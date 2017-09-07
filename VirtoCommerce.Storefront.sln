@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtoCommerce.Storefront", "VirtoCommerce.Storefront\VirtoCommerce.Storefront.csproj", "{84C14E0A-0F36-4BB5-9C00-7E8FB72891C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtoCommerce.Storefront.Model", "VirtoCommerce.Storefront.Model\VirtoCommerce.Storefront.Model.csproj", "{4730CFD4-9D72-4AA4-B819-8A32017D4B86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtoCommerce.Storefront.Tests", "VirtoCommerce.Storefront.Tests\VirtoCommerce.Storefront.Tests.csproj", "{0EC8A6E2-1A58-4125-8F09-243ED02AF1DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtoCommerce.LiquidThemeEngine", "VirtoCommerce.LiquidThemeEngine\VirtoCommerce.LiquidThemeEngine.csproj", "{21E262AC-A0AB-4A9C-8759-6AFDC9CEE49E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84C14E0A-0F36-4BB5-9C00-7E8FB72891C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84C14E0A-0F36-4BB5-9C00-7E8FB72891C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84C14E0A-0F36-4BB5-9C00-7E8FB72891C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84C14E0A-0F36-4BB5-9C00-7E8FB72891C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4730CFD4-9D72-4AA4-B819-8A32017D4B86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4730CFD4-9D72-4AA4-B819-8A32017D4B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4730CFD4-9D72-4AA4-B819-8A32017D4B86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4730CFD4-9D72-4AA4-B819-8A32017D4B86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EC8A6E2-1A58-4125-8F09-243ED02AF1DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EC8A6E2-1A58-4125-8F09-243ED02AF1DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EC8A6E2-1A58-4125-8F09-243ED02AF1DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EC8A6E2-1A58-4125-8F09-243ED02AF1DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21E262AC-A0AB-4A9C-8759-6AFDC9CEE49E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21E262AC-A0AB-4A9C-8759-6AFDC9CEE49E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21E262AC-A0AB-4A9C-8759-6AFDC9CEE49E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21E262AC-A0AB-4A9C-8759-6AFDC9CEE49E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DD0E246E-A0B1-441B-A37C-4367BB52059F}
+	EndGlobalSection
+EndGlobal
