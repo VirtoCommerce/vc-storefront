@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VirtoCommerce.Storefront.Common;
@@ -12,6 +13,7 @@ using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Stores;
+using VirtoCommerce.Storefront.Routing;
 using VirtoCommerce.Storefront.Services;
 using VirtoCommerce.Tools;
 
@@ -41,6 +43,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<ICountriesService, JsonCountriesService>(provider => new JsonCountriesService(provider.GetService<ICacheManager<object>>(), HostingEnvironment.MapPath("~/countries.json")));
             services.AddSingleton<IStoreService, StoreService>();
             services.AddSingleton<ICurrencyService, CurrencyService>();
+            services.AddSingleton<ISlugRouteService, SlugRouteService>();
 
             services.AddPlatformApi(Configuration, HostingEnvironment);
 
@@ -73,10 +76,10 @@ namespace VirtoCommerce.Storefront
             app.UseRewriter(options);
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapStorefrontRoutes();
             });
+
+
         }
     }
 }

@@ -30,9 +30,9 @@ namespace VirtoCommerce.Storefront.Middleware
             var serviceProvider = context.RequestServices;
             var builder = WorkContextBuilder.FromHttpContext(context);        
 
-            builder.WithCountries(serviceProvider.GetService<ICountriesService>());
-            await builder.WithStoresAsync(serviceProvider.GetService<IStoreService>(), _configuration.GetValue<string>("VirtoCommerce:DefaultStore"));
-            await builder.WithCurrenciesAsync(serviceProvider.GetService<ICurrencyService>());
+            builder.WithCountries(serviceProvider.GetRequiredService<ICountriesService>());
+            await builder.WithStoresAsync(serviceProvider.GetRequiredService<IStoreService>(), _configuration.GetValue<string>("VirtoCommerce:DefaultStore"));
+            await builder.WithCurrenciesAsync(serviceProvider.GetRequiredService<ICurrencyService>());
 
             _workContextAccessor.WorkContext = builder.Build();
             await _next(context);

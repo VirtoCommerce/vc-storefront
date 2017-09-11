@@ -9,7 +9,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class StorefrontRouteAttribute : Attribute, IRouteTemplateProvider
     {
-        private const string _regexp = "{store}/{language:regex(^[[a-z]]{{2}}-[[A-Z]]{{2}}$)}/";
+        private const string _regexp = "{store}/{language:regex([[a-zA-Z]]{{2}}-[[a-zA-Z]]{{2}})}/";
         public StorefrontRouteAttribute(string template)
         {
             Template = _regexp + template;
