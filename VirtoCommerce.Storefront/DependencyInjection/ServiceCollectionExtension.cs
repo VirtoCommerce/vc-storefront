@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using VirtoCommerce.LiquidThemeEngine;
+using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Common;
@@ -42,6 +43,8 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             var baseUri = new Uri(apiUrl);
             services.AddSingleton<IStoreModule>(provider => new StoreModule(new VirtoCommerceStoreRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
             services.AddSingleton<ICommerce>(provider => new Commerce(new VirtoCommerceCoreRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<ICatalogModuleCategories>(provider => new CatalogModuleCategories(new VirtoCommerceCatalogRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<ICatalogModuleProducts>(provider => new CatalogModuleProducts(new VirtoCommerceCatalogRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
 
         }
 

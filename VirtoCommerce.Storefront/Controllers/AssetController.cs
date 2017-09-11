@@ -16,7 +16,7 @@ namespace VirtoCommerce.Storefront.Controllers
         private readonly ILiquidThemeEngine _themeEngine;
         private readonly IStaticContentBlobProvider _staticContentBlobProvider;
         private readonly IHostingEnvironment _hostingEnvironment;
-        private readonly IWorkContextAccessor _workContextAccessor;
+
         public AssetController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, ILiquidThemeEngine themeEngine, 
                                IStaticContentBlobProvider staticContentBlobProvider, IHostingEnvironment hostingEnvironment)
             : base(workContextAccessor, urlBuilder)
@@ -31,8 +31,6 @@ namespace VirtoCommerce.Storefront.Controllers
         /// Return localization resources for current theme
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [StorefrontRouteAttribute("themes/localization.json")]
         public ActionResult GetThemeLocalizationJson()
         {
             var retVal = _themeEngine.ReadLocalization();
@@ -45,8 +43,6 @@ namespace VirtoCommerce.Storefront.Controllers
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        [HttpGet]
-        [StorefrontRouteAttribute("themes/assets/{*path}")]
         public ActionResult GetThemeAssets(string path)
         {
             var stream = _themeEngine.GetAssetStream(path);
@@ -61,8 +57,6 @@ namespace VirtoCommerce.Storefront.Controllers
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        [HttpGet]
-        [StorefrontRouteAttribute("assets/{*path}")]
         public ActionResult GetStaticContentAssets(string path)
         {
             var blobPath = _staticContentBlobProvider.Search(Path.Combine(WorkContext.CurrentStore.Id, "assets"), path, true).FirstOrDefault();
@@ -75,7 +69,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 }
             }
 
-            return StatusCode(404, path);
+            return NotFound();
         }
 
         /// <summary>
@@ -89,9 +83,9 @@ namespace VirtoCommerce.Storefront.Controllers
             var mimeType = MimeTypes.GetMimeType(path);
             if (System.IO.File.Exists(path) && mimeType != "application/octet-stream")
             {
-                return File(path, MimeTypes.GetMimeType(path));
+                return PhysicalFile(path, MimeTypes.GetMimeType(path));
             }
-            return StatusCode(404, path);
+            return NotFound();
         }
     }
 }
