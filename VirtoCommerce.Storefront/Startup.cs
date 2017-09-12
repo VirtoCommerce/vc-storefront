@@ -65,12 +65,14 @@ namespace VirtoCommerce.Storefront
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/error/500");
             }
 
             app.UseStaticFiles();
 
             app.UseMiddleware<WorkContextPopulateMiddleware>();
+
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
 
             var options = new RewriteOptions().Add(new StorefrontUrlNormalizeRule());
             app.UseRewriter(options);

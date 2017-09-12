@@ -11,6 +11,17 @@ namespace VirtoCommerce.Storefront.Extensions
 {
     public static class PathStringExtensions 
     {
+        public static Regex _storeLangeExpr = new Regex(@"^/\b\S+\b/[a-zA-Z]{2}-[a-zA-Z]{2}/");
+        public static PathString GetStoreAndLangSegment(this PathString path)
+        {
+            if (path == null)
+            {
+                throw new ArgumentNullException(nameof(path));
+            }
+            var matches = _storeLangeExpr.Match(path);
+            return matches.Success ? matches.Value : "/";
+        }
+
         public static PathString TrimStoreAndLangSegment(this PathString path, Store store, Language language)
         {
             if (store == null)

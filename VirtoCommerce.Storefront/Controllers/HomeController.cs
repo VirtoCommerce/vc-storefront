@@ -13,7 +13,7 @@ namespace VirtoCommerce.Storefront.Controllers
     {       
         public IActionResult Index()
         {
-            return View();
+            return View("index");
         }
 
         [StorefrontRoute("about")]
@@ -31,9 +31,6 @@ namespace VirtoCommerce.Storefront.Controllers
             return View();
         }
 
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        
     }
 }

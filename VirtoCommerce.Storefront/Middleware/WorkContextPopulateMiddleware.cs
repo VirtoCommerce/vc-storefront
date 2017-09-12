@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Data.Stores;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Stores;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
+using VirtoCommerce.Storefront.Extensions;
 
 namespace VirtoCommerce.Storefront.Middleware
 {
@@ -28,8 +31,14 @@ namespace VirtoCommerce.Storefront.Middleware
         public async Task Invoke(HttpContext context)
         {
             var serviceProvider = context.RequestServices;
-            var builder = WorkContextBuilder.FromHttpContext(context);        
+            //Need to get store and language segment from old path in ExceptionHandlerPathFeature for correct exception page routing
+            var exceptionFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+            if(exceptionFeature != null)
+            {
+                context.Request.Path = new PathString(exceptionFeature.Path).GetStoreAndLangSegment() + context.Request.Path;
+            }
 
+            var builder = WorkContextBuilder.FromHttpContext(context);
             builder.WithCountries(serviceProvider.GetRequiredService<ICountriesService>());
             await builder.WithStoresAsync(serviceProvider.GetRequiredService<IStoreService>(), _configuration.GetValue<string>("VirtoCommerce:DefaultStore"));
             await builder.WithCurrenciesAsync(serviceProvider.GetRequiredService<ICurrencyService>());

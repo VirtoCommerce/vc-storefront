@@ -9,7 +9,9 @@ using VirtoCommerce.Storefront.Routing;
 public static class MapStorefrontRouteBuilderExtension
 {
     public static void MapStorefrontRoutes(this IRouteBuilder routes)
-    {        
+    {
+        //Errors
+        routes.MapStorefrontRoute("Errors", "error/{errCode}", defaults: new { controller = "Error", action = "Errors" });
         // Account
         routes.MapStorefrontRoute("Account", "account", defaults: new { controller = "Account", action = "GetAccount" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));
         routes.MapStorefrontRoute("Account.UpdateAccount", "account", defaults: new { controller = "Account", action = "UpdateAccount" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
