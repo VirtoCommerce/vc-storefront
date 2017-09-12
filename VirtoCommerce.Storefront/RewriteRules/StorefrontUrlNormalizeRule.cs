@@ -14,7 +14,10 @@ namespace VirtoCommerce.Storefront.Middleware
         public void ApplyRule(RewriteContext context)
         {
             var workContext = context.HttpContext.RequestServices.GetService<IWorkContextAccessor>().WorkContext;
-            context.HttpContext.Request.Path = context.HttpContext.Request.Path.AddStoreAndLangSegment(workContext.CurrentStore, workContext.CurrentLanguage);
+            if (workContext != null)
+            {
+                context.HttpContext.Request.Path = context.HttpContext.Request.Path.AddStoreAndLangSegment(workContext.CurrentStore, workContext.CurrentLanguage);
+            }
             context.Result = RuleResult.ContinueRules;
         }
         #endregion

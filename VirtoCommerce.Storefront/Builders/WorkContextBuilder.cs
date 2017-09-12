@@ -10,6 +10,7 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 using VirtoCommerce.Storefront.Model.Stores;
+using VirtoCommerce.Storefront.Common.Exceptions;
 
 namespace VirtoCommerce.Storefront.Data.Stores
 {
@@ -57,9 +58,9 @@ namespace VirtoCommerce.Storefront.Data.Stores
 
         public WorkContextBuilder WithStores(Store[] stores, string defaultStoreId)
         {
-            if (stores == null)
+            if (stores.IsNullOrEmpty())
             {
-                throw new ArgumentNullException(nameof(stores));
+                throw new NoStoresException();
             }
 
             WorkContext.AllStores = stores;
@@ -75,13 +76,8 @@ namespace VirtoCommerce.Storefront.Data.Stores
                 currentStore = stores.FirstOrDefault(x => x.Id.EqualsInvariant(defaultStoreId));
             }
 
-            WorkContext.CurrentStore = currentStore ?? stores.FirstOrDefault();
+            WorkContext.CurrentStore = currentStore ?? stores.FirstOrDefault();          
 
-            if (WorkContext.CurrentStore == null)
-            {
-                throw new StorefrontException("No stores defined");
-            }
-            
             //TODO: need to use DDD Specification for this conditions
             //Set current language
             var availLanguages = stores.SelectMany(s => s.Languages)

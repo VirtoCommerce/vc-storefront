@@ -12,6 +12,9 @@ public static class MapStorefrontRouteBuilderExtension
     {
         //Errors
         routes.MapStorefrontRoute("Errors", "error/{errCode}", defaults: new { controller = "Error", action = "Errors" });
+        routes.MapRoute("NoWorkContextErrors", "error/{errCode}", defaults: new { controller = "Error", action = "Errors" });
+        routes.MapStorefrontRoute("StoreMaintenance", "common/maintenance", defaults: new { controller = "Common", action = "Maintenance" });
+        routes.MapStorefrontRoute("NoTheme", "common/notheme", defaults: new { controller = "Common", action = "NoTheme" });
         // Account
         routes.MapStorefrontRoute("Account", "account", defaults: new { controller = "Account", action = "GetAccount" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));
         routes.MapStorefrontRoute("Account.UpdateAccount", "account", defaults: new { controller = "Account", action = "UpdateAccount" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));

@@ -71,6 +71,8 @@ namespace VirtoCommerce.Storefront
             app.UseStaticFiles();
 
             app.UseMiddleware<WorkContextPopulateMiddleware>();
+            app.UseMiddleware<StoreMaintenanceMiddleware>();
+            app.UseMiddleware<NoLiquidThemeMiddleware>();
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
 
