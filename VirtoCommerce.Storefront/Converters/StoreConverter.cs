@@ -35,7 +35,7 @@ namespace VirtoCommerce.Storefront.Converters
         }
     }
 
-    public class StoreConverter
+    public partial class StoreConverter
     {
         public virtual SeoInfo ToSeoInfo(storeDto.SeoInfo seoDto)
         {

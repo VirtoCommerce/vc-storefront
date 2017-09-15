@@ -65,7 +65,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <summary>
         /// Gets or sets the value of weight
         /// </summary>
-        public decimal? Weight { get; set; }
+        public double? Weight { get; set; }
 
         /// <summary>
         /// Gets or sets the value of measurement units
@@ -75,17 +75,17 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <summary>
         /// Gets or sets the value of height
         /// </summary>
-        public decimal? Height { get; set; }
+        public double? Height { get; set; }
 
         /// <summary>
         /// Gets or sets the value of length
         /// </summary>
-        public decimal? Length { get; set; }
+        public double? Length { get; set; }
 
         /// <summary>
         /// Gets or sets the value of width
         /// </summary>
-        public decimal? Width { get; set; }
+        public double? Width { get; set; }
 
         /// <summary>
         /// Gets or sets the value of shipping price

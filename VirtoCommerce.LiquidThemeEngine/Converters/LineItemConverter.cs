@@ -66,7 +66,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.Url = lineItem.ImageUrl;
 
             result.Fulfillment = null; // TODO
-            result.Grams = lineItem.Weight ?? 0m;
+            result.Grams = (decimal?)lineItem.Weight ?? 0m;
             result.Image = new Image
             {
                 Alt = lineItem.Name,

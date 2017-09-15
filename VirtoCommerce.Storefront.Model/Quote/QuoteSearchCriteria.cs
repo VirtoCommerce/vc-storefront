@@ -7,12 +7,19 @@ namespace VirtoCommerce.Storefront.Model.Quote
     {
         private static int _defaultPageSize = 20;
 
+        public string CustomerId { get; set; }
+        public string Sort { get; set; }
+        public string StoreId { get; set; }
         public static int DefaultPageSize
         {
             get { return _defaultPageSize; }
             set { _defaultPageSize = value; }
         }
 
+        public QuoteSearchCriteria()
+            : base(new NameValueCollection(), _defaultPageSize)
+        {
+        }
         public QuoteSearchCriteria(NameValueCollection queryString)
             : base(queryString, DefaultPageSize)
         {

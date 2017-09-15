@@ -24,7 +24,7 @@ namespace VirtoCommerce.Storefront.Model
         /// </summary>
         public Money Amount { get; set; }
 
-        public decimal Quantity { get; set; }
+        public int Quantity { get; set; }
         /// <summary>
         /// Tax line one item price
         /// </summary>

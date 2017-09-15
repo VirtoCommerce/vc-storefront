@@ -23,13 +23,22 @@ namespace VirtoCommerce.Storefront.Model.Customer
         /// </summary>
         public string UserId { get; set; }
         /// <summary>
+        /// Store id
+        /// </summary>
+        public string StoreId { get; set; }
+        /// <summary>
         /// Security account user name
         /// </summary>
         public string UserName { get; set; }
+        public string UserNameNormalized => UserName?.ToUpper();
+
+        public string PhoneNumber { get; set; }
+        public bool PhoneNumberConfirmed { get; set; }
         /// <summary>
         /// Returns the email address of the customer.
         /// </summary>
         public string Email { get; set; }
+        public string EmailNormalized => Email?.ToUpper();
 
         public string FullName { get; set; }
         /// <summary>
@@ -44,6 +53,9 @@ namespace VirtoCommerce.Storefront.Model.Customer
 
         public string TimeZone { get; set; }
         public string DefaultLanguage { get; set; }
+
+        public string Password { get; set; }    
+        public bool TwoFactorEnabled { get; set; }
 
         public Address DefaultBillingAddress { get; set; }
         public Address DefaultShippingAddress { get; set; }

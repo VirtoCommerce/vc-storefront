@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="CacheManager.Core" Version="1.1.1" />
     <PackageReference Include="CacheManager.Microsoft.Extensions.Caching.Memory" Version="1.1.1" />
+    <PackageReference Include="Markdig" Version="0.13.3" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="MimeTypes" Version="1.0.6" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />

@@ -105,7 +105,7 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// <summary>
         /// Gets or Sets Weight
         /// </summary>
-        public decimal? Weight { get; set; }
+        public double? Weight { get; set; }
 
         /// <summary>
         /// Gets or Sets MeasureUnit
