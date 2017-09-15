@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
@@ -18,11 +19,16 @@ namespace VirtoCommerce.Storefront.Converters
             }
         }
 
-        public static pricingDto.PriceEvaluationContext ToPriceEvaluationContextDto(this WorkContext workContext, IEnumerable<Product> products = null)
+        public static PriceEvaluationContext ToPriceEvaluationContext(this WorkContext workContext, IEnumerable<Product> products = null)
         {
-            return PricingConverterInstance.ToPriceEvaluationContextDto(workContext, products);
+            return PricingConverterInstance.ToPriceEvaluationContext(workContext, products);
         }
-      
+
+        public static pricingDto.PriceEvaluationContext ToPriceEvaluationContextDto(this PriceEvaluationContext evalContext)
+        {
+            return PricingConverterInstance.ToPriceEvaluationContextDto(evalContext);
+        }
+
         public static ProductPrice ToProductPrice(this pricingDto.Price priceDto, IEnumerable<Currency> availCurrencies, Language language)
         {
             return PricingConverterInstance.ToProductPrice(priceDto, availCurrencies, language);
@@ -75,11 +81,15 @@ namespace VirtoCommerce.Storefront.Converters
             return result;
         }
 
-        public virtual pricingDto.PriceEvaluationContext ToPriceEvaluationContextDto(WorkContext workContext, IEnumerable<Product> products = null)
+        public virtual pricingDto.PriceEvaluationContext ToPriceEvaluationContextDto(PriceEvaluationContext evalContext)
         {
+            return evalContext.JsonConvert<pricingDto.PriceEvaluationContext>();
+        }
 
+        public virtual PriceEvaluationContext ToPriceEvaluationContext(WorkContext workContext, IEnumerable<Product> products = null)
+        {
             //Evaluate products prices
-            var retVal = new pricingDto.PriceEvaluationContext
+            var retVal = new PriceEvaluationContext
             {
                 PricelistIds = workContext.CurrentPricelists.Select(p => p.Id).ToList(),
                 CatalogId = workContext.CurrentStore.Catalog,

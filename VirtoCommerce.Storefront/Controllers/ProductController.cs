@@ -12,9 +12,9 @@ namespace VirtoCommerce.Storefront.Controllers
 {
     public class ProductController : StorefrontControllerBase
     {
-        private readonly ICatalogSearchService _catalogSearchService;
+        private readonly ICatalogService _catalogSearchService;
 
-        public ProductController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, ICatalogSearchService catalogSearchService)
+        public ProductController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, ICatalogService catalogSearchService)
             : base(workContextAccessor, urlBuilder)
         {
             _catalogSearchService = catalogSearchService;

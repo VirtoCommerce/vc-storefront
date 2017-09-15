@@ -7,7 +7,7 @@ namespace VirtoCommerce.Storefront.Model.Services
     /// <summary>
     /// Represent abstraction to search in catalog api (products, categories etc)
     /// </summary>
-    public interface ICatalogSearchService
+    public interface ICatalogService
     {
         Task<Product[]> GetProductsAsync(string[] ids, ItemResponseGroup responseGroup);
 

@@ -67,7 +67,7 @@ namespace VirtoCommerce.Storefront.Converters.Subscriptions
 
             result.CustomerId = criteria.CustomerId;          
             result.Sort = criteria.Sort;
-
+            result.Number = criteria.Number;
             result.Skip = criteria.Start;
             result.Take = criteria.PageSize;
             result.Sort = criteria.Sort;

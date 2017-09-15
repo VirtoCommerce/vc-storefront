@@ -14,6 +14,9 @@
         public const string ApiStoreCacheRegion = "ApiStoreCacheRegion";
         public const string CountryCacheRegion = "CountryCacheRegion";
         public const string CurrencyCacheRegion = "CurrencyRegion";
+        public const string MenuLinksCacheRegion = "MenuLinksCacheRegion";
+        public const string StaticContentCacheRegion = "StaticContentCacheRegion";
+        public const string PricingCacheRegion = "PricingCacheRegion";
 
         public const string AnonymousUsername = "Anonymous";
 

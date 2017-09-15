@@ -13,10 +13,14 @@ namespace VirtoCommerce.Storefront.Model.Common.Events
 	public class EventPublisher<T> : IEventPublisher<T>
     {
         private readonly IAsyncObserver<T>[] _observers;
-        public EventPublisher(IAsyncObserver<T>[] observers)
+        public EventPublisher()
         {
-            _observers = observers;
+            _observers = new IAsyncObserver<T>[] { };
         }
+        //public EventPublisher(IAsyncObserver<T>[] observers)
+        //{
+        //    _observers = observers;
+        //}
 
         #region IEventPublisher Members
 

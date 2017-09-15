@@ -71,7 +71,7 @@ namespace VirtoCommerce.Storefront.Model.Common
 
         public static string RemoveAccent(this string txt)
         {
-            var bytes = Encoding.GetEncoding("Cyrillic").GetBytes(txt);
+            var bytes = Encoding.ASCII.GetBytes(txt);
             return Encoding.ASCII.GetString(bytes);
         }
 

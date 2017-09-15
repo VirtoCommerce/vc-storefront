@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model.Catalog;
 
 namespace VirtoCommerce.Storefront.Model.Recommendations
@@ -7,5 +8,6 @@ namespace VirtoCommerce.Storefront.Model.Recommendations
     {
         string ProviderName { get; }
         Task<Product[]> GetRecommendationsAsync(RecommendationEvalContext context);
+        Task AddEventAsync(IEnumerable<UsageEvent> @events);
     }
 }

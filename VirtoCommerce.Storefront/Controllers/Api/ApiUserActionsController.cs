@@ -1,0 +1,50 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Interaction;
+using VirtoCommerce.Storefront.Model.Recommendations;
+
+namespace VirtoCommerce.Storefront.Controllers.Api
+{
+    //[HandleJsonError]
+    public class ApiUserActionsController : StorefrontControllerBase
+    {
+        private readonly IRecommendationsService _productRecommendationsService;
+
+        public ApiUserActionsController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder,
+            IRecommendationsService productRecommendationsApi) : base(workContextAccessor, urlBuilder)
+        {
+            _productRecommendationsService = productRecommendationsApi;
+        }
+
+        /// <summary>
+        /// POST /storefrontapi/useractions/eventinfo
+        /// Record user actions events in VC platform
+        /// </summary>
+        /// <param name="userSession"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult> SaveEventInfo(UserSession userSession)
+        {
+            //TODO: need to replace to other special detected VC API for usage
+            if (userSession.Interactions != null)
+            {
+                IList<UsageEvent> usageEvents = userSession.Interactions.Select(i => new UsageEvent
+                {
+                    EventType = i.Type,
+                    ItemId = i.Content,
+                    CreatedDate = i.CreatedAt,
+                    CustomerId = WorkContext.CurrentCustomer.Id,
+                    StoreId = WorkContext.CurrentStore.Id
+                }).ToList();
+
+                await _productRecommendationsService.AddEventAsync(usageEvents);
+            }
+
+            return Ok();
+        }
+    }
+}

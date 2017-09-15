@@ -21,6 +21,31 @@ namespace VirtoCommerce.Storefront.Services
             _subscriptionApi = subscriptionApi;
             _workContextAccessor = workContextAccessor;
         }
+        public  async Task<Subscription> CancelSubscriptionAsync(SubscriptionCancelRequest request)
+        {
+            var workContext = _workContextAccessor.WorkContext;
+            return (await _subscriptionApi.CancelSubscriptionAsync(new AutoRestClients.SubscriptionModuleApi.Models.SubscriptionCancelRequest
+            {
+                CancelReason = request.CancelReason,                
+                SubscriptionId = request.SubscriptionId
+            })).ToSubscription(workContext.AllCurrencies, workContext.CurrentLanguage);
+        }
+        public async Task DeletePlansByIdsAsync(string[] ids)
+        {
+            await _subscriptionApi.DeletePlansByIdsAsync(ids);
+        }
+        public async Task UpdatePaymentPlanAsync(PaymentPlan plan)
+        {
+            var paymentPlanDto = plan.ToPaymentPlanDto();
+
+            await _subscriptionApi.UpdatePaymentPlanAsync(paymentPlanDto);
+        }
+
+        public async Task<IList<PaymentPlan>> GetPaymentPlansByIdsAsync(string[] ids)
+        {
+            var result = (await _subscriptionApi.GetPaymentPlanByIdsAsync(ids)).Select(x => x.ToPaymentPlan()).ToList();
+            return result;
+        }
 
         public IPagedList<Subscription> SearchSubscription(SubscriptionSearchCriteria criteria)
         {

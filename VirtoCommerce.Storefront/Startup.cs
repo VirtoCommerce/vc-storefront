@@ -9,18 +9,32 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using VirtoCommerce.Storefront.Builders;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Filters;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Cart.Services;
+using VirtoCommerce.Storefront.Model.Catalog.Services;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Services;
+using VirtoCommerce.Storefront.Model.Inventory.Services;
+using VirtoCommerce.Storefront.Model.LinkList.Services;
+using VirtoCommerce.Storefront.Model.Marketing.Services;
+using VirtoCommerce.Storefront.Model.Order.Events;
 using VirtoCommerce.Storefront.Model.Order.Services;
+using VirtoCommerce.Storefront.Model.Pricing.Services;
+using VirtoCommerce.Storefront.Model.Quote.Events;
 using VirtoCommerce.Storefront.Model.Quote.Services;
+using VirtoCommerce.Storefront.Model.Services;
+using VirtoCommerce.Storefront.Model.StaticContent;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Model.Subscriptions.Services;
+using VirtoCommerce.Storefront.Model.Tax.Services;
 using VirtoCommerce.Storefront.Models;
 using VirtoCommerce.Storefront.Routing;
 using VirtoCommerce.Storefront.Services;
@@ -58,7 +72,28 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<ICustomerOrderService, CustomerOrderService>();
             services.AddSingleton<IQuoteService, QuoteService>();
             services.AddSingleton<ISubscriptionService, SubscriptionService>();
+            services.AddSingleton<ICatalogService, CatalogService>();
+            services.AddSingleton<IInventoryService, InventoryService>();
+            services.AddSingleton<IPricingService, PricingService>();
+            services.AddSingleton<ITaxEvaluator, TaxEvaluator>();
+            services.AddSingleton<IPromotionEvaluator, PromotionEvaluator>();
+            services.AddSingleton<IMarketingService, MarketingService>();
+            services.AddSingleton<IProductAvailabilityService, ProductAvailabilityService>();
+            services.AddSingleton<IQuoteRequestBuilder, QuoteRequestBuilder>();
+            services.AddSingleton<ICartBuilder, CartBuilder>();
+            services.AddSingleton<IStaticContentService, StaticContentService>();
+            services.AddSingleton<IMenuLinkListService, MenuLinkListServiceImpl>();
+            services.AddSingleton<IStaticContentItemFactory, StaticContentItemFactory>();
 
+            //TODO: replace to  Event bus publisher
+            //Register domain events
+            services.AddSingleton<IEventPublisher<OrderPlacedEvent>, EventPublisher<OrderPlacedEvent>>();
+            services.AddSingleton<IEventPublisher<UserLoginEvent>, EventPublisher<UserLoginEvent>>();
+            services.AddSingleton<IEventPublisher<QuoteRequestUpdatedEvent>, EventPublisher<QuoteRequestUpdatedEvent>>();
+
+          
+
+            //Register platform API clients
             services.AddPlatformApi(Configuration, HostingEnvironment);
 
             services.AddCache(Configuration, HostingEnvironment);
@@ -83,6 +118,11 @@ namespace VirtoCommerce.Storefront
                 options.Password.RequireNonAlphanumeric = false;
             }).AddDefaultTokenProviders();
 
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(WorkContextAuthPopulateFilter)); // by type
+            }
+            );
 
 
         }

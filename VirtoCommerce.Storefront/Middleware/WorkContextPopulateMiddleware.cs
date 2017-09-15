@@ -8,6 +8,10 @@ using VirtoCommerce.Storefront.Data.Stores;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Stores;
+using VirtoCommerce.Storefront.Model.Services;
+using VirtoCommerce.Storefront.Model.LinkList.Services;
+using VirtoCommerce.Storefront.Model.StaticContent;
+using VirtoCommerce.Storefront.Model.Pricing.Services;
 
 namespace VirtoCommerce.Storefront.Middleware
 {
@@ -41,7 +45,9 @@ namespace VirtoCommerce.Storefront.Middleware
                 builder.WithCountries(serviceProvider.GetRequiredService<ICountriesService>());
                 await builder.WithStoresAsync(serviceProvider.GetRequiredService<IStoreService>(), _configuration.GetValue<string>("VirtoCommerce:DefaultStore"));
                 await builder.WithCurrenciesAsync(serviceProvider.GetRequiredService<ICurrencyService>());
-
+                await builder.WithCatalogsAsync(serviceProvider.GetRequiredService<ICatalogService>());
+                //await builder.WithStaticContentAsync(serviceProvider.GetRequiredService<IMenuLinkListService>(), serviceProvider.GetRequiredService<IStaticContentService>());
+                //await builder.WithPrices(serviceProvider.GetRequiredService<IPricingService>());
                 _workContextAccessor.WorkContext = builder.Build();
             }
 

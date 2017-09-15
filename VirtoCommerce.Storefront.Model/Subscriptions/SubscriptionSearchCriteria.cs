@@ -26,6 +26,7 @@ namespace VirtoCommerce.Storefront.Model.Subscriptions
             : base(queryString, DefaultPageSize)
         {
         }
+        public string Number { get; set; }
         public string CustomerId { get; set; }
         public string Sort { get; set; }
     }   

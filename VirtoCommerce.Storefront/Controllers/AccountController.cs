@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
-using VirtoCommerce.Storefront.Model.Customer.Services;
-using VirtoCommerce.Storefront.Models;
-using VirtoCommerce.Storefront.Services.Identity;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
-  
+
     public class AccountController : StorefrontControllerBase
     {
         private readonly SignInManager<CustomerInfo> _signInManager;
@@ -89,7 +82,6 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 return View("customers/login", WorkContext);
             }
-
             var loginResult = await _signInManager.PasswordSignInAsync(login.Username, login.Password, login.RememberMe, lockoutOnFailure: true);
 
             if (loginResult.Succeeded)

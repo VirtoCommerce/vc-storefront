@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Subscriptions
 {
-    public class PaymentPlan
+    public class PaymentPlan : Entity
     {
         public PaymentPlan()
         {
             Interval = PaymentInterval.Months;
         }
-        public string Id { get; set; }
-        /// <summary>
+         /// <summary>
         /// (days, months, years) - billing interval
         /// </summary>
         public PaymentInterval Interval { get; set; }
