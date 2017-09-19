@@ -45,7 +45,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.PageImageUrl = workContext.CurrentPageSeo != null ? workContext.CurrentPageSeo.ImageUrl : string.Empty;
             result.CanonicalUrl = workContext.CurrentPageSeo != null ? urlBuilder.ToAppAbsolute(workContext.CurrentPageSeo.Slug) : null;
             result.Shop = workContext.CurrentStore != null ? ToLiquidShop(workContext.CurrentStore, workContext) : null;
-            result.Cart = workContext.CurrentCart != null ? ToLiquidCart(workContext.CurrentCart, workContext.CurrentLanguage, urlBuilder) : null;
+            result.Cart = workContext.CurrentCart != null && workContext.CurrentCart.IsValueCreated ? ToLiquidCart(workContext.CurrentCart.Value, workContext.CurrentLanguage, urlBuilder) : null;
             result.Product = workContext.CurrentProduct != null ? ToLiquidProduct(workContext.CurrentProduct) : null;
             result.Vendor = workContext.CurrentVendor != null ? ToLiquidVendor(workContext.CurrentVendor) : null;
             result.Customer = workContext.CurrentCustomer != null && workContext.CurrentCustomer.IsRegisteredUser ? ToLiquidCustomer(workContext.CurrentCustomer, workContext, urlBuilder) : null;

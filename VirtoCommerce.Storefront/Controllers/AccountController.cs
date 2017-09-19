@@ -10,7 +10,7 @@ using VirtoCommerce.Storefront.Model.Customer;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
-
+    [Authorize]
     public class AccountController : StorefrontControllerBase
     {
         private readonly SignInManager<CustomerInfo> _signInManager;
@@ -18,6 +18,45 @@ namespace VirtoCommerce.Storefront.Controllers
             : base(workContextAccessor, urlBuilder)
         {
             _signInManager = signInManager;
+        }
+
+        //GET: /account
+        [HttpGet]
+        public ActionResult GetAccount()
+        {
+            //Customer should be already populated in WorkContext middle-ware
+            return View("customers/account", WorkContext);
+        }
+
+        //POST: /account
+        [HttpPost]
+        public async Task<ActionResult> UpdateAccount(CustomerInfo customer)
+        {
+            //Do not allow to update other accounts
+            customer.Id = WorkContext.CurrentCustomer.Id;
+
+            await _signInManager.UserManager.UpdateAsync(customer);
+            return View("customers/account", WorkContext);
+        }
+
+       
+
+        [HttpGet]
+        public ActionResult GetOrderDetails(string number)
+        {
+            var order = WorkContext.CurrentCustomer.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(number));
+            if (order != null)
+            {
+                WorkContext.CurrentOrder = order;
+                return View("customers/order", WorkContext);
+            }
+            return NotFound();
+        }
+
+        [HttpGet]
+        public ActionResult GetAddresses()
+        {
+            return View("customers/addresses", WorkContext);
         }
 
         [HttpGet]
@@ -109,8 +148,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
                 //Check that current user can sing in to current store
                 if (userInfo.AllowedStores.IsNullOrEmpty() || userInfo.AllowedStores.Any(x => x.EqualsInvariant(WorkContext.CurrentStore.Id)))
-                {
-    
+                {    
                     //TODO: Publish user login event
                     //Publish user login event 
                     //await _userLoginEventPublisher.PublishAsync(new UserLoginEvent(WorkContext, WorkContext.CurrentCustomer, customer));
@@ -138,5 +176,11 @@ namespace VirtoCommerce.Storefront.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<ActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return StoreFrontRedirect("~/");
+        }
     }    
 }

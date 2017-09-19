@@ -50,6 +50,7 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// </summary>
         /// <value>Payment gateway code used for link with gateway provider realization</value>
         public string GatewayCode { get; set; }
+        public string PaymentMethodType { get; set; }
 
         /// <summary>
         /// Expected date of receipt of payment

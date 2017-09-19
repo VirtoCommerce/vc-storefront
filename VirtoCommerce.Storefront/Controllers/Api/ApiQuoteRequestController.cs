@@ -172,7 +172,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             _quoteRequestBuilder.Update(quoteRequest).Confirm();
             await _quoteRequestBuilder.SaveAsync();
 
-            await _cartBuilder.TakeCartAsync(WorkContext.CurrentCart);
+            await _cartBuilder.TakeCartAsync(WorkContext.CurrentCart.Value);
             await _cartBuilder.FillFromQuoteRequestAsync(_quoteRequestBuilder.QuoteRequest);
             await _cartBuilder.SaveAsync();
 

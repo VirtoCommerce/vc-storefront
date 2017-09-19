@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
@@ -83,7 +84,7 @@ namespace VirtoCommerce.Storefront.Model
         /// <summary>
         /// Gets or sets the current shopping cart
         /// </summary>
-        public ShoppingCart CurrentCart { get; set; }
+        public Lazy<ShoppingCart> CurrentCart { get; set; }
 
         /// <summary>
         /// Represent current quotes search criteria taken from request url

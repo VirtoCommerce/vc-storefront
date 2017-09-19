@@ -364,6 +364,7 @@ namespace VirtoCommerce.Storefront.Converters
             if (paymentIn.PaymentMethod != null)
             {
                 retVal.GatewayCode = paymentIn.PaymentMethod.Code;
+                retVal.PaymentMethodType = paymentIn.PaymentMethod.PaymentMethodType;
             }
             return retVal;
         }

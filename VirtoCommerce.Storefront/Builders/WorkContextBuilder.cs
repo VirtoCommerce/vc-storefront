@@ -23,6 +23,8 @@ using VirtoCommerce.Storefront.Model.LinkList.Services;
 using VirtoCommerce.Storefront.Model.StaticContent;
 using VirtoCommerce.Storefront.Model.Pricing.Services;
 using VirtoCommerce.Storefront.Converters;
+using VirtoCommerce.Storefront.Model.Cart.Services;
+using System.Threading;
 
 namespace VirtoCommerce.Storefront.Data.Stores
 {
@@ -56,23 +58,22 @@ namespace VirtoCommerce.Storefront.Data.Stores
             return WorkContext;
         }
 
-        public WorkContextBuilder WithCountries(Country[] countries)
+        public void WithCountries(Country[] countries)
         {
             WorkContext.AllCountries = countries ?? throw new ArgumentNullException(nameof(countries));
-            return this;
         }
 
-        public WorkContextBuilder WithCountries(ICountriesService countryService)
+        public void WithCountries(ICountriesService countryService)
         {
             if (countryService == null)
             {
                 throw new ArgumentNullException(nameof(countryService));
             }
 
-            return WithCountries(countryService.GetCountries().ToArray());
+            WithCountries(countryService.GetCountries().ToArray());
         }
 
-        public WorkContextBuilder WithStores(Store[] stores, string defaultStoreId)
+        public void WithStores(Store[] stores, string defaultStoreId)
         {
             if (stores.IsNullOrEmpty())
             {
@@ -111,21 +112,21 @@ namespace VirtoCommerce.Storefront.Data.Stores
                 currentLanguage = WorkContext.CurrentStore.Languages.Contains(language) ? language : currentLanguage;
             }
             WorkContext.CurrentLanguage = currentLanguage;
-            return this;
+            
         }
 
-        public async Task<WorkContextBuilder> WithStoresAsync(IStoreService storeService, string defaultStoreId)
+        public async Task WithStoresAsync(IStoreService storeService, string defaultStoreId)
         {
             if (storeService == null)
             {
                 throw new ArgumentNullException(nameof(storeService));
             }
             var stores = await storeService.GetAllStoresAsync();
-            return WithStores(stores, defaultStoreId);
+            WithStores(stores, defaultStoreId);
         }
 
 
-        public WorkContextBuilder WithCurrencies(Currency[] currencies)
+        public void WithCurrencies(Currency[] currencies)
         {
             if (currencies == null)
             {
@@ -167,11 +168,11 @@ namespace VirtoCommerce.Storefront.Data.Stores
             {
                 currentCurrency = WorkContext.CurrentStore.Currencies.FirstOrDefault(x => x.Equals(currencyCode)) ?? currentCurrency;
             }
+
             WorkContext.CurrentCurrency = currentCurrency;
-            return this;
         }
 
-        public async Task<WorkContextBuilder> WithCurrenciesAsync(ICurrencyService currencyService)
+        public async Task WithCurrenciesAsync(ICurrencyService currencyService)
         {
             if (currencyService == null)
             {
@@ -182,10 +183,11 @@ namespace VirtoCommerce.Storefront.Data.Stores
                 throw new StorefrontException("Unable to set currencies without language");
             }
             var currencies = await currencyService.GetAllCurrenciesAsync(WorkContext.CurrentLanguage);
-            return WithCurrencies(currencies);
+
+            WithCurrencies(currencies);
         }
 
-        public Task<WorkContextBuilder> WithCatalogsAsync(ICatalogService catalogService)
+        public Task WithCatalogsAsync(ICatalogService catalogService)
         {
             //Initialize catalog search criteria
             WorkContext.CurrentProductSearchCriteria = new ProductSearchCriteria(WorkContext.CurrentLanguage, WorkContext.CurrentCurrency, WorkContext.QueryString);
@@ -270,10 +272,10 @@ namespace VirtoCommerce.Storefront.Data.Stores
                 return WorkContext.Aggregations;
             }, 1, ProductSearchCriteria.DefaultPageSize);
 
-            return Task.FromResult(this);
+            return Task.FromResult(true);
         }
 
-        public async Task<WorkContextBuilder> WithStaticContentAsync(IMenuLinkListService linkListService, IStaticContentService staticContentService)
+        public async Task WithStaticContentAsync(IMenuLinkListService linkListService, IStaticContentService staticContentService)
         {
             if (WorkContext.CurrentStore == null)
             {
@@ -300,15 +302,58 @@ namespace VirtoCommerce.Storefront.Data.Stores
 
             // Initialize blogs search criteria 
             WorkContext.CurrentBlogSearchCritera = new BlogSearchCriteria(WorkContext.QueryString);
-
-            return this;
         }
 
-        public async Task<WorkContextBuilder> WithPrices(IPricingService pricingService)
+        public async Task WithPricesAsync(IPricingService pricingService)
         {
             WorkContext.CurrentPricelists = (await pricingService.EvaluatePricesListsAsync(WorkContext.ToPriceEvaluationContext())).ToList();
-            return this;
+        }
 
+        public async Task WithAuthAsync(SignInManager<CustomerInfo> signInManager)
+        {
+            var customer = new CustomerInfo
+            {
+                Id = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier),
+                UserName = HttpContext.User.FindFirstValue(ClaimTypes.Name),
+                OperatorUserId = HttpContext.User.FindFirstValue(StorefrontConstants.OperatorUserIdClaimType),
+                OperatorUserName = HttpContext.User.FindFirstValue(StorefrontConstants.OperatorUserNameClaimType)
+            };
+
+            var identity = HttpContext.User.Identity;
+            if (identity.IsAuthenticated)
+            {
+                 customer = await signInManager.UserManager.FindByNameAsync(identity.Name);
+                //User has been removed from storage need to do sign out 
+                if(customer == null)
+                {
+                    await signInManager.SignOutAsync();
+                }
+            }
+
+            if (customer == null || customer.IsTransient())
+            {
+                customer = new CustomerInfo
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UserName = StorefrontConstants.AnonymousUsername,
+                    FullName = StorefrontConstants.AnonymousUsername
+                };
+                //Sign-in anonymous user
+                await signInManager.SignInAsync(customer, true);
+            }
+
+            WorkContext.CurrentCustomer = customer;
+        }
+
+        public Task WithShoppingCartAsync(string cartName, ICartBuilder cartBuilder)
+        {
+            WorkContext.CurrentCart = new Lazy<Model.Cart.ShoppingCart>(() =>
+           {
+               Task.Factory.StartNew(() => cartBuilder.LoadOrCreateNewTransientCartAsync(cartName, WorkContext.CurrentStore, WorkContext.CurrentCustomer,
+                                                                       WorkContext.CurrentLanguage, WorkContext.CurrentCurrency), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+               return cartBuilder.Cart;
+           });
+            return Task.FromResult(true);
         }
     }
 }

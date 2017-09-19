@@ -38,7 +38,7 @@ namespace VirtoCommerce.Storefront.Model.Order
             DiscountAmountWithTax = new Money(currency);
 
         }
-
+        public string PaymentMethodType { get; set; }
         /// <summary>
         /// Gets or Sets CustomerName
         /// </summary>

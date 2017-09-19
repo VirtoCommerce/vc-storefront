@@ -12,6 +12,9 @@ using VirtoCommerce.Storefront.Model.Services;
 using VirtoCommerce.Storefront.Model.LinkList.Services;
 using VirtoCommerce.Storefront.Model.StaticContent;
 using VirtoCommerce.Storefront.Model.Pricing.Services;
+using VirtoCommerce.Storefront.Model.Cart.Services;
+using Microsoft.AspNetCore.Identity;
+using VirtoCommerce.Storefront.Model.Customer;
 
 namespace VirtoCommerce.Storefront.Middleware
 {
@@ -33,23 +36,17 @@ namespace VirtoCommerce.Storefront.Middleware
         public async Task Invoke(HttpContext context)
         {
             var serviceProvider = context.RequestServices;
-            //Need to get store and language segment from old path in ExceptionHandlerPathFeature for correct exception page routing
-            var exceptionFeature = context.Features.Get<IExceptionHandlerPathFeature>();
-            if (exceptionFeature != null)
-            {
-                context.Request.Path = new PathString(exceptionFeature.Path).GetStoreAndLangSegment() + context.Request.Path;
-            }
-            else
-            {
-                var builder = WorkContextBuilder.FromHttpContext(context);
-                builder.WithCountries(serviceProvider.GetRequiredService<ICountriesService>());
-                await builder.WithStoresAsync(serviceProvider.GetRequiredService<IStoreService>(), _configuration.GetValue<string>("VirtoCommerce:DefaultStore"));
-                await builder.WithCurrenciesAsync(serviceProvider.GetRequiredService<ICurrencyService>());
-                await builder.WithCatalogsAsync(serviceProvider.GetRequiredService<ICatalogService>());
-                //await builder.WithStaticContentAsync(serviceProvider.GetRequiredService<IMenuLinkListService>(), serviceProvider.GetRequiredService<IStaticContentService>());
-                //await builder.WithPrices(serviceProvider.GetRequiredService<IPricingService>());
-                _workContextAccessor.WorkContext = builder.Build();
-            }
+
+            var builder = WorkContextBuilder.FromHttpContext(context);
+            builder.WithCountries(serviceProvider.GetRequiredService<ICountriesService>());
+            await builder.WithAuthAsync(serviceProvider.GetRequiredService<SignInManager<CustomerInfo>>());
+            await builder.WithStoresAsync(serviceProvider.GetRequiredService<IStoreService>(), _configuration.GetValue<string>("VirtoCommerce:DefaultStore"));
+            await builder.WithCurrenciesAsync(serviceProvider.GetRequiredService<ICurrencyService>());
+            await builder.WithCatalogsAsync(serviceProvider.GetRequiredService<ICatalogService>());
+            await builder.WithShoppingCartAsync("default", serviceProvider.GetRequiredService<ICartBuilder>());
+            //await builder.WithStaticContentAsync(serviceProvider.GetRequiredService<IMenuLinkListService>(), serviceProvider.GetRequiredService<IStaticContentService>());
+            //await builder.WithPrices(serviceProvider.GetRequiredService<IPricingService>());
+            _workContextAccessor.WorkContext = builder.Build();
 
             await _next(context);
         }

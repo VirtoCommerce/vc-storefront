@@ -1,0 +1,112 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
+using VirtoCommerce.Storefront.Converters;
+using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common.Exceptions;
+using orderModel = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models;
+
+namespace VirtoCommerce.Storefront.Controllers
+{
+    public class CartController : StorefrontControllerBase
+    {
+        private readonly IOrderModule _orderApi;
+        public CartController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IOrderModule orderApi)
+            : base(workContextAccessor, urlBuilder)
+        {
+            _orderApi = orderApi;
+        }
+
+        // GET: /cart
+        [HttpGet]
+        public ActionResult Index()
+        {
+            return View("cart", WorkContext);
+        }
+
+
+        // GET: /cart/checkout
+        [HttpGet]
+        public ActionResult Checkout()
+        {
+            return View("checkout", WorkContext);
+        }
+
+
+        // GET: /cart/checkout/paymentform?orderNumber=...
+        [HttpGet]
+        public async Task<ActionResult> PaymentForm(string orderNumber)
+        {
+            var order = WorkContext.CurrentCustomer.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(orderNumber));
+            if (order == null)
+            {
+                return BadRequest();
+            }
+            var incomingPayment = order.InPayments?.FirstOrDefault(x => x.PaymentMethodType.EqualsInvariant("PreparedForm"));
+            if (incomingPayment == null)
+            {
+                throw new StorefrontException("Order doesn't have any payment of type: PreparedForm");
+            }
+            var processingResult = await _orderApi.ProcessOrderPaymentsAsync(order.Id, incomingPayment.Id);
+
+            WorkContext.PaymentFormHtml = processingResult.HtmlForm;
+
+            return View("payment-form", WorkContext);
+        }
+
+        // GET/POST: /cart/externalpaymentcallback
+        public async Task<ActionResult> ExternalPaymentCallback()
+        {
+            var callback = new orderModel.PaymentCallbackParameters
+            {
+                Parameters = new List<orderModel.KeyValuePair>()
+            };
+
+            foreach (var pair in HttpContext.Request.Query)
+            {
+                callback.Parameters.Add(new orderModel.KeyValuePair
+                {
+                    Key = pair.Key,
+                    Value = pair.Value
+                });
+            }
+
+            foreach (var pair in HttpContext.Request.Form)
+            {
+                callback.Parameters.Add(new orderModel.KeyValuePair
+                {
+                    Key = pair.Key,
+                    Value = pair.Value
+                });
+            }
+
+            var postProcessingResult = await _orderApi.PostProcessPaymentAsync(callback);
+            if (postProcessingResult.IsSuccess.HasValue && postProcessingResult.IsSuccess.Value)
+            {
+                return StoreFrontRedirect("~/cart/thanks/" + postProcessingResult.OrderId);
+            }
+            else
+            {
+                return View("error");
+            }
+        }
+
+        // GET: /cart/thanks/{orderNumber}
+        [HttpGet]
+        public async Task<ActionResult> Thanks(string orderNumber)
+        {
+            var order = WorkContext.CurrentCustomer.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(orderNumber));
+            if (order == null)
+            {
+                return BadRequest();
+            }
+
+            WorkContext.CurrentOrder = order;
+
+            return View("thanks", WorkContext);
+        }
+    }
+}

@@ -18,13 +18,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
     //[HandleJsonError]
     public class ApiAccountController : StorefrontControllerBase
     {
-        private readonly ICustomerService _customerService;
         private readonly SignInManager<CustomerInfo> _signInManager;
 
-        public ApiAccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, ICustomerService customerService, SignInManager<CustomerInfo> signInManager)
+        public ApiAccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<CustomerInfo> signInManager)
             : base(workContextAccessor, urlBuilder)
         {
-            _customerService = customerService;
             _signInManager = signInManager;
         }
 
@@ -56,29 +54,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         public async Task<ActionResult> UpdateAccount(CustomerInfo customer)
         {
             customer.Id = WorkContext.CurrentCustomer.Id;
-            // workaround for "partial update"
-            if (!customer.Addresses.Any())
-            {
-                customer.Addresses = null;
-            }
-            if (!customer.DynamicProperties.Any())
-            {
-                customer.DynamicProperties = null;
-            }
-
-            var fullName = string.Join(" ", customer.FirstName, customer.LastName).Trim();
-
-            if (string.IsNullOrEmpty(fullName))
-            {
-                fullName = customer.Email;
-            }
-
-            if (!string.IsNullOrWhiteSpace(fullName))
-            {
-                customer.FullName = fullName;
-            }
-
-            await _customerService.UpdateCustomerAsync(customer);
+        
+            await _signInManager.UserManager.UpdateAsync(customer);
 
             return Ok();
         }
@@ -106,9 +83,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             if (contact != null)
             {
                 contact.Addresses.Clear();
+                contact.DynamicProperties = null;
                 if (addresses != null)
                     contact.Addresses.AddRange(addresses);
-                await _customerService.UpdateAddressesAsync(contact);
+
+                await _signInManager.UserManager.UpdateAsync(contact);
             }
 
             return Ok();

@@ -78,7 +78,7 @@ namespace VirtoCommerce.Storefront.Model.Customer
         public Address DefaultAddress { get; set; }
 
         /// <summary>
-        /// Returns true if user registered  returns false if it anonynous. 
+        /// Returns true if user registered  returns false if it anonymous. 
         /// </summary>
         public bool IsRegisteredUser { get; set; }
 

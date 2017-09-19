@@ -1,19 +1,15 @@
 ﻿using CacheManager.Core;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VirtoCommerce.Storefront.Builders;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Extensions;
-using VirtoCommerce.Storefront.Filters;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart.Services;
@@ -35,7 +31,6 @@ using VirtoCommerce.Storefront.Model.StaticContent;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 using VirtoCommerce.Storefront.Model.Tax.Services;
-using VirtoCommerce.Storefront.Models;
 using VirtoCommerce.Storefront.Routing;
 using VirtoCommerce.Storefront.Services;
 using VirtoCommerce.Storefront.Services.Identity;
@@ -120,9 +115,7 @@ namespace VirtoCommerce.Storefront
 
             services.AddMvc(options =>
             {
-                options.Filters.Add(typeof(WorkContextAuthPopulateFilter)); // by type
-            }
-            );
+            });
 
 
         }
@@ -142,13 +135,15 @@ namespace VirtoCommerce.Storefront
 
             app.UseStaticFiles();
 
+            app.UseAuthentication();
+
             app.UseMiddleware<WorkContextPopulateMiddleware>();
             app.UseMiddleware<StoreMaintenanceMiddleware>();
             app.UseMiddleware<NoLiquidThemeMiddleware>();
+            app.UseMiddleware<ApiErrorHandlingMiddleware>();
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
 
-            app.UseAuthentication();
 
             var options = new RewriteOptions().Add(new StorefrontUrlNormalizeRule());
             app.UseRewriter(options);

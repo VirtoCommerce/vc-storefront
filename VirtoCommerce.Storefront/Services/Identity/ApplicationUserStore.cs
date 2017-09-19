@@ -44,15 +44,9 @@ namespace VirtoCommerce.Storefront.Services.Identity
             {
                 //Load newly created account from API
                 var storefrontUser = await _commerceCoreApi.GetUserByNameAsync(user.UserName);
-
-                //Next need create corresponding Customer contact in VC Customers (CRM) module
-                user.UserId = storefrontUser.Id;
                 user.IsRegisteredUser = true;
                 user.AllowedStores = storefrontUser.AllowedStores;
-
                 await _customerService.CreateCustomerAsync(user);
-
-
                 return IdentityResult.Success;
             }
             return IdentityResult.Failed();

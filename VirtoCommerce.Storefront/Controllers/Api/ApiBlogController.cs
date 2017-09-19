@@ -8,8 +8,6 @@ using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-    //TODO
-    //[HandleJsonError]
     public class ApiBlogController : StorefrontControllerBase
     {
         public ApiBlogController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder)

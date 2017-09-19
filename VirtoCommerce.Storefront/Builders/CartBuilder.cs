@@ -454,7 +454,7 @@ namespace VirtoCommerce.Storefront.Builders
 
             var workContext = userLoginEvent.WorkContext;
             var prevUser = userLoginEvent.PrevUser;
-            var prevUserCart = userLoginEvent.WorkContext.CurrentCart;
+            var prevUserCart = userLoginEvent.WorkContext.CurrentCart.Value;
             var newUser = userLoginEvent.NewUser;
 
             //If previous user was anonymous and it has not empty cart need merge anonymous cart to personal

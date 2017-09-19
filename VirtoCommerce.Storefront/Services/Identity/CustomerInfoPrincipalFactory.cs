@@ -19,10 +19,16 @@ namespace VirtoCommerce.Storefront.Services.Identity
 
         public Task<ClaimsPrincipal> CreateAsync(CustomerInfo user)
         {
+            //Create first anonymous identity
             var identity = new ClaimsIdentity();
+            if(user.IsRegisteredUser)
+            {
+                //https://stackoverflow.com/questions/45261732/user-identity-isauthenticated-always-false-in-net-core-custom-authentication
+                identity = new ClaimsIdentity("Registered");
+            }
 
             identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
-            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.UserId));
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
 
     
             if (!user.AllowedStores.IsNullOrEmpty())
