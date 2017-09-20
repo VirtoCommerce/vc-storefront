@@ -1,33 +1,37 @@
 ﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Primitives;
+using PagedList.Core;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Common;
+using VirtoCommerce.Storefront.Common.Exceptions;
+using VirtoCommerce.Storefront.Converters;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Cart.Services;
+using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
-using VirtoCommerce.Storefront.Model.Stores;
-using VirtoCommerce.Storefront.Common.Exceptions;
-using VirtoCommerce.Storefront.Model.Catalog;
-using VirtoCommerce.Storefront.Model.Services;
-using VirtoCommerce.Storefront.Extensions;
-using System.Security.Principal;
 using VirtoCommerce.Storefront.Model.Customer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using System.Security.Claims;
 using VirtoCommerce.Storefront.Model.LinkList.Services;
-using VirtoCommerce.Storefront.Model.StaticContent;
 using VirtoCommerce.Storefront.Model.Pricing.Services;
-using VirtoCommerce.Storefront.Converters;
-using VirtoCommerce.Storefront.Model.Cart.Services;
-using System.Threading;
+using VirtoCommerce.Storefront.Model.Services;
+using VirtoCommerce.Storefront.Model.StaticContent;
+using VirtoCommerce.Storefront.Model.Stores;
+using VirtoCommerce.Storefront.Model.Pricing;
+using Microsoft.Extensions.Configuration;
+using VirtoCommerce.Storefront.Model.Customer.Services;
+using VirtoCommerce.Storefront.Model.Quote.Services;
 
 namespace VirtoCommerce.Storefront.Data.Stores
-{
+{   
     public partial class WorkContextBuilder
     {
         private WorkContextBuilder(WorkContext workContext, HttpContext httpContext)
@@ -275,40 +279,102 @@ namespace VirtoCommerce.Storefront.Data.Stores
             return Task.FromResult(true);
         }
 
-        public async Task WithStaticContentAsync(IMenuLinkListService linkListService, IStaticContentService staticContentService)
+        public Task WithStaticContentAsync(IMenuLinkListService linkListService, IStaticContentService staticContentService)
         {
             if (WorkContext.CurrentStore == null)
             {
-                throw new StorefrontException("Unable to set static content without store");
+                throw new StorefrontException("Unable to set static content without current store");
             }
-            var linkLists =  await linkListService.LoadAllStoreLinkListsAsync(WorkContext.CurrentStore.Id);
-            WorkContext.CurrentLinkLists = linkLists.GroupBy(x => x.Name).Select(x => x.FindWithLanguage(WorkContext.CurrentLanguage)).Where(x => x != null).ToList();
-
-            // load all static content
-            var allContentItems = staticContentService.LoadStoreStaticContent(WorkContext.CurrentStore);
-            var blogs = allContentItems.OfType<Blog>().ToArray();
-            var blogArticlesGroup = allContentItems.OfType<BlogArticle>().GroupBy(x => x.BlogName, x => x).ToList();
-            foreach (var blog in blogs)
+            
+            Func<int, int, IEnumerable<SortInfo>, IPagedList<MenuLinkList>> menuLinksGetter = (pageNumber, pageSize, sorInfos) =>
             {
-                var blogArticles = blogArticlesGroup.FirstOrDefault(x => string.Equals(x.Key, blog.Name, StringComparison.OrdinalIgnoreCase));
-                if (blogArticles != null)
+                //TODO: performance and DDD specification instead if statements
+                var linkLists = Task.Factory.StartNew(() => linkListService.LoadAllStoreLinkListsAsync(WorkContext.CurrentStore, WorkContext.CurrentLanguage), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+                return new StaticPagedList<MenuLinkList>(linkLists, pageNumber, pageSize, linkLists.Count());
+            };
+            WorkContext.CurrentLinkLists = new MutablePagedList<MenuLinkList>(menuLinksGetter, 1, 20);
+
+            // all static content items
+            Func<int, int, IEnumerable<SortInfo>, IPagedList<ContentItem>> pagesGetter = (pageNumber, pageSize, sorInfos) =>
+            {
+                //TODO: performance and DDD specification instead if statements
+                var contentItems = staticContentService.LoadStoreStaticContent(WorkContext.CurrentStore).Where(x => x.Language.IsInvariant || x.Language == WorkContext.CurrentLanguage);
+                return new StaticPagedList<ContentItem>(contentItems, pageNumber, pageSize, contentItems.Count());
+            };
+            WorkContext.Pages = new MutablePagedList<ContentItem>(pagesGetter, 1, 20);
+            Func<int, int, IEnumerable<SortInfo>, IPagedList<Blog>> blogsGetter = (pageNumber, pageSize, sorInfos) =>
+            {
+                //TODO: performance and DDD specification instead if statements
+                var contentItems = staticContentService.LoadStoreStaticContent(WorkContext.CurrentStore).Where(x => x.Language.IsInvariant || x.Language == WorkContext.CurrentLanguage);
+                var blogs = contentItems.OfType<Blog>().ToArray();
+                var blogArticlesGroup = contentItems.OfType<BlogArticle>().GroupBy(x => x.BlogName, x => x).ToList();
+                foreach (var blog in blogs)
                 {
-                    blog.Articles = new MutablePagedList<BlogArticle>(blogArticles);
+                    var blogArticles = blogArticlesGroup.FirstOrDefault(x => string.Equals(x.Key, blog.Name, StringComparison.OrdinalIgnoreCase));
+                    if (blogArticles != null)
+                    {
+                        blog.Articles = new MutablePagedList<BlogArticle>(blogArticles);
+                    }
                 }
-            }
-            //TODO: performance and DDD specification instead if statements
-            WorkContext.Pages = new MutablePagedList<ContentItem>(allContentItems.Where(x => x.Language.IsInvariant || x.Language == WorkContext.CurrentLanguage));
-            WorkContext.Blogs = new MutablePagedList<Blog>(blogs.Where(x => x.Language.IsInvariant || x.Language == WorkContext.CurrentLanguage));
+                return new StaticPagedList<Blog>(blogs, pageNumber, pageSize, blogs.Count());
+            };
+            WorkContext.Blogs = new MutablePagedList<Blog>(blogsGetter, 1, 20);
 
             // Initialize blogs search criteria 
             WorkContext.CurrentBlogSearchCritera = new BlogSearchCriteria(WorkContext.QueryString);
+
+            return Task.FromResult(true);
         }
 
-        public async Task WithPricesAsync(IPricingService pricingService)
+        public async Task WithPricelistsAsync(IPricingService pricingService)
         {
-            WorkContext.CurrentPricelists = (await pricingService.EvaluatePricesListsAsync(WorkContext.ToPriceEvaluationContext())).ToList();
+            WorkContext.CurrentPricelists = new MutablePagedList<Pricelist>(await pricingService.EvaluatePricesListsAsync(WorkContext.ToPriceEvaluationContext(), WorkContext)).ToList();
         }
 
+        public Task WithQuotesAsync(IQuoteRequestBuilder quoteRequestBuilder)
+        {
+            WorkContext.CurrentQuoteRequest = new Lazy<Model.Quote.QuoteRequest>(() =>
+            {
+                Task.Factory.StartNew(() => quoteRequestBuilder.GetOrCreateNewTransientQuoteRequestAsync(WorkContext.CurrentStore, WorkContext.CurrentCustomer, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency), 
+                                                                                                         CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult(); 
+                return quoteRequestBuilder.QuoteRequest;
+            });
+
+            return Task.FromResult(true);
+        }
+
+        public void WithVendors(ICustomerService customerService, ICatalogService catalogService)
+        {
+            Func<int, int, IEnumerable<SortInfo>, IPagedList<Vendor>> vendorsGetter = (pageNumber, pageSize, sortInfos) =>
+            {
+                var vendors = customerService.SearchVendors(null, pageNumber, pageSize, sortInfos);
+                foreach (var vendor in vendors)
+                {
+                    vendor.Products = new MutablePagedList<Product>((pageNumber2, pageSize2, sortInfos2) =>
+                    {
+                        var vendorProductsSearchCriteria = new ProductSearchCriteria
+                        {
+                            VendorId = vendor.Id,
+                            PageNumber = pageNumber2,
+                            PageSize = pageSize2,
+                            ResponseGroup = WorkContext.CurrentProductSearchCriteria.ResponseGroup & ~ItemResponseGroup.ItemWithVendor,
+                            SortBy = SortInfo.ToString(sortInfos2),
+                        };
+                        var searchResult = catalogService.SearchProducts(vendorProductsSearchCriteria);
+                        return searchResult.Products;
+                    }, 1, ProductSearchCriteria.DefaultPageSize);
+                }
+                return vendors;
+            };
+            WorkContext.Vendors = new MutablePagedList<Vendor>(vendorsGetter, 1, VendorSearchCriteria.DefaultPageSize);         
+        }
+
+        
+        public void WithSettings(StorefrontOptions options)
+        {
+            WorkContext.ApplicationSettings = options.Settings;
+        }
+         
         public async Task WithAuthAsync(SignInManager<CustomerInfo> signInManager)
         {
             var customer = new CustomerInfo

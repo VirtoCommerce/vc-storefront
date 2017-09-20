@@ -25,51 +25,45 @@ using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CartModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi;
+using System.Net.Http;
+using VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi;
 
 namespace VirtoCommerce.Storefront.DependencyInjection
 {
     public static class ServiceCollectionExtension
     {
-        public static void AddPlatformApi(this IServiceCollection services, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public static void AddPlatformApi(this IServiceCollection services, StorefrontOptions options)
         {
-            var apiUrl = configuration.GetValue<string>("VirtoCommerce:Api:Url");
-            //TODO: Add validation and throw friendly error
-            var apiAppId = configuration.GetValue<string>("VirtoCommerce:Api:AppId");
-            var apiSecretKey = configuration.GetValue<string>("VirtoCommerce:Api:SecretKey");
             //Timeout for all API requests. Should be small on production to prevent platform API flood.
-            var apiRequestTimeout = TimeSpan.Parse(configuration.GetValue("VirtoCommerce:Api:RequestTimeout", "0:0:30"));
-            //container.RegisterInstance(new HmacCredentials(apiAppId, apiSecretKey));
-
-            //container.RegisterType<VirtoCommerceApiRequestHandler>(new PerRequestLifetimeManager());
+            var apiRequestTimeout = options.Api.RequestTimeout;
 
             ServicePointManager.UseNagleAlgorithm = false;
             services.AddSingleton<VirtoCommerceApiRequestHandler>();
-            services.AddSingleton(provider => new HmacCredentials(apiAppId, apiSecretKey));
-            services.AddTransient(provider => new System.Net.Http.HttpClientHandler
+            var httpHandlerWithCompression = new HttpClientHandler
             {
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-            });
+            };
 
-            var baseUri = new Uri(apiUrl);
-            services.AddSingleton<IStoreModule>(provider => new StoreModule(new VirtoCommerceStoreRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-            services.AddSingleton<ICommerce>(provider => new Commerce(new VirtoCommerceCoreRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-            services.AddSingleton<ICatalogModuleCategories>(provider => new CatalogModuleCategories(new VirtoCommerceCatalogRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-            services.AddSingleton<ICatalogModuleProducts>(provider => new CatalogModuleProducts(new VirtoCommerceCatalogRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-            services.AddSingleton<ICatalogModuleSearch>(provider => new CatalogModuleSearch(new VirtoCommerceCatalogRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-            services.AddSingleton<ISecurity>(provider => new Security(new VirtoCommercePlatformRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-            services.AddSingleton<IStorefrontSecurity>(provider => new StorefrontSecurity(new VirtoCommerceCoreRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-            services.AddSingleton<ICustomerModule>(provider => new CustomerModule(new VirtoCommerceCustomerRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-            services.AddSingleton<IOrderModule>(provider => new OrderModule(new VirtoCommerceOrdersRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-            services.AddSingleton<IQuoteModule>(provider => new QuoteModule(new VirtoCommerceQuoteRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-            services.AddSingleton<ISubscriptionModule>(provider => new SubscriptionModule(new VirtoCommerceSubscriptionRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-            services.AddSingleton<IInventoryModule>(provider => new InventoryModule(new VirtoCommerceInventoryRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-            services.AddSingleton<IMarketingModulePromotion>(provider => new MarketingModulePromotion(new VirtoCommerceMarketingRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-            services.AddSingleton<IMarketingModuleDynamicContent>(provider => new MarketingModuleDynamicContent(new VirtoCommerceMarketingRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-            services.AddSingleton<IPricingModule>(provider => new PricingModule(new VirtoCommercePricingRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-            services.AddSingleton<ICartModule>(provider => new CartModule(new VirtoCommerceCartRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-            services.AddSingleton<IMenu>(provider => new Menu(new VirtoCommerceContentRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-            services.AddSingleton<IContent>(provider => new Content(new VirtoCommerceContentRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>()).DisableRetries().WithTimeout(apiRequestTimeout)));
-
+            var baseUri = new Uri(options.Api.Url);
+            services.AddSingleton<IStoreModule>(provider => new StoreModule(new VirtoCommerceStoreRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<ICommerce>(provider => new Commerce(new VirtoCommerceCoreRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<ICatalogModuleCategories>(provider => new CatalogModuleCategories(new VirtoCommerceCatalogRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<ICatalogModuleProducts>(provider => new CatalogModuleProducts(new VirtoCommerceCatalogRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<ICatalogModuleSearch>(provider => new CatalogModuleSearch(new VirtoCommerceCatalogRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<ISecurity>(provider => new Security(new VirtoCommercePlatformRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<IStorefrontSecurity>(provider => new StorefrontSecurity(new VirtoCommerceCoreRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<ICustomerModule>(provider => new CustomerModule(new VirtoCommerceCustomerRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<IOrderModule>(provider => new OrderModule(new VirtoCommerceOrdersRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<IQuoteModule>(provider => new QuoteModule(new VirtoCommerceQuoteRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<ISubscriptionModule>(provider => new SubscriptionModule(new VirtoCommerceSubscriptionRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<IInventoryModule>(provider => new InventoryModule(new VirtoCommerceInventoryRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<IMarketingModulePromotion>(provider => new MarketingModulePromotion(new VirtoCommerceMarketingRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<IMarketingModuleDynamicContent>(provider => new MarketingModuleDynamicContent(new VirtoCommerceMarketingRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<IPricingModule>(provider => new PricingModule(new VirtoCommercePricingRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<ICartModule>(provider => new CartModule(new VirtoCommerceCartRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<IMenu>(provider => new Menu(new VirtoCommerceContentRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<IContent>(provider => new Content(new VirtoCommerceContentRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<IRecommendations>(provider => new Recommendations(new VirtoCommerceProductRecommendationsRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
         }
 
         public static void AddCache(this IServiceCollection services, IConfiguration configuration, IHostingEnvironment hostingEnvironment)

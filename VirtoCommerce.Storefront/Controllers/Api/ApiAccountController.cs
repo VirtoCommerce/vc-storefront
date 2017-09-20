@@ -14,8 +14,6 @@ using VirtoCommerce.Storefront.Model.Quote;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-    //TODO
-    //[HandleJsonError]
     public class ApiAccountController : StorefrontControllerBase
     {
         private readonly SignInManager<CustomerInfo> _signInManager;
@@ -51,7 +49,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account
         [HttpPost]
-        public async Task<ActionResult> UpdateAccount(CustomerInfo customer)
+        public async Task<ActionResult> UpdateAccount([FromBody] CustomerInfo customer)
         {
             customer.Id = WorkContext.CurrentCustomer.Id;
         
@@ -62,7 +60,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/password
         [HttpPost]
-        public async Task<ActionResult> ChangePassword(ChangePassword formModel)
+        public async Task<ActionResult> ChangePassword([FromBody] ChangePassword formModel)
         {
             var changePassword = new ChangePasswordInfo
             {
@@ -77,7 +75,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/addresses
         [HttpPost]
-        public async Task<ActionResult> UpdateAddresses(ICollection<Address> addresses)
+        public async Task<ActionResult> UpdateAddresses([FromBody] ICollection<Address> addresses)
         {
             var contact = WorkContext.CurrentCustomer;
             if (contact != null)

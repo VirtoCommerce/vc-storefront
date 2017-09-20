@@ -28,7 +28,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/orders/search
         [HttpPost]
-        public async Task<ActionResult> SearchCustomerOrders(OrderSearchCriteria criteria)
+        public async Task<ActionResult> SearchCustomerOrders([FromBody] OrderSearchCriteria criteria)
         {
             if (criteria == null)
             {
@@ -99,7 +99,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/orders/{orderNumber}/payments/{paymentNumber}/process
         [HttpPost]
-        public async Task<ActionResult> ProcessOrderPayment(string orderNumber, string paymentNumber, orderModel.BankCardInfo bankCardInfo)
+        public async Task<ActionResult> ProcessOrderPayment(string orderNumber, string paymentNumber, [FromBody] orderModel.BankCardInfo bankCardInfo)
         {
             //Need lock to prevent concurrent access to same order
             using (await AsyncLock.GetLockByKey(GetAsyncLockKey(orderNumber, WorkContext)).LockAsync())
@@ -117,7 +117,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/orders/{orderNumber}/payments
         [HttpPost]
-        public async Task<ActionResult> AddOrUpdateOrderPayment(string orderNumber, PaymentIn payment)
+        public async Task<ActionResult> AddOrUpdateOrderPayment(string orderNumber, [FromBody] PaymentIn payment)
         {
             if (payment.Sum.Amount == 0)
             {

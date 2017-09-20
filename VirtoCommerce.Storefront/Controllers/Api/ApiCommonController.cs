@@ -45,7 +45,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/feedback
         [HttpPost]
-        public async Task<ActionResult> Feedback(ContactForm model)
+        public async Task<ActionResult> Feedback([FromBody] ContactForm model)
         {
             await _storeApi.SendDynamicNotificationAnStoreEmailAsync(model.ToServiceModel(WorkContext));
 

@@ -133,7 +133,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
             if (workContext.CurrentQuoteRequest != null)
             {
-                result.QuoteRequest = ToLiquidQuoteRequest(workContext.CurrentQuoteRequest);
+                result.QuoteRequest = ToLiquidQuoteRequest(workContext.CurrentQuoteRequest.Value);
             }
 
             result.PaymentFormHtml = workContext.PaymentFormHtml;

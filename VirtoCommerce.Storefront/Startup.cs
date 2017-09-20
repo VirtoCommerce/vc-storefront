@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using VirtoCommerce.Storefront.Binders;
 using VirtoCommerce.Storefront.Builders;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.DependencyInjection;
@@ -26,6 +28,7 @@ using VirtoCommerce.Storefront.Model.Order.Services;
 using VirtoCommerce.Storefront.Model.Pricing.Services;
 using VirtoCommerce.Storefront.Model.Quote.Events;
 using VirtoCommerce.Storefront.Model.Quote.Services;
+using VirtoCommerce.Storefront.Model.Recommendations;
 using VirtoCommerce.Storefront.Model.Services;
 using VirtoCommerce.Storefront.Model.StaticContent;
 using VirtoCommerce.Storefront.Model.Stores;
@@ -34,7 +37,10 @@ using VirtoCommerce.Storefront.Model.Tax.Services;
 using VirtoCommerce.Storefront.Routing;
 using VirtoCommerce.Storefront.Services;
 using VirtoCommerce.Storefront.Services.Identity;
+using VirtoCommerce.Storefront.Services.Recommendations;
 using VirtoCommerce.Tools;
+using Microsoft.Extensions.DependencyInjection;
+using VirtoCommerce.Storefront.JsonConverters;
 
 namespace VirtoCommerce.Storefront
 {
@@ -52,6 +58,11 @@ namespace VirtoCommerce.Storefront
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var storefrontOptions = new StorefrontOptions();
+            var virtoConfigSection = Configuration.GetSection("VirtoCommerce");
+            virtoConfigSection.Bind(storefrontOptions);
+            services.Configure<StorefrontOptions>(virtoConfigSection);
+
             //The IHttpContextAccessor service is not registered by default
             //https://github.com/aspnet/Hosting/issues/793
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -79,17 +90,19 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IStaticContentService, StaticContentService>();
             services.AddSingleton<IMenuLinkListService, MenuLinkListServiceImpl>();
             services.AddSingleton<IStaticContentItemFactory, StaticContentItemFactory>();
-
+            services.AddSingleton<AssociationRecommendationsProvider>();
+            services.AddSingleton<CognitiveRecommendationsProvider>();
+            services.AddSingleton<IRecommendationProviderFactory, RecommendationProviderFactory>(provider => new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(), provider.GetService<CognitiveRecommendationsProvider>()));
             //TODO: replace to  Event bus publisher
             //Register domain events
             services.AddSingleton<IEventPublisher<OrderPlacedEvent>, EventPublisher<OrderPlacedEvent>>();
             services.AddSingleton<IEventPublisher<UserLoginEvent>, EventPublisher<UserLoginEvent>>();
             services.AddSingleton<IEventPublisher<QuoteRequestUpdatedEvent>, EventPublisher<QuoteRequestUpdatedEvent>>();
 
-          
 
+         
             //Register platform API clients
-            services.AddPlatformApi(Configuration, HostingEnvironment);
+            services.AddPlatformApi(storefrontOptions);
 
             services.AddCache(Configuration, HostingEnvironment);
 
@@ -113,8 +126,25 @@ namespace VirtoCommerce.Storefront
                 options.Password.RequireNonAlphanumeric = false;
             }).AddDefaultTokenProviders();
 
-            services.AddMvc(options =>
+       
+            services.ConfigureApplicationCookie(options =>
             {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.Cookie.Expiration = TimeSpan.FromDays(30);
+                options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
+                options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout               
+                options.SlidingExpiration = true;
+            });
+
+            var snapshotProvider = services.BuildServiceProvider();
+            services.AddMvc().AddJsonOptions(options =>
+            {
+                options.SerializerSettings.Converters.Add(new CartTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
+                options.SerializerSettings.Converters.Add(new MoneyJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
+                options.SerializerSettings.Converters.Add(new CurrencyJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
+                options.SerializerSettings.Converters.Add(new OrderTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
+                options.SerializerSettings.Converters.Add(new RecommendationJsonConverter(snapshotProvider.GetService<IRecommendationProviderFactory>()));
             });
 
 

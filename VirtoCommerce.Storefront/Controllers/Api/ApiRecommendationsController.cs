@@ -2,26 +2,26 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Binders;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Recommendations;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-    //[HandleJsonError]
     public class ApiRecommendationsController : StorefrontControllerBase
     {
-        private readonly IRecommendationsService[] _services;
+        private readonly IRecommendationProviderFactory _providerFactory;
         public ApiRecommendationsController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder,
-           IRecommendationsService[] services) : base(workContextAccessor, urlBuilder)
+           IRecommendationProviderFactory providerFactory) : base(workContextAccessor, urlBuilder)
         {
-            _services = services;
+            _providerFactory = providerFactory;
         }
 
         [HttpPost]
-        public async Task<ActionResult> GetRecommendations(RecommendationEvalContext evalContext)
+        public async Task<ActionResult> GetRecommendations([FromBody] RecommendationEvalContext evalContext)
         {
-            var recommendationService = _services.FirstOrDefault(x => x.ProviderName.EqualsInvariant(evalContext.Provider));
+            var recommendationService = _providerFactory.GetProvider(evalContext.Provider);
             if (recommendationService == null)
             {
                 throw new NotSupportedException(evalContext.Provider);

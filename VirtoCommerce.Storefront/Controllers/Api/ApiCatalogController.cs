@@ -20,7 +20,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // storefrontapi/catalog/search
         [HttpPost]
-        public async Task<ActionResult> SearchProducts(ProductSearchCriteria searchCriteria)
+        public async Task<ActionResult> SearchProducts([FromBody] ProductSearchCriteria searchCriteria)
         {
             var retVal = await _catalogService.SearchProductsAsync(searchCriteria);
             foreach (var product in retVal.Products)
@@ -45,7 +45,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // storefrontapi/categories/search
         [HttpPost]
-        public async Task<ActionResult> SearchCategories(CategorySearchCriteria searchCriteria)
+        public async Task<ActionResult> SearchCategories([FromBody] CategorySearchCriteria searchCriteria)
         {
             var retVal = await _catalogService.SearchCategoriesAsync(searchCriteria);
             foreach (var category in retVal)

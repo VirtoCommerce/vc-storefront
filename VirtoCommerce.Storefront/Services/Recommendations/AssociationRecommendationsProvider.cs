@@ -13,17 +13,15 @@ using VirtoCommerce.Storefront.Common;
 
 namespace VirtoCommerce.Storefront.Services.Recommendations
 {
-    public class AssociationRecommendationsService : IRecommendationsService
+    public class AssociationRecommendationsProvider : IRecommendationsProvider
     {
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly ICatalogService _catalogService;
-        private readonly IRecommendations _recommendationApi;
 
-        public AssociationRecommendationsService(IWorkContextAccessor workContextAccessor, ICatalogService catalogService, IRecommendations recommendationApi)
+        public AssociationRecommendationsProvider(IWorkContextAccessor workContextAccessor, ICatalogService catalogService)
         {
             _workContextAccessor = workContextAccessor;
             _catalogService = catalogService;
-            _recommendationApi = recommendationApi;
         }
 
         #region IRecommendationsService members
@@ -35,11 +33,15 @@ namespace VirtoCommerce.Storefront.Services.Recommendations
             }
         }
 
-        public async Task AddEventAsync(IEnumerable<UsageEvent> events)
+        public RecommendationEvalContext CreateEvalContext()
         {
-            var usageEvents = events.Select(i => i.JsonConvert<dto.UsageEvent>());
+            return new RecommendationEvalContext();
+        }
 
-            await _recommendationApi.AddEventAsync(usageEvents.ToList());
+        public Task AddEventAsync(IEnumerable<UsageEvent> events)
+        {
+            //Nothing todo
+            return Task.FromResult(true);
         }
 
         public async Task<Product[]> GetRecommendationsAsync(RecommendationEvalContext context)

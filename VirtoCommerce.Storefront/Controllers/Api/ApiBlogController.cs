@@ -17,7 +17,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/blog/{blogName}/search
         [HttpPost]
-        public ActionResult Search(string blogName, BlogSearchCriteria criteria)
+        public ActionResult Search([FromQuery] string blogName, [FromBody] BlogSearchCriteria criteria)
         {
             var articles = new List<BlogArticle>();
 

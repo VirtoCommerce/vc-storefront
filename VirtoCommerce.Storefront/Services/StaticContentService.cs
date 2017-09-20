@@ -25,22 +25,16 @@ namespace VirtoCommerce.Storefront.Services
     {
         private static readonly Regex _headerRegExp = new Regex(@"(?s:^---(.*?)---)");
         private static readonly string[] _extensions = { ".md", ".html" };
-        private readonly ILiquidThemeEngine _liquidEngine;
-        private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IStorefrontUrlBuilder _urlBuilder;
         private readonly IStaticContentItemFactory  _contentItemFactory;
         private readonly IStaticContentBlobProvider _contentBlobProvider;
         private readonly MarkdownPipeline _markdownPipeline;
         private readonly ICacheManager<object> _cacheManager;
 
-        public StaticContentService(ILiquidThemeEngine liquidEngine,
-                                        ICacheManager<object> cacheManager, IWorkContextAccessor workContextAccessor,
+        public StaticContentService(ICacheManager<object> cacheManager, IWorkContextAccessor workContextAccessor,
                                         IStorefrontUrlBuilder urlBuilder, IStaticContentItemFactory contentItemFactory,
                                         IStaticContentBlobProvider contentBlobProvider)
         {
-            _liquidEngine = liquidEngine;
-
-            _workContextAccessor = workContextAccessor;
             _urlBuilder = urlBuilder;
             _contentItemFactory = contentItemFactory;
             _contentBlobProvider = contentBlobProvider;
@@ -70,7 +64,6 @@ namespace VirtoCommerce.Storefront.Services
 
                 if (_contentBlobProvider.PathExists(baseStoreContentPath))
                 {
-                    var config = _liquidEngine.GetSettings();
 
                     //Search files by requested search pattern
                     var contentBlobs = _contentBlobProvider.Search(baseStoreContentPath, searchPattern, true)
@@ -129,20 +122,7 @@ namespace VirtoCommerce.Storefront.Services
                 metaHeaders = new Dictionary<string, IEnumerable<string>>();
             }
 
-            content = RemoveYamlHeader(content);
-
-            IDictionary themeSettings = null;
-            var workContext = _workContextAccessor.WorkContext;
-            if (workContext != null)
-            {
-                var shopifyContext = workContext.ToShopifyModel(_urlBuilder);
-                var parameters = (Dictionary<string, object>)shopifyContext.ToLiquid();
-
-                themeSettings = _liquidEngine.GetSettings();
-                parameters.Add("settings", themeSettings);
-                //Render content by liquid engine
-                content = _liquidEngine.RenderTemplate(content, parameters);
-            }
+            content = RemoveYamlHeader(content);        
 
             //Render markdown content
             if (Path.GetExtension(contentItem.StoragePath).EqualsInvariant(".md"))
@@ -157,14 +137,9 @@ namespace VirtoCommerce.Storefront.Services
 
             contentItem.LoadContent(content, metaHeaders);
 
-            //Try to get default permalink template from theme settings
             if (string.IsNullOrEmpty(contentItem.Permalink))
             {
-                contentItem.Permalink = ":folder/:categories/:title";
-                if (themeSettings != null)
-                {
-                    contentItem.Permalink = (string)themeSettings["permalink"] ?? contentItem.Permalink;
-                }
+                contentItem.Permalink = ":folder/:categories/:title";           
             }
             //Transform permalink template to url
             contentItem.Url = GetContentItemUrl(contentItem, contentItem.Permalink);

@@ -37,7 +37,18 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return serializedString;
         }
 
-   
+        public static string Render(Context context, string input)
+        {
+            if (input == null)
+            {
+                return null;
+            }
+            var themeEngine = (ShopifyLiquidThemeEngine)Template.FileSystem;
+            var renderParams = context.Environments[0].ToDictionary(x => x.Key, x => x.Value);
+            var result = themeEngine.RenderTemplate(input.ToString(), renderParams);
+            return result;
+        }
+
         #endregion
 
 

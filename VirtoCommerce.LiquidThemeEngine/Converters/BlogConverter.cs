@@ -32,7 +32,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                     //var articlesForLanguage = blog.Articles.Where(x => x.Language == language || x.Language.IsInvariant).GroupBy(x => x.Name).Select(x => x.OrderByDescending(y => y.Language).FirstOrDefault());
                     // ordering generating exception
                     var articlesForLanguage = blog.Articles.GroupBy(x => x.Name).Select(x => x.FindWithLanguage(language)).Where(x => x != null && x.IsPublished);
-                    return new PagedList<Article>(articlesForLanguage.Select(x => x.ToShopifyModel()).OrderByDescending(x => x.CreatedAt), pageNumber, pageSize);
+                    return new PagedList<Article>(articlesForLanguage.Select(x => x.ToShopifyModel()).OrderByDescending(x => x.CreatedAt).AsQueryable(), pageNumber, pageSize);
                 }, blog.Articles.PageNumber, blog.Articles.PageSize);
             }
 

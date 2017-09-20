@@ -32,7 +32,14 @@ namespace VirtoCommerce.Storefront.Services
         public async Task<IPagedList<CustomerOrder>> SearchOrdersAsync(OrderSearchCriteria criteria)
         {
             var workContext = _workContextAccessor.WorkContext;
-            return await InnerSearchOrdersAsync(criteria, workContext);        }
+            return await InnerSearchOrdersAsync(criteria, workContext);
+        }
+
+        public async Task<CustomerOrder> GetOrderByNumberAsync(string number)
+        {
+            var workContext = _workContextAccessor.WorkContext;
+            return (await _orderApi.GetByNumberAsync(number))?.ToCustomerOrder(workContext.AllCurrencies, workContext.CurrentLanguage);
+        }
 
 
         protected virtual async Task<IPagedList<CustomerOrder>> InnerSearchOrdersAsync(OrderSearchCriteria criteria, WorkContext workContext)

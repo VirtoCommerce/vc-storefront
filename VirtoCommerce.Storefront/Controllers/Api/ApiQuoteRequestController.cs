@@ -57,7 +57,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpGet]
         public ActionResult GetCurrent()
         {
-            EnsureQuoteRequestBelongsToCurrentCustomer(WorkContext.CurrentQuoteRequest);
+            EnsureQuoteRequestBelongsToCurrentCustomer(WorkContext.CurrentQuoteRequest.Value);
 
             return Json(WorkContext.CurrentQuoteRequest);
         }
@@ -66,8 +66,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost]
         public async Task<ActionResult> AddItem(string productId, int quantity)
         {
-            EnsureQuoteRequestBelongsToCurrentCustomer(WorkContext.CurrentQuoteRequest);
-            _quoteRequestBuilder.TakeQuoteRequest(WorkContext.CurrentQuoteRequest);
+            EnsureQuoteRequestBelongsToCurrentCustomer(WorkContext.CurrentQuoteRequest.Value);
+            _quoteRequestBuilder.TakeQuoteRequest(WorkContext.CurrentQuoteRequest.Value);
 
             using (await AsyncLock.GetLockByKey(GetAsyncLockQuoteKey(_quoteRequestBuilder.QuoteRequest.Id)).LockAsync())
             {
@@ -104,7 +104,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             EnsureQuoteRequestBelongsToCurrentCustomer(_quoteRequestBuilder.QuoteRequest);
 
-            using (await AsyncLock.GetLockByKey(WorkContext.CurrentQuoteRequest.Id).LockAsync())
+            using (await AsyncLock.GetLockByKey(WorkContext.CurrentQuoteRequest.Value.Id).LockAsync())
             {
                 _quoteRequestBuilder.Update(quoteForm).Submit();
                 await _quoteRequestBuilder.SaveAsync();

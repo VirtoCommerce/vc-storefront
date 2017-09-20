@@ -96,7 +96,7 @@ namespace VirtoCommerce.Storefront.Services
 
                     if (responseGroup.HasFlag(ItemResponseGroup.ItemWithPrices))
                     {
-                        taskList.Add(_pricingService.EvaluateProductPricesAsync(allProducts));
+                        taskList.Add(_pricingService.EvaluateProductPricesAsync(allProducts, workContext));
                     }
 
                     if (responseGroup.HasFlag(ItemResponseGroup.ItemWithVendor))
@@ -243,7 +243,7 @@ namespace VirtoCommerce.Storefront.Services
 
                 if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.ItemWithPrices))
                 {
-                    taskList.Add(_pricingService.EvaluateProductPricesAsync(productsWithVariations));
+                    taskList.Add(_pricingService.EvaluateProductPricesAsync(productsWithVariations, workContext));
                 }
 
                 await Task.WhenAll(taskList.ToArray());

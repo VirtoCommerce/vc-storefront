@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
-using VirtoCommerce.Storefront.Converters;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Common.Exceptions;
+using VirtoCommerce.Storefront.Model.Order.Services;
 using orderModel = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Controllers
@@ -14,10 +13,12 @@ namespace VirtoCommerce.Storefront.Controllers
     public class CartController : StorefrontControllerBase
     {
         private readonly IOrderModule _orderApi;
-        public CartController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IOrderModule orderApi)
+        private readonly ICustomerOrderService _orderService;
+        public CartController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IOrderModule orderApi, ICustomerOrderService orderService)
             : base(workContextAccessor, urlBuilder)
         {
             _orderApi = orderApi;
+            _orderService = orderService;
         }
 
         // GET: /cart
@@ -40,15 +41,12 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpGet]
         public async Task<ActionResult> PaymentForm(string orderNumber)
         {
-            var order = WorkContext.CurrentCustomer.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(orderNumber));
-            if (order == null)
-            {
-                return BadRequest();
-            }
+            var order = await _orderService.GetOrderByNumberAsync(orderNumber);
+          
             var incomingPayment = order.InPayments?.FirstOrDefault(x => x.PaymentMethodType.EqualsInvariant("PreparedForm"));
             if (incomingPayment == null)
             {
-                throw new StorefrontException("Order doesn't have any payment of type: PreparedForm");
+                return BadRequest("Order doesn't have any payment of type: PreparedForm");
             }
             var processingResult = await _orderApi.ProcessOrderPaymentsAsync(order.Id, incomingPayment.Id);
 
@@ -98,10 +96,11 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpGet]
         public async Task<ActionResult> Thanks(string orderNumber)
         {
-            var order = WorkContext.CurrentCustomer.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(orderNumber));
-            if (order == null)
+            var order = await _orderService.GetOrderByNumberAsync(orderNumber);
+
+            if (order == null || order.CustomerId != WorkContext.CurrentCustomer.Id)
             {
-                return BadRequest();
+                return NotFound("Order with number " + orderNumber + " not found.");
             }
 
             WorkContext.CurrentOrder = order;

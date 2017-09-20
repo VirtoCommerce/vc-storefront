@@ -1,4 +1,6 @@
-﻿using Microsoft.Rest;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.Rest;
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
@@ -10,12 +12,12 @@ namespace VirtoCommerce.Storefront.Common
 {
     public class VirtoCommerceApiRequestHandler : ServiceClientCredentials
     {
-        private readonly HmacCredentials _credentials;
         private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly StorefrontOptions _options;
 
-        public VirtoCommerceApiRequestHandler(HmacCredentials credentials, IWorkContextAccessor workContextAccessor)
+        public VirtoCommerceApiRequestHandler(IOptions<StorefrontOptions> options, IWorkContextAccessor workContextAccessor)
         {
-            _credentials = credentials;
+            _options = options.Value;
             _workContextAccessor = workContextAccessor;
         }
 
@@ -30,17 +32,17 @@ namespace VirtoCommerce.Storefront.Common
 
         private void AddAuthorization(HttpRequestMessage request)
         {
-            if (_credentials != null)
+            if (_options.Api != null)
             {
-                var signature = new ApiRequestSignature { AppId = _credentials.AppId };
+                var signature = new ApiRequestSignature { AppId = _options.Api.AppId };
 
                 var parameters = new[]
                 {
-                    new NameValuePair(null, _credentials.AppId),
+                    new NameValuePair(null, _options.Api.AppId),
                     new NameValuePair(null, signature.TimestampString)
                 };
 
-                signature.Hash = HmacUtility.GetHashString(key => new HMACSHA256(key), _credentials.SecretKey, parameters);
+                signature.Hash = HmacUtility.GetHashString(key => new HMACSHA256(key), _options.Api.SecretKey, parameters);
 
                 request.Headers.Authorization = new AuthenticationHeaderValue("HMACSHA256", signature.ToString());
             }

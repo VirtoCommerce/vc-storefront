@@ -231,7 +231,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/cart/paymentPlan    
         [HttpPost]
-        public async Task<ActionResult> AddOrUpdateCartPaymentPlan(PaymentPlan paymentPlan)
+        public async Task<ActionResult> AddOrUpdateCartPaymentPlan([FromBody] PaymentPlan paymentPlan)
         {
             EnsureCartExists();
 
@@ -268,7 +268,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/cart/shipments    
         [HttpPost]
-        public async Task<ActionResult> AddOrUpdateCartShipment(Shipment shipment)
+        public async Task<ActionResult> AddOrUpdateCartShipment([FromBody] Shipment shipment)
         {
             EnsureCartExists();
 
@@ -285,7 +285,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/cart/payments
         [HttpPost]
-        public async Task<ActionResult> AddOrUpdateCartPayment(Payment payment)
+        public async Task<ActionResult> AddOrUpdateCartPayment([FromBody] Payment payment)
         {
             EnsureCartExists();
 
@@ -306,7 +306,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/cart/createorder
         [HttpPost]
-        public async Task<ActionResult> CreateOrder(orderModel.BankCardInfo bankCardInfo)
+        public async Task<ActionResult> CreateOrder([FromBody] orderModel.BankCardInfo bankCardInfo)
         {
             EnsureCartExists();
 

@@ -24,6 +24,8 @@ using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Model.Subscriptions;
 using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 using customerDto = VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models;
+using VirtoCommerce.Storefront.Model.Services;
+using VirtoCommerce.Storefront.Model.Catalog;
 
 namespace VirtoCommerce.Storefront.Services
 {
@@ -129,6 +131,7 @@ namespace VirtoCommerce.Storefront.Services
         public virtual IPagedList<Vendor> SearchVendors(string keyword, int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos)
         {
             // TODO: implement indexed search for vendors
+            //TODO: Add caching for vendors
             var workContext = _workContextAccessor.WorkContext;
             var criteria = new customerDto.MembersSearchCriteria
             {
@@ -142,8 +145,9 @@ namespace VirtoCommerce.Storefront.Services
             {
                 criteria.Sort = SortInfo.ToString(sortInfos);
             }
-            var result = _customerApi.SearchVendors(criteria);
-            return new StaticPagedList<Vendor>(result.Vendors.Select(x => x.ToVendor(workContext.CurrentLanguage, workContext.CurrentStore)), pageNumber, pageSize, result.TotalCount.Value);
+            var vendorSearchResult = _customerApi.SearchVendors(criteria);
+            var vendors = vendorSearchResult.Vendors.Select(x => x.ToVendor(workContext.CurrentLanguage, workContext.CurrentStore));       
+            return new StaticPagedList<Vendor>(vendors, pageNumber, pageSize, vendorSearchResult.TotalCount.Value);
         }
         #endregion
 

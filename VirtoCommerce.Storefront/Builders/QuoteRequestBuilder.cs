@@ -271,10 +271,10 @@ namespace VirtoCommerce.Storefront.Builders
         {
             //If previous user was anonymous and it has not empty cart need merge anonymous cart to personal
             if (userLoginEvent.WorkContext.CurrentStore.QuotesEnabled && !userLoginEvent.PrevUser.IsRegisteredUser
-                 && userLoginEvent.WorkContext.CurrentQuoteRequest != null && userLoginEvent.WorkContext.CurrentQuoteRequest.Items.Any())
+                 && userLoginEvent.WorkContext.CurrentQuoteRequest != null && userLoginEvent.WorkContext.CurrentQuoteRequest.Value.Items.Any())
             {
                 await GetOrCreateNewTransientQuoteRequestAsync(userLoginEvent.WorkContext.CurrentStore, userLoginEvent.NewUser, userLoginEvent.WorkContext.CurrentLanguage, userLoginEvent.WorkContext.CurrentCurrency);
-                await MergeFromOtherAsync(userLoginEvent.WorkContext.CurrentQuoteRequest);
+                await MergeFromOtherAsync(userLoginEvent.WorkContext.CurrentQuoteRequest.Value);
                 await SaveAsync();
             }
         }

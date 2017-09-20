@@ -4,9 +4,10 @@ using VirtoCommerce.Storefront.Model.Catalog;
 
 namespace VirtoCommerce.Storefront.Model.Recommendations
 {
-    public interface IRecommendationsService
+    public interface IRecommendationsProvider
     {
         string ProviderName { get; }
+        RecommendationEvalContext CreateEvalContext();
         Task<Product[]> GetRecommendationsAsync(RecommendationEvalContext context);
         Task AddEventAsync(IEnumerable<UsageEvent> @events);
     }

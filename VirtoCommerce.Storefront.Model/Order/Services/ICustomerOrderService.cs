@@ -10,5 +10,6 @@ namespace VirtoCommerce.Storefront.Model.Order.Services
     {
         Task<IPagedList<CustomerOrder>> SearchOrdersAsync(OrderSearchCriteria criteria);
         IPagedList<CustomerOrder> SearchOrders(OrderSearchCriteria criteria);
+        Task<CustomerOrder> GetOrderByNumberAsync(string number);
     }
 }

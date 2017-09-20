@@ -24,16 +24,13 @@ namespace VirtoCommerce.Storefront.Services
         private readonly ITaxEvaluator _taxEvaluator;
         private readonly IPromotionEvaluator _promotionEvaluator;
         private readonly IInventoryService _inventoryService;
-        private readonly IWorkContextAccessor _workContextAccessor;
         private readonly ICacheManager<object> _cacheManager;
 
-        public PricingService(IWorkContextAccessor workContextAccessor,
-        IPricingModule pricingApi,
+        public PricingService(IPricingModule pricingApi,
             ITaxEvaluator taxEvaluator,
             IPromotionEvaluator promotionEvaluator,
             IInventoryService inventoryService, ICacheManager<object> cacheManager)
         {
-            _workContextAccessor = workContextAccessor;
             _pricingApi = pricingApi;
             _taxEvaluator = taxEvaluator;
             _promotionEvaluator = promotionEvaluator;
@@ -42,24 +39,34 @@ namespace VirtoCommerce.Storefront.Services
         }
 
         #region IPricingService Members
-        public virtual async Task<IList<Pricelist>> EvaluatePricesListsAsync(PriceEvaluationContext evalContext)
+        public virtual async Task<IList<Pricelist>> EvaluatePricesListsAsync(PriceEvaluationContext evalContext, WorkContext workContext)
         {
+            if (evalContext == null)
+            {
+                throw new ArgumentNullException(nameof(evalContext));
+            }
+            if (workContext == null)
+            {
+                throw new ArgumentNullException(nameof(workContext));
+            }
             return await _cacheManager.GetAsync($"EvaluatePricesListsAsync-{evalContext.GetHashCode()}", StorefrontConstants.PricingCacheRegion, async () =>
             {
-                var workContext = _workContextAccessor.WorkContext;
                 return (await _pricingApi.EvaluatePriceListsAsync(evalContext.ToPriceEvaluationContextDto())).Select(x => x.ToPricelist(workContext.AllCurrencies, workContext.CurrentLanguage)).ToList();
             });
-          
+
         }
 
-        public virtual async Task EvaluateProductPricesAsync(IEnumerable<Product> products)
+        public virtual async Task EvaluateProductPricesAsync(IEnumerable<Product> products, WorkContext workContext)
         {
-            if(products == null)
+            if (products == null)
             {
                 throw new ArgumentNullException(nameof(products));
             }
+            if (workContext == null)
+            {
+                throw new ArgumentNullException(nameof(workContext));
+            }
 
-            var workContext = _workContextAccessor.WorkContext;
             //Evaluate products prices
             var evalContext = workContext.ToPriceEvaluationContext(products);
 

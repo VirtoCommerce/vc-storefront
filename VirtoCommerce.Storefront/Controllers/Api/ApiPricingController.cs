@@ -33,7 +33,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             if (products != null)
             {
                 //Evaluate products prices
-                await _pricingService.EvaluateProductPricesAsync(products);
+                await _pricingService.EvaluateProductPricesAsync(products, WorkContext);
               
                 var retVal = products.Select(x => x.Price).ToArray();
 

@@ -22,7 +22,6 @@ namespace VirtoCommerce.Storefront.Model
         public WorkContext()
         {
             CurrentPricelists = new List<Pricelist>();
-            CurrentLinkLists = new List<MenuLinkList>();
             ExternalLoginProviders = new List<LoginProvider>();
             ApplicationSettings = new Dictionary<string, object>();
         }
@@ -91,7 +90,7 @@ namespace VirtoCommerce.Storefront.Model
         /// </summary>
         public QuoteSearchCriteria CurrentQuoteSearchCriteria { get; set; }
 
-        public QuoteRequest CurrentQuoteRequest { get; set; }
+        public Lazy<QuoteRequest> CurrentQuoteRequest { get; set; }
 
         /// <summary>
         /// Gets or sets the HTML code for payment method prepared form
@@ -101,7 +100,7 @@ namespace VirtoCommerce.Storefront.Model
         /// <summary>
         /// Gets or sets the collection of site navigation menu link lists
         /// </summary>
-        public ICollection<MenuLinkList> CurrentLinkLists { get; set; }
+        public IMutablePagedList<MenuLinkList> CurrentLinkLists { get; set; }
 
         /// <summary>
         /// List of all supported stores

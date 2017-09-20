@@ -22,7 +22,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/subscriptions/search
         [HttpPost]
-        public async Task<ActionResult> SearchCustomerSubscriptions(SubscriptionSearchCriteria searchCriteria)
+        public async Task<ActionResult> SearchCustomerSubscriptions([FromBody] SubscriptionSearchCriteria searchCriteria)
         {
             if(searchCriteria == null)
             {
@@ -46,7 +46,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/subscriptions/{number}/cancel
         [HttpPost]
-        public async Task<ActionResult> CancelSubscription(SubscriptionCancelRequest cancelRequest)
+        public async Task<ActionResult> CancelSubscription([FromBody] SubscriptionCancelRequest cancelRequest)
         {
             var subscription = await GetSubscriptionByNumberAsync(cancelRequest.Number);
             var retVal = (await _subscriptionService.CancelSubscriptionAsync(new SubscriptionCancelRequest

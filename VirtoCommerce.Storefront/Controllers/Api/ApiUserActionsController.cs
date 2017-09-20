@@ -12,10 +12,10 @@ namespace VirtoCommerce.Storefront.Controllers.Api
     //[HandleJsonError]
     public class ApiUserActionsController : StorefrontControllerBase
     {
-        private readonly IRecommendationsService _productRecommendationsService;
+        private readonly IRecommendationsProvider _productRecommendationsService;
 
         public ApiUserActionsController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder,
-            IRecommendationsService productRecommendationsApi) : base(workContextAccessor, urlBuilder)
+            IRecommendationsProvider productRecommendationsApi) : base(workContextAccessor, urlBuilder)
         {
             _productRecommendationsService = productRecommendationsApi;
         }
@@ -27,7 +27,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         /// <param name="userSession"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> SaveEventInfo(UserSession userSession)
+        public async Task<ActionResult> SaveEventInfo([FromBody] UserSession userSession)
         {
             //TODO: need to replace to other special detected VC API for usage
             if (userSession.Interactions != null)
