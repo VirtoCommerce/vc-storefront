@@ -29,7 +29,7 @@ using cartModel = VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Builders
 {
-    public class CartBuilder : ICartBuilder, IAsyncObserver<UserLoginEvent>
+    public class CartBuilder : ICartBuilder, IEventHandler<UserLoginEvent>
     {
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly ICartModule _cartApi;
@@ -441,21 +441,21 @@ namespace VirtoCommerce.Storefront.Builders
 
         #endregion
 
-        #region IObserver<UserLoginEvent> Members
+        #region IEventHandler<UserLoginEvent>
 
         /// <summary>
         /// Merges anonymous cart and logged in customer cart
         /// </summary>
         /// <param name="userLoginEvent"></param>
-        public virtual async Task OnNextAsync(UserLoginEvent userLoginEvent)
+        public virtual async Task Handle(UserLoginEvent @event)
         {
-            if (userLoginEvent == null)
+            if (@event == null)
                 return;
 
-            var workContext = userLoginEvent.WorkContext;
-            var prevUser = userLoginEvent.PrevUser;
-            var prevUserCart = userLoginEvent.WorkContext.CurrentCart.Value;
-            var newUser = userLoginEvent.NewUser;
+            var workContext = @event.WorkContext;
+            var prevUser = @event.WorkContext.CurrentCustomer;
+            var prevUserCart = @event.WorkContext.CurrentCart.Value;
+            var newUser = @event.User;
 
             //If previous user was anonymous and it has not empty cart need merge anonymous cart to personal
             if (!prevUser.IsRegisteredUser && prevUserCart != null && prevUserCart.Items.Any())

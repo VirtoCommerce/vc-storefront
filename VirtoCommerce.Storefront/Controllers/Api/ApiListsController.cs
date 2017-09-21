@@ -9,7 +9,6 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-    //[HandleJsonError]
     public class ApiListsController : StorefrontControllerBase
     {
         private readonly ICartBuilder _wishlistBuilder;

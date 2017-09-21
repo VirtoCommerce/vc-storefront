@@ -1,6 +1,8 @@
-﻿namespace VirtoCommerce.Storefront.Model.Quote.Events
+﻿using VirtoCommerce.Storefront.Model.Common.Events;
+
+namespace VirtoCommerce.Storefront.Model.Quote.Events
 {
-    public class QuoteRequestUpdatedEvent
+    public class QuoteRequestUpdatedEvent : DomainEvent
     {
         public QuoteRequestUpdatedEvent(QuoteRequest quoteRequest)
         {

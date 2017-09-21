@@ -6,6 +6,7 @@ using DotLiquid.ViewEngine.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -39,7 +40,7 @@ namespace VirtoCommerce.LiquidThemeEngine
     /// </summary>
     public class ShopifyLiquidThemeEngine : IFileSystem, ILiquidThemeEngine
     {
-        private readonly LiquidThemeEngineSettings _options;
+        private readonly LiquidThemeEngineOptions _options;
         private static readonly Regex _isLiquid = new Regex("[{}|]", RegexOptions.Compiled);      
         private const string _liquidTemplateFormat = "{0}.liquid";
         private readonly IWorkContextAccessor _workContextAccessor;
@@ -49,11 +50,11 @@ namespace VirtoCommerce.LiquidThemeEngine
         //private readonly SassCompilerProxy _saasCompiler = new SassCompilerProxy();
         private readonly IThemesContentBlobProvider _themeBlobProvider;
         public ShopifyLiquidThemeEngine(ICacheManager<object> cache, IWorkContextAccessor workContextAccessor, 
-                                        IStorefrontUrlBuilder storeFrontUrlBuilder, IThemesContentBlobProvider themeBlobProvider, LiquidThemeEngineSettings options)
+                                        IStorefrontUrlBuilder storeFrontUrlBuilder, IThemesContentBlobProvider themeBlobProvider, IOptions<LiquidThemeEngineOptions> options)
         {
             _workContextAccessor = workContextAccessor;
             _storeFrontUrlBuilder = storeFrontUrlBuilder;
-            _options = options;
+            _options = options.Value;
             _cache = cache;
             _themeBlobProvider = themeBlobProvider;
 

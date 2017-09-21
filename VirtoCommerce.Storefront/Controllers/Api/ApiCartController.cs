@@ -27,18 +27,18 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private readonly ICartBuilder _cartBuilder;
         private readonly IOrderModule _orderApi;
         private readonly ICatalogService _catalogService;
-        private readonly IEventPublisher<OrderPlacedEvent> _orderPlacedEventPublisher;
+        private readonly IEventPublisher _publisher;
         private readonly ISubscriptionService _subscriptionService;
 
         public ApiCartController(IWorkContextAccessor workContextAccessor, ICatalogService catalogService, ICartBuilder cartBuilder,
                                  IOrderModule orderApi, IStorefrontUrlBuilder urlBuilder,
-                                 IEventPublisher<OrderPlacedEvent> orderPlacedEventPublisher, ISubscriptionService subscriptionService)
+                                 IEventPublisher publisher, ISubscriptionService subscriptionService)
             : base(workContextAccessor, urlBuilder)
         {
             _cartBuilder = cartBuilder;
             _orderApi = orderApi;
             _catalogService = catalogService;
-            _orderPlacedEventPublisher = orderPlacedEventPublisher;
+            _publisher = publisher;
             _subscriptionService = subscriptionService;
         }
 
@@ -318,7 +318,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var order = await _orderApi.CreateOrderFromCartAsync(cartBuilder.Cart.Id);
 
                 //Raise domain event
-                await _orderPlacedEventPublisher.PublishAsync(new OrderPlacedEvent(order.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage), cartBuilder.Cart));
+                await _publisher.Publish(new OrderPlacedEvent(order.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage), cartBuilder.Cart));
 
 
                 orderModel.ProcessPaymentResult processingResult = null;

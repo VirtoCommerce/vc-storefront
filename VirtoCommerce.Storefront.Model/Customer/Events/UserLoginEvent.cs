@@ -4,24 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model.Cart;
+using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer;
+using VirtoCommerce.Storefront.Model.Quote;
+using VirtoCommerce.Storefront.Model.Stores;
 
 namespace VirtoCommerce.Storefront.Model.Order.Events
 {
     /// <summary>
-    /// Event generated when user logined to storefront
+    /// Event generated when user logged in to the storefront
     /// </summary>
-    public class UserLoginEvent
+    public partial class UserLoginEvent : DomainEvent
     {
-        public UserLoginEvent(WorkContext workContext, CustomerInfo prevUser, CustomerInfo newUser)
+        public UserLoginEvent(WorkContext workContext, CustomerInfo user)
         {
             WorkContext = workContext;
-            PrevUser = prevUser;
-            NewUser = newUser;
+            User = user;
         }
 
         public WorkContext WorkContext { get; set; }
-        public CustomerInfo PrevUser { get; set; }
-        public CustomerInfo NewUser { get; set; }
+        public CustomerInfo User { get; set; }
     }
 }

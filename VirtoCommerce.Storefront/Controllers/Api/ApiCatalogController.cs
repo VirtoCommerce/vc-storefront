@@ -7,8 +7,6 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-    //TODO:
-    //[HandleJsonError]
     public class ApiCatalogController : StorefrontControllerBase
     {
         private readonly ICatalogService _catalogService;

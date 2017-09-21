@@ -12,21 +12,21 @@ using VirtoCommerce.Storefront.Builders;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.JsonConverters;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Catalog.Services;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common.Bus;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Inventory.Services;
 using VirtoCommerce.Storefront.Model.LinkList.Services;
 using VirtoCommerce.Storefront.Model.Marketing.Services;
-using VirtoCommerce.Storefront.Model.Order.Events;
 using VirtoCommerce.Storefront.Model.Order.Services;
 using VirtoCommerce.Storefront.Model.Pricing.Services;
-using VirtoCommerce.Storefront.Model.Quote.Events;
 using VirtoCommerce.Storefront.Model.Quote.Services;
 using VirtoCommerce.Storefront.Model.Recommendations;
 using VirtoCommerce.Storefront.Model.Services;
@@ -39,8 +39,6 @@ using VirtoCommerce.Storefront.Services;
 using VirtoCommerce.Storefront.Services.Identity;
 using VirtoCommerce.Storefront.Services.Recommendations;
 using VirtoCommerce.Tools;
-using Microsoft.Extensions.DependencyInjection;
-using VirtoCommerce.Storefront.JsonConverters;
 
 namespace VirtoCommerce.Storefront
 {
@@ -93,14 +91,12 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<AssociationRecommendationsProvider>();
             services.AddSingleton<CognitiveRecommendationsProvider>();
             services.AddSingleton<IRecommendationProviderFactory, RecommendationProviderFactory>(provider => new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(), provider.GetService<CognitiveRecommendationsProvider>()));
-            //TODO: replace to  Event bus publisher
-            //Register domain events
-            services.AddSingleton<IEventPublisher<OrderPlacedEvent>, EventPublisher<OrderPlacedEvent>>();
-            services.AddSingleton<IEventPublisher<UserLoginEvent>, EventPublisher<UserLoginEvent>>();
-            services.AddSingleton<IEventPublisher<QuoteRequestUpdatedEvent>, EventPublisher<QuoteRequestUpdatedEvent>>();
 
+            //Register events framework dependencies
+            services.AddSingleton(new InProcessBus());
+            services.AddSingleton<IEventPublisher>(provider => provider.GetService<InProcessBus>());
+            services.AddSingleton<IHandlerRegistrar>(provider => provider.GetService<InProcessBus>());
 
-         
             //Register platform API clients
             services.AddPlatformApi(storefrontOptions);
 
@@ -138,6 +134,7 @@ namespace VirtoCommerce.Storefront
             });
 
             var snapshotProvider = services.BuildServiceProvider();
+            //Register JSON converters to 
             services.AddMvc().AddJsonOptions(options =>
             {
                 options.SerializerSettings.Converters.Add(new CartTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
@@ -146,8 +143,10 @@ namespace VirtoCommerce.Storefront
                 options.SerializerSettings.Converters.Add(new OrderTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
                 options.SerializerSettings.Converters.Add(new RecommendationJsonConverter(snapshotProvider.GetService<IRecommendationProviderFactory>()));
             });
-
-
+            
+            //Register event handlers via reflection
+            services.RegisterAssembliesEventHandlers(typeof(Startup));
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

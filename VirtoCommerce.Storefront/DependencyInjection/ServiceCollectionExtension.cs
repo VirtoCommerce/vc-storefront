@@ -6,27 +6,32 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.LiquidThemeEngine;
+using VirtoCommerce.Storefront.AutoRestClients.CartModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
-using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
-using VirtoCommerce.Storefront.Common;
-using VirtoCommerce.Storefront.Extensions;
-using VirtoCommerce.Storefront.Model.StaticContent;
-using VirtoCommerce.Storefront.Services;
-using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
-using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
-using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
-using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi;
-using VirtoCommerce.Storefront.AutoRestClients.CartModuleApi;
-using VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi;
-using System.Net.Http;
 using VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
+using VirtoCommerce.Storefront.Common;
+using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Model.Common.Bus;
+using VirtoCommerce.Storefront.Model.Common.Events;
+using VirtoCommerce.Storefront.Model.Common.Messages;
+using VirtoCommerce.Storefront.Model.StaticContent;
+using VirtoCommerce.Storefront.Services;
 
 namespace VirtoCommerce.Storefront.DependencyInjection
 {
@@ -107,21 +112,102 @@ namespace VirtoCommerce.Storefront.DependencyInjection
                 throw new ArgumentNullException(nameof(services));
             }
 
-            var liquidThemeEngineOptions = new LiquidThemeEngineSettings
-            {
-                ThemesAssetsRelativeUrl = "~/themes/assets",
-                RethrowLiquidRenderErrors = configuration.GetValue("VirtoCommerce:LiquidThemeEngine:RethrowErrors", false)
-            };
-            services.AddSingleton(liquidThemeEngineOptions);
-            services.AddSingleton<ShopifyLiquidThemeEngine>();
-            var tmpProvider = services.BuildServiceProvider();
+            var configSection = configuration.GetSection("VirtoCommerce:LiquidThemeEngine");
+            services.Configure<LiquidThemeEngineOptions>(configSection);
 
-            services.AddSingleton<ILiquidThemeEngine>(tmpProvider.GetService<ShopifyLiquidThemeEngine>());
+            services.AddSingleton<ShopifyLiquidThemeEngine>();
+            var provider = services.BuildServiceProvider();
+
+            services.AddSingleton<ILiquidThemeEngine>(provider.GetService<ShopifyLiquidThemeEngine>());
             var mvcBuilder = services.AddMvc().AddViewOptions(options =>
             {
-                options.ViewEngines.Add(new DotLiquidThemedViewEngine(tmpProvider.GetService<ShopifyLiquidThemeEngine>()));
+                options.ViewEngines.Add(new DotLiquidThemedViewEngine(provider.GetService<ShopifyLiquidThemeEngine>()));
             });
 
+        }
+
+        //Register event handlers through reflection
+        public static void RegisterAssembliesEventHandlers(this IServiceCollection services, params Type[] typesFromAssemblyContainingMessages)
+        {
+            //Scan for eventhandlers
+            services.Scan(scan => scan
+                .FromAssemblies(typesFromAssemblyContainingMessages.Select(x => x.Assembly))
+                    .AddClasses(classes => classes.Where(x => {
+                        var allInterfaces = x.GetInterfaces();
+                        return
+                            allInterfaces.Any(y => y.GetTypeInfo().IsGenericType && y.GetTypeInfo().GetGenericTypeDefinition() == typeof(IHandler<>)) ||
+                            allInterfaces.Any(y => y.GetTypeInfo().IsGenericType && y.GetTypeInfo().GetGenericTypeDefinition() == typeof(ICancellableHandler<>));
+                    }))
+                    .AsSelf()
+                    .WithTransientLifetime()
+            );
+
+            var serviceProvider = services.BuildServiceProvider();
+            var handlerRegistrar = serviceProvider.GetService<IHandlerRegistrar>();
+
+            foreach (var typesFromAssemblyContainingMessage in typesFromAssemblyContainingMessages)
+            {
+                var executorsAssembly = typesFromAssemblyContainingMessage.GetTypeInfo().Assembly;
+                var executorTypes = executorsAssembly
+                    .GetTypes()
+                    .Select(t => new { Type = t, Interfaces = ResolveMessageHandlerInterface(t) })
+                    .Where(e => e.Interfaces != null && e.Interfaces.Any());
+
+                foreach (var executorType in executorTypes)
+                {
+                    foreach (var @interface in executorType.Interfaces)
+                    {
+                        InvokeHandler(@interface, handlerRegistrar, executorType.Type, serviceProvider);
+                    }
+                }
+            }
+        }
+
+        private static void InvokeHandler(Type @interface, IHandlerRegistrar registrar, Type executorType, ServiceProvider serviceProvider)
+        {
+            var commandType = @interface.GetGenericArguments()[0];
+
+            var registerExecutorMethod = registrar
+                .GetType()
+                .GetMethods(BindingFlags.Instance | BindingFlags.Public)
+                .Where(mi => mi.Name == "RegisterHandler")
+                .Where(mi => mi.IsGenericMethod)
+                .Where(mi => mi.GetGenericArguments().Length == 1)
+                .Single(mi => mi.GetParameters().Length == 1)
+                .MakeGenericMethod(commandType);
+
+            Func<dynamic, CancellationToken, Task> del;
+            if (IsCancellable(@interface))
+            {
+                del = (x, token) =>
+                {
+                    dynamic handler = serviceProvider.GetService(executorType);
+                    return handler.Handle(x, token);
+                };
+            }
+            else
+            {
+                del = (x, token) =>
+                {
+                    dynamic handler = serviceProvider.GetService(executorType);
+                    return handler.Handle(x);
+                };
+            }
+
+            registerExecutorMethod.Invoke(registrar, new object[] { del });
+        }
+
+        private static bool IsCancellable(Type @interface)
+        {
+            return @interface.GetGenericTypeDefinition() == typeof(ICancellableEventHandler<>);
+        }
+
+        private static IEnumerable<Type> ResolveMessageHandlerInterface(Type type)
+        {
+            return type
+                .GetInterfaces()
+                .Where(i => i.GetTypeInfo().IsGenericType && (i.GetGenericTypeDefinition() == typeof(IEventHandler<>)
+                             || i.GetGenericTypeDefinition() == typeof(ICancellableEventHandler<>)));
         }
     }
 }

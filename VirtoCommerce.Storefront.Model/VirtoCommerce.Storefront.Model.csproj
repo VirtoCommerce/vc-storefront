@@ -10,6 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Common\Bus\" />
+    <Folder Include="Common\Messages\" />
     <Folder Include="Properties\" />
   </ItemGroup>
 

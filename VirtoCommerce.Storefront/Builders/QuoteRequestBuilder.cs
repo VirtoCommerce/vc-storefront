@@ -21,23 +21,20 @@ using quoteModel = VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Model
 
 namespace VirtoCommerce.Storefront.Builders
 {
-    public class QuoteRequestBuilder : IQuoteRequestBuilder, IAsyncObserver<UserLoginEvent>
+    public class QuoteRequestBuilder : IQuoteRequestBuilder, IEventHandler<UserLoginEvent>
     {
         private readonly IQuoteModule _quoteApi;
         private readonly ICacheManager<object> _cacheManager;
-        private readonly IEventPublisher<QuoteRequestUpdatedEvent> _quoteRequestUpdatedEventPublisher;
+        private readonly IEventPublisher _publisher;
 
         private QuoteRequest _quoteRequest;
         private const string _quoteRequestCacheRegion = "QuoteRequestRegion";
 
-        public QuoteRequestBuilder(
-            IQuoteModule quoteApi,
-            ICacheManager<object> cacheManager,
-            IEventPublisher<QuoteRequestUpdatedEvent> quoteRequestUpdatedEventPublisher)
+        public QuoteRequestBuilder(IQuoteModule quoteApi, ICacheManager<object> cacheManager, IEventPublisher publisher)
         {
             _quoteApi = quoteApi;
             _cacheManager = cacheManager;
-            _quoteRequestUpdatedEventPublisher = quoteRequestUpdatedEventPublisher;
+            _publisher = publisher;
         }
 
         #region IQuoteRequestBuilder Members
@@ -241,7 +238,7 @@ namespace VirtoCommerce.Storefront.Builders
                 await _quoteApi.UpdateAsync(quoteDto);
             }
 
-            await _quoteRequestUpdatedEventPublisher.PublishAsync(new QuoteRequestUpdatedEvent(_quoteRequest));
+            await _publisher.Publish(new QuoteRequestUpdatedEvent(_quoteRequest));
         }
 
         public QuoteRequest QuoteRequest
@@ -264,17 +261,17 @@ namespace VirtoCommerce.Storefront.Builders
         #region IObserver<UserLoginEvent> Members
 
         /// <summary>
-        /// Merge anonymous user quote to newly logined user quote by loging event
+        /// Merge anonymous user quote to newly log in user quote by log in event
         /// </summary>
         /// <param name="userLoginEvent"></param>
-        public async Task OnNextAsync(UserLoginEvent userLoginEvent)
+        public virtual async Task Handle(UserLoginEvent @event)
         {
             //If previous user was anonymous and it has not empty cart need merge anonymous cart to personal
-            if (userLoginEvent.WorkContext.CurrentStore.QuotesEnabled && !userLoginEvent.PrevUser.IsRegisteredUser
-                 && userLoginEvent.WorkContext.CurrentQuoteRequest != null && userLoginEvent.WorkContext.CurrentQuoteRequest.Value.Items.Any())
+            if (@event.WorkContext.CurrentStore.QuotesEnabled && !@event.WorkContext.CurrentCustomer.IsRegisteredUser
+                 && @event.WorkContext.CurrentQuoteRequest != null && @event.WorkContext.CurrentQuoteRequest.Value.Items.Any())
             {
-                await GetOrCreateNewTransientQuoteRequestAsync(userLoginEvent.WorkContext.CurrentStore, userLoginEvent.NewUser, userLoginEvent.WorkContext.CurrentLanguage, userLoginEvent.WorkContext.CurrentCurrency);
-                await MergeFromOtherAsync(userLoginEvent.WorkContext.CurrentQuoteRequest.Value);
+                await GetOrCreateNewTransientQuoteRequestAsync(@event.WorkContext.CurrentStore, @event.User, @event.WorkContext.CurrentLanguage, @event.WorkContext.CurrentCurrency);
+                await MergeFromOtherAsync(@event.WorkContext.CurrentQuoteRequest.Value);
                 await SaveAsync();
             }
         }

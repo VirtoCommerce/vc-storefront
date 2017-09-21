@@ -6,7 +6,6 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-    //[HandleJsonError]
     public class ApiMarketingController : StorefrontControllerBase
     {
         private readonly IMarketingService _marketingService;

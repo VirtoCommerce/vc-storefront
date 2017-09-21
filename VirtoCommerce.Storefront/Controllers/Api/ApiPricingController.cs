@@ -10,7 +10,6 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-    //[HandleJsonError]
     public class ApiPricingController : StorefrontControllerBase
     {
         private readonly IMarketingService _marketingService;

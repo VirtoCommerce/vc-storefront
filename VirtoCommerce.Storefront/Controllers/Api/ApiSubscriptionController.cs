@@ -9,7 +9,6 @@ using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-    //[HandleJsonError]
     public class ApiSubscriptionController : StorefrontControllerBase
     {
         private readonly ISubscriptionService _subscriptionService;

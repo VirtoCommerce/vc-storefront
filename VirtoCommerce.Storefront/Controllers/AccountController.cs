@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer;
+using VirtoCommerce.Storefront.Model.Order.Events;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
@@ -14,10 +16,12 @@ namespace VirtoCommerce.Storefront.Controllers
     public class AccountController : StorefrontControllerBase
     {
         private readonly SignInManager<CustomerInfo> _signInManager;
-        public AccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<CustomerInfo> signInManager)
+        private readonly IEventPublisher _publisher;
+        public AccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<CustomerInfo> signInManager, IEventPublisher publisher)
             : base(workContextAccessor, urlBuilder)
         {
             _signInManager = signInManager;
+            _publisher = publisher;
         }
 
         //GET: /account
@@ -125,7 +129,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
             if (loginResult.Succeeded)
             {
-                var userInfo = await _signInManager.UserManager.FindByNameAsync(login.Username);
+                var user = await _signInManager.UserManager.FindByNameAsync(login.Username);
                 //Check that it's login on behalf request           
                 var onBehalfUserId = Request.Cookies[StorefrontConstants.LoginOnBehalfUserIdCookie];
                 //TODO: login on behalf
@@ -147,11 +151,9 @@ namespace VirtoCommerce.Storefront.Controllers
                 //}
 
                 //Check that current user can sing in to current store
-                if (userInfo.AllowedStores.IsNullOrEmpty() || userInfo.AllowedStores.Any(x => x.EqualsInvariant(WorkContext.CurrentStore.Id)))
+                if (user.AllowedStores.IsNullOrEmpty() || user.AllowedStores.Any(x => x.EqualsInvariant(WorkContext.CurrentStore.Id)))
                 {    
-                    //TODO: Publish user login event
-                    //Publish user login event 
-                    //await _userLoginEventPublisher.PublishAsync(new UserLoginEvent(WorkContext, WorkContext.CurrentCustomer, customer));
+                    await _publisher.Publish(new UserLoginEvent(WorkContext, user));
                     return StoreFrontRedirect(returnUrl);
                 }
                 else

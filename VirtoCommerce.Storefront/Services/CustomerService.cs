@@ -1,10 +1,10 @@
-﻿using System;
+﻿using CacheManager.Core;
+using PagedList.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using CacheManager.Core;
-using PagedList.Core;
 using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Common;
@@ -24,12 +24,10 @@ using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Model.Subscriptions;
 using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 using customerDto = VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models;
-using VirtoCommerce.Storefront.Model.Services;
-using VirtoCommerce.Storefront.Model.Catalog;
 
 namespace VirtoCommerce.Storefront.Services
 {
-    public class CustomerService : ICustomerService, IAsyncObserver<OrderPlacedEvent>, IAsyncObserver<QuoteRequestUpdatedEvent>
+    public class CustomerService : ICustomerService, IEventHandler<OrderPlacedEvent>, IEventHandler<QuoteRequestUpdatedEvent>
     {
         private readonly ICustomerModule _customerApi;
         private readonly ICustomerOrderService _orderService;
@@ -151,21 +149,21 @@ namespace VirtoCommerce.Storefront.Services
         }
         #endregion
 
-        #region IObserver<CreateOrderEvent> Members
-        public virtual async Task OnNextAsync(OrderPlacedEvent eventArgs)
+        #region IEventHandler<OrderPlacedEvent> 
+        public virtual async Task Handle(OrderPlacedEvent @event)
         {
-            if (eventArgs.Order != null)
+            if (@event.Order != null)
             {
                 //Invalidate cache
-                _cacheManager.ClearRegion(string.Format(_customerOrdersCacheRegionFormat, eventArgs.Order.CustomerId));
-                _cacheManager.ClearRegion(string.Format(_customerSubscriptionCacheRegionFormat, eventArgs.Order.CustomerId));
+                _cacheManager.ClearRegion(string.Format(_customerOrdersCacheRegionFormat, @event.Order.CustomerId));
+                _cacheManager.ClearRegion(string.Format(_customerSubscriptionCacheRegionFormat, @event.Order.CustomerId));
 
                 var workContext = _workContextAccessor.WorkContext;
                 //Add addresses to contact profile
                 if (workContext.CurrentCustomer.IsRegisteredUser)
                 {
-                    workContext.CurrentCustomer.Addresses.AddRange(eventArgs.Order.Addresses);
-                    workContext.CurrentCustomer.Addresses.AddRange(eventArgs.Order.Shipments.Select(x => x.DeliveryAddress));
+                    workContext.CurrentCustomer.Addresses.AddRange(@event.Order.Addresses);
+                    workContext.CurrentCustomer.Addresses.AddRange(@event.Order.Shipments.Select(x => x.DeliveryAddress));
 
                     foreach (var address in workContext.CurrentCustomer.Addresses)
                     {
@@ -178,17 +176,16 @@ namespace VirtoCommerce.Storefront.Services
         }
         #endregion
 
-        #region IAsyncObserver<QuoteRequestUpdatedEvent> Members
+        #region IEventHandler<QuoteRequestUpdatedEvent>
 
-        public virtual Task OnNextAsync(QuoteRequestUpdatedEvent quoteRequestCreatedEvent)
+        public virtual Task Handle(QuoteRequestUpdatedEvent @event)
         {
-            if (quoteRequestCreatedEvent.QuoteRequest != null)
+            if (@event.QuoteRequest != null)
             {
                 //Invalidate cache
-                _cacheManager.ClearRegion(string.Format(_customerQuotesCacheRegionFormat, quoteRequestCreatedEvent.QuoteRequest.CustomerId));
+                _cacheManager.ClearRegion(string.Format(_customerQuotesCacheRegionFormat, @event.QuoteRequest.CustomerId));
             }
-
-            return Task.Factory.StartNew(() => { });
+            return Task.CompletedTask;
         }
 
         #endregion

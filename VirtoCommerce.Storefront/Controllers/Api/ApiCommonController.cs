@@ -9,7 +9,6 @@ using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-    //[HandleJsonError]
     public class ApiCommonController : StorefrontControllerBase
     {
         private readonly IStoreModule _storeApi;
