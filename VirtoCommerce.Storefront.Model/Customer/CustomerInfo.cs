@@ -18,10 +18,8 @@ namespace VirtoCommerce.Storefront.Model.Customer
             Addresses = new List<Address>();
             DynamicProperties = new List<DynamicProperty>();
         }
-        /// <summary>
-        /// Security account Id
-        /// </summary>
-        public string UserId { get; set; }
+        //Associated with current user member from contact module
+        public string MemberId { get; set; }
         /// <summary>
         /// Store id
         /// </summary>
@@ -112,7 +110,8 @@ namespace VirtoCommerce.Storefront.Model.Customer
         /// User groups such as VIP, Wholesaler etc
         /// </summary>
         public IEnumerable<string> UserGroups { get; set; }
-
+        //Selected and persisted currency code
+        public string SelectedCurrencyCode { get; set; }
         /// <summary>
         /// Entity type of customer
         /// </summary>

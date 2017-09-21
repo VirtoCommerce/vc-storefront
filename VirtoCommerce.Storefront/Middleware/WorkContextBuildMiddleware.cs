@@ -22,13 +22,13 @@ using VirtoCommerce.Storefront.Common;
 
 namespace VirtoCommerce.Storefront.Middleware
 {
-    public class WorkContextPopulateMiddleware
+    public class WorkContextBuildMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly StorefrontOptions _options;
         private readonly IWorkContextAccessor _workContextAccessor;
-        public WorkContextPopulateMiddleware(RequestDelegate next, IHostingEnvironment hostingEnvironment,
+        public WorkContextBuildMiddleware(RequestDelegate next, IHostingEnvironment hostingEnvironment,
                                              IOptions<StorefrontOptions> options, IWorkContextAccessor workContextAccessor)
         {
             _next = next;

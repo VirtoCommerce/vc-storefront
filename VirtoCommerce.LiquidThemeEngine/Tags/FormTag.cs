@@ -79,6 +79,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Tags
                     HttpUtility.HtmlAttributeEncode(formName));
 
                 // add anti forgery token
+                //TODO:
                 //result.WriteLine(AntiForgery.GetHtml());
 
                 RenderAll(NodeList, context, result);

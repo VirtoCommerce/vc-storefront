@@ -13,12 +13,13 @@ namespace VirtoCommerce.Storefront.Model.Order.Events
     /// </summary>
     public class OrderPlacedEvent : DomainEvent
     {
-        public OrderPlacedEvent(CustomerOrder order, ShoppingCart cart)
+        public OrderPlacedEvent(WorkContext workContext, CustomerOrder order, ShoppingCart cart)
         {
+            WorkContext = workContext;
             Cart = cart;
             Order = order;
         }
-
+        public WorkContext WorkContext { get; set; }
         public ShoppingCart Cart { get; set; }
         public CustomerOrder Order { get; set; }
         

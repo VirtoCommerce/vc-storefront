@@ -137,11 +137,14 @@ namespace VirtoCommerce.Storefront.Converters
 
         public virtual CustomerInfo ToCustomerInfo(Register formModel)
         {
-            var result = new CustomerInfo();
-            result.Email = formModel.Email;
-            result.FullName = string.Join(" ", formModel.FirstName, formModel.LastName);
-            result.FirstName = formModel.FirstName;
-            result.LastName = formModel.LastName;
+            var result = new CustomerInfo
+            {
+                Email = formModel.Email,
+                UserName = formModel.UserName,
+                FullName = string.Join(" ", formModel.FirstName, formModel.LastName),
+                FirstName = formModel.FirstName,
+                LastName = formModel.LastName
+            };
 
             if (string.IsNullOrEmpty(result.FullName) || string.IsNullOrWhiteSpace(result.FullName))
             {

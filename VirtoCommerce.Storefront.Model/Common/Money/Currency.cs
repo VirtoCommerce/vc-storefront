@@ -147,7 +147,7 @@ namespace VirtoCommerce.Storefront.Model.Common
                 return true;
 
             var other = obj as Currency;
-            var code = obj as string;
+            var code = obj.ToString();
 
             if (other != null)
             {

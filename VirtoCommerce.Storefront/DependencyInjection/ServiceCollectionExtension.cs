@@ -23,6 +23,7 @@ using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
 using VirtoCommerce.Storefront.Common;
@@ -69,6 +70,7 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddSingleton<IMenu>(provider => new Menu(new VirtoCommerceContentRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
             services.AddSingleton<IContent>(provider => new Content(new VirtoCommerceContentRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
             services.AddSingleton<IRecommendations>(provider => new Recommendations(new VirtoCommerceProductRecommendationsRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
+            services.AddSingleton<ISitemapsModuleApiOperations>(provider => new SitemapsModuleApiOperations(new VirtoCommerceSitemapsRESTAPIdocumentation(baseUri, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(apiRequestTimeout)));
         }
 
         public static void AddCache(this IServiceCollection services, IConfiguration configuration, IHostingEnvironment hostingEnvironment)

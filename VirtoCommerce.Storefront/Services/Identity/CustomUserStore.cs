@@ -47,11 +47,10 @@ namespace VirtoCommerce.Storefront.Services.Identity
                 var storefrontUser = await _commerceCoreApi.GetUserByNameAsync(user.UserName);
 
                 //Next need create corresponding Customer contact in VC Customers (CRM) module
-                user.UserId = storefrontUser.Id;
+                user.Id = storefrontUser.Id;
                 user.IsRegisteredUser = true;
                 user.AllowedStores = storefrontUser.AllowedStores;
                 await _customerService.CreateCustomerAsync(user);
-
                 return IdentityResult.Success;
             }
             return IdentityResult.Failed();
@@ -121,7 +120,7 @@ namespace VirtoCommerce.Storefront.Services.Identity
                     Id = user.Id,
                 };
             }
-            result.UserId = user.Id;
+            result.MemberId = user.MemberId;
             result.UserName = user.UserName;
             result.AllowedStores = user.AllowedStores;
             result.IsRegisteredUser = true;
@@ -130,7 +129,7 @@ namespace VirtoCommerce.Storefront.Services.Identity
 
         public Task<string> GetUserIdAsync(CustomerInfo user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.UserId);
+            return Task.FromResult(user.Id);
         }
 
         public Task<string> GetUserNameAsync(CustomerInfo user, CancellationToken cancellationToken)

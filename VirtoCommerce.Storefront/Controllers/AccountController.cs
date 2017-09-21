@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Common;
+using VirtoCommerce.Storefront.Converters;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Events;
@@ -74,19 +75,14 @@ namespace VirtoCommerce.Storefront.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Register([FromForm] Register formModel)
         {
-            var user = new CustomerInfo
-            {
-                Email = formModel.Email,
-                UserName = formModel.UserName,
-                StoreId = WorkContext.CurrentStore.Id
-            };
+            var user = formModel.ToCustomerInfo();
+            user.StoreId = WorkContext.CurrentStore.Id;
+         
             var result = await _signInManager.UserManager.CreateAsync(user, formModel.Password);
             if (result.Succeeded == true)
             {
-                //TODO:
-                //Publish user login event 
-                //await _userLoginEventPublisher.PublishAsync(new UserLoginEvent(WorkContext, WorkContext.CurrentCustomer, customer));
-
+                await _signInManager.SignInAsync(user, isPersistent: true);
+                await _publisher.Publish(new UserLoginEvent(WorkContext, user));
                 return StoreFrontRedirect("~/account");
             }
             else

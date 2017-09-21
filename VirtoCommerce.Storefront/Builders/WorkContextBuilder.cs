@@ -163,8 +163,8 @@ namespace VirtoCommerce.Storefront.Data.Stores
             StringValues currencyCode;
             if (!HttpContext.Request.Query.TryGetValue("currency", out currencyCode))
             {
-                //Next try get from Cookies
-                currencyCode = HttpContext.Request.Cookies[StorefrontConstants.CurrencyCookie];
+                //Next try get from claims
+                currencyCode = HttpContext.User.FindFirstValue(StorefrontConstants.CurrencyClaimType);
             }
             var currentCurrency = WorkContext.CurrentStore.DefaultCurrency;
             //Get store default currency if currency not in the supported by stores list
@@ -347,7 +347,7 @@ namespace VirtoCommerce.Storefront.Data.Stores
         {
             Func<int, int, IEnumerable<SortInfo>, IPagedList<Vendor>> vendorsGetter = (pageNumber, pageSize, sortInfos) =>
             {
-                var vendors = customerService.SearchVendors(null, pageNumber, pageSize, sortInfos);
+                var vendors = customerService.SearchVendors(WorkContext.CurrentStore, WorkContext.CurrentLanguage, null, pageNumber, pageSize, sortInfos);
                 foreach (var vendor in vendors)
                 {
                     vendor.Products = new MutablePagedList<Product>((pageNumber2, pageSize2, sortInfos2) =>
@@ -380,11 +380,9 @@ namespace VirtoCommerce.Storefront.Data.Stores
             var customer = new CustomerInfo
             {
                 Id = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier),
-                UserName = HttpContext.User.FindFirstValue(ClaimTypes.Name),
-                OperatorUserId = HttpContext.User.FindFirstValue(StorefrontConstants.OperatorUserIdClaimType),
-                OperatorUserName = HttpContext.User.FindFirstValue(StorefrontConstants.OperatorUserNameClaimType)
+                UserName = HttpContext.User.FindFirstValue(ClaimTypes.Name)            
             };
-
+            
             var identity = HttpContext.User.Identity;
             if (identity.IsAuthenticated)
             {
@@ -407,6 +405,10 @@ namespace VirtoCommerce.Storefront.Data.Stores
                 //Sign-in anonymous user
                 await signInManager.SignInAsync(customer, true);
             }
+            //Restore some properties from claims
+            customer.OperatorUserId = HttpContext.User.FindFirstValue(StorefrontConstants.OperatorUserIdClaimType);
+            customer.OperatorUserName = HttpContext.User.FindFirstValue(StorefrontConstants.OperatorUserNameClaimType);
+            customer.SelectedCurrencyCode = HttpContext.User.FindFirstValue(StorefrontConstants.CurrencyClaimType);
 
             WorkContext.CurrentCustomer = customer;
         }

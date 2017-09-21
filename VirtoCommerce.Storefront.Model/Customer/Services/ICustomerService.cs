@@ -15,6 +15,6 @@ namespace VirtoCommerce.Storefront.Model.Customer.Services
         Task<bool> CanLoginOnBehalfAsync(string storeId, string customerId);
         Task<Vendor[]> GetVendorsByIdsAsync(Store store, Language language,  params string[] vendorIds);
         Vendor[] GetVendorsByIds(Store store, Language language, params string[] vendorIds);
-        IPagedList<Vendor> SearchVendors(string keyword, int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos);
+        IPagedList<Vendor> SearchVendors(Store store, Language language, string keyword, int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos);
     }
 }

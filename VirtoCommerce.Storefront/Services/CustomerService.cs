@@ -31,7 +31,6 @@ namespace VirtoCommerce.Storefront.Services
     {
         private readonly ICustomerModule _customerApi;
         private readonly ICustomerOrderService _orderService;
-        private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IQuoteService _quoteService;
         private readonly IStoreModule _storeApi;
         private readonly ISubscriptionService _subscriptionService;
@@ -42,10 +41,9 @@ namespace VirtoCommerce.Storefront.Services
         private const string _customerCacheKeyFormat = "customer/{0}";
         private const string _customerCacheRegionFormat = "customer/{0}/region";
 
-        public CustomerService(IWorkContextAccessor workContextAccessor, ICustomerModule customerApi, ICustomerOrderService orderService,
+        public CustomerService(ICustomerModule customerApi, ICustomerOrderService orderService,
             IQuoteService quoteService, IStoreModule storeApi, ISubscriptionService subscriptionService, ICacheManager<object> cacheManager)
         {
-            _workContextAccessor = workContextAccessor;
             _customerApi = customerApi;
             _orderService = orderService;
             _quoteService = quoteService;
@@ -58,7 +56,6 @@ namespace VirtoCommerce.Storefront.Services
 
         public virtual async Task<CustomerInfo> GetCustomerByIdAsync(string customerId)
         {
-            var workContext = _workContextAccessor.WorkContext;
             var retVal = await _cacheManager.GetAsync(string.Format(_customerCacheKeyFormat, customerId), string.Format(_customerCacheRegionFormat, customerId), async () =>
             {
                 //TODO: Make parallels call
@@ -75,10 +72,7 @@ namespace VirtoCommerce.Storefront.Services
             {
                 retVal = retVal.JsonClone();
                 retVal.Orders = GetCustomerOrders(retVal);
-                if (workContext.CurrentStore.QuotesEnabled)
-                {
-                    retVal.QuoteRequests = GetCustomerQuotes(retVal);
-                }
+                retVal.QuoteRequests = GetCustomerQuotes(retVal);
                 retVal.Subscriptions = GetCustomerSubscriptions(retVal);
             }
 
@@ -126,11 +120,10 @@ namespace VirtoCommerce.Storefront.Services
             return retVal;
         }
 
-        public virtual IPagedList<Vendor> SearchVendors(string keyword, int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos)
+        public virtual IPagedList<Vendor> SearchVendors(Store store, Language language, string keyword, int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos)
         {
             // TODO: implement indexed search for vendors
             //TODO: Add caching for vendors
-            var workContext = _workContextAccessor.WorkContext;
             var criteria = new customerDto.MembersSearchCriteria
             {
                 SearchPhrase = keyword,
@@ -144,7 +137,7 @@ namespace VirtoCommerce.Storefront.Services
                 criteria.Sort = SortInfo.ToString(sortInfos);
             }
             var vendorSearchResult = _customerApi.SearchVendors(criteria);
-            var vendors = vendorSearchResult.Vendors.Select(x => x.ToVendor(workContext.CurrentLanguage, workContext.CurrentStore));       
+            var vendors = vendorSearchResult.Vendors.Select(x => x.ToVendor(language, store));       
             return new StaticPagedList<Vendor>(vendors, pageNumber, pageSize, vendorSearchResult.TotalCount.Value);
         }
         #endregion
@@ -158,19 +151,18 @@ namespace VirtoCommerce.Storefront.Services
                 _cacheManager.ClearRegion(string.Format(_customerOrdersCacheRegionFormat, @event.Order.CustomerId));
                 _cacheManager.ClearRegion(string.Format(_customerSubscriptionCacheRegionFormat, @event.Order.CustomerId));
 
-                var workContext = _workContextAccessor.WorkContext;
                 //Add addresses to contact profile
-                if (workContext.CurrentCustomer.IsRegisteredUser)
+                if (@event.WorkContext.CurrentCustomer.IsRegisteredUser)
                 {
-                    workContext.CurrentCustomer.Addresses.AddRange(@event.Order.Addresses);
-                    workContext.CurrentCustomer.Addresses.AddRange(@event.Order.Shipments.Select(x => x.DeliveryAddress));
+                    @event.WorkContext.CurrentCustomer.Addresses.AddRange(@event.Order.Addresses);
+                    @event.WorkContext.CurrentCustomer.Addresses.AddRange(@event.Order.Shipments.Select(x => x.DeliveryAddress));
 
-                    foreach (var address in workContext.CurrentCustomer.Addresses)
+                    foreach (var address in @event.WorkContext.CurrentCustomer.Addresses)
                     {
                         address.Name = address.ToString();
                     }
 
-                    await UpdateAddressesAsync(workContext.CurrentCustomer);
+                    await UpdateAddressesAsync(@event.WorkContext.CurrentCustomer);
                 }
             }
         }
@@ -192,7 +184,6 @@ namespace VirtoCommerce.Storefront.Services
 
         protected virtual IMutablePagedList<QuoteRequest> GetCustomerQuotes(CustomerInfo customer)
         {
-            var workContext = _workContextAccessor.WorkContext;
             Func<int, int, IEnumerable<SortInfo>, IPagedList<QuoteRequest>> quotesGetter = (pageNumber, pageSize, sortInfos) =>
             {
                 var quoteSearchCriteria = new QuoteSearchCriteria
@@ -200,8 +191,7 @@ namespace VirtoCommerce.Storefront.Services
                     PageNumber = pageNumber,
                     PageSize = pageSize,
                     Sort = sortInfos.ToString(),
-                    CustomerId = customer.Id,                   
-                    StoreId = workContext.CurrentStore.Id
+                    CustomerId = customer.Id                   
                 };
                 var cacheKey = "GetCustomerQuotes-" + quoteSearchCriteria.GetHashCode();
                 return _cacheManager.Get(cacheKey, string.Format(_customerQuotesCacheRegionFormat, customer.Id), () =>  _quoteService.SearchQuotes(quoteSearchCriteria), cacheNullValue: false);
@@ -212,7 +202,6 @@ namespace VirtoCommerce.Storefront.Services
 
         protected virtual IMutablePagedList<CustomerOrder> GetCustomerOrders(CustomerInfo customer)
         {
-            var workContext = _workContextAccessor.WorkContext;
             var orderSearchcriteria = new OrderSearchCriteria
             {
                 CustomerId = customer.Id             
@@ -230,7 +219,6 @@ namespace VirtoCommerce.Storefront.Services
 
         protected virtual IMutablePagedList<Subscription> GetCustomerSubscriptions(CustomerInfo customer)
         {
-            var workContext = _workContextAccessor.WorkContext; 
             var subscriptionSearchcriteria = new SubscriptionSearchCriteria
             {
                 CustomerId = customer.Id             

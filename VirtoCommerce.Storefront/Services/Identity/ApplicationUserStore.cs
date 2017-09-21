@@ -99,7 +99,6 @@ namespace VirtoCommerce.Storefront.Services.Identity
                     IsRegisteredUser = true,
                 };
             }
-            result.UserId = user.Id;
             result.UserName = user.UserName;
             result.AllowedStores = user.AllowedStores;
             return result;
@@ -107,7 +106,7 @@ namespace VirtoCommerce.Storefront.Services.Identity
 
         public Task<string> GetUserIdAsync(CustomerInfo user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.UserId);
+            return Task.FromResult(user.Id);
         }
 
         public Task<string> GetUserNameAsync(CustomerInfo user, CancellationToken cancellationToken)

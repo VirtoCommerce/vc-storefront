@@ -45,6 +45,11 @@ namespace VirtoCommerce.Storefront.Middleware
                 }
                 else
                 {
+                    //Need to extract AutoRest errors
+                    if (ex is HttpOperationException httpException)
+                    {
+                       throw new HttpOperationException(httpException.Message + httpException.Response.Content);
+                    }
                     //Continue default error handling
                     throw ex;
                 }
