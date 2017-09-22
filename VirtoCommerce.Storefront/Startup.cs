@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Binders;
 using VirtoCommerce.Storefront.Builders;
 using VirtoCommerce.Storefront.Common;
@@ -56,10 +57,7 @@ namespace VirtoCommerce.Storefront
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var storefrontOptions = new StorefrontOptions();
-            var virtoConfigSection = Configuration.GetSection("VirtoCommerce");
-            virtoConfigSection.Bind(storefrontOptions);
-            services.Configure<StorefrontOptions>(virtoConfigSection);
+            services.Configure<StorefrontOptions>(Configuration.GetSection("VirtoCommerce"));
 
             //The IHttpContextAccessor service is not registered by default
             //https://github.com/aspnet/Hosting/issues/793
@@ -98,14 +96,31 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IHandlerRegistrar>(provider => provider.GetService<InProcessBus>());
 
             //Register platform API clients
-            services.AddPlatformApi(storefrontOptions);
+            services.AddPlatformEndpoint(options =>
+            {
+                Configuration.GetSection("VirtoCommerce:Endpoint").Bind(options);
+            });
 
-            services.AddCache(Configuration, HostingEnvironment);
+            services.AddCache(HostingEnvironment);
 
-            services.AddContentBlobServices(Configuration, HostingEnvironment);
+            var contentConnectionString = BlobConnectionString.Parse(Configuration.GetConnectionString("ContentConnectionString"));
+            if (contentConnectionString.Provider.EqualsInvariant("AzureBlobStorage"))
+            {
+                services.AddAzureBlobContent(options =>
+                {
+                    options.Container = contentConnectionString.RootPath;
+                    options.ConnectionString = contentConnectionString.ConnectionString;
+                });              
+            }
+            else
+            {            
+                services.AddFileSystemBlobContent(options =>
+                {
+                    options.Path = HostingEnvironment.MapPath(contentConnectionString.RootPath);
+                });
+            }     
 
-            services.AddLiquidViewEngine(Configuration);
-
+            //Identity overrides for use remote user storage
             services.AddSingleton<IUserStore<CustomerInfo>, CustomUserStore>();
             services.AddSingleton<IUserPasswordStore<CustomerInfo>, CustomUserStore>();
             services.AddSingleton<IUserEmailStore<CustomerInfo>, CustomUserStore>();
@@ -133,6 +148,12 @@ namespace VirtoCommerce.Storefront
                 options.SlidingExpiration = true;
             });
 
+            //Add Liquid view engine
+            services.AddLiquidViewEngine(options =>
+            {
+                Configuration.GetSection("VirtoCommerce:LiquidThemeEngine").Bind(options);
+            });
+
             var snapshotProvider = services.BuildServiceProvider();
             //Register JSON converters to 
             services.AddMvc().AddJsonOptions(options =>
@@ -142,8 +163,11 @@ namespace VirtoCommerce.Storefront
                 options.SerializerSettings.Converters.Add(new CurrencyJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
                 options.SerializerSettings.Converters.Add(new OrderTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
                 options.SerializerSettings.Converters.Add(new RecommendationJsonConverter(snapshotProvider.GetService<IRecommendationProviderFactory>()));
+            }).AddViewOptions(options =>
+            {
+                options.ViewEngines.Add(snapshotProvider.GetService<ILiquidViewEngine>());
             });
-            
+
             //Register event handlers via reflection
             services.RegisterAssembliesEventHandlers(typeof(Startup));
             
@@ -172,7 +196,6 @@ namespace VirtoCommerce.Storefront
             app.UseMiddleware<ApiErrorHandlingMiddleware>();
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
-
 
             var options = new RewriteOptions().Add(new StorefrontUrlNormalizeRule());
             app.UseRewriter(options);

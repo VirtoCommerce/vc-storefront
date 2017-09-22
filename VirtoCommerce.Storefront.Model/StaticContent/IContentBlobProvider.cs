@@ -19,11 +19,4 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
         Stream OpenWrite(string path);
         IEnumerable<string> Search(string path, string searchPattern, bool recursive);
     }
-
-    public interface IStaticContentBlobProvider : IContentBlobProvider
-    {
-    }
-    public interface IThemesContentBlobProvider : IContentBlobProvider
-    {
-    }
 }

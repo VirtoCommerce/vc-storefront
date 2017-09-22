@@ -48,15 +48,15 @@ namespace VirtoCommerce.LiquidThemeEngine
         private readonly ICacheManager<object> _cache;
         //TODO:
         //private readonly SassCompilerProxy _saasCompiler = new SassCompilerProxy();
-        private readonly IThemesContentBlobProvider _themeBlobProvider;
+        private readonly IContentBlobProvider _themeBlobProvider;
         public ShopifyLiquidThemeEngine(ICacheManager<object> cache, IWorkContextAccessor workContextAccessor, 
-                                        IStorefrontUrlBuilder storeFrontUrlBuilder, IThemesContentBlobProvider themeBlobProvider, IOptions<LiquidThemeEngineOptions> options)
+                                        IStorefrontUrlBuilder storeFrontUrlBuilder, IContentBlobProvider contentBlobProvder, IOptions<LiquidThemeEngineOptions> options)
         {
             _workContextAccessor = workContextAccessor;
             _storeFrontUrlBuilder = storeFrontUrlBuilder;
             _options = options.Value;
             _cache = cache;
-            _themeBlobProvider = themeBlobProvider;
+            _themeBlobProvider = contentBlobProvder;
 
             Liquid.UseRubyDateFormat = true;
             // Register custom tags (Only need to do this once)
@@ -112,7 +112,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <summary>
         /// Current theme base path
         /// </summary>
-        private string CurrentThemePath => Path.Combine(WorkContext.CurrentStore.Id, CurrentThemeName);
+        private string CurrentThemePath => Path.Combine("Themes", WorkContext.CurrentStore.Id, CurrentThemeName);
 
         #region IFileSystem members
         public string ReadTemplateFile(Context context, string templateName)

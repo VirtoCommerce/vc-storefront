@@ -1,11 +1,11 @@
-﻿using System.Collections;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json.Linq;
 
 namespace VirtoCommerce.LiquidThemeEngine
 {
-    public interface ILiquidThemeEngine
+    public interface ILiquidThemeEngine 
     {
         IEnumerable<string> DiscoveryPaths { get; }
         string ResolveTemplatePath(string templateName);

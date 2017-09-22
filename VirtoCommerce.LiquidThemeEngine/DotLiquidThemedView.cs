@@ -9,21 +9,26 @@ using VirtoCommerce.LiquidThemeEngine.Objects;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine
 {
     public class DotLiquidThemedView : IView
     {
-        private readonly ShopifyLiquidThemeEngine _themeAdaptor;
+        private readonly ILiquidThemeEngine _liquidThemeEngine;
         private readonly string _viewName;
         private readonly bool _isMainPage;
-
-        public DotLiquidThemedView(ShopifyLiquidThemeEngine themeAdaptor, string viewName, string path, bool isMainPage)
+        private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly IStorefrontUrlBuilder _urlBuilder;
+        public DotLiquidThemedView(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, ILiquidThemeEngine themeEngine, string viewName, string path, bool isMainPage)
         {
             if (string.IsNullOrEmpty(viewName))
                 throw new ArgumentNullException(nameof(viewName));
 
-            _themeAdaptor = themeAdaptor ?? throw new ArgumentNullException(nameof(themeAdaptor));
+            _workContextAccessor = workContextAccessor;
+            _urlBuilder = urlBuilder;
+            _liquidThemeEngine = themeEngine ?? throw new ArgumentNullException(nameof(themeEngine));
             _viewName = viewName;
             _isMainPage = isMainPage;
             Path = path;
@@ -42,7 +47,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
 
-            var shopifyContext = _themeAdaptor.WorkContext.ToShopifyModel(_themeAdaptor.UrlBuilder);
+            var shopifyContext = _workContextAccessor.WorkContext.ToShopifyModel(_urlBuilder);
             //Set current template
             shopifyContext.Template = _viewName;
 
@@ -63,7 +68,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             var parameters = shopifyContext.ToLiquid() as Dictionary<string, object>;
 
             //Add settings to context
-            parameters.Add("settings", _themeAdaptor.GetSettings());
+            parameters.Add("settings", _liquidThemeEngine.GetSettings());
 
             foreach (var item in context.ViewData)
             {
@@ -74,7 +79,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 parameters.Add(Template.NamingConvention.GetMemberName(item.Key), item.Value);
             }
 
-            var viewTemplate = _themeAdaptor.RenderTemplateByName(_viewName, parameters);
+            var viewTemplate = _liquidThemeEngine.RenderTemplateByName(_viewName, parameters);
 
             // don't use layouts for partial views when masterViewName is not specified
             if (_isMainPage)
@@ -88,7 +93,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 //if layout specified need render with master page
                 if (!string.IsNullOrEmpty(masterViewName))
                 {
-                    var headerTemplate = _themeAdaptor.RenderTemplateByName("content_header", parameters);
+                    var headerTemplate = _liquidThemeEngine.RenderTemplateByName("content_header", parameters);
 
                     //add special placeholder 'content_for_layout' to content it will be replaced in master page by main content
                     parameters.Add("content_for_layout", viewTemplate);
@@ -96,7 +101,7 @@ namespace VirtoCommerce.LiquidThemeEngine
 
                     try
                     {
-                        viewTemplate = _themeAdaptor.RenderTemplateByName(masterViewName, parameters);
+                        viewTemplate = _liquidThemeEngine.RenderTemplateByName(masterViewName, parameters);
                     }
                     catch (FileSystemException ex)
                     {

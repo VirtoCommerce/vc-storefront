@@ -2,16 +2,21 @@
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System;
 using System.Linq;
+using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine
 {
-    public class DotLiquidThemedViewEngine : IViewEngine
+    public class DotLiquidThemedViewEngine : ILiquidViewEngine
     {
-        private ShopifyLiquidThemeEngine _themeEngine;
-
-        public DotLiquidThemedViewEngine(ShopifyLiquidThemeEngine themeEngine)
+        private readonly ILiquidThemeEngine _themeEngine;
+        private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly IStorefrontUrlBuilder _urlBuilder;
+        public DotLiquidThemedViewEngine(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, ILiquidThemeEngine themeEngine)
         {
             _themeEngine = themeEngine;
+            _workContextAccessor = workContextAccessor;
+            _urlBuilder = urlBuilder;
         }
 
         #region IViewEngine members
@@ -32,12 +37,12 @@ namespace VirtoCommerce.LiquidThemeEngine
             var searchedLocations = Enumerable.Empty<string>();
 
             //Do not handle without a set WorkContext
-            if (_themeEngine.WorkContext != null)
+            if (_workContextAccessor.WorkContext != null)
             {
                 var path = _themeEngine.ResolveTemplatePath(view);
                 if (!string.IsNullOrEmpty(path))
                 {
-                    return ViewEngineResult.Found(view, new DotLiquidThemedView(_themeEngine, view, path, isMainPage));
+                    return ViewEngineResult.Found(view, new DotLiquidThemedView(_workContextAccessor, _urlBuilder, _themeEngine, view, path, isMainPage));
                 }
                 searchedLocations = _themeEngine.DiscoveryPaths.ToArray();
             }

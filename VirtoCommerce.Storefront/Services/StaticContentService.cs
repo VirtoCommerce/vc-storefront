@@ -27,13 +27,14 @@ namespace VirtoCommerce.Storefront.Services
         private static readonly string[] _extensions = { ".md", ".html" };
         private readonly IStorefrontUrlBuilder _urlBuilder;
         private readonly IStaticContentItemFactory  _contentItemFactory;
-        private readonly IStaticContentBlobProvider _contentBlobProvider;
+        private readonly IContentBlobProvider _contentBlobProvider;
         private readonly MarkdownPipeline _markdownPipeline;
         private readonly ICacheManager<object> _cacheManager;
+        private readonly string _basePath = "Pages";
 
         public StaticContentService(ICacheManager<object> cacheManager, IWorkContextAccessor workContextAccessor,
                                         IStorefrontUrlBuilder urlBuilder, IStaticContentItemFactory contentItemFactory,
-                                        IStaticContentBlobProvider contentBlobProvider)
+                                        IContentBlobProvider contentBlobProvider)
         {
             _urlBuilder = urlBuilder;
             _contentItemFactory = contentItemFactory;
@@ -48,7 +49,6 @@ namespace VirtoCommerce.Storefront.Services
             {
                 cacheManager.Clear();
             };
-
             _markdownPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         }
 
@@ -59,7 +59,7 @@ namespace VirtoCommerce.Storefront.Services
             return _cacheManager.Get($"LoadStoreStaticContent-{store.Id}", StorefrontConstants.StaticContentCacheRegion, () =>
             {
                 var retVal = new List<ContentItem>();
-                var baseStoreContentPath = "/" + store.Id;
+                var baseStoreContentPath = _basePath + "/" + store.Id;
                 const string searchPattern = "*.*";
 
                 if (_contentBlobProvider.PathExists(baseStoreContentPath))

@@ -14,15 +14,15 @@ namespace VirtoCommerce.Storefront.Controllers
     public class AssetController : StorefrontControllerBase
     {
         private readonly ILiquidThemeEngine _themeEngine;
-        private readonly IStaticContentBlobProvider _staticContentBlobProvider;
+        private readonly IContentBlobProvider _contentBlobProvider;
         private readonly IHostingEnvironment _hostingEnvironment;
 
         public AssetController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, ILiquidThemeEngine themeEngine, 
-                               IStaticContentBlobProvider staticContentBlobProvider, IHostingEnvironment hostingEnvironment)
+                               IContentBlobProvider staticContentBlobProvider, IHostingEnvironment hostingEnvironment)
             : base(workContextAccessor, urlBuilder)
         {
             _themeEngine = themeEngine;
-            _staticContentBlobProvider = staticContentBlobProvider;
+            _contentBlobProvider = staticContentBlobProvider;
             _hostingEnvironment = hostingEnvironment;
         }
 
@@ -59,10 +59,10 @@ namespace VirtoCommerce.Storefront.Controllers
         /// <returns></returns>
         public ActionResult GetStaticContentAssets(string path)
         {
-            var blobPath = _staticContentBlobProvider.Search(Path.Combine(WorkContext.CurrentStore.Id, "assets"), path, true).FirstOrDefault();
+            var blobPath = _contentBlobProvider.Search(Path.Combine("Pages", WorkContext.CurrentStore.Id, "assets"), path, true).FirstOrDefault();
             if (!string.IsNullOrEmpty(blobPath))
             {
-                var stream = _staticContentBlobProvider.OpenRead(blobPath);
+                var stream = _contentBlobProvider.OpenRead(blobPath);
                 if (stream != null)
                 {
                     return File(stream, MimeTypes.GetMimeType(blobPath));

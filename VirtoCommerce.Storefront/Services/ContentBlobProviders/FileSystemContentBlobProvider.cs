@@ -1,23 +1,26 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.StaticContent;
 
-namespace VirtoCommerce.Storefront.Services
+namespace VirtoCommerce.Storefront.Services.ContentBlobProviders
 {
-    public class FileSystemContentBlobProvider : IThemesContentBlobProvider, IStaticContentBlobProvider
+    public class FileSystemContentBlobProvider : IContentBlobProvider
     {
-        private readonly string _basePath;
+        private readonly FileSystemBlobContentOptions _options;
 
         // Keep links to file watchers to prevent GC to collect it
         private readonly FileSystemWatcher[] _fileSystemWatchers;
 
-        public FileSystemContentBlobProvider(string basePath)
+        public FileSystemContentBlobProvider(IOptions<FileSystemBlobContentOptions> options)
         {
-            _basePath = basePath;
-            _fileSystemWatchers = MonitorThemeFileSystemChanges(basePath);
+            _options = options.Value;
+
+            _fileSystemWatchers = MonitorThemeFileSystemChanges(_options.Path);
         }
 
         #region IContentBlobProvider Members
@@ -92,7 +95,7 @@ namespace VirtoCommerce.Storefront.Services
 
         protected virtual string GetRelativePath(string path)
         {
-            return path.Replace(_basePath, string.Empty).Replace('\\', '/');
+            return path.Replace(_options.Path, string.Empty).Replace('\\', '/');
         }
 
         protected virtual string NormalizePath(string path)
@@ -102,8 +105,8 @@ namespace VirtoCommerce.Storefront.Services
                 throw new ArgumentNullException("path");
             }
             path = path.Replace("/", "\\");
-            path = path.Replace(_basePath, string.Empty);
-            return Path.Combine(_basePath, path.TrimStart('\\'));
+            path = path.Replace(_options.Path, string.Empty);
+            return Path.Combine(_options.Path, path.TrimStart('\\'));
         }
 
         private FileSystemWatcher[] MonitorThemeFileSystemChanges(string path)
