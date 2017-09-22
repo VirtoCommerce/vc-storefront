@@ -3,6 +3,7 @@ using DotLiquid;
 using DotLiquid.Exceptions;
 using DotLiquid.FileSystems;
 using DotLiquid.ViewEngine.Exceptions;
+using LibSassHost;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
@@ -46,8 +47,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IStorefrontUrlBuilder _storeFrontUrlBuilder;
         private readonly ICacheManager<object> _cache;
-        //TODO:
-        //private readonly SassCompilerProxy _saasCompiler = new SassCompilerProxy();
+
         private readonly IThemesContentBlobProvider _themeBlobProvider;
         public ShopifyLiquidThemeEngine(ICacheManager<object> cache, IWorkContextAccessor workContextAccessor, 
                                         IStorefrontUrlBuilder storeFrontUrlBuilder, IThemesContentBlobProvider themeBlobProvider, IOptions<LiquidThemeEngineOptions> options)
@@ -182,7 +182,9 @@ namespace VirtoCommerce.LiquidThemeEngine
                 try
                 {
                     //handle scss resources
-                    //content = _saasCompiler.Compile(content);
+                    CompilationResult result = SassCompiler.Compile(content); 
+                    content = result.CompiledContent;
+
                     retVal = new MemoryStream(Encoding.UTF8.GetBytes(content));
                 }
                 catch (Exception ex)
