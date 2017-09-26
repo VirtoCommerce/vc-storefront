@@ -9,6 +9,7 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer;
+using VirtoCommerce.Storefront.Model.Customer.Events;
 using VirtoCommerce.Storefront.Model.Order.Events;
 
 namespace VirtoCommerce.Storefront.Controllers
@@ -81,6 +82,7 @@ namespace VirtoCommerce.Storefront.Controllers
             var result = await _signInManager.UserManager.CreateAsync(user, formModel.Password);
             if (result.Succeeded == true)
             {
+                await _publisher.Publish(new UserRegisteredEvent(WorkContext, user));
                 await _signInManager.SignInAsync(user, isPersistent: true);
                 await _publisher.Publish(new UserLoginEvent(WorkContext, user));
                 return StoreFrontRedirect("~/account");

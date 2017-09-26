@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.FileProviders.Physical;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,19 +16,16 @@ namespace VirtoCommerce.Storefront.Services.ContentBlobProviders
         private readonly FileSystemBlobContentOptions _options;
 
         // Keep links to file watchers to prevent GC to collect it
-        private readonly FileSystemWatcher[] _fileSystemWatchers;
+        private readonly PhysicalFilesWatcher _fileSystemWatcher;
 
         public FileSystemContentBlobProvider(IOptions<FileSystemBlobContentOptions> options)
         {
             _options = options.Value;
 
-            _fileSystemWatchers = MonitorThemeFileSystemChanges(_options.Path);
+            _fileSystemWatcher = new PhysicalFilesWatcher(_options.Path, new FileSystemWatcher(_options.Path), _options.PollForChanges);
         }
 
         #region IContentBlobProvider Members
-        public event FileSystemEventHandler Changed;
-        public event RenamedEventHandler Renamed;
-
         /// <summary>
         /// Open blob for read 
         /// </summary>
@@ -91,6 +90,14 @@ namespace VirtoCommerce.Storefront.Services.ContentBlobProviders
             }
             return retVal;
         }
+
+        public virtual IChangeToken Watch(string path)
+        {
+            //TODO: Test with symbolic links
+            var result = _fileSystemWatcher.CreateFileChangeToken(path);         
+            return result;
+
+        }
         #endregion
 
         protected virtual string GetRelativePath(string path)
@@ -109,73 +116,6 @@ namespace VirtoCommerce.Storefront.Services.ContentBlobProviders
             return Path.Combine(_options.Path, path.TrimStart('\\'));
         }
 
-        private FileSystemWatcher[] MonitorThemeFileSystemChanges(string path)
-        {
-            var result = new List<FileSystemWatcher>();
-            if (Directory.Exists(path))
-            {
-                result.Add(SetFileSystemWatcher(path));
-
-                var symbolicLinks = GetSymbolicLinks(path);
-                foreach (var symbolicLink in symbolicLinks)
-                {
-                    result.Add(SetFileSystemWatcher(symbolicLink));
-                }
-            }
-            return result.ToArray();
-        }
-
-        private FileSystemWatcher SetFileSystemWatcher(string path)
-        {
-            var fileSystemWatcher = new FileSystemWatcher();
-
-            fileSystemWatcher.Path = path;
-            fileSystemWatcher.IncludeSubdirectories = true;
-
-            FileSystemEventHandler handler = (sender, args) =>
-            {
-                RaiseChangedEvent(args);
-            };
-            RenamedEventHandler renamedHandler = (sender, args) =>
-            {
-                RaiseRenamedEvent(args);
-            };
-            var throttledHandler = handler.Throttle(TimeSpan.FromSeconds(5));
-            // Add event handlers.
-            fileSystemWatcher.Changed += throttledHandler;
-            fileSystemWatcher.Created += throttledHandler;
-            fileSystemWatcher.Deleted += throttledHandler;
-            fileSystemWatcher.Renamed += renamedHandler;
-
-            // Begin watching.
-            fileSystemWatcher.EnableRaisingEvents = true;
-
-            return fileSystemWatcher;
-        }
-
-        private IEnumerable<string> GetSymbolicLinks(string path)
-        {
-            var result = new List<string>();
-            var directories = Directory.GetDirectories(path, "*", System.IO.SearchOption.AllDirectories);
-            foreach (var directory in directories)
-            {
-                var directoryInfo = new DirectoryInfo(directory);
-                if ((directoryInfo.Attributes & FileAttributes.ReparsePoint) != 0)
-                {
-                    result.Add(directory);
-                }
-            }
-            return result;
-        }
-
-        protected virtual void RaiseChangedEvent(FileSystemEventArgs args)
-        {
-            Changed?.Invoke(this, args);
-        }
-
-        protected virtual void RaiseRenamedEvent(RenamedEventArgs args)
-        {
-            Renamed?.Invoke(this, args);
-        }
+     
     }
 }

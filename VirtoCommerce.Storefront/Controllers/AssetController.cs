@@ -11,6 +11,7 @@ using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
+    [ResponseCache(CacheProfileName = "Default")]
     public class AssetController : StorefrontControllerBase
     {
         private readonly ILiquidThemeEngine _themeEngine;

@@ -1,16 +1,14 @@
-﻿using CacheManager.Core;
-using Markdig;
+﻿using Markdig;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Primitives;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using VirtoCommerce.LiquidThemeEngine;
-using VirtoCommerce.LiquidThemeEngine.Converters;
-using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.StaticContent;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Tools;
@@ -29,26 +27,17 @@ namespace VirtoCommerce.Storefront.Services
         private readonly IStaticContentItemFactory  _contentItemFactory;
         private readonly IContentBlobProvider _contentBlobProvider;
         private readonly MarkdownPipeline _markdownPipeline;
-        private readonly ICacheManager<object> _cacheManager;
+        private readonly IMemoryCache _memoryCache; 
         private readonly string _basePath = "Pages";
 
-        public StaticContentService(ICacheManager<object> cacheManager, IWorkContextAccessor workContextAccessor,
+        public StaticContentService(IMemoryCache memoryCache, IWorkContextAccessor workContextAccessor,
                                         IStorefrontUrlBuilder urlBuilder, IStaticContentItemFactory contentItemFactory,
                                         IContentBlobProvider contentBlobProvider)
         {
             _urlBuilder = urlBuilder;
             _contentItemFactory = contentItemFactory;
             _contentBlobProvider = contentBlobProvider;
-            _cacheManager = cacheManager;
-            //Observe content changes to invalidate cache if changes occur
-            _contentBlobProvider.Changed += (sender, args) =>
-            {
-                cacheManager.Clear();
-            };
-            _contentBlobProvider.Renamed += (sender, args) =>
-            {
-                cacheManager.Clear();
-            };
+            _memoryCache = memoryCache;        
             _markdownPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         }
 
@@ -56,12 +45,14 @@ namespace VirtoCommerce.Storefront.Services
 
         public IEnumerable<ContentItem> LoadStoreStaticContent(Store store)
         {
-            return _cacheManager.Get($"LoadStoreStaticContent-{store.Id}", StorefrontConstants.StaticContentCacheRegion, () =>
+            var baseStoreContentPath = _basePath + "/" + store.Id;
+            var cacheKey = CacheKey.With(GetType(), "LoadStoreStaticContent", store.Id);
+            return _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
             {
-                var retVal = new List<ContentItem>();
-                var baseStoreContentPath = _basePath + "/" + store.Id;
-                const string searchPattern = "*.*";
+                cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { StaticContentCacheRegion.GetChangeToken(), _contentBlobProvider.Watch(baseStoreContentPath + "/*") }));
 
+                var retVal = new List<ContentItem>();              
+                const string searchPattern = "*.*";
                 if (_contentBlobProvider.PathExists(baseStoreContentPath))
                 {
 

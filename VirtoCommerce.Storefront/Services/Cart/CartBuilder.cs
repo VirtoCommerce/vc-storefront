@@ -17,6 +17,7 @@ using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 using VirtoCommerce.Storefront.Model.Customer;
+using VirtoCommerce.Storefront.Model.Customer.Events;
 using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Marketing.Services;
 using VirtoCommerce.Storefront.Model.Order.Events;

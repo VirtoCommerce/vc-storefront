@@ -8,5 +8,6 @@ namespace VirtoCommerce.Storefront.Common
     public class FileSystemBlobContentOptions
     {
         public string Path { get; set; }
+        public bool PollForChanges { get; set; } = true;
     }
 }

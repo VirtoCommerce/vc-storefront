@@ -6,8 +6,10 @@ using DotLiquid.ViewEngine.Exceptions;
 using LibSassHost;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -25,6 +27,7 @@ using VirtoCommerce.LiquidThemeEngine.Operators;
 using VirtoCommerce.LiquidThemeEngine.Tags;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 using VirtoCommerce.Storefront.Model.StaticContent;
 
@@ -46,15 +49,15 @@ namespace VirtoCommerce.LiquidThemeEngine
         private const string _liquidTemplateFormat = "{0}.liquid";
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IStorefrontUrlBuilder _storeFrontUrlBuilder;
-        private readonly ICacheManager<object> _cache;
+        private readonly IMemoryCache _memoryCache;
         private readonly IContentBlobProvider _themeBlobProvider;
-        public ShopifyLiquidThemeEngine(ICacheManager<object> cache, IWorkContextAccessor workContextAccessor, 
+        public ShopifyLiquidThemeEngine(IMemoryCache memoryCache, IWorkContextAccessor workContextAccessor, 
                                         IStorefrontUrlBuilder storeFrontUrlBuilder, IContentBlobProvider contentBlobProvder, IOptions<LiquidThemeEngineOptions> options)
         {
             _workContextAccessor = workContextAccessor;
             _storeFrontUrlBuilder = storeFrontUrlBuilder;
             _options = options.Value;
-            _cache = cache;
+            _memoryCache = memoryCache;
             _themeBlobProvider = contentBlobProvder;
 
             Liquid.UseRubyDateFormat = true;
@@ -74,17 +77,7 @@ namespace VirtoCommerce.LiquidThemeEngine
 
             Template.RegisterTag<LayoutTag>("layout");
             Template.RegisterTag<FormTag>("form");
-            Template.RegisterTag<PaginateTag>("paginate");
-
-            //Observe themes content system changes to invalidate cache if changes occur
-            _themeBlobProvider.Changed += (sender, args) =>
-            {
-                _cache.Clear();
-            };
-            _themeBlobProvider.Renamed += (sender, args) =>
-            {
-                _cache.Clear();
-            };
+            Template.RegisterTag<PaginateTag>("paginate");      
         }
 
         /// <summary>
@@ -107,7 +100,8 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// </summary>
         public string CurrentThemeName => !string.IsNullOrEmpty(WorkContext.CurrentStore.ThemeName) ? WorkContext.CurrentStore.ThemeName : "default";
 
-
+        public string CurrentThemeSettingPath => Path.Combine(CurrentThemePath, "config\\settings_data.json");
+        public string CurrentThemeLocalePath => Path.Combine(CurrentThemePath, "locales");
         /// <summary>
         /// Current theme base path
         /// </summary>
@@ -203,8 +197,11 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <returns></returns>
         public string GetAssetHash(string filePath)
         {
-            return _cache.Get(GetCacheKey("GetAssetHash", filePath), "LiquidThemeRegion", () =>
+            var cacheKey = CacheKey.With(GetType(), "GetAssetHash", filePath);
+            return _memoryCache.GetOrCreate(cacheKey,  (cacheEntry) =>
             {
+                cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.GetChangeToken(), _themeBlobProvider.Watch(filePath) }));
+
                 using (var stream = GetAssetStream(filePath))
                 {
                     var hashAlgorithm = CryptoConfig.AllowOnlyFipsAlgorithms ? (SHA256)new SHA256CryptoServiceProvider() : new SHA256Managed();
@@ -271,8 +268,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             }
 
             Template.FileSystem = this;
-            //TODO:
-       
+            //TODO:       
             var renderParams = new RenderParameters
             {
                 LocalVariables = Hash.FromDictionary(parameters),
@@ -302,12 +298,13 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <returns></returns>
         public IDictionary GetSettings(string defaultValue = null)
         {
-            return _cache.Get(GetCacheKey("GetSettings", defaultValue), "LiquidThemeRegion", () =>
+            var cacheKey = CacheKey.With(GetType(), "GetSettings", defaultValue);
+            return _memoryCache.GetOrCreate(cacheKey,  (cacheItem) =>
             {
+                cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.GetChangeToken(), _themeBlobProvider.Watch(CurrentThemeSettingPath) }));
                 var retVal = new DefaultableDictionary(defaultValue);
-
                 //Load all data from current theme config
-                var resultSettings = InnerGetAllSettings(_themeBlobProvider, CurrentThemePath);
+                var resultSettings = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
                 if (resultSettings != null)
                 {
                     //Get actual preset from merged config
@@ -348,7 +345,12 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <returns></returns>
         public JObject ReadLocalization()
         {
-            return _cache.Get(GetCacheKey("ReadLocalization"), "LiquidThemeRegion", () => InnerReadLocalization(_themeBlobProvider, CurrentThemePath, WorkContext.CurrentLanguage) ?? new JObject());
+            var cacheKey = CacheKey.With(GetType(), "ReadLocalization", WorkContext.CurrentLanguage.CultureName);
+            return _memoryCache.GetOrCreate(cacheKey, (cacheItem) =>
+            {
+                cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.GetChangeToken(), _themeBlobProvider.Watch(CurrentThemeLocalePath + "/*") }));
+                return InnerReadLocalization(_themeBlobProvider, CurrentThemeLocalePath, WorkContext.CurrentLanguage) ?? new JObject();
+            });
         }
 
         /// <summary>
@@ -363,19 +365,18 @@ namespace VirtoCommerce.LiquidThemeEngine
         
         #endregion
 
-        private static JObject InnerReadLocalization(IContentBlobProvider themeBlobProvider, string themePath, Language language)
+        private static JObject InnerReadLocalization(IContentBlobProvider themeBlobProvider, string localePath, Language language)
         {
             JObject retVal = null;
-            var localeFolderPath = Path.Combine(themePath, "locales");
 
-            if (themeBlobProvider.PathExists(localeFolderPath))
+            if (themeBlobProvider.PathExists(localePath))
             {
                 JObject localeJson = null;
                 JObject defaultJson = null;
 
                 foreach (var languageName in new[] { language.CultureName, language.TwoLetterLanguageName })
                 {
-                    var currentLocalePath = Path.Combine(localeFolderPath, string.Concat(languageName, ".json"));
+                    var currentLocalePath = Path.Combine(localePath, string.Concat(languageName, ".json"));
 
                     if (themeBlobProvider.PathExists(currentLocalePath))
                     {
@@ -387,7 +388,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                     }
                 }
 
-                var localeDefaultPath = themeBlobProvider.Search(localeFolderPath, "*.default.json", false).FirstOrDefault();
+                var localeDefaultPath = themeBlobProvider.Search(localePath, "*.default.json", false).FirstOrDefault();
 
                 if (localeDefaultPath != null && themeBlobProvider.PathExists(localeDefaultPath))
                 {
@@ -408,10 +409,15 @@ namespace VirtoCommerce.LiquidThemeEngine
             return retVal;
         }
 
-        private static JObject InnerGetAllSettings(IContentBlobProvider themeBlobProvider, string themePath)
+        private static JObject InnerGetAllSettings(IContentBlobProvider themeBlobProvider, string settingsPath)
         {
+            if(settingsPath == null)
+            {
+                throw new ArgumentNullException(nameof(settingsPath));
+            }
+
             JObject retVal = null;
-            var settingsPath = Path.Combine(themePath, "config\\settings_data.json");
+         
             if (themeBlobProvider.PathExists(settingsPath))
             {
                 using (var stream = themeBlobProvider.OpenRead(settingsPath))
@@ -429,9 +435,11 @@ namespace VirtoCommerce.LiquidThemeEngine
             {
                 throw new FileSystemException($"The template '{templateName}' was not found. The following locations were searched:<br/>{string.Join("<br/>", DiscoveryPaths)}");
             }
-            
-            return _cache.Get(GetCacheKey("ReadTemplateByName", templatePath), "LiquidThemeRegion", () =>
+
+            var cacheKey = CacheKey.With(GetType(), "ReadTemplateByName", templateName);
+            return _memoryCache.GetOrCreate(cacheKey, (cacheItem) =>
             {
+                cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.GetChangeToken(), _themeBlobProvider.Watch(templatePath) }));
                 using (var stream = _themeBlobProvider.OpenRead(templatePath))
                 {
                     return stream.ReadToString();

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -57,6 +58,9 @@ namespace VirtoCommerce.Storefront
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
+            services.AddResponseCaching();
+
             services.Configure<StorefrontOptions>(Configuration.GetSection("VirtoCommerce"));
 
             //The IHttpContextAccessor service is not registered by default
@@ -156,7 +160,13 @@ namespace VirtoCommerce.Storefront
 
             var snapshotProvider = services.BuildServiceProvider();
             //Register JSON converters to 
-            services.AddMvc().AddJsonOptions(options =>
+            services.AddMvc(options=>
+            {
+                options.CacheProfiles.Add("Default", new CacheProfile() {
+                                                           Duration = 60,
+                                                           VaryByHeader = "host"
+                                                       });
+            }).AddJsonOptions(options =>
             {
                 options.SerializerSettings.Converters.Add(new CartTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
                 options.SerializerSettings.Converters.Add(new MoneyJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
@@ -167,6 +177,7 @@ namespace VirtoCommerce.Storefront
             {
                 options.ViewEngines.Add(snapshotProvider.GetService<ILiquidViewEngine>());
             });
+          
 
             //Register event handlers via reflection
             services.RegisterAssembliesEventHandlers(typeof(Startup));
@@ -185,6 +196,8 @@ namespace VirtoCommerce.Storefront
             {
                 app.UseExceptionHandler("/error/500");
             }
+
+            app.UseResponseCaching();
 
             app.UseStaticFiles();
 

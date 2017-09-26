@@ -86,41 +86,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
                 .SelectMany(a => a[1].Split(',').Select(v => new Term { Name = a[0], Value = v }))
                 .ToArray();
         }
-
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            // credit: http://stackoverflow.com/a/263416/677735
-            unchecked // Overflow is fine, just wrap
-            {
-                int hash = base.GetHashCode();
-
-                if (Outline != null)
-                    hash = hash * 59 + Outline.GetHashCode();
-
-                if (VendorId != null)
-                    hash = hash * 59 + VendorId.GetHashCode();
-
-                if (Currency != null)
-                    hash = hash * 59 + Currency.Code.GetHashCode();
-
-                if (Language != null)
-                    hash = hash * 59 + Language.CultureName.GetHashCode();
-
-                if (Keyword != null)
-                    hash = hash * 59 + Keyword.GetHashCode();
-
-                if (SortBy != null)
-                    hash = hash * 59 + SortBy.GetHashCode();
-
-                return hash;
-            }
-        }
-
+        
         public override string ToString()
         {
             var result = new List<string>

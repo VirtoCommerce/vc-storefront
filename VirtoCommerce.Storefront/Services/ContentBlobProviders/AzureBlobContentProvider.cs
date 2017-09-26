@@ -1,5 +1,7 @@
 ﻿using CacheManager.Core;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System;
@@ -11,24 +13,25 @@ using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.Services
 {
-    public class AzureBlobContentProvider : IContentBlobProvider, IDisposable
+    public class AzureBlobContentProvider : IContentBlobProvider
     {
         private readonly CloudBlobClient _cloudBlobClient;
         private readonly CloudStorageAccount _cloudStorageAccount;
         private readonly CloudBlobContainer _container;
         private readonly CloudBlobDirectory _directory;
-        private readonly ICacheManager<object> _cacheManager;
-        private readonly CancellationTokenSource _cancelSource;
+        private readonly IMemoryCache _memoryCache;
         private readonly AzureBlobContentOptions _options;
-        public AzureBlobContentProvider(IOptions<AzureBlobContentOptions> options, ICacheManager<object> cacheManager)
+
+        public AzureBlobContentProvider(IOptions<AzureBlobContentOptions> options, IMemoryCache memoryCache)
         {
             _options = options.Value;
-            _cacheManager = cacheManager;       
+            _memoryCache = memoryCache;       
 
             if (!CloudStorageAccount.TryParse(_options.ConnectionString, out _cloudStorageAccount))
             {
@@ -40,90 +43,9 @@ namespace VirtoCommerce.Storefront.Services
             {
                 _directory = _container.GetDirectoryReference(_options.Directory);
             }
-            _cancelSource = new CancellationTokenSource();
-
-            if (_options.TrackChanges)
-            {
-                Task.Run(() => MonitorFileSystemChanges(_cancelSource.Token), _cancelSource.Token);
-            }
-        }
-
-        private void MonitorFileSystemChanges(CancellationToken cancellationToken)
-        {
-            var intetval = _options.TrackChangesInterval;
-
-            var latestModifiedDate = DateTimeOffset.UtcNow;
-
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                try
-                {
-                    var maxModifiedDate = DateTimeOffset.MinValue;
-
-                    foreach (var file in EnumBlobFiles())
-                    {
-                        if (cancellationToken.IsCancellationRequested)
-                            break;
-
-                        if (file.Properties.LastModified.HasValue)
-                        {
-                            if (maxModifiedDate < file.Properties.LastModified)
-                                maxModifiedDate = (DateTimeOffset)file.Properties.LastModified;
-
-                            if (file.Properties.LastModified > latestModifiedDate)
-                            {
-                                RaiseChangedEvent(new FileSystemEventArgs(WatcherChangeTypes.Changed, Path.GetDirectoryName(file.Name), Path.GetFileName(file.Name)));
-                            }
-                        }
-                    }
-
-                    latestModifiedDate = maxModifiedDate;
-                }
-                catch (Exception ex)
-                {
-                    Trace.TraceError(ex.ToString());
-                }
-
-                Thread.Sleep(intetval);
-            }
-        }
-
-        private IEnumerable<CloudBlob> EnumBlobFiles()
-        {
-            return Task.Factory.StartNew(() => EnumBlobFilesAsync(), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
-        }
-        private async Task<IEnumerable<CloudBlob>> EnumBlobFilesAsync()
-        {
-            var result = new List<CloudBlob>();
-            var token = new BlobContinuationToken();
-            var context = new OperationContext();
-            if (_directory != null)
-            {
-                do
-                {
-                    var resultSegment = await _directory.ListBlobsSegmentedAsync(true, BlobListingDetails.Metadata, null, token, _options.BlobRequestOptions, context);
-                    token = resultSegment.ContinuationToken;
-                    result.AddRange(resultSegment.Results.OfType<CloudBlob>());
-                } while (token != null);
-            }
-            else
-            {
-                do
-                {
-                    var resultSegment = await _container.ListBlobsSegmentedAsync(null, true, BlobListingDetails.Metadata, null, token, _options.BlobRequestOptions, context);
-                    token = resultSegment.ContinuationToken;
-                    result.AddRange(resultSegment.Results.OfType<CloudBlob>());
-                } while (token != null);
-            }
-            return result;
-        }
+        }       
 
         #region IContentBlobProvider Members
-        public event FileSystemEventHandler Changed;
-        public event RenamedEventHandler Renamed;
-
-
-    
         /// <summary>
         /// Open blob for read 
         /// </summary>
@@ -181,28 +103,27 @@ namespace VirtoCommerce.Storefront.Services
         public async virtual Task<bool> PathExistsAsync(string path)
         {
             path = NormalizePath(path);
-
-            var result = await _cacheManager.GetAsync("AzureBlobContentProvider.PathExists:" + path.GetHashCode(), "ContentRegion", async () =>
+            var cacheKey = CacheKey.With(GetType(), "PathExistsAsync", path);
+            return await _memoryCache.GetOrCreateAsync(cacheKey,  async (cacheEntry) =>
             {
+                cacheEntry.AddExpirationToken(ContentBlobCacheRegion.GetChangeToken());
+
                 // If requested path is a directory we should always return true because Azure blob storage does not support checking if directories exist
-                var retVal = string.IsNullOrEmpty(Path.GetExtension(path));
-                if (!retVal)
+                var result = string.IsNullOrEmpty(Path.GetExtension(path));
+                if (!result)
                 {
                     var url = GetAbsoluteUrl(path);
                     try
                     {
-                        retVal = await (await _cloudBlobClient.GetBlobReferenceFromServerAsync(new Uri(url))).ExistsAsync();
+                        result = await (await _cloudBlobClient.GetBlobReferenceFromServerAsync(new Uri(url))).ExistsAsync();
                     }
                     catch (Exception)
                     {
                         //Azure blob storage client does not provide method to check blob url exist without throwing exception
                     }
                 }
-
-                return (object)retVal;
+                return result;
             });
-
-            return (bool)result;
         }
 
 
@@ -277,6 +198,12 @@ namespace VirtoCommerce.Storefront.Services
             return retVal;
         }
 
+        public virtual IChangeToken Watch(string path)
+        {
+            //TODO
+            //See https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-storage-blob
+            throw new NotImplementedException();
+        }
         #endregion
 
         protected virtual string NormalizePath(string path)
@@ -295,55 +222,6 @@ namespace VirtoCommerce.Storefront.Services
             var builder = new UriBuilder(_cloudBlobClient.BaseUri);
             builder.Path += string.Join("/", _options.Container, _options.Directory, path).Replace("//", "/");
             return builder.Uri.ToString();
-        }
-
-
-        protected virtual void RaiseChangedEvent(FileSystemEventArgs args)
-        {
-            var changedEvent = Changed;
-            changedEvent?.Invoke(this, args);
-        }
-
-        protected virtual void RaiseRenamedEvent(RenamedEventArgs args)
-        {
-            var renamedEvent = Renamed;
-            renamedEvent?.Invoke(this, args);
-        }
-
-        #region IDisposable Support
-        private bool _disposedValue; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                    _cancelSource.Cancel();
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                _disposedValue = true;
-            }
-        }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~AzureBlobContentProvider() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
-        }
-        #endregion
+        }     
     }
 }

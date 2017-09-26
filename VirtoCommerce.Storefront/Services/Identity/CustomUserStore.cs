@@ -10,6 +10,8 @@ using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using securityDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 using VirtoCommerce.Storefront.Converters;
+using Microsoft.Extensions.Caching.Memory;
+using VirtoCommerce.Storefront.Model.Common.Caching;
 
 namespace VirtoCommerce.Storefront.Services.Identity
 {
@@ -23,10 +25,13 @@ namespace VirtoCommerce.Storefront.Services.Identity
     {
         private readonly IStorefrontSecurity _commerceCoreApi;
         private readonly ICustomerService _customerService;
-        public CustomUserStore(IStorefrontSecurity commerceCoreApi, ICustomerService customerService)
+        private readonly IMemoryCache _memoryCache;
+
+        public CustomUserStore(IStorefrontSecurity commerceCoreApi, ICustomerService customerService, IMemoryCache memoryCache)
         {
             _commerceCoreApi = commerceCoreApi;
             _customerService = customerService;
+            _memoryCache = memoryCache;
         }
 
         public async Task<IdentityResult> CreateAsync(CustomerInfo user, CancellationToken cancellationToken)
@@ -83,19 +88,29 @@ namespace VirtoCommerce.Storefront.Services.Identity
 
         public async Task<CustomerInfo> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            //TODO: Caching
-            var user = await _commerceCoreApi.GetUserByIdAsync(userId, cancellationToken);
+            var cacheKey = CacheKey.With(GetType(), "FindByIdAsync", userId);
+            var user = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            {
+                cacheEntry.AddExpirationToken(UserStoreCacheRegion.GetChangeToken());
+                return await _commerceCoreApi.GetUserByIdAsync(userId, cancellationToken);
+            });
+
             if (user != null)
             {
                 return await GetContactInfoForPlatformUserAsync(user);
-            }            
+            }
             return null;
         }
 
         public async Task<CustomerInfo> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            //TODO: Caching
-            var user = await _commerceCoreApi.GetUserByNameAsync(normalizedUserName, cancellationToken);
+            var cacheKey = CacheKey.With(GetType(), "FindByNameAsync", normalizedUserName);
+            var user = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            {
+                cacheEntry.AddExpirationToken(UserStoreCacheRegion.GetChangeToken());
+                return await _commerceCoreApi.GetUserByNameAsync(normalizedUserName, cancellationToken);
+            });
+
             if (user != null)
             {
                 return await GetContactInfoForPlatformUserAsync(user);
@@ -105,7 +120,6 @@ namespace VirtoCommerce.Storefront.Services.Identity
 
         private async Task<CustomerInfo> GetContactInfoForPlatformUserAsync(securityDto.StorefrontUser user)
         {
-            //TODO: Caching
             CustomerInfo result = null;
             if (!string.IsNullOrEmpty(user.MemberId))
             {

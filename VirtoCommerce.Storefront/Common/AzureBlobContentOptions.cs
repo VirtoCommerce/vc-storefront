@@ -11,8 +11,8 @@ namespace VirtoCommerce.Storefront.Common
         public string Container { get; set; }
         public string Directory { get; set; }
         public string ConnectionString { get; set; }
-        public bool TrackChanges { get; set; } = true;
-        public int TrackChangesInterval { get; set; } = 5000;
+        public bool PollForChanges { get; set; } = false;
+        public int PollingChangesInterval { get; set; } = 5000;
         public BlobRequestOptions BlobRequestOptions { get; set; } = new BlobRequestOptions();
     }
 }
