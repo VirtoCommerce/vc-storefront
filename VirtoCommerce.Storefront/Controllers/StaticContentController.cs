@@ -1,7 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.SyndicationFeed;
+using Microsoft.SyndicationFeed.Rss;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.StaticContent;
@@ -116,7 +123,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// <param name="blogName"></param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult BlogRssFeed(string blogName)
+        public async Task<ActionResult> BlogRssFeed(string blogName)
         {
             Blog blog = WorkContext.Blogs.FirstOrDefault();
             if (!string.IsNullOrEmpty(blogName))
@@ -128,29 +135,47 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 return NotFound();
             }
+            
+            var feedItems = new List<SyndicationItem>();
+            foreach (var article in blog.Articles.OrderByDescending(a => a.PublishedDate))
+            {
+                if (!string.IsNullOrEmpty(article.Url))
+                {
+                    var urlString = UriHelper.GetDisplayUrl(Request);
+                    var requestUri = new Uri(urlString);
+                    var baseUri = new Uri(requestUri.Scheme + Uri.SchemeDelimiter + requestUri.Host);
+                    var fullUrl = new Uri(baseUri, UrlBuilder.ToAppAbsolute(article.Url, WorkContext.CurrentStore, WorkContext.CurrentLanguage));
+                    var syndicationItem = new SyndicationItem()
+                    {
+                        Title = article.Title,
+                        Description = article.Excerpt,
+                        Published = article.PublishedDate.HasValue ? new DateTimeOffset(article.PublishedDate.Value) : new DateTimeOffset()
+                    };
+                    syndicationItem.AddLink(new SyndicationLink(fullUrl));
+                    feedItems.Add(syndicationItem);
+                }
+            }
 
-            //TODO: Rss feed
-            //var feedItems = new List<SyndicationItem>();
-            //foreach(var article in blog.Articles.OrderByDescending(a => a.PublishedDate))
-            //{
-            //    if (!string.IsNullOrEmpty(article.Url))
-            //    {
-            //        var baseUri = new Uri(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host);
-            //        var fullUrl = new Uri(baseUri, UrlBuilder.ToAppAbsolute(article.Url, WorkContext.CurrentStore, WorkContext.CurrentLanguage));
-            //        var syndicationItem = new SyndicationItem(article.Title, article.Excerpt, fullUrl);
-            //        syndicationItem.PublishDate = article.PublishedDate.HasValue ? new DateTimeOffset(article.PublishedDate.Value) : new DateTimeOffset();
-            //        feedItems.Add(syndicationItem);
-            //    }
-            //}
 
-            //var feed = new SyndicationFeed(blog.Title, blog.Title, new Uri(blog.Url, UriKind.Relative), feedItems)
-            //{
-            //    Language = WorkContext.CurrentLanguage.CultureName,
-            //    Title = new TextSyndicationContent(blog.Title)
-            //};
+            var sw = new StringWriter();
+            using (XmlWriter xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async= true, Indent = true }))
+            {
+                var writer = new RssFeedWriter(xmlWriter);
 
-            //return new FeedResult(new Rss20FeedFormatter(feed));
-            throw new NotImplementedException();
+                await writer.WriteTitle(blog.Title);
+                await writer.WriteDescription(blog.Title);
+                await writer.Write(new SyndicationLink(new Uri(blog.Url, UriKind.Relative)));
+
+                foreach (var item in feedItems)
+                {
+                    await writer.Write(item);
+                }
+
+                xmlWriter.Flush();
+            }
+
+            return Content(sw.ToString(), "text/xml");
+
         }
 
         private void SetCurrentPage(ContentPage contentPage)
