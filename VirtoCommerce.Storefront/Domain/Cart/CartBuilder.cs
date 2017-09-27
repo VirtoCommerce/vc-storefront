@@ -39,16 +39,9 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly ITaxEvaluator _taxEvaluator;
         private readonly ISubscriptionService _subscriptionService;
         private readonly IProductAvailabilityService _productAvailabilityService;
-        private const string _cartCacheRegion = "CartRegion";
 
-        public CartBuilder(
-            IWorkContextAccessor workContextAccessor,
-            ICartModule cartApi,
-            ICatalogService catalogSearchService,
-            IMemoryCache memoryCache,
-            IPromotionEvaluator promotionEvaluator,
-            ITaxEvaluator taxEvaluator,
-            ISubscriptionService subscriptionService,
+        public CartBuilder(IWorkContextAccessor workContextAccessor, ICartModule cartApi, ICatalogService catalogSearchService,
+            IMemoryCache memoryCache, IPromotionEvaluator promotionEvaluator, ITaxEvaluator taxEvaluator, ISubscriptionService subscriptionService,
             IProductAvailabilityService productAvailabilityService)
         {
             _cartApi = cartApi;
@@ -101,7 +94,7 @@ namespace VirtoCommerce.Storefront.Domain
                 cart.Customer = customer;
 
                 //Add expiration token for concrete cart instance
-                cacheEntry.AddExpirationToken(CartCacheRegion.GetChangeToken(cart));
+                cacheEntry.AddExpirationToken(CartCacheRegion.CreateChangeToken(cart));
 
                 return cart;
             });
@@ -279,7 +272,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             EnsureCartExists();
             //Evict cart from cache
-            CartCacheRegion.ClearCart(Cart);
+            CartCacheRegion.ExpireCart(Cart);
 
             await _cartApi.DeleteCartsAsync(new List<string> { Cart.Id });
         }
@@ -427,7 +420,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             EnsureCartExists();
             //Evict cart from cache
-            CartCacheRegion.ClearCart(Cart);
+            CartCacheRegion.ExpireCart(Cart);
 
             await EvaluatePromotionsAsync();
             await EvaluateTaxesAsync();

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Domain;
@@ -39,7 +40,20 @@ namespace VirtoCommerce.Storefront.Controllers
             //check permissions
             if (_platformSecurityApi.UserHasAnyPermission(WorkContext.CurrentCustomer.UserName, new[] { "cache:reset" }.ToList(), new List<string>()).Result ?? false)
             {
-               //TODO: Reset global cache
+                //TODO: Replace to some other (maybe with using reflection)
+                ThemeEngineCacheRegion.ExpireRegion();
+                CartCacheRegion.ExpireRegion();
+                CatalogCacheRegion.ExpireRegion();
+                ContentBlobCacheRegion.ExpireRegion();
+                CustomerCacheRegion.ExpireRegion();
+                MarketingCacheRegion.ExpireRegion();
+                PricingCacheRegion.ExpireRegion();
+                QuoteCacheRegion.ExpireRegion();
+                RecommendationsCacheRegion.ExpireRegion();
+                StaticContentCacheRegion.ExpireRegion();
+                StoreCacheRegion.ExpireRegion();
+                TaxCacheRegion.ExpireRegion();
+
                 return StoreFrontRedirect("~/");
             }
             return Unauthorized();

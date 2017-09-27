@@ -179,7 +179,7 @@ namespace VirtoCommerce.Storefront.Routing
                 var cacheKey = CacheKey.With(GetType(), "GetAllSeoRecords", slug);
                 var apiResult = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
                 {
-                    cacheEntry.AddExpirationToken(RoutingCacheRegion.GetChangeToken());
+                    cacheEntry.AddExpirationToken(RoutingCacheRegion.CreateChangeToken());
                     return _coreApi.GetSeoInfoBySlug(slug);
                 });
                 result.AddRange(apiResult);

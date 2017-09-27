@@ -87,6 +87,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IStaticContentService, StaticContentService>();
             services.AddSingleton<IMenuLinkListService, MenuLinkListServiceImpl>();
             services.AddSingleton<IStaticContentItemFactory, StaticContentItemFactory>();
+            services.AddSingleton<IApiChangesWatcher, ApiChangesWatcher>();
             services.AddSingleton<AssociationRecommendationsProvider>();
             services.AddSingleton<CognitiveRecommendationsProvider>();
             services.AddSingleton<IRecommendationProviderFactory, RecommendationProviderFactory>(provider => new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(), provider.GetService<CognitiveRecommendationsProvider>()));
@@ -165,7 +166,7 @@ namespace VirtoCommerce.Storefront
             {
                 options.CacheProfiles.Add("Default", new CacheProfile()
                 {
-                    Duration = 60,
+                    Duration = (int)TimeSpan.FromHours(1).TotalSeconds,
                     VaryByHeader = "host"
                 });
             }).AddJsonOptions(options =>

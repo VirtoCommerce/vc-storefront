@@ -11,17 +11,17 @@ namespace VirtoCommerce.Storefront.Domain
     {
         private static readonly ConcurrentDictionary<QuoteRequest, CancellationTokenSource> _quoteRegionLookup = new ConcurrentDictionary<QuoteRequest, CancellationTokenSource>();
 
-        public static IChangeToken GetChangeToken(QuoteRequest qoute)
+        public static IChangeToken CreateChangeToken(QuoteRequest qoute)
         {
             if (qoute == null)
             {
                 throw new ArgumentNullException(nameof(qoute));
             }
             var cancellationTokenSource = _quoteRegionLookup.GetOrAdd(qoute, new CancellationTokenSource());
-            return new CompositeChangeToken(new[] { GetChangeToken(), new CancellationChangeToken(cancellationTokenSource.Token) });
+            return new CompositeChangeToken(new[] { CreateChangeToken(), new CancellationChangeToken(cancellationTokenSource.Token) });
         }
 
-        public static void ClearQuote(QuoteRequest qoute)
+        public static void ExpireQuote(QuoteRequest qoute)
         {
             if (_quoteRegionLookup.TryRemove(qoute, out CancellationTokenSource token))
             {

@@ -36,7 +36,7 @@ namespace VirtoCommerce.Storefront.Domain
             var cacheKey = CacheKey.With(GetType(), "LoadAllStoreLinkListsAsync", store.Id, language.CultureName);
             return await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(StaticContentCacheRegion.GetChangeToken());
+                cacheEntry.AddExpirationToken(StaticContentCacheRegion.CreateChangeToken());
 
                 var result = (await _cmsApi.GetListsAsync(store.Id)).Select(x => x.ToMenuLinkList());
                 result = result.GroupBy(x => x.Name).Select(x => x.FindWithLanguage(language)).Where(x => x != null).ToList().ToList();

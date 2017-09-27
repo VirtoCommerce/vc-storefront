@@ -39,7 +39,7 @@ namespace VirtoCommerce.Storefront.Domain
 
                 taxRates = await _memoryCache.GetOrCreateAsync(cacheKey, (cacheEntry) =>
                 {
-                    cacheEntry.AddExpirationToken(TaxCacheRegion.GetChangeToken());
+                    cacheEntry.AddExpirationToken(TaxCacheRegion.CreateChangeToken());
                     return _commerceApi.EvaluateTaxesAsync(context.StoreId, context.ToTaxEvaluationContextDto());
                 });
             }

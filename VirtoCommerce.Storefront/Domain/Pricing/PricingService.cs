@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -24,17 +25,19 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IPromotionEvaluator _promotionEvaluator;
         private readonly IInventoryService _inventoryService;
         private readonly IMemoryCache _memoryCache;
+        private readonly IApiChangesWatcher _apiChangesWatcher;
 
         public PricingService(IPricingModule pricingApi,
             ITaxEvaluator taxEvaluator,
             IPromotionEvaluator promotionEvaluator,
-            IInventoryService inventoryService, IMemoryCache memoryCache)
+            IInventoryService inventoryService, IMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
         {
             _pricingApi = pricingApi;
             _taxEvaluator = taxEvaluator;
             _promotionEvaluator = promotionEvaluator;
             _inventoryService = inventoryService;
             _memoryCache = memoryCache;
+            _apiChangesWatcher = apiChangesWatcher;
         }
 
         #region IPricingService Members
@@ -56,7 +59,9 @@ namespace VirtoCommerce.Storefront.Domain
             var cacheKey = CacheKey.With(GetType(), "EvaluatePricesListsAsync", evalContext.GetHashCode().ToString());
             return await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(PricingCacheRegion.GetChangeToken());
+                cacheEntry.AddExpirationToken(PricingCacheRegion.CreateChangeToken());
+                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
+
                 return (await _pricingApi.EvaluatePriceListsAsync(evalContext.ToPriceEvaluationContextDto())).Select(x => x.ToPricelist(workContext.AllCurrencies, workContext.CurrentLanguage)).ToList();
             });
 
@@ -78,7 +83,9 @@ namespace VirtoCommerce.Storefront.Domain
             var cacheKey = CacheKey.With(GetType(), "EvaluateProductPricesAsync", evalContext.GetHashCode().ToString());
             var pricesResponse = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(PricingCacheRegion.GetChangeToken());
+                cacheEntry.AddExpirationToken(PricingCacheRegion.CreateChangeToken());
+                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
+
                 return await _pricingApi.EvaluatePricesAsync(evalContext.ToPriceEvaluationContextDto());
             });
             ApplyProductPrices(products, pricesResponse, workContext);

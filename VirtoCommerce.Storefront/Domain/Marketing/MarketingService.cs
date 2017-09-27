@@ -34,7 +34,7 @@ namespace VirtoCommerce.Storefront.Domain
             var cacheKey = CacheKey.With(GetType(), "GetDynamicContentHtmlAsync", storeId, placeholderName);
             return await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(MarketingCacheRegion.GetChangeToken());
+                cacheEntry.AddExpirationToken(MarketingCacheRegion.CreateChangeToken());
                 var dynamicContentItems = (await _dynamicContentApi.EvaluateDynamicContentAsync(evaluationContext)).Select(x => x.ToDynamicContentItem());
 
                 if (dynamicContentItems != null)

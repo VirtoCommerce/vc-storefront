@@ -93,7 +93,7 @@ namespace VirtoCommerce.Storefront.Domain
                     quoteRequest = (await _quoteApi.GetByIdAsync(quoteRequest.Id)).ToQuoteRequest(store.Currencies, language);
                 }
                 //Add expiration token for concrete quote instance
-                cacheEntry.AddExpirationToken(QuoteCacheRegion.GetChangeToken(quoteRequest));
+                cacheEntry.AddExpirationToken(QuoteCacheRegion.CreateChangeToken(quoteRequest));
                 quoteRequest.Customer = customer;
 
                 return quoteRequest;
@@ -166,7 +166,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         public IQuoteRequestBuilder Update(QuoteRequestFormModel quoteRequest)
         {
-            QuoteCacheRegion.ClearQuote(_quoteRequest);
+            QuoteCacheRegion.ExpireQuote(_quoteRequest);
 
             _quoteRequest.Comment = quoteRequest.Comment;
             _quoteRequest.Status = quoteRequest.Status;
@@ -218,14 +218,14 @@ namespace VirtoCommerce.Storefront.Domain
             }
 
             await _quoteApi.DeleteAsync(new[] { quoteRequest.Id }.ToList());
-            QuoteCacheRegion.ClearQuote(_quoteRequest);
+            QuoteCacheRegion.ExpireQuote(_quoteRequest);
 
             return this;
         }
 
         public async Task SaveAsync()
         {
-            QuoteCacheRegion.ClearQuote(_quoteRequest);
+            QuoteCacheRegion.ExpireQuote(_quoteRequest);
 
             var quoteDto = _quoteRequest.ToQuoteRequestDto();
             if (_quoteRequest.IsTransient())

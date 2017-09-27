@@ -11,17 +11,17 @@ namespace VirtoCommerce.Storefront.Domain
     {
         private static readonly ConcurrentDictionary<ShoppingCart, CancellationTokenSource> _cartRegionTokenLookup = new ConcurrentDictionary<ShoppingCart, CancellationTokenSource>();
 
-        public static IChangeToken GetChangeToken(ShoppingCart cart)
+        public static IChangeToken CreateChangeToken(ShoppingCart cart)
         {
             if (cart == null)
             {
                 throw new ArgumentNullException(nameof(cart));
             }
             var cancellationTokenSource = _cartRegionTokenLookup.GetOrAdd(cart, new CancellationTokenSource());
-            return new CompositeChangeToken(new[] { GetChangeToken(), new CancellationChangeToken(cancellationTokenSource.Token) });
+            return new CompositeChangeToken(new[] { CreateChangeToken(), new CancellationChangeToken(cancellationTokenSource.Token) });
         }
 
-        public static void ClearCart(ShoppingCart cart)
+        public static void ExpireCart(ShoppingCart cart)
         {
             if (_cartRegionTokenLookup.TryRemove(cart, out CancellationTokenSource token))
             {

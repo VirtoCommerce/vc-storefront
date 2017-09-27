@@ -89,7 +89,7 @@ namespace VirtoCommerce.Storefront.Authentication
             var cacheKey = CacheKey.With(GetType(), "FindByIdAsync", userId);
             var user = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(UserStoreCacheRegion.GetChangeToken());
+                cacheEntry.AddExpirationToken(UserStoreCacheRegion.CreateChangeToken());
                 return await _commerceCoreApi.GetUserByIdAsync(userId, cancellationToken);
             });
 
@@ -105,7 +105,7 @@ namespace VirtoCommerce.Storefront.Authentication
             var cacheKey = CacheKey.With(GetType(), "FindByNameAsync", normalizedUserName);
             var user = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(UserStoreCacheRegion.GetChangeToken());
+                cacheEntry.AddExpirationToken(UserStoreCacheRegion.CreateChangeToken());
                 return await _commerceCoreApi.GetUserByNameAsync(normalizedUserName, cancellationToken);
             });
 

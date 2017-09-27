@@ -9,7 +9,7 @@ namespace VirtoCommerce.Storefront.Model.Common.Caching
         private static CancellationChangeToken _regionChangeToken;
         private static object _lock = new object();
        
-        public static IChangeToken GetChangeToken()
+        public static IChangeToken CreateChangeToken()
         {
             if(_regionTokenSource == null)
             {
@@ -26,7 +26,7 @@ namespace VirtoCommerce.Storefront.Model.Common.Caching
         }
 
 
-        public static void ClearRegion()
+        public static void ExpireRegion()
         {
             lock (_lock)
             {

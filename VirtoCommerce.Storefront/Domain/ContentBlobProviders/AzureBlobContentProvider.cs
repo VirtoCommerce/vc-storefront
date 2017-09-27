@@ -103,7 +103,7 @@ namespace VirtoCommerce.Storefront.Domain
             var cacheKey = CacheKey.With(GetType(), "PathExistsAsync", path);
             return await _memoryCache.GetOrCreateAsync(cacheKey,  async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(ContentBlobCacheRegion.GetChangeToken());
+                cacheEntry.AddExpirationToken(ContentBlobCacheRegion.CreateChangeToken());
 
                 // If requested path is a directory we should always return true because Azure blob storage does not support checking if directories exist
                 var result = string.IsNullOrEmpty(Path.GetExtension(path));

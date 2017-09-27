@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Catalog.Services;
@@ -30,10 +31,11 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IProductAvailabilityService _productAvailabilityService;
         private readonly IInventoryService _inventoryService;
         private readonly IMemoryCache _memoryCache;
+        private readonly IApiChangesWatcher _apiChangesWatcher;
 
         public CatalogService(IWorkContextAccessor workContextAccessor, ICatalogModuleCategories categoriesApi, ICatalogModuleProducts productsApi,
                               ICatalogModuleSearch searchApi, IPricingService pricingService, ICustomerService customerService, ISubscriptionService subscriptionService,
-                              IProductAvailabilityService productAvailabilityService, IInventoryService inventoryService, IMemoryCache memoryCache)
+                              IProductAvailabilityService productAvailabilityService, IInventoryService inventoryService, IMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
         {
             _workContextAccessor = workContextAccessor;
             _categoriesApi = categoriesApi;
@@ -46,6 +48,7 @@ namespace VirtoCommerce.Storefront.Domain
             _subscriptionService = subscriptionService;
             _productAvailabilityService = productAvailabilityService;
             _memoryCache = memoryCache;
+            _apiChangesWatcher = changesWatcher;
         }
 
         #region ICatalogSearchService Members
@@ -176,7 +179,9 @@ namespace VirtoCommerce.Storefront.Domain
             var cacheKey = CacheKey.With(GetType(), "GetProductsAsync", ids.GetOrderIndependentHashCode().ToString(), responseGroup.ToString());
             return await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(CatalogCacheRegion.GetChangeToken());
+                cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
+                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
+
                 var productDtos = await _productsApi.GetProductByPlentyIdsAsync(ids, ((int)responseGroup).ToString());
 
                 var result = productDtos.Select(x => x.ToProduct(workContext.CurrentLanguage, workContext.CurrentCurrency, workContext.CurrentStore)).ToArray();
@@ -189,7 +194,7 @@ namespace VirtoCommerce.Storefront.Domain
             var cacheKey = CacheKey.With(GetType(), "InnerGetCategoriesAsync", ids.GetOrderIndependentHashCode().ToString(), responseGroup.ToString());
             var result = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(CatalogCacheRegion.GetChangeToken());
+                cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
 
                 return (await _categoriesApi.GetCategoriesByPlentyIdsAsync(ids.ToList(), ((int)responseGroup).ToString())).Select(x => x.ToCategory(workContext.CurrentLanguage, workContext.CurrentStore)).ToArray();
             });
@@ -203,7 +208,8 @@ namespace VirtoCommerce.Storefront.Domain
             var cacheKey = CacheKey.With(GetType(), "InnerSearchCategoriesAsync", criteria.GetHashCode().ToString());
             var result = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(CatalogCacheRegion.GetChangeToken());
+                cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
+                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
 
                 criteria = criteria.Clone();
                 var searchCriteria = criteria.ToCategorySearchCriteriaDto(workContext);
@@ -226,7 +232,8 @@ namespace VirtoCommerce.Storefront.Domain
             var cacheKey = CacheKey.With(GetType(), "InnerSearchProductsAsync", criteria.GetHashCode().ToString());
             return await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(CatalogCacheRegion.GetChangeToken());
+                cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
+                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
 
                 criteria = criteria.Clone();
 

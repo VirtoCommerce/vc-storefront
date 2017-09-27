@@ -33,7 +33,7 @@ namespace VirtoCommerce.Storefront.Domain
             var cacheKey = CacheKey.With(GetType(), "EvaluateDiscountsAsync", context.GetHashCode().ToString());
             var rewards = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(MarketingCacheRegion.GetChangeToken());
+                cacheEntry.AddExpirationToken(MarketingCacheRegion.CreateChangeToken());
 
                 var contextDto = context.ToPromotionEvaluationContextDto();
                 return await _promiotionApi.EvaluatePromotionsAsync(contextDto);               

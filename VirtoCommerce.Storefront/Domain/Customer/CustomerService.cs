@@ -50,8 +50,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var cacheKey = CacheKey.With(GetType(),  "GetCustomerByIdAsync", customerId);
             var retVal = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
-            {
-                cacheEntry.AddExpirationToken(CustomerCacheRegion.GetChangeToken(customerId));
+            {              
                 //TODO: Make parallels call
                 var contact = await _customerApi.GetMemberByIdAsync(customerId);
                 CustomerInfo result = null;
@@ -59,7 +58,9 @@ namespace VirtoCommerce.Storefront.Domain
                 {
                     result = contact.ToCustomerInfo();
                 }
-               
+
+                cacheEntry.AddExpirationToken(CustomerCacheRegion.CreateChangeToken(result));
+
                 return result;
             });
 
@@ -89,7 +90,7 @@ namespace VirtoCommerce.Storefront.Domain
             await _customerApi.UpdateContactAsync(contact);
 
             //Invalidate cache
-            CustomerCacheRegion.ClearCustomerRegion(customer.Id);
+            CustomerCacheRegion.ExpireCustomer(customer);
         }
 
         public async Task UpdateAddressesAsync(CustomerInfo customer)
@@ -97,7 +98,7 @@ namespace VirtoCommerce.Storefront.Domain
             await _customerApi.UpdateAddessesAsync(customer.Id, customer.Addresses.Select(x => x.ToCustomerAddressDto()).ToList());
 
             //Invalidate cache
-            CustomerCacheRegion.ClearCustomerRegion(customer.Id);
+            CustomerCacheRegion.ExpireCustomer(customer);
         }
 
         public virtual async Task<bool> CanLoginOnBehalfAsync(string storeId, string customerId)

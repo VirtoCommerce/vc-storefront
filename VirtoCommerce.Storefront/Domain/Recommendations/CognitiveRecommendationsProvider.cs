@@ -62,7 +62,7 @@ namespace VirtoCommerce.Storefront.Domain
             var cacheKey = CacheKey.With(GetType(), "GetRecommendationsAsync", context.GetHashCode().ToString());
             return await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(RecommendationsCacheRegion.GetChangeToken());
+                cacheEntry.AddExpirationToken(RecommendationsCacheRegion.CreateChangeToken());
 
                 var result = new List<Product>();
                 var recommendedProductIds = await _recommendationsApi.GetRecommendationsAsync(cognitiveContext.ToContextDto());
