@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
-using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
-using VirtoCommerce.Storefront.Converters;
-using VirtoCommerce.Storefront.Converters.Subscriptions;
+using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
@@ -21,7 +18,7 @@ using orderModel = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Mode
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-  
+
     public class ApiCartController : StorefrontControllerBase
     {
         private readonly ICartBuilder _cartBuilder;

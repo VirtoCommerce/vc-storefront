@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CacheManager.Core" Version="1.1.1" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
   </ItemGroup>
 

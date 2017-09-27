@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
-    public class PagedSearchCriteria : ValueObject<PagedSearchCriteria>
+    public class PagedSearchCriteria : ValueObject
     {
         public PagedSearchCriteria(NameValueCollection queryString, int defaultPageSize)
         {

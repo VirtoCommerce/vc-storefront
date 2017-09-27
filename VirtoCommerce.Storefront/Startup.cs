@@ -1,5 +1,4 @@
-﻿using CacheManager.Core;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -9,11 +8,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using VirtoCommerce.LiquidThemeEngine;
+using VirtoCommerce.Storefront.Authentication;
 using VirtoCommerce.Storefront.Binders;
-using VirtoCommerce.Storefront.Builders;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.DependencyInjection;
+using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.JsonConverters;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
@@ -37,9 +38,6 @@ using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 using VirtoCommerce.Storefront.Model.Tax.Services;
 using VirtoCommerce.Storefront.Routing;
-using VirtoCommerce.Storefront.Services;
-using VirtoCommerce.Storefront.Services.Identity;
-using VirtoCommerce.Storefront.Services.Recommendations;
 using VirtoCommerce.Tools;
 
 namespace VirtoCommerce.Storefront
@@ -70,7 +68,6 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IUrlBuilder, UrlBuilder>();
             services.AddSingleton<IStorefrontUrlBuilder, StorefrontUrlBuilder>();
 
-            services.AddSingleton<ICountriesService, JsonCountriesService>(provider => new JsonCountriesService(provider.GetService<ICacheManager<object>>(), HostingEnvironment.MapPath("~/countries.json")));
             services.AddSingleton<IStoreService, StoreService>();
             services.AddSingleton<ICurrencyService, CurrencyService>();
             services.AddSingleton<ISlugRouteService, SlugRouteService>();
@@ -105,7 +102,11 @@ namespace VirtoCommerce.Storefront
                 Configuration.GetSection("VirtoCommerce:Endpoint").Bind(options);
             });
 
-            services.AddCache(HostingEnvironment);
+            services.AddSingleton<ICountriesService, FileSystemCountriesService>();
+            services.Configure<FileSystemCountriesOptions>(options =>
+            {
+               options.FilePath = HostingEnvironment.MapPath("~/countries.json");
+            });
 
             var contentConnectionString = BlobConnectionString.Parse(Configuration.GetConnectionString("ContentConnectionString"));
             if (contentConnectionString.Provider.EqualsInvariant("AzureBlobStorage"))
@@ -114,15 +115,15 @@ namespace VirtoCommerce.Storefront
                 {
                     options.Container = contentConnectionString.RootPath;
                     options.ConnectionString = contentConnectionString.ConnectionString;
-                });              
+                });
             }
             else
-            {            
+            {
                 services.AddFileSystemBlobContent(options =>
                 {
                     options.Path = HostingEnvironment.MapPath(contentConnectionString.RootPath);
                 });
-            }     
+            }
 
             //Identity overrides for use remote user storage
             services.AddSingleton<IUserStore<CustomerInfo>, CustomUserStore>();
@@ -141,7 +142,7 @@ namespace VirtoCommerce.Storefront
                 options.Password.RequireNonAlphanumeric = false;
             }).AddDefaultTokenProviders();
 
-       
+
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
@@ -160,12 +161,13 @@ namespace VirtoCommerce.Storefront
 
             var snapshotProvider = services.BuildServiceProvider();
             //Register JSON converters to 
-            services.AddMvc(options=>
+            services.AddMvc(options =>
             {
-                options.CacheProfiles.Add("Default", new CacheProfile() {
-                                                           Duration = 60,
-                                                           VaryByHeader = "host"
-                                                       });
+                options.CacheProfiles.Add("Default", new CacheProfile()
+                {
+                    Duration = 60,
+                    VaryByHeader = "host"
+                });
             }).AddJsonOptions(options =>
             {
                 options.SerializerSettings.Converters.Add(new CartTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
@@ -177,11 +179,11 @@ namespace VirtoCommerce.Storefront
             {
                 options.ViewEngines.Add(snapshotProvider.GetService<ILiquidViewEngine>());
             });
-          
+
 
             //Register event handlers via reflection
             services.RegisterAssembliesEventHandlers(typeof(Startup));
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

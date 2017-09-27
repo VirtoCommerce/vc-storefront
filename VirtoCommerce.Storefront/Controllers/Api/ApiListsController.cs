@@ -26,19 +26,26 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpGet]
         public async Task<ActionResult> GetListByName(string listName)
         {
-            var wishlistBuilder = await LoadOrCreateWishlistAsync(listName);
-            await wishlistBuilder.ValidateAsync();
-            return Json(wishlistBuilder.Cart);
+            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listName)).LockAsync())
+            {
+                var wishlistBuilder = await LoadOrCreateWishlistAsync(listName);
+                await wishlistBuilder.ValidateAsync();
+                return Json(wishlistBuilder.Cart);
+            }
         }
 
         // GET: storefrontapi/lists/contains
         [HttpGet]
         public async Task<ActionResult> IsItemContainsInList(string productId, string listName)
         {
-            var wishlistBuilder = await LoadOrCreateWishlistAsync(listName);
-            await wishlistBuilder.ValidateAsync();
-            var hasProduct = wishlistBuilder.Cart.Items.Any(x => x.ProductId == productId);
-            return Json(new { Contains = hasProduct });
+            //Need lock to prevent concurrent access to same cart
+            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listName)).LockAsync())
+            {
+                var wishlistBuilder = await LoadOrCreateWishlistAsync(listName);
+                await wishlistBuilder.ValidateAsync();
+                var hasProduct = wishlistBuilder.Cart.Items.Any(x => x.ProductId == productId);
+                return Json(new { Contains = hasProduct });
+            }
         }
 
         // POST: storefrontapi/lists/items?id=...

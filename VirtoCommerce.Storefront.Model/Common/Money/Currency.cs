@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.Serialization;
 
@@ -7,7 +8,7 @@ namespace VirtoCommerce.Storefront.Model.Common
     /// <summary>
     /// Represent currency information in storefront. Contains some extra informations as exchnage rate, symbol, formating. 
     /// </summary>
-    public class Currency
+    public class Currency : ValueObject
     {
         private Language _language;
         private string _code;
@@ -119,56 +120,21 @@ namespace VirtoCommerce.Storefront.Model.Common
             }
             return null;
         }
-
-
-        public static bool operator ==(Currency left, Currency right)
-        {
-            return Equals(left, null)
-                ? Equals(right, null)
-                : left.Equals(right);
-        }
-
-        public static bool operator !=(Currency left, Currency right)
-        {
-            return !(left == right);
-        }
-
-        /// <summary>
-        /// <see cref="M:System.Object.Equals"/>
-        /// </summary>
-        /// <param name="obj"><see cref="M:System.Object.Equals"/></param>
-        /// <returns><see cref="M:System.Object.Equals"/></returns>
+     
         public override bool Equals(object obj)
         {
-            if (obj == null)
-                return false;
-
-            if (ReferenceEquals(this, obj))
-                return true;
-
-            var other = obj as Currency;
-            var code = obj.ToString();
-
-            if (other != null)
+            var result = base.Equals(obj);
+            if(!result && obj is string code)
             {
-                return string.Equals(Code, other.Code, StringComparison.InvariantCultureIgnoreCase);
+                result = code.EqualsInvariant(Code);
             }
-
-            if (code != null)
-            {
-                return string.Equals(Code, code, StringComparison.InvariantCultureIgnoreCase);
-            }
-
-            return false;
+            return result;
         }
 
-        /// <summary>
-        /// <see cref="M:System.Object.GetHashCode"/>
-        /// </summary>
-        /// <returns><see cref="M:System.Object.GetHashCode"/></returns>
-        public override int GetHashCode()
+        protected override IEnumerable<object> GetEqualityComponents()
         {
-            return Code.ToUpper().GetHashCode();
+            yield return Code;
         }
+
     }
 }

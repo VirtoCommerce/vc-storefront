@@ -1,24 +1,21 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using VirtoCommerce.Storefront.Data.Stores;
-using VirtoCommerce.Storefront.Extensions;
-using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Model.Stores;
-using VirtoCommerce.Storefront.Model.Services;
-using VirtoCommerce.Storefront.Model.LinkList.Services;
-using VirtoCommerce.Storefront.Model.StaticContent;
-using VirtoCommerce.Storefront.Model.Pricing.Services;
-using VirtoCommerce.Storefront.Model.Cart.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Domain;
+using VirtoCommerce.Storefront.Infrastructure;
+using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Services;
+using VirtoCommerce.Storefront.Model.LinkList.Services;
+using VirtoCommerce.Storefront.Model.Pricing.Services;
 using VirtoCommerce.Storefront.Model.Quote.Services;
-using Microsoft.Extensions.Options;
-using VirtoCommerce.Storefront.Common;
+using VirtoCommerce.Storefront.Model.Services;
+using VirtoCommerce.Storefront.Model.StaticContent;
+using VirtoCommerce.Storefront.Model.Stores;
 
 namespace VirtoCommerce.Storefront.Middleware
 {

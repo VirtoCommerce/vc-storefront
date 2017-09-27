@@ -1,17 +1,9 @@
-﻿using System.IO;
+﻿using Microsoft.AspNetCore.Http;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using VirtoCommerce.LiquidThemeEngine;
-using VirtoCommerce.Storefront.Common.Exceptions;
-using VirtoCommerce.Storefront.Data.Stores;
-using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Models;
 
 namespace VirtoCommerce.Storefront.Middleware

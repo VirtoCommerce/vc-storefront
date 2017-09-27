@@ -1,13 +1,10 @@
-﻿using CacheManager.Core;
-using DotLiquid;
+﻿using DotLiquid;
 using DotLiquid.Exceptions;
 using DotLiquid.FileSystems;
 using DotLiquid.ViewEngine.Exceptions;
 using LibSassHost;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;

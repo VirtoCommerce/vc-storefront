@@ -3,7 +3,7 @@ using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Marketing
 {
-    public partial class Discount : ValueObject<Discount>, IConvertible<Discount>
+    public partial class Discount : ValueObject, IConvertible<Discount>
     {
         public Discount()
         {

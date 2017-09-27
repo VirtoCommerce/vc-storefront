@@ -3,7 +3,7 @@ using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model
 {
-    public partial class Address : ValueObject<Address>
+    public partial class Address : ValueObject
     {
         public AddressType Type { get; set; }
         public string Name { get; set; }
@@ -21,13 +21,7 @@ namespace VirtoCommerce.Storefront.Model
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string Phone { get; set; }
-        public string Email { get; set; }
-
-        public override string ToString()
-        {
-            var retVal = string.Join(" ", FirstName, LastName, Organization, Line1, City, RegionName, PostalCode, CountryName);
-            return retVal;
-        }
+        public string Email { get; set; }      
 
     }
 }

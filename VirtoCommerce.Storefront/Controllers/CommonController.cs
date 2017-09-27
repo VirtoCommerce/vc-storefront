@@ -1,15 +1,12 @@
-﻿using CacheManager.Core;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
-using VirtoCommerce.Storefront.Common;
-using VirtoCommerce.Storefront.Converters;
+using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -22,13 +19,11 @@ namespace VirtoCommerce.Storefront.Controllers
     {
         private readonly IStoreModule _storeApi;
         private readonly ISecurity _platformSecurityApi;
-        private readonly ICacheManager<object> _cacheManager;
         private readonly SignInManager<CustomerInfo> _signInManager;
         public CommonController(IWorkContextAccessor workContextAccesor, IStorefrontUrlBuilder urlBuilder, IStoreModule storeApi,
-                                 ISecurity platformSecurityApi, ICacheManager<object> cacheManager, SignInManager<CustomerInfo> signInManager)
+                                 ISecurity platformSecurityApi, SignInManager<CustomerInfo> signInManager)
               : base(workContextAccesor, urlBuilder)
         {
-            _cacheManager = cacheManager;
             _storeApi = storeApi;
             _platformSecurityApi = platformSecurityApi;
             _signInManager = signInManager;
@@ -44,7 +39,7 @@ namespace VirtoCommerce.Storefront.Controllers
             //check permissions
             if (_platformSecurityApi.UserHasAnyPermission(WorkContext.CurrentCustomer.UserName, new[] { "cache:reset" }.ToList(), new List<string>()).Result ?? false)
             {
-                _cacheManager.Clear();
+               //TODO: Reset global cache
                 return StoreFrontRedirect("~/");
             }
             return Unauthorized();

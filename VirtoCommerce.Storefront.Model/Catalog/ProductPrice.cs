@@ -9,7 +9,7 @@ using VirtoCommerce.Storefront.Model.Marketing;
 
 namespace VirtoCommerce.Storefront.Model.Catalog
 {
-    public partial class ProductPrice : ValueObject<ProductPrice>, IConvertible<ProductPrice>, ITaxable
+    public partial class ProductPrice : ValueObject, IConvertible<ProductPrice>, ITaxable
     {
         public ProductPrice(Currency currency)
         {
@@ -200,7 +200,28 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             retVal.ProductId = ProductId;
            
             return retVal;
-        } 
+        }
         #endregion
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return ProductId;
+            yield return Currency;
+            yield return MinQuantity;
+            yield return ListPrice;
+            yield return SalePrice;
+            yield return DiscountAmount;
+            yield return PricelistId;
+            yield return TaxPercentRate;
+
+            if (TierPrices != null)
+            {
+                foreach(var tierPrice in TierPrices)
+                {
+                    yield return tierPrice;
+                }
+            }
+
+        }
     }
 }

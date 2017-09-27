@@ -1,6 +1,4 @@
-﻿using CacheManager.Core;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
@@ -28,14 +26,12 @@ using VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
 using VirtoCommerce.Storefront.Common;
-using VirtoCommerce.Storefront.Extensions;
-using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Domain;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Common.Bus;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Common.Messages;
 using VirtoCommerce.Storefront.Model.StaticContent;
-using VirtoCommerce.Storefront.Services;
-using VirtoCommerce.Storefront.Services.ContentBlobProviders;
 
 namespace VirtoCommerce.Storefront.DependencyInjection
 {
@@ -76,19 +72,7 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             {
                 services.Configure(setupAction);
             }
-        }
-
-        public static void AddCache(this IServiceCollection services, IHostingEnvironment hostingEnvironment)
-        {
-            //TODO: Load from configuration
-            var localCache = CacheFactory.Build("storefrontCache", settings =>
-            {
-                settings.WithUpdateMode(CacheUpdateMode.Up)
-                        .WithMicrosoftMemoryCacheHandle("memCacheHandle")
-                        .WithExpiration(ExpirationMode.Sliding, TimeSpan.FromMinutes(5));
-            });
-            services.AddSingleton<ICacheManager<object>>(localCache);
-        }
+        }     
 
         public static void AddFileSystemBlobContent(this IServiceCollection services, Action<FileSystemBlobContentOptions> setupAction = null)
         {

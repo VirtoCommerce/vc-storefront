@@ -8,10 +8,12 @@ namespace VirtoCommerce.Storefront.Model.Marketing
     /// <summary>
     /// Represents context object for promotion evaluation
     /// </summary>
-    public partial class PromotionEvaluationContext
+    public partial class PromotionEvaluationContext : ValueObject
     {
-        public PromotionEvaluationContext()
-        {     
+        public PromotionEvaluationContext(Language language, Currency currency)
+        {
+            Language = language;
+            Currency = currency;
         }
             
         public string StoreId { get; set; }
@@ -19,8 +21,25 @@ namespace VirtoCommerce.Storefront.Model.Marketing
         public Currency Currency { get; set; } 
         public Customer.CustomerInfo Customer { get; set; }
         public Cart.ShoppingCart Cart { get; set; }
-        public ICollection<Product> Products { get; set; }
+        public ICollection<Product> Products { get; set; } = new List<Product>();
         public Product Product { get; set; }
-    
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return StoreId;
+            yield return Language;
+            yield return Currency;
+            yield return Customer;
+            yield return Cart;
+            yield return Product;
+            if(!Products.IsNullOrEmpty())
+            {
+                foreach(var product in Products)
+                {
+                    yield return product;
+                }
+            }
+        }
+
     }
 }
