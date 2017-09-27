@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
@@ -34,7 +35,7 @@ namespace VirtoCommerce.Storefront.Domain
                 throw new ArgumentNullException(nameof(store));
             }
             var cacheKey = CacheKey.With(GetType(), "LoadAllStoreLinkListsAsync", store.Id, language.CultureName);
-            return await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(StaticContentCacheRegion.CreateChangeToken());
 

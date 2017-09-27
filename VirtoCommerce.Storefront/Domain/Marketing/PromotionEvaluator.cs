@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Marketing.Services;
@@ -31,7 +32,7 @@ namespace VirtoCommerce.Storefront.Domain
         public virtual async Task EvaluateDiscountsAsync(PromotionEvaluationContext context, IEnumerable<IDiscountable> owners)
         {
             var cacheKey = CacheKey.With(GetType(), "EvaluateDiscountsAsync", context.GetHashCode().ToString());
-            var rewards = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            var rewards = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(MarketingCacheRegion.CreateChangeToken());
 

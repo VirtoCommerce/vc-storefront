@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
@@ -57,7 +58,7 @@ namespace VirtoCommerce.Storefront.Domain
                 throw new ArgumentNullException(nameof(workContext));
             }
             var cacheKey = CacheKey.With(GetType(), "EvaluatePricesListsAsync", evalContext.GetHashCode().ToString());
-            return await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(PricingCacheRegion.CreateChangeToken());
                 cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
@@ -81,7 +82,7 @@ namespace VirtoCommerce.Storefront.Domain
             //Evaluate products prices
             var evalContext = workContext.ToPriceEvaluationContext(products);
             var cacheKey = CacheKey.With(GetType(), "EvaluateProductPricesAsync", evalContext.GetHashCode().ToString());
-            var pricesResponse = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            var pricesResponse = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(PricingCacheRegion.CreateChangeToken());
                 cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());

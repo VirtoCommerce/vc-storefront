@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 using VirtoCommerce.Storefront.Common;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
@@ -60,7 +61,7 @@ namespace VirtoCommerce.Storefront.Domain
         public async Task<IQuoteRequestBuilder> GetOrCreateNewTransientQuoteRequestAsync(Store store, CustomerInfo customer, Language language, Currency currency)
         {
             var cacheKey = CacheKey.With(GetType(), store.Id, customer.Id);
-            _quoteRequest = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            _quoteRequest = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 var activeQuoteSearchCriteria = new quoteModel.QuoteRequestSearchCriteria
                 {

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.CartModuleApi;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
@@ -68,7 +69,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var cacheKey = CacheKey.With(GetType(), store.Id, cartName, customer.Id, currency.Code);
             var needReevaluate = false;
-            Cart = await  _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            Cart = await  _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {              
                 needReevaluate = true;
 

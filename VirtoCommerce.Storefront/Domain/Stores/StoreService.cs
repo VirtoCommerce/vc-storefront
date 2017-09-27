@@ -5,6 +5,7 @@ using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Stores;
+using VirtoCommerce.Storefront.Extensions;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -25,13 +26,13 @@ namespace VirtoCommerce.Storefront.Domain
         public async Task<Model.Stores.Store[]> GetAllStoresAsync()
         {
             var cacheKey = CacheKey.With(GetType(), "GetAllStoresAsync");
-            return await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(StoreCacheRegion.CreateChangeToken());
                 cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
 
                 return (await _storeApi.GetStoresAsync()).Select(x => x.ToStore()).ToArray();
-            });
+            }, cacheNullValue : false);
         }
     }
 }

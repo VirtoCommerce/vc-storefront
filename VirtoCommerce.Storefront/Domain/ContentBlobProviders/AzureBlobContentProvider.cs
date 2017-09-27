@@ -9,6 +9,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Common;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
@@ -101,7 +102,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             path = NormalizePath(path);
             var cacheKey = CacheKey.With(GetType(), "PathExistsAsync", path);
-            return await _memoryCache.GetOrCreateAsync(cacheKey,  async (cacheEntry) =>
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey,  async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(ContentBlobCacheRegion.CreateChangeToken());
 

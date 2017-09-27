@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Tax;
@@ -37,7 +38,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 var cacheKey = CacheKey.With(GetType(), context.GetHashCode().ToString());
 
-                taxRates = await _memoryCache.GetOrCreateAsync(cacheKey, (cacheEntry) =>
+                taxRates = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, (cacheEntry) =>
                 {
                     cacheEntry.AddExpirationToken(TaxCacheRegion.CreateChangeToken());
                     return _commerceApi.EvaluateTaxesAsync(context.StoreId, context.ToTaxEvaluationContextDto());

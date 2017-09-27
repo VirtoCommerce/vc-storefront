@@ -10,6 +10,7 @@ using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using securityDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
+using VirtoCommerce.Storefront.Extensions;
 
 namespace VirtoCommerce.Storefront.Authentication
 {
@@ -91,7 +92,7 @@ namespace VirtoCommerce.Storefront.Authentication
             {
                 cacheEntry.AddExpirationToken(UserStoreCacheRegion.CreateChangeToken());
                 return await _commerceCoreApi.GetUserByIdAsync(userId, cancellationToken);
-            });
+            }, cacheNullValue: false);
 
             if (user != null)
             {
@@ -107,7 +108,7 @@ namespace VirtoCommerce.Storefront.Authentication
             {
                 cacheEntry.AddExpirationToken(UserStoreCacheRegion.CreateChangeToken());
                 return await _commerceCoreApi.GetUserByNameAsync(normalizedUserName, cancellationToken);
-            });
+            }, cacheNullValue: false);
 
             if (user != null)
             {

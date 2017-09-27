@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Common;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -49,7 +50,7 @@ namespace VirtoCommerce.Storefront.Domain
         public virtual async Task<CustomerInfo> GetCustomerByIdAsync(string customerId)
         {
             var cacheKey = CacheKey.With(GetType(),  "GetCustomerByIdAsync", customerId);
-            var retVal = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            var retVal = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {              
                 //TODO: Make parallels call
                 var contact = await _customerApi.GetMemberByIdAsync(customerId);

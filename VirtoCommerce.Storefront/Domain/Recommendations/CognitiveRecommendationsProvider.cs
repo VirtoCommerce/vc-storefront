@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi;
 using VirtoCommerce.Storefront.Common;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -60,7 +61,7 @@ namespace VirtoCommerce.Storefront.Domain
             }
 
             var cacheKey = CacheKey.With(GetType(), "GetRecommendationsAsync", context.GetHashCode().ToString());
-            return await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(RecommendationsCacheRegion.CreateChangeToken());
 

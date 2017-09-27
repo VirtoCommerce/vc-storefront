@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Services;
@@ -32,7 +33,7 @@ namespace VirtoCommerce.Storefront.Domain
             };
 
             var cacheKey = CacheKey.With(GetType(), "GetDynamicContentHtmlAsync", storeId, placeholderName);
-            return await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(MarketingCacheRegion.CreateChangeToken());
                 var dynamicContentItems = (await _dynamicContentApi.EvaluateDynamicContentAsync(evaluationContext)).Select(x => x.ToDynamicContentItem());

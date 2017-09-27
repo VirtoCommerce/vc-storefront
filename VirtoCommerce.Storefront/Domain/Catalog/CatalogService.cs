@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
@@ -177,7 +178,7 @@ namespace VirtoCommerce.Storefront.Domain
         protected virtual async Task<Product[]> GetProductsAsync(IList<string> ids, ItemResponseGroup responseGroup, WorkContext workContext)
         {
             var cacheKey = CacheKey.With(GetType(), "GetProductsAsync", ids.GetOrderIndependentHashCode().ToString(), responseGroup.ToString());
-            return await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
                 cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
@@ -192,7 +193,7 @@ namespace VirtoCommerce.Storefront.Domain
         private async Task<Category[]> InnerGetCategoriesAsync(string[] ids, WorkContext workContext, CategoryResponseGroup responseGroup = CategoryResponseGroup.Info)
         {
             var cacheKey = CacheKey.With(GetType(), "InnerGetCategoriesAsync", ids.GetOrderIndependentHashCode().ToString(), responseGroup.ToString());
-            var result = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
 
@@ -206,7 +207,7 @@ namespace VirtoCommerce.Storefront.Domain
         private async Task<IPagedList<Category>> InnerSearchCategoriesAsync(CategorySearchCriteria criteria, WorkContext workContext)
         {
             var cacheKey = CacheKey.With(GetType(), "InnerSearchCategoriesAsync", criteria.GetHashCode().ToString());
-            var result = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
                 cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
@@ -230,7 +231,7 @@ namespace VirtoCommerce.Storefront.Domain
         private async Task<CatalogSearchResult> InnerSearchProductsAsync(ProductSearchCriteria criteria, WorkContext workContext)
         {
             var cacheKey = CacheKey.With(GetType(), "InnerSearchProductsAsync", criteria.GetHashCode().ToString());
-            return await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
                 cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());

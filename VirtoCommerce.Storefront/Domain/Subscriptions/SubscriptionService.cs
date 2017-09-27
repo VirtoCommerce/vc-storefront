@@ -1,11 +1,15 @@
-﻿using PagedList.Core;
+﻿using Microsoft.Extensions.Caching.Memory;
+using PagedList.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Subscriptions;
 using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 
@@ -15,11 +19,13 @@ namespace VirtoCommerce.Storefront.Domain
     {
         private readonly ISubscriptionModule _subscriptionApi;
         private readonly IWorkContextAccessor _workContextAccessor;
-        public SubscriptionService(ISubscriptionModule subscriptionApi, IWorkContextAccessor workContextAccessor)
+        private readonly IMemoryCache _memoryCache;
+        public SubscriptionService(ISubscriptionModule subscriptionApi, IWorkContextAccessor workContextAccessor, IMemoryCache memoryCache)
         {
             _subscriptionApi = subscriptionApi;
             _workContextAccessor = workContextAccessor;
-        }
+            _memoryCache = memoryCache;
+    }
         public  async Task<Subscription> CancelSubscriptionAsync(SubscriptionCancelRequest request)
         {
             var workContext = _workContextAccessor.WorkContext;
@@ -42,8 +48,12 @@ namespace VirtoCommerce.Storefront.Domain
 
         public async Task<IList<PaymentPlan>> GetPaymentPlansByIdsAsync(string[] ids)
         {
-            var result = (await _subscriptionApi.GetPaymentPlanByIdsAsync(ids)).Select(x => x.ToPaymentPlan()).ToList();
-            return result;
+            var cacheKey = CacheKey.With(GetType(), "GetPaymentPlansByIdsAsync", ids.GetOrderIndependentHashCode().ToString());
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                cacheEntry.AddExpirationToken(SubscriptionCacheRegion.CreateChangeToken());
+                return (await _subscriptionApi.GetPaymentPlanByIdsAsync(ids)).Select(x => x.ToPaymentPlan()).ToList();
+            });
         }
 
         public IPagedList<Subscription> SearchSubscription(SubscriptionSearchCriteria criteria)

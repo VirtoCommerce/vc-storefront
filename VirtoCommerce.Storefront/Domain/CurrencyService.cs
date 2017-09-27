@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -22,7 +23,7 @@ namespace VirtoCommerce.Storefront.Domain
         public async Task<Currency[]> GetAllCurrenciesAsync(Language language)
         {
             var cacheKey = CacheKey.With(GetType(), language.CultureName);
-            return await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 return (await _commerceApi.GetAllCurrenciesAsync()).Select(x => x.ToCurrency(language)).ToArray();
             });
