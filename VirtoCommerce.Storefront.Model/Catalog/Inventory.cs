@@ -7,7 +7,7 @@ using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Catalog
 {
-    public partial class Inventory : ValueObject<Inventory>
+    public partial class Inventory : ValueObject
     {
         /// <summary>
         /// Gets or Sets PreorderAvailabilityDate

@@ -5,7 +5,7 @@ using VirtoCommerce.Storefront.Model.Marketing;
 
 namespace VirtoCommerce.Storefront.Model
 {
-    public partial class TierPrice : ValueObject<TierPrice>, ITaxable
+    public partial class TierPrice : ValueObject, ITaxable
     {
         public TierPrice(Currency currency)
             :this (new Money(currency), 0)
@@ -106,5 +106,14 @@ namespace VirtoCommerce.Storefront.Model
             }
         }
         #endregion
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Price;
+            yield return DiscountAmount;
+            yield return TaxPercentRate;
+            yield return Quantity;           
+
+        }
     }
 }

@@ -1,13 +1,10 @@
-﻿using CacheManager.Core;
-using DotLiquid;
+﻿using DotLiquid;
 using DotLiquid.Exceptions;
 using DotLiquid.FileSystems;
 using DotLiquid.ViewEngine.Exceptions;
 using LibSassHost;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
@@ -200,7 +197,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             var cacheKey = CacheKey.With(GetType(), "GetAssetHash", filePath);
             return _memoryCache.GetOrCreate(cacheKey,  (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.GetChangeToken(), _themeBlobProvider.Watch(filePath) }));
+                cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(filePath) }));
 
                 using (var stream = GetAssetStream(filePath))
                 {
@@ -301,7 +298,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             var cacheKey = CacheKey.With(GetType(), "GetSettings", defaultValue);
             return _memoryCache.GetOrCreate(cacheKey,  (cacheItem) =>
             {
-                cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.GetChangeToken(), _themeBlobProvider.Watch(CurrentThemeSettingPath) }));
+                cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeSettingPath) }));
                 var retVal = new DefaultableDictionary(defaultValue);
                 //Load all data from current theme config
                 var resultSettings = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
@@ -348,7 +345,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             var cacheKey = CacheKey.With(GetType(), "ReadLocalization", WorkContext.CurrentLanguage.CultureName);
             return _memoryCache.GetOrCreate(cacheKey, (cacheItem) =>
             {
-                cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.GetChangeToken(), _themeBlobProvider.Watch(CurrentThemeLocalePath + "/*") }));
+                cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeLocalePath + "/*") }));
                 return InnerReadLocalization(_themeBlobProvider, CurrentThemeLocalePath, WorkContext.CurrentLanguage) ?? new JObject();
             });
         }
@@ -439,7 +436,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             var cacheKey = CacheKey.With(GetType(), "ReadTemplateByName", templateName);
             return _memoryCache.GetOrCreate(cacheKey, (cacheItem) =>
             {
-                cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.GetChangeToken(), _themeBlobProvider.Watch(templatePath) }));
+                cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(templatePath) }));
                 using (var stream = _themeBlobProvider.OpenRead(templatePath))
                 {
                     return stream.ReadToString();

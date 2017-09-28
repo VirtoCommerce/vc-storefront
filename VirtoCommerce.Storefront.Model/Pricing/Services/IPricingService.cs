@@ -8,5 +8,6 @@ namespace VirtoCommerce.Storefront.Model.Pricing.Services
     {
         Task EvaluateProductPricesAsync(IEnumerable<Product> products, WorkContext workContext);
         Task<IList<Pricelist>> EvaluatePricesListsAsync(PriceEvaluationContext evalContext, WorkContext workContext);
+        IList<Pricelist> EvaluatePricesLists(PriceEvaluationContext evalContext, WorkContext workContext);
     }
 }

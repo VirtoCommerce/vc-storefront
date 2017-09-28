@@ -10,9 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CacheManager.Core" Version="1.1.1" />
-    <PackageReference Include="CacheManager.Microsoft.Extensions.Caching.Memory" Version="1.1.1" />
     <PackageReference Include="Markdig" Version="0.13.3" />
+    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.0.0" />
     <PackageReference Include="Microsoft.SyndicationFeed.ReaderWriter" Version="1.0.0" />
@@ -34,12 +33,6 @@
   <ItemGroup>
     <ProjectReference Include="..\VirtoCommerce.LiquidThemeEngine\VirtoCommerce.LiquidThemeEngine.csproj" />
     <ProjectReference Include="..\VirtoCommerce.Storefront.Model\VirtoCommerce.Storefront.Model.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="LibSassNetProxy">
-      <HintPath>Shared\LibSassNetProxy.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

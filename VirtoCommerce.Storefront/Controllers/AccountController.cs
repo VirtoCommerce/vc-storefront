@@ -3,14 +3,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
-using VirtoCommerce.Storefront.Common;
-using VirtoCommerce.Storefront.Converters;
+using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Events;
-using VirtoCommerce.Storefront.Model.Order.Events;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
@@ -129,7 +127,7 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 var user = await _signInManager.UserManager.FindByNameAsync(login.Username);
                 //Check that it's login on behalf request           
-                var onBehalfUserId = Request.Cookies[StorefrontConstants.LoginOnBehalfUserIdCookie];
+                //var onBehalfUserId = Request.Cookies[StorefrontConstants.LoginOnBehalfUserIdCookie];
                 //TODO: login on behalf
                 //if (!string.IsNullOrEmpty(onBehalfUserId) && !string.Equals(onBehalfUserId, User.Identity.Name) && await _customerService.CanLoginOnBehalfAsync(WorkContext.CurrentStore.Id, customer.UserId))
                 //{
