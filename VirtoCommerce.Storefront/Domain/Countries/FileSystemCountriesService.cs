@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
@@ -23,7 +24,7 @@ namespace VirtoCommerce.Storefront.Domain
             _memoryCache = cacheManager;
         }
         #region IKnowCountriesProvider members
-        public IEnumerable<Country> GetCountries()
+        public async Task<IList<Country>> GetCountriesAsync()
         {
             if (_options == null)
             {
@@ -31,9 +32,9 @@ namespace VirtoCommerce.Storefront.Domain
             }
 
             var cacheKey = CacheKey.With(GetType(), "GetCountries");
-            return _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
+            return await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
             {
-                Country[] result = null;
+                List<Country> result = new List<Country>();
 
                 var regions = CultureInfo.GetCultures(CultureTypes.SpecificCultures)
                     .Select(GetRegionInfo)
@@ -42,16 +43,15 @@ namespace VirtoCommerce.Storefront.Domain
 
                 if (_options != null)
                 {
-                    var countriesJson = File.ReadAllText(_options.FilePath);
+                    var countriesJson = await File.ReadAllTextAsync(_options.FilePath);
                     var countriesDict = JsonConvert.DeserializeObject<Dictionary<string, JObject>>(countriesJson);
 
                     result = countriesDict
                         .Select(kvp => ParseCountry(kvp, regions))
                         .Where(c => c.Code3 != null)
-                        .ToArray();
+                        .ToList();
                 }
                 return result;
-
             });
 
         }

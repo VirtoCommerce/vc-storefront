@@ -180,8 +180,7 @@ namespace VirtoCommerce.Storefront
             {
                 options.ViewEngines.Add(snapshotProvider.GetService<ILiquidViewEngine>());
             });
-
-
+            
             //Register event handlers via reflection
             services.RegisterAssembliesEventHandlers(typeof(Startup));
 
