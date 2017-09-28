@@ -411,6 +411,15 @@ namespace VirtoCommerce.Storefront.Data.Stores
             customer.SelectedCurrencyCode = HttpContext.User.FindFirstValue(StorefrontConstants.CurrencyClaimType);
 
             WorkContext.CurrentCustomer = customer;
+
+            // Gets the collection of external login providers
+            var externalAuthTypes = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            WorkContext.ExternalLoginProviders = externalAuthTypes.Select(at => new LoginProvider
+            {
+                AuthenticationType = at.Name,
+                Caption = at.DisplayName,
+                //Properties = at.Properties
+            }).ToList();
         }
 
         public Task WithShoppingCartAsync(string cartName, ICartBuilder cartBuilder)

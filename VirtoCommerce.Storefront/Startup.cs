@@ -1,4 +1,5 @@
 ﻿using CacheManager.Core;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -114,24 +115,46 @@ namespace VirtoCommerce.Storefront
                 {
                     options.Container = contentConnectionString.RootPath;
                     options.ConnectionString = contentConnectionString.ConnectionString;
-                });              
+                });
             }
             else
-            {            
+            {
                 services.AddFileSystemBlobContent(options =>
                 {
                     options.Path = HostingEnvironment.MapPath(contentConnectionString.RootPath);
                 });
-            }     
+            }
 
             //Identity overrides for use remote user storage
             services.AddSingleton<IUserStore<CustomerInfo>, CustomUserStore>();
             services.AddSingleton<IUserPasswordStore<CustomerInfo>, CustomUserStore>();
             services.AddSingleton<IUserEmailStore<CustomerInfo>, CustomUserStore>();
+            services.AddSingleton<IUserLoginStore<CustomerInfo>, CustomUserStore>();
             services.AddSingleton<IUserClaimsPrincipalFactory<CustomerInfo>, CustomerInfoPrincipalFactory>();
             services.AddScoped<UserManager<CustomerInfo>, CustomUserManager>();
 
-            services.AddAuthentication();
+            //services.AddAuthentication();
+            var auth = services.AddAuthentication() //CookieAuthenticationDefaults.AuthenticationScheme
+                .AddCookie(options =>
+                {
+                    options.LoginPath = new PathString("/Account/Login");
+                    options.Cookie.Name = StorefrontConstants.AuthenticationCookie;
+                });
+
+            var a = Configuration["Authentication:Facebook:AppId"];
+
+            auth.AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            });
+
+            auth.AddGoogle(googleOptions =>
+             {
+                 googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                 googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+             });
+
             services.AddIdentity<CustomerInfo, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 8;
@@ -141,7 +164,7 @@ namespace VirtoCommerce.Storefront
                 options.Password.RequireNonAlphanumeric = false;
             }).AddDefaultTokenProviders();
 
-       
+
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
@@ -177,11 +200,11 @@ namespace VirtoCommerce.Storefront
             {
                 options.ViewEngines.Add(snapshotProvider.GetService<ILiquidViewEngine>());
             });
-          
+
 
             //Register event handlers via reflection
             services.RegisterAssembliesEventHandlers(typeof(Startup));
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
