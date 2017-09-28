@@ -263,7 +263,7 @@ namespace VirtoCommerce.Storefront.Authentication
             var cacheKey = CacheKey.With(GetType(), "FindByLoginAsync", loginProvider, providerKey);
             var user = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(UserStoreCacheRegion.GetChangeToken());
+                cacheEntry.AddExpirationToken(UserStoreCacheRegion.CreateChangeToken());
                 return await _commerceCoreApi.GetUserByLoginAsync(loginProvider, providerKey);
             });
 

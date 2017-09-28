@@ -138,8 +138,7 @@ namespace VirtoCommerce.Storefront
             var auth = services.AddAuthentication() //CookieAuthenticationDefaults.AuthenticationScheme
                 .AddCookie(options =>
                 {
-                    options.LoginPath = new PathString("/Account/Login");
-                    options.Cookie.Name = StorefrontConstants.AuthenticationCookie;
+                    options.LoginPath = new PathString("/Account/Login");                    
                 });
 
             var a = Configuration["Authentication:Facebook:AppId"];
