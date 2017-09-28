@@ -261,11 +261,11 @@ namespace VirtoCommerce.Storefront.Authentication
         public async Task<CustomerInfo> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
             var cacheKey = CacheKey.With(GetType(), "FindByLoginAsync", loginProvider, providerKey);
-            var user = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            var user = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(UserStoreCacheRegion.CreateChangeToken());
                 return await _commerceCoreApi.GetUserByLoginAsync(loginProvider, providerKey);
-            });
+            }, cacheNullValue: false);
 
             if (user != null)
             {
@@ -304,9 +304,6 @@ namespace VirtoCommerce.Storefront.Authentication
                 user.AllowedStores = storefrontUser.AllowedStores;
                 await _customerService.CreateCustomerAsync(user);
             }
-
-            var cacheKey = CacheKey.With(GetType(), "FindByLoginAsync", login.LoginProvider, login.ProviderKey);
-            _memoryCache.Remove(cacheKey);
         }
 
         public Task RemoveLoginAsync(CustomerInfo user, string loginProvider, string providerKey, CancellationToken cancellationToken)

@@ -134,26 +134,33 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IUserClaimsPrincipalFactory<CustomerInfo>, CustomerInfoPrincipalFactory>();
             services.AddScoped<UserManager<CustomerInfo>, CustomUserManager>();
 
-            //services.AddAuthentication();
-            var auth = services.AddAuthentication() //CookieAuthenticationDefaults.AuthenticationScheme
+            var auth = services.AddAuthentication() 
                 .AddCookie(options =>
                 {
                     options.LoginPath = new PathString("/Account/Login");                    
                 });
 
-            var a = Configuration["Authentication:Facebook:AppId"];
-
-            auth.AddFacebook(facebookOptions =>
+            var facebookAppId = Configuration["Authentication:Facebook:AppId"];
+            var facebookAppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            if (!string.IsNullOrEmpty(facebookAppId) && !string.IsNullOrEmpty(facebookAppSecret))
             {
-                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-            });
+                auth.AddFacebook(facebookOptions =>
+                {
+                    facebookOptions.AppId = facebookAppId;
+                    facebookOptions.AppSecret = facebookAppSecret;
+                });
+            }
 
-            auth.AddGoogle(googleOptions =>
-             {
-                 googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-                 googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-             });
+            var googleClientId = Configuration["Authentication:Google:ClientId"];
+            var googleClientSecret = Configuration["Authentication:Google:ClientSecret"];
+            if (!string.IsNullOrEmpty(googleClientId) && !string.IsNullOrEmpty(googleClientSecret))
+            {
+                auth.AddGoogle(googleOptions =>
+                {
+                    googleOptions.ClientId = googleClientId;
+                    googleOptions.ClientSecret = googleClientSecret;
+                });
+            }
 
             services.AddIdentity<CustomerInfo, IdentityRole>(options =>
             {
