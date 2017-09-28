@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Domain;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Events;
@@ -17,11 +19,13 @@ namespace VirtoCommerce.Storefront.Controllers
     {
         private readonly SignInManager<CustomerInfo> _signInManager;
         private readonly IEventPublisher _publisher;
-        public AccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<CustomerInfo> signInManager, IEventPublisher publisher)
+        private readonly IAuthorizationService _authorizationService;
+        public AccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<CustomerInfo> signInManager, IEventPublisher publisher, IAuthorizationService authorizationService)
             : base(workContextAccessor, urlBuilder)
         {
             _signInManager = signInManager;
             _publisher = publisher;
+            _authorizationService = authorizationService;
         }
 
         //GET: /account
@@ -41,9 +45,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
             await _signInManager.UserManager.UpdateAsync(customer);
             return View("customers/account", WorkContext);
-        }
-
-       
+        }       
 
         [HttpGet]
         public ActionResult GetOrderDetails(string number)
@@ -96,10 +98,27 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("customers/register", WorkContext);
         }
 
+        [Authorize(Policy = "CanImpersonate")]
+        [HttpGet]
+        public async Task<IActionResult> ImpersonateUser(string userId)
+        {
+            var user = await _signInManager.UserManager.FindByNameAsync(User.Identity.Name);
+            var impersonatedUser = await _signInManager.UserManager.FindByIdAsync(userId);
+            impersonatedUser.OperatorUserId = user.Id;
+            impersonatedUser.OperatorUserName = user.UserName;
+         
+            // sign out the current user
+            await _signInManager.SignOutAsync();
+
+            await _signInManager.SignInAsync(impersonatedUser, isPersistent: false);
+
+            return View("index");
+        }
+
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult Login(string userId)
-        {
+        public ActionResult Login()
+        {           
             return View("customers/login");
         }
     
@@ -126,26 +145,7 @@ namespace VirtoCommerce.Storefront.Controllers
             if (loginResult.Succeeded)
             {
                 var user = await _signInManager.UserManager.FindByNameAsync(login.Username);
-                //Check that it's login on behalf request           
-                //var onBehalfUserId = Request.Cookies[StorefrontConstants.LoginOnBehalfUserIdCookie];
-                //TODO: login on behalf
-                //if (!string.IsNullOrEmpty(onBehalfUserId) && !string.Equals(onBehalfUserId, User.Identity.Name) && await _customerService.CanLoginOnBehalfAsync(WorkContext.CurrentStore.Id, customer.UserId))
-                //{
-                //    var userOnBehalf = await _commerceCoreApi.StorefrontSecurity.GetUserByIdAsync(onBehalfUserId);
-                //    if (userOnBehalf != null)
-                //    {
-                //        var customerOnBehalf = await GetStorefrontCustomerByUserAsync(userOnBehalf);
-
-                //        customerOnBehalf.OperatorUserId = customer.UserId;
-                //        customerOnBehalf.OperatorUserName = customer.UserName;
-                //        //change the operator login on the customer login
-                //        customer = customerOnBehalf;
-                //        //Clear LoginOnBehalf cookies
-                //        SetUserIdForLoginOnBehalf(Response, null);
-                //    }
-                //    // TODO: Configure the reduced login expiration
-                //}
-
+                
                 //Check that current user can sing in to current store
                 if (user.AllowedStores.IsNullOrEmpty() || user.AllowedStores.Any(x => x.EqualsInvariant(WorkContext.CurrentStore.Id)))
                 {    
@@ -175,6 +175,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

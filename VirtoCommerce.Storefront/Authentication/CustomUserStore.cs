@@ -88,7 +88,7 @@ namespace VirtoCommerce.Storefront.Authentication
         public async Task<CustomerInfo> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
             var cacheKey = CacheKey.With(GetType(), "FindByIdAsync", userId);
-            var user = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            var user = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(UserStoreCacheRegion.CreateChangeToken());
                 return await _commerceCoreApi.GetUserByIdAsync(userId, cancellationToken);
@@ -104,7 +104,7 @@ namespace VirtoCommerce.Storefront.Authentication
         public async Task<CustomerInfo> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
             var cacheKey = CacheKey.With(GetType(), "FindByNameAsync", normalizedUserName);
-            var user = await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
+            var user = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(UserStoreCacheRegion.CreateChangeToken());
                 return await _commerceCoreApi.GetUserByNameAsync(normalizedUserName, cancellationToken);

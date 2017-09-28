@@ -105,6 +105,7 @@ public static class MapStorefrontRouteBuilderExtension
         routes.MapRoute("NoWorkContextErrors", "error/{errCode}", defaults: new { controller = "Error", action = "Errors" });
         routes.MapStorefrontRoute("StoreMaintenance", "common/maintenance", defaults: new { controller = "Common", action = "Maintenance" });
         routes.MapStorefrontRoute("NoTheme", "common/notheme", defaults: new { controller = "Common", action = "NoTheme" });
+        routes.MapStorefrontRoute("AccessDenied", "error/AccessDenied", defaults: new { controller = "Error", action = "AccessDenied" });
         // Account
         routes.MapStorefrontRoute("Account", "account", defaults: new { controller = "Account", action = "GetAccount" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));
         routes.MapStorefrontRoute("Account.UpdateAccount", "account", defaults: new { controller = "Account", action = "UpdateAccount" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
@@ -119,6 +120,8 @@ public static class MapStorefrontRouteBuilderExtension
         routes.MapStorefrontRoute("Account.ChangePassword", "account/password", defaults: new { controller = "Account", action = "ChangePassword" });
         routes.MapStorefrontRoute("Account.ExternalLogin", "account/externallogin", defaults: new { controller = "Account", action = "ExternalLogin" });
         routes.MapStorefrontRoute("Account.ExternalLoginCallback", "account/externallogincallback", defaults: new { controller = "Account", action = "ExternalLoginCallback" });
+        routes.MapStorefrontRoute("Account.ImpersonateUser", "account/impersonate/{userId}", defaults: new { controller = "Account", action = "ImpersonateUser" });
+
 
         // Cart
         routes.MapStorefrontRoute("Cart.Index", "cart", defaults: new { controller = "Cart", action = "Index" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));
