@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -7,8 +8,10 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Authentication;
+using VirtoCommerce.Storefront.Authorization;
 using VirtoCommerce.Storefront.Binders;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.DependencyInjection;
@@ -106,7 +109,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<ICountriesService, FileSystemCountriesService>();
             services.Configure<FileSystemCountriesOptions>(options =>
             {
-               options.FilePath = HostingEnvironment.MapPath("~/countries.json");
+                options.FilePath = HostingEnvironment.MapPath("~/countries.json");
             });
 
             var contentConnectionString = BlobConnectionString.Parse(Configuration.GetConnectionString("ContentConnectionString"));
@@ -134,34 +137,43 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IUserClaimsPrincipalFactory<CustomerInfo>, CustomerInfoPrincipalFactory>();
             services.AddScoped<UserManager<CustomerInfo>, CustomUserManager>();
 
-            var auth = services.AddAuthentication() 
+            services.AddAuthentication();
+            //Resource-based authorization that requires API permissions for some operations
+            services.AddSingleton<IAuthorizationHandler, StorefrontAuthorizationHandler>();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CanImpersonate",
+                                  policy => policy.Requirements.Add(AuthorizationOperations.CanImpersonate));
+            });
+
+            var auth = services.AddAuthentication()
                 .AddCookie(options =>
                 {
-                    options.LoginPath = new PathString("/Account/Login");                    
+                    options.LoginPath = new PathString("/Account/Login");
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.Expiration = TimeSpan.FromDays(30);
+                    options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
+                    options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout 
+                    options.AccessDeniedPath = "/error/AccessDenied";
+                    options.SlidingExpiration = true;
                 });
 
-            var facebookAppId = Configuration["Authentication:Facebook:AppId"];
-            var facebookAppSecret = Configuration["Authentication:Facebook:AppSecret"];
-            if (!string.IsNullOrEmpty(facebookAppId) && !string.IsNullOrEmpty(facebookAppSecret))
+            var facebookSection = Configuration.GetSection("Authentication:Facebook");
+            if (facebookSection.GetChildren().Any())
             {
                 auth.AddFacebook(facebookOptions =>
                 {
-                    facebookOptions.AppId = facebookAppId;
-                    facebookOptions.AppSecret = facebookAppSecret;
+                    facebookSection.Bind(facebookOptions);
                 });
             }
-
-            var googleClientId = Configuration["Authentication:Google:ClientId"];
-            var googleClientSecret = Configuration["Authentication:Google:ClientSecret"];
-            if (!string.IsNullOrEmpty(googleClientId) && !string.IsNullOrEmpty(googleClientSecret))
+            var googleSection = Configuration.GetSection("Authentication:Google");
+            if (googleSection.GetChildren().Any())
             {
                 auth.AddGoogle(googleOptions =>
                 {
-                    googleOptions.ClientId = googleClientId;
-                    googleOptions.ClientSecret = googleClientSecret;
+                    googleSection.Bind(googleOptions);
                 });
             }
-
             services.AddIdentity<CustomerInfo, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 8;
@@ -172,15 +184,6 @@ namespace VirtoCommerce.Storefront
             }).AddDefaultTokenProviders();
 
 
-            services.ConfigureApplicationCookie(options =>
-            {
-                // Cookie settings
-                options.Cookie.HttpOnly = true;
-                options.Cookie.Expiration = TimeSpan.FromDays(30);
-                options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
-                options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout               
-                options.SlidingExpiration = true;
-            });
 
             //Add Liquid view engine
             services.AddLiquidViewEngine(options =>
@@ -208,7 +211,7 @@ namespace VirtoCommerce.Storefront
             {
                 options.ViewEngines.Add(snapshotProvider.GetService<ILiquidViewEngine>());
             });
-            
+
             //Register event handlers via reflection
             services.RegisterAssembliesEventHandlers(typeof(Startup));
 
