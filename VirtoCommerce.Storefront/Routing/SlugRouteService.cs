@@ -2,13 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.Common;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
+using VirtoCommerce.Storefront.Model.Services;
 using VirtoCommerce.Storefront.Model.StaticContent;
 using VirtoCommerce.Storefront.Model.Stores;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
@@ -20,20 +23,18 @@ namespace VirtoCommerce.Storefront.Routing
         private readonly IMemoryCache _memoryCache;
         //TODO: Replace to services and  make async
         private readonly  ICommerce _coreApi;
-        private readonly ICatalogModuleCategories _catalogCategoriesApi;
-        private readonly ICatalogModuleProducts _catalogProductsApi;
+        private readonly ICatalogService _catalogService;
 
-        public SlugRouteService(IMemoryCache memoryCache, ICommerce coreApi, ICatalogModuleCategories catalogCategoriesApi, ICatalogModuleProducts catalogProductsApi)
+        public SlugRouteService(IMemoryCache memoryCache, ICommerce coreApi, ICatalogService catalogService, ICatalogModuleProducts catalogProductsApi)
         {
             _memoryCache = memoryCache;
             _coreApi = coreApi;
-            _catalogCategoriesApi = catalogCategoriesApi;
-            _catalogProductsApi = catalogProductsApi;
+            _catalogService = catalogService;
         }
 
-        public virtual SlugRouteResponse HandleSlugRequest(string slugPath, WorkContext workContext)
+        public virtual async Task<SlugRouteResponse> HandleSlugRequestAsync(string slugPath, WorkContext workContext)
         {
-            var entity = FindEntityBySlugPath(slugPath, workContext) ?? new SeoEntity { ObjectType = "Asset", SeoPath = slugPath };
+            var entity = await FindEntityBySlugPath(slugPath, workContext) ?? new SeoEntity { ObjectType = "Asset", SeoPath = slugPath };
             var response = entity.SeoPath.EqualsInvariant(slugPath) ? View(entity) : Redirect(entity);
             return response;
         }
@@ -84,7 +85,7 @@ namespace VirtoCommerce.Storefront.Routing
             };
         }
 
-        protected virtual SeoEntity FindEntityBySlugPath(string path, WorkContext workContext)
+        protected virtual async Task<SeoEntity> FindEntityBySlugPath(string path, WorkContext workContext)
         {
             path = path.Trim('/');
 
@@ -92,7 +93,7 @@ namespace VirtoCommerce.Storefront.Routing
             var lastSlug = slugs.LastOrDefault();
 
             // Get all SEO records for requested slug and also all other SEO records with different slug and languages but related to the same object
-            var allSeoRecords = GetAllSeoRecords(lastSlug);
+            var allSeoRecords = await GetAllSeoRecordsAsync(lastSlug);
             var bestSeoRecords = GetBestMatchingSeoRecords(allSeoRecords, workContext.CurrentStore, workContext.CurrentLanguage, lastSlug);
 
             var seoEntityComparer = AnonymousComparer.Create((SeoEntity x) => string.Join(":", x.ObjectType, x.ObjectId, x.SeoPath));
@@ -107,7 +108,7 @@ namespace VirtoCommerce.Storefront.Routing
             {
                 foreach (var group in entities.GroupBy(e => e.ObjectType))
                 {
-                    LoadObjectsAndBuildFullSeoPaths(group.Key, group.ToList(), workContext.CurrentStore, workContext.CurrentLanguage);
+                   await LoadObjectsAndBuildFullSeoPaths(group.Key, group.ToList(), workContext.CurrentStore, workContext.CurrentLanguage);
                 }
 
                 entities = entities.Where(e => !string.IsNullOrEmpty(e.SeoPath)).ToList();
@@ -170,21 +171,20 @@ namespace VirtoCommerce.Storefront.Routing
             return result;
         }
 
-        protected virtual IList<coreDto.SeoInfo> GetAllSeoRecords(string slug)
+        protected virtual async Task<IList<coreDto.SeoInfo>> GetAllSeoRecordsAsync(string slug)
         {
             var result = new List<coreDto.SeoInfo>();
 
             if (!string.IsNullOrEmpty(slug))
             {
                 var cacheKey = CacheKey.With(GetType(), "GetAllSeoRecords", slug);
-                var apiResult = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
+                var apiResult = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
                 {
                     cacheEntry.AddExpirationToken(RoutingCacheRegion.CreateChangeToken());
-                    return _coreApi.GetSeoInfoBySlug(slug);
+                    return await _coreApi.GetSeoInfoBySlugAsync(slug);
                 });
                 result.AddRange(apiResult);
             }
-
             return result;
         }
 
@@ -193,10 +193,10 @@ namespace VirtoCommerce.Storefront.Routing
             return allSeoRecords.GetBestMatchingSeoInfos(store, language, slug);
         }
 
-        protected virtual void LoadObjectsAndBuildFullSeoPaths(string objectType, IList<SeoEntity> objects, Store store, Language language)
+        protected virtual async Task LoadObjectsAndBuildFullSeoPaths(string objectType, IList<SeoEntity> objects, Store store, Language language)
         {
             var objectIds = objects.Select(o => o.ObjectId).ToArray();
-            var seoPaths = GetFullSeoPaths(objectType, objectIds, store, language);
+            var seoPaths = await GetFullSeoPathsAsync(objectType, objectIds, store, language);
 
             if (seoPaths != null)
             {
@@ -210,32 +210,32 @@ namespace VirtoCommerce.Storefront.Routing
             }
         }
 
-        protected virtual IDictionary<string, string> GetFullSeoPaths(string objectType, string[] objectIds, Store store, Language language)
+        protected virtual async  Task<IDictionary<string, string>> GetFullSeoPathsAsync(string objectType, string[] objectIds, Store store, Language language)
         {
             var cacheKey = CacheKey.With(GetType(), "GetFullSeoPaths", store.Id, objectType, objectIds.GetOrderIndependentHashCode().ToString());
-            return _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 switch (objectType)
                 {
                     case "Category":
-                        return GetCategorySeoPaths(objectIds, store, language);
+                        return await GetCategorySeoPathsAsync(objectIds, store, language);
                     case "CatalogProduct":
-                        return GetProductSeoPaths(objectIds, store, language);
+                        return await GetProductSeoPathsAsync(objectIds, store, language);
                 }
-                return null;
+                return new Dictionary<string, string>();
             });           
         }
 
-        protected virtual IDictionary<string, string> GetCategorySeoPaths(string[] objectIds, Store store, Language language)
+        protected virtual async Task<IDictionary<string, string>> GetCategorySeoPathsAsync(string[] objectIds, Store store, Language language)
         {
-            return _catalogCategoriesApi.GetCategoriesByIds(objectIds, (CategoryResponseGroup.WithOutlines | CategoryResponseGroup.WithSeo).ToString())
-                .ToDictionary(x => x.Id, x => x.Outlines.GetSeoPath(store, language, null));
+            var result = (await _catalogService.GetCategoriesAsync(objectIds, CategoryResponseGroup.WithOutlines | CategoryResponseGroup.WithSeo));
+            return result.ToDictionary(x => x.Id, x => x.SeoPath);
         }
 
-        protected virtual IDictionary<string, string> GetProductSeoPaths(string[] objectIds, Store store, Language language)
+        protected virtual async Task<IDictionary<string, string>> GetProductSeoPathsAsync(string[] objectIds, Store store, Language language)
         {
-            return _catalogProductsApi.GetProductByIds(objectIds, (ItemResponseGroup.Outlines | ItemResponseGroup.Seo).ToString())
-                .ToDictionary(x => x.Id, x => x.Outlines.GetSeoPath(store, language, null));
+            var result = await _catalogService.GetProductsAsync(objectIds, ItemResponseGroup.Outlines | ItemResponseGroup.Seo);
+            return result.ToDictionary(x => x.Id, x => x.SeoPath);
         }
     }
 }

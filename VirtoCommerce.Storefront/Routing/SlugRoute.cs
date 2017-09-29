@@ -20,7 +20,7 @@ namespace VirtoCommerce.Storefront.Routing
         {
         }
       
-        protected override Task OnRouteMatched(RouteContext context)
+        protected override async Task OnRouteMatched(RouteContext context)
         {
             var seoRouteService = context.HttpContext.RequestServices.GetRequiredService<ISlugRouteService>();
             var storefrontUrlBuilder = context.HttpContext.RequestServices.GetRequiredService<IStorefrontUrlBuilder>();
@@ -30,7 +30,7 @@ namespace VirtoCommerce.Storefront.Routing
 
             if (!string.IsNullOrEmpty(path))
             {
-                var seoRouteResponse = seoRouteService.HandleSlugRequest(path, workContext);
+                var seoRouteResponse = await seoRouteService.HandleSlugRequestAsync(path, workContext);
                 if (seoRouteResponse != null)
                 {
                     if (seoRouteResponse.Redirect)
@@ -46,7 +46,7 @@ namespace VirtoCommerce.Storefront.Routing
                     }
                 }
             }
-            return base.OnRouteMatched(context);
+            await base.OnRouteMatched(context);
         }
     }
 }

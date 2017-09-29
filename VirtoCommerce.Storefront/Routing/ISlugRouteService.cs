@@ -1,9 +1,10 @@
-﻿using VirtoCommerce.Storefront.Model;
+﻿using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Model;
 
 namespace VirtoCommerce.Storefront.Routing
 {
     public interface ISlugRouteService
     {
-        SlugRouteResponse HandleSlugRequest(string slugPath, WorkContext workContext);
+        Task<SlugRouteResponse> HandleSlugRequestAsync(string slugPath, WorkContext workContext);
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -47,7 +48,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var baseStoreContentPath = _basePath + "/" + store.Id;
             var cacheKey = CacheKey.With(GetType(), "LoadStoreStaticContent", store.Id);
-            return _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
+            return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { StaticContentCacheRegion.CreateChangeToken(), _contentBlobProvider.Watch(baseStoreContentPath + "/*") }));
 

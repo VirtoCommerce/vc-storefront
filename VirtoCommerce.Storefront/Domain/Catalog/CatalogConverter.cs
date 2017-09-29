@@ -440,8 +440,9 @@ namespace VirtoCommerce.Storefront.Domain
                 Length = (decimal?)productDto.Length,
                 Sku = productDto.Code,
                 Outline = productDto.Outlines.GetOutlinePath(store.Catalog),
-                Url = "~/" + productDto.Outlines.GetSeoPath(store, currentLanguage, "product/" + productDto.Id),
+                SeoPath = productDto.Outlines.GetSeoPath(store, currentLanguage, null),
             };
+            result.Url = "~/" + (result.SeoPath ?? "product/" + result.Id);
 
             if (productDto.Properties != null)
             {

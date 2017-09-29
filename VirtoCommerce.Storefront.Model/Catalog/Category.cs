@@ -27,6 +27,14 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// All parent categories ids concatenated with "/". E.g. (1/21/344)
         /// </summary>
         public string Outline { get; set; }
+        /// <summary>
+        /// Slug  path e.g /camcorders
+        /// </summary>
+        public string SeoPath { get; set; }
+        /// <summary>
+        /// Application relative url e.g ~/camcorders
+        /// </summary>
+        public string Url { get; set; }
 
         public SeoInfo SeoInfo { get; set; }
 
@@ -47,8 +55,5 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         #region IHasProperties Members
         public ICollection<CatalogProperty> Properties { get; set; }
         #endregion
-
-        public string SeoPath { get; set; }
-        public string Url { get; set; }
     }
 }

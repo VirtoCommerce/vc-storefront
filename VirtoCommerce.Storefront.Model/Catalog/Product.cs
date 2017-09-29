@@ -65,7 +65,14 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// All parent categories ids concatenated with "/". E.g. (1/21/344)
         /// </summary>
         public string Outline { get; set; }
-
+        /// <summary>
+        /// Slug path e.g /camcorders/blue-win-camera
+        /// </summary>
+        public string SeoPath { get; set; }
+        /// <summary>
+        /// Application relative url e.g ~/camcorders/blue-win-camera
+        /// </summary>
+        public string Url { get; set; }
         /// <summary>
         /// Date of last indexing of product, if null - product never was indexed
         /// </summary>
@@ -396,7 +403,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         #endregion
 
-        public string Url { get; set; }
+  
 
         public override string ToString()
         {

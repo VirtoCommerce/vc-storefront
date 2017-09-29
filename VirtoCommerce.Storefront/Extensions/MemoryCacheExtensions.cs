@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace VirtoCommerce.Storefront.Extensions
 {
     public static class MemoryCacheExtensions
     {
+        private static ConcurrentDictionary<string, object> _lockLookup = new ConcurrentDictionary<string, object>();
         public static async Task<TItem> GetOrCreateExclusiveAsync<TItem>(this IMemoryCache cache, string key, Func<ICacheEntry, Task<TItem>> factory, bool cacheNullValue = true)
         {
             using (await AsyncLock.GetLockByKey(key).LockAsync())
@@ -16,7 +18,15 @@ namespace VirtoCommerce.Storefront.Extensions
                 return await cache.GetOrCreateAsync(key, factory, cacheNullValue);
             }
         }
-    
+
+        public static TItem GetOrCreateExclusive<TItem>(this IMemoryCache cache, string key, Func<ICacheEntry, TItem> factory, bool cacheNullValue = true)
+        {
+            lock(_lockLookup.GetOrAdd(key, new object()))
+            { 
+                return cache.GetOrCreate(key, factory, cacheNullValue);
+            }
+        }
+
         public static async Task<TItem> GetOrCreateAsync<TItem>(this IMemoryCache cache, string key, Func<ICacheEntry, Task<TItem>> factory, bool cacheNullValue)
         {
             if (!cache.TryGetValue(key, out object result))
