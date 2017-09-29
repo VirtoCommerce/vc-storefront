@@ -21,7 +21,6 @@ namespace VirtoCommerce.Storefront.Routing
     public class SlugRouteService : ISlugRouteService
     {
         private readonly IMemoryCache _memoryCache;
-        //TODO: Replace to services and  make async
         private readonly  ICommerce _coreApi;
         private readonly ICatalogService _catalogService;
 

@@ -88,7 +88,7 @@ namespace VirtoCommerce.Storefront.Domain
             //Get store default currency if currency not in the supported by stores list
             if (!string.IsNullOrEmpty(currencyCode))
             {
-                currentCurrency = builder.WorkContext.CurrentStore.Currencies.FirstOrDefault(x => x.Equals(currencyCode)) ?? currentCurrency;
+                currentCurrency = builder.WorkContext.CurrentStore.Currencies.FirstOrDefault(x => x.Equals(currencyCode.First())) ?? currentCurrency;
             }
 
             builder.WorkContext.CurrentCurrency = currentCurrency;

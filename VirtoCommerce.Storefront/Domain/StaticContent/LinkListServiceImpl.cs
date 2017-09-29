@@ -38,8 +38,13 @@ namespace VirtoCommerce.Storefront.Domain
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(StaticContentCacheRegion.CreateChangeToken());
+                var result = new List<MenuLinkList>();
+                var listsDto = await _cmsApi.GetListsAsync(store.Id);
+                if(listsDto != null)
+                {
+                    result.AddRange(listsDto.Select(x => x.ToMenuLinkList()));
+                }
 
-                var result = (await _cmsApi.GetListsAsync(store.Id)).Select(x => x.ToMenuLinkList());
                 result = result.GroupBy(x => x.Name).Select(x => x.FindWithLanguage(language)).Where(x => x != null).ToList().ToList();
 
                 var allMenuLinks = result.SelectMany(x => x.MenuLinks).ToList();

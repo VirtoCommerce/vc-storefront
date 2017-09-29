@@ -39,6 +39,7 @@ namespace VirtoCommerce.Storefront.Tests.ValueObjects
             var code1 = value1.GetHashCode();
             var code2 = value2.GetHashCode();
             Assert.Equal(code1, code2);
+            Assert.Equal(value1, value2);
         }
 
     }

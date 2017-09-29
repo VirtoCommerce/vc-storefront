@@ -433,7 +433,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 throw new FileSystemException($"The template '{templateName}' was not found. The following locations were searched:<br/>{string.Join("<br/>", DiscoveryPaths)}");
             }
 
-            var cacheKey = CacheKey.With(GetType(), "ReadTemplateByName", templateName);
+            var cacheKey = CacheKey.With(GetType(), "ReadTemplateByName", templatePath);
             return _memoryCache.GetOrCreate(cacheKey, (cacheItem) =>
             {
                 cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(templatePath) }));

@@ -59,32 +59,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             Keyword = queryString.Get("q");
             SortBy = queryString.Get("sort_by");
             ResponseGroup = EnumUtility.SafeParse<CategoryResponseGroup>(queryString.Get("resp_group"), CategoryResponseGroup.Small);
-        }
-
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            // credit: http://stackoverflow.com/a/263416/677735
-            unchecked // Overflow is fine, just wrap
-            {
-                int hash = base.GetHashCode();
-
-                if (this.Language != null)
-                    hash = hash * 59 + this.Language.CultureName.GetHashCode();
-
-                if (this.Keyword != null)
-                    hash = hash * 59 + this.Keyword.GetHashCode();
-
-                if (this.SortBy != null)
-                    hash = hash * 59 + this.SortBy.GetHashCode();
-
-                return hash;
-            }
-        }
+        }      
 
         public override string ToString()
         {
