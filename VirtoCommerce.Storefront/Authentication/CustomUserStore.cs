@@ -258,14 +258,52 @@ namespace VirtoCommerce.Storefront.Authentication
             return Task.FromResult(logins);
         }
 
-        public Task<CustomerInfo> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
+        public async Task<CustomerInfo> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var cacheKey = CacheKey.With(GetType(), "FindByLoginAsync", loginProvider, providerKey);
+            var user = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                cacheEntry.AddExpirationToken(UserStoreCacheRegion.CreateChangeToken());
+                return await _commerceCoreApi.GetUserByLoginAsync(loginProvider, providerKey);
+            }, cacheNullValue: false);
+
+            if (user != null)
+            {
+                return await GetContactInfoForPlatformUserAsync(user);
+            }
+            return null;
         }
 
-        public Task AddLoginAsync(CustomerInfo user, UserLoginInfo login, CancellationToken cancellationToken)
+        public async Task AddLoginAsync(CustomerInfo user, UserLoginInfo login, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var newUser = new securityDto.ApplicationUserExtended
+            {
+                Email = user.Email,
+                UserName = user.UserName,
+                UserType = "Customer",
+                StoreId = user.StoreId,
+                Logins = new List<securityDto.ApplicationUserLogin>
+                    {
+                        new securityDto.ApplicationUserLogin
+                        {
+                            LoginProvider = login.LoginProvider,
+                            ProviderKey = login.ProviderKey
+                        }
+                    }
+            };
+            var result = await _commerceCoreApi.CreateAsync(newUser);
+
+            if (result.Succeeded == true)
+            {
+                var storefrontUser = await _commerceCoreApi.GetUserByNameAsync(user.UserName);
+
+                user.Id = storefrontUser.Id;
+                user.IsRegisteredUser = true;
+                user.MemberType = "Contact";
+                user.FullName = user.FullName;
+                user.AllowedStores = storefrontUser.AllowedStores;
+                await _customerService.CreateCustomerAsync(user);
+            }
         }
 
         public Task RemoveLoginAsync(CustomerInfo user, string loginProvider, string providerKey, CancellationToken cancellationToken)

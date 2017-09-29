@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Authentication;
 using VirtoCommerce.Storefront.Authorization;
@@ -108,7 +109,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<ICountriesService, FileSystemCountriesService>();
             services.Configure<FileSystemCountriesOptions>(options =>
             {
-               options.FilePath = HostingEnvironment.MapPath("~/countries.json");
+                options.FilePath = HostingEnvironment.MapPath("~/countries.json");
             });
 
             var contentConnectionString = BlobConnectionString.Parse(Configuration.GetConnectionString("ContentConnectionString"));
@@ -132,6 +133,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IUserStore<CustomerInfo>, CustomUserStore>();
             services.AddSingleton<IUserPasswordStore<CustomerInfo>, CustomUserStore>();
             services.AddSingleton<IUserEmailStore<CustomerInfo>, CustomUserStore>();
+            services.AddSingleton<IUserLoginStore<CustomerInfo>, CustomUserStore>();
             services.AddSingleton<IUserClaimsPrincipalFactory<CustomerInfo>, CustomerInfoPrincipalFactory>();
             services.AddScoped<UserManager<CustomerInfo>, CustomUserManager>();
 
@@ -143,6 +145,35 @@ namespace VirtoCommerce.Storefront
                 options.AddPolicy("CanImpersonate",
                                   policy => policy.Requirements.Add(AuthorizationOperations.CanImpersonate));
             });
+
+            var auth = services.AddAuthentication()
+                .AddCookie(options =>
+                {
+                    options.LoginPath = new PathString("/Account/Login");
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.Expiration = TimeSpan.FromDays(30);
+                    options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
+                    options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout 
+                    options.AccessDeniedPath = "/error/AccessDenied";
+                    options.SlidingExpiration = true;
+                });
+
+            var facebookSection = Configuration.GetSection("Authentication:Facebook");
+            if (facebookSection.GetChildren().Any())
+            {
+                auth.AddFacebook(facebookOptions =>
+                {
+                    facebookSection.Bind(facebookOptions);
+                });
+            }
+            var googleSection = Configuration.GetSection("Authentication:Google");
+            if (googleSection.GetChildren().Any())
+            {
+                auth.AddGoogle(googleOptions =>
+                {
+                    googleSection.Bind(googleOptions);
+                });
+            }
             services.AddIdentity<CustomerInfo, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 8;
@@ -153,16 +184,6 @@ namespace VirtoCommerce.Storefront
             }).AddDefaultTokenProviders();
 
 
-            services.ConfigureApplicationCookie(options =>
-            {
-                // Cookie settings
-                options.Cookie.HttpOnly = true;
-                options.Cookie.Expiration = TimeSpan.FromDays(30);
-                options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
-                options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout 
-                options.AccessDeniedPath = "/error/AccessDenied";
-                options.SlidingExpiration = true;
-            });
 
             //Add Liquid view engine
             services.AddLiquidViewEngine(options =>
@@ -190,7 +211,7 @@ namespace VirtoCommerce.Storefront
             {
                 options.ViewEngines.Add(snapshotProvider.GetService<ILiquidViewEngine>());
             });
-            
+
             //Register event handlers via reflection
             services.RegisterAssembliesEventHandlers(typeof(Startup));
 
