@@ -109,6 +109,8 @@ namespace VirtoCommerce.Storefront.Domain
                     foreach (var product in allProducts)
                     {
                         product.IsAvailable = await _productAvailabilityService.IsAvailable(product, 1);
+                        product.IsBuyable = _productAvailabilityService.IsBuyable(product);
+                        product.IsInStock = await _productAvailabilityService.IsInStock(product);
                     }
                 }
             }
@@ -272,6 +274,8 @@ namespace VirtoCommerce.Storefront.Domain
                     foreach (var product in productsWithVariations)
                     {
                         product.IsAvailable = await _productAvailabilityService.IsAvailable(product, 1);
+                        product.IsBuyable = _productAvailabilityService.IsBuyable(product);
+                        product.IsInStock = await _productAvailabilityService.IsInStock(product);
                     }
                 }
                 return new CatalogSearchResult
