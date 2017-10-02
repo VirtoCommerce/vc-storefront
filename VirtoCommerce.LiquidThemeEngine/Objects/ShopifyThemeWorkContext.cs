@@ -40,6 +40,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// </summary>
         public Form Form { get; set; }
 
+        public ResetPassword ResetPassword { get; set; }
+
         /// <summary>
         /// Contains a collection of all of the links in your shop.
         /// You can access a linklist by calling its handle on linklists

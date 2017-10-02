@@ -98,7 +98,7 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             var order = await _orderService.GetOrderByNumberAsync(orderNumber);
 
-            if (order == null || order.CustomerId != WorkContext.CurrentCustomer.Id)
+            if (order == null || order.CustomerId != WorkContext.CurrentUser.Id)
             {
                 return NotFound("Order with number " + orderNumber + " not found.");
             }

@@ -48,7 +48,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.Cart = workContext.CurrentCart != null && workContext.CurrentCart.IsValueCreated ? ToLiquidCart(workContext.CurrentCart.Value, workContext.CurrentLanguage, urlBuilder) : null;
             result.Product = workContext.CurrentProduct != null ? ToLiquidProduct(workContext.CurrentProduct) : null;
             result.Vendor = workContext.CurrentVendor != null ? ToLiquidVendor(workContext.CurrentVendor) : null;
-            result.Customer = workContext.CurrentCustomer != null && workContext.CurrentCustomer.IsRegisteredUser ? ToLiquidCustomer(workContext.CurrentCustomer, workContext, urlBuilder) : null;
+            result.Customer = workContext.CurrentUser != null && workContext.CurrentUser.IsRegisteredUser ? ToLiquidCustomer(workContext.CurrentUser, workContext, urlBuilder) : null;
             result.AllStores = workContext.AllStores.Select(x => ToLiquidShop(x, workContext)).ToArray();
             result.CurrentCurrency = workContext.CurrentCurrency != null ? ToLiquidCurrency(workContext.CurrentCurrency) : null;
             result.CurrentLanguage = workContext.CurrentLanguage != null ? ToLiquidLanguage(workContext.CurrentLanguage) : null;
@@ -162,6 +162,16 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 result.Form = workContext.ContactUsForm.ToShopifyModel();
             }
 
+            if (workContext.ResetPassword != null)
+            {
+                result.ResetPassword = new ResetPassword
+                {
+                    PasswordConfirmation = workContext.ResetPassword.PasswordConfirmation,
+                    Email = workContext.ResetPassword.Email,
+                    Password = workContext.ResetPassword.Password,
+                    Token = workContext.ResetPassword.Token
+                };
+            }
             //if (workContext.Login != null)
             //{
             //    result.Form = workContext.Login.ToShopifyModel();

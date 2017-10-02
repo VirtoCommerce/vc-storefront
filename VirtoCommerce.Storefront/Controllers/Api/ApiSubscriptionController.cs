@@ -28,7 +28,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 searchCriteria = new SubscriptionSearchCriteria();
             }
             //Does not allow to see a other subscriptions
-            searchCriteria.CustomerId = WorkContext.CurrentCustomer.Id;
+            searchCriteria.CustomerId = WorkContext.CurrentUser.Id;
 
             var result = await _subscriptionService.SearchSubscriptionsAsync(searchCriteria);
         
@@ -65,7 +65,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             };
             var retVal = (await _subscriptionService.SearchSubscriptionsAsync(criteria)).FirstOrDefault();
 
-            if (retVal == null || retVal.CustomerId != WorkContext.CurrentCustomer.Id)
+            if (retVal == null || retVal.CustomerId != WorkContext.CurrentUser.Id)
             {
                 throw new StorefrontException($"Subscription with number {{ number }} not found (or not belongs to current user)");
             }

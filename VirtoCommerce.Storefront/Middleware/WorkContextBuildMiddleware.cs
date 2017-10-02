@@ -1,19 +1,12 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Threading.Tasks;
-using VirtoCommerce.Storefront.Authentication;
 using VirtoCommerce.Storefront.Domain;
+using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Model.Customer.Services;
-using VirtoCommerce.Storefront.Model.LinkList.Services;
-using VirtoCommerce.Storefront.Model.Pricing.Services;
-using VirtoCommerce.Storefront.Model.Quote.Services;
-using VirtoCommerce.Storefront.Model.Services;
-using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.Middleware
 {
@@ -51,12 +44,13 @@ namespace VirtoCommerce.Storefront.Middleware
 
             await builder.WithCurrenciesAsync();
             await builder.WithCatalogsAsync();
-            await builder.WithDefaultShoppingCartAsync("default", workContext.CurrentStore, workContext.CurrentCustomer, workContext.CurrentCurrency, workContext.CurrentLanguage);
+            await builder.WithDefaultShoppingCartAsync("default", workContext.CurrentStore, workContext.CurrentUser, workContext.CurrentCurrency, workContext.CurrentLanguage);
             await builder.WithMenuLinksAsync(workContext.CurrentStore, workContext.CurrentLanguage);
             await builder.WithPagesAsync(workContext.CurrentStore, workContext.CurrentLanguage);
             await builder.WithBlogsAsync(workContext.CurrentStore, workContext.CurrentLanguage);
             await builder.WithPricelistsAsync();
-            await builder.WithQuotesAsync(workContext.CurrentStore, workContext.CurrentCustomer, workContext.CurrentCurrency, workContext.CurrentLanguage);
+            await builder.WithQuotesAsync(workContext.CurrentStore, workContext.CurrentUser, workContext.CurrentCurrency, workContext.CurrentLanguage);
+            await builder.WithUserContactAsync();
             await builder.WithVendorsAsync(workContext.CurrentStore, workContext.CurrentLanguage);
 
             _workContextAccessor.WorkContext = workContext;

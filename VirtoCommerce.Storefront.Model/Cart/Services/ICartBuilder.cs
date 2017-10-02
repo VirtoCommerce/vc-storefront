@@ -5,6 +5,7 @@ using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Quote;
+using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Stores;
 
 namespace VirtoCommerce.Storefront.Model.Cart.Services
@@ -28,11 +29,11 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         /// </summary>
         /// <param name="cartName"></param>
         /// <param name="store"></param>
-        /// <param name="customer"></param>
+        /// <param name="user"></param>
         /// <param name="language"></param>
         /// <param name="currency"></param>
         /// <returns></returns>
-        Task LoadOrCreateNewTransientCartAsync(string cartName, Store store, CustomerInfo customer, Language language, Currency currency);
+        Task LoadOrCreateNewTransientCartAsync(string cartName, Store store, User user, Language language, Currency currency);
 
         /// <summary>
         /// Add new product to cart

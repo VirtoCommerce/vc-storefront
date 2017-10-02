@@ -1,23 +1,21 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Model.Customer;
+using VirtoCommerce.Storefront.Model.Security;
 
-namespace VirtoCommerce.Storefront.Authentication
+namespace VirtoCommerce.Storefront.Domain.Security
 {
     public static class AuthWorkContextBuilderExtensions
     {
         public static async Task WithCurrentUserAsync(this IWorkContextBuilder builder)
         {
             var serviceProvider = builder.HttpContext.RequestServices;
-            var signInManager = serviceProvider.GetRequiredService<SignInManager<CustomerInfo>>();
+            var signInManager = serviceProvider.GetRequiredService<SignInManager<User>>();
 
             // Gets the collection of external login providers
             var externalAuthTypes = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -25,10 +23,9 @@ namespace VirtoCommerce.Storefront.Authentication
             {
                 AuthenticationType = at.Name,
                 Caption = at.DisplayName,
-                //Properties = at.Properties
             }).ToList();
 
-            var customer = new CustomerInfo
+            var user = new User
             {
                 Id = builder.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier),
                 UserName = builder.HttpContext.User.FindFirstValue(ClaimTypes.Name)
@@ -37,31 +34,34 @@ namespace VirtoCommerce.Storefront.Authentication
             var identity = builder.HttpContext.User.Identity;
             if (identity.IsAuthenticated)
             {
-                customer = await signInManager.UserManager.FindByNameAsync(identity.Name);
+                user = await signInManager.UserManager.FindByNameAsync(identity.Name);
                 //User has been removed from storage need to do sign out 
-                if (customer == null)
+                if (user == null)
                 {
                     await signInManager.SignOutAsync();
                 }
             }
 
-            if (customer == null || customer.IsTransient())
+            if (user == null || user.IsTransient())
             {
-                customer = new CustomerInfo
+                user = new User
                 {
                     Id = Guid.NewGuid().ToString(),
                     UserName = StorefrontClaims.AnonymousUsername,
-                    FullName = StorefrontClaims.AnonymousUsername
                 };
-                //Sign-in anonymous user
-                await signInManager.SignInAsync(customer, true);
+                //Workaround: Do not sign out for js map requests they are always coming without authentication
+                if (!builder.HttpContext.Request.Path.Value.EndsWith(".map"))
+                {
+                    //Sign-in anonymous user
+                    await signInManager.SignInAsync(user, true);
+                }
             }
             //Restore some properties from claims
-            customer.OperatorUserId = builder.HttpContext.User.FindFirstValue(StorefrontClaims.OperatorUserIdClaimType);
-            customer.OperatorUserName = builder.HttpContext.User.FindFirstValue(StorefrontClaims.OperatorUserNameClaimType);
-            customer.SelectedCurrencyCode = builder.HttpContext.User.FindFirstValue(StorefrontClaims.CurrencyClaimType);
+            user.OperatorUserId = builder.HttpContext.User.FindFirstValue(StorefrontClaims.OperatorUserIdClaimType);
+            user.OperatorUserName = builder.HttpContext.User.FindFirstValue(StorefrontClaims.OperatorUserNameClaimType);
+            user.SelectedCurrencyCode = builder.HttpContext.User.FindFirstValue(StorefrontClaims.CurrencyClaimType);
 
-            builder.WorkContext.CurrentCustomer = customer;
+            builder.WorkContext.CurrentUser = user;
         }
     }
 }

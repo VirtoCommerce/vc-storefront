@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using VirtoCommerce.Storefront.Model.Common;
 
-namespace VirtoCommerce.Storefront.Model
+namespace VirtoCommerce.Storefront.Model.Security
 {
     public partial class Register 
     {

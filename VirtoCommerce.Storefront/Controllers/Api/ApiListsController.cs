@@ -83,12 +83,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
         private static string GetAsyncLockCartKey(WorkContext context, string listName)
         {
-            return string.Join(":", listName, context.CurrentCustomer.Id, context.CurrentStore.Id);
+            return string.Join(":", listName, context.CurrentUser.Id, context.CurrentStore.Id);
         }
 
         private async Task<ICartBuilder> LoadOrCreateWishlistAsync(string listName)
         {
-            await _wishlistBuilder.LoadOrCreateNewTransientCartAsync(listName, WorkContext.CurrentStore, WorkContext.CurrentCustomer, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
+            await _wishlistBuilder.LoadOrCreateNewTransientCartAsync(listName, WorkContext.CurrentStore, WorkContext.CurrentUser, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
             return _wishlistBuilder;
         }
     }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
+using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Stores;
 
 namespace VirtoCommerce.Storefront.Model.Quote.Services
@@ -36,7 +37,7 @@ namespace VirtoCommerce.Storefront.Model.Quote.Services
         /// <param name="language"></param>
         /// <param name="currency"></param>
         /// <returns></returns>
-        Task<IQuoteRequestBuilder> GetOrCreateNewTransientQuoteRequestAsync(Store store, CustomerInfo customer, Language language, Currency currency);
+        Task<IQuoteRequestBuilder> GetOrCreateNewTransientQuoteRequestAsync(Store store, User user, Language language, Currency currency);
 
         /// <summary>
         /// Update captured RFQ

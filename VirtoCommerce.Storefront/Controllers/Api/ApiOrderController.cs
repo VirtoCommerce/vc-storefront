@@ -34,7 +34,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 criteria = new OrderSearchCriteria();
             }
             //Does not allow to see a other customer orders
-            criteria.CustomerId = WorkContext.CurrentCustomer.Id;
+            criteria.CustomerId = WorkContext.CurrentUser.Id;
 
             var result = await _orderApi.SearchAsync(criteria.ToSearchCriteriaDto());
 
@@ -130,8 +130,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 if (paymentDto == null)
                 {
                     paymentDto = payment.ToOrderPaymentInDto();
-                    paymentDto.CustomerId = WorkContext.CurrentCustomer.Id;
-                    paymentDto.CustomerName = WorkContext.CurrentCustomer.FullName;
+                    paymentDto.CustomerId = WorkContext.CurrentUser.Id;
+                    paymentDto.CustomerName = WorkContext.CurrentUser.UserName;
                     paymentDto.Status = "New";
                     orderDto.InPayments.Add((orderModel.PaymentIn)paymentDto);
                 }
@@ -174,7 +174,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         {
             var order = await _orderApi.GetByNumberAsync(number);
 
-            if (order == null || order.CustomerId != WorkContext.CurrentCustomer.Id)
+            if (order == null || order.CustomerId != WorkContext.CurrentUser.Id)
             {
                  throw new StorefrontException($"Order with number {{ number }} not found (or not belongs to current user)");
             }
@@ -184,7 +184,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         private static string GetAsyncLockKey(string orderNumber, WorkContext ctx)
         {
-            return string.Join(":", "Order", orderNumber, ctx.CurrentStore.Id, ctx.CurrentCustomer.Id);
+            return string.Join(":", "Order", orderNumber, ctx.CurrentStore.Id, ctx.CurrentUser.Id);
         }
     }
 }

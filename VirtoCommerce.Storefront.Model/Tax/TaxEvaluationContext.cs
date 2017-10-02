@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Security;
 
 namespace VirtoCommerce.Storefront.Model.Tax
 {
@@ -19,7 +20,7 @@ namespace VirtoCommerce.Storefront.Model.Tax
 
          public string Type { get; set; }
 
-        public Customer.CustomerInfo Customer { get; set; }
+        public User Customer { get; set; }
 
         public Address Address { get; set; }
 

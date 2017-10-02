@@ -39,7 +39,7 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             var builder = await _quoteRequestBuilder.LoadQuoteRequestAsync(number, WorkContext.CurrentLanguage, WorkContext.AllCurrencies);
             WorkContext.CurrentQuoteRequest = new System.Lazy<Model.Quote.QuoteRequest>(() => builder.QuoteRequest);
-            if (WorkContext.CurrentCustomer.Id != builder.QuoteRequest.CustomerId)
+            if (WorkContext.CurrentUser.Id != builder.QuoteRequest.CustomerId)
             {
                 throw new StorefrontException("Requested quote not belongs to current user");
             }

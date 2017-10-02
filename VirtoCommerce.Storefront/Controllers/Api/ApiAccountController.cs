@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PagedList.Core;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,52 +11,56 @@ using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Services;
+using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Quote;
+using VirtoCommerce.Storefront.Model.Security;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
     public class ApiAccountController : StorefrontControllerBase
     {
-        private readonly SignInManager<CustomerInfo> _signInManager;
-
-        public ApiAccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<CustomerInfo> signInManager)
+        private readonly SignInManager<User> _signInManager;
+        private readonly IMemberService _memberService;
+        public ApiAccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<User> signInManager, IMemberService memberService)
             : base(workContextAccessor, urlBuilder)
         {
             _signInManager = signInManager;
+            _memberService = memberService;
         }
 
         // GET: storefrontapi/account
         [HttpGet]
         [AllowAnonymous]
         public ActionResult GetCurrentCustomer()
-        {
-            return Json(WorkContext.CurrentCustomer);
+        {       
+            return Json(WorkContext.CurrentUser);
         }
 
         // GET: storefrontapi/account/quotes
         [HttpGet]
         public ActionResult GetCustomerQuotes(int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos)
         {
-            var entries = WorkContext.CurrentCustomer.QuoteRequests;
-            entries.Slice(pageNumber, pageSize, sortInfos);
-            var retVal = new StaticPagedList<QuoteRequest>(entries.Select(x => x), entries);
-
-            return Json(new
+            if (WorkContext.CurrentUser.IsRegisteredUser)
             {
-                Results = retVal,
-                TotalCount = retVal.TotalItemCount
-            });
+                var entries = WorkContext.CurrentUser.Contact.Value.QuoteRequests;
+                entries.Slice(pageNumber, pageSize, sortInfos);
+                var retVal = new StaticPagedList<QuoteRequest>(entries.Select(x => x), entries);
+
+                return Json(new
+                {
+                    Results = retVal,
+                    TotalCount = retVal.TotalItemCount
+                });
+            }
+            return NoContent();
         }
 
         // POST: storefrontapi/account
         [HttpPost]
-        public async Task<ActionResult> UpdateAccount([FromBody] CustomerInfo customer)
+        public async Task<ActionResult> UpdateAccount([FromBody] ContactUpdateInfo updateInfo)
         {
-            customer.Id = WorkContext.CurrentCustomer.Id;
-        
-            await _signInManager.UserManager.UpdateAsync(customer);
+            await _memberService.UpdateContactAsync(WorkContext.CurrentUser.ContactId, updateInfo);
 
             return Ok();
         }
@@ -68,25 +75,16 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 NewPassword = formModel.NewPassword,
             };
 
-            var result = await _signInManager.UserManager.ChangePasswordAsync(WorkContext.CurrentCustomer, formModel.OldPassword, formModel.NewPassword);
+            var result = await _signInManager.UserManager.ChangePasswordAsync(WorkContext.CurrentUser, formModel.OldPassword, formModel.NewPassword);
 
-            return Json(result);
+            return Json(new { Succeeded = result.Succeeded, Errors = result.Errors.Select(x => x.Description) });
         }
 
         // POST: storefrontapi/account/addresses
         [HttpPost]
-        public async Task<ActionResult> UpdateAddresses([FromBody] ICollection<Address> addresses)
+        public async Task<ActionResult> UpdateAddresses([FromBody] IList<Address> addresses)
         {
-            var contact = WorkContext.CurrentCustomer;
-            if (contact != null)
-            {
-                contact.Addresses.Clear();
-                contact.DynamicProperties = null;
-                if (addresses != null)
-                    contact.Addresses.AddRange(addresses);
-
-                await _signInManager.UserManager.UpdateAsync(contact);
-            }
+            await _memberService.UpdateContactAddressesAsync(WorkContext.CurrentUser.ContactId, addresses);
 
             return Ok();
         }

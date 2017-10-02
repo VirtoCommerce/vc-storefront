@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.Serialization;
@@ -66,7 +67,7 @@ namespace VirtoCommerce.Storefront.Model.Common
             }
         }
 
-        [IgnoreDataMember]
+        [JsonIgnore]
         public NumberFormatInfo NumberFormat { get; private set; }
         public string Symbol { get; set; }
         public string EnglishName { get; set; }
@@ -120,7 +121,12 @@ namespace VirtoCommerce.Storefront.Model.Common
             }
             return null;
         }
-     
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public override bool Equals(object obj)
         {
             var result = base.Equals(obj);

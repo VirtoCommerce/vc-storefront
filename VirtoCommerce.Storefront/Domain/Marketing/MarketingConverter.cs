@@ -133,7 +133,7 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new PromotionEvaluationContext(workContext.CurrentLanguage, workContext.CurrentCurrency)
             {
                 Currency = workContext.CurrentCurrency,
-                Customer = workContext.CurrentCustomer,
+                User = workContext.CurrentUser,
                 Language = workContext.CurrentLanguage,
                 StoreId = workContext.CurrentStore.Id,
 
@@ -160,9 +160,9 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Coupon = promoEvalContext.Cart.Coupon != null ? promoEvalContext.Cart.Coupon.Code : null;
                 result.Currency = promoEvalContext.Cart.Currency.Code;
                 result.CustomerId = promoEvalContext.Cart.Customer.Id;
-                if (promoEvalContext.Cart.Customer.UserGroups != null)
+                if (promoEvalContext.Cart.Customer.Contact != null && promoEvalContext.Cart.Customer.Contact.Value.UserGroups != null)
                 {
-                    result.UserGroups = promoEvalContext.Cart.Customer.UserGroups.ToList();
+                    result.UserGroups = promoEvalContext.Cart.Customer.Contact.Value.UserGroups;
                 }
                 result.IsRegisteredUser = promoEvalContext.Cart.Customer.IsRegisteredUser;
                 result.Language = promoEvalContext.Cart.Language.CultureName;
@@ -194,15 +194,16 @@ namespace VirtoCommerce.Storefront.Domain
                 result.PromoEntry = promoEvalContext.Product.ToProductPromoEntryDto();
             }
            
-            if (promoEvalContext.Customer != null)
+            if (promoEvalContext.User != null && promoEvalContext.User.Contact != null)
             {
-                if (promoEvalContext.Customer.UserGroups != null)
+                var contact = promoEvalContext.User.Contact.Value;
+                if (contact.UserGroups != null)
                 {
-                    result.UserGroups = promoEvalContext.Customer.UserGroups.ToList();
+                    result.UserGroups = contact.UserGroups.ToList();
                 }
-                result.CustomerId = promoEvalContext.Customer.Id;
+                result.CustomerId = promoEvalContext.User.Id;
                 result.IsEveryone = true;
-                result.IsRegisteredUser = promoEvalContext.Customer.IsRegisteredUser;               
+                result.IsRegisteredUser = promoEvalContext.User.IsRegisteredUser;               
             }
 
             result.Currency = promoEvalContext.Currency != null ? promoEvalContext.Currency.Code : null;

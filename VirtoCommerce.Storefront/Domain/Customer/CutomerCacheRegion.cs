@@ -9,10 +9,10 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public class CustomerCacheRegion : CancellableCacheRegion<CustomerCacheRegion>
     {
-        private static readonly ConcurrentDictionary<CustomerInfo, CancellationTokenSource> _customerRegionTokenLookup =
-          new ConcurrentDictionary<CustomerInfo, CancellationTokenSource>();
+        private static readonly ConcurrentDictionary<Contact, CancellationTokenSource> _customerRegionTokenLookup =
+          new ConcurrentDictionary<Contact, CancellationTokenSource>();
 
-        public static IChangeToken CreateChangeToken(CustomerInfo customer)
+        public static IChangeToken CreateChangeToken(Contact customer)
         {
             if (customer == null)
             {
@@ -22,7 +22,7 @@ namespace VirtoCommerce.Storefront.Domain
             return new CompositeChangeToken(new[] { CreateChangeToken(), new CancellationChangeToken(cancellationTokenSource.Token) });
         }
 
-        public static void ExpireCustomer(CustomerInfo customer)
+        public static void ExpireCustomer(Contact customer)
         {
             if (_customerRegionTokenLookup.TryRemove(customer, out CancellationTokenSource token))
             {

@@ -98,22 +98,30 @@ namespace VirtoCommerce.Storefront.Domain
                 StoreId = workContext.CurrentStore.Id
             };
 
-            if (workContext.CurrentCustomer != null)
+            if (workContext.CurrentUser != null)
             {
-                retVal.CustomerId = workContext.CurrentCustomer.Id;
-                retVal.GeoTimeZone = workContext.CurrentCustomer.TimeZone;
-                var address = workContext.CurrentCustomer.DefaultShippingAddress ?? workContext.CurrentCustomer.DefaultBillingAddress;
-                if (address != null)
+                retVal.CustomerId = workContext.CurrentUser.Id;
+                if(workContext.CurrentUser.Contact != null)
                 {
-                    retVal.GeoCity = address.City;
-                    retVal.GeoCountry = address.CountryCode;
-                    retVal.GeoState = address.RegionName;
-                    retVal.GeoZipCode = address.PostalCode;
-                }
-                if (workContext.CurrentCustomer.UserGroups != null)
-                {
-                    retVal.UserGroups = workContext.CurrentCustomer.UserGroups.ToList();
-                }
+                    var contact = workContext.CurrentUser.Contact.Value;
+                    if(contact != null)
+                    {
+                        retVal.GeoTimeZone = contact.TimeZone;
+                        var address = contact.DefaultShippingAddress ?? contact.DefaultBillingAddress;
+                        if (address != null)
+                        {
+                            retVal.GeoCity = address.City;
+                            retVal.GeoCountry = address.CountryCode;
+                            retVal.GeoState = address.RegionName;
+                            retVal.GeoZipCode = address.PostalCode;
+                        }
+                        if (contact.UserGroups != null)
+                        {
+                            retVal.UserGroups = contact.UserGroups;
+                        }
+                    }
+                }              
+               
             }
 
             if (products != null)

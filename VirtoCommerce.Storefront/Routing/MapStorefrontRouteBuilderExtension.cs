@@ -108,7 +108,6 @@ public static class MapStorefrontRouteBuilderExtension
         routes.MapStorefrontRoute("AccessDenied", "error/AccessDenied", defaults: new { controller = "Error", action = "AccessDenied" });
         // Account
         routes.MapStorefrontRoute("Account", "account", defaults: new { controller = "Account", action = "GetAccount" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));
-        routes.MapStorefrontRoute("Account.UpdateAccount", "account", defaults: new { controller = "Account", action = "UpdateAccount" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
         routes.MapStorefrontRoute("Account.GetOrderDetails ", "account/order/{number}", defaults: new { controller = "Account", action = "GetOrderDetails" });
         routes.MapStorefrontRoute("Account.UpdateAddress", "account/addresses/{id?}", defaults: new { controller = "Account", action = "UpdateAddress" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
         routes.MapStorefrontRoute("Account.GetAddresses", "account/addresses", defaults: new { controller = "Account", action = "GetAddresses" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));

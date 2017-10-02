@@ -36,7 +36,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     EventType = i.Type,
                     ItemId = i.Content,
                     CreatedDate = i.CreatedAt,
-                    CustomerId = WorkContext.CurrentCustomer.Id,
+                    CustomerId = WorkContext.CurrentUser.Id,
                     StoreId = WorkContext.CurrentStore.Id
                 }).ToList();
 

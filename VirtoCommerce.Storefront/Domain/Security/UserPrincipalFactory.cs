@@ -5,19 +5,20 @@ using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
+using VirtoCommerce.Storefront.Model.Security;
 
-namespace VirtoCommerce.Storefront.Authentication
+namespace VirtoCommerce.Storefront.Domain.Security
 {
-    public class CustomerInfoPrincipalFactory : IUserClaimsPrincipalFactory<CustomerInfo>
+    public class UserPrincipalFactory : IUserClaimsPrincipalFactory<User>
     {
         private readonly IdentityOptions _options;
 
-        public CustomerInfoPrincipalFactory(IOptions<IdentityOptions> optionsAccessor)
+        public UserPrincipalFactory(IOptions<IdentityOptions> optionsAccessor)
         {
             _options = optionsAccessor?.Value ?? new IdentityOptions();
         }
 
-        public Task<ClaimsPrincipal> CreateAsync(CustomerInfo user)
+        public Task<ClaimsPrincipal> CreateAsync(User user)
         {
             //Create first anonymous identity
             var identity = new ClaimsIdentity();

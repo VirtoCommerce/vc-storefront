@@ -1,12 +1,8 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace VirtoCommerce.Storefront.Models
+namespace VirtoCommerce.Storefront.Model.Cart
 {
-    public class AddCartItem
+    public partial class AddCartItem
     {
         public AddCartItem()
         {

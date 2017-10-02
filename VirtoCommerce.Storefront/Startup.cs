@@ -7,15 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using VirtoCommerce.LiquidThemeEngine;
-using VirtoCommerce.Storefront.Authentication;
-using VirtoCommerce.Storefront.Authorization;
 using VirtoCommerce.Storefront.Binders;
-using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Domain;
+using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.JsonConverters;
@@ -26,7 +25,6 @@ using VirtoCommerce.Storefront.Model.Catalog.Services;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Bus;
 using VirtoCommerce.Storefront.Model.Common.Events;
-using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Inventory.Services;
 using VirtoCommerce.Storefront.Model.LinkList.Services;
@@ -35,6 +33,7 @@ using VirtoCommerce.Storefront.Model.Order.Services;
 using VirtoCommerce.Storefront.Model.Pricing.Services;
 using VirtoCommerce.Storefront.Model.Quote.Services;
 using VirtoCommerce.Storefront.Model.Recommendations;
+using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Services;
 using VirtoCommerce.Storefront.Model.StaticContent;
 using VirtoCommerce.Storefront.Model.Stores;
@@ -74,7 +73,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IStoreService, StoreService>();
             services.AddSingleton<ICurrencyService, CurrencyService>();
             services.AddSingleton<ISlugRouteService, SlugRouteService>();
-            services.AddSingleton<ICustomerService, CustomerService>();
+            services.AddSingleton<IMemberService, MemberService>();
             services.AddSingleton<ICustomerOrderService, CustomerOrderService>();
             services.AddSingleton<IQuoteService, QuoteService>();
             services.AddSingleton<ISubscriptionService, SubscriptionService>();
@@ -93,6 +92,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IApiChangesWatcher, ApiChangesWatcher>();
             services.AddSingleton<AssociationRecommendationsProvider>();
             services.AddSingleton<CognitiveRecommendationsProvider>();
+            services.AddSingleton<IStorefrontSecurityService, StorefrontSecurityService>();
             services.AddSingleton<IRecommendationProviderFactory, RecommendationProviderFactory>(provider => new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(), provider.GetService<CognitiveRecommendationsProvider>()));
 
             //Register events framework dependencies
@@ -130,12 +130,11 @@ namespace VirtoCommerce.Storefront
             }
 
             //Identity overrides for use remote user storage
-            services.AddSingleton<IUserStore<CustomerInfo>, CustomUserStore>();
-            services.AddSingleton<IUserPasswordStore<CustomerInfo>, CustomUserStore>();
-            services.AddSingleton<IUserEmailStore<CustomerInfo>, CustomUserStore>();
-            services.AddSingleton<IUserLoginStore<CustomerInfo>, CustomUserStore>();
-            services.AddSingleton<IUserClaimsPrincipalFactory<CustomerInfo>, CustomerInfoPrincipalFactory>();
-            services.AddScoped<UserManager<CustomerInfo>, CustomUserManager>();
+            services.AddSingleton<IUserStore<User>, CustomUserStore>();
+            services.AddSingleton<IUserEmailStore<User>, CustomUserStore>();
+            services.AddSingleton<IUserLoginStore<User>, CustomUserStore>();
+            services.AddSingleton<IUserClaimsPrincipalFactory<User>, UserPrincipalFactory>();
+            services.AddScoped<UserManager<User>, CustomUserManager>();
 
             services.AddAuthentication();
             //Resource-based authorization that requires API permissions for some operations
@@ -174,7 +173,7 @@ namespace VirtoCommerce.Storefront
                     googleSection.Bind(googleOptions);
                 });
             }
-            services.AddIdentity<CustomerInfo, IdentityRole>(options =>
+            services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 8;
                 options.Password.RequireLowercase = true;
@@ -202,11 +201,17 @@ namespace VirtoCommerce.Storefront
                 });
             }).AddJsonOptions(options =>
             {
+                options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.Converters.Add(new CartTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
                 options.SerializerSettings.Converters.Add(new MoneyJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
                 options.SerializerSettings.Converters.Add(new CurrencyJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
                 options.SerializerSettings.Converters.Add(new OrderTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
                 options.SerializerSettings.Converters.Add(new RecommendationJsonConverter(snapshotProvider.GetService<IRecommendationProviderFactory>()));
+                //Converter for providing back compatibility with old themes was used CustomerInfo type which has contained user and contact data in the single type.
+                //May be removed when all themes will fixed to new User type with nested Contact property.
+                options.SerializerSettings.Converters.Add(new UserBackCompatibilityJsonConverter(options.SerializerSettings));
             }).AddViewOptions(options =>
             {
                 options.ViewEngines.Add(snapshotProvider.GetService<ILiquidViewEngine>());

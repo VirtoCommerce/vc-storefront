@@ -7,6 +7,7 @@ using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Marketing;
+using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Model.Tax;
 using cartDto = VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models;
@@ -26,9 +27,9 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
-        public static ShoppingCart ToShoppingCart(this cartDto.ShoppingCart cartDto, Currency currency, Language language, Model.Customer.CustomerInfo customer)
+        public static ShoppingCart ToShoppingCart(this cartDto.ShoppingCart cartDto, Currency currency, Language language, User user)
         {
-            return CartConverterInstance.ToShoppingCart(cartDto, currency, language, customer);
+            return CartConverterInstance.ToShoppingCart(cartDto, currency, language, user);
         }
 
         public static cartDto.ShoppingCart ToShoppingCartDto(this ShoppingCart cart)
@@ -519,7 +520,7 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new PromotionEvaluationContext(cart.Language, cart.Currency)
             {
                 Cart = cart,
-                Customer = cart.Customer,
+                User = cart.Customer,
                 Currency = cart.Currency,
                 Language = cart.Language,
                 StoreId = cart.StoreId
@@ -528,7 +529,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual ShoppingCart ToShoppingCart(cartDto.ShoppingCart cartDto, Currency currency, Language language, Model.Customer.CustomerInfo customer)
+        public virtual ShoppingCart ToShoppingCart(cartDto.ShoppingCart cartDto, Currency currency, Language language, User user)
         {
             var result = new ShoppingCart(currency, language);
 
@@ -543,7 +544,7 @@ namespace VirtoCommerce.Storefront.Domain
             result.Status = cartDto.Status;
             result.StoreId = cartDto.StoreId;
        
-            result.Customer = customer;
+            result.Customer = user;
 
             if (cartDto.Coupon != null)
             {

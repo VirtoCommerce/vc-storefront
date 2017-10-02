@@ -53,7 +53,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
             var worContex = _workContextAccessor.WorkContext;
             if (worContex != null)
             {
-                var currentUser = worContex.CurrentCustomer;
+                var currentUser = worContex.CurrentUser;
 
                 //Add special header with user name to each API request for future audit and logging
                 if (currentUser != null && currentUser.IsRegisteredUser)

@@ -17,7 +17,6 @@ namespace VirtoCommerce.Storefront.Binders
         {
             _workContextAccessor = workContextAccessor;
         }
-
         public override bool CanWrite { get { return false; } }
         public override bool CanRead { get { return true; } }
 

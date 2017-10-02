@@ -17,11 +17,11 @@ using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
-using VirtoCommerce.Storefront.Model.Customer;
-using VirtoCommerce.Storefront.Model.Customer.Events;
 using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Marketing.Services;
 using VirtoCommerce.Storefront.Model.Quote;
+using VirtoCommerce.Storefront.Model.Security;
+using VirtoCommerce.Storefront.Model.Security.Events;
 using VirtoCommerce.Storefront.Model.Services;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Model.Subscriptions.Services;
@@ -65,19 +65,19 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.FromResult((object)null);
         }
 
-        public virtual async Task LoadOrCreateNewTransientCartAsync(string cartName, Store store, CustomerInfo customer, Language language, Currency currency)
+        public virtual async Task LoadOrCreateNewTransientCartAsync(string cartName, Store store, User user, Language language, Currency currency)
         {
-            var cacheKey = CacheKey.With(GetType(), store.Id, cartName, customer.Id, currency.Code);
+            var cacheKey = CacheKey.With(GetType(), store.Id, cartName, user.Id, currency.Code);
             var needReevaluate = false;
             Cart = await  _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {              
                 needReevaluate = true;
 
-                var cartSearchCriteria = CreateCartSearchCriteria(cartName, store, customer, language, currency);
+                var cartSearchCriteria = CreateCartSearchCriteria(cartName, store, user, language, currency);
                 var cartSearchResult = await _cartApi.SearchAsync(cartSearchCriteria);
 
                 var cartDto = cartSearchResult.Results.FirstOrDefault();
-                var cart = cartDto?.ToShoppingCart(currency, language, customer) ?? CreateCart(cartName, store, customer, language, currency);
+                var cart = cartDto?.ToShoppingCart(currency, language, user) ?? CreateCart(cartName, store, user, language, currency);
 
                 //Load cart payment plan with have same id
                 if (store.SubscriptionEnabled)
@@ -92,7 +92,7 @@ namespace VirtoCommerce.Storefront.Domain
                     }
                 }
 
-                cart.Customer = customer;
+                cart.Customer = user;
 
                 //Add expiration token for concrete cart instance
                 cacheEntry.AddExpirationToken(CartCacheRegion.CreateChangeToken(cart));
@@ -453,7 +453,7 @@ namespace VirtoCommerce.Storefront.Domain
                 return;
 
             var workContext = @event.WorkContext;
-            var prevUser = @event.WorkContext.CurrentCustomer;
+            var prevUser = @event.WorkContext.CurrentUser;
             var prevUserCart = @event.WorkContext.CurrentCart.Value;
             var newUser = @event.User;
 
@@ -470,27 +470,27 @@ namespace VirtoCommerce.Storefront.Domain
 
         #endregion
 
-        protected virtual cartModel.ShoppingCartSearchCriteria CreateCartSearchCriteria(string cartName, Store store, CustomerInfo customer, Language language, Currency currency)
+        protected virtual cartModel.ShoppingCartSearchCriteria CreateCartSearchCriteria(string cartName, Store store, User user, Language language, Currency currency)
         {
             return new cartModel.ShoppingCartSearchCriteria
             {
                 StoreId = store.Id,
-                CustomerId = customer.Id,
+                CustomerId = user.Id,
                 Name = cartName,
                 Currency = currency.Code,
             };
         }
 
-        protected virtual ShoppingCart CreateCart(string cartName, Store store, CustomerInfo customer, Language language, Currency currency)
+        protected virtual ShoppingCart CreateCart(string cartName, Store store, User user, Language language, Currency currency)
         {
             var cart = new ShoppingCart(currency, language)
             {
-                CustomerId = customer.Id,
+                CustomerId = user.Id,
                 Name = cartName,
                 StoreId = store.Id,
                 Language = language,
-                IsAnonymous = !customer.IsRegisteredUser,
-                CustomerName = customer.IsRegisteredUser ? customer.UserName : StorefrontClaims.AnonymousUsername
+                IsAnonymous = !user.IsRegisteredUser,
+                CustomerName = user.IsRegisteredUser ? user.UserName : StorefrontClaims.AnonymousUsername
             };
 
             return cart;

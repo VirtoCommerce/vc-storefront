@@ -7,6 +7,7 @@ using VirtoCommerce.Storefront.Model.Cart.ValidationErrors;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Marketing;
+using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Subscriptions;
 
 namespace VirtoCommerce.Storefront.Model.Cart
@@ -60,7 +61,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// </summary>
         public bool IsAnonymous { get; set; }
 
-        public CustomerInfo Customer { get; set; }
+        public User Customer { get; set; }
 
         /// <summary>
         /// Gets or sets the value of shopping cart customer id

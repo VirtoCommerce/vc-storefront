@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Stores;
 
 namespace VirtoCommerce.Storefront.Domain
@@ -19,7 +20,7 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.CompletedTask;
         }
 
-        public static Task WithDefaultShoppingCartAsync(this IWorkContextBuilder builder, string cartName, Store store, Model.Customer.CustomerInfo customer, 
+        public static Task WithDefaultShoppingCartAsync(this IWorkContextBuilder builder, string cartName, Store store, User user, 
                                                         Currency currency, Language language)
         {
             var serviceProvider = builder.HttpContext.RequestServices;
@@ -27,7 +28,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             Func<Model.Cart.ShoppingCart> factory = () =>
             {
-                Task.Factory.StartNew(() => cartBuilder.LoadOrCreateNewTransientCartAsync(cartName, store, customer, language, currency), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+                Task.Factory.StartNew(() => cartBuilder.LoadOrCreateNewTransientCartAsync(cartName, store, user, language, currency), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
                 return cartBuilder.Cart;
             };
             return builder.WithDefaultShoppingCartAsync(factory);

@@ -11,10 +11,10 @@ namespace VirtoCommerce.Storefront.Controllers
 {
     public class VendorController : StorefrontControllerBase
     {
-        private readonly ICustomerService _customerService;
+        private readonly IMemberService _customerService;
         private readonly ICatalogService _catalogService;
 
-        public VendorController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, ICustomerService customerService, ICatalogService catalogService)
+        public VendorController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IMemberService customerService, ICatalogService catalogService)
             : base(workContextAccessor, urlBuilder)
         {
             _customerService = customerService;

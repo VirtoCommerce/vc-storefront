@@ -9,6 +9,7 @@ using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Order;
 using VirtoCommerce.Storefront.Model.Pricing;
 using VirtoCommerce.Storefront.Model.Quote;
+using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.StaticContent;
 using VirtoCommerce.Storefront.Model.Stores;
 
@@ -33,9 +34,9 @@ namespace VirtoCommerce.Storefront.Model
         public NameValueCollection QueryString { get; set; }
 
         /// <summary>
-        /// Current customer
+        /// Current user
         /// </summary>
-        public CustomerInfo CurrentCustomer { get; set; }
+        public User CurrentUser { get; set; }
 
         /// <summary>
         /// Current language and culture
@@ -217,6 +218,7 @@ namespace VirtoCommerce.Storefront.Model
         /// </summary>
         public IDictionary<string, object> ApplicationSettings { get; set; }
 
+        public ResetPassword ResetPassword { get; set; }
         /// <summary>
         /// Current page number
         /// </summary>

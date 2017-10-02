@@ -8,6 +8,7 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Quote.Services;
+using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Stores;
 
 namespace VirtoCommerce.Storefront.Domain
@@ -20,14 +21,14 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.CompletedTask;
         }
 
-        public static Task WithQuotesAsync(this IWorkContextBuilder builder, Store store, CustomerInfo customer, Currency currency, Language language)
+        public static Task WithQuotesAsync(this IWorkContextBuilder builder, Store store, User user, Currency currency, Language language)
         {
             var serviceProvider = builder.HttpContext.RequestServices;
             var quoteRequestBuilder = serviceProvider.GetRequiredService<IQuoteRequestBuilder>();
 
             Func<Model.Quote.QuoteRequest> factory = () =>
              {
-                 Task.Factory.StartNew(() => quoteRequestBuilder.GetOrCreateNewTransientQuoteRequestAsync(store, customer, language, currency),
+                 Task.Factory.StartNew(() => quoteRequestBuilder.GetOrCreateNewTransientQuoteRequestAsync(store, user, language, currency),
                                                                                                           CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
                  return quoteRequestBuilder.QuoteRequest;
              };

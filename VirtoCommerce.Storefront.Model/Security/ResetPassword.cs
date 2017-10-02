@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using VirtoCommerce.Storefront.Model.Common;
 
-namespace VirtoCommerce.Storefront.Model
+namespace VirtoCommerce.Storefront.Model.Security
 {
-    public partial class ResetPassword : ValueObject
+    public partial class ResetPassword
     {
+        [FromForm(Name = "customer[email]")]
+        public string Email { get; set; }
+        [FromForm(Name = "customer[token]")]
+        public string Token { get; set; }
         [FromForm(Name = "customer[password]")]
         public string Password { get; set; }
         [FromForm(Name = "customer[password_confirmation]")]

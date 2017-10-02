@@ -4,28 +4,29 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using VirtoCommerce.Storefront.Domain;
-using VirtoCommerce.Storefront.Infrastructure;
+using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Events;
-using VirtoCommerce.Storefront.Model.Customer;
-using VirtoCommerce.Storefront.Model.Customer.Events;
+using VirtoCommerce.Storefront.Model.Security;
+using VirtoCommerce.Storefront.Model.Security.Events;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
     [Authorize]
     public class AccountController : StorefrontControllerBase
     {
-        private readonly SignInManager<CustomerInfo> _signInManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly IEventPublisher _publisher;
+        private readonly IStorefrontSecurityService _storefrontSecurityService;
         private readonly IAuthorizationService _authorizationService;
-        public AccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<CustomerInfo> signInManager, IEventPublisher publisher, IAuthorizationService authorizationService)
+        public AccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<User> signInManager, IEventPublisher publisher, IAuthorizationService authorizationService, IStorefrontSecurityService storefrontSecurityService)
             : base(workContextAccessor, urlBuilder)
         {
             _signInManager = signInManager;
             _publisher = publisher;
             _authorizationService = authorizationService;
+            _storefrontSecurityService = storefrontSecurityService;
         }
 
         //GET: /account
@@ -36,21 +37,11 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("customers/account", WorkContext);
         }
 
-        //POST: /account
-        [HttpPost]
-        public async Task<ActionResult> UpdateAccount(CustomerInfo customer)
-        {
-            //Do not allow to update other accounts
-            customer.Id = WorkContext.CurrentCustomer.Id;
-
-            await _signInManager.UserManager.UpdateAsync(customer);
-            return View("customers/account", WorkContext);
-        }       
 
         [HttpGet]
         public ActionResult GetOrderDetails(string number)
         {
-            var order = WorkContext.CurrentCustomer.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(number));
+            var order = WorkContext.CurrentUser.Contact.Value.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(number));
             if (order != null)
             {
                 WorkContext.CurrentOrder = order;
@@ -76,13 +67,14 @@ namespace VirtoCommerce.Storefront.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Register([FromForm] Register formModel)
         {
-            var user = formModel.ToCustomerInfo();
+            var user = formModel.ToUser();
             user.StoreId = WorkContext.CurrentStore.Id;
-         
+
             var result = await _signInManager.UserManager.CreateAsync(user, formModel.Password);
             if (result.Succeeded == true)
             {
-                await _publisher.Publish(new UserRegisteredEvent(WorkContext, user));
+                user = await _signInManager.UserManager.FindByNameAsync(user.UserName);
+                await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, formModel.ToUserRegistrationInfo()));
                 await _signInManager.SignInAsync(user, isPersistent: true);
                 await _publisher.Publish(new UserLoginEvent(WorkContext, user));
                 return StoreFrontRedirect("~/account");
@@ -106,7 +98,7 @@ namespace VirtoCommerce.Storefront.Controllers
             var impersonatedUser = await _signInManager.UserManager.FindByIdAsync(userId);
             impersonatedUser.OperatorUserId = user.Id;
             impersonatedUser.OperatorUserName = user.UserName;
-         
+
             // sign out the current user
             await _signInManager.SignOutAsync();
 
@@ -118,10 +110,10 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpGet]
         [AllowAnonymous]
         public ActionResult Login()
-        {           
+        {
             return View("customers/login");
         }
-    
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult> Login([FromForm] Login login, string returnUrl)
@@ -145,10 +137,10 @@ namespace VirtoCommerce.Storefront.Controllers
             if (loginResult.Succeeded)
             {
                 var user = await _signInManager.UserManager.FindByNameAsync(login.Username);
-                
+
                 //Check that current user can sing in to current store
                 if (user.AllowedStores.IsNullOrEmpty() || user.AllowedStores.Any(x => x.EqualsInvariant(WorkContext.CurrentStore.Id)))
-                {    
+                {
                     await _publisher.Publish(new UserLoginEvent(WorkContext, user));
                     return StoreFrontRedirect(returnUrl);
                 }
@@ -206,19 +198,26 @@ namespace VirtoCommerce.Storefront.Controllers
                 return new BadRequestResult();
             }
 
-            CustomerInfo customer = await _signInManager.UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey);
-            if (customer == null)
+            var user = await _signInManager.UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey);
+            if (user == null)
             {
-                customer = new CustomerInfo()
+                user = new User()
                 {
-                    FullName = loginInfo.Principal.Identity.Name,
-                    UserName = string.Join("--", loginInfo.LoginProvider, loginInfo.ProviderKey),
+                    Email = loginInfo.Principal.FindFirstValue(ClaimTypes.Email),
+                    UserName = loginInfo.Principal.Identity.Name,
                     StoreId = WorkContext.CurrentStore.Id,
                 };
-
-                var result = await _signInManager.UserManager.AddLoginAsync(customer, loginInfo);
+                user.ExternalLogins.Add(new ExternalUserLoginInfo { LoginProvider = loginInfo.LoginProvider, ProviderKey = loginInfo.ProviderKey });
+                var result = await _signInManager.UserManager.AddLoginAsync(user, loginInfo);
                 if (!result.Succeeded)
                 {
+                    var registrationInfo = new UserRegistrationInfo
+                    {
+                        FirstName = loginInfo.Principal.FindFirstValue(ClaimTypes.Name),
+                        LastName = loginInfo.Principal.FindFirstValue(ClaimTypes.Surname),
+                        Email = user.Email
+                    };
+                    await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, registrationInfo));
                     return new StatusCodeResult((int)System.Net.HttpStatusCode.InternalServerError);
                 }
             }
@@ -226,10 +225,114 @@ namespace VirtoCommerce.Storefront.Controllers
             var signInResult = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (signInResult.Succeeded)
             {
-                await _publisher.Publish(new UserLoginEvent(WorkContext, customer));
+                await _publisher.Publish(new UserLoginEvent(WorkContext, user));
             }
 
             return StoreFrontRedirect(returnUrl);
+        }
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult ForgotPassword()
+        {
+            return View("customers/forgot_password", WorkContext);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> ForgotPassword(ForgotPassword formModel)
+        {
+            var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
+            if (user != null)
+            {
+                var callbackUrl = Url.Action("ResetPassword", "Account",
+                    new { UserId = user.Id, Code = "token" }, protocol: Request.Scheme);
+                //TODO: Need to change storefront security API to support to do reset password token generation  via ASP.NET UserManager 
+                await _storefrontSecurityService.GeneratePasswordResetTokenAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage, callbackUrl);
+            }
+            else
+            {
+                ModelState.AddModelError("form", "User not found");
+            }
+
+            return View("customers/forgot_password", WorkContext);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult> ResetPassword(string code, string userId)
+        {
+            if (string.IsNullOrEmpty(code) && string.IsNullOrEmpty(userId))
+            {
+                WorkContext.ErrorMessage = "Error in URL format";
+
+                return View("error", WorkContext);
+            }
+
+            var user = await _signInManager.UserManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                WorkContext.ErrorMessage = "User was not found.";
+                return View("error", WorkContext);
+            }
+            WorkContext.ResetPassword = new ResetPassword
+            {
+                Token = code,
+                Email = user.Email
+            };
+            return View("customers/reset_password", WorkContext);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> ResetPassword(ResetPassword formModel)
+        {
+            if (formModel.Email == null || formModel.Token == null)
+            {
+                WorkContext.ErrorMessage = "Not enough info for reseting password";
+                return View("error", WorkContext);
+            }
+
+            var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
+            if (user == null)
+            {
+                // Don't reveal that the user does not exist
+                return RedirectToPage("./ResetPasswordConfirmation");
+
+            }
+            var result = await _signInManager.UserManager.ResetPasswordAsync(user, formModel.Token, formModel.Password);
+
+            if (result.Succeeded == true)
+            {
+                return View("customers/reset_password_confirmation", WorkContext);
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            return View("customers/reset_password", WorkContext);
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> ChangePassword(ChangePassword formModel)
+        {
+            var result = await _signInManager.UserManager.ChangePasswordAsync(WorkContext.CurrentUser, formModel.OldPassword, formModel.NewPassword);
+
+            if (result.Succeeded == true)
+            {
+                return StoreFrontRedirect("~/account");
+            }
+            else
+            {
+                ModelState.AddModelError("form", result.Errors.FirstOrDefault()?.Description);
+                return View("customers/account", WorkContext);
+            }
         }
     }    
 }

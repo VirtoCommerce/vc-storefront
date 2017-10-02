@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
-using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Extensions;
-using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
-using VirtoCommerce.Storefront.Model.Customer;
-using VirtoCommerce.Storefront.Model.Customer.Events;
 using VirtoCommerce.Storefront.Model.Quote;
 using VirtoCommerce.Storefront.Model.Quote.Events;
 using VirtoCommerce.Storefront.Model.Quote.Services;
+using VirtoCommerce.Storefront.Model.Security;
+using VirtoCommerce.Storefront.Model.Security.Events;
 using VirtoCommerce.Storefront.Model.Stores;
 using quoteModel = VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models;
 
@@ -58,15 +56,15 @@ namespace VirtoCommerce.Storefront.Domain
             return this;
         }
 
-        public async Task<IQuoteRequestBuilder> GetOrCreateNewTransientQuoteRequestAsync(Store store, CustomerInfo customer, Language language, Currency currency)
+        public async Task<IQuoteRequestBuilder> GetOrCreateNewTransientQuoteRequestAsync(Store store, User user, Language language, Currency currency)
         {
-            var cacheKey = CacheKey.With(GetType(), store.Id, customer.Id);
+            var cacheKey = CacheKey.With(GetType(), store.Id, user.Id);
             _quoteRequest = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 var activeQuoteSearchCriteria = new quoteModel.QuoteRequestSearchCriteria
                 {
                     Tag = "actual",
-                    CustomerId = customer.Id,
+                    CustomerId = user.Id,
                     StoreId = store.Id
                 };
 
@@ -78,16 +76,14 @@ namespace VirtoCommerce.Storefront.Domain
                     quoteRequest = new QuoteRequest(currency, language)
                     {
                         Currency = currency,
-                        CustomerId = customer.Id,
+                        CustomerId = user.Id,
                         Language = language,
                         Status = "New",
                         StoreId = store.Id,
                         Tag = "actual"
                     };
 
-                    quoteRequest.CustomerName = customer.IsRegisteredUser
-                    ? string.Join(" ", customer.FirstName, customer.LastName)
-                    : StorefrontClaims.AnonymousUsername;
+                    quoteRequest.CustomerName = user.UserName;
                 }
                 else
                 {
@@ -95,7 +91,7 @@ namespace VirtoCommerce.Storefront.Domain
                 }
                 //Add expiration token for concrete quote instance
                 cacheEntry.AddExpirationToken(QuoteCacheRegion.CreateChangeToken(quoteRequest));
-                quoteRequest.Customer = customer;
+                quoteRequest.Customer = user;
 
                 return quoteRequest;
             });
@@ -267,7 +263,7 @@ namespace VirtoCommerce.Storefront.Domain
         public virtual async Task Handle(UserLoginEvent @event)
         {
             //If previous user was anonymous and it has not empty cart need merge anonymous cart to personal
-            if (@event.WorkContext.CurrentStore.QuotesEnabled && !@event.WorkContext.CurrentCustomer.IsRegisteredUser
+            if (@event.WorkContext.CurrentStore.QuotesEnabled && !@event.WorkContext.CurrentUser.IsRegisteredUser
                  && @event.WorkContext.CurrentQuoteRequest != null && @event.WorkContext.CurrentQuoteRequest.Value.Items.Any())
             {
                 await GetOrCreateNewTransientQuoteRequestAsync(@event.WorkContext.CurrentStore, @event.User, @event.WorkContext.CurrentLanguage, @event.WorkContext.CurrentCurrency);

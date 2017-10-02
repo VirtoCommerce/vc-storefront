@@ -47,7 +47,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             EnsureQuoteRequestBelongsToCurrentCustomer(quoteRequest);
 
-            quoteRequest.Customer = WorkContext.CurrentCustomer;
+            quoteRequest.Customer = WorkContext.CurrentUser;
 
             return Json(quoteRequest);
         }
@@ -185,9 +185,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         private void EnsureQuoteRequestBelongsToCurrentCustomer(QuoteRequest quote)
         {
-            if (WorkContext.CurrentCustomer.Id != quote.CustomerId)
+            if (WorkContext.CurrentUser.Id != quote.CustomerId)
             {
-                throw new StorefrontException("Requested quote not belongs to user " + WorkContext.CurrentCustomer.UserName);
+                throw new StorefrontException("Requested quote not belongs to user " + WorkContext.CurrentUser.UserName);
             }
         }
     }

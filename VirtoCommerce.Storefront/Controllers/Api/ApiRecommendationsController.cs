@@ -27,7 +27,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 throw new NotSupportedException(evalContext.Provider);
             }
             evalContext.StoreId = WorkContext.CurrentStore.Id;
-            evalContext.UserId = WorkContext.CurrentCustomer.Id;
+            evalContext.UserId = WorkContext.CurrentUser.Id;
             var result = await recommendationService.GetRecommendationsAsync(evalContext);
 
             return Json(result);

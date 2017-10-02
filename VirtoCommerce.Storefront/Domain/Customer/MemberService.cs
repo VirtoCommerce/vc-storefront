@@ -4,20 +4,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
-using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
+using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Order;
 using VirtoCommerce.Storefront.Model.Order.Services;
 using VirtoCommerce.Storefront.Model.Quote;
 using VirtoCommerce.Storefront.Model.Quote.Services;
+using VirtoCommerce.Storefront.Model.Security.Events;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Model.Subscriptions;
 using VirtoCommerce.Storefront.Model.Subscriptions.Services;
@@ -25,39 +27,41 @@ using customerDto = VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.M
 
 namespace VirtoCommerce.Storefront.Domain
 {
-    public class CustomerService : ICustomerService
+    public class MemberService : IMemberService, IEventHandler<UserRegisteredEvent>
     {
         private readonly ICustomerModule _customerApi;
         private readonly ICustomerOrderService _orderService;
         private readonly IQuoteService _quoteService;
-        private readonly IStoreModule _storeApi;
         private readonly ISubscriptionService _subscriptionService;
         private readonly IMemoryCache _memoryCache;
 
-        public CustomerService(ICustomerModule customerApi, ICustomerOrderService orderService,
-            IQuoteService quoteService, IStoreModule storeApi, ISubscriptionService subscriptionService, IMemoryCache memoryCache)
+        public MemberService(ICustomerModule customerApi, ICustomerOrderService orderService,
+            IQuoteService quoteService, ISubscriptionService subscriptionService, IMemoryCache memoryCache)
         {
             _customerApi = customerApi;
             _orderService = orderService;
             _quoteService = quoteService;
-            _storeApi = storeApi;
             _memoryCache = memoryCache;
             _subscriptionService = subscriptionService;
         }
 
         #region ICustomerService Members
-
-        public virtual async Task<CustomerInfo> GetCustomerByIdAsync(string customerId)
+        public virtual Contact GetContactById(string contactId)
         {
-            var cacheKey = CacheKey.With(GetType(),  "GetCustomerByIdAsync", customerId);
+            return Task.Factory.StartNew(() => GetContactByIdAsync(contactId), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+        }
+
+        public virtual async Task<Contact> GetContactByIdAsync(string contactId)
+        {
+            var cacheKey = CacheKey.With(GetType(), "GetContactByIdAsync", contactId);
             var retVal = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {              
                 //TODO: Make parallels call
-                var contact = await _customerApi.GetMemberByIdAsync(customerId);
-                CustomerInfo result = null;
-                if (contact != null)
+                var contactDto = await _customerApi.GetContactByIdAsync(contactId);
+                Contact result = null;
+                if (contactDto != null)
                 {
-                    result = contact.ToCustomerInfo();
+                    result = contactDto.ToContact();
                 }
 
                 cacheEntry.AddExpirationToken(CustomerCacheRegion.CreateChangeToken(result));
@@ -76,37 +80,40 @@ namespace VirtoCommerce.Storefront.Domain
             return retVal;
         }
         
-        public virtual async Task CreateCustomerAsync(CustomerInfo customer)
+        public virtual async Task CreateContactAsync(Contact contact)
         {
-            var contact = customer.ToCustomerContactDto();
-            await _customerApi.CreateContactAsync(contact);
+            var contactDto = contact.ToCustomerContactDto();
+            await _customerApi.CreateContactAsync(contactDto);
         }
         
-        public virtual async Task UpdateCustomerAsync(CustomerInfo customer)
+        public virtual async Task UpdateContactAsync(string contactId, ContactUpdateInfo contactUpdateInfo)
         {
-            if (customer.MemberType != typeof(customerDto.Contact).Name)
-                throw new HttpRequestException("Can't update customer which member type is not " + typeof(customerDto.Contact).Name);
+            var existContact = await GetContactByIdAsync(contactId);
+            if (existContact != null)
+            {
+                existContact.FirstName = contactUpdateInfo.FirstName;
+                existContact.LastName = contactUpdateInfo.LastName;
+                existContact.Email = contactUpdateInfo.Email;
 
-            var contact = customer.ToCustomerContactDto();
-            await _customerApi.UpdateContactAsync(contact);
+                var contactDto = existContact.ToCustomerContactDto();
+                await _customerApi.UpdateContactAsync(contactDto);
 
-            //Invalidate cache
-            CustomerCacheRegion.ExpireCustomer(customer);
+                //Invalidate cache
+                CustomerCacheRegion.ExpireCustomer(existContact);
+            }
         }
 
-        public async Task UpdateAddressesAsync(CustomerInfo customer)
+        public async Task UpdateContactAddressesAsync(string contactId, IList<Address> addresses)
         {
-            await _customerApi.UpdateAddessesAsync(customer.Id, customer.Addresses.Select(x => x.ToCustomerAddressDto()).ToList());
+            var existContact = await GetContactByIdAsync(contactId);
+            if (existContact != null)
+            {
+                await _customerApi.UpdateAddessesAsync(contactId, addresses.Select(x => x.ToCustomerAddressDto()).ToList());
 
-            //Invalidate cache
-            CustomerCacheRegion.ExpireCustomer(customer);
-        }
-
-        public virtual async Task<bool> CanLoginOnBehalfAsync(string storeId, string customerId)
-        {
-            var info = await _storeApi.GetLoginOnBehalfInfoAsync(storeId, customerId);
-            return info.CanLoginOnBehalf == true;
-        }
+                //Invalidate cache
+                CustomerCacheRegion.ExpireCustomer(existContact);
+            }
+        }       
 
         public virtual async Task<Vendor[]> GetVendorsByIdsAsync(Store store, Language language, params string[] vendorIds)
         {
@@ -141,9 +148,32 @@ namespace VirtoCommerce.Storefront.Domain
         }
         #endregion
 
-     
+        #region IEventHandler<UserRegisteredEvent> members
+        public virtual async Task Handle(UserRegisteredEvent @event)
+        {
+            //Need to create new contact related to new user with same Id
+            var registrationData = @event.RegistrationInfo;
+            var contact = new Contact
+            {
+                Id = @event.User.Id,
+                Name = registrationData.UserName,
+                FullName = string.Join(" ", registrationData.FirstName, registrationData.LastName),
+                FirstName = registrationData.FirstName,
+                LastName = registrationData.LastName
+            };
+            if (!string.IsNullOrEmpty(registrationData.Email))
+            {
+                contact.Emails.Add(registrationData.Email);
+            }
+            if (string.IsNullOrEmpty(contact.FullName) || string.IsNullOrWhiteSpace(contact.FullName))
+            {
+                contact.FullName = registrationData.Email;
+            }
+            await CreateContactAsync(contact);            
+        }
+        #endregion
 
-        protected virtual IMutablePagedList<QuoteRequest> LazyLoadCustomerQuotes(CustomerInfo customer)
+        protected virtual IMutablePagedList<QuoteRequest> LazyLoadCustomerQuotes(Contact customer)
         {
             Func<int, int, IEnumerable<SortInfo>, IPagedList<QuoteRequest>> quotesGetter = (pageNumber, pageSize, sortInfos) =>
             {
@@ -159,7 +189,7 @@ namespace VirtoCommerce.Storefront.Domain
             return new MutablePagedList<QuoteRequest>(quotesGetter, 1, QuoteSearchCriteria.DefaultPageSize);
         }
 
-        protected virtual IMutablePagedList<CustomerOrder> LazyLoadCustomerOrders(CustomerInfo customer)
+        protected virtual IMutablePagedList<CustomerOrder> LazyLoadCustomerOrders(Contact customer)
         {
             var orderSearchcriteria = new OrderSearchCriteria
             {
@@ -175,7 +205,7 @@ namespace VirtoCommerce.Storefront.Domain
             return new MutablePagedList<CustomerOrder>(ordersGetter, 1, OrderSearchCriteria.DefaultPageSize);
         }
 
-        protected virtual IMutablePagedList<Subscription> LazyLoadCustomerSubscriptions(CustomerInfo customer)
+        protected virtual IMutablePagedList<Subscription> LazyLoadCustomerSubscriptions(Contact customer)
         {
             var subscriptionSearchcriteria = new SubscriptionSearchCriteria
             {
@@ -190,6 +220,8 @@ namespace VirtoCommerce.Storefront.Domain
             };
             return new MutablePagedList<Subscription>(subscriptionGetter, 1, SubscriptionSearchCriteria.DefaultPageSize);
         }
+
+   
     }
 }
 

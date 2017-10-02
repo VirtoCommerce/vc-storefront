@@ -70,10 +70,14 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 retVal.Address = taxContext.Address.ToCoreAddressDto();
             }
-            if (taxContext.Customer != null)
+            if (taxContext.Customer != null && taxContext.Customer.Contact != null)
             {
-                retVal.Customer = taxContext.Customer.ToCoreContactDto();
-                retVal.Customer.MemberType = "Contact";
+                var contact = taxContext.Customer.Contact.Value;
+                if (contact != null)
+                {
+                    retVal.Customer = contact.ToCoreContactDto();
+                    retVal.Customer.MemberType = "Contact";
+                }          
             }
             if (taxContext.Currency != null)
             {
@@ -106,10 +110,17 @@ namespace VirtoCommerce.Storefront.Domain
             result.Id = workContext.CurrentStore.Id;
             result.Currency = workContext.CurrentCurrency;
             result.Type = "";
-            result.Address = workContext.CurrentCustomer.DefaultBillingAddress;
-            result.Customer = workContext.CurrentCustomer;
+       
+            result.Customer = workContext.CurrentUser;
             result.StoreTaxCalculationEnabled = workContext.CurrentStore.TaxCalculationEnabled;
-
+            if(workContext.CurrentUser.Contact != null)
+            {
+                var contact = workContext.CurrentUser.Contact.Value;
+                if(contact != null)
+                {
+                    result.Address = contact.DefaultBillingAddress;
+                }
+            }
             if (products != null)
             {
                 result.Lines = products.SelectMany(x => x.ToTaxLines()).ToList();

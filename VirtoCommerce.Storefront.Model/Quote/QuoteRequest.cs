@@ -4,6 +4,7 @@ using System.Linq;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Marketing;
+using VirtoCommerce.Storefront.Model.Security;
 
 namespace VirtoCommerce.Storefront.Model.Quote
 {
@@ -40,7 +41,7 @@ namespace VirtoCommerce.Storefront.Model.Quote
 
         public string CustomerName { get; set; }
 
-        public CustomerInfo Customer { get; set; }
+        public User Customer { get; set; }
 
         public string OrganizationName { get; set; }
 

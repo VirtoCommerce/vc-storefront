@@ -254,14 +254,18 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Terms.Add(string.Concat("vendor:", criteria.VendorId));
             }
             // Add user groups to terms
-            if (!workContext.CurrentCustomer.UserGroups.IsNullOrEmpty())
+            if (workContext.CurrentUser.Contact != null)
             {
-                if (result.Terms == null)
+                var contact = workContext.CurrentUser.Contact.Value;
+                if (contact != null && !contact.UserGroups.IsNullOrEmpty())
                 {
-                    result.Terms = new List<string>();
+                    if (result.Terms == null)
+                    {
+                        result.Terms = new List<string>();
+                    }
+                    //search products with user_groups defined in customer
+                    result.Terms.Add("user_groups:" + string.Join(",", contact.UserGroups));
                 }
-                //search products with user_groups defined in customer
-                result.Terms.Add("user_groups:" + string.Join(",", workContext.CurrentCustomer.UserGroups));
             }
 
             return result;

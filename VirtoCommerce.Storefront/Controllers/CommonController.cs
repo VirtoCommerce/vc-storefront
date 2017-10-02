@@ -12,6 +12,7 @@ using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
+using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Models;
 
 namespace VirtoCommerce.Storefront.Controllers
@@ -20,9 +21,9 @@ namespace VirtoCommerce.Storefront.Controllers
     {
         private readonly IStoreModule _storeApi;
         private readonly ISecurity _platformSecurityApi;
-        private readonly SignInManager<CustomerInfo> _signInManager;
+        private readonly SignInManager<User> _signInManager;
         public CommonController(IWorkContextAccessor workContextAccesor, IStorefrontUrlBuilder urlBuilder, IStoreModule storeApi,
-                                 ISecurity platformSecurityApi, SignInManager<CustomerInfo> signInManager)
+                                 ISecurity platformSecurityApi, SignInManager<User> signInManager)
               : base(workContextAccesor, urlBuilder)
         {
             _storeApi = storeApi;
@@ -38,7 +39,7 @@ namespace VirtoCommerce.Storefront.Controllers
         public ActionResult ResetCache()
         {
             //check permissions
-            if (_platformSecurityApi.UserHasAnyPermission(WorkContext.CurrentCustomer.UserName, new[] { "cache:reset" }.ToList(), new List<string>()).Result ?? false)
+            if (_platformSecurityApi.UserHasAnyPermission(WorkContext.CurrentUser.UserName, new[] { "cache:reset" }.ToList(), new List<string>()).Result ?? false)
             {
                 //TODO: Replace to some other (maybe with using reflection)
                 ThemeEngineCacheRegion.ExpireRegion();
@@ -91,8 +92,8 @@ namespace VirtoCommerce.Storefront.Controllers
         //[OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public async Task<ActionResult> SetCurrency(string currency, string returnUrl = "")
         {
-            WorkContext.CurrentCustomer.SelectedCurrencyCode = currency;            
-            await _signInManager.RefreshSignInAsync(WorkContext.CurrentCustomer);
+            WorkContext.CurrentUser.SelectedCurrencyCode = currency;            
+            await _signInManager.RefreshSignInAsync(WorkContext.CurrentUser);
             //home page  and prevent open redirection attack
             if (string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
             {
