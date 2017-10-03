@@ -62,10 +62,8 @@ namespace VirtoCommerce.Storefront.Domain
                 if (contactDto != null)
                 {
                     result = contactDto.ToContact();
+                    cacheEntry.AddExpirationToken(CustomerCacheRegion.CreateChangeToken(result));
                 }
-
-                cacheEntry.AddExpirationToken(CustomerCacheRegion.CreateChangeToken(result));
-
                 return result;
             });
 

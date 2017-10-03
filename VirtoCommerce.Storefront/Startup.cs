@@ -84,8 +84,6 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IPromotionEvaluator, PromotionEvaluator>();
             services.AddSingleton<IMarketingService, MarketingService>();
             services.AddSingleton<IProductAvailabilityService, ProductAvailabilityService>();
-            services.AddSingleton<IQuoteRequestBuilder, QuoteRequestBuilder>();
-            services.AddSingleton<ICartBuilder, CartBuilder>();
             services.AddSingleton<IStaticContentService, StaticContentService>();
             services.AddSingleton<IMenuLinkListService, MenuLinkListServiceImpl>();
             services.AddSingleton<IStaticContentItemFactory, StaticContentItemFactory>();
@@ -94,6 +92,8 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<CognitiveRecommendationsProvider>();
             services.AddSingleton<IStorefrontSecurityService, StorefrontSecurityService>();
             services.AddSingleton<IRecommendationProviderFactory, RecommendationProviderFactory>(provider => new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(), provider.GetService<CognitiveRecommendationsProvider>()));
+            services.AddTransient<IQuoteRequestBuilder, QuoteRequestBuilder>();
+            services.AddTransient<ICartBuilder, CartBuilder>();
 
             //Register events framework dependencies
             services.AddSingleton(new InProcessBus());

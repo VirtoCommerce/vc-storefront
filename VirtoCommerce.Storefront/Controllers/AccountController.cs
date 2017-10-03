@@ -195,38 +195,50 @@ namespace VirtoCommerce.Storefront.Controllers
             var loginInfo = await _signInManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
-                return new BadRequestResult();
+                return View("customers/login", WorkContext);
             }
-
-            var user = await _signInManager.UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey);
-            if (user == null)
+            User user = null;
+            // Sign in the user with this external login provider if the user already has a login.
+            var externalLoginResult = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            if (externalLoginResult.Succeeded)
             {
+                if (externalLoginResult.IsLockedOut)
+                {
+                    return View("lockedout", WorkContext);
+                }
+                //Register new user
                 user = new User()
                 {
                     Email = loginInfo.Principal.FindFirstValue(ClaimTypes.Email),
-                    UserName = loginInfo.Principal.Identity.Name,
+                    UserName = $"{loginInfo.LoginProvider}--{loginInfo.ProviderKey}",
                     StoreId = WorkContext.CurrentStore.Id,
                 };
-                user.ExternalLogins.Add(new ExternalUserLoginInfo { LoginProvider = loginInfo.LoginProvider, ProviderKey = loginInfo.ProviderKey });
-                var result = await _signInManager.UserManager.AddLoginAsync(user, loginInfo);
-                if (!result.Succeeded)
+                user.ExternalLogins.Add(new ExternalUserLoginInfo { ProviderKey = loginInfo.ProviderKey, LoginProvider = loginInfo.LoginProvider });
+                var identityResult = await _signInManager.UserManager.CreateAsync(user);
+                if (!identityResult.Succeeded)
                 {
-                    var registrationInfo = new UserRegistrationInfo
+                    foreach (var error in identityResult.Errors)
                     {
-                        FirstName = loginInfo.Principal.FindFirstValue(ClaimTypes.Name),
-                        LastName = loginInfo.Principal.FindFirstValue(ClaimTypes.Surname),
-                        Email = user.Email
-                    };
-                    await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, registrationInfo));
-                    return new StatusCodeResult((int)System.Net.HttpStatusCode.InternalServerError);
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    return View("customers/login", WorkContext);
                 }
             }
 
-            var signInResult = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, isPersistent: false, bypassTwoFactor: true);
-            if (signInResult.Succeeded)
+            user = await _signInManager.UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey);
+            if(!externalLoginResult.Succeeded)
             {
-                await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                var registrationInfo = new UserRegistrationInfo
+                {
+                    FirstName = loginInfo.Principal.FindFirstValue(ClaimTypes.GivenName),
+                    LastName = loginInfo.Principal.FindFirstValue(ClaimTypes.Surname),
+                    UserName = user.UserName,
+                    Email = user.Email
+                };
+                await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, registrationInfo));
             }
+            await _publisher.Publish(new UserLoginEvent(WorkContext, user));
 
             return StoreFrontRedirect(returnUrl);
         }

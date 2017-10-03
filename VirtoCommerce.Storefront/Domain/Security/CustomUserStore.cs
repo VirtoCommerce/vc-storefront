@@ -185,18 +185,16 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public async Task<User> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
             var cacheKey = CacheKey.With(GetType(), "FindByLoginAsync", loginProvider, providerKey);
-            var user = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(UserStoreCacheRegion.CreateChangeToken());
                 return await _securityService.GetUserByLoginAsync(loginProvider, providerKey);
-            }, cacheNullValue: false);
-            
-            return null;
+            }, cacheNullValue: false);            
         }
 
-        public async Task AddLoginAsync(User user, UserLoginInfo login, CancellationToken cancellationToken)
-        {  
-            await _securityService.CreateAsync(user);
+        public Task AddLoginAsync(User user, UserLoginInfo login, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         public Task RemoveLoginAsync(User user, string loginProvider, string providerKey, CancellationToken cancellationToken)

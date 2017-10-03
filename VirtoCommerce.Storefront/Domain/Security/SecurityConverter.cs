@@ -3,6 +3,8 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Security;
 using securityDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
+using platformSecurityDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
+using VirtoCommerce.Storefront.Common;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
@@ -13,6 +15,10 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public static securityDto.ApplicationUserExtended ToUserDto(this User user)
         {
             return ConverterInstance.ToUserDto(user);
+        }
+        public static platformSecurityDto.ApplicationUserExtended ToPlatformUserDto(this User user)
+        {
+            return ConverterInstance.ToUserDto(user).JsonConvert<platformSecurityDto.ApplicationUserExtended>();
         }
 
         public static User ToUser(this securityDto.StorefrontUser userDto)

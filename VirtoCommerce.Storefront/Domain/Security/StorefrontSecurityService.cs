@@ -8,6 +8,7 @@ using VirtoCommerce.Storefront.Model.Security;
 using System.Collections.Generic;
 using System;
 using VirtoCommerce.Storefront.Model;
+using Microsoft.AspNetCore.Identity;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
@@ -22,6 +23,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             _commerceCoreApi = commerceCoreApi;
             _platformSecurityApi = platformSecurityApi;
         }
+    
         public virtual async Task<bool> CanLoginOnBehalfAsync(string storeId, string userId)
         {
             var info = await _storeApi.GetLoginOnBehalfInfoAsync(storeId, userId);

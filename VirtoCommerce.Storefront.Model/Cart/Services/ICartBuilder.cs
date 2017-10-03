@@ -35,6 +35,8 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         /// <returns></returns>
         Task LoadOrCreateNewTransientCartAsync(string cartName, Store store, User user, Language language, Currency currency);
 
+        void LoadOrCreateNewTransientCart(string cartName, Store store, User user, Language language, Currency currency);
+
         /// <summary>
         /// Add new product to cart
         /// </summary>

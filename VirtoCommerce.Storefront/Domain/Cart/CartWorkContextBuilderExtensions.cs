@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart.Services;
@@ -28,7 +25,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             Func<Model.Cart.ShoppingCart> factory = () =>
             {
-                Task.Factory.StartNew(() => cartBuilder.LoadOrCreateNewTransientCartAsync(cartName, store, user, language, currency), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+                cartBuilder.LoadOrCreateNewTransientCartAsync(cartName, store, user, language, currency);
                 return cartBuilder.Cart;
             };
             return builder.WithDefaultShoppingCartAsync(factory);

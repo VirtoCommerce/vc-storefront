@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.CartModuleApi;
 using VirtoCommerce.Storefront.Extensions;
@@ -63,6 +64,11 @@ namespace VirtoCommerce.Storefront.Domain
         {
             Cart = cart;
             return Task.FromResult((object)null);
+        }
+
+        public void LoadOrCreateNewTransientCart(string cartName, Store store, User user, Language language, Currency currency)
+        {
+            Task.Factory.StartNew(() => LoadOrCreateNewTransientCartAsync(cartName, store, user, language, currency), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
         }
 
         public virtual async Task LoadOrCreateNewTransientCartAsync(string cartName, Store store, User user, Language language, Currency currency)
