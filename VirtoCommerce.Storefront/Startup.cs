@@ -133,7 +133,6 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IUserClaimsPrincipalFactory<User>, UserPrincipalFactory>();
             services.AddScoped<UserManager<User>, CustomUserManager>();
 
-            services.AddAuthentication();
             //Resource-based authorization that requires API permissions for some operations
             services.AddSingleton<IAuthorizationHandler, StorefrontAuthorizationHandler>();
             services.AddAuthorization(options =>
@@ -151,7 +150,7 @@ namespace VirtoCommerce.Storefront
                     options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
                     options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout 
                     options.AccessDeniedPath = "/error/AccessDenied";
-                    options.SlidingExpiration = true;
+                    options.SlidingExpiration = false;
                 });
 
             var facebookSection = Configuration.GetSection("Authentication:Facebook");
@@ -178,7 +177,6 @@ namespace VirtoCommerce.Storefront
                 options.Password.RequireDigit = false;
                 options.Password.RequireNonAlphanumeric = false;
             }).AddDefaultTokenProviders();
-
 
 
             //Add Liquid view engine
