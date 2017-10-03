@@ -130,8 +130,6 @@ namespace VirtoCommerce.Storefront
 
             //Identity overrides for use remote user storage
             services.AddSingleton<IUserStore<User>, UserStoreStub>();
-            services.AddSingleton<IUserEmailStore<User>, UserStoreStub>();
-            services.AddSingleton<IUserLoginStore<User>, UserStoreStub>();
             services.AddSingleton<IUserClaimsPrincipalFactory<User>, UserPrincipalFactory>();
             services.AddScoped<UserManager<User>, CustomUserManager>();
 
