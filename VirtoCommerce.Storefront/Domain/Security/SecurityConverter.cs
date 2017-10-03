@@ -5,6 +5,7 @@ using VirtoCommerce.Storefront.Model.Security;
 using securityDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 using platformSecurityDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using VirtoCommerce.Storefront.Common;
+using Microsoft.AspNetCore.Identity;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
@@ -35,10 +36,27 @@ namespace VirtoCommerce.Storefront.Domain.Security
         {
             return ConverterInstance.ToUserRegistrationInfo(registerForm);
         }
+        public static IdentityResult ToIdentityResult(this securityDto.SecurityResult resultDto)
+        {
+            return ConverterInstance.ToIdentityResult(resultDto);
+        }
+        public static IdentityResult ToIdentityResult(this platformSecurityDto.SecurityResult resultDto)
+        {
+            return ConverterInstance.ToIdentityResult(resultDto.JsonConvert<securityDto.SecurityResult>());
+        }
     }
 
     public class SecurityConverter
     {
+        public virtual IdentityResult ToIdentityResult(securityDto.SecurityResult resultDto)
+        {
+            if (resultDto.Succeeded == true)
+            {
+                return IdentityResult.Success;
+            }
+            return IdentityResult.Failed(resultDto.Errors.Select(x => new IdentityError { Description = x }).ToArray());
+        }
+
         public virtual UserRegistrationInfo ToUserRegistrationInfo(Register registerForm)
         {
             var result = new UserRegistrationInfo
