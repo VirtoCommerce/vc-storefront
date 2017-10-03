@@ -2,7 +2,7 @@
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
-    public class UserStoreCacheRegion : CancellableCacheRegion<UserStoreCacheRegion>
+    public class SecurityCacheRegion : CancellableCacheRegion<SecurityCacheRegion>
     {  
     }
 }

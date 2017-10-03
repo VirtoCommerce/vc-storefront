@@ -9,5 +9,6 @@ namespace VirtoCommerce.Storefront.Domain.Security
     public static class AuthorizationOperations
     {
         public static OperationAuthorizationRequirement CanImpersonate =  new OperationAuthorizationRequirement { Name = "CanImpersonate" };
+        public static OperationAuthorizationRequirement CanResetCache = new OperationAuthorizationRequirement { Name = "CanResetCache" };
     }
 }

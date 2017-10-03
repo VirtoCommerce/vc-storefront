@@ -139,19 +139,11 @@ namespace VirtoCommerce.Storefront
             {
                 options.AddPolicy("CanImpersonate",
                                   policy => policy.Requirements.Add(AuthorizationOperations.CanImpersonate));
+                options.AddPolicy("CanResetCache",
+                                policy => policy.Requirements.Add(AuthorizationOperations.CanResetCache));
             });
 
-            var auth = services.AddAuthentication()
-                .AddCookie(options =>
-                {
-                    options.LoginPath = new PathString("/Account/Login");
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.Expiration = TimeSpan.FromDays(30);
-                    options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
-                    options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout 
-                    options.AccessDeniedPath = "/error/AccessDenied";
-                    options.SlidingExpiration = false;
-                });
+            var auth = services.AddAuthentication();
 
             var facebookSection = Configuration.GetSection("Authentication:Facebook");
             if (facebookSection.GetChildren().Any())
@@ -177,6 +169,18 @@ namespace VirtoCommerce.Storefront
                 options.Password.RequireDigit = false;
                 options.Password.RequireNonAlphanumeric = false;
             }).AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.Cookie.Expiration = TimeSpan.FromDays(30);
+                options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
+                options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout 
+                options.AccessDeniedPath = "/error/AccessDenied";
+                options.SlidingExpiration = true;
+            });
+
 
 
             //Add Liquid view engine

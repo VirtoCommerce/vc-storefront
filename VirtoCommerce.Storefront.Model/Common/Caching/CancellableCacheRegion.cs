@@ -30,11 +30,14 @@ namespace VirtoCommerce.Storefront.Model.Common.Caching
         {
             lock (_lock)
             {
-                _regionTokenSource.Cancel();
-                _regionTokenSource.Dispose();
-                //Need to reset cached tokens because they are already changed
-                _regionTokenSource = null;
-                _regionChangeToken = null;
+                if (_regionTokenSource != null)
+                {
+                    _regionTokenSource.Cancel();
+                    _regionTokenSource.Dispose();
+                    //Need to reset cached tokens because they are already changed
+                    _regionTokenSource = null;
+                    _regionChangeToken = null;
+                }
             }
 
         }

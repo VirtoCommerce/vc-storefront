@@ -90,7 +90,6 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         [Authorize(Policy = "CanImpersonate")]
-        [HttpGet]
         public async Task<IActionResult> ImpersonateUser(string userId)
         {
             var user = await _signInManager.UserManager.FindByNameAsync(User.Identity.Name);

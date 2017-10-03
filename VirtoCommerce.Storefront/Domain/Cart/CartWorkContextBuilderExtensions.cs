@@ -25,7 +25,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             Func<Model.Cart.ShoppingCart> factory = () =>
             {
-                cartBuilder.LoadOrCreateNewTransientCartAsync(cartName, store, user, language, currency);
+                cartBuilder.LoadOrCreateNewTransientCart(cartName, store, user, language, currency);
                 return cartBuilder.Cart;
             };
             return builder.WithDefaultShoppingCartAsync(factory);

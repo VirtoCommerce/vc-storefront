@@ -1,17 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Domain;
+using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Models;
 
@@ -20,45 +19,40 @@ namespace VirtoCommerce.Storefront.Controllers
     public class CommonController : StorefrontControllerBase
     {
         private readonly IStoreModule _storeApi;
-        private readonly ISecurity _platformSecurityApi;
         private readonly SignInManager<User> _signInManager;
         public CommonController(IWorkContextAccessor workContextAccesor, IStorefrontUrlBuilder urlBuilder, IStoreModule storeApi,
                                  ISecurity platformSecurityApi, SignInManager<User> signInManager)
               : base(workContextAccesor, urlBuilder)
         {
             _storeApi = storeApi;
-            _platformSecurityApi = platformSecurityApi;
             _signInManager = signInManager;
         }
 
         /// <summary>
-        /// POST : /resetcache
+        /// GET : /resetcache
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [Authorize(Policy = "CanResetCache")]
         public ActionResult ResetCache()
         {
-            //check permissions
-            if (_platformSecurityApi.UserHasAnyPermission(WorkContext.CurrentUser.UserName, new[] { "cache:reset" }.ToList(), new List<string>()).Result ?? false)
-            {
-                //TODO: Replace to some other (maybe with using reflection)
-                ThemeEngineCacheRegion.ExpireRegion();
-                CartCacheRegion.ExpireRegion();
-                CatalogCacheRegion.ExpireRegion();
-                ContentBlobCacheRegion.ExpireRegion();
-                CustomerCacheRegion.ExpireRegion();
-                MarketingCacheRegion.ExpireRegion();
-                PricingCacheRegion.ExpireRegion();
-                QuoteCacheRegion.ExpireRegion();
-                RecommendationsCacheRegion.ExpireRegion();
-                StaticContentCacheRegion.ExpireRegion();
-                StoreCacheRegion.ExpireRegion();
-                TaxCacheRegion.ExpireRegion();
-                SubscriptionCacheRegion.ExpireRegion();
 
-                return StoreFrontRedirect("~/");
-            }
-            return Unauthorized();
+            //TODO: Replace to some other (maybe with using reflection)
+            ThemeEngineCacheRegion.ExpireRegion();
+            CartCacheRegion.ExpireRegion();
+            CatalogCacheRegion.ExpireRegion();
+            ContentBlobCacheRegion.ExpireRegion();
+            CustomerCacheRegion.ExpireRegion();
+            MarketingCacheRegion.ExpireRegion();
+            PricingCacheRegion.ExpireRegion();
+            QuoteCacheRegion.ExpireRegion();
+            RecommendationsCacheRegion.ExpireRegion();
+            StaticContentCacheRegion.ExpireRegion();
+            StoreCacheRegion.ExpireRegion();
+            TaxCacheRegion.ExpireRegion();
+            SubscriptionCacheRegion.ExpireRegion();
+            SecurityCacheRegion.ExpireRegion();
+
+            return StoreFrontRedirect("~/");
         }
 
         /// <summary>
