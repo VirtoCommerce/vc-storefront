@@ -1,52 +1,270 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
+using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Security;
+using platformSecurityDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
+using System.Threading;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
     public class CustomUserManager : AspNetUserManager<User>
     {
-        private readonly IStorefrontSecurityService _storefrontSecurity;
+        private readonly IStoreModule _storeApi;
+        private readonly IStorefrontSecurity _commerceCoreApi;
+        private readonly ISecurity _platformSecurityApi;
+
         private readonly IMemoryCache _memoryCache;
-        public CustomUserManager(IStorefrontSecurityService storefrontSecurity, IUserStore<User> store, IOptions<IdentityOptions> optionsAccessor, IPasswordHasher<User> passwordHasher,
+        public CustomUserManager(IUserStore<User> userStore, IStoreModule storeApi, IStorefrontSecurity commerceCoreApi, ISecurity platformSecurityApi, IOptions<IdentityOptions> optionsAccessor, IPasswordHasher<User> passwordHasher,
                                 IEnumerable<IUserValidator<User>> userValidators, IEnumerable<IPasswordValidator<User>> passwordValidators,
-                                ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, IServiceProvider services, ILogger<UserManager<User>> logger)
-            : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
+                                ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, IServiceProvider services, ILogger<UserManager<User>> logger, IMemoryCache memoryCache)
+            : base(userStore, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
         {
-            _storefrontSecurity = storefrontSecurity;
+            _storeApi = storeApi;
+            _commerceCoreApi = commerceCoreApi;
+            _platformSecurityApi = platformSecurityApi;
+            _memoryCache = memoryCache;
+        }
+            
+        public override async Task<User> FindByIdAsync(string userId)
+        {
+            var cacheKey = CacheKey.With(GetType(), "FindByIdAsync", userId);
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                cacheEntry.AddExpirationToken(UserStoreCacheRegion.CreateChangeToken());
+
+                var userDto = await _commerceCoreApi.GetUserByIdAsync(userId);
+                if (userDto != null)
+                {
+                    return userDto.ToUser();
+                }
+                return null;
+            }, cacheNullValue: false);
         }
 
-        public override async Task<bool> CheckPasswordAsync(User user, string password)
+        public override async Task<User> FindByNameAsync(string userName)
         {
-            return await _storefrontSecurity.CheckPasswordAsync(user, password);
+            var cacheKey = CacheKey.With(GetType(), "FindByNameAsync", userName);
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                cacheEntry.AddExpirationToken(UserStoreCacheRegion.CreateChangeToken());
+                var userDto = await _commerceCoreApi.GetUserByNameAsync(userName);
+                if (userDto != null)
+                {
+                    return userDto.ToUser();
+                }
+                return null;
+            }, cacheNullValue: false);
+
         }
-    
+      
+        public override async Task<User> FindByEmailAsync(string email)
+        {
+            var cacheKey = CacheKey.With(GetType(), "FindByEmailAsync", email);
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                cacheEntry.AddExpirationToken(UserStoreCacheRegion.CreateChangeToken());
+                var userDto = await _commerceCoreApi.GetUserByEmailAsync(email);
+                if (userDto != null)
+                {
+                    return userDto.ToUser();
+                }
+                return null;
+            }, cacheNullValue: false);
+        }
+
+        public override async Task<User> FindByLoginAsync(string loginProvider, string providerKey)
+        {
+            var cacheKey = CacheKey.With(GetType(), "FindByLoginAsync", loginProvider, providerKey);
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                cacheEntry.AddExpirationToken(UserStoreCacheRegion.CreateChangeToken());
+                var userDto = await _commerceCoreApi.GetUserByLoginAsync(loginProvider, providerKey);
+                if (userDto != null)
+                {
+                    return userDto.ToUser();
+                }
+                return null;
+            }, cacheNullValue: false);
+        }
+
+        public override async Task<IdentityResult> CreateAsync(User user)
+        {
+            var dtoUser = user.ToUserDto();
+            var resultDto = await _commerceCoreApi.CreateAsync(dtoUser);          
+            return resultDto.ToIdentityResult();
+        }
+
+        public override async Task<IdentityResult> CreateAsync(User user, string password)
+        {
+            user.Password = password;
+            return await CreateAsync(user);
+        }
+
+        protected override async Task<PasswordVerificationResult> VerifyPasswordAsync(IUserPasswordStore<User> store, User user, string password)
+        {
+            var result = await _commerceCoreApi.PasswordSignInAsync(user.UserName, password);
+            return result.Status.EqualsInvariant("success") ? PasswordVerificationResult.Success : PasswordVerificationResult.Failed;
+        }
+       
         public override async Task<IdentityResult> ChangePasswordAsync(User user, string currentPassword, string newPassword)
         {
-            var result = await _storefrontSecurity.ChangePasswordAsync(user, currentPassword, newPassword);
-            if (result.Succeeded == true)
+            var changePassword = new platformSecurityDto.ChangePasswordInfo
             {
-                return IdentityResult.Success;
-            }
-            return IdentityResult.Failed(result.Errors.Select(x=> new IdentityError { Description = x }).ToArray());
+                OldPassword = currentPassword,
+                NewPassword = newPassword,
+            };
+            var resultDto = await _platformSecurityApi.ChangePasswordAsync(user.UserName, changePassword);
+            return resultDto.ToIdentityResult();
+
         }
 
         public override async Task<IdentityResult> ResetPasswordAsync(User user, string token, string newPassword)
         {
-            var result = await _storefrontSecurity.ResetPasswordAsync(user, token, newPassword);
-            if (result.Succeeded == true)
-            {
-                return IdentityResult.Success;
-            }
-            return IdentityResult.Failed(result.Errors.Select(x => new IdentityError { Description = x }).ToArray());
+            var resultDto = await _commerceCoreApi.ResetPasswordAsync(user.Id, token, newPassword);
+            return resultDto.ToIdentityResult();
         }
 
     }
+
+    //Stub for UserManager
+    public class UserStoreStub : IUserStore<User>, IUserPasswordStore<User>, IUserEmailStore<User>, IUserLoginStore<User>
+    {
+        public Task AddLoginAsync(User user, UserLoginInfo login, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetEmailAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> GetEmailConfirmedAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<UserLoginInfo>> GetLoginsAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.Email);
+        }
+
+        public Task<string> GetNormalizedUserNameAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.UserName);
+        }
+
+        public Task<string> GetPasswordHashAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetUserIdAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.Id);
+        }
+
+        public Task<string> GetUserNameAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.UserName);
+        }
+
+        public Task<bool> HasPasswordAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveLoginAsync(User user, string loginProvider, string providerKey, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetEmailAsync(User user, string email, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetEmailConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetNormalizedEmailAsync(User user, string normalizedEmail, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetNormalizedUserNameAsync(User user, string normalizedName, CancellationToken cancellationToken)
+        {
+            user.UserName = normalizedName;
+            return Task.CompletedTask; 
+        }
+
+        public Task SetPasswordHashAsync(User user, string passwordHash, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetUserNameAsync(User user, string userName, CancellationToken cancellationToken)
+        {
+            user.UserName = userName;
+            return Task.CompletedTask;
+        }
+
+        public Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
 }

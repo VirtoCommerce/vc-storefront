@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -18,15 +19,13 @@ namespace VirtoCommerce.Storefront.Controllers
     {
         private readonly SignInManager<User> _signInManager;
         private readonly IEventPublisher _publisher;
-        private readonly IStorefrontSecurityService _storefrontSecurityService;
-        private readonly IAuthorizationService _authorizationService;
-        public AccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<User> signInManager, IEventPublisher publisher, IAuthorizationService authorizationService, IStorefrontSecurityService storefrontSecurityService)
+        private readonly IStorefrontSecurity _commerceCoreApi;
+        public AccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<User> signInManager, IEventPublisher publisher, IStorefrontSecurity commerceCoreApi)
             : base(workContextAccessor, urlBuilder)
         {
             _signInManager = signInManager;
             _publisher = publisher;
-            _authorizationService = authorizationService;
-            _storefrontSecurityService = storefrontSecurityService;
+            _commerceCoreApi = commerceCoreApi;
         }
 
         //GET: /account
@@ -150,7 +149,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 }
 
             }
-
+            //TODO: Locked out not work. Need to add some API methods to support lockout data.
             if (loginResult.IsLockedOut)
             {
                 return View("lockedout", WorkContext);
@@ -200,8 +199,9 @@ namespace VirtoCommerce.Storefront.Controllers
             User user = null;
             // Sign in the user with this external login provider if the user already has a login.
             var externalLoginResult = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, isPersistent: false, bypassTwoFactor: true);
-            if (externalLoginResult.Succeeded)
+            if (!externalLoginResult.Succeeded)
             {
+                //TODO: Locked out not work. Need to add some API methods to support lockout data.
                 if (externalLoginResult.IsLockedOut)
                 {
                     return View("lockedout", WorkContext);
@@ -226,7 +226,7 @@ namespace VirtoCommerce.Storefront.Controllers
             }
 
             user = await _signInManager.UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey);
-            if(!externalLoginResult.Succeeded)
+            if (!externalLoginResult.Succeeded)
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 var registrationInfo = new UserRegistrationInfo
@@ -261,7 +261,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 var callbackUrl = Url.Action("ResetPassword", "Account",
                     new { UserId = user.Id, Code = "token" }, protocol: Request.Scheme);
                 //TODO: Need to change storefront security API to support to do reset password token generation  via ASP.NET UserManager 
-                await _storefrontSecurityService.GeneratePasswordResetTokenAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage, callbackUrl);
+                await _commerceCoreApi.GenerateResetPasswordTokenAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName, callbackUrl);
             }
             else
             {
@@ -346,5 +346,5 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View("customers/account", WorkContext);
             }
         }
-    }    
+    }
 }

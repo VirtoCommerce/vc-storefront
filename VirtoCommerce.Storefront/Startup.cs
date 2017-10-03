@@ -90,7 +90,6 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IApiChangesWatcher, ApiChangesWatcher>();
             services.AddSingleton<AssociationRecommendationsProvider>();
             services.AddSingleton<CognitiveRecommendationsProvider>();
-            services.AddSingleton<IStorefrontSecurityService, StorefrontSecurityService>();
             services.AddSingleton<IRecommendationProviderFactory, RecommendationProviderFactory>(provider => new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(), provider.GetService<CognitiveRecommendationsProvider>()));
             services.AddTransient<IQuoteRequestBuilder, QuoteRequestBuilder>();
             services.AddTransient<ICartBuilder, CartBuilder>();
@@ -130,9 +129,9 @@ namespace VirtoCommerce.Storefront
             }
 
             //Identity overrides for use remote user storage
-            services.AddSingleton<IUserStore<User>, CustomUserStore>();
-            services.AddSingleton<IUserEmailStore<User>, CustomUserStore>();
-            services.AddSingleton<IUserLoginStore<User>, CustomUserStore>();
+            services.AddSingleton<IUserStore<User>, UserStoreStub>();
+            services.AddSingleton<IUserEmailStore<User>, UserStoreStub>();
+            services.AddSingleton<IUserLoginStore<User>, UserStoreStub>();
             services.AddSingleton<IUserClaimsPrincipalFactory<User>, UserPrincipalFactory>();
             services.AddScoped<UserManager<User>, CustomUserManager>();
 

@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Model.Security;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
     public class StorefrontAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement>
     {
-        private readonly IStorefrontSecurityService _authService;
+        private readonly IStoreModule _storeApi;
         private readonly IWorkContextAccessor _workContextAccessor;
-        public StorefrontAuthorizationHandler(IStorefrontSecurityService authService, IWorkContextAccessor workContextAccessor)
+        public StorefrontAuthorizationHandler(IStoreModule storeApi, IWorkContextAccessor workContextAccessor)
         {
-            _authService = authService;
+            _storeApi = storeApi;
             _workContextAccessor = workContextAccessor;
         }
 
@@ -22,8 +22,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
             if(requirement == AuthorizationOperations.CanImpersonate)
             {
                 var workContext = _workContextAccessor.WorkContext;
-                var result = await _authService.CanLoginOnBehalfAsync(workContext.CurrentStore.Id, workContext.CurrentUser.Id);
-                if(result)
+                var info = await _storeApi.GetLoginOnBehalfInfoAsync(workContext.CurrentStore.Id, workContext.CurrentUser.Id);
+                if (info.CanLoginOnBehalf == true)
                 {
                     context.Succeed(requirement);
                 }           
