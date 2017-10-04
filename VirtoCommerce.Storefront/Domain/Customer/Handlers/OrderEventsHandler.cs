@@ -32,10 +32,8 @@ namespace VirtoCommerce.Storefront.Domain.Customer.Handlers
 
                     foreach (var address in contact.Addresses)
                     {
-                        address.Name = address.ToString();
+                        address.Name = address.ToString().Substring(0, 1800);
                     }
-
-                    await _memberService.UpdateContactAddressesAsync(contact.Id, addresses);
                 }
             }
         }
