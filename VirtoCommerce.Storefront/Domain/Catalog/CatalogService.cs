@@ -178,27 +178,25 @@ namespace VirtoCommerce.Storefront.Domain
         protected virtual async Task<Product[]> GetProductsAsync(IList<string> ids, ItemResponseGroup responseGroup, WorkContext workContext)
         {
             var cacheKey = CacheKey.With(GetType(), "GetProductsAsync", ids.GetOrderIndependentHashCode().ToString(), responseGroup.ToString());
-            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
                 cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
 
-                var productDtos = await _productsApi.GetProductByPlentyIdsAsync(ids, ((int)responseGroup).ToString());
-
-                var result = productDtos.Select(x => x.ToProduct(workContext.CurrentLanguage, workContext.CurrentCurrency, workContext.CurrentStore)).ToArray();
-                return result;
+                return await _productsApi.GetProductByPlentyIdsAsync(ids, ((int)responseGroup).ToString());            
             });
+            return result.Select(x => x.ToProduct(workContext.CurrentLanguage, workContext.CurrentCurrency, workContext.CurrentStore)).ToArray();
         }
 
         private async Task<Category[]> InnerGetCategoriesAsync(string[] ids, WorkContext workContext, CategoryResponseGroup responseGroup = CategoryResponseGroup.Info)
         {
             var cacheKey = CacheKey.With(GetType(), "InnerGetCategoriesAsync", ids.GetOrderIndependentHashCode().ToString(), responseGroup.ToString());
-            var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            var categoriesDto = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
-
-                return (await _categoriesApi.GetCategoriesByPlentyIdsAsync(ids.ToList(), ((int)responseGroup).ToString())).Select(x => x.ToCategory(workContext.CurrentLanguage, workContext.CurrentStore)).ToArray();
+                return (await _categoriesApi.GetCategoriesByPlentyIdsAsync(ids.ToList(), ((int)responseGroup).ToString()));
             });
+            var result = categoriesDto.Select(x => x.ToCategory(workContext.CurrentLanguage, workContext.CurrentStore)).ToArray();
             //Set  lazy loading for child categories 
             SetChildCategoriesLazyLoading(result);
             return result;
@@ -207,22 +205,22 @@ namespace VirtoCommerce.Storefront.Domain
         private async Task<IPagedList<Category>> InnerSearchCategoriesAsync(CategorySearchCriteria criteria, WorkContext workContext)
         {
             var cacheKey = CacheKey.With(GetType(), "InnerSearchCategoriesAsync", criteria.GetHashCode().ToString());
-            var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            var searchResult = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
                 cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
 
                 criteria = criteria.Clone();
                 var searchCriteria = criteria.ToCategorySearchCriteriaDto(workContext);
-                var searchResult = await _searchApi.SearchCategoriesAsync(searchCriteria);
+                return await _searchApi.SearchCategoriesAsync(searchCriteria);
 
-                var pagedList = new PagedList<Category>(new List<Category>().AsQueryable(), 1, 1);
-                if (searchResult.Items != null)
-                {
-                    pagedList = new PagedList<Category>(searchResult.Items.Select(x => x.ToCategory(workContext.CurrentLanguage, workContext.CurrentStore)).AsQueryable(), criteria.PageNumber, criteria.PageSize);
-                }
-                return pagedList;
+            
             });
+            var result = new PagedList<Category>(new List<Category>().AsQueryable(), 1, 1);
+            if (searchResult.Items != null)
+            {
+                result = new PagedList<Category>(searchResult.Items.Select(x => x.ToCategory(workContext.CurrentLanguage, workContext.CurrentStore)).AsQueryable(), criteria.PageNumber, criteria.PageSize);
+            }
             //Set  lazy loading for child categories 
             SetChildCategoriesLazyLoading(result.ToArray());
             return result;

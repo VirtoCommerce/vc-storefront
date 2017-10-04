@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
@@ -13,18 +11,17 @@ using VirtoCommerce.Storefront.Model.Stores;
 namespace VirtoCommerce.Storefront.Domain
 {
     public static class StoreWorkContextBuilderExtensions
-    {
-        
-        public static Task WithStoresAsync(this IWorkContextBuilder builder, IList<Store> stores, Store curentStore)
+    {        
+        public static Task WithStoresAsync(this IWorkContextBuilder builder, IEnumerable<Store> stores, string defaultStoreId)
         {
             if(stores == null)
             {
-                throw new ArgumentNullException(nameof(stores));
+                throw new NoStoresException();
             }
 
             builder.WorkContext.AllStores = stores.ToArray();
-            builder.WorkContext.CurrentStore = curentStore ?? stores.FirstOrDefault();
-
+            builder.WorkContext.CurrentStore = builder.HttpContext.GetCurrentStore(stores, defaultStoreId);
+            builder.WorkContext.CurrentLanguage = builder.HttpContext.GetCurrentLanguage(builder.WorkContext.CurrentStore);
             return Task.CompletedTask;
         }
 
@@ -39,19 +36,36 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 throw new NoStoresException();
             }
+        
+            await builder.WithStoresAsync(stores, defaultStoreId);
+        }
 
-            //Set current store
-            //Try first find by store url (if it defined)
-            var currentStore = stores.FirstOrDefault(x => builder.HttpContext.Request.Path.StartsWithSegments(new PathString("/" + x.Id)));
-            if (currentStore == null)
+        public static Task WithCurrenciesAsync(this IWorkContextBuilder builder, IList<Currency> availCurrencies, Store store)
+        {
+            if (availCurrencies == null)
             {
-                currentStore = stores.Where(x => x.IsStoreUrl(builder.WorkContext.RequestUrl)).FirstOrDefault();
+                throw new ArgumentNullException(nameof(availCurrencies));
             }
-            if (currentStore == null && defaultStoreId != null)
+            //Filter all avail currencies, leave only currencies define for store 
+            var storeCurrencies = availCurrencies.Where(x => store.CurrenciesCodes.Any(y => x.Equals(y))).ToList();
+            builder.WorkContext.AllCurrencies = storeCurrencies;
+            builder.WorkContext.CurrentCurrency = builder.HttpContext.GetCurrentCurrency(availCurrencies, store);
+            return Task.CompletedTask;
+        }
+
+        public static async Task WithCurrenciesAsync(this IWorkContextBuilder builder, Language language, Store store)
+        {
+            if (language == null)
             {
-                currentStore = stores.FirstOrDefault(x => x.Id.EqualsInvariant(defaultStoreId));
+                throw new ArgumentNullException(nameof(language));
             }
-            await builder.WithStoresAsync(stores, currentStore);
+
+            var serviceProvider = builder.HttpContext.RequestServices;
+            var currencyService = serviceProvider.GetRequiredService<ICurrencyService>();
+
+            var currencies = await currencyService.GetAllCurrenciesAsync(language);
+
+            await builder.WithCurrenciesAsync(currencies, store);
         }
     }
 }

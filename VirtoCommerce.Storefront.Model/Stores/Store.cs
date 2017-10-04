@@ -14,7 +14,7 @@ namespace VirtoCommerce.Storefront.Model.Stores
         public Store()
         {
             Languages = new List<Language>();
-            Currencies = new List<Currency>();
+            CurrenciesCodes = new List<string>();
             SeoInfos = new List<SeoInfo>();
             DynamicProperties = new List<DynamicProperty>();
             Settings = new List<SettingEntry>();
@@ -50,20 +50,20 @@ namespace VirtoCommerce.Storefront.Model.Stores
         /// Default Language culture name  of store ( example en-US )
         /// </summary>
         public Language DefaultLanguage { get; set; }
-
         /// <summary>
-        /// All supported lanuagages
+        /// All supported languages
         /// </summary>
         public ICollection<Language> Languages { get; set; }
 
         /// <summary>
         /// Default currency of store. 
+        /// Achtung ! Do not use Currency objects here, because Store object can be cached but Currency may be changed depend on request culture.
         /// </summary>
-        public Currency DefaultCurrency { get; set; }
+        public string DefaultCurrencyCode { get; set; }
         /// <summary>
-        /// List of all supported currencies
+        /// List of all supported currencies codes
         /// </summary>
-        public ICollection<Currency> Currencies { get; set; }
+        public ICollection<string> CurrenciesCodes { get; set; }
 
         /// <summary>
         /// Product catalog id assigned to store
@@ -86,11 +86,6 @@ namespace VirtoCommerce.Storefront.Model.Stores
         public string ThemeName { get; set; }
 
         public ICollection<DynamicProperty> DynamicProperties { get; set; }
-
-        /// <summary>
-        /// Seo info for current language
-        /// </summary>
-        public SeoInfo CurrentSeoInfo { get; set; }
 
         /// <summary>
         /// All store seo informations for all languages
@@ -143,18 +138,6 @@ namespace VirtoCommerce.Storefront.Model.Stores
         #endregion
 
         public SeoLinksType SeoLinksType { get; set; }
-
-        //Need sync store currencies with system avail currencies for specific language
-        public void SyncCurrencies(IEnumerable<Currency> availableCurrencies, Language language)
-        {
-            var allCurrencies = availableCurrencies.ToList();
-            var newCurrencies = Currencies
-                .Select(storeCurrency => allCurrencies.FirstOrDefault(c => c.Equals(storeCurrency)) ?? new Currency(language, storeCurrency.Code))
-                .ToList();
-
-            Currencies = newCurrencies;
-            DefaultCurrency = Currencies.FirstOrDefault(c => c.Equals(DefaultCurrency)) ?? new Currency(language, DefaultCurrency.Code);
-        }
 
         /// <summary>
         /// Checks if specified URL starts with store URL or store secure URL.

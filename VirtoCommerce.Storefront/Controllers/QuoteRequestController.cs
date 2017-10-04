@@ -37,7 +37,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpGet]
         public async Task<ActionResult> QuoteRequestByNumber(string number)
         {
-            var builder = await _quoteRequestBuilder.LoadQuoteRequestAsync(number, WorkContext.CurrentLanguage, WorkContext.AllCurrencies);
+            var builder = await _quoteRequestBuilder.LoadQuoteRequestAsync(number, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
             WorkContext.CurrentQuoteRequest = new System.Lazy<Model.Quote.QuoteRequest>(() => builder.QuoteRequest);
             if (WorkContext.CurrentUser.Id != builder.QuoteRequest.CustomerId)
             {

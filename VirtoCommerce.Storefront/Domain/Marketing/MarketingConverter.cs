@@ -181,7 +181,7 @@ namespace VirtoCommerce.Storefront.Domain
                 }              
             }
 
-            if (promoEvalContext.Products != null)
+            if (!promoEvalContext.Products.IsNullOrEmpty())
             {
                 result.PromoEntries = promoEvalContext.Products.Select(x=>x.ToProductPromoEntryDto()).ToList();
             }

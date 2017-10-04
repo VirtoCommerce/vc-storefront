@@ -5,7 +5,7 @@ namespace VirtoCommerce.Storefront.Model.Marketing
     /// <summary>
     /// Represents coupon object
     /// </summary>
-    public partial class Coupon
+    public partial class Coupon : ValueObject
     {
         /// <summary>
         /// Gets or sets coupon code

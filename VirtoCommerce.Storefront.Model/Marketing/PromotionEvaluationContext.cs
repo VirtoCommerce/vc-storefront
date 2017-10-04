@@ -31,13 +31,50 @@ namespace VirtoCommerce.Storefront.Model.Marketing
             yield return Language;
             yield return Currency;
             yield return User;
-            yield return Cart;
             yield return Product;
-            if(!Products.IsNullOrEmpty())
+
+            if (Cart != null)
             {
-                foreach(var product in Products)
+                yield return Cart.Total;
+                yield return Cart.Coupon;
+                yield return Cart.Currency;
+                yield return Cart.Language;
+
+                if (!Cart.Items.IsNullOrEmpty())
                 {
-                    yield return product;
+                    foreach (var lineItem in Cart.Items)
+                    {
+                        yield return lineItem;
+                        yield return lineItem.ProductId;
+                        yield return lineItem.Quantity;
+                        yield return lineItem.PlacedPrice;
+                        yield return lineItem.InStockQuantity;
+                    }
+                }
+                if (!Cart.Shipments.IsNullOrEmpty())
+                {
+                    foreach (var shipment in Cart.Shipments)
+                    {
+                        yield return shipment.ShipmentMethodCode;
+                        yield return shipment.ShipmentMethodOption;
+                        yield return shipment.Price;
+                    }
+                }
+                if (!Cart.Payments.IsNullOrEmpty())
+                {
+                    foreach (var shipment in Cart.Payments)
+                    {
+                        yield return shipment.PaymentGatewayCode;
+                        yield return shipment.Price;
+
+                    }
+                }
+            }
+            if (!Products.IsNullOrEmpty())
+            {
+                foreach (var product in Products)
+                {
+                    yield return product;                   
                 }
             }
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Catalog;
@@ -57,7 +58,7 @@ namespace VirtoCommerce.Storefront.Model
                 {
                     // SEO for category, product and blogs is set inside corresponding controllers
                     // if no SEO is found, set meta data to the site root and set url to the currently requested one
-                    _seoInfo = CurrentStore.CurrentSeoInfo;
+                    _seoInfo = CurrentStore.SeoInfos?.FirstOrDefault(x => x.Language == CurrentLanguage);
 
                     if (_seoInfo != null && RequestUrl != null)
                     {
@@ -106,18 +107,18 @@ namespace VirtoCommerce.Storefront.Model
         /// <summary>
         /// List of all supported stores
         /// </summary>
-        public Store[] AllStores { get; set; }
+        public IList<Store> AllStores { get; set; }
 
         /// <summary>
         /// List of all active system currencies
         /// </summary>
-        public ICollection<Currency> AllCurrencies { get; set; }
+        public IList<Currency> AllCurrencies { get; set; }
 
         public string ErrorMessage { get; set; }
         /// <summary>
         /// List of active pricelists
         /// </summary>
-        public ICollection<Pricelist> CurrentPricelists { get; set; }
+        public IList<Pricelist> CurrentPricelists { get; set; }
 
         #region Catalog Properties
 

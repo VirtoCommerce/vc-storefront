@@ -25,9 +25,9 @@ namespace VirtoCommerce.Storefront.Domain
             return QuoteConverterInstance.ToQuoteSearchCriteriaDto(criteria);
         }
 
-        public static QuoteRequest ToQuoteRequest(this quoteDto.QuoteRequest quoteRequestDto, IEnumerable<Currency> availCurrencies, Language language)
+        public static QuoteRequest ToQuoteRequest(this quoteDto.QuoteRequest quoteRequestDto, Currency currency, Language language)
         {
-            return QuoteConverterInstance.ToQuoteRequest(quoteRequestDto, availCurrencies, language);
+            return QuoteConverterInstance.ToQuoteRequest(quoteRequestDto, currency, language);
         }
 
         public static quoteDto.QuoteRequest ToQuoteRequestDto(this QuoteRequest quoteRequest)
@@ -120,11 +120,13 @@ namespace VirtoCommerce.Storefront.Domain
     {
         public virtual quoteDto.QuoteRequestSearchCriteria ToQuoteSearchCriteriaDto(QuoteSearchCriteria criteria)
         {
-            var result = new quoteDto.QuoteRequestSearchCriteria();
-            result.CustomerId = criteria.CustomerId;
-            result.Skip = criteria.Start;
-            result.Take = criteria.PageSize;
-            result.Sort = criteria.Sort;
+            var result = new quoteDto.QuoteRequestSearchCriteria
+            {
+                CustomerId = criteria.CustomerId,
+                Skip = criteria.Start,
+                Take = criteria.PageSize,
+                Sort = criteria.Sort
+            };
             return result;
         }
 
@@ -140,16 +142,18 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual Attachment ToAttachment(quoteDto.QuoteAttachment attachmentDto)
         {
-            var result = new Attachment();
-            result.CreatedBy = attachmentDto.CreatedBy;
-            result.CreatedDate = attachmentDto.CreatedDate;
-            result.Id = attachmentDto.Id;
-            result.MimeType = attachmentDto.MimeType;
-            result.ModifiedBy = attachmentDto.ModifiedBy;
-            result.ModifiedDate = attachmentDto.ModifiedDate;
-            result.Name = attachmentDto.Name;
-            result.Size = attachmentDto.Size;
-            result.Url = attachmentDto.Url;
+            var result = new Attachment
+            {
+                CreatedBy = attachmentDto.CreatedBy,
+                CreatedDate = attachmentDto.CreatedDate,
+                Id = attachmentDto.Id,
+                MimeType = attachmentDto.MimeType,
+                ModifiedBy = attachmentDto.ModifiedBy,
+                ModifiedDate = attachmentDto.ModifiedDate,
+                Name = attachmentDto.Name,
+                Size = attachmentDto.Size,
+                Url = attachmentDto.Url
+            };
             return result;
         }
 
@@ -163,42 +167,42 @@ namespace VirtoCommerce.Storefront.Domain
             return address.ToCoreAddressDto().JsonConvert<quoteDto.Address>();
         }
 
-        public virtual QuoteRequest ToQuoteRequest(quoteDto.QuoteRequest quoteRequestDto, IEnumerable<Currency> availCurrencies, Language language)
+        public virtual QuoteRequest ToQuoteRequest(quoteDto.QuoteRequest quoteRequestDto, Currency currency, Language language)
         {
-            var currency = availCurrencies.FirstOrDefault(x => x.Equals(quoteRequestDto.Currency)) ?? new Currency(language, quoteRequestDto.Currency);
-            var result = new QuoteRequest(currency, language);
+            var result = new QuoteRequest(currency, language)
+            {
+                CancelledDate = quoteRequestDto.CancelledDate,
+                CancelReason = quoteRequestDto.CancelReason,
+                ChannelId = quoteRequestDto.ChannelId,
+                Comment = quoteRequestDto.Comment,
+                CreatedBy = quoteRequestDto.CreatedBy,
+                CreatedDate = quoteRequestDto.CreatedDate,
+                CustomerId = quoteRequestDto.CustomerId,
+                CustomerName = quoteRequestDto.CustomerName,
+                EmployeeId = quoteRequestDto.EmployeeId,
+                EmployeeName = quoteRequestDto.EmployeeName,
+                EnableNotification = quoteRequestDto.EnableNotification ?? false,
+                ExpirationDate = quoteRequestDto.ExpirationDate,
+                Id = quoteRequestDto.Id,
+                IsAnonymous = quoteRequestDto.IsAnonymous ?? false,
+                IsCancelled = quoteRequestDto.IsCancelled ?? false,
+                IsLocked = quoteRequestDto.IsLocked ?? false,
+                ModifiedBy = quoteRequestDto.ModifiedBy,
+                ModifiedDate = quoteRequestDto.ModifiedDate,
+                Number = quoteRequestDto.Number,
+                OrganizationId = quoteRequestDto.OrganizationId,
+                OrganizationName = quoteRequestDto.OrganizationName,
+                ReminderDate = quoteRequestDto.ReminderDate,
+                Status = quoteRequestDto.Status,
+                StoreId = quoteRequestDto.StoreId,
+                Tag = quoteRequestDto.Tag,
 
-            result.CancelledDate = quoteRequestDto.CancelledDate;
-            result.CancelReason = quoteRequestDto.CancelReason;
-            result.ChannelId = quoteRequestDto.ChannelId;
-            result.Comment = quoteRequestDto.Comment;
-            result.CreatedBy = quoteRequestDto.CreatedBy;
-            result.CreatedDate = quoteRequestDto.CreatedDate;
-            result.CustomerId = quoteRequestDto.CustomerId;
-            result.CustomerName = quoteRequestDto.CustomerName;
-            result.EmployeeId = quoteRequestDto.EmployeeId;
-            result.EmployeeName = quoteRequestDto.EmployeeName;
-            result.EnableNotification = quoteRequestDto.EnableNotification ?? false;
-            result.ExpirationDate = quoteRequestDto.ExpirationDate;
-            result.Id = quoteRequestDto.Id;
-            result.IsAnonymous = quoteRequestDto.IsAnonymous ?? false;
-            result.IsCancelled = quoteRequestDto.IsCancelled ?? false;
-            result.IsLocked = quoteRequestDto.IsLocked ?? false;
-            result.ModifiedBy = quoteRequestDto.ModifiedBy;
-            result.ModifiedDate = quoteRequestDto.ModifiedDate;
-            result.Number = quoteRequestDto.Number;
-            result.OrganizationId = quoteRequestDto.OrganizationId;
-            result.OrganizationName = quoteRequestDto.OrganizationName;
-            result.ReminderDate = quoteRequestDto.ReminderDate;
-            result.Status = quoteRequestDto.Status;
-            result.StoreId = quoteRequestDto.StoreId;
-            result.Tag = quoteRequestDto.Tag;
-            
-            result.Currency = currency;
-            result.Language = language;
-            result.ManualRelDiscountAmount = new Money(quoteRequestDto.ManualRelDiscountAmount ?? 0, currency);
-            result.ManualShippingTotal = new Money(quoteRequestDto.ManualShippingTotal ?? 0, currency);
-            result.ManualSubTotal = new Money(quoteRequestDto.ManualSubTotal ?? 0, currency);
+                Currency = currency,
+                Language = language,
+                ManualRelDiscountAmount = new Money(quoteRequestDto.ManualRelDiscountAmount ?? 0, currency),
+                ManualShippingTotal = new Money(quoteRequestDto.ManualShippingTotal ?? 0, currency),
+                ManualSubTotal = new Money(quoteRequestDto.ManualSubTotal ?? 0, currency)
+            };
 
             if (quoteRequestDto.Addresses != null)
             {
@@ -245,44 +249,45 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual quoteDto.QuoteRequest ToQuoteRequestDto(QuoteRequest quoteRequest)
         {
-            var result = new quoteDto.QuoteRequest();
+            var result = new quoteDto.QuoteRequest
+            {
+                CancelledDate = quoteRequest.CancelledDate,
+                CancelReason = quoteRequest.CancelReason,
+                ChannelId = quoteRequest.ChannelId,
+                Comment = quoteRequest.Comment,
+                CreatedBy = quoteRequest.CreatedBy,
+                CreatedDate = quoteRequest.CreatedDate,
+                CustomerId = quoteRequest.CustomerId,
+                CustomerName = quoteRequest.CustomerName,
+                EmployeeId = quoteRequest.EmployeeId,
+                EmployeeName = quoteRequest.EmployeeName,
+                EnableNotification = quoteRequest.EnableNotification,
+                ExpirationDate = quoteRequest.ExpirationDate,
+                Id = quoteRequest.Id,
+                IsAnonymous = quoteRequest.IsAnonymous,
+                IsCancelled = quoteRequest.IsCancelled,
+                IsLocked = quoteRequest.IsLocked,
+                ModifiedBy = quoteRequest.ModifiedBy,
+                ModifiedDate = quoteRequest.ModifiedDate,
+                Number = quoteRequest.Number,
+                OrganizationId = quoteRequest.OrganizationId,
+                OrganizationName = quoteRequest.OrganizationName,
+                ReminderDate = quoteRequest.ReminderDate,
+                Status = quoteRequest.Status,
+                StoreId = quoteRequest.StoreId,
+                Tag = quoteRequest.Tag,
 
-            result.CancelledDate = quoteRequest.CancelledDate;
-            result.CancelReason = quoteRequest.CancelReason;
-            result.ChannelId = quoteRequest.ChannelId;
-            result.Comment = quoteRequest.Comment;
-            result.CreatedBy = quoteRequest.CreatedBy;
-            result.CreatedDate = quoteRequest.CreatedDate;
-            result.CustomerId = quoteRequest.CustomerId;
-            result.CustomerName = quoteRequest.CustomerName;
-            result.EmployeeId = quoteRequest.EmployeeId;
-            result.EmployeeName = quoteRequest.EmployeeName;
-            result.EnableNotification = quoteRequest.EnableNotification;
-            result.ExpirationDate = quoteRequest.ExpirationDate;
-            result.Id = quoteRequest.Id;
-            result.IsAnonymous = quoteRequest.IsAnonymous;
-            result.IsCancelled = quoteRequest.IsCancelled;
-            result.IsLocked = quoteRequest.IsLocked;
-            result.ModifiedBy = quoteRequest.ModifiedBy;
-            result.ModifiedDate = quoteRequest.ModifiedDate;
-            result.Number = quoteRequest.Number;
-            result.OrganizationId = quoteRequest.OrganizationId;
-            result.OrganizationName = quoteRequest.OrganizationName;
-            result.ReminderDate = quoteRequest.ReminderDate;
-            result.Status = quoteRequest.Status;
-            result.StoreId = quoteRequest.StoreId;
-            result.Tag = quoteRequest.Tag;
-
-            result.Currency = quoteRequest.Currency.Code;
-            result.Addresses = quoteRequest.Addresses.Select(ToQuoteAddressDto).ToList();
-            result.Attachments = quoteRequest.Attachments.Select(ToQuoteAttachmentDto).ToList();
-            result.DynamicProperties = quoteRequest.DynamicProperties.Select(ToQuoteDynamicPropertyDto).ToList();
-            result.Items = quoteRequest.Items.Select(ToQuoteItemDto).ToList();
-            result.LanguageCode = quoteRequest.Language.CultureName;
-            result.ManualRelDiscountAmount = quoteRequest.ManualRelDiscountAmount != null ? (double?)quoteRequest.ManualRelDiscountAmount.Amount : null;
-            result.ManualShippingTotal = quoteRequest.ManualShippingTotal != null ? (double?)quoteRequest.ManualShippingTotal.Amount : null;
-            result.ManualSubTotal = quoteRequest.ManualSubTotal != null ? (double?)quoteRequest.ManualSubTotal.Amount : null;
-            result.TaxDetails = quoteRequest.TaxDetails.Select(ToQuoteTaxDetailDto).ToList();
+                Currency = quoteRequest.Currency.Code,
+                Addresses = quoteRequest.Addresses.Select(ToQuoteAddressDto).ToList(),
+                Attachments = quoteRequest.Attachments.Select(ToQuoteAttachmentDto).ToList(),
+                DynamicProperties = quoteRequest.DynamicProperties.Select(ToQuoteDynamicPropertyDto).ToList(),
+                Items = quoteRequest.Items.Select(ToQuoteItemDto).ToList(),
+                LanguageCode = quoteRequest.Language.CultureName,
+                ManualRelDiscountAmount = quoteRequest.ManualRelDiscountAmount != null ? (double?)quoteRequest.ManualRelDiscountAmount.Amount : null,
+                ManualShippingTotal = quoteRequest.ManualShippingTotal != null ? (double?)quoteRequest.ManualShippingTotal.Amount : null,
+                ManualSubTotal = quoteRequest.ManualSubTotal != null ? (double?)quoteRequest.ManualSubTotal.Amount : null,
+                TaxDetails = quoteRequest.TaxDetails.Select(ToQuoteTaxDetailDto).ToList()
+            };
 
             if (quoteRequest.Coupon != null && quoteRequest.Coupon.AppliedSuccessfully)
             {
@@ -299,25 +304,26 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual QuoteItem ToQuoteItem(quoteDto.QuoteItem quoteItemDto, Currency currency)
         {
-            var result = new QuoteItem();
+            var result = new QuoteItem
+            {
+                CatalogId = quoteItemDto.CatalogId,
+                CategoryId = quoteItemDto.CategoryId,
+                Comment = quoteItemDto.Comment,
+                CreatedBy = quoteItemDto.CreatedBy,
+                CreatedDate = quoteItemDto.CreatedDate,
+                Id = quoteItemDto.Id,
+                ImageUrl = quoteItemDto.ImageUrl,
+                ModifiedBy = quoteItemDto.ModifiedBy,
+                ModifiedDate = quoteItemDto.ModifiedDate,
+                Name = quoteItemDto.Name,
+                ProductId = quoteItemDto.ProductId,
+                Sku = quoteItemDto.Sku,
+                TaxType = quoteItemDto.TaxType,
 
-            result.CatalogId = quoteItemDto.CatalogId;
-            result.CategoryId = quoteItemDto.CategoryId;
-            result.Comment = quoteItemDto.Comment;
-            result.CreatedBy = quoteItemDto.CreatedBy;
-            result.CreatedDate = quoteItemDto.CreatedDate;
-            result.Id = quoteItemDto.Id;
-            result.ImageUrl = quoteItemDto.ImageUrl;
-            result.ModifiedBy = quoteItemDto.ModifiedBy;
-            result.ModifiedDate = quoteItemDto.ModifiedDate;
-            result.Name = quoteItemDto.Name;
-            result.ProductId = quoteItemDto.ProductId;
-            result.Sku = quoteItemDto.Sku;
-            result.TaxType = quoteItemDto.TaxType;
-            
-            result.Currency = currency;
-            result.ListPrice = new Money(quoteItemDto.ListPrice ?? 0, currency);
-            result.SalePrice = new Money(quoteItemDto.SalePrice ?? 0, currency);
+                Currency = currency,
+                ListPrice = new Money(quoteItemDto.ListPrice ?? 0, currency),
+                SalePrice = new Money(quoteItemDto.SalePrice ?? 0, currency)
+            };
 
             if (quoteItemDto.ProposalPrices != null)
             {
@@ -334,26 +340,27 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual quoteDto.QuoteItem ToQuoteItemDto(QuoteItem quoteItem)
         {
-            var result = new quoteDto.QuoteItem();
+            var result = new quoteDto.QuoteItem
+            {
+                CatalogId = quoteItem.CatalogId,
+                CategoryId = quoteItem.CategoryId,
+                Comment = quoteItem.Comment,
+                CreatedBy = quoteItem.CreatedBy,
+                CreatedDate = quoteItem.CreatedDate,
+                Id = quoteItem.Id,
+                ImageUrl = quoteItem.ImageUrl,
+                ModifiedBy = quoteItem.ModifiedBy,
+                ModifiedDate = quoteItem.ModifiedDate,
+                Name = quoteItem.Name,
+                ProductId = quoteItem.ProductId,
+                Sku = quoteItem.Sku,
+                TaxType = quoteItem.TaxType,
 
-            result.CatalogId = quoteItem.CatalogId;
-            result.CategoryId = quoteItem.CategoryId;
-            result.Comment = quoteItem.Comment;
-            result.CreatedBy = quoteItem.CreatedBy;
-            result.CreatedDate = quoteItem.CreatedDate;
-            result.Id = quoteItem.Id;
-            result.ImageUrl = quoteItem.ImageUrl;
-            result.ModifiedBy = quoteItem.ModifiedBy;
-            result.ModifiedDate = quoteItem.ModifiedDate;
-            result.Name = quoteItem.Name;
-            result.ProductId = quoteItem.ProductId;
-            result.Sku = quoteItem.Sku;
-            result.TaxType = quoteItem.TaxType;
-
-            result.Currency = quoteItem.Currency.Code;
-            result.ListPrice = (double)quoteItem.ListPrice.Amount;
-            result.ProposalPrices = quoteItem.ProposalPrices.Select(ToQuoteTierPriceDto).ToList();
-            result.SalePrice = (double)quoteItem.SalePrice.Amount;
+                Currency = quoteItem.Currency.Code,
+                ListPrice = (double)quoteItem.ListPrice.Amount,
+                ProposalPrices = quoteItem.ProposalPrices.Select(ToQuoteTierPriceDto).ToList(),
+                SalePrice = (double)quoteItem.SalePrice.Amount
+            };
 
             if (quoteItem.SelectedTierPrice != null)
             {
@@ -365,18 +372,19 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual QuoteItem ToQuoteItem(Product product, long quantity)
         {
-            var retVal = new QuoteItem();
+            var retVal = new QuoteItem
+            {
+                CatalogId = product.CatalogId,
+                CategoryId = product.CategoryId,
+                Name = product.Name,
+                Sku = product.Sku,
+                TaxType = product.TaxType,
 
-            retVal.CatalogId = product.CatalogId;
-            retVal.CategoryId = product.CategoryId;
-            retVal.Name = product.Name;
-            retVal.Sku = product.Sku;
-            retVal.TaxType = product.TaxType;
-           
-            retVal.ImageUrl = product.PrimaryImage != null ? product.PrimaryImage.Url : null;
-            retVal.ListPrice = product.Price.ListPrice;
-            retVal.ProductId = product.Id;
-            retVal.SalePrice = product.Price.SalePrice;
+                ImageUrl = product.PrimaryImage != null ? product.PrimaryImage.Url : null,
+                ListPrice = product.Price.ListPrice,
+                ProductId = product.Id,
+                SalePrice = product.Price.SalePrice
+            };
             retVal.ProposalPrices.Add(new TierPrice(product.Price.SalePrice, quantity));
             retVal.SelectedTierPrice = retVal.ProposalPrices.First();
 
@@ -385,16 +393,17 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual QuoteRequestTotals ToQuoteTotals(quoteDto.QuoteRequestTotals totalsDto, Currency currency)
         {
-            var result = new QuoteRequestTotals(currency);
-
-            result.AdjustmentQuoteExlTax = new Money(totalsDto.AdjustmentQuoteExlTax ?? 0, currency);
-            result.DiscountTotal = new Money(totalsDto.DiscountTotal ?? 0, currency);
-            result.GrandTotalExlTax = new Money(totalsDto.GrandTotalExlTax ?? 0, currency);
-            result.GrandTotalInclTax = new Money(totalsDto.GrandTotalInclTax ?? 0, currency);
-            result.OriginalSubTotalExlTax = new Money(totalsDto.OriginalSubTotalExlTax ?? 0, currency);
-            result.ShippingTotal = new Money(totalsDto.ShippingTotal ?? 0, currency);
-            result.SubTotalExlTax = new Money(totalsDto.SubTotalExlTax ?? 0, currency);
-            result.TaxTotal = new Money(totalsDto.TaxTotal ?? 0, currency);
+            var result = new QuoteRequestTotals(currency)
+            {
+                AdjustmentQuoteExlTax = new Money(totalsDto.AdjustmentQuoteExlTax ?? 0, currency),
+                DiscountTotal = new Money(totalsDto.DiscountTotal ?? 0, currency),
+                GrandTotalExlTax = new Money(totalsDto.GrandTotalExlTax ?? 0, currency),
+                GrandTotalInclTax = new Money(totalsDto.GrandTotalInclTax ?? 0, currency),
+                OriginalSubTotalExlTax = new Money(totalsDto.OriginalSubTotalExlTax ?? 0, currency),
+                ShippingTotal = new Money(totalsDto.ShippingTotal ?? 0, currency),
+                SubTotalExlTax = new Money(totalsDto.SubTotalExlTax ?? 0, currency),
+                TaxTotal = new Money(totalsDto.TaxTotal ?? 0, currency)
+            };
             return result;
         }
 
@@ -417,10 +426,12 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual ShippingMethod ToShippingMethod(quoteDto.ShipmentMethod shippingMethodDto, Currency currency)
         {
-            var result = new ShippingMethod(currency);
-            result.LogoUrl = shippingMethodDto.LogoUrl;
-            result.Name = shippingMethodDto.Name;
-            result.OptionName = shippingMethodDto.OptionName;
+            var result = new ShippingMethod(currency)
+            {
+                LogoUrl = shippingMethodDto.LogoUrl,
+                Name = shippingMethodDto.Name,
+                OptionName = shippingMethodDto.OptionName
+            };
             result.LogoUrl = shippingMethodDto.LogoUrl;
             result.Price = new Money(shippingMethodDto.Price ?? 0, currency);
             return result;
@@ -428,50 +439,60 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual TaxDetail ToTaxDetail(quoteDto.TaxDetail taxDetail, Currency currency)
         {
-            var result = new TaxDetail(currency);
-            result.Amount = new Money(taxDetail.Amount ?? 0, currency);
-            result.Rate = new Money(taxDetail.Rate ?? 0, currency);
-            result.Name = taxDetail.Name;
+            var result = new TaxDetail(currency)
+            {
+                Amount = new Money(taxDetail.Amount ?? 0, currency),
+                Rate = new Money(taxDetail.Rate ?? 0, currency),
+                Name = taxDetail.Name
+            };
             return result;
         }
 
         public virtual quoteDto.TaxDetail ToQuoteTaxDetailDto(TaxDetail taxDetail)
         {
-            var result = new quoteDto.TaxDetail();
-            result.Amount = (double)taxDetail.Amount.Amount;
-            result.Name = taxDetail.Name;
-            result.Rate = (double)taxDetail.Rate.Amount;
+            var result = new quoteDto.TaxDetail
+            {
+                Amount = (double)taxDetail.Amount.Amount,
+                Name = taxDetail.Name,
+                Rate = (double)taxDetail.Rate.Amount
+            };
             return result;
         }
 
         public virtual quoteDto.QuoteAttachment ToQuoteAttachmentDto(Attachment attachment)
         {
-            var result = new quoteDto.QuoteAttachment();
-            result.CreatedBy = attachment.CreatedBy;
-            result.CreatedDate = attachment.CreatedDate;
-            result.Id = attachment.Id;
-            result.MimeType = attachment.MimeType;
-            result.ModifiedBy = attachment.ModifiedBy;
-            result.ModifiedDate = attachment.ModifiedDate;
-            result.Name = attachment.Name;
-            result.Size = attachment.Size;
-            result.Url = attachment.Url;
+            var result = new quoteDto.QuoteAttachment
+            {
+                CreatedBy = attachment.CreatedBy,
+                CreatedDate = attachment.CreatedDate,
+                Id = attachment.Id,
+                MimeType = attachment.MimeType,
+                ModifiedBy = attachment.ModifiedBy,
+                ModifiedDate = attachment.ModifiedDate,
+                Name = attachment.Name,
+                Size = attachment.Size,
+                Url = attachment.Url
+            };
             return result;
         }
 
         public virtual TierPrice ToTierPrice(quoteDto.TierPrice tierPriceDto, Currency currency)
         {
-            var result = new TierPrice(currency);
-            result.Quantity = tierPriceDto.Quantity ?? 1;         
-            result.Price = new Money(tierPriceDto.Price ?? 0, currency);
+            var result = new TierPrice(currency)
+            {
+                Quantity = tierPriceDto.Quantity ?? 1,
+                Price = new Money(tierPriceDto.Price ?? 0, currency)
+            };
             return result;
         }
 
         public virtual quoteDto.TierPrice ToQuoteTierPriceDto(TierPrice webModel)
         {
-            var result = new quoteDto.TierPrice();
-            result.Quantity = webModel.Quantity;
-            result.Price = (double)webModel.Price.Amount;
+            var result = new quoteDto.TierPrice
+            {
+                Quantity = webModel.Quantity,
+                Price = (double)webModel.Price.Amount
+            };
             return result;
         }
 

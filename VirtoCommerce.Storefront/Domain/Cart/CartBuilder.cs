@@ -31,7 +31,7 @@ using cartModel = VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
-    public class CartBuilder : ICartBuilder, IEventHandler<UserLoginEvent>
+    public class CartBuilder : ICartBuilder
     {
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly ICartModule _cartApi;
@@ -445,36 +445,7 @@ namespace VirtoCommerce.Storefront.Domain
             Cart = cart.ToShoppingCart(Cart.Currency, Cart.Language, Cart.Customer);
         }
 
-        #endregion
-
-        #region IEventHandler<UserLoginEvent>
-
-        /// <summary>
-        /// Merge an anonymous cart into a shopping cart belonging to a registered customer
-        /// </summary>
-        /// <param name="userLoginEvent"></param>
-        public virtual async Task Handle(UserLoginEvent @event)
-        {
-            if (@event == null)
-                return;
-
-            var workContext = @event.WorkContext;
-            var prevUser = @event.WorkContext.CurrentUser;
-            var prevUserCart = @event.WorkContext.CurrentCart.Value;
-            var newUser = @event.User;
-
-            //If previous user was anonymous and it has not empty cart need merge anonymous cart to personal
-            if (!prevUser.IsRegisteredUser && prevUserCart != null && prevUserCart.Items.Any())
-            {
-                //we load or create cart for new user
-                await LoadOrCreateNewTransientCartAsync(prevUserCart.Name, workContext.CurrentStore, newUser, workContext.CurrentLanguage, workContext.CurrentCurrency);
-                await MergeWithCartAsync(prevUserCart);
-                await SaveAsync();
-                await _cartApi.DeleteCartsAsync(new[] { prevUserCart.Id }.ToList());
-            }
-        }
-
-        #endregion
+        #endregion      
 
         protected virtual cartModel.ShoppingCartSearchCriteria CreateCartSearchCriteria(string cartName, Store store, User user, Language language, Currency currency)
         {

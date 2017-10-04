@@ -20,7 +20,7 @@ namespace VirtoCommerce.Storefront.Model.Quote.Services
         /// <param name="language"></param>
         /// <param name="availCurrencies"></param>
         /// <returns></returns>
-        Task<IQuoteRequestBuilder> LoadQuoteRequestAsync(string number, Language language, IEnumerable<Currency> availCurrencies);
+        Task<IQuoteRequestBuilder> LoadQuoteRequestAsync(string number, Language language, Currency currency);
 
         /// <summary>
         /// Capture passed RFQ and all next changes will be implemented on it

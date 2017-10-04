@@ -16,6 +16,7 @@ using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Order;
+using VirtoCommerce.Storefront.Model.Order.Events;
 using VirtoCommerce.Storefront.Model.Order.Services;
 using VirtoCommerce.Storefront.Model.Quote;
 using VirtoCommerce.Storefront.Model.Quote.Services;
@@ -27,7 +28,7 @@ using customerDto = VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.M
 
 namespace VirtoCommerce.Storefront.Domain
 {
-    public class MemberService : IMemberService, IEventHandler<UserRegisteredEvent>
+    public class MemberService : IMemberService
     {
         private readonly ICustomerModule _customerApi;
         private readonly ICustomerOrderService _orderService;
@@ -53,29 +54,26 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual async Task<Contact> GetContactByIdAsync(string contactId)
         {
+            Contact result = null;
             var cacheKey = CacheKey.With(GetType(), "GetContactByIdAsync", contactId);
-            var retVal = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            var dto = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {              
-                //TODO: Make parallels call
                 var contactDto = await _customerApi.GetContactByIdAsync(contactId);
-                Contact result = null;
                 if (contactDto != null)
                 {
-                    result = contactDto.ToContact();
-                    cacheEntry.AddExpirationToken(CustomerCacheRegion.CreateChangeToken(result));
+                    cacheEntry.AddExpirationToken(CustomerCacheRegion.CreateChangeToken(contactDto.Id));
                 }
-                return result;
+                return contactDto;
             });
 
-            if (retVal != null)
+            if (dto != null)
             {
-                retVal = retVal.JsonClone();
-                retVal.Orders = LazyLoadCustomerOrders(retVal);
-                retVal.QuoteRequests = LazyLoadCustomerQuotes(retVal);
-                retVal.Subscriptions = LazyLoadCustomerSubscriptions(retVal);
+                result = dto.ToContact();
+                result.Orders = LazyLoadCustomerOrders(result);
+                result.QuoteRequests = LazyLoadCustomerQuotes(result);
+                result.Subscriptions = LazyLoadCustomerSubscriptions(result);
             }
-
-            return retVal;
+            return result;
         }
         
         public virtual async Task CreateContactAsync(Contact contact)
@@ -97,7 +95,7 @@ namespace VirtoCommerce.Storefront.Domain
                 await _customerApi.UpdateContactAsync(contactDto);
 
                 //Invalidate cache
-                CustomerCacheRegion.ExpireCustomer(existContact);
+                CustomerCacheRegion.ExpireCustomer(existContact.Id);
             }
         }
 
@@ -109,7 +107,7 @@ namespace VirtoCommerce.Storefront.Domain
                 await _customerApi.UpdateAddessesAsync(contactId, addresses.Select(x => x.ToCustomerAddressDto()).ToList());
 
                 //Invalidate cache
-                CustomerCacheRegion.ExpireCustomer(existContact);
+                CustomerCacheRegion.ExpireCustomer(existContact.Id);
             }
         }       
 
@@ -144,32 +142,7 @@ namespace VirtoCommerce.Storefront.Domain
             var vendors = vendorSearchResult.Vendors.Select(x => x.ToVendor(language, store));       
             return new StaticPagedList<Vendor>(vendors, pageNumber, pageSize, vendorSearchResult.TotalCount.Value);
         }
-        #endregion
-
-        #region IEventHandler<UserRegisteredEvent> members
-        public virtual async Task Handle(UserRegisteredEvent @event)
-        {
-            //Need to create new contact related to new user with same Id
-            var registrationData = @event.RegistrationInfo;
-            var contact = new Contact
-            {
-                Id = @event.User.Id,
-                Name = registrationData.UserName,
-                FullName = string.Join(" ", registrationData.FirstName, registrationData.LastName),
-                FirstName = registrationData.FirstName,
-                LastName = registrationData.LastName
-            };
-            if (!string.IsNullOrEmpty(registrationData.Email))
-            {
-                contact.Emails.Add(registrationData.Email);
-            }
-            if (string.IsNullOrEmpty(contact.FullName) || string.IsNullOrWhiteSpace(contact.FullName))
-            {
-                contact.FullName = registrationData.Email;
-            }
-            await CreateContactAsync(contact);            
-        }
-        #endregion
+        #endregion      
 
         protected virtual IMutablePagedList<QuoteRequest> LazyLoadCustomerQuotes(Contact customer)
         {
@@ -219,7 +192,6 @@ namespace VirtoCommerce.Storefront.Domain
             return new MutablePagedList<Subscription>(subscriptionGetter, 1, SubscriptionSearchCriteria.DefaultPageSize);
         }
 
-   
     }
 }
 

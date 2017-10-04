@@ -6,6 +6,8 @@ using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Extensions;
+using System.Collections.Generic;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Domain
 {

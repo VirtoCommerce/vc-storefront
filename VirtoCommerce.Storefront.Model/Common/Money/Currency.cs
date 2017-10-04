@@ -140,6 +140,7 @@ namespace VirtoCommerce.Storefront.Model.Common
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Code;
+            yield return CultureName;
         }
 
     }

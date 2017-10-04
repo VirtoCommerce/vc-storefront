@@ -110,7 +110,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 var productPrices = prices.Where(x => x.ProductId == product.Id)
                                           .Select(x => x.ToProductPrice(workContext.AllCurrencies, workContext.CurrentLanguage));
-                product.ApplyPrices(productPrices, workContext.CurrentCurrency, workContext.CurrentStore.Currencies);
+                product.ApplyPrices(productPrices, workContext.CurrentCurrency, workContext.AllCurrencies);
             }
         }
     }

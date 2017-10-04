@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -35,6 +36,7 @@ namespace VirtoCommerce.Storefront.Domain
             var rewards = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(MarketingCacheRegion.CreateChangeToken());
+                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
 
                 var contextDto = context.ToPromotionEvaluationContextDto();
                 return await _promiotionApi.EvaluatePromotionsAsync(contextDto);               

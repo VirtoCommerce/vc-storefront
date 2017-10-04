@@ -39,7 +39,7 @@ namespace VirtoCommerce.Storefront.Domain
                 throw new ArgumentNullException(nameof(criteria));
             }
             var result = await _quoteApi.SearchAsync(criteria.ToQuoteSearchCriteriaDto());
-            return new StaticPagedList<QuoteRequest>(result.QuoteRequests.Select(x => x.ToQuoteRequest(workContext.AllCurrencies, workContext.CurrentLanguage)),
+            return new StaticPagedList<QuoteRequest>(result.QuoteRequests.Select(x => x.ToQuoteRequest(workContext.CurrentCurrency, workContext.CurrentLanguage)),
                                                      criteria.PageNumber, criteria.PageSize, result.TotalCount.Value);
         }
 

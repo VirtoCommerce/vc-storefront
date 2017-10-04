@@ -40,18 +40,13 @@ namespace VirtoCommerce.Storefront.Middleware
             var workContext = builder.WorkContext;
 
             workContext.ApplicationSettings = _options.Settings;
-
+            //The important to preserve the order of initialization
             await builder.WithCountriesAsync();
 
             await builder.WithCurrentUserAsync();
             await builder.WithStoresAsync(_options.DefaultStore);
-
-            //Set current language
-            var availLanguages = workContext.AllStores.SelectMany(s => s.Languages)
-                                  .Union(workContext.AllStores.Select(s => s.DefaultLanguage)).Distinct().ToList();
-            await builder.WithCurrentLanguageForStore(availLanguages, workContext.CurrentStore);
-
-            await builder.WithCurrenciesAsync();
+            await builder.WithCurrenciesAsync(workContext.CurrentLanguage, workContext.CurrentStore);
+ 
             await builder.WithCatalogsAsync();
             await builder.WithDefaultShoppingCartAsync("default", workContext.CurrentStore, workContext.CurrentUser, workContext.CurrentCurrency, workContext.CurrentLanguage);
             await builder.WithMenuLinksAsync(workContext.CurrentStore, workContext.CurrentLanguage);
@@ -63,6 +58,7 @@ namespace VirtoCommerce.Storefront.Middleware
             await builder.WithVendorsAsync(workContext.CurrentStore, workContext.CurrentLanguage);
 
             _workContextAccessor.WorkContext = workContext;
+         
 
             await _next(context);
         }

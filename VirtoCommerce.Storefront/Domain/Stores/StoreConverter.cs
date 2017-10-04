@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -84,12 +86,11 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Languages = storeDto.Languages.Select(x => new Language(x)).ToList();
             }
 
-            if (!storeDto.Currencies.IsNullOrEmpty())
-            {
-                result.Currencies.AddRange(storeDto.Currencies.Select(x => new Currency(Language.InvariantLanguage, x)));
-            }
-
-            result.DefaultCurrency = result.Currencies.FirstOrDefault(x => x.Equals(storeDto.DefaultCurrency));
+            result.CurrenciesCodes = storeDto.Currencies.Concat(new[] { storeDto.DefaultCurrency })
+                                                   .Where(x => !string.IsNullOrEmpty(x))
+                                                   .Distinct()
+                                                   .ToList();           
+            result.DefaultCurrencyCode = storeDto.DefaultCurrency;
 
             if (!storeDto.DynamicProperties.IsNullOrEmpty())
             {
