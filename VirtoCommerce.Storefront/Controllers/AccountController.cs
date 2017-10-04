@@ -40,13 +40,12 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpGet]
         public ActionResult GetOrderDetails(string number)
         {
-            var order = WorkContext.CurrentUser.Contact.Value.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(number));
+            var order = WorkContext.CurrentUser?.Contact?.Value?.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(number));
             if (order != null)
             {
                 WorkContext.CurrentOrder = order;
-                return View("customers/order", WorkContext);
             }
-            return NotFound();
+            return View("customers/order", WorkContext);
         }
 
         [HttpGet]
@@ -130,6 +129,7 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 return View("customers/login", WorkContext);
             }
+
             var loginResult = await _signInManager.PasswordSignInAsync(login.Username, login.Password, login.RememberMe, lockoutOnFailure: true);
 
             if (loginResult.Succeeded)

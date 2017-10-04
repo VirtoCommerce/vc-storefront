@@ -53,7 +53,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 if (!builder.HttpContext.Request.Path.Value.EndsWith(".map"))
                 {
                     //Sign-in anonymous user
-                    await signInManager.SignInAsync(user, true);
+                    await signInManager.SignInAsync(user, false);
                 }
             }
             //Restore some properties from claims

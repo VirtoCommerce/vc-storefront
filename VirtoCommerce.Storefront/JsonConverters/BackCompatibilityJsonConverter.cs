@@ -47,7 +47,7 @@ namespace VirtoCommerce.Storefront.JsonConverters
                 TypeNameAssemblyFormatHandling = jsonSettings.TypeNameAssemblyFormatHandling,
                 // exclude  BackCompatibilityJsonConverter from  Converters  to prevent infinite loops when serializing
                 Converters = null
-            };            
+            };
 
         }
         public override bool CanWrite { get { return true; } }
@@ -62,21 +62,19 @@ namespace VirtoCommerce.Storefront.JsonConverters
         {
             throw new NotImplementedException();
         }
-        
+
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var user = value as User;
             //Use serializer with your setting do not containing this converter to prevent infinite recursion calls.
             serializer = JsonSerializer.Create(_jsonSettings);
             var result = JObject.FromObject(user, serializer);
-            if (user.Contact != null)
+            var contact = user?.Contact?.Value;
+
+            if (contact != null)
             {
-                var contact = user.Contact.Value;
-                if (contact != null)
-                {
-                    var contactJson = JObject.FromObject(contact, serializer);
-                    result.Merge(contactJson);
-                }
+                var contactJson = JObject.FromObject(contact, serializer);
+                result.Merge(contactJson);
             }
             result.WriteTo(writer);
         }

@@ -159,11 +159,8 @@ namespace VirtoCommerce.Storefront.Domain
                 result.CartTotal = (double)promoEvalContext.Cart.Total.Amount;
                 result.Coupon = promoEvalContext.Cart.Coupon != null ? promoEvalContext.Cart.Coupon.Code : null;
                 result.Currency = promoEvalContext.Cart.Currency.Code;
-                result.CustomerId = promoEvalContext.Cart.Customer.Id;
-                if (promoEvalContext.Cart.Customer.Contact != null && promoEvalContext.Cart.Customer.Contact.Value.UserGroups != null)
-                {
-                    result.UserGroups = promoEvalContext.Cart.Customer.Contact.Value.UserGroups;
-                }
+                result.CustomerId = promoEvalContext.Cart.Customer.Id;                
+                result.UserGroups = promoEvalContext.Cart.Customer?.Contact?.Value?.UserGroups;
                 result.IsRegisteredUser = promoEvalContext.Cart.Customer.IsRegisteredUser;
                 result.Language = promoEvalContext.Cart.Language.CultureName;
                 //Set cart line items as default promo items
@@ -193,18 +190,12 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 result.PromoEntry = promoEvalContext.Product.ToProductPromoEntryDto();
             }
-           
-            if (promoEvalContext.User != null && promoEvalContext.User.Contact != null)
-            {
-                var contact = promoEvalContext.User.Contact.Value;
-                if (contact.UserGroups != null)
-                {
-                    result.UserGroups = contact.UserGroups.ToList();
-                }
-                result.CustomerId = promoEvalContext.User.Id;
-                result.IsEveryone = true;
-                result.IsRegisteredUser = promoEvalContext.User.IsRegisteredUser;               
-            }
+            
+            result.UserGroups = promoEvalContext?.User?.Contact?.Value?.UserGroups;
+
+            result.CustomerId = promoEvalContext.User.Id;
+            result.IsEveryone = true;
+            result.IsRegisteredUser = promoEvalContext.User.IsRegisteredUser;
 
             result.Currency = promoEvalContext.Currency != null ? promoEvalContext.Currency.Code : null;
             result.Language = promoEvalContext.Language != null ? promoEvalContext.Language.CultureName : null;

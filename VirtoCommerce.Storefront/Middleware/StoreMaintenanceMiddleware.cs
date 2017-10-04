@@ -18,7 +18,7 @@ namespace VirtoCommerce.Storefront.Middleware
         public async Task Invoke(HttpContext context)
         {
             var workContext = _workContextAccessor.WorkContext;
-            if (workContext != null && workContext.CurrentStore.StoreState == StoreStatus.Closed)
+            if (workContext != null && workContext.CurrentStore != null && workContext.CurrentStore.StoreState == StoreStatus.Closed)
             {
                 context.Request.Path = "/common/maintenance";
             }

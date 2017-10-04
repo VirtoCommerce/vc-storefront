@@ -101,27 +101,24 @@ namespace VirtoCommerce.Storefront.Domain
             if (workContext.CurrentUser != null)
             {
                 retVal.CustomerId = workContext.CurrentUser.Id;
-                if(workContext.CurrentUser.Contact != null)
+                var contact = workContext.CurrentUser?.Contact?.Value;
+
+                if (contact != null)
                 {
-                    var contact = workContext.CurrentUser.Contact.Value;
-                    if(contact != null)
+                    retVal.GeoTimeZone = contact.TimeZone;
+                    var address = contact.DefaultShippingAddress ?? contact.DefaultBillingAddress;
+                    if (address != null)
                     {
-                        retVal.GeoTimeZone = contact.TimeZone;
-                        var address = contact.DefaultShippingAddress ?? contact.DefaultBillingAddress;
-                        if (address != null)
-                        {
-                            retVal.GeoCity = address.City;
-                            retVal.GeoCountry = address.CountryCode;
-                            retVal.GeoState = address.RegionName;
-                            retVal.GeoZipCode = address.PostalCode;
-                        }
-                        if (contact.UserGroups != null)
-                        {
-                            retVal.UserGroups = contact.UserGroups;
-                        }
+                        retVal.GeoCity = address.City;
+                        retVal.GeoCountry = address.CountryCode;
+                        retVal.GeoState = address.RegionName;
+                        retVal.GeoZipCode = address.PostalCode;
                     }
-                }              
-               
+                    if (contact.UserGroups != null)
+                    {
+                        retVal.UserGroups = contact.UserGroups;
+                    }
+                }
             }
 
             if (products != null)

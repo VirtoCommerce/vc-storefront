@@ -26,6 +26,7 @@ namespace VirtoCommerce.Storefront.Domain
             if (_quoteRegionLookup.TryRemove(qoute, out CancellationTokenSource token))
             {
                 token.Cancel();
+                token.Dispose();
             }
         }
     }

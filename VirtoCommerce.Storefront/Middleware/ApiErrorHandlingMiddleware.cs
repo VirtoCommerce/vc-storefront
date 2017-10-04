@@ -51,7 +51,7 @@ namespace VirtoCommerce.Storefront.Middleware
                        throw new HttpOperationException(httpException.Message + httpException.Response.Content);
                     }
                     //Continue default error handling
-                    throw ex;
+                    throw;
                 }
             }
         }

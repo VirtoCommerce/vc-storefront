@@ -30,9 +30,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 UserName = user.UserName
             };
 
-            if (user.Contact != null)
+
+            var contact = user?.Contact?.Value;
+            if (contact != null)
             {
-                var contact = user.Contact.Value;
                 result.AcceptsMarketing = contact.AcceptsMarketing;
                 result.FirstName = contact.FirstName;
                 result.LastName = contact.LastName;
@@ -81,6 +82,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                     result.Metafields = new MetaFieldNamespacesCollection(new[] { new MetafieldsCollection("dynamic_properties", workContext.CurrentLanguage, contact.DynamicProperties) });
                 }
             }
+            
 
             return result;
         }

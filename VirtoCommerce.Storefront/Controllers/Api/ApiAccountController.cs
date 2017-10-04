@@ -43,15 +43,18 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         {
             if (WorkContext.CurrentUser.IsRegisteredUser)
             {
-                var entries = WorkContext.CurrentUser.Contact.Value.QuoteRequests;
-                entries.Slice(pageNumber, pageSize, sortInfos);
-                var retVal = new StaticPagedList<QuoteRequest>(entries.Select(x => x), entries);
-
-                return Json(new
+                var entries = WorkContext.CurrentUser?.Contact?.Value?.QuoteRequests;
+                if (entries != null)
                 {
-                    Results = retVal,
-                    TotalCount = retVal.TotalItemCount
-                });
+                    entries.Slice(pageNumber, pageSize, sortInfos);
+                    var retVal = new StaticPagedList<QuoteRequest>(entries.Select(x => x), entries);
+
+                    return Json(new
+                    {
+                        Results = retVal,
+                        TotalCount = retVal.TotalItemCount
+                    });
+                }
             }
             return NoContent();
         }

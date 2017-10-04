@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System.Linq;
@@ -27,6 +28,14 @@ namespace VirtoCommerce.Storefront.Middleware
 
         public async Task Invoke(HttpContext context)
         {
+            //Do not process for exist exception 
+            var exceptionFeature = context.Features.Get<IExceptionHandlerFeature>();
+            if(exceptionFeature != null)
+            {
+                await _next(context);
+                return;
+            }
+
             var builder = new WorkContextBuilder(context);
             var workContext = builder.WorkContext;
 
