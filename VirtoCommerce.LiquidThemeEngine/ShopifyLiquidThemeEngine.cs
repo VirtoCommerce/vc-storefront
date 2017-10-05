@@ -295,7 +295,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <returns></returns>
         public IDictionary GetSettings(string defaultValue = null)
         {
-            var cacheKey = CacheKey.With(GetType(), "GetSettings", defaultValue);
+            var cacheKey = CacheKey.With(GetType(), "GetSettings", CurrentThemeSettingPath,  defaultValue);
             return _memoryCache.GetOrCreate(cacheKey,  (cacheItem) =>
             {
                 cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeSettingPath) }));
@@ -342,7 +342,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <returns></returns>
         public JObject ReadLocalization()
         {
-            var cacheKey = CacheKey.With(GetType(), "ReadLocalization", WorkContext.CurrentLanguage.CultureName);
+            var cacheKey = CacheKey.With(GetType(), "ReadLocalization", CurrentThemeLocalePath, WorkContext.CurrentLanguage.CultureName);
             return _memoryCache.GetOrCreate(cacheKey, (cacheItem) =>
             {
                 cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeLocalePath + "/*") }));
