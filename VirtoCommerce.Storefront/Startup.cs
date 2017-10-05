@@ -248,6 +248,12 @@ namespace VirtoCommerce.Storefront
             app.UseStatusCodePagesWithReExecute("/error/{0}");
 
             var options = new RewriteOptions().Add(new StorefrontUrlNormalizeRule());
+            var requireHttpsOptions = new RequireHttpsOptions();
+            Configuration.GetSection("VirtoCommerce:RequireHttps").Bind(requireHttpsOptions);
+            if (requireHttpsOptions.Enabled)
+            {
+                options.AddRedirectToHttps(requireHttpsOptions.StatusCode,  requireHttpsOptions.Port);
+            }
             app.UseRewriter(options);
             app.UseMvc(routes =>
             {
