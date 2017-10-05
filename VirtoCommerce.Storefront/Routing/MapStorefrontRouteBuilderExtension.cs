@@ -101,8 +101,8 @@ public static class MapStorefrontRouteBuilderExtension
         #endregion
 
         //Errors
-        routes.MapStorefrontRoute("Errors", "error/{errCode}", defaults: new { controller = "Error", action = "Errors" });
-        routes.MapRoute("NoWorkContextErrors", "error/{errCode}", defaults: new { controller = "Error", action = "Errors" });
+        routes.MapStorefrontRoute("Error", "error/{errCode}", defaults: new { controller = "Error", action = "Error" });
+        routes.MapRoute("NoWorkContextErrors", "error/{errCode}", defaults: new { controller = "Error", action = "Error" });
         routes.MapStorefrontRoute("StoreMaintenance", "common/maintenance", defaults: new { controller = "Common", action = "Maintenance" });
         routes.MapStorefrontRoute("NoTheme", "common/notheme", defaults: new { controller = "Common", action = "NoTheme" });
         routes.MapStorefrontRoute("AccessDenied", "error/AccessDenied", defaults: new { controller = "Error", action = "AccessDenied" });

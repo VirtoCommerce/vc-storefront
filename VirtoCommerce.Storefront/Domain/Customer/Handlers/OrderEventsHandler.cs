@@ -32,7 +32,9 @@ namespace VirtoCommerce.Storefront.Domain.Customer.Handlers
 
                     foreach (var address in contact.Addresses)
                     {
-                        address.Name = address.ToString().Substring(0, 1800);
+
+                        address.Name = address.ToString();
+                        address.Name = address.Name.Substring(0, Math.Min(1800, address.Name.Length));
                     }
                 }
             }

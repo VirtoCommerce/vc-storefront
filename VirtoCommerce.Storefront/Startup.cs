@@ -180,9 +180,7 @@ namespace VirtoCommerce.Storefront
                 options.AccessDeniedPath = "/error/AccessDenied";
                 options.SlidingExpiration = true;
             });
-
-
-
+            
             //Add Liquid view engine
             services.AddLiquidViewEngine(options =>
             {
@@ -190,7 +188,6 @@ namespace VirtoCommerce.Storefront
             });
 
             var snapshotProvider = services.BuildServiceProvider();
-            //Register JSON converters to 
             services.AddMvc(options =>
             {
                 options.CacheProfiles.Add("Default", new CacheProfile()

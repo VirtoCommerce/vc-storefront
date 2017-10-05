@@ -7,19 +7,18 @@ namespace VirtoCommerce.Storefront.Controllers
 {
     public class ErrorController : Controller
     {
-        public IActionResult Errors(string errCode)
+        public IActionResult Error(int? errCode)
         {
-            var view = errCode;
-            var exceptionFeature =  base.HttpContext.Features.Get<IExceptionHandlerFeature>();
-            if(exceptionFeature != null)
+            var exceptionFeature = base.HttpContext.Features.Get<IExceptionHandlerFeature>();
+            if (exceptionFeature != null && exceptionFeature.Error is StorefrontException storefrontException && storefrontException.View != null)
             {
-                var storefrontException = exceptionFeature.Error as StorefrontException;
-                if(storefrontException != null)
-                {
-                    view = storefrontException.View ?? view;
-                }
+                return View(storefrontException.View);
             }
-            return View(view);
+            if (errCode == 404 || errCode == 500)
+            {
+                return View(errCode.ToString());
+            }
+            return View();
         }
 
         public IActionResult AccessDenied()
