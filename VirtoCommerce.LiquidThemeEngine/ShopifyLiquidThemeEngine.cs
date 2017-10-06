@@ -1,15 +1,4 @@
-﻿using DotLiquid;
-using DotLiquid.Exceptions;
-using DotLiquid.FileSystems;
-using DotLiquid.ViewEngine.Exceptions;
-using LibSassHost;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -17,6 +6,18 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using DotLiquid;
+using DotLiquid.Exceptions;
+using DotLiquid.FileSystems;
+using DotLiquid.ViewEngine.Exceptions;
+using LibSassHost;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using VirtoCommerce.LiquidThemeEngine.Converters;
 using VirtoCommerce.LiquidThemeEngine.Extensions;
 using VirtoCommerce.LiquidThemeEngine.Filters;
@@ -45,13 +46,16 @@ namespace VirtoCommerce.LiquidThemeEngine
         private static readonly Regex _isLiquid = new Regex("[{}|]", RegexOptions.Compiled);      
         private const string _liquidTemplateFormat = "{0}.liquid";
         private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IStorefrontUrlBuilder _storeFrontUrlBuilder;
         private readonly IMemoryCache _memoryCache;
         private readonly IContentBlobProvider _themeBlobProvider;
-        public ShopifyLiquidThemeEngine(IMemoryCache memoryCache, IWorkContextAccessor workContextAccessor, 
+        public ShopifyLiquidThemeEngine(IMemoryCache memoryCache, IWorkContextAccessor workContextAccessor,
+                                        IHttpContextAccessor httpContextAccessor,
                                         IStorefrontUrlBuilder storeFrontUrlBuilder, IContentBlobProvider contentBlobProvder, IOptions<LiquidThemeEngineOptions> options)
         {
             _workContextAccessor = workContextAccessor;
+            _httpContextAccessor = httpContextAccessor;
             _storeFrontUrlBuilder = storeFrontUrlBuilder;
             _options = options.Value;
             _memoryCache = memoryCache;
@@ -72,6 +76,7 @@ namespace VirtoCommerce.LiquidThemeEngine
 
             Condition.Operators["contains"] = CommonOperators.ContainsMethod;
 
+            Template.RegisterTag<AntiforgeryTag>("anti_forgery");
             Template.RegisterTag<LayoutTag>("layout");
             Template.RegisterTag<FormTag>("form");
             Template.RegisterTag<PaginateTag>("paginate");      
@@ -81,6 +86,11 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// Main work context
         /// </summary>
         public WorkContext WorkContext => _workContextAccessor.WorkContext;
+
+        /// <summary>
+        /// Current HttpContext
+        /// </summary>
+        public HttpContext HttpContext => _httpContextAccessor.HttpContext;
 
         /// <summary>
         /// Store url builder
