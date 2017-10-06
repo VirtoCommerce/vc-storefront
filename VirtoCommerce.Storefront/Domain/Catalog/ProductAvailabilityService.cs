@@ -24,6 +24,32 @@ namespace VirtoCommerce.Storefront.Domain
             return isAvailable;
         }
 
+        public bool IsBuyable(Product product)
+         {
+             if (product == null)
+                 throw new ArgumentNullException(nameof(product));
+ 
+             var isBuyable = product.IsActive && product.IsBuyable;
+ 
+             return  isBuyable;
+         }
+ 
+         public virtual async Task<bool> IsInStock(Product product)
+         {
+             if (product == null)
+                 throw new ArgumentNullException(nameof(product));
+ 
+             bool inStock = false;
+             if (product.TrackInventory && product.Inventory != null)
+             {
+                     inStock = product.Inventory.AllowPreorder == true ||
+                               product.Inventory.AllowBackorder == true ||
+                              await GetAvailableQuantity(product) > 0;
+             }
+ 
+             return inStock;
+         }
+
         public virtual Task<long> GetAvailableQuantity(Product product)
         {
             if (product == null)

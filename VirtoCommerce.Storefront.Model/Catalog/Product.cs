@@ -89,6 +89,11 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public bool IsBuyable { get; set; }
 
         /// <summary>
+        /// Indicating whether this product is instock
+        /// </summary>
+        public bool IsInStock { get; set; }
+
+        /// <summary>
         /// Indicating whether this product is active
         /// </summary>
         public bool IsActive { get; set; }
