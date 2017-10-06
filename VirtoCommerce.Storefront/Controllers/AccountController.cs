@@ -63,6 +63,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register([FromForm] Register formModel)
         {
             var user = formModel.ToUser();
