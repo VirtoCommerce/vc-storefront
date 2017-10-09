@@ -18,12 +18,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// <summary>
         /// Returns all tags of all articles of a blog. This includes tags of articles that are not in the current pagination view.
         /// </summary>
-        public ICollection<Tag> AllTags { get; set; }
+        public IList<Tag> AllTags { get; set; }
 
         /// <summary>
         /// Returns all tags in a blog. Similar to all_tags, but only returns tags of articles that are in the filtered view.
         /// </summary>
-        public ICollection<Tag> Tags { get; set; }
+        public IList<Tag> Tags { get; set; }
 
         /// <summary>
         /// Returns an array of all articles in a blog. See this page for a list of all available attributes for article.
@@ -59,6 +59,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// <summary>
         /// Gets or sets the list of categories of the blog
         /// </summary>
-        public ICollection<string> Categories { get; set; }
+        public IList<string> Categories { get; set; }
     }
 }

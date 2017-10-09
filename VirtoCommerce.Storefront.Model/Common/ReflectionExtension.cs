@@ -50,6 +50,19 @@ namespace VirtoCommerce.Storefront.Model.Common
             return null;
         }
 
+        public static bool IsAssignableFromGenericList(this Type type)
+        {
+            foreach (var intType in type.GetInterfaces())
+            {
+                if (intType.IsGenericType
+                    && intType.GetGenericTypeDefinition() == typeof(IList<>))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public static T[] GetFlatObjectsListWithInterface<T>(this object obj, List<T> resultList = null)
         {
             var retVal = new List<T>();

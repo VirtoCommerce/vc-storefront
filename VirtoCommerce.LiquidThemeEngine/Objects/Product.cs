@@ -41,6 +41,18 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         [DataMember]
         public bool Available { get; set; }
 
+         /// <summary>
+         ///  Returns true if a product is buyable
+         /// </summary>
+        [DataMember]
+        public bool Buyable { get; set; }
+  
+        /// <summary>
+        ///  Returns true if a product is instock
+        /// </summary>
+        [DataMember]
+        public bool InStock { get; set; }
+
         /// <summary>
         /// Returns the compare at price. Use one of the money filters to return
         /// the value in a monetary format.
@@ -217,12 +229,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// Returns an array the product's variants.
         /// </summary>
         [DataMember]
-        public ICollection<Variant> Variants { get; set; }
+        public IList<Variant> Variants { get; set; }
 
         /// <summary>
         /// Returns a collection of product properties
         /// </summary>
-        public ICollection<ProductProperty> Properties { get; set; }
+        public IList<ProductProperty> Properties { get; set; }
 
         /// <summary>
         /// Returns the vendor of the product. 

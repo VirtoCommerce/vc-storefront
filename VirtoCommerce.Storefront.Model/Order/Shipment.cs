@@ -112,18 +112,18 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// Information about quantity and order items belongs to current shipment
         /// </summary>
         /// <value>Information about quantity and order items belongs to current shipment</value>
-        public ICollection<ShipmentItem> Items { get; set; }
+        public IList<ShipmentItem> Items { get; set; }
 
         /// <summary>
         /// Information about packages belongs to current shipment
         /// </summary>
         /// <value>Information about packages belongs to current shipment</value>
-        public ICollection<ShipmentPackage> Packages { get; set; }
+        public IList<ShipmentPackage> Packages { get; set; }
 
         /// <summary>
         /// Gets or Sets InPayments
         /// </summary>
-        public ICollection<PaymentIn> InPayments { get; set; }
+        public IList<PaymentIn> InPayments { get; set; }
 
         /// <summary>
         /// Gets or Sets DeliveryAddress
@@ -133,7 +133,7 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// <summary>
         /// Gets or Sets TaxDetails
         /// </summary>
-        public ICollection<TaxDetail> TaxDetails { get; set; }
+        public IList<TaxDetail> TaxDetails { get; set; }
 
         /// <summary>
         /// Operation type string representation (CustomerOrder, Shipment etc)
@@ -199,7 +199,7 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// <summary>
         /// Gets or Sets ChildrenOperations
         /// </summary>
-        public ICollection<Operation> ChildrenOperations { get; set; }
+        public IList<Operation> ChildrenOperations { get; set; }
 
         /// <summary>
         /// Used for dynamic properties management, contains object type string
@@ -211,7 +211,7 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// Dynamic properties collections
         /// </summary>
         /// <value>Dynamic properties collections</value>
-        public ICollection<DynamicProperty> DynamicProperties { get; set; }
+        public IList<DynamicProperty> DynamicProperties { get; set; }
 
         /// <summary>
         /// Gets or Sets CreatedDate
@@ -242,7 +242,7 @@ namespace VirtoCommerce.Storefront.Model.Order
         public Money TaxTotal { get; set; }
         public decimal TaxPercentRate { get; set; }
 
-        public ICollection<Discount> Discounts { get; set; }
+        public IList<Discount> Discounts { get; set; }
 
         public Money Price { get; set; }
         public Money PriceWithTax { get; set; }

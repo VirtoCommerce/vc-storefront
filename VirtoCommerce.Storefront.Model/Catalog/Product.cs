@@ -89,6 +89,11 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public bool IsBuyable { get; set; }
 
         /// <summary>
+        /// Indicating whether this product is instock
+        /// </summary>
+        public bool IsInStock { get; set; }
+
+        /// <summary>
         /// Indicating whether this product is active
         /// </summary>
         public bool IsActive { get; set; }
@@ -187,22 +192,22 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// <summary>
         /// List og variation properties
         /// </summary>
-        public ICollection<CatalogProperty> VariationProperties { get; set; }
+        public IList<CatalogProperty> VariationProperties { get; set; }
 
         /// <summary>
         /// List of product assets
         /// </summary>
-        public ICollection<Asset> Assets { get; set; }
+        public IList<Asset> Assets { get; set; }
 
         /// <summary>
         /// List of product variations
         /// </summary>
-        public ICollection<Product> Variations { get; set; }
+        public IList<Product> Variations { get; set; }
 
         /// <summary>
         /// Related or associated products
         /// </summary>
-        public ICollection<Association> Associations { get; set; }
+        public IList<Association> Associations { get; set; }
 
         /// <summary>
         /// Product description in current language
@@ -212,7 +217,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// <summary>
         /// Product editorial reviews
         /// </summary>
-        public ICollection<EditorialReview> Descriptions { get; set; }
+        public IList<EditorialReview> Descriptions { get; set; }
 
         /// <summary>
         /// Current product price
@@ -222,7 +227,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// <summary>
         /// Product prices for other currencies
         /// </summary>
-        public ICollection<ProductPrice> Prices { get; set; }
+        public IList<ProductPrice> Prices { get; set; }
 
         /// <summary>
         /// Inventory for default fulfilment center
@@ -232,7 +237,24 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// <summary>
         /// Inventory of all fulfillment centers.
         /// </summary>
-        public ICollection<Inventory> InventoryAll { get; set; }
+        public IList<Inventory> InventoryAll { get; set; }
+
+        public virtual long AvailableQuantity
+        {
+            get
+            {
+                long result = 0;
+
+                if (TrackInventory && InventoryAll != null)
+                {
+                    foreach (var inventory in InventoryAll)
+                    {
+                        result += Math.Max(0, (inventory.InStockQuantity ?? 0L) - (inventory.ReservedQuantity ?? 0L));
+                    }
+                }
+                return result;
+            }
+        }
 
         /// <summary>
         /// product seo info
@@ -247,7 +269,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// <summary>
         /// List of product images
         /// </summary>
-        public ICollection<Image> Images { get; set; }
+        public IList<Image> Images { get; set; }
 
         public bool IsQuotable
         {
@@ -316,7 +338,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         }
 
         #region IHasProperties Members
-        public ICollection<CatalogProperty> Properties { get; set; }
+        public IList<CatalogProperty> Properties { get; set; }
         #endregion
 
         #region ITaxable Members
@@ -351,7 +373,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// <value>
         /// Collection of TaxDetail objects
         /// </value>
-        public ICollection<TaxDetail> TaxDetails { get; set; }
+        public IList<TaxDetail> TaxDetails { get; set; }
 
         public void ApplyTaxRates(IEnumerable<TaxRate> taxRates)
         {
@@ -362,7 +384,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         #endregion
 
         #region IDiscountable Members
-        public ICollection<Discount> Discounts { get; private set; }
+        public IList<Discount> Discounts { get; private set; }
 
         public Currency Currency { get; set; }
 

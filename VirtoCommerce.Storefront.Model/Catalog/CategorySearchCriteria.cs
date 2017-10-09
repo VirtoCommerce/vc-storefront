@@ -53,6 +53,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             retVal.ResponseGroup = ResponseGroup;
             return retVal;
         }
+      
 
         private void Parse(NameValueCollection queryString)
         {

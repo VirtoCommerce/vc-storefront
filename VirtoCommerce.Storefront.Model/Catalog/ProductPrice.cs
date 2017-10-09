@@ -113,7 +113,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             }
         }
 
-        public ICollection<Discount> Discounts { get; set; }
+        public IList<Discount> Discounts { get; set; }
 
         /// <summary>
         /// It defines the minimum quantity of products
@@ -123,7 +123,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// <summary>
         /// Tier prices 
         /// </summary>
-        public ICollection<TierPrice> TierPrices { get; set; }
+        public IList<TierPrice> TierPrices { get; set; }
                 
         /// <summary>
         /// Return tire price for passed quantity
@@ -165,7 +165,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// <value>
         /// Collection of TaxDetail objects
         /// </value>
-        public ICollection<TaxDetail> TaxDetails { get; set; }
+        public IList<TaxDetail> TaxDetails { get; set; }
 
         public void ApplyTaxRates(IEnumerable<TaxRate> taxRates)
         {

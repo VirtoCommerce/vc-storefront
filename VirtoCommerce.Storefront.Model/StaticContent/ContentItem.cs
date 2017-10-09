@@ -8,11 +8,6 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
     {
         protected ContentItem()
         {
-            Tags = new List<string>();
-            Categories = new List<string>();
-            Aliases = new List<string>();
-            AliasesUrls = new List<string>();
-            IsPublished = true;
         }
 
         public virtual string Type => "page";
@@ -35,16 +30,16 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
         /// <summary>
         /// Represent alternative urls which will be used for redirection to main url
         /// </summary>
-        public ICollection<string> Aliases { get; set; }
-        public ICollection<string> AliasesUrls { get; set; }
+        public IList<string> Aliases { get; set; } = new List<string>();
+        public IList<string> AliasesUrls { get; set; } = new List<string>();
 
-        public List<string> Tags { get; set; }
+        public List<string> Tags { get; set; } = new List<string>();
 
-        public List<string> Categories { get; set; }
+        public List<string> Categories { get; set; } = new List<string>();
 
         public string Category { get; set; }
 
-        public bool IsPublished { get; set; }
+        public bool IsPublished { get; set; } = true;
 
         /// <summary>
         /// Content file name without extension

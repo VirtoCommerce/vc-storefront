@@ -22,7 +22,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// Gets collection of shopping cart line items
         /// </summary>
         [DataMember]
-        public ICollection<LineItem> Items { get; set; }
+        public IList<LineItem> Items { get; set; }
 
         /// <summary>
         /// Gets the number of shopping cart line items

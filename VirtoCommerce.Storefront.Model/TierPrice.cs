@@ -95,7 +95,7 @@ namespace VirtoCommerce.Storefront.Model
         /// <value>
         /// Collection of TaxDetail objects
         /// </value>
-        public ICollection<TaxDetail> TaxDetails { get; set; }
+        public IList<TaxDetail> TaxDetails { get; set; }
 
         public void ApplyTaxRates(IEnumerable<TaxRate> taxRates)
         {

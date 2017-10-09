@@ -143,7 +143,7 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// <summary>
         /// Gets or Sets ChildrenOperations
         /// </summary>
-        public ICollection<Operation> ChildrenOperations { get; set; }
+        public IList<Operation> ChildrenOperations { get; set; }
 
         /// <summary>
         /// Used for dynamic properties management, contains object type string
@@ -155,7 +155,7 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// Dynamic properties collections
         /// </summary>
         /// <value>Dynamic properties collections</value>
-        public ICollection<DynamicProperty> DynamicProperties { get; set; }
+        public IList<DynamicProperty> DynamicProperties { get; set; }
 
         /// <summary>
         /// Gets or Sets CreatedDate

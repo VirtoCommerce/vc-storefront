@@ -9,7 +9,7 @@ namespace VirtoCommerce.Storefront.Model.Order
     /// <summary>
     /// Represent customer order
     /// </summary>
-    public partial class CustomerOrder
+    public partial class CustomerOrder : Entity
     {
         public CustomerOrder(Currency currency)
         {
@@ -90,19 +90,19 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// All shipping and billing order addresses
         /// </summary>
         /// <value>All shipping and billing order addresses</value>
-        public ICollection<Address> Addresses { get; set; }
+        public IList<Address> Addresses { get; set; }
 
         /// <summary>
         /// Incoming payments operations
         /// </summary>
         /// <value>Incoming payments operations</value>
-        public ICollection<PaymentIn> InPayments { get; set; }
+        public IList<PaymentIn> InPayments { get; set; }
 
         /// <summary>
         /// All customer order line items
         /// </summary>
         /// <value>All customer order line items</value>
-        public ICollection<LineItem> Items { get; set; }
+        public IList<LineItem> Items { get; set; }
 
         /// <summary>
         /// All customer order shipments
@@ -120,7 +120,7 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// Tax details
         /// </summary>
         /// <value>Tax details</value>
-        public ICollection<TaxDetail> TaxDetails { get; set; }
+        public IList<TaxDetail> TaxDetails { get; set; }
 
         /// <summary>
         /// Unique user friendly document number (generate automatically based on special algorithm realization)
@@ -170,7 +170,7 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// Dynamic properties collections
         /// </summary>
         /// <value>Dynamic properties collections</value>
-        public ICollection<DynamicProperty> DynamicProperties { get; set; }
+        public IList<DynamicProperty> DynamicProperties { get; set; }
 
         /// <summary>
         /// Gets or Sets CreatedDate
@@ -192,12 +192,8 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// </summary>
         public string ModifiedBy { get; set; }
 
-        /// <summary>
-        /// Gets or Sets Id
-        /// </summary>
-        public string Id { get; set; }
-
-        public ICollection<Discount> Discounts { get; set; }
+     
+        public IList<Discount> Discounts { get; set; }
 
         public Money Total { get; set; }
 

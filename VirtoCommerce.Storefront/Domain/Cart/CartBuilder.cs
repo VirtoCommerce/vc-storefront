@@ -13,16 +13,13 @@ using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Cart.ValidationErrors;
 using VirtoCommerce.Storefront.Model.Catalog;
-using VirtoCommerce.Storefront.Model.Catalog.Services;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
-using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Marketing.Services;
 using VirtoCommerce.Storefront.Model.Quote;
 using VirtoCommerce.Storefront.Model.Security;
-using VirtoCommerce.Storefront.Model.Security.Events;
 using VirtoCommerce.Storefront.Model.Services;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Model.Subscriptions.Services;
@@ -40,11 +37,9 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IPromotionEvaluator _promotionEvaluator;
         private readonly ITaxEvaluator _taxEvaluator;
         private readonly ISubscriptionService _subscriptionService;
-        private readonly IProductAvailabilityService _productAvailabilityService;
 
         public CartBuilder(IWorkContextAccessor workContextAccessor, ICartModule cartApi, ICatalogService catalogSearchService,
-            IMemoryCache memoryCache, IPromotionEvaluator promotionEvaluator, ITaxEvaluator taxEvaluator, ISubscriptionService subscriptionService,
-            IProductAvailabilityService productAvailabilityService)
+            IMemoryCache memoryCache, IPromotionEvaluator promotionEvaluator, ITaxEvaluator taxEvaluator, ISubscriptionService subscriptionService)
         {
             _cartApi = cartApi;
             _catalogService = catalogSearchService;
@@ -53,7 +48,6 @@ namespace VirtoCommerce.Storefront.Domain
             _promotionEvaluator = promotionEvaluator;
             _taxEvaluator = taxEvaluator;
             _subscriptionService = subscriptionService;
-            _productAvailabilityService = productAvailabilityService;
         }
 
         #region ICartBuilder Members
@@ -117,7 +111,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             EnsureCartExists();
 
-            var isProductAvailable = await _productAvailabilityService.IsAvailable(product, quantity);
+            var isProductAvailable = new ProductIsAvailableSpecification(product).IsSatisfiedBy(quantity);
             if (isProductAvailable)
             {
                 var lineItem = product.ToLineItem(Cart.Language, quantity);
@@ -348,7 +342,7 @@ namespace VirtoCommerce.Storefront.Domain
             Cart.Payments.Add(payment);
         }
 
-        public virtual async Task<ICollection<ShippingMethod>> GetAvailableShippingMethodsAsync()
+        public virtual async Task<IEnumerable<ShippingMethod>> GetAvailableShippingMethodsAsync()
         {
             var workContext = _workContextAccessor.WorkContext;
 
@@ -369,7 +363,7 @@ namespace VirtoCommerce.Storefront.Domain
             return retVal;
         }
 
-        public virtual async Task<ICollection<PaymentMethod>> GetAvailablePaymentMethodsAsync()
+        public virtual async Task<IEnumerable<PaymentMethod>> GetAvailablePaymentMethodsAsync()
         {
             EnsureCartExists();
             var payments = await _cartApi.GetAvailablePaymentMethodsAsync(Cart.Id);
@@ -409,7 +403,7 @@ namespace VirtoCommerce.Storefront.Domain
                 foreach (var lineItem in Cart.Items.ToList())
                 {
                     var product = products.FirstOrDefault(p => p.Id == lineItem.ProductId);
-                    lineItem.InStockQuantity = (int)await _productAvailabilityService.GetAvailableQuantity(product);
+                    lineItem.InStockQuantity = (int)product.AvailableQuantity;
                 }
                 
                 var evalContext = Cart.ToPromotionEvaluationContext();
@@ -489,12 +483,12 @@ namespace VirtoCommerce.Storefront.Domain
                 }
                 else
                 {
-                    var isProductAvailable = await _productAvailabilityService.IsAvailable(product, lineItem.Quantity);
+                    var isProductAvailable = new ProductIsAvailableSpecification(product).IsSatisfiedBy(lineItem.Quantity);
                     if (!isProductAvailable)
                     {
                         lineItem.IsValid = false;
 
-                        var availableQuantity = await _productAvailabilityService.GetAvailableQuantity(product);
+                        var availableQuantity = product.AvailableQuantity;
                         lineItem.ValidationErrors.Add(new QuantityError(availableQuantity));
                     }
 

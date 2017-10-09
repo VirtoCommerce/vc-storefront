@@ -18,7 +18,7 @@ namespace VirtoCommerce.Storefront.Model
 
         public string Description { get; set; }
 
-        public ICollection<DynamicProperty> DynamicProperties { get; set; }
+        public IList<DynamicProperty> DynamicProperties { get; set; }
 
         public string FolderId { get; set; }
 

@@ -8,6 +8,6 @@ namespace VirtoCommerce.Storefront.Model
 {
     public interface IHasSettings
     {
-        ICollection<SettingEntry> Settings { get; }
+        IList<SettingEntry> Settings { get; }
     }
 }

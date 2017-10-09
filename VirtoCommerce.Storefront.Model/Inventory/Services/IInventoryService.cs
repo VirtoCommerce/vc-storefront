@@ -6,6 +6,6 @@ namespace VirtoCommerce.Storefront.Model.Inventory.Services
 {
     public interface IInventoryService
     {
-        Task EvaluateProductInventoriesAsync(ICollection<Product> products, WorkContext workContext);
+        Task EvaluateProductInventoriesAsync(IEnumerable<Product> products, WorkContext workContext);
     }
 }

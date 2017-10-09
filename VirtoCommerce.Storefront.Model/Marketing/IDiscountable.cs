@@ -11,7 +11,7 @@ namespace VirtoCommerce.Storefront.Model.Marketing
     {
         Currency Currency { get; }
 
-        ICollection<Discount> Discounts { get; }
+        IList<Discount> Discounts { get; }
 
         void ApplyRewards(IEnumerable<PromotionReward> rewards);
     }

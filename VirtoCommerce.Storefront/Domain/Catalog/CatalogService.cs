@@ -9,7 +9,6 @@ using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
-using VirtoCommerce.Storefront.Model.Catalog.Services;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Customer.Services;
@@ -29,14 +28,13 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IPricingService _pricingService;
         private readonly IMemberService _customerService;
         private readonly ISubscriptionService _subscriptionService;
-        private readonly IProductAvailabilityService _productAvailabilityService;
         private readonly IInventoryService _inventoryService;
         private readonly IMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
 
         public CatalogService(IWorkContextAccessor workContextAccessor, ICatalogModuleCategories categoriesApi, ICatalogModuleProducts productsApi,
                               ICatalogModuleSearch searchApi, IPricingService pricingService, IMemberService customerService, ISubscriptionService subscriptionService,
-                              IProductAvailabilityService productAvailabilityService, IInventoryService inventoryService, IMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
+                              IInventoryService inventoryService, IMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
         {
             _workContextAccessor = workContextAccessor;
             _categoriesApi = categoriesApi;
@@ -47,7 +45,6 @@ namespace VirtoCommerce.Storefront.Domain
             _inventoryService = inventoryService;
             _customerService = customerService;
             _subscriptionService = subscriptionService;
-            _productAvailabilityService = productAvailabilityService;
             _memoryCache = memoryCache;
             _apiChangesWatcher = changesWatcher;
         }
@@ -108,7 +105,9 @@ namespace VirtoCommerce.Storefront.Domain
 
                     foreach (var product in allProducts)
                     {
-                        product.IsAvailable = await _productAvailabilityService.IsAvailable(product, 1);
+                        product.IsBuyable = new ProductIsBuyableSpecification().IsSatisfiedBy(product);
+                        product.IsAvailable = new ProductIsAvailableSpecification(product).IsSatisfiedBy(1);
+                        product.IsInStock = new ProductIsInStockSpecification().IsSatisfiedBy(product);
                     }
                 }
             }
@@ -269,7 +268,9 @@ namespace VirtoCommerce.Storefront.Domain
 
                     foreach (var product in productsWithVariations)
                     {
-                        product.IsAvailable = await _productAvailabilityService.IsAvailable(product, 1);
+                        product.IsBuyable = new ProductIsBuyableSpecification().IsSatisfiedBy(product);
+                        product.IsAvailable = new ProductIsAvailableSpecification(product).IsSatisfiedBy(1);
+                        product.IsInStock = new ProductIsInStockSpecification().IsSatisfiedBy(product);
                     }
                 }
                 return new CatalogSearchResult

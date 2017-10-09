@@ -6,6 +6,6 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
     public interface IValidatable
     {
         bool IsValid { get; set; }
-        ICollection<ValidationError> ValidationErrors { get; }
+        IList<ValidationError> ValidationErrors { get; }
     }
 }

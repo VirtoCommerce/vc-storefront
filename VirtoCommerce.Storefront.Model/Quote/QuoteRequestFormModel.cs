@@ -20,6 +20,6 @@ namespace VirtoCommerce.Storefront.Model.Quote
 
         public Address ShippingAddress { get; set; }
 
-        public ICollection<QuoteItemFormModel> Items { get; set; }
+        public IList<QuoteItemFormModel> Items { get; set; }
     }
 }

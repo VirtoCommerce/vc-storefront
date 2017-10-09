@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +46,26 @@ namespace VirtoCommerce.Storefront.Model.Common
 
         protected virtual IEnumerable<object> GetEqualityComponents()
         {
-            return GetProperties().Select(x => x.GetValue(this));
+            foreach(var property in GetProperties())
+            {
+                var value = property.GetValue(this);
+                if(value != null)
+                {
+                    var valueType = value.GetType();
+
+                    if(valueType.IsAssignableFromGenericList())
+                    {
+                        foreach (var child in ((IEnumerable)value))
+                        {
+                            yield return child;
+                        }
+                    }
+                    else
+                    {
+                        yield return value;
+                    }
+                }
+            }
         }
 
         protected virtual IEnumerable<PropertyInfo> GetProperties()

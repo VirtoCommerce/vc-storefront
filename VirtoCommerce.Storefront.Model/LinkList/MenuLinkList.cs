@@ -26,7 +26,7 @@ namespace VirtoCommerce.Storefront.Model
         /// <summary>
         /// Gets or sets the collection of site navigation menu link for link list
         /// </summary>
-        public ICollection<MenuLink> MenuLinks { get; set; }
+        public IList<MenuLink> MenuLinks { get; set; }
 
         #region IHasLanguage Members
         /// <summary>

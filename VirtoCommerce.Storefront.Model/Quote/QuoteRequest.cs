@@ -79,13 +79,13 @@ namespace VirtoCommerce.Storefront.Model.Quote
 
         public ShippingMethod ShipmentMethod { get; set; }
 
-        public ICollection<Address> Addresses { get; set; }
+        public IList<Address> Addresses { get; set; }
 
-        public ICollection<QuoteItem> Items { get; set; }
+        public IList<QuoteItem> Items { get; set; }
 
-        public ICollection<Attachment> Attachments { get; set; }
+        public IList<Attachment> Attachments { get; set; }
 
-        public ICollection<TaxDetail> TaxDetails { get; set; }
+        public IList<TaxDetail> TaxDetails { get; set; }
 
         public bool IsCancelled { get; set; }
 
@@ -95,7 +95,7 @@ namespace VirtoCommerce.Storefront.Model.Quote
 
         public string ObjectType { get; set; }
 
-        public ICollection<DynamicProperty> DynamicProperties { get; set; }
+        public IList<DynamicProperty> DynamicProperties { get; set; }
 
         public DateTime? CreatedDate { get; set; }
 

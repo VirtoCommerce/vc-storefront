@@ -24,7 +24,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// <summary>
         /// Returns a collection of links in the linklist
         /// </summary>
-        public ICollection<Link> Links { get; set; }
+        public IList<Link> Links { get; set; }
 
         /// <summary>
         /// Returns the title of the linklist

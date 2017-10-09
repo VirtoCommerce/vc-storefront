@@ -16,7 +16,7 @@ namespace VirtoCommerce.Storefront.Model
         Money TaxTotal { get; }
         decimal TaxPercentRate { get; }
         string TaxType { get; }
-        ICollection<TaxDetail> TaxDetails { get; }
+        IList<TaxDetail> TaxDetails { get; }
 
         void ApplyTaxRates(IEnumerable<TaxRate> taxRates);
     }

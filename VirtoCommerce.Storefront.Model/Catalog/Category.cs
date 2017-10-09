@@ -43,7 +43,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// </summary>
         public Image PrimaryImage { get; set; }
 
-        public ICollection<Image> Images { get; set; }
+        public IList<Image> Images { get; set; }
 
         public IMutablePagedList<Product> Products { get; set; }
 
@@ -53,7 +53,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public IMutablePagedList<Category> Categories { get; set; }
 
         #region IHasProperties Members
-        public ICollection<CatalogProperty> Properties { get; set; }
+        public IList<CatalogProperty> Properties { get; set; }
         #endregion
     }
 }

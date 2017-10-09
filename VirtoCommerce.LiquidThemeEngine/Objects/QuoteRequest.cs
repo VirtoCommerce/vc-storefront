@@ -56,15 +56,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
 
         public ShippingMethod ShipmentMethod { get; set; }
 
-        public ICollection<Address> Addresses { get; set; }
+        public IList<Address> Addresses { get; set; }
 
-        public ICollection<QuoteItem> Items { get; set; }
+        public IList<QuoteItem> Items { get; set; }
 
-        public ICollection<Attachment> Attachments { get; set; }
+        public IList<Attachment> Attachments { get; set; }
 
         public Language Language { get; set; }
 
-        public ICollection<TaxLine> TaxDetails { get; set; }
+        public IList<TaxLine> TaxDetails { get; set; }
 
         public bool IsCancelled { get; set; }
 

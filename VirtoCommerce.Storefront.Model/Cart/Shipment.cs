@@ -144,7 +144,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <value>
         /// Collection of CartShipmentItem objects
         /// </value>
-        public ICollection<CartShipmentItem> Items { get; set; }
+        public IList<CartShipmentItem> Items { get; set; }
 
         #region ITaxable Members
         /// <summary>
@@ -171,7 +171,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <value>
         /// Collection of TaxDetail objects
         /// </value>
-        public ICollection<TaxDetail> TaxDetails { get; set; } 
+        public IList<TaxDetail> TaxDetails { get; set; } 
 
         public void ApplyTaxRates(IEnumerable<TaxRate> taxRates)
         {
@@ -194,11 +194,11 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
         #region IValidatable Members
         public bool IsValid { get; set; }
-        public ICollection<ValidationError> ValidationErrors { get; set; }
+        public IList<ValidationError> ValidationErrors { get; set; }
         #endregion
 
         #region IDiscountable Members
-        public ICollection<Discount> Discounts { get; private set; }
+        public IList<Discount> Discounts { get; private set; }
 
         public Currency Currency { get; set; }
 

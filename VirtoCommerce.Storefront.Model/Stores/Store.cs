@@ -53,7 +53,7 @@ namespace VirtoCommerce.Storefront.Model.Stores
         /// <summary>
         /// All supported languages
         /// </summary>
-        public ICollection<Language> Languages { get; set; }
+        public IList<Language> Languages { get; set; }
 
         /// <summary>
         /// Default currency of store. 
@@ -63,7 +63,7 @@ namespace VirtoCommerce.Storefront.Model.Stores
         /// <summary>
         /// List of all supported currencies codes
         /// </summary>
-        public ICollection<string> CurrenciesCodes { get; set; }
+        public IList<string> CurrenciesCodes { get; set; }
 
         /// <summary>
         /// Product catalog id assigned to store
@@ -85,17 +85,17 @@ namespace VirtoCommerce.Storefront.Model.Stores
         /// </summary>
         public string ThemeName { get; set; }
 
-        public ICollection<DynamicProperty> DynamicProperties { get; set; }
+        public IList<DynamicProperty> DynamicProperties { get; set; }
 
         /// <summary>
         /// All store seo informations for all languages
         /// </summary>
-        public ICollection<SeoInfo> SeoInfos { get; set; }
+        public IList<SeoInfo> SeoInfos { get; set; }
 
         /// <summary>
         /// All linked stores (their accounts can be reused here)
         /// </summary>
-        public ICollection<string> TrustedGroups { get; set; }
+        public IList<string> TrustedGroups { get; set; }
 
         /// <summary>
         /// Primary  fullfilment center
@@ -105,7 +105,7 @@ namespace VirtoCommerce.Storefront.Model.Stores
         /// <summary>
         /// All fullfilment centeres
         /// </summary>
-        public ICollection<FulfillmentCenter> FulfilmentCenters { get; set; }
+        public IList<FulfillmentCenter> FulfilmentCenters { get; set; }
 
         public bool QuotesEnabled
         {
@@ -133,7 +133,7 @@ namespace VirtoCommerce.Storefront.Model.Stores
 
         #region IHasSettings Members
 
-        public ICollection<SettingEntry> Settings { get; set; }
+        public IList<SettingEntry> Settings { get; set; }
 
         #endregion
 

@@ -8,6 +8,6 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 {
     public interface IHasProperties
     {
-        ICollection<CatalogProperty> Properties { get; }
+        IList<CatalogProperty> Properties { get; }
     }
 }
