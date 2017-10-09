@@ -26,7 +26,7 @@ namespace VirtoCommerce.Storefront.Model
         public string ValueType { get; set; }
 
         //Selected scalar values
-        public IList<LocalizedString> Values { get; set; }
+        public IList<LocalizedString> Values { get; set; } = new List<LocalizedString>();
         //Selected dictionary values
         public IList<DynamicPropertyDictionaryItem> DictionaryValues { get; set; } = new List<DynamicPropertyDictionaryItem>();
         //All possible dictionary values
