@@ -114,6 +114,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login([FromForm] Login login, string returnUrl)
         {
             if (string.IsNullOrWhiteSpace(login.Username))
@@ -253,6 +254,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotPassword(ForgotPassword formModel)
         {
             var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
@@ -298,6 +300,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(ResetPassword formModel)
         {
             if (formModel.Email == null || formModel.Token == null)
