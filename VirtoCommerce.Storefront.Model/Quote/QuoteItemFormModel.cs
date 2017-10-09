@@ -15,6 +15,6 @@ namespace VirtoCommerce.Storefront.Model.Quote
 
         public TierPriceFormModel SelectedTierPrice { get; set; }
 
-        public ICollection<TierPriceFormModel> ProposalPrices { get; set; }
+        public IList<TierPriceFormModel> ProposalPrices { get; set; }
     }
 }

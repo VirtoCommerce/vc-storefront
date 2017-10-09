@@ -42,11 +42,11 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         public string Keyword { get; set; }
 
-        public Term[] Terms { get; set; }
+        public IList<Term> Terms { get; set; } = new List<Term>();
 
         public string SortBy { get; set; }
 
-        public string VendorId { get; set; }
+        public string VendorId { get; set; }     
 
         public ProductSearchCriteria Clone()
         {

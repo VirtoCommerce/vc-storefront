@@ -37,7 +37,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public IMutablePagedList<Address> Addresses { get; set; }
 
         [DataMember]
-        public ICollection<DynamicProperty> DynamicProperties { get; set; }
+        public IList<DynamicProperty> DynamicProperties { get; set; }
 
         [DataMember]
         public IMutablePagedList<Product> Products { get; set; }

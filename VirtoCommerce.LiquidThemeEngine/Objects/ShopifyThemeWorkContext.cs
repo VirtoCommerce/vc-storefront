@@ -141,7 +141,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
 
         public QuoteRequest QuoteRequest { get; set; }
 
-        public ICollection<LoginProvider> ExternalLoginProviders { get; set; }
+        public IList<LoginProvider> ExternalLoginProviders { get; set; }
 
         public MetafieldsCollection ApplicationSettings { get; set; }
 

@@ -305,7 +305,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <value>
         /// Collection of Address objects
         /// </value>
-        public ICollection<Address> Addresses { get; set; }
+        public IList<Address> Addresses { get; set; }
 
         /// <summary>
         /// Gets or sets the value of shopping cart line items
@@ -313,7 +313,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <value>
         /// Collection of LineItem objects
         /// </value>
-        public ICollection<LineItem> Items { get; set; }
+        public IList<LineItem> Items { get; set; }
 
         public int ItemsCount => Items.Count;
 
@@ -328,7 +328,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <value>
         /// Collection of Payment objects
         /// </value>
-        public ICollection<Payment> Payments { get; set; }
+        public IList<Payment> Payments { get; set; }
 
         /// <summary>
         /// Gets or sets the collection of shopping cart shipments
@@ -336,7 +336,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <value>
         /// Collection of Shipment objects
         /// </value>
-        public ICollection<Shipment> Shipments { get; set; }
+        public IList<Shipment> Shipments { get; set; }
 
 
         /// <summary>
@@ -350,10 +350,10 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// Dynamic properties collections
         /// </summary>
         /// <value>Dynamic properties collections</value>
-        public ICollection<DynamicProperty> DynamicProperties { get; set; }
+        public IList<DynamicProperty> DynamicProperties { get; set; }
 
 
-        public ICollection<PaymentMethod> AvailablePaymentMethods { get; set; }
+        public IList<PaymentMethod> AvailablePaymentMethods { get; set; }
 
         public LineItem RecentlyAddedItem
         {
@@ -370,11 +370,11 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
         #region IValidatable Members
         public bool IsValid { get; set; }
-        public ICollection<ValidationError> ValidationErrors { get; set; }
+        public IList<ValidationError> ValidationErrors { get; set; }
         #endregion
 
         #region IDiscountable Members
-        public ICollection<Discount> Discounts { get; }
+        public IList<Discount> Discounts { get; }
 
         public Currency Currency { get; }
 
@@ -463,7 +463,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <value>
         /// Collection of TaxDetail objects
         /// </value>
-        public ICollection<TaxDetail> TaxDetails { get; set; }
+        public IList<TaxDetail> TaxDetails { get; set; }
 
         public void ApplyTaxRates(IEnumerable<TaxRate> taxRates)
         {

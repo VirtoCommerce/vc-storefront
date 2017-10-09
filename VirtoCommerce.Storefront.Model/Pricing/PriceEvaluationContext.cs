@@ -17,8 +17,6 @@ namespace VirtoCommerce.Storefront.Model.Pricing
 
         public string OrganizationId { get; set; }
 
-        public System.DateTime? CertainDate { get; set; }
-
         public string Currency { get; set; }
 
         public object ContextObject { get; set; }
@@ -58,57 +56,5 @@ namespace VirtoCommerce.Storefront.Model.Pricing
         public string CurrentUrl { get; set; }
         
         public string ReferredUrl { get; set; }
-
-        protected override IEnumerable<object> GetEqualityComponents()
-        {
-            yield return StoreId;
-            yield return CatalogId;
-            yield return Quantity;
-            yield return CustomerId;
-            yield return OrganizationId;
-            yield return Currency;
-            yield return ContextObject;
-            yield return GeoCity;
-            yield return GeoState;
-            yield return GeoCountry;
-            yield return GeoContinent;
-            yield return GeoZipCode;
-            yield return GeoConnectionType;
-            yield return GeoTimeZone;
-            yield return GeoIpRoutingType;
-            yield return GeoIspSecondLevel;
-            yield return GeoIspTopLevel;
-            yield return ShopperAge;
-            yield return ShopperGender;
-            yield return Language;
-            yield return ShopperSearchedPhraseInStore;
-            yield return ShopperSearchedPhraseOnInternet;
-            yield return CurrentUrl;
-            yield return ReferredUrl;
-
-            if(!ProductIds.IsNullOrEmpty())
-            {               
-                foreach(var productId in ProductIds)
-                {
-                    yield return productId;
-                }
-            }
-            if (!UserGroups.IsNullOrEmpty())
-            {
-                foreach (var userGroup in UserGroups)
-                {
-                    yield return userGroup;
-                }
-            }
-            if (!PricelistIds.IsNullOrEmpty())
-            {
-                foreach (var priceList in PricelistIds)
-                {
-                    yield return priceList;
-                }
-            }
-
-        }
-
     }
 }

@@ -37,7 +37,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// <summary>
         /// Property values for all languages
         /// </summary>
-        public ICollection<LocalizedString> LocalizedValues { get; set; }
+        public IList<LocalizedString> LocalizedValues { get; set; }
         /// <summary>
         /// Property value in current language
         /// </summary>
@@ -45,10 +45,10 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         public string DisplayName { get; set; }
 
-        public ICollection<LocalizedString> DisplayNames { get; set; }
+        public IList<LocalizedString> DisplayNames { get; set; }
 
         public bool IsMultivalue { get; set; }
 
-        public ICollection<string> Values { get; set; }
+        public IList<string> Values { get; set; }
     }
 }

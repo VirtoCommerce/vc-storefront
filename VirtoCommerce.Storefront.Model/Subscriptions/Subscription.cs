@@ -15,7 +15,6 @@ namespace VirtoCommerce.Storefront.Model.Subscriptions
             : base(currency)
         {
             Balance = new Money(currency);
-            CustomerOrders = new List<CustomerOrder>();
         }
 
         /// <summary>
@@ -39,7 +38,7 @@ namespace VirtoCommerce.Storefront.Model.Subscriptions
         /// <summary>
         /// List of all orders  created on the basis of the subscription
         /// </summary>
-        public ICollection<CustomerOrder> CustomerOrders{ get; set; }
+        public IList<CustomerOrder> CustomerOrders { get; set; } = new List<CustomerOrder>();
 
         /// <summary>
         /// Date the most recent update to this subscription started.

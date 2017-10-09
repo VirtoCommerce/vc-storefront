@@ -94,7 +94,6 @@ namespace VirtoCommerce.Storefront.Domain
                 PricelistIds = workContext.CurrentPricelists.Select(p => p.Id).ToList(),
                 CatalogId = workContext.CurrentStore.Catalog,
                 Language = workContext.CurrentLanguage.CultureName,
-                CertainDate = workContext.StorefrontUtcNow,
                 StoreId = workContext.CurrentStore.Id
             };
 

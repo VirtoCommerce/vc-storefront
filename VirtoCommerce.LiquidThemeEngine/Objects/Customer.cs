@@ -105,7 +105,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// Returns the list of tags associated with the customer.
         /// </summary>
         [DataMember]
-        public ICollection<string> Tags { get; set; }
+        public IList<string> Tags { get; set; }
 
         /// <summary>
         /// Access in liquid template customer.metafields.dynamic_properties['propertyName']

@@ -21,7 +21,6 @@ using VirtoCommerce.Storefront.JsonConverters;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart.Services;
-using VirtoCommerce.Storefront.Model.Catalog.Services;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Bus;
 using VirtoCommerce.Storefront.Model.Common.Events;
@@ -83,7 +82,6 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<ITaxEvaluator, TaxEvaluator>();
             services.AddSingleton<IPromotionEvaluator, PromotionEvaluator>();
             services.AddSingleton<IMarketingService, MarketingService>();
-            services.AddSingleton<IProductAvailabilityService, ProductAvailabilityService>();
             services.AddSingleton<IStaticContentService, StaticContentService>();
             services.AddSingleton<IMenuLinkListService, MenuLinkListServiceImpl>();
             services.AddSingleton<IStaticContentItemFactory, StaticContentItemFactory>();

@@ -20,7 +20,7 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
-        public static Subscription ToSubscription(this subscriptionDto.Subscription subscriptionDto, ICollection<Currency> availCurrencies, Language language)
+        public static Subscription ToSubscription(this subscriptionDto.Subscription subscriptionDto, IEnumerable<Currency> availCurrencies, Language language)
         {
             return SubscriptionConverterInstance.ToSubscription(subscriptionDto, availCurrencies, language);
         }
@@ -75,7 +75,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual Subscription ToSubscription(subscriptionDto.Subscription subscriptionDto, ICollection<Currency> availCurrencies, Language language)
+        public virtual Subscription ToSubscription(subscriptionDto.Subscription subscriptionDto, IEnumerable<Currency> availCurrencies, Language language)
         {
             var currency = availCurrencies.FirstOrDefault(x => x.Equals(subscriptionDto.CustomerOrderPrototype.Currency)) ?? new Currency(language, subscriptionDto.CustomerOrderPrototype.Currency);
             var order = subscriptionDto.CustomerOrderPrototype.JsonConvert<orderDto.CustomerOrder>()

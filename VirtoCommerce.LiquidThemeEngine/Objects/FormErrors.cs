@@ -11,17 +11,16 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// </summary>
     public class FormErrors : Drop, IEnumerable<string>
     {
-
         public FormErrors(ModelStateDictionary modelState)
         {
             Messages = modelState
                 .Where(x => x.Value.Errors.Any())
                 .ToDictionary(x => x.Key, x => x.Value.Errors.Select(y => y.ErrorMessage).FirstOrDefault());
 
-            _fields = Messages.Keys;
+            _fields = Messages.Keys.ToList();
         }
 
-        private ICollection<string> _fields { get; set; }
+        private IList<string> _fields { get; set; }
 
         public IDictionary<string, string> Messages { get; set; }
 

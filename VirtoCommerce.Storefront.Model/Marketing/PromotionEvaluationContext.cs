@@ -22,7 +22,7 @@ namespace VirtoCommerce.Storefront.Model.Marketing
         public Currency Currency { get; set; } 
         public User User { get; set; }
         public Cart.ShoppingCart Cart { get; set; }
-        public ICollection<Product> Products { get; set; } = new List<Product>();
+        public IList<Product> Products { get; set; } = new List<Product>();
         public Product Product { get; set; }
 
         protected override IEnumerable<object> GetEqualityComponents()

@@ -26,7 +26,7 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// <summary>
         /// Gets or Sets Items
         /// </summary>
-        public ICollection<ShipmentItem> Items { get; set; }
+        public IList<ShipmentItem> Items { get; set; }
 
         /// <summary>
         /// Gets or Sets WeightUnit

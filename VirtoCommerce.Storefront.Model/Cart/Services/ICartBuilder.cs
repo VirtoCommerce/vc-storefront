@@ -134,13 +134,13 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         /// Returns all available shipment methods for current cart
         /// </summary>
         /// <returns></returns>
-        Task<ICollection<ShippingMethod>> GetAvailableShippingMethodsAsync();
+        Task<IEnumerable<ShippingMethod>> GetAvailableShippingMethodsAsync();
 
         /// <summary>
         /// Returns all available payment methods for current cart
         /// </summary>
         /// <returns></returns>
-        Task<ICollection<PaymentMethod>> GetAvailablePaymentMethodsAsync();
+        Task<IEnumerable<PaymentMethod>> GetAvailablePaymentMethodsAsync();
 
         /// <summary>
         /// Evaluate marketing discounts for captured cart

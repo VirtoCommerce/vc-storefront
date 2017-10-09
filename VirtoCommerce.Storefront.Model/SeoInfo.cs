@@ -21,15 +21,6 @@ namespace VirtoCommerce.Storefront.Model
         #region IHasLanguage Members
         public Language Language { get; set; }
         #endregion
-
-        protected override IEnumerable<object> GetEqualityComponents()
-        {
-            yield return MetaDescription;
-            yield return Slug;
-            yield return MetaKeywords;
-            yield return Title;
-            yield return ImageUrl;
-            yield return Language;
-        }
+      
     }
 }

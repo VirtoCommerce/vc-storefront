@@ -30,7 +30,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
 
         public TierPrice SelectedTierPrice { get; set; }
 
-        public ICollection<TierPrice> ProposalPrices { get; set; }
+        public IList<TierPrice> ProposalPrices { get; set; }
 
 
         public DateTime? CreatedDate { get; set; }

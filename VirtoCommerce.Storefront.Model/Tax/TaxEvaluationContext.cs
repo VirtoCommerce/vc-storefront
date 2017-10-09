@@ -26,28 +26,9 @@ namespace VirtoCommerce.Storefront.Model.Tax
 
         public Currency Currency { get; set; }
 
-        public ICollection<TaxLine> Lines { get; set; }
+        public IList<TaxLine> Lines { get; set; }
 
         public bool StoreTaxCalculationEnabled { get; set; }
-
-        protected override IEnumerable<object> GetEqualityComponents()
-        {
-            yield return Id;
-            yield return StoreId;
-            yield return Code;
-            yield return Type;
-            yield return Customer;
-            yield return Address;
-            yield return Currency;
-            yield return StoreTaxCalculationEnabled;
-            if(Lines != null)
-            {
-                foreach(var line in Lines)
-                {
-                    yield return line;
-                }
-            }
-        }
-
+       
     }
 }

@@ -12,15 +12,7 @@ namespace VirtoCommerce.Storefront.Tests.ValueObjects
         {
             public List<string> ListProperty { get; set; }
             public string SimpleProperty { get; set; }
-
-            protected override IEnumerable<object> GetEqualityComponents()
-            {
-                yield return SimpleProperty;
-                foreach(var val in ListProperty)
-                {
-                    yield return val;
-                }
-            }
+         
         }
 
         [Fact]

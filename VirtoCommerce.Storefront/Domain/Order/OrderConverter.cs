@@ -22,7 +22,7 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
-        public static CustomerOrder ToCustomerOrder(this orderDto.CustomerOrder orderDto, ICollection<Currency> availCurrencies, Language language)
+        public static CustomerOrder ToCustomerOrder(this orderDto.CustomerOrder orderDto, IEnumerable<Currency> availCurrencies, Language language)
         {
             return OrderConverterInstance.ToCustomerOrder(orderDto, availCurrencies, language);
         }
@@ -61,7 +61,7 @@ namespace VirtoCommerce.Storefront.Domain
             return OrderConverterInstance.ToOrderLineItem(lineItemDto, availCurrencies, language);
         }
 
-        public static Model.Order.Shipment ToOrderShipment(this orderDto.Shipment shipmentDto, ICollection<Currency> availCurrencies, Language language)
+        public static Model.Order.Shipment ToOrderShipment(this orderDto.Shipment shipmentDto, IEnumerable<Currency> availCurrencies, Language language)
         {
             return OrderConverterInstance.ToOrderShipment(shipmentDto, availCurrencies, language);
         }
@@ -175,7 +175,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual Shipment ToOrderShipment(orderDto.Shipment shipmentDto, ICollection<Currency> availCurrencies, Language language)
+        public virtual Shipment ToOrderShipment(orderDto.Shipment shipmentDto, IEnumerable<Currency> availCurrencies, Language language)
         {
             var currency = availCurrencies.FirstOrDefault(x => x.Equals(shipmentDto.Currency)) ?? new Currency(language, shipmentDto.Currency);
             var result = new Shipment(currency)
@@ -449,7 +449,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual CustomerOrder ToCustomerOrder(orderDto.CustomerOrder order, ICollection<Currency> availCurrencies, Language language)
+        public virtual CustomerOrder ToCustomerOrder(orderDto.CustomerOrder order, IEnumerable<Currency> availCurrencies, Language language)
         {
             var currency = availCurrencies.FirstOrDefault(x => x.Equals(order.Currency)) ?? new Currency(language, order.Currency);
 

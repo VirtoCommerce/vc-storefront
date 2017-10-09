@@ -279,11 +279,11 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// Dynamic properties collections
         /// </summary>
         /// <value>Dynamic properties collections</value>
-        public ICollection<DynamicProperty> DynamicProperties { get; set; }
+        public IList<DynamicProperty> DynamicProperties { get; set; }
 
         #region IValidatable Members
         public bool IsValid { get; set; }
-        public ICollection<ValidationError> ValidationErrors { get; set; }
+        public IList<ValidationError> ValidationErrors { get; set; }
         #endregion
 
 
@@ -312,7 +312,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <value>
         /// Collection of TaxDetail objects
         /// </value>
-        public ICollection<TaxDetail> TaxDetails { get; set; }
+        public IList<TaxDetail> TaxDetails { get; set; }
 
         public void ApplyTaxRates(IEnumerable<TaxRate> taxRates)
         {
@@ -337,7 +337,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         #region IDiscountable  Members
         public Currency Currency { get; private set; }
 
-        public ICollection<Discount> Discounts { get; private set; }
+        public IList<Discount> Discounts { get; private set; }
 
         public void ApplyRewards(IEnumerable<PromotionReward> rewards)
         {

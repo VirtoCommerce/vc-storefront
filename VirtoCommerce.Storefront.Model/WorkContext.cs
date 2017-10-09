@@ -212,7 +212,7 @@ namespace VirtoCommerce.Storefront.Model
         /// <summary>
         /// Gets or sets the collection of external login providers
         /// </summary>
-        public ICollection<LoginProvider> ExternalLoginProviders { get; set; }
+        public IList<LoginProvider> ExternalLoginProviders { get; set; }
 
         /// <summary>
         /// Gets or sets the dictionary of application settings

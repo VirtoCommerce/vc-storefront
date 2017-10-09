@@ -23,7 +23,7 @@ namespace VirtoCommerce.Storefront.Domain
             _memoryCache = memoryCache;
         }
 
-        public virtual async Task EvaluateProductInventoriesAsync(ICollection<Product> products, WorkContext workContext)
+        public virtual async Task EvaluateProductInventoriesAsync(IEnumerable<Product> products, WorkContext workContext)
         {
             if(products == null)
             {

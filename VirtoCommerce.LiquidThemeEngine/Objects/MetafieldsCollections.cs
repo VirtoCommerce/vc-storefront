@@ -22,7 +22,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
             this.Namespace = scope;
         }
 
-        public MetafieldsCollection(string scope, ICollection<SettingEntry> settings)
+        public MetafieldsCollection(string scope, IEnumerable<SettingEntry> settings)
         {
             this.Namespace = scope;
             if (settings != null)
@@ -41,7 +41,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
             }
         }
 
-        public MetafieldsCollection(string scope, Storefront.Model.Language language, ICollection<DynamicProperty> dynamicProperties)
+        public MetafieldsCollection(string scope, Storefront.Model.Language language, IEnumerable<DynamicProperty> dynamicProperties)
         {
             this.Namespace = scope;
             if (dynamicProperties != null)
@@ -60,7 +60,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
             }
         }
 
-        public MetafieldsCollection(string scope, ICollection<CatalogProperty> catalogProperties)
+        public MetafieldsCollection(string scope, IEnumerable<CatalogProperty> catalogProperties)
         {
             this.Namespace = scope;
             if (catalogProperties != null)

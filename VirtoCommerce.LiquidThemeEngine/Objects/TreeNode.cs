@@ -6,11 +6,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
     public partial class TreeNode : Drop
     {
-        public TreeNode()
-        {
-            Children = new List<TreeNode>();
-        }
-
         public string Path { get; set; }
 
         public int Level { get; set; }
@@ -19,13 +14,13 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
 
         public int? Priority { get; set; }
 
-        public ICollection<TreeNode> Children { get; set; }
+        public IList<TreeNode> Children { get; set; } = new List<TreeNode>();
 
         public string ParentPath { get; set; }
 
         public TreeNode Parent { get; set; }
 
-        public ICollection<TreeNode> Parents
+        public IList<TreeNode> Parents
         {
             get
             {
@@ -40,6 +35,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
             }
         }
 
-        public ICollection<TreeNode> AllChildren { get; set; }
+        public IList<TreeNode> AllChildren { get; set; } = new List<TreeNode>();
     }
 }
