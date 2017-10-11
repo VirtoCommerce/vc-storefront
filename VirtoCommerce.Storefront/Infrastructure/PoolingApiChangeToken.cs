@@ -9,9 +9,9 @@ namespace VirtoCommerce.Storefront.Infrastructure
     public class PoolingApiChangeToken : IChangeToken
     {
         private readonly ICacheModule _cacheApi;
-        private static DateTime _previousChangeTimeUtc;
-        private static DateTime _lastCheckedTimeUtc;
-        private bool _hasChanged;
+        private static DateTime _previousChangeTimeUtcStatic;
+        private static DateTime _lastCheckedTimeUtcStatic;
+        private DateTime _previousChangeTimeUtc;
         private readonly TimeSpan _poolingInterval;
         private static object _lock = new object();
 
@@ -19,6 +19,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
         {
             _poolingInterval = poolingInterval;
             _cacheApi = cacheApi;
+            _previousChangeTimeUtc = _previousChangeTimeUtcStatic;
         }
 
         private DateTime GetLastChangeTimeUtc()
@@ -35,15 +36,12 @@ namespace VirtoCommerce.Storefront.Infrastructure
         {
             get
             {
-                if (_hasChanged)
-                {
-                    return _hasChanged;
-                }
+                var hasChanged = _previousChangeTimeUtc < _previousChangeTimeUtcStatic;            
 
                 var currentTime = DateTime.UtcNow;
-                if (currentTime - _lastCheckedTimeUtc < _poolingInterval)
+                if (currentTime - _lastCheckedTimeUtcStatic < _poolingInterval)
                 {
-                    return _hasChanged;
+                    return hasChanged;
                 }
 
                 //Need to prevent API flood for multiple token instances
@@ -53,12 +51,12 @@ namespace VirtoCommerce.Storefront.Infrastructure
                     if (lockTaken)
                     {
                         var lastChangeTimeUtc = GetLastChangeTimeUtc();
-                        if (_previousChangeTimeUtc < lastChangeTimeUtc)
+                        if (_previousChangeTimeUtcStatic < lastChangeTimeUtc)
                         {
-                            _previousChangeTimeUtc = lastChangeTimeUtc;
-                            _hasChanged = true;
+                            _previousChangeTimeUtcStatic = lastChangeTimeUtc;
+                            hasChanged = true;
                         }
-                        _lastCheckedTimeUtc = currentTime;
+                        _lastCheckedTimeUtcStatic = currentTime;
                     }                 
                 }
                 finally
@@ -66,7 +64,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
                     if (lockTaken) Monitor.Exit(_lock);
                 }
              
-                return _hasChanged;
+                return hasChanged;
             }
         }
 
