@@ -14,9 +14,14 @@ namespace VirtoCommerce.LiquidThemeEngine.Tags
     {
         public override void Render(Context context, TextWriter result)
         {
-            var themeAdaptor = (ShopifyLiquidThemeEngine)Template.FileSystem;
-            var httpContext = themeAdaptor.HttpContext;
-            var antiforgery = httpContext.RequestServices.GetService<IAntiforgery>();            
+            GenerateAndWriteTo(result);
+        }
+
+        internal static void GenerateAndWriteTo(TextWriter result)
+        {
+            var themeEngine = (ShopifyLiquidThemeEngine)Template.FileSystem;
+            var httpContext = themeEngine.HttpContext;
+            var antiforgery = httpContext.RequestServices.GetService<IAntiforgery>();
             var htmlContent = antiforgery.GetHtml(httpContext);
             htmlContent.WriteTo(result, HtmlEncoder.Default);
         }
