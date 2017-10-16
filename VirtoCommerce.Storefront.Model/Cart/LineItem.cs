@@ -349,7 +349,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
             foreach (var reward in lineItemRewards)
             {
-                var discount = reward.ToDiscountModel(SalePrice);
+                var discount = reward.ToDiscountModel(ListPrice - DiscountAmount);
                 if (reward.Quantity > 0)
                 {
                     var money = discount.Amount * Math.Min(reward.Quantity, Quantity);

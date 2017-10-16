@@ -862,7 +862,8 @@ namespace VirtoCommerce.Storefront.Domain
             result.Code = lineItem.Sku;
             result.ProductId = lineItem.ProductId;
             result.Discount = (double)lineItem.DiscountTotal.Amount;
-            result.Price = (double)lineItem.PlacedPrice.Amount;
+            //Use only base price for discount evaluation
+            result.Price = (double)lineItem.SalePrice.Amount;
             result.Quantity = lineItem.Quantity;
             result.InStockQuantity = lineItem.InStockQuantity;
             result.Variations = null; // TODO

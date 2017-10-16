@@ -178,7 +178,7 @@ namespace VirtoCommerce.Storefront.Model
 
             foreach (var reward in paymentRewards)
             {
-                var discount = reward.ToDiscountModel(Price);
+                var discount = reward.ToDiscountModel(Price - DiscountAmount);
 
                 if (reward.IsValid)
                 {

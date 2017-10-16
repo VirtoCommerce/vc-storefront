@@ -398,6 +398,7 @@ namespace VirtoCommerce.Storefront.Domain
             if (!isReadOnlyLineItems)
             {
                 //Get product inventory to fill InStockQuantity parameter of LineItem
+                //required for some promotions evaluation
                 var products = await GetCartProductsAsync();
 
                 foreach (var lineItem in Cart.Items.ToList())
