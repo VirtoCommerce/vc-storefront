@@ -200,7 +200,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             //TODO
             //See https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-storage-blob
-            throw new NotImplementedException();
+            return new CancellationChangeToken(new CancellationToken());
         }
         #endregion
 
