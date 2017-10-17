@@ -20,7 +20,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.ValueType = property.ValueType;
             result.Value = property.Value;
             result.Name = property.Name;
-            
+            result.DisplayName = property.DisplayName ?? property.Name;
             return result;
         }
     }

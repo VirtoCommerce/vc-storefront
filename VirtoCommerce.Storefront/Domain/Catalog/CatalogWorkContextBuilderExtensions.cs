@@ -16,8 +16,8 @@ namespace VirtoCommerce.Storefront.Domain
             //Initialize catalog search criteria
             builder.WorkContext.CurrentProductSearchCriteria = new ProductSearchCriteria(builder.WorkContext.CurrentLanguage, builder.WorkContext.CurrentCurrency, builder.WorkContext.QueryString);
 
-            //Initialize product response group. Exclude properties meta-information for performance reason (property values will be returned)
-            builder.WorkContext.CurrentProductResponseGroup = EnumUtility.SafeParse(builder.WorkContext.QueryString.Get("resp_group"), ItemResponseGroup.ItemLarge & ~ItemResponseGroup.ItemProperties);
+            //Initialize product response group.
+            builder.WorkContext.CurrentProductResponseGroup = EnumUtility.SafeParse(builder.WorkContext.QueryString.Get("resp_group"), ItemResponseGroup.ItemLarge);
 
             //This line make delay categories loading initialization (categories can be evaluated on view rendering time)
             builder.WorkContext.Categories = new MutablePagedList<Category>((pageNumber, pageSize, sortInfos) =>
