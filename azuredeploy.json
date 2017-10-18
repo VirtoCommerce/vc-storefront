@@ -1,0 +1,131 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "siteName": {
+            "type": "string"
+        },
+        "siteLocation": {
+            "type": "string",
+            "defaultValue": "West US"
+        },
+        "sku": {
+            "type": "string",
+            "allowedValues": [
+                "Free",
+                "Shared",
+                "Basic",
+                "Standard"
+            ],
+            "defaultValue": "Free"
+        },
+        "virtoCommerceManagerUrl": {
+            "type": "string"
+        },
+        "virtoCommerceApiHmacAppId": {
+            "type": "string"
+        },
+        "virtoCommerceApiHmacSecretKey": {
+            "type": "string"
+        },
+        "contentStorageConnectionString": {
+            "type": "string"
+        },
+
+        "repoUrl": {
+            "type": "string"
+        },
+        "branch": {
+            "type": "string"
+        },
+        "hostingPlanName": {
+            "type": "string"
+        },
+        "workerSize": {
+            "type": "string",
+            "allowedValues": [
+                "0",
+                "1",
+                "2"
+            ],
+            "defaultValue": "0"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "name": "[parameters('hostingPlanName')]",
+            "location": "[parameters('siteLocation')]",
+            "apiVersion": "2014-06-01",
+            "properties": {
+                "name": "[parameters('hostingPlanName')]",
+                "sku": "[parameters('sku')]",
+                "workerSize": "[parameters('workerSize')]",
+                "numberOfWorkers": 1
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "name": "[parameters('siteName')]",
+            "location": "[parameters('siteLocation')]",
+            "apiVersion": "2014-06-01",
+            "dependsOn": [
+                "[concat('Microsoft.Web/serverFarms/', parameters('hostingPlanName'))]"
+            ],
+            "tags": {
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "empty"
+            },
+            "properties": {
+                "name": "[parameters('siteName')]",
+                "serverFarm": "[parameters('hostingPlanName')]"
+            },
+            "resources": [
+                {
+                    "type": "config",
+                    "name": "connectionstrings",
+                    "apiVersion": "2014-11-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]"
+                    ],
+                    "properties": {
+                        "VirtoCommerceBaseUrl": {
+                            "value": "[parameters('virtoCommerceManagerUrl')]",
+                            "type": "custom"
+                        },
+                        "ContentConnectionString": {
+                            "value": "[parameters('contentStorageConnectionString')]",
+                            "type": "custom"
+                        }
+                    }
+                },
+                {
+                    "type": "config",
+                    "name": "appsettings",
+                    "apiVersion": "2014-11-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]"
+                    ],
+                    "properties": {
+                        "vc-public-ApiAppId": "[parameters('virtoCommerceApiHmacAppId')]",
+                        "vc-public-ApiSecretKey": "[parameters('virtoCommerceApiHmacSecretKey')]"
+                    }
+                },
+                {
+                    "type": "sourcecontrols",
+                    "name": "web",
+                    "apiVersion": "2014-06-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]",
+                        "[concat('Microsoft.Web/Sites/', parameters('siteName'), '/config/connectionstrings')]",
+                        "[concat('Microsoft.Web/Sites/', parameters('siteName'), '/config/appsettings')]"
+                    ],
+                    "properties": {
+                        "RepoUrl": "[parameters('repoUrl')]",
+                        "branch": "[parameters('branch')]",
+                        "IsManualIntegration": true
+                    }
+                }
+            ]
+        }
+    ]
+}
