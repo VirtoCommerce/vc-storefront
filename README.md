@@ -74,7 +74,7 @@ ASP.NET Core represents a new tools a **Secret Manager tool**, which allows in d
 You can find more about them [here](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?tabs=visual-studio)
 
 ### Configure themes 
-Storefront  **appsettings.json** file contains **ContentConnectionString** setting with pointed to folder with actual themes and pages content
+Storefront  **appsettings.json** file contains **ContentConnectionString** setting with pointed to the folder with actual themes and pages content
 ```
 ...
 "ConnectionStrings": {
@@ -86,8 +86,7 @@ Storefront  **appsettings.json** file contains **ContentConnectionString** setti
 ...
 ```
 You can set this connection string in one of the following ways:
-1. If you have already have installed  platform with sample data, your platform already contains `~/App_Data/cms-content` folder with themes for smaple stores
-and you need only to make symbolic link to this folder by this command:
+1. If you have already have installed  platform with sample data, your platform already contains `~/App_Data/cms-content` folder with themes for sample stores and you need only to make symbolic link to this folder by this command:
 ```
 mklink /d C:\vc-storefront\VirtoCommerce.Storefront\wwwroot\cms-content C:\vc-platform\VirtoCommerce.Platform.Web\App_Data\cms-content
 ```
