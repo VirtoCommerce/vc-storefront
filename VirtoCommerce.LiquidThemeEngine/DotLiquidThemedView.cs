@@ -85,30 +85,29 @@ namespace VirtoCommerce.LiquidThemeEngine
             if (_isMainPage)
             {
                 var masterViewName = "theme";
-                object layoutFromTemplate;
-                if (parameters.TryGetValue("layout", out layoutFromTemplate))
+                if (parameters.TryGetValue("layout", out object layoutFromTemplate))
                 {
-                    masterViewName = layoutFromTemplate.ToString();
-                }
-                //if layout specified need render with master page
-                if (!string.IsNullOrEmpty(masterViewName))
-                {
-                    var headerTemplate = _liquidThemeEngine.RenderTemplateByName("content_header", parameters);
-
-                    //add special placeholder 'content_for_layout' to content it will be replaced in master page by main content
-                    parameters.Add("content_for_layout", viewTemplate);
-                    parameters.Add("content_for_header", headerTemplate);
-
-                    try
+                    if (layoutFromTemplate != null && !string.IsNullOrEmpty(layoutFromTemplate.ToString()))
                     {
-                        viewTemplate = _liquidThemeEngine.RenderTemplateByName(masterViewName, parameters);
-                    }
-                    catch (FileSystemException ex)
-                    {
-                        var message = ex.Message.Replace("<br/>", "\r\n");
-                        throw new InvalidOperationException(message);
+                        masterViewName = layoutFromTemplate.ToString();
                     }
                 }
+                var headerTemplate = _liquidThemeEngine.RenderTemplateByName("content_header", parameters);
+
+                //add special placeholder 'content_for_layout' to content it will be replaced in master page by main content
+                parameters.Add("content_for_layout", viewTemplate);
+                parameters.Add("content_for_header", headerTemplate);
+
+                try
+                {
+                    viewTemplate = _liquidThemeEngine.RenderTemplateByName(masterViewName, parameters);
+                }
+                catch (FileSystemException ex)
+                {
+                    var message = ex.Message.Replace("<br/>", "\r\n");
+                    throw new InvalidOperationException(message);
+                }
+
             }
             context.Writer.Write(viewTemplate);
             return Task.FromResult(0);

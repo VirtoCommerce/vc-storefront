@@ -9,12 +9,12 @@ namespace VirtoCommerce.Storefront.JsonConverters
     /// <summary>
     /// Converter used for API back compatibility of User type. Previous version  contained user and contact data in one type CustomerInfo.
     /// </summary>
-    public class UserBackCompatibilityJsonConverter : JsonConverter
+    public class UserBackwardCompatibilityJsonConverter : JsonConverter
     {
         private readonly JsonSerializerSettings _jsonSettings;
         private static Type[] _knowTypes = new[] { typeof(User) };
 
-        public UserBackCompatibilityJsonConverter(JsonSerializerSettings jsonSettings)
+        public UserBackwardCompatibilityJsonConverter(JsonSerializerSettings jsonSettings)
         {
             //Making the clone of JsonSerializerSettings, unfortunately cannot find other way to do this
             _jsonSettings = new JsonSerializerSettings

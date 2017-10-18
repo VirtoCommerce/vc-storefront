@@ -205,7 +205,7 @@ namespace VirtoCommerce.Storefront
                 options.SerializerSettings.Converters.Add(new RecommendationJsonConverter(snapshotProvider.GetService<IRecommendationProviderFactory>()));
                 //Converter for providing back compatibility with old themes was used CustomerInfo type which has contained user and contact data in the single type.
                 //May be removed when all themes will fixed to new User type with nested Contact property.
-                options.SerializerSettings.Converters.Add(new UserBackCompatibilityJsonConverter(options.SerializerSettings));
+                options.SerializerSettings.Converters.Add(new UserBackwardCompatibilityJsonConverter(options.SerializerSettings));
             }).AddViewOptions(options =>
             {
                 options.ViewEngines.Add(snapshotProvider.GetService<ILiquidViewEngine>());

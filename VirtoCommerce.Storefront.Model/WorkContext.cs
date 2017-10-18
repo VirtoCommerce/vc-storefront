@@ -28,6 +28,10 @@ namespace VirtoCommerce.Storefront.Model
             ApplicationSettings = new Dictionary<string, object>();
         }
         /// <summary>
+        /// Layout which will be used for rendering current view
+        /// </summary>
+        public string Layout { get; set; }
+        /// <summary>
         /// Current request url example: http:/host/app/store/en-us/search?page=2
         /// </summary>
         public Uri RequestUrl { get; set; }

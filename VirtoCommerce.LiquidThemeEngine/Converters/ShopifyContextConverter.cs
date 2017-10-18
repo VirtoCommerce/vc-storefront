@@ -39,6 +39,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
 
             result.CurrentPage = 1;
+            result.Layout = workContext.Layout;
             result.CountryOptionTags = string.Join("\r\n", workContext.AllCountries.OrderBy(c => c.Name).Select(c => c.ToOptionTag()));
             result.PageDescription = workContext.CurrentPageSeo != null ? workContext.CurrentPageSeo.MetaDescription : string.Empty;
             result.PageTitle = workContext.CurrentPageSeo != null ? workContext.CurrentPageSeo.Title : string.Empty;

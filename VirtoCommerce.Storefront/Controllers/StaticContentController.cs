@@ -34,15 +34,14 @@ namespace VirtoCommerce.Storefront.Controllers
                 Slug = page.Url
             };
 
-            var blogArticle = page as BlogArticle;
-            if (blogArticle != null)
+            if (page is BlogArticle blogArticle)
             {
                 WorkContext.CurrentPageSeo.ImageUrl = blogArticle.ImageUrl;
                 WorkContext.CurrentPageSeo.MetaDescription = blogArticle.Excerpt ?? blogArticle.Title;
 
                 WorkContext.CurrentBlogArticle = blogArticle;
                 WorkContext.CurrentBlog = WorkContext.Blogs.SingleOrDefault(x => x.Name.EqualsInvariant(blogArticle.BlogName));
-                var layout = string.IsNullOrEmpty(blogArticle.Layout) ? WorkContext.CurrentBlog.Layout : blogArticle.Layout;
+                WorkContext.Layout = string.IsNullOrEmpty(blogArticle.Layout) ? WorkContext.CurrentBlog.Layout : blogArticle.Layout;
                 return View("article", WorkContext);
             }
 
@@ -88,6 +87,7 @@ namespace VirtoCommerce.Storefront.Controllers
                     Title = context.CurrentBlog.Title ?? context.CurrentBlog.Name,
                     Slug = context.RequestUrl.AbsolutePath
                 };
+                WorkContext.Layout = WorkContext.CurrentBlog.Layout;
                 return View("blog", WorkContext);
             }
             return NotFound();
@@ -180,6 +180,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
         private void SetCurrentPage(ContentPage contentPage)
         {
+            WorkContext.Layout = contentPage.Layout;
             WorkContext.CurrentPage = contentPage;
             WorkContext.CurrentPageSeo = new SeoInfo
             {

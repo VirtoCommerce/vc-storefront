@@ -11,7 +11,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     public partial class ShopifyThemeWorkContext : ILiquidizable
     {
         #region Aliases for shopify theme compliance
-
+        /// <summary>
+        /// Layout which will be used for rendering current view
+        /// </summary>
+        public string Layout { get; set; }
         /// <summary>
         /// Merchants can specify a page_description.
         /// </summary>
