@@ -27,7 +27,7 @@ namespace VirtoCommerce.Storefront.Middleware
             if (workContext != null && string.IsNullOrEmpty(_liquidThemeEngine.ResolveTemplatePath("index")))
             {
                 context.Request.Path = "/common/notheme";
-                context.Items[NoThemeModelKey] = new NoThemeViewModel { SearchedLocations = _liquidThemeEngine.DiscoveryPaths.Select(x => Path.GetDirectoryName(x)) };
+                context.Items[NoThemeModelKey] = new NoThemeViewModel { SearchedLocations = _liquidThemeEngine.DiscoveryPaths.ToList() };
             }
 
             await _next(context);

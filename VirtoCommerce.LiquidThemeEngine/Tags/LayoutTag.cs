@@ -37,10 +37,16 @@ namespace VirtoCommerce.LiquidThemeEngine.Tags
             var template = (context[this._templateName] ?? String.Empty).ToString();
             if (String.IsNullOrEmpty(template))
             {
-                template = this._templateName;
+                var themeEngine = (ShopifyLiquidThemeEngine)Template.FileSystem;
+                if (themeEngine.ResolveTemplatePath(_templateName) != null)
+                {
+                    template = this._templateName;
+                }
             }
-
-            context.Registers["layout"] = template;
+            if (!string.IsNullOrEmpty(template))
+            {
+                context.Registers["layout"] = template;
+            }
         }
 
         protected override void AssertMissingDelimitation()

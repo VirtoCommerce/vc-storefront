@@ -4,12 +4,12 @@
         <p>Looks like you missed theme :(</p>
         @if (Model != null)
         {
-            <p>We looked for 'index' view in the following locations</p>
+            <p>We looked for 'index.liquid' view in the following locations</p>
             <ul>
-                @foreach (var searchedLocation in Model.SearchedLocations.Distinct())
+                @foreach (var searchedLocation in Model.SearchedLocations)
                 {
                     <li>
-                        @Html.DisplayFor(modelItem => searchedLocation)
+                        @searchedLocation
                     </li>
                 }
             </ul>

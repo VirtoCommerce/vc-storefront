@@ -23,6 +23,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public string Content { get; set; }
 
         public string Handle { get; set; }
+        /// <summary>
+        /// Layout name for this page
+        /// </summary>
+        public string Layout { get; set; }
 
         /// <summary>
         /// Returns the id of the page.

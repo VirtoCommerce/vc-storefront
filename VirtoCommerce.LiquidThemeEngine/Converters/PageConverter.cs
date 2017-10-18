@@ -27,7 +27,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 Url = contentItem.Url,
                 Handle = contentItem.Url,
                 Content = contentItem.Content,
-
+                Layout = contentItem.Layout,
                 MetaInfo = new MetafieldsCollection("meta_fields", new Dictionary<string, object>())
             };
             foreach (var metaInfoProp in contentItem.MetaInfo)
