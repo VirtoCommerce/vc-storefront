@@ -22,7 +22,6 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly CloudBlobClient _cloudBlobClient;
         private readonly CloudStorageAccount _cloudStorageAccount;
         private readonly CloudBlobContainer _container;
-        private readonly CloudBlobDirectory _directory;
         private readonly IMemoryCache _memoryCache;
         private readonly AzureBlobContentOptions _options;
 
@@ -36,11 +35,7 @@ namespace VirtoCommerce.Storefront.Domain
                 throw new StorefrontException("Failed to get valid connection string");
             }
             _cloudBlobClient = _cloudStorageAccount.CreateCloudBlobClient();
-            _container = _cloudBlobClient.GetContainerReference(_options.Container);
-            if (!string.IsNullOrEmpty(_options.Directory))
-            {
-                _directory = _container.GetDirectoryReference(_options.Directory);
-            }
+            _container = _cloudBlobClient.GetContainerReference(_options.Container);       
         }       
 
         #region IContentBlobProvider Members
@@ -61,11 +56,7 @@ namespace VirtoCommerce.Storefront.Domain
                 throw new ArgumentNullException(nameof(path));
             }
             path = NormalizePath(path);
-            if (_directory != null)
-            {
-                return await _directory.GetBlockBlobReference(path).OpenReadAsync();
-            }
-
+          
             return await _container.GetBlobReference(path).OpenReadAsync();
         }
 
@@ -152,33 +143,15 @@ namespace VirtoCommerce.Storefront.Domain
             var context = new OperationContext();
             var blobItems = new List<IListBlobItem>();
             BlobContinuationToken token = null;
-            var operationContext =  new OperationContext();
-            if (_directory != null)
+            var operationContext = new OperationContext();
+            var directory = GetCloudBlobDirectory(path);
+            do
             {
-                var directoryBlob = _directory;
-                if (!string.IsNullOrEmpty(path))
-                {
-                    directoryBlob = _directory.GetDirectoryReference(path);
-                }
+                var resultSegment = await directory.ListBlobsSegmentedAsync(recursive, BlobListingDetails.Metadata, null, token, _options.BlobRequestOptions, operationContext);
+                token = resultSegment.ContinuationToken;
+                blobItems.AddRange(resultSegment.Results);
+            } while (token != null);
 
-                do
-                {
-                    var resultSegment = await directoryBlob.ListBlobsSegmentedAsync(recursive, BlobListingDetails.Metadata, null, token, _options.BlobRequestOptions, operationContext);
-                    token = resultSegment.ContinuationToken;
-                    blobItems.AddRange(resultSegment.Results);
-                } while (token != null);
-
-            }
-            else
-            {
-                do
-                {
-                    var resultSegment = await _container.ListBlobsSegmentedAsync(null, recursive, BlobListingDetails.Metadata, null, token, _options.BlobRequestOptions, operationContext);
-                    token = resultSegment.ContinuationToken;
-                    blobItems.AddRange(resultSegment.Results);
-                } while (token != null);
-
-            }
             // Loop over items within the container and output the length and URI.
             foreach (var item in blobItems)
             {
@@ -204,6 +177,17 @@ namespace VirtoCommerce.Storefront.Domain
         }
         #endregion
 
+
+        protected virtual CloudBlobDirectory GetCloudBlobDirectory(string path)
+        {
+            var isPathToFile = !string.IsNullOrEmpty(Path.GetExtension(path));
+            if(isPathToFile)
+            {
+                path = NormalizePath(Path.GetDirectoryName(path));
+            }         
+            return _container.GetDirectoryReference(path);
+        }
+
         protected virtual string NormalizePath(string path)
         {
             return path.Replace('\\', '/').TrimStart('/');
@@ -218,7 +202,7 @@ namespace VirtoCommerce.Storefront.Domain
         protected virtual string GetAbsoluteUrl(string path)
         {
             var builder = new UriBuilder(_cloudBlobClient.BaseUri);
-            builder.Path += string.Join("/", _options.Container, _options.Directory, path).Replace("//", "/");
+            builder.Path += string.Join("/", _options.Container, path).Replace("//", "/");
             return builder.Uri.ToString();
         }     
     }

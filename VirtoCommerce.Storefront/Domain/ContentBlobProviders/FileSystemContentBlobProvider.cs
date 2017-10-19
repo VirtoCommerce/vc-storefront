@@ -7,19 +7,23 @@ using System.IO;
 using System.Linq;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model.StaticContent;
+using Microsoft.Extensions.Caching.Memory;
+using VirtoCommerce.Storefront.Model.Common.Caching;
+using VirtoCommerce.Storefront.Extensions;
 
 namespace VirtoCommerce.Storefront.Domain
 {
     public class FileSystemContentBlobProvider : IContentBlobProvider
     {
         private readonly FileSystemBlobContentOptions _options;
-
+        private readonly IMemoryCache _memoryCache;
         // Keep links to file watchers to prevent GC to collect it
         private readonly PhysicalFilesWatcher _fileSystemWatcher;
 
-        public FileSystemContentBlobProvider(IOptions<FileSystemBlobContentOptions> options)
+        public FileSystemContentBlobProvider(IOptions<FileSystemBlobContentOptions> options, IMemoryCache memoryCache)
         {
             _options = options.Value;
+            _memoryCache = memoryCache;
 
             _fileSystemWatcher = new PhysicalFilesWatcher(_options.Path, new FileSystemWatcher(_options.Path), _options.PollForChanges);
         }
@@ -60,13 +64,19 @@ namespace VirtoCommerce.Storefront.Domain
         /// <returns></returns>
         public virtual bool PathExists(string path)
         {
-            path = NormalizePath(path);
-            var retVal = Directory.Exists(path);
-            if (!retVal)
+            var cacheKey = CacheKey.With(GetType(), "PathExists", path);
+            return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
             {
-                retVal = File.Exists(path);
-            }
-            return retVal;
+                path = NormalizePath(path);
+                cacheEntry.AddExpirationToken(Watch(path));
+                cacheEntry.AddExpirationToken(ContentBlobCacheRegion.CreateChangeToken());
+                var retVal = Directory.Exists(path);
+                if (!retVal)
+                {
+                    retVal = File.Exists(path);
+                }
+                return retVal;
+            });
         }
 
         /// <summary>
