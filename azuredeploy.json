@@ -87,11 +87,7 @@
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]"
                     ],
-                    "properties": {
-                        "VirtoCommerceBaseUrl": {
-                            "value": "[parameters('virtoCommerceManagerUrl')]",
-                            "type": "custom"
-                        },
+                    "properties": {                      
                         "ContentConnectionString": {
                             "value": "[parameters('contentStorageConnectionString')]",
                             "type": "custom"
@@ -106,8 +102,9 @@
                         "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]"
                     ],
                     "properties": {
-                        "vc-public-ApiAppId": "[parameters('virtoCommerceApiHmacAppId')]",
-                        "vc-public-ApiSecretKey": "[parameters('virtoCommerceApiHmacSecretKey')]"
+					  "VirtoCommerce:Endpoint:Url": "[parameters('virtoCommerceManagerUrl')]",
+                      "VirtoCommerce:Endpoint:AppId": "[parameters('virtoCommerceApiHmacAppId')]",
+                      "VirtoCommerce:Endpoint:SecretKey": "[parameters('virtoCommerceApiHmacSecretKey')]"
                     }
                 },
                 {
