@@ -34,6 +34,7 @@ Setup your own private Microsoft Cloud environment and evaluate the latest versi
 
 ### Prerequisites 
 https://docs.microsoft.com/en-us/dotnet/core/windows-prerequisites
+
 ### Downloading source code
 
 Fork your own copy of VirtoCommerce Storefront to your account on GitHub:
@@ -56,13 +57,14 @@ In result you should get the C:\vc-storefront folder which contains full storefr
 
 ### Configuring VirtoCommerce Platform Endpoint
 Set actual platform endpoint values in the C:\vc-storefront\VirtoCommerce.Storefront\appsettings.json.
+Read more about how to generate API keys [here](https://virtocommerce.com/docs/vc2devguide/development-scenarios/working-with-platform-api)
 
 ``` 
  ...
   "VirtoCommerce": {
     "Endpoint": {
       "Url": "http://localhost/admin" <!-- Virto Commerce platform manager url -->,
-	  <!-- HMAC authentification user credentials on whose behalf the API calls will be made. [How to generate HMAC credentials] (https://virtocommerce.com/docs/vc2devguide/development-scenarios/working-with-platform-api) -->
+	  <!-- HMAC authentification user credentials on whose behalf the API calls will be made.
       "AppId": "27e0d789f12641049bd0e939185b4fd2" 
       "SecretKey": "34f0a3c12c9dbb59b63b5fece955b7b2b9a3b20f84370cba1524dd5c53503a2e2cb733536ecf7ea1e77319a47084a3a2c9d94d36069a432ecc73b72aeba6ea78",
     }
@@ -72,7 +74,7 @@ ASP.NET Core represents a new tools a **Secret Manager tool**, which allows in d
 You can find more about them [here](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?tabs=visual-studio)
 
 ### Configure themes 
-Storefront  **appsettings.json** file contains **ContentConnectionString** setting with pointed to folder with actual themes and pages content
+Storefront  **appsettings.json** file contains **ContentConnectionString** setting with pointed to the folder with actual themes and pages content
 ```
 ...
 "ConnectionStrings": {
@@ -84,15 +86,14 @@ Storefront  **appsettings.json** file contains **ContentConnectionString** setti
 ...
 ```
 You can set this connection string in one of the following ways:
-1. If you have already have installed  platform with sample data, your platform already contains `~/App_Data/cms-content` folder with themes for smaple stores
-and you need only to make symbolic link to this folder by this command:
+1. If you have already have installed  platform with sample data, your platform already contains `~/App_Data/cms-content` folder with themes for sample stores and you need only to make symbolic link to this folder by this command:
 ```
 mklink /d C:\vc-storefront\VirtoCommerce.Storefront\wwwroot\cms-content C:\vc-platform\VirtoCommerce.Platform.Web\App_Data\cms-content
 ```
 2. If you did not install sample data with your platform, you need to create new store in platform manager and download themes as it described in this article 
 [Theme development](https://virtocommerce.com/docs/vc2devguide/working-with-storefront/theme-development)
 
-### Host on WIndows with IIS 
+### Host on Windows with IIS 
 VirtoCommerce.Storefront project already include the **web.config** file with all necessary settings for runing in IIS. 
 How to configure IIS application to host ASP.NET Core site please learn more in the official Microsoft ASP.NET Core documentation 
 https://docs.microsoft.com/en-us/aspnet/core/publishing/iis
