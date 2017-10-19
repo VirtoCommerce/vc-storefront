@@ -107,7 +107,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// </summary>
         public string CurrentThemeName => !string.IsNullOrEmpty(WorkContext.CurrentStore.ThemeName) ? WorkContext.CurrentStore.ThemeName : "default";
 
-        public string CurrentThemeSettingPath => Path.Combine(CurrentThemePath, "config\\settings_data.json");
+        public string CurrentThemeSettingPath => Path.Combine(CurrentThemePath, "config", "settings_data.json");
         public string CurrentThemeLocalePath => Path.Combine(CurrentThemePath, "locales");
         /// <summary>
         /// Current theme base path
@@ -143,15 +143,15 @@ namespace VirtoCommerce.LiquidThemeEngine
         public Stream GetAssetStream(string filePath)
         {
             Stream retVal = null;
-            var filePathWithoutExtension = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath)).Replace("\\", "/");
+            var filePathWithoutExtension = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
             //file.ext => file.ext || file || file.liquid || file.ext.liquid        
             var searchPatterns = new[] { filePath, filePathWithoutExtension, string.Format(_liquidTemplateFormat, filePathWithoutExtension), string.Format(_liquidTemplateFormat, filePath) };
 
             string currentThemeFilePath = null;
             //try to search in current store theme 
-            if (_themeBlobProvider.PathExists(CurrentThemePath + "\\assets"))
+            if (_themeBlobProvider.PathExists(Path.Combine(CurrentThemePath, "assets")))
             {
-                currentThemeFilePath = searchPatterns.SelectMany(x => _themeBlobProvider.Search(CurrentThemePath + "\\assets", x, true)).FirstOrDefault();
+                currentThemeFilePath = searchPatterns.SelectMany(x => _themeBlobProvider.Search(Path.Combine(CurrentThemePath, "assets"), x, true)).FirstOrDefault();
             }
 
             if (currentThemeFilePath != null)

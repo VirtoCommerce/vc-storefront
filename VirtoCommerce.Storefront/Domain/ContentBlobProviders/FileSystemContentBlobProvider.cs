@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model.StaticContent;
 using Microsoft.Extensions.Caching.Memory;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -111,7 +110,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         protected virtual string GetRelativePath(string path)
         {
-            return path.Replace(_options.Path, string.Empty).Replace('\\', '/');
+            return path.Replace(_options.Path, string.Empty).Replace(Path.DirectorySeparatorChar, '/');
         }
 
         protected virtual string NormalizePath(string path)
@@ -120,9 +119,9 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 throw new ArgumentNullException("path");
             }
-            path = path.Replace("/", "\\");
+            path = path.Replace('/', Path.DirectorySeparatorChar);
             path = path.Replace(_options.Path, string.Empty);
-            return Path.Combine(_options.Path, path.TrimStart('\\'));
+            return Path.Combine(_options.Path, path.TrimStart(Path.DirectorySeparatorChar));
         }
 
      
