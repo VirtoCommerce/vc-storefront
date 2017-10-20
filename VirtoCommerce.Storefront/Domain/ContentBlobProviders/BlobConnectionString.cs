@@ -16,7 +16,7 @@ namespace VirtoCommerce.Storefront.Domain
         }
         public string Provider { get; private set; }
         /// <summary>
-        /// Chroot path. Base for blob resources
+        /// root path. Base for blob resources
         /// </summary>
         public string RootPath { get; private set; }
         public string ConnectionString { get; private set; }

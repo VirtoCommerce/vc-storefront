@@ -9,6 +9,7 @@ using VirtoCommerce.Storefront.Model.StaticContent;
 using Microsoft.Extensions.Caching.Memory;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Extensions;
+using System.Threading;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -23,8 +24,11 @@ namespace VirtoCommerce.Storefront.Domain
         {
             _options = options.Value;
             _memoryCache = memoryCache;
-
-            _fileSystemWatcher = new PhysicalFilesWatcher(_options.Path, new FileSystemWatcher(_options.Path), _options.PollForChanges);
+            //Create fileSystemWatcher instance only when rootFolder exist to prevent whole application crash on initialization phase. 
+            if (Directory.Exists(_options.Path))
+            {
+                _fileSystemWatcher = new PhysicalFilesWatcher(_options.Path, new FileSystemWatcher(_options.Path), _options.PollForChanges);
+            }
         }
 
         #region IContentBlobProvider Members
@@ -102,9 +106,14 @@ namespace VirtoCommerce.Storefront.Domain
         public virtual IChangeToken Watch(string path)
         {
             //TODO: Test with symbolic links
-            var result = _fileSystemWatcher.CreateFileChangeToken(path);         
-            return result;
-
+            if (_fileSystemWatcher != null)
+            {
+                return _fileSystemWatcher.CreateFileChangeToken(path);
+            }
+            else
+            {
+                return new CancellationChangeToken(new CancellationToken());
+            }
         }
         #endregion
 

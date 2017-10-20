@@ -4,8 +4,9 @@ VirtoCommerce Storefront represents the official online shopping website based o
 Technologies and frameworks used:
 * ASP.NET MVC Core 2.0.0 on .NET Core 2.0.0
 * ASP.NET Identity Core 2.0.0
-* Microsoft AutoRest
-* Liquid view engine
+* [Microsoft AutoRest](https://github.com/Azure/autorest)
+* [DotLiquid}(https://github.com/dotliquid/dotliquid) Liquid view engine
+
 
 Key features:
 * multiple themes (full theme customization in Liquid templates)
@@ -14,6 +15,16 @@ Key features:
 * configurable shipping and payment options
 * SEO
 * multiple languages and currencies
+
+### List of changes
+1. Changed settings, now we use a [new approach](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) recommended by ASP.NET Core, we use the appsettings.json file and strongly type options for work with settings from code.
+2. Authentication and authorization was completely rewritten according to using ASP.NET Identity Core.
+3. Default ASP.NET Core [in-memory caching](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/memory) completely replaced the [CacheManager](http://cachemanager.michaco.net/) used before.
+4. New more selective cache invalidation based on usage of `CancellationChangeToken` and strongly typed cache regions allows to display always actual content without loss of performance.
+5. New framework for work with domain events.
+6. Usage of ASP.NET Core middlewares
+7. Rewriten arhitecture of the WorkContext initialization, it made more fluently.
+8. Used [Microsoft AutoRest](https://github.com/Azure/autorest) latest version
 
 ![Storefront UI](https://cloud.githubusercontent.com/assets/5801549/15822429/682f32d8-2bfe-11e6-9ddf-562b400afeb1.png)
 
@@ -63,8 +74,9 @@ Read more about how to generate API keys [here](https://virtocommerce.com/docs/v
  ...
   "VirtoCommerce": {
     "Endpoint": {
-      "Url": "http://localhost/admin" <!-- Virto Commerce platform manager url -->,
-	  <!-- HMAC authentification user credentials on whose behalf the API calls will be made.
+	     //Virto Commerce platform manager url 
+      "Url": "http://localhost/admin",
+	     //HMAC authentification user credentials on whose behalf the API calls will be made.
       "AppId": "27e0d789f12641049bd0e939185b4fd2" 
       "SecretKey": "34f0a3c12c9dbb59b63b5fece955b7b2b9a3b20f84370cba1524dd5c53503a2e2cb733536ecf7ea1e77319a47084a3a2c9d94d36069a432ecc73b72aeba6ea78",
     }
@@ -78,10 +90,10 @@ Storefront  **appsettings.json** file contains **ContentConnectionString** setti
 ```
 ...
 "ConnectionStrings": {
-    <!-- For themes stored in local file system  -->
+    //For themes stored in local file system
     "ContentConnectionString": "provider=LocalStorage;rootPath=~/cms-content"
-	<!-- For themes stored in azure blob storage  -->
-    <!--<add name="ContentConnectionString" connectionString="provider=AzureBlobStorage;rootPath=cms-content;DefaultEndpointsProtocol=https;AccountName=yourAccountName;AccountKey=yourAccountKey" />-->
+	   //For themes stored in azure blob storage
+    //"ContentConnectionString" connectionString="provider=AzureBlobStorage;rootPath=cms-content;DefaultEndpointsProtocol=https;AccountName=yourAccountName;AccountKey=yourAccountKey"
   },
 ...
 ```
@@ -98,6 +110,9 @@ VirtoCommerce.Storefront project already include the **web.config** file with al
 How to configure IIS application to host ASP.NET Core site please learn more in the official Microsoft ASP.NET Core documentation 
 https://docs.microsoft.com/en-us/aspnet/core/publishing/iis
 
+
+
+Please note that we don’t plan to use ASP.NET Identity
 # License
 Copyright (c) Virtosoftware Ltd.  All rights reserved.
 
