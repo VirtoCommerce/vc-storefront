@@ -4,27 +4,30 @@ VirtoCommerce Storefront represents the official online shopping website based o
 Technologies and frameworks used:
 * ASP.NET MVC Core 2.0.0 on .NET Core 2.0.0
 * ASP.NET Identity Core 2.0.0
-* [Microsoft AutoRest](https://github.com/Azure/autorest)
-* [DotLiquid}(https://github.com/dotliquid/dotliquid) Liquid view engine
+* REST services clients generation with using [Microsoft AutoRest](https://github.com/Azure/autorest)
+* Liquid view engine based on [DotLiquid](https://github.com/dotliquid/dotliquid)
+* [LibSaasHost](https://github.com/ducksboard/libsaas) for processing **scss** stylesheets in runtime
 
 
 Key features:
-* multiple themes (full theme customization in Liquid templates)
-* dynamic content
-* B2C, B2B scenarios (quotes)
-* configurable shipping and payment options
-* SEO
-* multiple languages and currencies
+* Multi-Store support
+* Multi-Language support
+* Multi-Currency support
+* Multi-Themes support
+* Faceted search support
+* SEO friendly routing
 
 ### List of changes
-1. Changed settings, now we use a [new approach](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) recommended by ASP.NET Core, we use the appsettings.json file and strongly type options for work with settings from code.
-2. Authentication and authorization was completely rewritten according to using ASP.NET Identity Core.
+1. Changed settings, now we are using a [new approach](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) recommended by ASP.NET Core, we are using the appsettings.json file and strongly type options for working with settings from code.
+2. Authentication and authorization was completely rewritten according to using [ASP.NET Identity Core](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity).
 3. Default ASP.NET Core [in-memory caching](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/memory) completely replaced the [CacheManager](http://cachemanager.michaco.net/) used before.
-4. New more selective cache invalidation based on usage of `CancellationChangeToken` and strongly typed cache regions allows to display always actual content without loss of performance.
-5. New framework for work with domain events.
-6. Usage of ASP.NET Core middlewares
-7. Rewriten arhitecture of the WorkContext initialization, it made more fluently.
-8. Used [Microsoft AutoRest](https://github.com/Azure/autorest) latest version
+4. New more selective cache invalidation based on usage of `CancellationChangeToken` and strongly typed cache regions allows to display always actual content without performance lossing.
+5. New framework for working with domain events.
+6. Usage of [ASP.NET Core middlewares](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware) 
+7. Reworked the WorkContext initialization, it made more fluently.
+8. Usage of the latest version of [Microsoft AutoRest](https://github.com/Azure/autorest)
+9. Usage  of [ASP.NET Core Response Caching Middleware](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/middleware) for FPC (full page caching).
+10. Use [Build-in ASP.NET Dependency Injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection) instead Unity DI and IoC container.
 
 ![Storefront UI](https://cloud.githubusercontent.com/assets/5801549/15822429/682f32d8-2bfe-11e6-9ddf-562b400afeb1.png)
 
@@ -44,7 +47,7 @@ Setup your own private Microsoft Cloud environment and evaluate the latest versi
 ## Source code getting started
 
 ### Prerequisites 
-https://docs.microsoft.com/en-us/dotnet/core/windows-prerequisites
+[Prerequisites for .NET Core on Windows](https://docs.microsoft.com/en-us/dotnet/core/windows-prerequisites)
 
 ### Downloading source code
 
@@ -77,8 +80,8 @@ Read more about how to generate API keys [here](https://virtocommerce.com/docs/v
 	     //Virto Commerce platform manager url 
       "Url": "http://localhost/admin",
 	     //HMAC authentification user credentials on whose behalf the API calls will be made.
-      "AppId": "27e0d789f12641049bd0e939185b4fd2" 
-      "SecretKey": "34f0a3c12c9dbb59b63b5fece955b7b2b9a3b20f84370cba1524dd5c53503a2e2cb733536ecf7ea1e77319a47084a3a2c9d94d36069a432ecc73b72aeba6ea78",
+      "AppId": "Enter your AppId here" 
+      "SecretKey": "Enter your SecretKey here",
     }
 	...
 ```
@@ -108,7 +111,7 @@ mklink /d C:\vc-storefront\VirtoCommerce.Storefront\wwwroot\cms-content C:\vc-pl
 ### Host on Windows with IIS 
 VirtoCommerce.Storefront project already include the **web.config** file with all necessary settings for runing in IIS. 
 How to configure IIS application to host ASP.NET Core site please learn more in the official Microsoft ASP.NET Core documentation 
-https://docs.microsoft.com/en-us/aspnet/core/publishing/iis
+[Host ASP.NET Core on Windows with IIS](https://docs.microsoft.com/en-us/aspnet/core/publishing/iis)
 
 
 
