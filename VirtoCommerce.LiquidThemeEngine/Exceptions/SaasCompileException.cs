@@ -26,7 +26,7 @@ namespace DotLiquid.ViewEngine.Exceptions
         public override string ToString()
         {
 
-            return String.Format("Line: {0}\n\rCompiler error: {1}", SassLine, _innerException != null ? _innerException.Message : "");
+            return String.Format("Line: {0}\n\rCompiler error: {1}", SassLine, _innerException != null ? _innerException.ToString() : "");
         }
 
         private Exception _innerException;
