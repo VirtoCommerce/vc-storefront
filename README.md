@@ -29,11 +29,13 @@ Key features:
 9. Usage  of [ASP.NET Core Response Caching Middleware](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/middleware) for FPC (full page caching).
 10. Use [Build-in ASP.NET Dependency Injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection) instead Unity DI and IoC container.
 
-Electronics store
+#### Electronics store
 ![electronics](https://user-images.githubusercontent.com/7566324/31821605-f36d17de-b5a5-11e7-9bb5-a71803285d8b.png)
-Clothing store
+
+#### Clothing store
 ![clothing](https://user-images.githubusercontent.com/7566324/31821604-f341c444-b5a5-11e7-877a-eb919e01dee2.PNG)
-B2B store
+
+#### B2B store
 ![img_20102017_174148_0](https://user-images.githubusercontent.com/7566324/31821606-f3974b26-b5a5-11e7-8b52-e3b80d6bdd74.png)
 
 # Live DEMO
