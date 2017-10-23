@@ -29,7 +29,16 @@ Key features:
 9. Usage  of [ASP.NET Core Response Caching Middleware](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/middleware) for FPC (full page caching).
 10. Use [Build-in ASP.NET Dependency Injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection) instead Unity DI and IoC container.
 
-![Storefront UI](https://cloud.githubusercontent.com/assets/5801549/15822429/682f32d8-2bfe-11e6-9ddf-562b400afeb1.png)
+# Sample themes 
+
+## [Default theme](https://github.com/VirtoCommerce/vc-theme-default)
+![electronics](https://user-images.githubusercontent.com/7566324/31821605-f36d17de-b5a5-11e7-9bb5-a71803285d8b.png)
+
+## [Material theme](https://github.com/VirtoCommerce/vc-theme-material)
+![clothing](https://user-images.githubusercontent.com/7566324/31821604-f341c444-b5a5-11e7-877a-eb919e01dee2.PNG)
+
+## [B2B theme](https://github.com/VirtoCommerce/vc-theme-b2b)
+![img_20102017_174148_0](https://user-images.githubusercontent.com/7566324/31821606-f3974b26-b5a5-11e7-8b52-e3b80d6bdd74.png)
 
 # Live DEMO
 http://demo.virtocommerce.com
@@ -77,9 +86,9 @@ Read more about how to generate API keys [here](https://virtocommerce.com/docs/v
  ...
   "VirtoCommerce": {
     "Endpoint": {
-	     //Virto Commerce platform manager url 
+	   //Virto Commerce platform manager url 
       "Url": "http://localhost/admin",
-	     //HMAC authentification user credentials on whose behalf the API calls will be made.
+	   //HMAC authentification user credentials on whose behalf the API calls will be made.
       "AppId": "Enter your AppId here" 
       "SecretKey": "Enter your SecretKey here",
     }
@@ -95,7 +104,7 @@ Storefront  **appsettings.json** file contains **ContentConnectionString** setti
 "ConnectionStrings": {
     //For themes stored in local file system
     "ContentConnectionString": "provider=LocalStorage;rootPath=~/cms-content"
-	   //For themes stored in azure blob storage
+	//For themes stored in azure blob storage
     //"ContentConnectionString" connectionString="provider=AzureBlobStorage;rootPath=cms-content;DefaultEndpointsProtocol=https;AccountName=yourAccountName;AccountKey=yourAccountKey"
   },
 ...
@@ -112,7 +121,6 @@ mklink /d C:\vc-storefront\VirtoCommerce.Storefront\wwwroot\cms-content C:\vc-pl
 VirtoCommerce.Storefront project already include the **web.config** file with all necessary settings for runing in IIS. 
 How to configure IIS application to host ASP.NET Core site please learn more in the official Microsoft ASP.NET Core documentation 
 [Host ASP.NET Core on Windows with IIS](https://docs.microsoft.com/en-us/aspnet/core/publishing/iis)
-
 
 # License
 Copyright (c) Virtosoftware Ltd.  All rights reserved.
