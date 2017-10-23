@@ -115,7 +115,6 @@ How to configure IIS application to host ASP.NET Core site please learn more in 
 
 
 
-Please note that we don’t plan to use ASP.NET Identity
 # License
 Copyright (c) Virtosoftware Ltd.  All rights reserved.
 
