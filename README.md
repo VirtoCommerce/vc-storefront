@@ -84,9 +84,9 @@ Read more about how to generate API keys [here](https://virtocommerce.com/docs/v
  ...
   "VirtoCommerce": {
     "Endpoint": {
-	     //Virto Commerce platform manager url 
+	   //Virto Commerce platform manager url 
       "Url": "http://localhost/admin",
-	     //HMAC authentification user credentials on whose behalf the API calls will be made.
+	   //HMAC authentification user credentials on whose behalf the API calls will be made.
       "AppId": "Enter your AppId here" 
       "SecretKey": "Enter your SecretKey here",
     }
@@ -102,7 +102,7 @@ Storefront  **appsettings.json** file contains **ContentConnectionString** setti
 "ConnectionStrings": {
     //For themes stored in local file system
     "ContentConnectionString": "provider=LocalStorage;rootPath=~/cms-content"
-	   //For themes stored in azure blob storage
+	//For themes stored in azure blob storage
     //"ContentConnectionString" connectionString="provider=AzureBlobStorage;rootPath=cms-content;DefaultEndpointsProtocol=https;AccountName=yourAccountName;AccountKey=yourAccountKey"
   },
 ...
