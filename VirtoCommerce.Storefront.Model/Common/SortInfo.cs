@@ -31,7 +31,7 @@ namespace VirtoCommerce.Storefront.Model.Common
             {
                 return string.Join(";", sortInfos);
             }
-            return null;
+            return string.Empty;
         }
         public static IEnumerable<SortInfo> Parse(string sortExpr)
         {

@@ -50,17 +50,9 @@ namespace VirtoCommerce.LiquidThemeEngine
         private readonly IStorefrontUrlBuilder _storeFrontUrlBuilder;
         private readonly IMemoryCache _memoryCache;
         private readonly IContentBlobProvider _themeBlobProvider;
-        public ShopifyLiquidThemeEngine(IMemoryCache memoryCache, IWorkContextAccessor workContextAccessor,
-                                        IHttpContextAccessor httpContextAccessor,
-                                        IStorefrontUrlBuilder storeFrontUrlBuilder, IContentBlobProvider contentBlobProvder, IOptions<LiquidThemeEngineOptions> options)
-        {
-            _workContextAccessor = workContextAccessor;
-            _httpContextAccessor = httpContextAccessor;
-            _storeFrontUrlBuilder = storeFrontUrlBuilder;
-            _options = options.Value;
-            _memoryCache = memoryCache;
-            _themeBlobProvider = contentBlobProvder;
 
+        static ShopifyLiquidThemeEngine()
+        {
             Liquid.UseRubyDateFormat = true;
             // Register custom tags (Only need to do this once)
             Template.RegisterFilter(typeof(CommonFilters));
@@ -79,7 +71,19 @@ namespace VirtoCommerce.LiquidThemeEngine
             Template.RegisterTag<AntiforgeryTag>("anti_forgery");
             Template.RegisterTag<LayoutTag>("layout");
             Template.RegisterTag<FormTag>("form");
-            Template.RegisterTag<PaginateTag>("paginate");      
+            Template.RegisterTag<PaginateTag>("paginate");
+        }
+
+        public ShopifyLiquidThemeEngine(IMemoryCache memoryCache, IWorkContextAccessor workContextAccessor,
+                                        IHttpContextAccessor httpContextAccessor,
+                                        IStorefrontUrlBuilder storeFrontUrlBuilder, IContentBlobProvider contentBlobProvder, IOptions<LiquidThemeEngineOptions> options)
+        {
+            _workContextAccessor = workContextAccessor;
+            _httpContextAccessor = httpContextAccessor;
+            _storeFrontUrlBuilder = storeFrontUrlBuilder;
+            _options = options.Value;
+            _memoryCache = memoryCache;
+            _themeBlobProvider = contentBlobProvder;
         }
 
         /// <summary>

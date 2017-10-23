@@ -9,7 +9,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// <summary>
         /// Only simple product information and properties without meta information
         /// </summary>
-        ItemInfo = 1 << 0,
+        ItemInfo = 1,
         /// <summary>
         /// With images and assets
         /// </summary>

@@ -31,7 +31,7 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
             if (parts.Length > 1)
             {
                 Excerpt = parts[0];
-                content.Replace(_excerpToken, string.Empty);
+                content = content.Replace(_excerpToken, string.Empty);
             }
 
             if (metaInfoMap.ContainsKey("main-image"))

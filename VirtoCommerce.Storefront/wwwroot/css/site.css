@@ -13,7 +13,7 @@ body {
 }
 
 #content {
-    font-family: "Segoe UI";
+    font-family: "Segoe UI", sans-serif;
     font-weight: normal;
     font-size: 26px;
     color: #ffffff;
@@ -25,7 +25,7 @@ body {
 }
 
     #content h1 {
-        font-family: "Segoe UI Light";
+        font-family: "Segoe UI Light", sans-serif;
         color: #ffffff;
         font-weight: normal;
         font-size: 70px;
@@ -43,7 +43,7 @@ p a, p a:visited, p a:active, p a:hover {
     border: 1px solid #FFFFFF;
     color: #FFFFFF;
     display: inline-block;
-    font-family: Segoe UI;
+    font-family: Segoe UI, sans-serif;
     font-size: 24px;
     line-height: 46px;
     margin-top: 10px;

@@ -98,7 +98,7 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             if (request == null)
             {
-                new ArgumentNullException(nameof(request));
+                throw new ArgumentNullException(nameof(request));
             }
             if (!string.IsNullOrEmpty(request.Keyword))
             {

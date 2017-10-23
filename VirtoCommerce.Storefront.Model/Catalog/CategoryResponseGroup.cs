@@ -6,7 +6,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
     public enum CategoryResponseGroup
     {
         None = 0,
-        Info = 1 << 0,
+        Info = 1,
         WithImages = 1 << 1,
         WithProperties = 1 << 2,
         WithLinks = 1 << 3,
