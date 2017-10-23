@@ -114,8 +114,6 @@ How to configure IIS application to host ASP.NET Core site please learn more in 
 [Host ASP.NET Core on Windows with IIS](https://docs.microsoft.com/en-us/aspnet/core/publishing/iis)
 
 
-
-Please note that we don’t plan to use ASP.NET Identity
 # License
 Copyright (c) Virtosoftware Ltd.  All rights reserved.
 
