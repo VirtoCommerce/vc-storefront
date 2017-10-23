@@ -122,6 +122,9 @@ VirtoCommerce.Storefront project already include the **web.config** file with al
 How to configure IIS application to host ASP.NET Core site please learn more in the official Microsoft ASP.NET Core documentation 
 [Host ASP.NET Core on Windows with IIS](https://docs.microsoft.com/en-us/aspnet/core/publishing/iis)
 
+
+
+Please note that we don’t plan to use ASP.NET Identity
 # License
 Copyright (c) Virtosoftware Ltd.  All rights reserved.
 
