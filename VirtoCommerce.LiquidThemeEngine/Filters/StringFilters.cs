@@ -115,6 +115,16 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return input.Trim();
         }
 
+        public static string Format(object input, string format)
+        {
+            if (input == null)
+                return null;
+            else if (string.IsNullOrWhiteSpace(format))
+                return input.ToString();
+
+            return string.Format("{0:" + format + "}", input);
+        }
+
     }
 
     public class RubyContractResolver : DefaultContractResolver

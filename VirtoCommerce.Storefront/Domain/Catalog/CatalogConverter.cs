@@ -259,12 +259,12 @@ namespace VirtoCommerce.Storefront.Domain
                 var contact = workContext.CurrentUser.Contact.Value;
                 if (contact != null && !contact.UserGroups.IsNullOrEmpty())
                 {
-                    if (result.Terms == null)
+                    if (result.UserGroups == null)
                     {
-                        result.Terms = new List<string>();
+                        result.UserGroups = new List<string>();
                     }
                     //search products with user_groups defined in customer
-                    result.Terms.Add("user_groups:" + string.Join(",", contact.UserGroups));
+                    result.UserGroups.Add("user_groups:" + string.Join(",", contact.UserGroups));
                 }
             }
 
@@ -296,7 +296,16 @@ namespace VirtoCommerce.Storefront.Domain
                 Take = criteria.PageSize,
                 ResponseGroup = ((int)criteria.ResponseGroup).ToString(),
             };
-
+            var contact = workContext.CurrentUser.Contact.Value;
+            if (contact != null && !contact.UserGroups.IsNullOrEmpty())
+            {
+                if (result.UserGroups == null)
+                {
+                    result.UserGroups = new List<string>();
+                }
+                //search categories with user_groups defined in customer
+                result.UserGroups.Add("user_groups:" + string.Join(",", contact.UserGroups));
+            }
 
             return result;
         }

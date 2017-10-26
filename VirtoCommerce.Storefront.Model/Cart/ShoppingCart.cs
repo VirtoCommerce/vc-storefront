@@ -467,8 +467,14 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
         public void ApplyTaxRates(IEnumerable<TaxRate> taxRates)
         {
+            TaxPercentRate = 0m;
             foreach (var lineItem in Items)
             {
+                //Get percent rate from line item
+                if (TaxPercentRate == 0)
+                {
+                    TaxPercentRate = lineItem.TaxPercentRate;
+                }
                 lineItem.ApplyTaxRates(taxRates);
             }
             foreach (var shipment in Shipments)
