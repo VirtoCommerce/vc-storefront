@@ -254,18 +254,15 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Terms.Add(string.Concat("vendor:", criteria.VendorId));
             }
             // Add user groups to terms
-            if (workContext.CurrentUser.Contact != null)
+            var contact = workContext.CurrentUser?.Contact?.Value;
+            if (contact != null && !contact.UserGroups.IsNullOrEmpty())
             {
-                var contact = workContext.CurrentUser.Contact.Value;
-                if (contact != null && !contact.UserGroups.IsNullOrEmpty())
+                if (result.UserGroups == null)
                 {
-                    if (result.UserGroups == null)
-                    {
-                        result.UserGroups = new List<string>();
-                    }
-                    //search products with user_groups defined in customer
-                    result.UserGroups.Add("user_groups:" + string.Join(",", contact.UserGroups));
+                    result.UserGroups = new List<string>();
                 }
+                //search products with user_groups defined in customer
+                result.UserGroups.AddRange(contact.UserGroups);
             }
 
             return result;
@@ -296,7 +293,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Take = criteria.PageSize,
                 ResponseGroup = ((int)criteria.ResponseGroup).ToString(),
             };
-            var contact = workContext.CurrentUser.Contact.Value;
+            var contact = workContext.CurrentUser?.Contact?.Value;
             if (contact != null && !contact.UserGroups.IsNullOrEmpty())
             {
                 if (result.UserGroups == null)
@@ -304,7 +301,7 @@ namespace VirtoCommerce.Storefront.Domain
                     result.UserGroups = new List<string>();
                 }
                 //search categories with user_groups defined in customer
-                result.UserGroups.Add("user_groups:" + string.Join(",", contact.UserGroups));
+                result.UserGroups.AddRange(contact.UserGroups);
             }
 
             return result;
