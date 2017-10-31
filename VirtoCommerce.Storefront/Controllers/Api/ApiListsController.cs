@@ -57,7 +57,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 var wishlistBuilder = await LoadOrCreateWishlistAsync(listName);
 
-                var products = await _catalogService.GetProductsAsync(new[] { productId }, Model.Catalog.ItemResponseGroup.ItemLarge);
+                var products = await _catalogService.GetProductsAsync(new[] { productId }, Model.Catalog.ItemResponseGroup.Inventory | Model.Catalog.ItemResponseGroup.ItemWithPrices);
                 if (products != null && products.Any())
                 {
                     await wishlistBuilder.AddItemAsync(products.First(), 1);

@@ -51,6 +51,7 @@ namespace VirtoCommerce.Storefront.Controllers
             TaxCacheRegion.ExpireRegion();
             SubscriptionCacheRegion.ExpireRegion();
             SecurityCacheRegion.ExpireRegion();
+            InventoryCacheRegion.ExpireRegion();
 
             return StoreFrontRedirect("~/");
         }
