@@ -46,14 +46,18 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// With category outlines
         /// </summary>
         Outlines = 1 << 9,
+        /// <summary>
+        /// With product referenced associations
+        /// </summary>
+        ReferencedAssociations = 1 << 10,
+        //the bits of this values must not intersect with domain ItemResponseGroup
+        ItemWithPrices = 1 << 20,
 
-        ItemWithPrices = 1 << 10,
+        ItemWithDiscounts = 1 << 21,
 
-        ItemWithDiscounts = 1 << 11,
+        ItemWithVendor = 1 << 22,
 
-        ItemWithVendor = 1 << 12,
-
-        ItemWithPaymentPlan = 1 << 13,
+        ItemWithPaymentPlan = 1 << 23,
 
         ItemSmall = ItemInfo | ItemAssets | ItemEditorialReviews | Seo | Outlines,
         ItemMedium = ItemSmall | ItemAssociations,

@@ -19,6 +19,7 @@ namespace VirtoCommerce.Storefront
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseApplicationInsights()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
              .ConfigureLogging((hostingContext, logging) =>

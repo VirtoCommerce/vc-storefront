@@ -203,7 +203,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         private async Task<IPagedList<Category>> InnerSearchCategoriesAsync(CategorySearchCriteria criteria, WorkContext workContext)
         {
-            var cacheKey = CacheKey.With(GetType(), "InnerSearchCategoriesAsync", criteria.GetHashCode().ToString());
+            var cacheKey = CacheKey.With(GetType(), "InnerSearchCategoriesAsync", criteria.GetHashCode().ToString(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
             var searchResult = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
@@ -227,7 +227,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         private async Task<CatalogSearchResult> InnerSearchProductsAsync(ProductSearchCriteria criteria, WorkContext workContext)
         {
-            var cacheKey = CacheKey.With(GetType(), "InnerSearchProductsAsync", criteria.GetHashCode().ToString());
+            var cacheKey = CacheKey.With(GetType(), "InnerSearchProductsAsync", criteria.GetHashCode().ToString(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());

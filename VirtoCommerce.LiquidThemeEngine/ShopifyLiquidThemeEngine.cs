@@ -457,16 +457,5 @@ namespace VirtoCommerce.LiquidThemeEngine
                 }
             });
         }
-
-        private string GetCacheKey(params string[] parts)
-        {
-            var retVal = new[] { CurrentThemePath, WorkContext.CurrentLanguage.CultureName, WorkContext.CurrentCurrency.Code };
-            if (parts != null)
-            {
-                retVal = retVal.Concat(parts.Select(x => x ?? string.Empty)).ToArray();
-            }
-            return string.Join(":", retVal).GetHashCode().ToString();
-        }
-
     }
 }
