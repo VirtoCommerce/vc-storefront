@@ -31,6 +31,7 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("API.Cart.CreateOrder", "storefrontapi/cart/createorder", defaults: new { controller = "ApiCart", action = "CreateOrder" });
             routes.MapStorefrontRoute("API.Cart.UpdatePaymentPlan", "storefrontapi/cart/paymentPlan", new { controller = "ApiCart", action = "AddOrUpdateCartPaymentPlan" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("API.Cart.DeletePaymentPlan", "storefrontapi/cart/paymentPlan", new { controller = "ApiCart", action = "DeleteCartPaymentPlan" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("DELETE") }));
+            routes.MapStorefrontRoute("API.Cart.SubmitComment", "storefrontapi/cart/comment", new { controller = "ApiCart", action = "UpdateCartComment" });
 
             // API lists
             routes.MapStorefrontRoute("API.Lists.GetListByName", "storefrontapi/lists/{listName}", defaults: new { controller = "ApiLists", action = "GetListByName" });
@@ -130,7 +131,7 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("Cart.ExternalPaymentCallback", "cart/externalpaymentcallback", defaults: new { controller = "Cart", action = "ExternalPaymentCallback" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET", "POST") }));
             routes.MapStorefrontRoute("Cart.Thanks", "cart/thanks/{orderNumber}", defaults: new { controller = "Cart", action = "Thanks" });
             routes.MapStorefrontRoute("Cart.PaymentForm", "cart/checkout/paymentform", defaults: new { controller = "Cart", action = "PaymentForm" });
-
+           
             // Cart (Shopify compatible)
             routes.MapStorefrontRoute("ShopifyCart.Cart", "cart", defaults: new { controller = "ShopifyCompatibility", action = "Cart" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("ShopifyCart.CartJs", "cart.js", defaults: new { controller = "ShopifyCompatibility", action = "CartJs" });

@@ -49,6 +49,23 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Json(cartBuilder.Cart);
         }
 
+        // PUT: storefrontapi/cart/comment
+        [HttpPut]
+        public async Task<ActionResult> UpdateCartComment(string comment)
+        {
+            EnsureCartExists();
+
+            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext.CurrentCart.Value)).LockAsync())
+            {
+                var cartBuilder = await LoadOrCreateCartAsync();
+
+                await cartBuilder.UpdateCartComment(comment);
+                await cartBuilder.SaveAsync();
+            }
+
+            return Ok();
+        }
+
         // GET: storefrontapi/cart/itemscount
         [HttpGet]
         public async Task<ActionResult> GetCartItemsCount()

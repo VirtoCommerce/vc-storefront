@@ -25,6 +25,13 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         Task TakeCartAsync(ShoppingCart cart);
 
         /// <summary>
+        /// Update shopping cart comment
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <returns></returns>
+        Task UpdateCartComment(string comment);
+
+        /// <summary>
         /// Load or created new cart for specified parameters and capture it.  All next changes will be implemented on it
         /// </summary>
         /// <param name="cartName"></param>

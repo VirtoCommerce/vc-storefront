@@ -69,42 +69,51 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var cacheKey = CacheKey.With(GetType(), store.Id, cartName, user.Id, currency.Code);
             var needReevaluate = false;
-            Cart = await  _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-            {              
-                needReevaluate = true;
+            Cart = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+           {
+               needReevaluate = true;
 
-                var cartSearchCriteria = CreateCartSearchCriteria(cartName, store, user, language, currency);
-                var cartSearchResult = await _cartApi.SearchAsync(cartSearchCriteria);
+               var cartSearchCriteria = CreateCartSearchCriteria(cartName, store, user, language, currency);
+               var cartSearchResult = await _cartApi.SearchAsync(cartSearchCriteria);
 
-                var cartDto = cartSearchResult.Results.FirstOrDefault();
-                var cart = cartDto?.ToShoppingCart(currency, language, user) ?? CreateCart(cartName, store, user, language, currency);
+               var cartDto = cartSearchResult.Results.FirstOrDefault();
+               var cart = cartDto?.ToShoppingCart(currency, language, user) ?? CreateCart(cartName, store, user, language, currency);
 
                 //Load cart payment plan with have same id
                 if (store.SubscriptionEnabled)
-                {
-                    var paymentPlanIds = new[] { cart.Id }.Concat(cart.Items.Select(x => x.ProductId).Distinct()).ToArray();
+               {
+                   var paymentPlanIds = new[] { cart.Id }.Concat(cart.Items.Select(x => x.ProductId).Distinct()).ToArray();
 
-                    var paymentPlans = await _subscriptionService.GetPaymentPlansByIdsAsync(paymentPlanIds);
-                    cart.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == cart.Id);
-                    foreach (var lineItem in cart.Items)
-                    {
-                        lineItem.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == lineItem.ProductId);
-                    }
-                }
+                   var paymentPlans = await _subscriptionService.GetPaymentPlansByIdsAsync(paymentPlanIds);
+                   cart.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == cart.Id);
+                   foreach (var lineItem in cart.Items)
+                   {
+                       lineItem.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == lineItem.ProductId);
+                   }
+               }
 
-                cart.Customer = user;
+               cart.Customer = user;
 
                 //Add expiration token for concrete cart instance
                 cacheEntry.AddExpirationToken(CartCacheRegion.CreateChangeToken(cart));
 
-                return cart;
-            });
+               return cart;
+           });
 
             if (needReevaluate)
             {
                 await EvaluatePromotionsAsync();
                 await EvaluateTaxesAsync();
             }
+        }
+
+        public virtual Task UpdateCartComment(string comment)
+        {
+            EnsureCartExists();
+
+            Cart.Comment = comment;
+
+            return Task.CompletedTask;
         }
 
         public virtual async Task AddItemAsync(Product product, int quantity)
@@ -247,11 +256,11 @@ namespace VirtoCommerce.Storefront.Domain
         public virtual async Task MergeWithCartAsync(ShoppingCart cart)
         {
             EnsureCartExists();
-            
+
             //Reset primary keys for all aggregated entities before merge
             //To prevent insertions same Ids for target cart
             var entities = cart.GetFlatObjectsListWithInterface<IEntity>();
-            foreach(var entity in entities)
+            foreach (var entity in entities)
             {
                 entity.Id = null;
             }
@@ -406,7 +415,7 @@ namespace VirtoCommerce.Storefront.Domain
                     var product = products.FirstOrDefault(p => p.Id == lineItem.ProductId);
                     lineItem.InStockQuantity = (int)product.AvailableQuantity;
                 }
-                
+
                 var evalContext = Cart.ToPromotionEvaluationContext();
                 await _promotionEvaluator.EvaluateDiscountsAsync(evalContext, new IDiscountable[] { Cart });
             }
@@ -599,7 +608,7 @@ namespace VirtoCommerce.Storefront.Domain
         protected virtual async Task<Product[]> GetCartProductsAsync()
         {
             var productIds = Cart.Items.Select(i => i.ProductId).ToArray();
-            var products =  await _catalogService.GetProductsAsync(productIds, ItemResponseGroup.ItemWithPrices | ItemResponseGroup.ItemWithDiscounts | ItemResponseGroup.Inventory);
+            var products = await _catalogService.GetProductsAsync(productIds, ItemResponseGroup.ItemWithPrices | ItemResponseGroup.ItemWithDiscounts | ItemResponseGroup.Inventory);
             return products;
         }
     }
