@@ -60,9 +60,9 @@ namespace VirtoCommerce.Storefront.Domain
             return QuoteConverterInstance.ToQuoteTierPriceDto(tierPrice);
         }
 
-        public static QuoteItem ToQuoteItem(this Product product, long quantity)
+        public static QuoteItem ToQuoteItem(this Product product, long quantity, Currency currency)
         {
-            return QuoteConverterInstance.ToQuoteItem(product, quantity);
+            return QuoteConverterInstance.ToQuoteItem(product, quantity, currency);
         }
 
         public static QuoteItem ToQuoteItem(this quoteDto.QuoteItem quoteItemDto, Currency currency)
@@ -370,7 +370,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual QuoteItem ToQuoteItem(Product product, long quantity)
+        public virtual QuoteItem ToQuoteItem(Product product, long quantity, Currency currency)
         {
             var retVal = new QuoteItem
             {
@@ -379,6 +379,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Name = product.Name,
                 Sku = product.Sku,
                 TaxType = product.TaxType,
+                Currency = currency,
 
                 ImageUrl = product.PrimaryImage != null ? product.PrimaryImage.Url : null,
                 ListPrice = product.Price.ListPrice,

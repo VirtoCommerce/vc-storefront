@@ -57,23 +57,22 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         public ActionResult GetCurrent()
         {
             EnsureQuoteRequestBelongsToCurrentCustomer(WorkContext.CurrentQuoteRequest.Value);
-
-            return Json(WorkContext.CurrentQuoteRequest);
+            return Json(WorkContext.CurrentQuoteRequest.Value);
         }
 
-        // POST: storefrontapi/quoterequests/current/items?productId=...&quantity=...
+        // POST: storefrontapi/quoterequests/current/items
         [HttpPost]
-        public async Task<ActionResult> AddItem(string productId, int quantity)
+        public async Task<ActionResult> AddItem([FromBody] AddQuoteItem addQuoteItem)
         {
             EnsureQuoteRequestBelongsToCurrentCustomer(WorkContext.CurrentQuoteRequest.Value);
             _quoteRequestBuilder.TakeQuoteRequest(WorkContext.CurrentQuoteRequest.Value);
 
             using (await AsyncLock.GetLockByKey(GetAsyncLockQuoteKey(_quoteRequestBuilder.QuoteRequest.Id)).LockAsync())
             {
-                var products = await _catalogService.GetProductsAsync(new[] { productId }, ItemResponseGroup.ItemLarge);
+                var products = await _catalogService.GetProductsAsync(new[] { addQuoteItem.ProductId }, ItemResponseGroup.ItemInfo | ItemResponseGroup.ItemWithPrices);
                 if (products != null && products.Any())
                 {
-                    _quoteRequestBuilder.AddItem(products.First(), quantity);
+                    _quoteRequestBuilder.AddItem(products.First(), addQuoteItem.Quantity);
                     await _quoteRequestBuilder.SaveAsync();
                 }
             }
@@ -97,7 +96,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/quoterequest/{number}/submit
         [HttpPost]
-        public async Task<ActionResult> Submit(string number, QuoteRequestFormModel quoteForm)
+        public async Task<ActionResult> Submit(string number, [FromBody] QuoteRequestFormModel quoteForm)
         {
             await _quoteRequestBuilder.LoadQuoteRequestAsync(number, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
 
@@ -130,7 +129,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // PUT: storefrontapi/quoterequest/{number}/update
         [HttpPut]
-        public async Task<ActionResult> Update(string number, QuoteRequestFormModel quoteRequest)
+        public async Task<ActionResult> Update(string number, [FromBody] QuoteRequestFormModel quoteRequest)
         {
             await _quoteRequestBuilder.LoadQuoteRequestAsync(number, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
 
@@ -147,7 +146,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/quoterequests/{number}/totals
         [HttpPost]
-        public async Task<ActionResult> CalculateTotals(string number, QuoteRequestFormModel quoteRequest)
+        public async Task<ActionResult> CalculateTotals(string number, [FromBody] QuoteRequestFormModel quoteRequest)
         {
             await _quoteRequestBuilder.LoadQuoteRequestAsync(number, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
 
@@ -162,7 +161,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/quoterequests/{number}/confirm
         [HttpPost]
-        public async Task<ActionResult> Confirm(string number, QuoteRequestFormModel quoteRequest)
+        public async Task<ActionResult> Confirm(string number, [FromBody] QuoteRequestFormModel quoteRequest)
         {
             await _quoteRequestBuilder.LoadQuoteRequestAsync(number, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
 

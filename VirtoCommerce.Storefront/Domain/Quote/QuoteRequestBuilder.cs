@@ -144,7 +144,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         public IQuoteRequestBuilder AddItem(Product product, long quantity)
         {
-            _quoteRequest.Items.Add(product.ToQuoteItem(quantity));
+            _quoteRequest.Items.Add(product.ToQuoteItem(quantity, _quoteRequest.Currency));
 
             return this;
         }

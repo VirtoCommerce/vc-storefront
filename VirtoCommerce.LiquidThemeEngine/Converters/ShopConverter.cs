@@ -26,7 +26,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.Id = store.Id;
             result.Name = store.Name;
             result.SubscriptionEnabled = store.SubscriptionEnabled;
-            
+            result.QuotesEnabled = store.QuotesEnabled;
             result.CustomerAccountsEnabled = true;
             result.CustomerAccountsOptional = true;
             result.Currency = workContext.CurrentCurrency.Code;
