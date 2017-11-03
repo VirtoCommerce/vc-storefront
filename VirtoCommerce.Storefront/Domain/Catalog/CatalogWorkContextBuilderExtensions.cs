@@ -17,6 +17,7 @@ namespace VirtoCommerce.Storefront.Domain
             builder.WorkContext.CurrentProductSearchCriteria = new ProductSearchCriteria(builder.WorkContext.CurrentLanguage, builder.WorkContext.CurrentCurrency, builder.WorkContext.QueryString);
 
             //Initialize product response group.
+            //TODO: Need to find possibility to set this response group in theme
             builder.WorkContext.CurrentProductResponseGroup = EnumUtility.SafeParse(builder.WorkContext.QueryString.Get("resp_group"), ItemResponseGroup.ItemMedium | ItemResponseGroup.ItemWithPrices | ItemResponseGroup.ItemWithVendor);
 
             //This line make delay categories loading initialization (categories can be evaluated on view rendering time)
