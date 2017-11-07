@@ -137,6 +137,12 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("Maintenance");
         }
 
+        //An internal special method for handling permanent redirection from routing rules
+        public ActionResult InternalRedirect([FromRoute] string url)
+        {
+            return RedirectPermanent(url);
+        }
+
         // GET: common/notheme
         [HttpGet]
         public ActionResult NoTheme()

@@ -159,7 +159,7 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("CatalogSearch.CategoryBrowsing", "search/{categoryId}", defaults: new { controller = "CatalogSearch", action = "CategoryBrowsing" });
             routes.MapStorefrontRoute("CatalogSearch.SearchProducts", "search", defaults: new { controller = "CatalogSearch", action = "SearchProducts" });
 
-            // Common
+            // Common            
             routes.MapStorefrontRoute("Common.SetCurrency", "common/setcurrency/{currency}", defaults: new { controller = "Common", action = "SetCurrency" });
             routes.MapStorefrontRoute("Common.ContactUsPost", "contact/{viewName?}", defaults: new { controller = "Common", action = "СontactForm" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("Common.NoStore", "common/nostore", defaults: new { controller = "Common", action = "NoStore" });

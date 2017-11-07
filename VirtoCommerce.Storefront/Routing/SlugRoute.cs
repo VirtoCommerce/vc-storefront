@@ -35,7 +35,10 @@ namespace VirtoCommerce.Storefront.Routing
                 {
                     if (seoRouteResponse.Redirect)
                     {
-                        context.HttpContext.Response.Redirect(storefrontUrlBuilder.ToAppAbsolute(seoRouteResponse.RedirectLocation), true);
+                        //Redirect via call specific controller method (because usage of Response.Redirect leads to the rendering the main page)
+                        context.RouteData.Values["action"] = "InternalRedirect";
+                        context.RouteData.Values["controller"] = "Common";
+                        context.RouteData.Values["url"] = storefrontUrlBuilder.ToAppAbsolute(seoRouteResponse.RedirectLocation);
                     }
                     else if (seoRouteResponse.RouteData != null)
                     {
