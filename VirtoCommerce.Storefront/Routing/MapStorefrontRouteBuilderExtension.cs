@@ -104,11 +104,11 @@ namespace VirtoCommerce.Storefront.Routing
             #endregion
 
             //Errors
+            routes.MapStorefrontRoute("AccessDenied", "error/AccessDenied", defaults: new { controller = "Error", action = "AccessDenied" });
             routes.MapStorefrontRoute("Error", "error/{errCode}", defaults: new { controller = "Error", action = "Error" });
             routes.MapRoute("NoWorkContextErrors", "error/{errCode}", defaults: new { controller = "Error", action = "Error" });
             routes.MapStorefrontRoute("StoreMaintenance", "common/maintenance", defaults: new { controller = "Common", action = "Maintenance" });
-            routes.MapStorefrontRoute("NoTheme", "common/notheme", defaults: new { controller = "Common", action = "NoTheme" });
-            routes.MapStorefrontRoute("AccessDenied", "error/AccessDenied", defaults: new { controller = "Error", action = "AccessDenied" });
+            routes.MapStorefrontRoute("NoTheme", "common/notheme", defaults: new { controller = "Common", action = "NoTheme" });            
             // Account
             routes.MapStorefrontRoute("Account", "account", defaults: new { controller = "Account", action = "GetAccount" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));
             routes.MapStorefrontRoute("Account.GetOrderDetails ", "account/order/{number}", defaults: new { controller = "Account", action = "GetOrderDetails" });
