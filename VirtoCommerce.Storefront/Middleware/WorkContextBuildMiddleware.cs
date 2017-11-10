@@ -8,22 +8,33 @@ using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
+using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
 namespace VirtoCommerce.Storefront.Middleware
 {
     public class WorkContextBuildMiddleware
     {
+        private readonly IConfiguration _configuration;
         private readonly RequestDelegate _next;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly StorefrontOptions _options;
         private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly Dictionary<string, object> _applicationSettings;
         public WorkContextBuildMiddleware(RequestDelegate next, IHostingEnvironment hostingEnvironment,
-                                          IOptions<StorefrontOptions> options, IWorkContextAccessor workContextAccessor)
+                                          IOptions<StorefrontOptions> options, IWorkContextAccessor workContextAccessor, IConfiguration configuration)
         {
             _next = next;
             _hostingEnvironment = hostingEnvironment;
             _workContextAccessor = workContextAccessor;
             _options = options.Value;
+            _configuration = configuration;
+
+            //Load a user-defined  settings from the special section.
+            //All of these settings are accessible from the themes and through access to WorkContext.ApplicationSettings property
+            //Trim of the VirtoCommerce:AppSettings added for backward compatibility with old themes
+            _applicationSettings = _configuration.GetSection("VirtoCommerce:AppSettings").AsEnumerable().Where(x => x.Value != null)
+                                                                                      .ToDictionary(x => x.Key.Replace("VirtoCommerce:AppSettings:", ""), x => (object)x.Value);
         }
 
         public async Task Invoke(HttpContext context)
@@ -39,7 +50,7 @@ namespace VirtoCommerce.Storefront.Middleware
             var builder = new WorkContextBuilder(context);
             var workContext = builder.WorkContext;
 
-            workContext.ApplicationSettings = _options.Settings;
+            workContext.ApplicationSettings = _applicationSettings;
             //The important to preserve the order of initialization
             await builder.WithCountriesAsync();
 
