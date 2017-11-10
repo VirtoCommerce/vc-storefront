@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <Version>3.0.2</Version>
+    <Version>3.0.3</Version>
     <Description>The storefront implementation of the Virto Commerce platform.</Description>
     <Copyright>Copyright © 2011-2017 Virto Commerce - an enterprise Microsoft ecommerce platform ©. All rights reserved</Copyright>
     <Authors>Virto Commerce</Authors>
