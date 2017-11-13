@@ -7,12 +7,12 @@ namespace VirtoCommerce.Storefront.Model.Marketing
     {
         public bool IsSatisfiedBy(DynamicContentItem contentItem)
         {
-            return string.IsNullOrEmpty(contentItem.ContentType) && contentItem.ContentType.EqualsInvariant("Html");        
+            return !string.IsNullOrEmpty(contentItem.ContentType) && contentItem.ContentType.EqualsInvariant("Html");        
         }
 
         public bool IsSatisfiedBy(DynamicProperty dynamicPropety)
         {
-            return string.IsNullOrEmpty(dynamicPropety.Name) && dynamicPropety.Name.EqualsInvariant("Html");
+            return !string.IsNullOrEmpty(dynamicPropety.Name) && dynamicPropety.Name.EqualsInvariant("Html");
         }
     }
 }
