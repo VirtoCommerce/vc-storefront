@@ -28,7 +28,7 @@
     <PackageReference Include="Markdig" Version="0.13.3" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.2.0-beta1" />
     <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.5.0-beta1" />
-    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.4.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.5.0-beta1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.0.0" />
     <PackageReference Include="Microsoft.SyndicationFeed.ReaderWriter" Version="1.0.0" />

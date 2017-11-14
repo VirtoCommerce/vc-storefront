@@ -214,6 +214,7 @@ namespace VirtoCommerce.Storefront
             //Register event handlers via reflection
             services.RegisterAssembliesEventHandlers(typeof(Startup));
 
+            services.AddApplicationInsightsTelemetry();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
