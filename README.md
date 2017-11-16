@@ -1,4 +1,4 @@
-# VirtoCommerce Storefront Core
+# VirtoCommerce Storefront for ASP.NET Core 2.0
 VirtoCommerce Storefront represents the official online shopping website based on VirtoCommerce Platform written on ASP.NET Core. The website is a client application for VC Platform and uses only public APIs while communicating.
 
 Technologies and frameworks used:
