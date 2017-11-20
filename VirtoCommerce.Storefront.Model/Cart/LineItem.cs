@@ -352,9 +352,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
                 var discount = reward.ToDiscountModel(ListPrice - DiscountAmount);
                 if (reward.Quantity > 0)
                 {
-                    var money = discount.Amount * Math.Min(reward.Quantity, Quantity);
-                    //TODO: need allocate more rightly between each quantities
-                    discount.Amount = money.Allocate(Quantity).FirstOrDefault();
+                    discount.Amount = discount.Amount * Math.Min(reward.Quantity, Quantity) / Quantity;
                 }
                 if (reward.IsValid)
                 {

@@ -369,8 +369,8 @@ namespace VirtoCommerce.Storefront.Domain
             retVal.Length = shipment.Length;
 
             retVal.Currency = shipment.Currency != null ? shipment.Currency.Code : null;
-            retVal.DiscountAmount = shipment.DiscountAmount != null ? (double?)shipment.DiscountAmount.Amount : null;
-            retVal.Price = shipment.Price != null ? (double?)shipment.Price.Amount : null;
+            retVal.DiscountAmount = shipment.DiscountAmount != null ? (double?)shipment.DiscountAmount.InternalAmount : null;
+            retVal.Price = shipment.Price != null ? (double?)shipment.Price.InternalAmount : null;
             retVal.TaxPercentRate = (double)shipment.TaxPercentRate;
 
             if (shipment.DeliveryAddress != null)
@@ -482,11 +482,11 @@ namespace VirtoCommerce.Storefront.Domain
             result.PaymentGatewayCode = payment.PaymentGatewayCode;
             result.TaxType = payment.TaxType;
 
-            result.Amount = (double)payment.Amount.Amount;
+            result.Amount = (double)payment.Amount.InternalAmount;
 
             result.Currency = payment.Currency.Code;
-            result.Price = (double)payment.Price.Amount;
-            result.DiscountAmount = (double)payment.DiscountAmount.Amount;
+            result.Price = (double)payment.Price.InternalAmount;
+            result.DiscountAmount = (double)payment.DiscountAmount.InternalAmount;
             result.TaxPercentRate = (double)payment.TaxPercentRate;
 
             if (payment.BillingAddress != null)
@@ -623,9 +623,9 @@ namespace VirtoCommerce.Storefront.Domain
             result.Coupon = cart.Coupon != null ? cart.Coupon.Code : null;
             result.Currency = cart.Currency.Code;
             result.Discounts = cart.Discounts.Select(ToCartDiscountDto).ToList();
-            result.HandlingTotal = (double)cart.HandlingTotal.Amount;
-            result.HandlingTotalWithTax = (double)cart.HandlingTotal.Amount;
-            result.DiscountAmount = (double)cart.DiscountAmount.Amount;
+            result.HandlingTotal = (double)cart.HandlingTotal.InternalAmount;
+            result.HandlingTotalWithTax = (double)cart.HandlingTotal.InternalAmount;
+            result.DiscountAmount = (double)cart.DiscountAmount.InternalAmount;
             result.Items = cart.Items.Select(ToLineItemDto).ToList();
             result.Payments = cart.Payments.Select(ToPaymentDto).ToList();
             result.Shipments = cart.Shipments.Select(ToShipmentDto).ToList();
@@ -828,10 +828,10 @@ namespace VirtoCommerce.Storefront.Domain
             retVal.Currency = lineItem.Currency.Code;
             retVal.Discounts = lineItem.Discounts.Select(ToCartDiscountDto).ToList();
 
-            retVal.ListPrice = (double)lineItem.ListPrice.Amount;
-            retVal.SalePrice = (double)lineItem.SalePrice.Amount;
+            retVal.ListPrice = (double)lineItem.ListPrice.InternalAmount;
+            retVal.SalePrice = (double)lineItem.SalePrice.InternalAmount;
             retVal.TaxPercentRate = (double)lineItem.TaxPercentRate;
-            retVal.DiscountAmount = (double)lineItem.DiscountAmount.Amount;
+            retVal.DiscountAmount = (double)lineItem.DiscountAmount.InternalAmount;
             retVal.TaxDetails = lineItem.TaxDetails.Select(ToCartTaxDetailDto).ToList();
             retVal.DynamicProperties = lineItem.DynamicProperties.Select(ToCartDynamicPropertyDto).ToList();
             retVal.VolumetricWeight = (double)(lineItem.VolumetricWeight ?? 0);
