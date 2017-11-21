@@ -6,7 +6,7 @@ Technologies and frameworks used:
 * ASP.NET Identity Core 2.0.0
 * REST services clients generation with using [Microsoft AutoRest](https://github.com/Azure/autorest)
 * Liquid view engine based on [DotLiquid](https://github.com/dotliquid/dotliquid)
-* [LibSaasHost](https://github.com/Taritsyn/LibSassHost) for processing **scss** stylesheets in runtime
+* [LibSassHost](https://github.com/Taritsyn/LibSassHost) for processing **scss** stylesheets in runtime
 
 
 Key features:
