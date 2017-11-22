@@ -178,7 +178,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 retVal = new MemoryStream(Encoding.UTF8.GetBytes(template));
             }
 
-            if (retVal != null && (filePath.Contains(".scss.") || filePath.EndsWith(".scss")))
+            if (retVal != null && (filePath.Contains(".scss.") && filePath.EndsWith(".liquid") || filePath.EndsWith(".scss")))
             {
                 var content = retVal.ReadToString();
                 retVal.Dispose();
@@ -186,7 +186,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 try
                 {
                     //handle scss resources
-                    CompilationResult result = SassCompiler.Compile(content); 
+                    CompilationResult result = SassCompiler.Compile(content);
                     content = result.CompiledContent;
 
                     retVal = new MemoryStream(Encoding.UTF8.GetBytes(content));
