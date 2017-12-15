@@ -88,6 +88,7 @@ namespace VirtoCommerce.Storefront.Domain
                    cart.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == cart.Id);
                    foreach (var lineItem in cart.Items)
                    {
+                       lineItem.Product = (await _catalogService.GetProductsAsync(new[] { lineItem.ProductId }, ItemResponseGroup.ItemWithPrices)).FirstOrDefault();
                        lineItem.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == lineItem.ProductId);
                    }
                }
