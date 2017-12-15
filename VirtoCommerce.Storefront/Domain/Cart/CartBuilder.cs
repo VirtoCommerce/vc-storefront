@@ -82,13 +82,15 @@ namespace VirtoCommerce.Storefront.Domain
                 //Load cart payment plan with have same id
                 if (store.SubscriptionEnabled)
                {
+                   var productsIds = cart.Items.Select(x => x.ProductId).Distinct().ToArray();
+                   var products = await _catalogService.GetProductsAsync(productsIds, ItemResponseGroup.ItemWithPrices);
                    var paymentPlanIds = new[] { cart.Id }.Concat(cart.Items.Select(x => x.ProductId).Distinct()).ToArray();
-
                    var paymentPlans = await _subscriptionService.GetPaymentPlansByIdsAsync(paymentPlanIds);
                    cart.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == cart.Id);
+                   //Realize this code whith dictionary
                    foreach (var lineItem in cart.Items)
                    {
-                       lineItem.Product = (await _catalogService.GetProductsAsync(new[] { lineItem.ProductId }, ItemResponseGroup.ItemWithPrices)).FirstOrDefault();
+                       lineItem.Product = products.FirstOrDefault(x => x.Id == lineItem.ProductId);
                        lineItem.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == lineItem.ProductId);
                    }
                }
@@ -302,6 +304,7 @@ namespace VirtoCommerce.Storefront.Domain
                 if (quoteItem != null)
                 {
                     var lineItem = product.ToLineItem(Cart.Language, (int)quoteItem.SelectedTierPrice.Quantity);
+                    lineItem.Product = product;
                     lineItem.ListPrice = quoteItem.ListPrice;
                     lineItem.SalePrice = quoteItem.SelectedTierPrice.Price;
                     if (lineItem.ListPrice < lineItem.SalePrice)
@@ -409,12 +412,10 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 //Get product inventory to fill InStockQuantity parameter of LineItem
                 //required for some promotions evaluation
-                var products = await GetCartProductsAsync();
 
                 foreach (var lineItem in Cart.Items.ToList())
                 {
-                    var product = products.FirstOrDefault(p => p.Id == lineItem.ProductId);
-                    lineItem.InStockQuantity = (int)product.AvailableQuantity;
+                    lineItem.InStockQuantity = (int)lineItem.Product.AvailableQuantity;
                 }
 
                 var evalContext = Cart.ToPromotionEvaluationContext();
@@ -480,30 +481,27 @@ namespace VirtoCommerce.Storefront.Domain
 
         protected virtual async Task ValidateCartItemsAsync()
         {
-            var products = await GetCartProductsAsync();
-
             foreach (var lineItem in Cart.Items.ToList())
             {
                 lineItem.ValidationErrors.Clear();
 
-                var product = products.FirstOrDefault(p => p.Id == lineItem.ProductId);
-                if (product == null || !product.IsActive || !product.IsBuyable)
+                if (lineItem.Product == null || !lineItem.Product.IsActive || !lineItem.Product.IsBuyable)
                 {
                     lineItem.ValidationErrors.Add(new UnavailableError());
                     lineItem.IsValid = false;
                 }
                 else
                 {
-                    var isProductAvailable = new ProductIsAvailableSpecification(product).IsSatisfiedBy(lineItem.Quantity);
+                    var isProductAvailable = new ProductIsAvailableSpecification(lineItem.Product).IsSatisfiedBy(lineItem.Quantity);
                     if (!isProductAvailable)
                     {
                         lineItem.IsValid = false;
 
-                        var availableQuantity = product.AvailableQuantity;
+                        var availableQuantity = lineItem.Product.AvailableQuantity;
                         lineItem.ValidationErrors.Add(new QuantityError(availableQuantity));
                     }
 
-                    var tierPrice = product.Price.GetTierPrice(lineItem.Quantity);
+                    var tierPrice = lineItem.Product.Price.GetTierPrice(lineItem.Quantity);
                     if (tierPrice.Price > lineItem.SalePrice)
                     {
                         lineItem.ValidationErrors.Add(new PriceError(lineItem.SalePrice, lineItem.SalePriceWithTax, tierPrice.Price, tierPrice.PriceWithTax));
@@ -563,10 +561,9 @@ namespace VirtoCommerce.Storefront.Domain
         {
             if (lineItem != null && !lineItem.IsReadOnly)
             {
-                var product = (await _catalogService.GetProductsAsync(new[] { lineItem.ProductId }, ItemResponseGroup.ItemWithPrices)).FirstOrDefault();
-                if (product != null)
+                if (lineItem.Product != null)
                 {
-                    lineItem.SalePrice = product.Price.GetTierPrice(quantity).Price;
+                    lineItem.SalePrice = lineItem.Product.Price.GetTierPrice(quantity).Price;
                     //List price should be always greater ot equals sale price because it may cause incorrect totals calculation
                     if (lineItem.ListPrice < lineItem.SalePrice)
                     {
@@ -604,13 +601,6 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 throw new StorefrontException("Cart not loaded.");
             }
-        }
-
-        protected virtual async Task<Product[]> GetCartProductsAsync()
-        {
-            var productIds = Cart.Items.Select(i => i.ProductId).ToArray();
-            var products = await _catalogService.GetProductsAsync(productIds, ItemResponseGroup.ItemWithPrices | ItemResponseGroup.ItemWithDiscounts | ItemResponseGroup.Inventory);
-            return products;
         }
     }
 }
