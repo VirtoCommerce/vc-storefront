@@ -128,6 +128,16 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
+        public virtual async Task AddItemsAsync(Product[] products, int[] quantity)
+        {
+            EnsureCartExists();
+            var lineItems = products.Where((p, i) => new ProductIsAvailableSpecification(p).IsSatisfiedBy(quantity[i]))
+                .Select((p, i) => p.ToLineItem(Cart.Language, quantity[i]))
+                .ToArray(); 
+
+            await AddLineItemsAsync(lineItems);
+        }
+
         public virtual async Task ChangeItemQuantityAsync(string id, int quantity)
         {
             EnsureCartExists();
@@ -174,6 +184,21 @@ namespace VirtoCommerce.Storefront.Domain
                 Cart.Items.Remove(lineItem);
             }
 
+            return Task.FromResult((object)null);
+        }
+
+        public virtual Task RemoveItemsAsync(string[] ids)
+        {
+            EnsureCartExists();
+
+            foreach (var id in ids)
+            {
+                var lineItem = Cart.Items.FirstOrDefault(x => x.Id == id);
+                if (lineItem != null)
+                {
+                    Cart.Items.Remove(lineItem);
+                }
+            }
             return Task.FromResult((object)null);
         }
 
@@ -577,7 +602,7 @@ namespace VirtoCommerce.Storefront.Domain
                     lineItem.Quantity = quantity;
                 }
                 else
-                {
+                {   //foreach
                     Cart.Items.Remove(lineItem);
                 }
             }
@@ -594,6 +619,23 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 lineItem.Id = null;
                 Cart.Items.Add(lineItem);
+            }
+        }
+
+        protected virtual async Task AddLineItemsAsync(IEnumerable<LineItem> lineItems)
+        {
+            foreach (var lineItem in lineItems)
+            {
+                var existingLineItem = Cart.Items.FirstOrDefault(li => li.ProductId == lineItem.ProductId);
+                if (existingLineItem != null)
+                {
+                    await ChangeItemQuantityAsync(existingLineItem, existingLineItem.Quantity + Math.Max(1, lineItem.Quantity));
+                }
+                else
+                {
+                    lineItem.Id = null;
+                    Cart.Items.Add(lineItem);
+                }
             }
         }
 

@@ -167,6 +167,75 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         }
 
+
+        // POST: storefrontapi/cart/items
+        [HttpPost]
+        public async Task<ActionResult> AddItemsToCart([FromBody] AddCartItem[] cartItems)
+        {
+            EnsureCartExists();
+
+            //Need lock to prevent concurrent access to same cart
+            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext.CurrentCart.Value)).LockAsync())
+            {
+                var cartBuilder = await LoadOrCreateCartAsync();
+                string[] productsId = null;
+                int[] quantity = null;
+                //отбирать селектом 
+                foreach (var cartItem in cartItems)
+                {
+                    productsId.AddDistinct(cartItem.ProductId);
+                    quantity.AddDistinct(cartItem.Quantity);
+                }
+                var products = await _catalogService.GetProductsAsync(productsId, Model.Catalog.ItemResponseGroup.Inventory | Model.Catalog.ItemResponseGroup.ItemWithPrices);
+                if (products != null && products.Any())
+                {
+                    await cartBuilder.AddItemsAsync(products, quantity);
+                    await cartBuilder.SaveAsync();
+                }
+                return Json(new { ItemsCount = cartBuilder.Cart.ItemsQuantity });
+            }
+        }
+
+        // PUT: storefrontapi/cart/items?lineItemsId=...&quantity=...
+        [HttpPut]
+        public async Task<ActionResult> ChangeCartItems([FromBody] ChangeCartItemQty[] changeQty)
+        {
+            EnsureCartExists();
+
+            //Need lock to prevent concurrent access to same cart
+            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext.CurrentCart.Value)).LockAsync())
+            {
+                var cartBuilder = await LoadOrCreateCartAsync();
+                foreach (var qty in changeQty)
+                {
+                    var lineItem = cartBuilder.Cart.Items.FirstOrDefault(i => i.Id == qty.LineItemId);
+                    if (lineItem != null)
+                    {
+                        await cartBuilder.ChangeItemQuantityAsync(qty.LineItemId, qty.Quantity);
+                        await cartBuilder.SaveAsync();
+                    }
+                }
+            }
+            return Ok();
+        }
+
+        // DELETE: storefrontapi/cart/items?lineItemsId=...
+        [HttpDelete]
+        public async Task<ActionResult> RemoveCartItems(string[] lineItemsId)
+        {
+            EnsureCartExists();
+
+            //Need lock to prevent concurrent access to same cart
+            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext.CurrentCart.Value)).LockAsync())
+            {
+                var cartBuilder = await LoadOrCreateCartAsync();
+                await cartBuilder.RemoveItemsAsync(lineItemsId);
+                await cartBuilder.SaveAsync();
+                return Json(new { ItemsCount = cartBuilder.Cart.ItemsQuantity });
+            }
+
+        }
+
         // POST: storefrontapi/cart/clear
         [HttpPost]
         public async Task<ActionResult> ClearCart()

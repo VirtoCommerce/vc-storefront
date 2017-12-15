@@ -53,6 +53,14 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         Task AddItemAsync(Product product, int quantity);
 
         /// <summary>
+        /// Add new product to cart
+        /// </summary>
+        /// <param name="products"></param>
+        /// <param name="quantity"></param>
+        /// <returns></returns>
+        Task AddItemsAsync(Product[] products, int[] quantity);
+
+        /// <summary>
         /// Change cart item qty by product index
         /// </summary>
         /// <param name="lineItemId"></param>
@@ -78,10 +86,19 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         Task RemoveItemAsync(string lineItemId);
 
         /// <summary>
+        /// Remove item from cart by id
+        /// </summary>
+        /// <param name="lineItemIds"></param>
+        /// <returns></returns>
+
+        Task RemoveItemsAsync(string[] lineItemIds);
+
+        /// <summary>
         /// Apply marketing coupon to captured cart
         /// </summary>
         /// <param name="couponCode"></param>
         /// <returns></returns>
+
         Task AddCouponAsync(string couponCode);
 
         /// <summary>
