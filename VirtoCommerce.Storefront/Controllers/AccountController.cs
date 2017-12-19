@@ -193,6 +193,7 @@ namespace VirtoCommerce.Storefront.Controllers
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
             var loginInfo = await _signInManager.GetExternalLoginInfoAsync();
+            var currentUser = WorkContext.CurrentUser;
             if (loginInfo == null)
             {
                 return View("customers/login", WorkContext);
@@ -223,6 +224,14 @@ namespace VirtoCommerce.Storefront.Controllers
                         ModelState.AddModelError(string.Empty, error.Description);
                     }
                     return View("customers/login", WorkContext);
+                }
+            }
+            else
+            {
+                if (currentUser.IsRegisteredUser == true)
+                {
+                    currentUser.ExternalLogins.Add(new ExternalUserLoginInfo { ProviderKey = loginInfo.ProviderKey, LoginProvider = loginInfo.LoginProvider });
+                    var updateResult = await _signInManager.UserManager.UpdateAsync(currentUser);
                 }
             }
 
