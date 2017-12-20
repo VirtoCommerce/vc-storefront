@@ -12,6 +12,7 @@ using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.LinkList.Services;
 using VirtoCommerce.Storefront.Model.Services;
 using VirtoCommerce.Storefront.Model.Stores;
+using VirtoCommerce.Storefront.Infrastructure;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -20,12 +21,13 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IMenu _cmsApi;
         private readonly ICatalogService _catalogService;
         private readonly IMemoryCache _memoryCache;
-
-        public MenuLinkListServiceImpl(IMenu cmsApi, ICatalogService catalogService, IMemoryCache memoryCache)
+        private readonly IApiChangesWatcher _apiChangesWatcher;
+        public MenuLinkListServiceImpl(IMenu cmsApi, ICatalogService catalogService, IMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
         {
             _cmsApi = cmsApi;
             _catalogService = catalogService;
             _memoryCache = memoryCache;
+            _apiChangesWatcher = apiChangesWatcher;
         }
 
         public async Task<IList<MenuLinkList>> LoadAllStoreLinkListsAsync(Store store, Language language)
@@ -38,6 +40,8 @@ namespace VirtoCommerce.Storefront.Domain
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(StaticContentCacheRegion.CreateChangeToken());
+                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
+
                 var result = new List<MenuLinkList>();
                 var listsDto = await _cmsApi.GetListsAsync(store.Id);
                 if(listsDto != null)

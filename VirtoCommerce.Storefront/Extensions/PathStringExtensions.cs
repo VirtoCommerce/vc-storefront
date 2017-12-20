@@ -30,8 +30,8 @@ namespace VirtoCommerce.Storefront.Extensions
             }
 
             //need to remove store and language if it already exist in path           
-            path = Regex.Replace(path, @"/\b" + store.Id + @"\b/?", "/", RegexOptions.IgnoreCase);
-            path = Regex.Replace(path, @"/\b" + language.CultureName + @"\b/?", "/", RegexOptions.IgnoreCase);
+            path = Regex.Replace(path, @"^/\b" + store.Id + @"\b/", "/", RegexOptions.IgnoreCase);
+            path = Regex.Replace(path, @"/\b" + language.CultureName + @"\b/", "/", RegexOptions.IgnoreCase);
             return path;
         }
 
