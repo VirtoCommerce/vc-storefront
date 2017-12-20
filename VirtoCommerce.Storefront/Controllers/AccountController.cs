@@ -208,30 +208,30 @@ namespace VirtoCommerce.Storefront.Controllers
                 {
                     return View("lockedout", WorkContext);
                 }
-                //Register new user
-                user = new User()
-                {
-                    Email = loginInfo.Principal.FindFirstValue(ClaimTypes.Email),
-                    UserName = $"{loginInfo.LoginProvider}--{loginInfo.ProviderKey}",
-                    StoreId = WorkContext.CurrentStore.Id,
-                };
-                user.ExternalLogins.Add(new ExternalUserLoginInfo { ProviderKey = loginInfo.ProviderKey, LoginProvider = loginInfo.LoginProvider });
-                var identityResult = await _signInManager.UserManager.CreateAsync(user);
-                if (!identityResult.Succeeded)
-                {
-                    foreach (var error in identityResult.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                    return View("customers/login", WorkContext);
-                }
-            }
-            else
-            {
+
                 if (currentUser.IsRegisteredUser == true)
                 {
-                    currentUser.ExternalLogins.Add(new ExternalUserLoginInfo { ProviderKey = loginInfo.ProviderKey, LoginProvider = loginInfo.LoginProvider });
-                    var updateResult = await _signInManager.UserManager.UpdateAsync(currentUser);
+                    currentUser.ExternalLogins.Add(new ExternalUserLoginInfo { ProviderKey = loginInfo.ProviderKey, ProviderDisplayName = loginInfo.ProviderDisplayName ,LoginProvider = loginInfo.LoginProvider });
+                    var identityResult = await _signInManager.UserManager.UpdateAsync(currentUser);
+                }
+                else
+                {
+                    user = new User()
+                    {
+                        Email = loginInfo.Principal.FindFirstValue(ClaimTypes.Email),
+                        UserName = $"{loginInfo.LoginProvider}--{loginInfo.ProviderKey}",
+                        StoreId = WorkContext.CurrentStore.Id,
+                    };
+                    user.ExternalLogins.Add(new ExternalUserLoginInfo { ProviderKey = loginInfo.ProviderKey, LoginProvider = loginInfo.LoginProvider });
+                    var identityResult = await _signInManager.UserManager.CreateAsync(user);
+                    if (!identityResult.Succeeded)
+                    {
+                        foreach (var error in identityResult.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
+                        return View("customers/login", WorkContext);
+                    }
                 }
             }
 
