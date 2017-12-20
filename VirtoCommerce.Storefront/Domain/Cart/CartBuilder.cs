@@ -83,7 +83,7 @@ namespace VirtoCommerce.Storefront.Domain
                 if (store.SubscriptionEnabled)
                {
                    var productsIds = cart.Items.Select(x => x.ProductId).Distinct().ToArray();
-                   var products = await _catalogService.GetProductsAsync(productsIds, ItemResponseGroup.ItemWithPrices);
+                   var products = await _catalogService.GetProductsAsync(productsIds, ItemResponseGroup.ItemWithPrices | ItemResponseGroup.ItemWithDiscounts | ItemResponseGroup.Inventory);
                    var paymentPlanIds = new[] { cart.Id }.Concat(cart.Items.Select(x => x.ProductId).Distinct()).ToArray();
                    var paymentPlans = await _subscriptionService.GetPaymentPlansByIdsAsync(paymentPlanIds);
                    cart.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == cart.Id);
