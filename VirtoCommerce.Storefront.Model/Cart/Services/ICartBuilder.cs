@@ -53,12 +53,11 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         Task AddItemAsync(Product product, int quantity);
 
         /// <summary>
-        /// Add new product to cart
+        /// Change cart item qty by product index
         /// </summary>
-        /// <param name="products"></param>
+        /// <param name="lineItemId"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-
         Task ChangeItemQuantityAsync(string lineItemId, int quantity);
 
         /// <summary>
@@ -68,6 +67,8 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         /// <param name="quantity"></param>
         /// <returns></returns>
         Task ChangeItemQuantityAsync(int lineItemIndex, int quantity);
+
+        Task ChangeItemsQuantitiesAsync(int[] quantities);
 
         /// <summary>
         /// Remove item from cart by id
