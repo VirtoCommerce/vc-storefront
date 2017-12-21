@@ -79,8 +79,8 @@ namespace VirtoCommerce.Storefront.Domain
                var cartDto = cartSearchResult.Results.FirstOrDefault();
                var cart = cartDto?.ToShoppingCart(currency, language, user) ?? CreateCart(cartName, store, user, language, currency);
 
-                //Load cart payment plan with have same id
-                if (store.SubscriptionEnabled)
+               //Load cart payment plan with have same id
+               if (store.SubscriptionEnabled)
                {
                    var productsIds = cart.Items.Select(x => x.ProductId).Distinct().ToArray();
                    var products = await _catalogService.GetProductsAsync(productsIds, ItemResponseGroup.ItemWithPrices | ItemResponseGroup.ItemWithDiscounts | ItemResponseGroup.Inventory);
@@ -127,6 +127,7 @@ namespace VirtoCommerce.Storefront.Domain
             if (isProductAvailable)
             {
                 var lineItem = product.ToLineItem(Cart.Language, quantity);
+                lineItem.Product = product;
                 await AddLineItemAsync(lineItem);
             }
         }
