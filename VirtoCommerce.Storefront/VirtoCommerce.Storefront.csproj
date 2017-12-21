@@ -25,6 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="2.0.0-rc2-final" />
+    <PackageReference Include="AspNet.Security.OAuth.StackExchange" Version="2.0.0-rc2-final" />
     <PackageReference Include="Markdig" Version="0.13.3" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.2.0-beta1" />
     <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.5.0-beta1" />

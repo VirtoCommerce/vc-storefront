@@ -159,6 +159,22 @@ namespace VirtoCommerce.Storefront
                     googleSection.Bind(googleOptions);
                 });
             }
+            var githubSection = Configuration.GetSection("Authentication:Github");
+            if (githubSection.GetChildren().Any())
+            {
+                auth.AddGitHub(GitHubAuthenticationOptions =>
+                {
+                    githubSection.Bind(GitHubAuthenticationOptions);
+                });
+            }
+            var stackexchangeSection = Configuration.GetSection("Authentication:Stackexchange");
+            if (stackexchangeSection.GetChildren().Any())
+            {
+                auth.AddStackExchange(StackExchangeAuthenticationOptions =>
+                {
+                    stackexchangeSection.Bind(StackExchangeAuthenticationOptions);
+                });
+            }
             services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 8;
