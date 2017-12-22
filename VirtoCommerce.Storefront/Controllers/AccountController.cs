@@ -193,6 +193,7 @@ namespace VirtoCommerce.Storefront.Controllers
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
             var loginInfo = await _signInManager.GetExternalLoginInfoAsync();
+            var currentUser = WorkContext.CurrentUser;
             if (loginInfo == null)
             {
                 return View("customers/login", WorkContext);
@@ -207,15 +208,25 @@ namespace VirtoCommerce.Storefront.Controllers
                 {
                     return View("lockedout", WorkContext);
                 }
-                //Register new user
-                user = new User()
+
+                IdentityResult identityResult;
+
+                if (currentUser.IsRegisteredUser == true)
                 {
-                    Email = loginInfo.Principal.FindFirstValue(ClaimTypes.Email),
-                    UserName = $"{loginInfo.LoginProvider}--{loginInfo.ProviderKey}",
-                    StoreId = WorkContext.CurrentStore.Id,
-                };
-                user.ExternalLogins.Add(new ExternalUserLoginInfo { ProviderKey = loginInfo.ProviderKey, LoginProvider = loginInfo.LoginProvider });
-                var identityResult = await _signInManager.UserManager.CreateAsync(user);
+                    identityResult = await _signInManager.UserManager.AddLoginAsync(currentUser, loginInfo);
+                }
+                else
+                {
+                    user = new User()
+                    {
+                        Email = loginInfo.Principal.FindFirstValue(ClaimTypes.Email),
+                        UserName = $"{loginInfo.LoginProvider}--{loginInfo.ProviderKey}",
+                        StoreId = WorkContext.CurrentStore.Id,
+                    };
+                    user.ExternalLogins.Add(new ExternalUserLoginInfo { ProviderKey = loginInfo.ProviderKey, LoginProvider = loginInfo.LoginProvider });
+                    identityResult = await _signInManager.UserManager.CreateAsync(user);
+                }
+
                 if (!identityResult.Succeeded)
                 {
                     foreach (var error in identityResult.Errors)

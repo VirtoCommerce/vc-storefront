@@ -27,7 +27,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/pricing/actualprices
         [HttpPost]
-        public async Task<ActionResult> GetActualProductPrices(Product[] products)
+        public async Task<ActionResult> GetActualProductPrices([FromBody] Product[] products)
         {
             if (products != null)
             {
