@@ -70,38 +70,38 @@ namespace VirtoCommerce.Storefront.Domain
             var cacheKey = CacheKey.With(GetType(), store.Id, cartName, user.Id, currency.Code);
             var needReevaluate = false;
             Cart = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-           {
-               needReevaluate = true;
+            {
+                needReevaluate = true;
 
-               var cartSearchCriteria = CreateCartSearchCriteria(cartName, store, user, language, currency);
-               var cartSearchResult = await _cartApi.SearchAsync(cartSearchCriteria);
+                var cartSearchCriteria = CreateCartSearchCriteria(cartName, store, user, language, currency);
+                var cartSearchResult = await _cartApi.SearchAsync(cartSearchCriteria);
 
-               var cartDto = cartSearchResult.Results.FirstOrDefault();
-               var cart = cartDto?.ToShoppingCart(currency, language, user) ?? CreateCart(cartName, store, user, language, currency);
+                var cartDto = cartSearchResult.Results.FirstOrDefault();
+                var cart = cartDto?.ToShoppingCart(currency, language, user) ?? CreateCart(cartName, store, user, language, currency);
 
-               //Load cart payment plan with have same id
-               if (store.SubscriptionEnabled)
-               {
-                   var productsIds = cart.Items.Select(x => x.ProductId).Distinct().ToArray();
-                   var products = await _catalogService.GetProductsAsync(productsIds, ItemResponseGroup.ItemWithPrices | ItemResponseGroup.ItemWithDiscounts | ItemResponseGroup.Inventory);
-                   var paymentPlanIds = new[] { cart.Id }.Concat(cart.Items.Select(x => x.ProductId).Distinct()).ToArray();
-                   var paymentPlans = await _subscriptionService.GetPaymentPlansByIdsAsync(paymentPlanIds);
-                   cart.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == cart.Id);
-                   //Realize this code whith dictionary
-                   foreach (var lineItem in cart.Items)
-                   {
-                       lineItem.Product = products.FirstOrDefault(x => x.Id == lineItem.ProductId);
-                       lineItem.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == lineItem.ProductId);
-                   }
-               }
+                //Load cart payment plan with have same id
+                if (store.SubscriptionEnabled)
+                {
+                    var productsIds = cart.Items.Select(x => x.ProductId).Distinct().ToArray();
+                    var products = await _catalogService.GetProductsAsync(productsIds, ItemResponseGroup.ItemWithPrices | ItemResponseGroup.ItemWithDiscounts | ItemResponseGroup.Inventory);
+                    var paymentPlanIds = new[] { cart.Id }.Concat(cart.Items.Select(x => x.ProductId).Distinct()).ToArray();
+                    var paymentPlans = await _subscriptionService.GetPaymentPlansByIdsAsync(paymentPlanIds);
+                    cart.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == cart.Id);
+                    //Realize this code whith dictionary
+                    foreach (var lineItem in cart.Items)
+                    {
+                        lineItem.Product = products.FirstOrDefault(x => x.Id == lineItem.ProductId);
+                        lineItem.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == lineItem.ProductId);
+                    }
+                }
 
-               cart.Customer = user;
+                cart.Customer = user;
 
                 //Add expiration token for concrete cart instance
                 cacheEntry.AddExpirationToken(CartCacheRegion.CreateChangeToken(cart));
 
-               return cart;
-           });
+                return cart;
+            });
 
             if (needReevaluate)
             {
@@ -562,7 +562,7 @@ namespace VirtoCommerce.Storefront.Domain
                     lineItem.Quantity = quantity;
                 }
                 else
-                {   //foreach
+                {
                     Cart.Items.Remove(lineItem);
                 }
             }
@@ -579,23 +579,6 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 lineItem.Id = null;
                 Cart.Items.Add(lineItem);
-            }
-        }
-
-        protected virtual async Task AddLineItemsAsync(IEnumerable<LineItem> lineItems)
-        {
-            foreach (var lineItem in lineItems)
-            {
-                var existingLineItem = Cart.Items.FirstOrDefault(li => li.ProductId == lineItem.ProductId);
-                if (existingLineItem != null)
-                {
-                    await ChangeItemQuantityAsync(existingLineItem, existingLineItem.Quantity + Math.Max(1, lineItem.Quantity));
-                }
-                else
-                {
-                    lineItem.Id = null;
-                    Cart.Items.Add(lineItem);
-                }
             }
         }
 
