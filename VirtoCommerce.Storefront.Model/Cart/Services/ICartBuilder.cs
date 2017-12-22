@@ -68,8 +68,6 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         /// <returns></returns>
         Task ChangeItemQuantityAsync(int lineItemIndex, int quantity);
 
-        Task ChangeItemsQuantitiesAsync(int[] quantities);
-
         /// <summary>
         /// Remove item from cart by id
         /// </summary>
