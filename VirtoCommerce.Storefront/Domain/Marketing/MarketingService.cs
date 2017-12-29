@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models;
 using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Services;
@@ -14,11 +15,13 @@ namespace VirtoCommerce.Storefront.Domain
     {
         private readonly IMarketingModuleDynamicContent _dynamicContentApi;
         private readonly IMemoryCache _memoryCache;
+        private readonly IApiChangesWatcher _apiChangesWatcher;
 
-        public MarketingService(IMarketingModuleDynamicContent dynamicContentApi, IMemoryCache memoryCache)
+        public MarketingService(IMarketingModuleDynamicContent dynamicContentApi, IMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
         {
             _dynamicContentApi = dynamicContentApi;
             _memoryCache = memoryCache;
+            _apiChangesWatcher = changesWatcher;
         }
 
         public virtual async Task<string> GetDynamicContentHtmlAsync(string storeId, string placeholderName)
@@ -36,6 +39,7 @@ namespace VirtoCommerce.Storefront.Domain
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(MarketingCacheRegion.CreateChangeToken());
+                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
                 var dynamicContentItems = (await _dynamicContentApi.EvaluateDynamicContentAsync(evaluationContext)).Select(x => x.ToDynamicContentItem());
 
                 if (dynamicContentItems != null)
