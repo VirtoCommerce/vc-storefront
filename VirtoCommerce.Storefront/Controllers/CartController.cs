@@ -72,14 +72,16 @@ namespace VirtoCommerce.Storefront.Controllers
                     Value = pair.Value
                 });
             }
-
-            foreach (var pair in HttpContext.Request.Form)
+            if (HttpContext.Request.HasFormContentType)
             {
-                callback.Parameters.Add(new orderModel.KeyValuePair
+                foreach (var pair in HttpContext.Request.Form)
                 {
-                    Key = pair.Key,
-                    Value = pair.Value
-                });
+                    callback.Parameters.Add(new orderModel.KeyValuePair
+                    {
+                        Key = pair.Key,
+                        Value = pair.Value
+                    });
+                }
             }
 
             var postProcessingResult = await _orderApi.PostProcessPaymentAsync(callback);
