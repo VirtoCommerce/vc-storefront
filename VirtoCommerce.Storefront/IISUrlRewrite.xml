@@ -1,0 +1,8 @@
+﻿<rewrite>
+    <rewriteMaps>
+        <!--  Write maps here -->
+    </rewriteMaps>
+    <rules>
+        <!--  Write rules here -->
+    </rules>
+</rewrite>

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Linq;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Binders;
@@ -259,14 +260,24 @@ namespace VirtoCommerce.Storefront
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
 
-            var options = new RewriteOptions().Add(new StorefrontUrlNormalizeRule());
+            var rewriteOptions = new RewriteOptions();
+            //Load IIS url rewrite rules from external file
+            if (File.Exists("IISUrlRewrite.xml"))
+            {
+                using (var iisUrlRewriteStreamReader = File.OpenText("IISUrlRewrite.xml"))
+                {
+                    rewriteOptions.AddIISUrlRewrite(iisUrlRewriteStreamReader);
+                }
+            }
+            rewriteOptions.Add(new StorefrontUrlNormalizeRule());
+
             var requireHttpsOptions = new RequireHttpsOptions();
             Configuration.GetSection("VirtoCommerce:RequireHttps").Bind(requireHttpsOptions);
             if (requireHttpsOptions.Enabled)
             {
-                options.AddRedirectToHttps(requireHttpsOptions.StatusCode,  requireHttpsOptions.Port);
-            }
-            app.UseRewriter(options);
+                rewriteOptions.AddRedirectToHttps(requireHttpsOptions.StatusCode,  requireHttpsOptions.Port);
+            }         
+            app.UseRewriter(rewriteOptions);
             app.UseMvc(routes =>
             {
                 routes.MapStorefrontRoutes();
