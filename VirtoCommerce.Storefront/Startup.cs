@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.IO;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Binders;
 using VirtoCommerce.Storefront.DependencyInjection;
@@ -261,6 +262,13 @@ namespace VirtoCommerce.Storefront
 
             var options = new RewriteOptions().Add(new StorefrontUrlNormalizeRule());
             var requireHttpsOptions = new RequireHttpsOptions();
+
+            using (StreamReader iisReader = File.OpenText("robots_rewrite.xml"))
+            {
+                options = new RewriteOptions().AddIISUrlRewrite(iisReader);
+                app.UseRewriter(options);
+            }
+
             Configuration.GetSection("VirtoCommerce:RequireHttps").Bind(requireHttpsOptions);
             if (requireHttpsOptions.Enabled)
             {

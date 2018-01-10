@@ -1,0 +1,8 @@
+﻿User-agent: *
+Disallow: /js/*.js$
+Disallow: /our-offers/agile-b2b-ecommerce
+Disallow: /static/b2b.htm
+Disallow: /products
+
+Host: https://virtocommerce.com
+Sitemap: https://virtocommerce.com/sitemap.xml
