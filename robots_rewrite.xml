@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<rewrite>
+  <rules>
+   <rule name="Robots.txt for production domain only" stopProcessing="true">
+        <match url="robots.txt" />
+        <conditions>
+            <add input="{HTTP_HOST}" pattern="^(virtocommerce\.com)$" negate="true"/>
+        </conditions>
+        <action type="Rewrite" url="/robots.staging.txt" />
+    </rule>
+  </rules>
+</rewrite>
