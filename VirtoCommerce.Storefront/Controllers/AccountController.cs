@@ -329,7 +329,7 @@ namespace VirtoCommerce.Storefront.Controllers
             }
             var result = await _signInManager.UserManager.ResetPasswordAsync(user, formModel.Token, formModel.Password);
 
-            if (result.Succeeded == true)
+            if (result.Succeeded)
             {
                 return View("customers/reset_password_confirmation", WorkContext);
             }
