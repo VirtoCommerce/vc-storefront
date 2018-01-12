@@ -480,7 +480,7 @@ namespace VirtoCommerce.Storefront.Domain
             return cart;
         }
 
-        protected virtual async Task ValidateCartItemsAsync()
+        protected virtual Task ValidateCartItemsAsync()
         {
             foreach (var lineItem in Cart.Items.ToList())
             {
@@ -509,6 +509,7 @@ namespace VirtoCommerce.Storefront.Domain
                     }
                 }
             }
+            return Task.CompletedTask;
         }
 
         protected virtual async Task ValidateCartShipmentsAsync()
@@ -558,7 +559,7 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.FromResult((object)null);
         }
 
-        protected virtual async Task ChangeItemQuantityAsync(LineItem lineItem, int quantity)
+        protected virtual Task ChangeItemQuantityAsync(LineItem lineItem, int quantity)
         {
             if (lineItem != null && !lineItem.IsReadOnly)
             {
@@ -580,6 +581,7 @@ namespace VirtoCommerce.Storefront.Domain
                     Cart.Items.Remove(lineItem);
                 }
             }
+            return Task.CompletedTask;
         }
 
         protected virtual async Task AddLineItemAsync(LineItem lineItem)
