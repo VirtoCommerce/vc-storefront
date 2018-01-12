@@ -38,15 +38,16 @@ namespace VirtoCommerce.Storefront.Middleware
                     {
                         message = httpException.Response.Content;
                     }
-                    var json = JsonConvert.SerializeObject(new { message = message, stackTrace = ex.StackTrace });
+                    var json = JsonConvert.SerializeObject(new { message, stackTrace = ex.StackTrace });
                     context.Response.ContentType = "application/json";
                     context.Response.StatusCode = (int)httpStatusCode;
                     await context.Response.WriteAsync(json);
                 }
                 else
                 {
+                    var httpException = ex as HttpOperationException ?? ex?.InnerException as HttpOperationException;
                     //Need to extract AutoRest errors
-                    if (ex is HttpOperationException httpException)
+                    if (httpException != null)
                     {
                        throw new HttpOperationException(httpException.Message + httpException.Response.Content);
                     }
