@@ -1,4 +1,6 @@
-﻿1. Open Tools > NuGet Package Manager > Package Manager Console
+﻿Install latest AutoRest v1 globally via 'npm install -g autorest@1.2.2' command
+ 
+1. Open Tools > NuGet Package Manager > Package Manager Console
 2. Run the following commands to generate API clients:
 
 $modules = @('Cache','Cart','Catalog','Content','Core','Customer','Inventory','Marketing','Orders','Platform','Pricing','Quote','Sitemaps','Store','Subscription')
