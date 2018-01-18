@@ -51,7 +51,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // PUT: storefrontapi/cart/comment
         [HttpPut]
-        public async Task<ActionResult> UpdateCartComment(string comment)
+        public async Task<ActionResult> UpdateCartComment([FromBody] string comment)
         {
             EnsureCartExists();
 
