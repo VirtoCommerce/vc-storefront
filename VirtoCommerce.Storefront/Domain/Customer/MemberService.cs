@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -35,15 +36,17 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IQuoteService _quoteService;
         private readonly ISubscriptionService _subscriptionService;
         private readonly IMemoryCache _memoryCache;
+        private readonly IApiChangesWatcher _apiChangesWatcher;
 
         public MemberService(ICustomerModule customerApi, ICustomerOrderService orderService,
-            IQuoteService quoteService, ISubscriptionService subscriptionService, IMemoryCache memoryCache)
+            IQuoteService quoteService, ISubscriptionService subscriptionService, IMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
         {
             _customerApi = customerApi;
             _orderService = orderService;
             _quoteService = quoteService;
             _memoryCache = memoryCache;
             _subscriptionService = subscriptionService;
+            _apiChangesWatcher = changesWatcher;
         }
 
         #region ICustomerService Members
@@ -62,6 +65,7 @@ namespace VirtoCommerce.Storefront.Domain
                 if (contactDto != null)
                 {
                     cacheEntry.AddExpirationToken(CustomerCacheRegion.CreateChangeToken(contactDto.Id));
+                    cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
                 }
                 return contactDto;
             });
