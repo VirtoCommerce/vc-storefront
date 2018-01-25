@@ -14,16 +14,23 @@ using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 using VirtoCommerce.Storefront.Model.StaticContent;
+using System.Linq;
+using System.Diagnostics;
+using System.Collections.Concurrent;
 
 namespace VirtoCommerce.Storefront.Domain
 {
     public class AzureBlobContentProvider : IContentBlobProvider
     {
+        private readonly ConcurrentDictionary<string, BlobChangeToken> _blobTokenLookup = new ConcurrentDictionary<string, BlobChangeToken>(StringComparer.OrdinalIgnoreCase);
+
         private readonly CloudBlobClient _cloudBlobClient;
         private readonly CloudStorageAccount _cloudStorageAccount;
         private readonly CloudBlobContainer _container;
         private readonly IMemoryCache _memoryCache;
         private readonly AzureBlobContentOptions _options;
+
+        private readonly CancellationTokenSource _cancelSource;
 
         public AzureBlobContentProvider(IOptions<AzureBlobContentOptions> options, IMemoryCache memoryCache)
         {
@@ -35,7 +42,11 @@ namespace VirtoCommerce.Storefront.Domain
                 throw new StorefrontException("Failed to get valid connection string");
             }
             _cloudBlobClient = _cloudStorageAccount.CreateCloudBlobClient();
-            _container = _cloudBlobClient.GetContainerReference(_options.Container);       
+            _container = _cloudBlobClient.GetContainerReference(_options.Container);
+
+            //todo: use _options.PollForChanges
+            _cancelSource = new CancellationTokenSource();
+            Task.Run(() => MonitorFileSystemChanges(_cancelSource.Token), _cancelSource.Token);
         }       
 
         #region IContentBlobProvider Members
@@ -171,9 +182,30 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual IChangeToken Watch(string path)
         {
-            //TODO
-            //See https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-storage-blob
-            return new CancellationChangeToken(new CancellationToken());
+            //todo: uncomment when PollForChanges set implemented
+            //if (!_options.PollForChanges)
+            //{
+            //    return new CancellationChangeToken(new CancellationToken());
+            //}
+
+            var key = NormalizePath(path);
+            var changeToken = default(BlobChangeToken);
+            if (_blobTokenLookup.TryGetValue(key, out changeToken))
+            {
+                //discard changed token, create a new one
+                if (changeToken.HasChanged)
+                {
+                    changeToken = new BlobChangeToken(changeToken.BlobName, changeToken.BlobLastModified, changeToken.LatestModified);
+                    _blobTokenLookup[changeToken.BlobName] = changeToken;
+                }
+
+                return changeToken;
+            }
+            else
+            {
+                //todo: probably need to create new BlobChangeToken(changeToken.BlobName, null) in case MonitorFileSystemChanges didn't create a token for this path
+                return new CancellationChangeToken(new CancellationToken());
+            }
         }
         #endregion
 
@@ -204,6 +236,125 @@ namespace VirtoCommerce.Storefront.Domain
             var builder = new UriBuilder(_cloudBlobClient.BaseUri);
             builder.Path += string.Join("/", _options.Container, path).Replace("//", "/");
             return builder.Uri.ToString();
-        }     
+        }
+
+        private async Task<IEnumerable<CloudBlob>> ListBlobs()
+        {
+            var context = new OperationContext();
+            var blobItems = new List<IListBlobItem>();
+            BlobContinuationToken token = null;
+            var operationContext = new OperationContext();
+            do
+            {
+                var resultSegment = await _container.ListBlobsSegmentedAsync(null, true, BlobListingDetails.Metadata, null, token, _options.BlobRequestOptions, operationContext);
+                token = resultSegment.ContinuationToken;
+                blobItems.AddRange(resultSegment.Results);
+            } while (token != null);
+
+            var result = blobItems.OfType<CloudBlob>().ToList();
+            return result;
+        }
+
+        //taken from the old Storefront
+        private void MonitorFileSystemChanges(CancellationToken cancellationToken)
+        {
+            //todo: use _options PollingInterval
+            var intetval = 5000;
+
+            var latestModifiedDate = DateTimeOffset.UtcNow;
+
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+                    var maxModifiedDate = DateTimeOffset.MinValue;
+                    var files = Task.Factory.StartNew(() => ListBlobs(), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+                    foreach (var file in files)
+                    {
+                        if (cancellationToken.IsCancellationRequested)
+                            break;
+
+                        var token = default(BlobChangeToken);
+                        if (!_blobTokenLookup.TryGetValue(file.Name, out token))
+                        {
+                            token = new BlobChangeToken(file.Name, file.Properties.LastModified);
+                            _blobTokenLookup.TryAdd(file.Name, token);
+                        }
+                        else
+                        {
+                            token.BlobLastModified = file.Properties.LastModified;
+                        }
+                    }
+
+                    latestModifiedDate = maxModifiedDate;
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.ToString());
+                }
+
+                Thread.Sleep(intetval);
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// Based on PollingFileChangeToken mostly 
+    /// </summary>
+    public class BlobChangeToken : IChangeToken
+    {
+        public string BlobName { get; set; }
+
+        public DateTimeOffset? BlobLastModified { get; set; }
+
+        public DateTimeOffset LatestModified { get; set; }
+
+        private bool _hasChanged;
+
+        public BlobChangeToken(string blobName, DateTimeOffset? lastModified, DateTimeOffset latestModified) : this(blobName, lastModified)
+        {
+            LatestModified = latestModified;
+        }
+
+        public BlobChangeToken(string blobName, DateTimeOffset? lastModified)
+        {
+            BlobName = blobName;
+            BlobLastModified = lastModified;
+            LatestModified = DateTime.UtcNow;
+        }
+
+        public bool HasChanged
+        {
+            get
+            {
+                if (_hasChanged)
+                    return _hasChanged;
+
+                if (!BlobLastModified.HasValue)
+                    return false;
+
+                if (BlobLastModified > LatestModified)
+                {
+                    LatestModified = BlobLastModified.Value;
+                    _hasChanged = true;
+                }
+
+                return _hasChanged;
+            }
+        }
+
+        /// <summary>
+        /// Don't know what to do with this one
+        /// </summary>
+        public bool ActiveChangeCallbacks => false;
+
+        /// <summary>
+        /// Don't know  what to do with this either
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        public IDisposable RegisterChangeCallback(Action<object> callback, object state) => EmptyDisposable.Instance;
     }
 }
