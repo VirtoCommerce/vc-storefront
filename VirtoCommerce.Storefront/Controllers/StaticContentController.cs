@@ -94,7 +94,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         [HttpPost]
-        public ActionResult Search([FromBody] StaticContentSearchCriteria request)
+        public ActionResult Search(StaticContentSearchCriteria request)
         {
             if (request == null)
             {
