@@ -80,28 +80,25 @@ namespace VirtoCommerce.Storefront.Domain
                var cart = cartDto?.ToShoppingCart(currency, language, user) ?? CreateCart(cartName, store, user, language, currency);
 
                //Load products for cart line items
-               if(cart.Items.Any())
+               if (cart.Items.Any())
                {
                    var productIds = cart.Items.Select(i => i.ProductId).ToArray();
                    var products = await _catalogService.GetProductsAsync(productIds, ItemResponseGroup.ItemWithPrices | ItemResponseGroup.ItemWithDiscounts | ItemResponseGroup.Inventory);
-                   foreach(var item in cart.Items)
+                   foreach (var item in cart.Items)
                    {
                        item.Product = products.FirstOrDefault(x => x.Id.EqualsInvariant(item.ProductId));
                    }
-               }               
+               }
 
                //Load cart payment plan with have same id
                if (store.SubscriptionEnabled)
                {
-                   var productsIds = cart.Items.Select(x => x.ProductId).Distinct().ToArray();
-                   var products = await _catalogService.GetProductsAsync(productsIds, ItemResponseGroup.ItemWithPrices | ItemResponseGroup.ItemWithDiscounts | ItemResponseGroup.Inventory);
                    var paymentPlanIds = new[] { cart.Id }.Concat(cart.Items.Select(x => x.ProductId).Distinct()).ToArray();
                    var paymentPlans = await _subscriptionService.GetPaymentPlansByIdsAsync(paymentPlanIds);
                    cart.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == cart.Id);
                    //Realize this code whith dictionary
                    foreach (var lineItem in cart.Items)
                    {
-                       lineItem.Product = products.FirstOrDefault(x => x.Id == lineItem.ProductId);
                        lineItem.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == lineItem.ProductId);
                    }
                }
