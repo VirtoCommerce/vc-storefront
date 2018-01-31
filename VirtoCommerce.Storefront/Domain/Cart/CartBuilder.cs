@@ -79,6 +79,17 @@ namespace VirtoCommerce.Storefront.Domain
                var cartDto = cartSearchResult.Results.FirstOrDefault();
                var cart = cartDto?.ToShoppingCart(currency, language, user) ?? CreateCart(cartName, store, user, language, currency);
 
+               //Load products for cart line items
+               if(cart.Items.Any())
+               {
+                   var productIds = cart.Items.Select(i => i.ProductId).ToArray();
+                   var products = await _catalogService.GetProductsAsync(productIds, ItemResponseGroup.ItemWithPrices | ItemResponseGroup.ItemWithDiscounts | ItemResponseGroup.Inventory);
+                   foreach(var item in cart.Items)
+                   {
+                       item.Product = products.FirstOrDefault(x => x.Id.EqualsInvariant(item.ProductId));
+                   }
+               }               
+
                //Load cart payment plan with have same id
                if (store.SubscriptionEnabled)
                {
