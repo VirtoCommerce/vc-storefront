@@ -92,6 +92,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IRecommendationProviderFactory, RecommendationProviderFactory>(provider => new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(), provider.GetService<CognitiveRecommendationsProvider>()));
             services.AddTransient<IQuoteRequestBuilder, QuoteRequestBuilder>();
             services.AddTransient<ICartBuilder, CartBuilder>();
+            services.AddSingleton<IBlobChangesWatcher, BlobChangesWatcher>();
 
             //Register events framework dependencies
             services.AddSingleton(new InProcessBus());
@@ -113,10 +114,15 @@ namespace VirtoCommerce.Storefront
             var contentConnectionString = BlobConnectionString.Parse(Configuration.GetConnectionString("ContentConnectionString"));
             if (contentConnectionString.Provider.EqualsInvariant("AzureBlobStorage"))
             {
+                var azureBlobOptions = new AzureBlobContentOptions();
+                Configuration.GetSection("VirtoCommerce:AzureBlobStorage").Bind(azureBlobOptions);
+
                 services.AddAzureBlobContent(options =>
                 {
                     options.Container = contentConnectionString.RootPath;
                     options.ConnectionString = contentConnectionString.ConnectionString;
+                    options.PollForChanges = azureBlobOptions.PollForChanges;
+                    options.ChangesPoolingInterval = azureBlobOptions.ChangesPoolingInterval;
                 });
             }
             else

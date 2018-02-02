@@ -8,12 +8,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 using VirtoCommerce.Storefront.Model.StaticContent;
+using VirtoCommerce.Storefront.Infrastructure;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -24,19 +24,21 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly CloudBlobContainer _container;
         private readonly IMemoryCache _memoryCache;
         private readonly AzureBlobContentOptions _options;
+        private readonly IBlobChangesWatcher _watcher;
 
-        public AzureBlobContentProvider(IOptions<AzureBlobContentOptions> options, IMemoryCache memoryCache)
+        public AzureBlobContentProvider(IOptions<AzureBlobContentOptions> options, IMemoryCache memoryCache, IBlobChangesWatcher watcher)
         {
             _options = options.Value;
-            _memoryCache = memoryCache;       
+            _memoryCache = memoryCache;
 
             if (!CloudStorageAccount.TryParse(_options.ConnectionString, out _cloudStorageAccount))
             {
                 throw new StorefrontException("Failed to get valid connection string");
             }
             _cloudBlobClient = _cloudStorageAccount.CreateCloudBlobClient();
-            _container = _cloudBlobClient.GetContainerReference(_options.Container);       
-        }       
+            _container = _cloudBlobClient.GetContainerReference(_options.Container);
+            _watcher = watcher;
+        }
 
         #region IContentBlobProvider Members
         /// <summary>
@@ -56,7 +58,7 @@ namespace VirtoCommerce.Storefront.Domain
                 throw new ArgumentNullException(nameof(path));
             }
             path = NormalizePath(path);
-          
+
             return await _container.GetBlobReference(path).OpenReadAsync();
         }
 
@@ -93,26 +95,26 @@ namespace VirtoCommerce.Storefront.Domain
         {
             path = NormalizePath(path);
             var cacheKey = CacheKey.With(GetType(), "PathExistsAsync", path);
-            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey,  async (cacheEntry) =>
-            {
-                cacheEntry.AddExpirationToken(ContentBlobCacheRegion.CreateChangeToken());
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+           {
+               cacheEntry.AddExpirationToken(ContentBlobCacheRegion.CreateChangeToken());
 
                 // If requested path is a directory we should always return true because Azure blob storage does not support checking if directories exist
                 var result = string.IsNullOrEmpty(Path.GetExtension(path));
-                if (!result)
-                {
-                    var url = GetAbsoluteUrl(path);
-                    try
-                    {
-                        result = await (await _cloudBlobClient.GetBlobReferenceFromServerAsync(new Uri(url))).ExistsAsync();
-                    }
-                    catch (Exception)
-                    {
+               if (!result)
+               {
+                   var url = GetAbsoluteUrl(path);
+                   try
+                   {
+                       result = await (await _cloudBlobClient.GetBlobReferenceFromServerAsync(new Uri(url))).ExistsAsync();
+                   }
+                   catch (Exception)
+                   {
                         //Azure blob storage client does not provide method to check blob url exist without throwing exception
                     }
-                }
-                return result;
-            });
+               }
+               return result;
+           });
         }
 
 
@@ -127,7 +129,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             return Task.Factory.StartNew(() => SearchAsync(path, searchPattern, recursive), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
         }
-       
+
         public virtual async Task<IEnumerable<string>> SearchAsync(string path, string searchPattern, bool recursive)
         {
             var retVal = new List<string>();
@@ -171,20 +173,17 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual IChangeToken Watch(string path)
         {
-            //TODO
-            //See https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-storage-blob
-            return new CancellationChangeToken(new CancellationToken());
+            return _watcher.CreateBlobChangeToken(NormalizePath(path));
         }
         #endregion
-
 
         protected virtual CloudBlobDirectory GetCloudBlobDirectory(string path)
         {
             var isPathToFile = !string.IsNullOrEmpty(Path.GetExtension(path));
-            if(isPathToFile)
+            if (isPathToFile)
             {
                 path = NormalizePath(Path.GetDirectoryName(path));
-            }         
+            }
             return _container.GetDirectoryReference(path);
         }
 
@@ -204,6 +203,6 @@ namespace VirtoCommerce.Storefront.Domain
             var builder = new UriBuilder(_cloudBlobClient.BaseUri);
             builder.Path += string.Join("/", _options.Container, path).Replace("//", "/");
             return builder.Uri.ToString();
-        }     
+        }
     }
 }
