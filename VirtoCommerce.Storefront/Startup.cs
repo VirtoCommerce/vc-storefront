@@ -122,7 +122,7 @@ namespace VirtoCommerce.Storefront
                     options.Container = contentConnectionString.RootPath;
                     options.ConnectionString = contentConnectionString.ConnectionString;
                     options.PollForChanges = azureBlobOptions.PollForChanges;
-                    options.PollingChangesInterval = azureBlobOptions.PollingChangesInterval;
+                    options.ChangesPoolingInterval = azureBlobOptions.ChangesPoolingInterval;
                 });
             }
             else

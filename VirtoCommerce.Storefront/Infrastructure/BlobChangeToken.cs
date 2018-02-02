@@ -54,7 +54,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
 
                 //check pooling interval
                 var currentTime = DateTime.UtcNow;
-                if (currentTime - _lastCheckedTimeUtcStatic < _options.PollingChangesInterval)
+                if (currentTime - _lastCheckedTimeUtcStatic < _options.ChangesPoolingInterval)
                 {
                     return _hasChanged;
                 }
