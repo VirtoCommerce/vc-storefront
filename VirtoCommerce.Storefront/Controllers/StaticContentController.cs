@@ -100,6 +100,10 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 throw new ArgumentNullException(nameof(request));
             }
+
+            WorkContext.CurrentStaticSearchCriteria = request;
+            WorkContext.Layout = request.Layout;
+
             if (!string.IsNullOrEmpty(request.Keyword))
             {
                 var contentItems = WorkContext.Pages.Where(i =>
