@@ -11,7 +11,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
 {
     public static class SecurityConverterExtensions
     {
-        public static SecurityConverter ConverterInstance => new SecurityConverter();
+        public static SecurityConverter ConverterInstance =>
+            new SecurityConverter();
 
         public static securityDto.ApplicationUserExtended ToUserDto(this User user)
         {
@@ -94,7 +95,6 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 StoreId = user.StoreId,
                 MemberId = user.ContactId
             };
-
             if(!user.ExternalLogins.IsNullOrEmpty())
             {
                 result.Logins = user.ExternalLogins.Select(x => new securityDto.ApplicationUserLogin
@@ -119,6 +119,16 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 StoreId = userDto.StoreId,
                 IsRegisteredUser = true
             };
+
+            if (!userDto.Logins.IsNullOrEmpty())
+            {
+                result.ExternalLogins = userDto.Logins.Select(x => new ExternalUserLoginInfo
+                {
+                    LoginProvider = x.LoginProvider,
+                    ProviderKey = x.ProviderKey
+                }).ToList();
+            }
+
             return result;
         }
     }
