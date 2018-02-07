@@ -70,6 +70,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public Vendor Vendor { get; set; }
 
         public Page Page { get; set; }
+        /// <summary>
+        /// Contains settings and blocks for json-page
+        /// </summary>
+        public CmsPage Cms { get; set; }
 
         public Blog Blog { get; set; }
 

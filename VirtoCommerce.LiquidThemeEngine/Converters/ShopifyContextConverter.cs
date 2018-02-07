@@ -142,6 +142,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             if (workContext.CurrentPage != null)
             {
                 result.Page = ToLiquidPage(workContext.CurrentPage);
+                // Making csm-definition available in a work context
+                result.Cms = result.Page.CmsPage;
             }
 
             if (workContext.CurrentBlog != null)

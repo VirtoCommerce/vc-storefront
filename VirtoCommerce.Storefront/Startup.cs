@@ -226,6 +226,7 @@ namespace VirtoCommerce.Storefront
                 options.SerializerSettings.Converters.Add(new CurrencyJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
                 options.SerializerSettings.Converters.Add(new OrderTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
                 options.SerializerSettings.Converters.Add(new RecommendationJsonConverter(snapshotProvider.GetService<IRecommendationProviderFactory>()));
+                options.SerializerSettings.Converters.Add(new CmsPageJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
                 //Converter for providing back compatibility with old themes was used CustomerInfo type which has contained user and contact data in the single type.
                 //May be removed when all themes will fixed to new User type with nested Contact property.
                 options.SerializerSettings.Converters.Add(new UserBackwardCompatibilityJsonConverter(options.SerializerSettings));
