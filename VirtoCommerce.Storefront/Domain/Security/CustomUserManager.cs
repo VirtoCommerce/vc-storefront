@@ -136,7 +136,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public override async Task<IdentityResult> AddLoginAsync(User user, UserLoginInfo login)
         {
-            User updateUser = await FindByIdAsync(user.Id);
+            var updateUser = await FindByIdAsync(user.Id);
 
             if (updateUser != null)
             {
