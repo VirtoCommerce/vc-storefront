@@ -4,7 +4,7 @@ using Xunit;
 
 namespace VirtoCommerce.Storefront.Tests
 {
-    public class ShoppingCartBuilderTests
+    public class ValueObjectTests
     {
         public class ComplexObject : ValueObject
         {
