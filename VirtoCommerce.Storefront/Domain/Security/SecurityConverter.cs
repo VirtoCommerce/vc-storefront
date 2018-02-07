@@ -88,6 +88,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         {
             var result = new securityDto.ApplicationUserExtended
             {
+                Id = user.Id,
                 Email = user.Email,
                 Password = user.Password,
                 UserName = user.UserName,

@@ -134,6 +134,24 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return resultDto.ToIdentityResult();
         }
 
+        public override async Task<IdentityResult> AddLoginAsync(User user, UserLoginInfo login)
+        {
+            var updateUser = await FindByIdAsync(user.Id);
+
+            if (updateUser != null)
+            {
+                updateUser.ExternalLogins.Add(new ExternalUserLoginInfo
+                {
+                    LoginProvider = login.LoginProvider,
+                    ProviderKey = login.ProviderKey,
+                    ProviderDisplayName = login.ProviderDisplayName
+                });
+            }
+
+            var resultDto = await _platformSecurityApi.UpdateAsyncAsync(updateUser.ToPlatformUserDto());
+
+            return resultDto.ToIdentityResult();
+        }
     }
 
     //Stub for UserManager
