@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VirtoCommerce.Storefront.Model\VirtoCommerce.Storefront.Model.csproj" />
+    <ProjectReference Include="..\VirtoCommerce.Storefront\VirtoCommerce.Storefront.csproj" />
   </ItemGroup>
 
 </Project>

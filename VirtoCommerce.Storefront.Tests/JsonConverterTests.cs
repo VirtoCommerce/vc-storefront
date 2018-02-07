@@ -1,13 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using VirtoCommerce.Storefront.Model.Security;
 using Xunit;
 
-namespace VirtoCommerce.Storefront.Tests.JsonConverters
+namespace VirtoCommerce.Storefront.Tests
 {
     public class JsonConverterTests
     {    

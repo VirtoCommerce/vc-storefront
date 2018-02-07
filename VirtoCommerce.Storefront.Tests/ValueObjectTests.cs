@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using VirtoCommerce.Storefront.Model.Common;
 using Xunit;
 
-namespace VirtoCommerce.Storefront.Tests.ValueObjects
+namespace VirtoCommerce.Storefront.Tests
 {
-    public class ValueObjectTests
+    public class ShoppingCartBuilderTests
     {
-        public class ComplexObject : ValueObject
-        {
-            public List<string> ListProperty { get; set; }
-            public string SimpleProperty { get; set; }
-         
-        }
-
+      
         [Fact]
         public void SameObjectHashCodeAreSame()
         {
