@@ -123,7 +123,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 OldPassword = currentPassword,
                 NewPassword = newPassword,
             };
-            var resultDto = await _platformSecurityApi.ChangePasswordAsync(user.UserName, changePassword);
+            platformSecurityDto.SecurityResult resultDto = await _platformSecurityApi.ChangePasswordAsync(user.UserName, changePassword);
             return resultDto.ToIdentityResult();
 
         }
@@ -134,6 +134,24 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return resultDto.ToIdentityResult();
         }
 
+        public override async Task<IdentityResult> AddLoginAsync(User user, UserLoginInfo login)
+        {
+            User updateUser = await FindByIdAsync(user.Id);
+
+            if (updateUser != null)
+            {
+                updateUser.ExternalLogins.Add(new ExternalUserLoginInfo
+                {
+                    LoginProvider = login.LoginProvider,
+                    ProviderKey = login.ProviderKey,
+                    ProviderDisplayName = login.ProviderDisplayName
+                });
+            }
+
+            var resultDto = await _platformSecurityApi.UpdateAsyncAsync(updateUser.ToPlatformUserDto());
+
+            return resultDto.ToIdentityResult();
+        }
     }
 
     //Stub for UserManager
