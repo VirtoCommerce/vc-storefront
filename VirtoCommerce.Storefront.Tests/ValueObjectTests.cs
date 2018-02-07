@@ -6,6 +6,11 @@ namespace VirtoCommerce.Storefront.Tests
 {
     public class ShoppingCartBuilderTests
     {
+        public class ComplexObject : ValueObject
+        {
+            public List<string> ListProperty { get; set; }
+            public string SimpleProperty { get; set; }         
+        }
       
         [Fact]
         public void SameObjectHashCodeAreSame()
