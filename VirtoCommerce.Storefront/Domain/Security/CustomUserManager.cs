@@ -123,7 +123,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 OldPassword = currentPassword,
                 NewPassword = newPassword,
             };
-            platformSecurityDto.SecurityResult resultDto = await _platformSecurityApi.ChangePasswordAsync(user.UserName, changePassword);
+            var resultDto = await _platformSecurityApi.ChangePasswordAsync(user.UserName, changePassword);
             return resultDto.ToIdentityResult();
 
         }
