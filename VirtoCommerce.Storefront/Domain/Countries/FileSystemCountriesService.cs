@@ -75,11 +75,11 @@ namespace VirtoCommerce.Storefront.Domain
 
         protected static Country ParseCountry(KeyValuePair<string, JObject> pair, List<RegionInfo> regions)
         {
-            var region = regions.FirstOrDefault(r => string.Equals(r.EnglishName, pair.Key, StringComparison.OrdinalIgnoreCase));
-
+            var region = regions.FirstOrDefault(r => string.Equals(r.TwoLetterISORegionName, pair.Key, StringComparison.OrdinalIgnoreCase));
+            
             var country = new Country
-            {
-                Name = pair.Key,
+            {                
+                Name = pair.Value["displayname"]?.ToString(),
                 Code2 = region?.TwoLetterISORegionName ?? string.Empty,
                 Code3 = region?.ThreeLetterISORegionName ?? string.Empty,
                 RegionType = pair.Value["label"]?.ToString()
