@@ -58,7 +58,7 @@ namespace VirtoCommerce.Storefront.JsonConverters
                 {
                     var dict = jblock.ToObject<Dictionary<string, object>>().ToDictionary(x => x.Key, x => x.Value);
 
-                    if (type == "container")
+                    if (dict.ContainsKey("blocks"))
                     {
                         var innerBlocks = dict["blocks"];
 
