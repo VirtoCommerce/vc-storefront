@@ -243,7 +243,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 var registrationInfo = new UserRegistrationInfo
                 {
-                    FirstName = loginInfo.Principal.FindFirstValue(ClaimTypes.GivenName),
+                    FirstName = loginInfo.Principal.FindFirstValue(ClaimTypes.GivenName) ?? loginInfo.Principal.FindFirstValue(ClaimTypes.Name),
                     LastName = loginInfo.Principal.FindFirstValue(ClaimTypes.Surname),
                     UserName = user.UserName,
                     Email = user.Email
