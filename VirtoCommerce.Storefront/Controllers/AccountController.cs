@@ -184,7 +184,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 return new BadRequestResult();
             }
 
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(authType, Url.Action("ExternalLoginCallback", "Account"));
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(authType, Url.Action("ExternalLoginCallback", "Account", new { returnUrl = returnUrl}));
             return Challenge(properties, authType);
         }
 
