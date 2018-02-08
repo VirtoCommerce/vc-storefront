@@ -33,8 +33,7 @@ namespace VirtoCommerce.Storefront.JsonConverters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var obj = JObject.Load(reader);
-            var blocks = obj["blocks"];
+            var blocks = JArray.Load(reader);
 
             var retVal = new CmsPageDefinition();
             retVal.Blocks = ReadBlocks(retVal, blocks);
