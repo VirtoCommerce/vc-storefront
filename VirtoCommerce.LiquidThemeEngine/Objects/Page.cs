@@ -60,5 +60,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public int Priority { get; set; }
 
         public MetafieldsCollection MetaInfo { get; set; }
+
+        public CmsPage CmsPage { get; set; }
     }
 }

@@ -12,6 +12,7 @@ using System.Xml;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.StaticContent;
+using VirtoCommerce.Storefront.Model.Cms;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
@@ -44,10 +45,17 @@ namespace VirtoCommerce.Storefront.Controllers
                 WorkContext.Layout = string.IsNullOrEmpty(blogArticle.Layout) ? WorkContext.CurrentBlog.Layout : blogArticle.Layout;
                 return View("article", WorkContext);
             }
-
             var contentPage = page as ContentPage;
             SetCurrentPage(contentPage);
-            return View(contentPage.Template, WorkContext);
+
+            if (page is CmsContentPage)
+            {
+                return View("cmspage", WorkContext);
+            }
+            else
+            {
+                return View(contentPage.Template, WorkContext);
+            }
         }
 
         // GET: /pages/{page}

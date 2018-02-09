@@ -14,6 +14,9 @@ using VirtoCommerce.Storefront.Model.StaticContent;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Tools;
 using YamlDotNet.RepresentationModel;
+using VirtoCommerce.Storefront.Model.Cms;
+using Newtonsoft.Json;
+using VirtoCommerce.Storefront.JsonConverters;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -23,7 +26,7 @@ namespace VirtoCommerce.Storefront.Domain
     public class StaticContentService : IStaticContentService
     {
         private static readonly Regex _headerRegExp = new Regex(@"(?s:^---(.*?)---)");
-        private static readonly string[] _extensions = { ".md", ".liquid", ".html" };
+        private static readonly string[] _extensions = { ".md", ".liquid", ".html", ".json" };
         private readonly IStorefrontUrlBuilder _urlBuilder;
         private readonly IStaticContentItemFactory  _contentItemFactory;
         private readonly IContentBlobProvider _contentBlobProvider;
@@ -99,6 +102,14 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 //Load raw content with metadata
                 content = stream.ReadToString();
+            }
+
+            if (contentItem is CmsContentPage)
+            {
+                ((CmsContentPage)contentItem).CmsPage = JsonConvert.DeserializeObject<CmsPageDefinition>(content, new CmsPageJsonConverter());
+                var permalink = ((CmsContentPage)contentItem).CmsPage.Settings["permalink"];
+                if (permalink != null)
+                    contentItem.Permalink = permalink.ToString();
             }
 
             IDictionary<string, IEnumerable<string>> metaHeaders;

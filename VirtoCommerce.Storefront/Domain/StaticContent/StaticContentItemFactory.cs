@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text.RegularExpressions;
+using VirtoCommerce.Storefront.Model.Cms;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.StaticContent;
 
@@ -37,10 +38,17 @@ namespace VirtoCommerce.Storefront.Domain
                 }
                 else
                 {
-                    retVal = new ContentPage();
+                    if (Path.GetExtension(path).EqualsInvariant(".json"))
+                    {
+                        retVal = new CmsContentPage();
+                    }
+                    else
+                    {
+                        retVal = new ContentPage();
+                    }
                 }
             }
-                
+
             return retVal;
         }
     }
