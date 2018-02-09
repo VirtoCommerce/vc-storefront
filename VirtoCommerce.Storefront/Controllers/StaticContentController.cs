@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.Extensions;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.SyndicationFeed;
 using Microsoft.SyndicationFeed.Rss;
@@ -17,15 +18,26 @@ namespace VirtoCommerce.Storefront.Controllers
 {
     public class StaticContentController : StorefrontControllerBase
     {
-        public StaticContentController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder)
+        private readonly IAuthorizationService _authorizationService;
+
+        public StaticContentController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IAuthorizationService authorizationService)
             : base(workContextAccessor, urlBuilder)
         {
+            _authorizationService = authorizationService;
         }
 
-        public ActionResult GetContentPage()
+        public async Task<ActionResult> GetContentPage()
         {
             //Because MVC does not allow to use abstract types for model binding we are getting this value from route data
             var page = RouteData.Values.GetValueOrDefault("page") as ContentItem;
+
+            if(page==null)
+                return NotFound();
+
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, page, "CanReadContentItem");
+            if (!authorizationResult.Succeeded)
+                return Challenge();
+
             WorkContext.CurrentPageSeo = new SeoInfo
             {
                 Language = page.Language,
@@ -47,19 +59,25 @@ namespace VirtoCommerce.Storefront.Controllers
 
             var contentPage = page as ContentPage;
             SetCurrentPage(contentPage);
+
             return View(contentPage.Template, WorkContext);
         }
 
         // GET: /pages/{page}
-        public ActionResult GetContentPageByName(string page)
+        public async Task<ActionResult> GetContentPageByName(string page)
         {
             var contentPage = WorkContext.Pages
                 .OfType<ContentPage>()
                 .Where(x => string.Equals(x.Url, page, StringComparison.OrdinalIgnoreCase))
                 .FindWithLanguage(WorkContext.CurrentLanguage);
 
+
             if (contentPage != null)
             {
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, contentPage, "CanReadContentItem");
+                if (!authorizationResult.Succeeded)
+                    return Challenge();
+
                 SetCurrentPage(contentPage);
                 return View(contentPage.Template, WorkContext);
             }
@@ -68,7 +86,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // GET: /blogs/{blog}, /blog, /blog/category/category, /blogs/{blog}/category/{category}, /blogs/{blog}/tag/{tag}, /blog/tag/{tag}
-        public ActionResult GetBlog(string blog = null, string category = null, string tag = null)
+        public async Task<ActionResult> GetBlog(string blog = null, string category = null, string tag = null)
         {
             var context = WorkContext;
             context.CurrentBlog = WorkContext.Blogs.FirstOrDefault();
@@ -78,8 +96,13 @@ namespace VirtoCommerce.Storefront.Controllers
             }
             WorkContext.CurrentBlogSearchCritera.Category = category;
             WorkContext.CurrentBlogSearchCritera.Tag = tag;
+
             if (context.CurrentBlog != null)
             {
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, context.CurrentBlog, "CanReadContentItem");
+                if (!authorizationResult.Succeeded)
+                    return Challenge();
+
                 context.CurrentPageSeo = new SeoInfo
                 {
                     Language = context.CurrentBlog.Language,

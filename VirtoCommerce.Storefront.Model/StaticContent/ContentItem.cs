@@ -66,6 +66,11 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
 
         public string Description { get; set; }
 
+        /// <summary>
+        /// Limits anonymous access to the page. Set true to block anonymous access. Set false to grant anonymous access.  Default value is false. 
+        /// </summary>
+        public bool Authorize { get; set; }
+
         public IDictionary<string, IEnumerable<string>> MetaInfo { get; set; }
 
         public virtual void LoadContent(string content, IDictionary<string, IEnumerable<string>> metaInfoMap)
@@ -125,6 +130,11 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
 
                         case "description":
                             Description = settingValue;
+                            break;
+
+                        case "authorize":
+                            bool isAuthorize;
+                            Authorize = bool.TryParse(settingValue, out isAuthorize) ? isAuthorize : false;
                             break;
                     }
                 }
