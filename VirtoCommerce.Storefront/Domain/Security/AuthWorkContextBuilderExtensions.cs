@@ -42,9 +42,10 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 }
 
                 //Current store is not allowed for signed in user - do sign out
-                if (!user.AllowedStores.Any(s => s.Equals(builder.WorkContext.CurrentStore.Id, StringComparison.OrdinalIgnoreCase)))
+                if (!user.AllowedStores.Contains(builder.WorkContext.CurrentStore.Id))
                 {
                     await signInManager.SignOutAsync();
+                    user = null;
                 }
             }
 
