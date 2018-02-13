@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Security;
@@ -37,6 +37,12 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 user = await signInManager.UserManager.FindByNameAsync(identity.Name);
                 //User has been removed from storage need to do sign out 
                 if (user == null)
+                {
+                    await signInManager.SignOutAsync();
+                }
+
+                //Current store is not allowed for signed in user - do sign out
+                if (!user.AllowedStores.Any(s => s.Equals(builder.WorkContext.CurrentStore.Id, StringComparison.OrdinalIgnoreCase)))
                 {
                     await signInManager.SignOutAsync();
                 }
