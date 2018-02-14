@@ -40,11 +40,10 @@ namespace VirtoCommerce.Storefront.Domain.Security
             var cacheKey = CacheKey.With(GetType(), "FindByIdAsync", userId);
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken());
-
                 var userDto = await _commerceCoreApi.GetUserByIdAsync(userId);
                 if (userDto != null)
                 {
+                    cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
                     return userDto.ToUser();
                 }
                 return null;
@@ -56,10 +55,10 @@ namespace VirtoCommerce.Storefront.Domain.Security
             var cacheKey = CacheKey.With(GetType(), "FindByNameAsync", userName);
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken());
                 var userDto = await _commerceCoreApi.GetUserByNameAsync(userName);
                 if (userDto != null)
                 {
+                    cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
                     return userDto.ToUser();
                 }
                 return null;
@@ -72,10 +71,10 @@ namespace VirtoCommerce.Storefront.Domain.Security
             var cacheKey = CacheKey.With(GetType(), "FindByEmailAsync", email);
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken());
                 var userDto = await _commerceCoreApi.GetUserByEmailAsync(email);
                 if (userDto != null)
                 {
+                    cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
                     return userDto.ToUser();
                 }
                 return null;
@@ -87,10 +86,10 @@ namespace VirtoCommerce.Storefront.Domain.Security
             var cacheKey = CacheKey.With(GetType(), "FindByLoginAsync", loginProvider, providerKey);
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken());
                 var userDto = await _commerceCoreApi.GetUserByLoginAsync(loginProvider, providerKey);
                 if (userDto != null)
                 {
+                    cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
                     return userDto.ToUser();
                 }
                 return null;
@@ -149,6 +148,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
             }
 
             var resultDto = await _platformSecurityApi.UpdateAsyncAsync(updateUser.ToPlatformUserDto());
+            //Evict user from the cache
+            SecurityCacheRegion.ExpireUser(user.Id);
 
             return resultDto.ToIdentityResult();
         }
