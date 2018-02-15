@@ -11,6 +11,7 @@ using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Security.Events;
+using VirtoCommerce.Storefront.Extensions;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
@@ -20,6 +21,8 @@ namespace VirtoCommerce.Storefront.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly IEventPublisher _publisher;
         private readonly IStorefrontSecurity _commerceCoreApi;
+        private readonly string[] _firstNameClaims = { ClaimTypes.GivenName, "urn:github:name", ClaimTypes.Name };
+
         public AccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<User> signInManager, IEventPublisher publisher, IStorefrontSecurity commerceCoreApi)
             : base(workContextAccessor, urlBuilder)
         {
@@ -243,8 +246,8 @@ namespace VirtoCommerce.Storefront.Controllers
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 var registrationInfo = new UserRegistrationInfo
                 {
-                    FirstName = GetFirstName(loginInfo),
-                    LastName = GetLastName(loginInfo),
+                    FirstName = loginInfo.Principal.FindFirstValue(_firstNameClaims, "unknown"),
+                    LastName = loginInfo.Principal.FindFirstValue(ClaimTypes.Surname),
                     UserName = user.UserName,
                     Email = user.Email
                 };
@@ -359,17 +362,5 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View("customers/account", WorkContext);
             }
         }
-
-        #region helpers methods for create user
-        private static string GetFirstName(ExternalLoginInfo loginInfo)
-        {
-            return loginInfo.Principal.FindFirstValue(ClaimTypes.GivenName) ?? loginInfo.Principal.FindFirstValue("urn:github:name") ?? loginInfo.Principal.FindFirstValue(ClaimTypes.Name) ?? "unknown";
-        }
-
-        private static string GetLastName(ExternalLoginInfo loginInfo)
-        {
-            return loginInfo.Principal.FindFirstValue(ClaimTypes.Surname);
-        }
-        #endregion
     }
 }
