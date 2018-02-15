@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Model;
@@ -20,12 +20,14 @@ namespace VirtoCommerce.Storefront.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly IEventPublisher _publisher;
         private readonly IStorefrontSecurity _commerceCoreApi;
+        private readonly IStorefrontUrlBuilder _urlBuilder;
         public AccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<User> signInManager, IEventPublisher publisher, IStorefrontSecurity commerceCoreApi)
             : base(workContextAccessor, urlBuilder)
         {
             _signInManager = signInManager;
             _publisher = publisher;
             _commerceCoreApi = commerceCoreApi;
+            _urlBuilder = urlBuilder;
         }
 
         //GET: /account
@@ -76,6 +78,8 @@ namespace VirtoCommerce.Storefront.Controllers
                 await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, formModel.ToUserRegistrationInfo()));
                 await _signInManager.SignInAsync(user, isPersistent: true);
                 await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                var callbackUrl = _urlBuilder.ToAppAbsolute("~/account/confirmemail", WorkContext.CurrentStore, WorkContext.CurrentLanguage);
+                await _commerceCoreApi.SendEmailConfirmationAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName, callbackUrl);
                 return StoreFrontRedirect("~/account");
             }
             else
@@ -87,6 +91,20 @@ namespace VirtoCommerce.Storefront.Controllers
             }
 
             return View("customers/register", WorkContext);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult> ConfirmEmail(string code)
+        {
+            var result = await _commerceCoreApi.ConfirmEmailAsync(WorkContext.CurrentUser.Id, code);
+
+            if (!result.Succeeded.HasValue || !result.Succeeded.Value)
+            {
+                return View("error");
+            }
+
+            return View("confirmation-done");
         }
 
         [Authorize(Policy = "CanImpersonate")]
@@ -184,7 +202,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 return new BadRequestResult();
             }
 
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(authType, Url.Action("ExternalLoginCallback", "Account", new { returnUrl = returnUrl}));
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(authType, Url.Action("ExternalLoginCallback", "Account", new { returnUrl = returnUrl }));
             return Challenge(properties, authType);
         }
 
