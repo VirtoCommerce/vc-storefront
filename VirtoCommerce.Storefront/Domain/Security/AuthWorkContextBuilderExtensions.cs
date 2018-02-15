@@ -35,18 +35,13 @@ namespace VirtoCommerce.Storefront.Domain.Security
             if (identity.IsAuthenticated)
             {
                 user = await signInManager.UserManager.FindByNameAsync(identity.Name);
-                //User has been removed from storage need to do sign out 
-                if (user == null)
-                {
-                    await signInManager.SignOutAsync();
-                }
-
-                //Current store is not allowed for signed in user - do sign out
-                if (!user.AllowedStores.Contains(builder.WorkContext.CurrentStore.Id))
+                //User has been removed from storage or current store is not allowed for signed in user
+                //need to do sign out 
+                if (user == null || !user.AllowedStores.Contains(builder.WorkContext.CurrentStore.Id))
                 {
                     await signInManager.SignOutAsync();
                     user = null;
-                }
+                }              
             }
 
             if (user == null || user.IsTransient())
