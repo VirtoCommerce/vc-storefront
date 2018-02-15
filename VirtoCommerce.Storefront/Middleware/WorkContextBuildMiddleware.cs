@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
 
 namespace VirtoCommerce.Storefront.Middleware
 {
@@ -41,7 +41,7 @@ namespace VirtoCommerce.Storefront.Middleware
         {
             //Do not process for exist exception 
             var exceptionFeature = context.Features.Get<IExceptionHandlerFeature>();
-            if(exceptionFeature != null)
+            if (exceptionFeature != null)
             {
                 await _next(context);
                 return;
@@ -54,10 +54,10 @@ namespace VirtoCommerce.Storefront.Middleware
             //The important to preserve the order of initialization
             await builder.WithCountriesAsync();
 
-            await builder.WithCurrentUserAsync();
             await builder.WithStoresAsync(_options.DefaultStore);
+            await builder.WithCurrentUserAsync();
             await builder.WithCurrenciesAsync(workContext.CurrentLanguage, workContext.CurrentStore);
- 
+
             await builder.WithCatalogsAsync();
             await builder.WithDefaultShoppingCartAsync("default", workContext.CurrentStore, workContext.CurrentUser, workContext.CurrentCurrency, workContext.CurrentLanguage);
             await builder.WithMenuLinksAsync(workContext.CurrentStore, workContext.CurrentLanguage);
@@ -69,7 +69,7 @@ namespace VirtoCommerce.Storefront.Middleware
             await builder.WithVendorsAsync(workContext.CurrentStore, workContext.CurrentLanguage);
 
             _workContextAccessor.WorkContext = workContext;
-         
+
 
             await _next(context);
         }

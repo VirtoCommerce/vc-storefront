@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Security;
@@ -39,6 +39,13 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 if (user == null)
                 {
                     await signInManager.SignOutAsync();
+                }
+
+                //Current store is not allowed for signed in user - do sign out
+                if (!user.AllowedStores.Contains(builder.WorkContext.CurrentStore.Id))
+                {
+                    await signInManager.SignOutAsync();
+                    user = null;
                 }
             }
 
