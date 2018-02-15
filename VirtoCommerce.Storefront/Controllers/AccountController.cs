@@ -12,6 +12,8 @@ using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Security.Events;
 using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Infrastructure;
+using Microsoft.Extensions.Options;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
@@ -22,15 +24,19 @@ namespace VirtoCommerce.Storefront.Controllers
         private readonly IEventPublisher _publisher;
         private readonly IStorefrontSecurity _commerceCoreApi;
         private readonly IStorefrontUrlBuilder _urlBuilder;
+        private readonly StorefrontOptions _options;
+        
         private readonly string[] _firstNameClaims = { ClaimTypes.GivenName, "urn:github:name", ClaimTypes.Name };
 
-        public AccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<User> signInManager, IEventPublisher publisher, IStorefrontSecurity commerceCoreApi)
+        public AccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<User> signInManager,
+            IEventPublisher publisher, IStorefrontSecurity commerceCoreApi, IOptions<StorefrontOptions> options)
             : base(workContextAccessor, urlBuilder)
         {
             _signInManager = signInManager;
             _publisher = publisher;
             _commerceCoreApi = commerceCoreApi;
             _urlBuilder = urlBuilder;
+            _options = options.Value;
         }
 
         //GET: /account
@@ -81,8 +87,11 @@ namespace VirtoCommerce.Storefront.Controllers
                 await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, formModel.ToUserRegistrationInfo()));
                 await _signInManager.SignInAsync(user, isPersistent: true);
                 await _publisher.Publish(new UserLoginEvent(WorkContext, user));
-                var callbackUrl = _urlBuilder.ToAppAbsolute("~/account/confirmemail", WorkContext.CurrentStore, WorkContext.CurrentLanguage);
-                await _commerceCoreApi.SendEmailConfirmationAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName, callbackUrl);
+                if (_options.SendAccountConfirmation)
+                {
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { UserId = user.Id, Code = "token" }, protocol: Request.Scheme);
+                    await _commerceCoreApi.SendEmailConfirmationAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName, callbackUrl);
+                }
                 return StoreFrontRedirect("~/account");
             }
             else

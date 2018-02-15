@@ -11,5 +11,6 @@ namespace VirtoCommerce.Storefront.Infrastructure
         public PlatformEndpointOptions Endpoint { get; set; }
         public LiquidThemeEngineOptions LiquidThemeEngine { get; set; }
         public RequireHttpsOptions RequireHttps { get; set; }
+        public bool SendAccountConfirmation { get; set; } =  false;
     }
 }
