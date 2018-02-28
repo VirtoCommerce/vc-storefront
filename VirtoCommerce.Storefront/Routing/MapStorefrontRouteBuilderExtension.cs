@@ -36,8 +36,9 @@ namespace VirtoCommerce.Storefront.Routing
             // API lists
             routes.MapStorefrontRoute("API.Lists.GetListByName", "storefrontapi/lists/{listName}", defaults: new { controller = "ApiLists", action = "GetListByName" });
             routes.MapStorefrontRoute("API.Lists.IsItemContainsInList", "storefrontapi/lists/{listName}/items/{productId}/contains", defaults: new { controller = "ApiLists", action = "IsItemContainsInList" });
-            routes.MapStorefrontRoute("API.Lists.AddItemToList", "storefrontapi/lists/{listName}/items", defaults: new { controller = "ApiLists", action = "AddItemToList" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
+            routes.MapStorefrontRoute("API.Lists.AddItemToList", "storefrontapi/lists/items", defaults: new { controller = "ApiLists", action = "AddItemToList" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("API.Lists.RemoveItemFromList", "storefrontapi/lists/{listName}/items/{lineItemId}", defaults: new { controller = "ApiLists", action = "RemoveItemFromList" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("DELETE") }));
+            routes.MapStorefrontRoute("API.Lists.FilterListsByProduct", "storefrontapi/lists/filterlistsbyproduct", defaults: new { controller = "ApiLists", action = "FilterListsByProduct" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
 
             // Catalog API
             routes.MapStorefrontRoute("API.Catalog.SearchProducts", "storefrontapi/catalog/search", defaults: new { controller = "ApiCatalog", action = "SearchProducts" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
