@@ -52,9 +52,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
         }
 
-        // POST: storefrontapi/lists/filterlistsbyproduct
+        // POST: storefrontapi/lists/getlistswithproduct
         [HttpPost]
-        public async Task<ActionResult> FilterListsByProduct([FromBody] FilterListsByProductRequest request)
+        public async Task<ActionResult> GetListsWithProduct([FromBody] GetListsWithProductRequest request)
         {
             var result = new List<string>();
             //Need lock to prevent concurrent access to same cart
@@ -64,7 +64,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 {
                     var wishlistBuilder = await LoadOrCreateWishlistAsync(listName);
                     await wishlistBuilder.ValidateAsync();
-                    var hasProduct = wishlistBuilder.Cart.Items.Any(x => x.ProductId == request.ProdcutId);
+                    var hasProduct = wishlistBuilder.Cart.Items.Any(x => x.ProductId == request.ProductId);
                     if (hasProduct)
                     {
                         result.Add(listName);
