@@ -166,8 +166,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.CatalogId = product.CatalogId;
             result.CategoryId = product.CategoryId;
             result.Id = product.Id;
-            result.InventoryPolicy = "continue";
-            result.InventoryQuantity = product.Inventory != null ? product.Inventory.InStockQuantity ?? 0 : 0;
+            result.InventoryPolicy = product.TrackInventory ? "deny" : "continue";
+            result.InventoryQuantity = product.Inventory != null ? Math.Max(0, (product.Inventory.InStockQuantity ?? 0L) - (product.Inventory.ReservedQuantity ?? 0L)) : 0;
             result.Options = product.VariationProperties.Where(p => !string.IsNullOrEmpty(p.Value)).Select(p => p.Value).ToArray();
             result.CompareAtPrice = product.Price.ListPrice.Amount * 100;
             result.CompareAtPriceWithTax = product.Price.ListPriceWithTax.Amount * 100;
