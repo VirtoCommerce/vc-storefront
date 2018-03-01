@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Security;
+using VirtoCommerce.Storefront.Model.Security.Specifications;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
@@ -37,7 +38,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 user = await signInManager.UserManager.FindByNameAsync(identity.Name);
                 //User has been removed from storage or current store is not allowed for signed in user
                 //need to do sign out 
-                if (user == null || (!user.IsAdministrator && !user.AllowedStores.Contains(builder.WorkContext.CurrentStore.Id)))
+                if (user == null || !new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(builder.WorkContext.CurrentStore))
                 {
                     await signInManager.SignOutAsync();
                     user = null;
