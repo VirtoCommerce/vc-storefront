@@ -14,6 +14,7 @@ using VirtoCommerce.Storefront.Model.Security.Events;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using Microsoft.Extensions.Options;
+using VirtoCommerce.Storefront.Model.Security.Specifications;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
@@ -169,7 +170,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 var user = await _signInManager.UserManager.FindByNameAsync(login.Username);
 
                 //Check that current user can sing in to current store
-                if (user.AllowedStores.IsNullOrEmpty() || user.AllowedStores.Any(x => x.EqualsInvariant(WorkContext.CurrentStore.Id)))
+                if (new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore))
                 {
                     await _publisher.Publish(new UserLoginEvent(WorkContext, user));
                     return StoreFrontRedirect(returnUrl);
