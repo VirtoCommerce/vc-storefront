@@ -43,7 +43,10 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// Returns true if user authenticated  returns false if it anonymous. 
         /// </summary>
         public bool IsRegisteredUser { get; set; }
-
+        /// <summary>
+        /// The flag indicates that the user is an administrator 
+        /// </summary>
+        public bool IsAdministrator { get; set; }
         /// <summary>
         /// The user ID of an operator who has loggen in on behalf of a customer
         /// </summary>
