@@ -39,9 +39,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             if (product.Variations != null && product.Variations.Any())
             {
                 result.Variants.AddRange(product.Variations.Select(x => x.ToVariant()));
-                result.Available = product.Variations.Any(v => v.IsAvailable);
-                result.Buyable = product.Variations.Any(v => v.IsBuyable);
-                result.InStock = product.Variations.Any(v => v.IsInStock);
+                result.Available = product.IsAvailable || product.Variations.Any(v => v.IsAvailable);
+                result.Buyable = product.IsBuyable || product.Variations.Any(v => v.IsBuyable);
+                result.InStock = product.IsInStock || product.Variations.Any(v => v.IsInStock);
             }
             else
             {
