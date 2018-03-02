@@ -74,7 +74,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Tags
                     actionAbsoluteUrl += string.Concat("?ReturnUrl=", HttpUtility.UrlEncode(returnUrl));
                 }
 
-                result.WriteLine("<form accept-charset=\"UTF-8\" action=\"{0}\" method=\"post\" id=\"{1}\">",
+                result.WriteLine("<form accept-charset=\"UTF-8\" action=\"{0}\" method=\"post\" id=\"{1}\" name=\"{1}\">",
                     HttpUtility.HtmlAttributeEncode(actionAbsoluteUrl),
                     HttpUtility.HtmlAttributeEncode(formName));
 
