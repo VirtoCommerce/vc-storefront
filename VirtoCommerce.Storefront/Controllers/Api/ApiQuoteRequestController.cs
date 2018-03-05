@@ -161,7 +161,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/quoterequests/{number}/confirm
         [HttpPost]
-        public async Task<ActionResult> Confirm(string number, [FromBody] QuoteRequestFormModel quoteRequest)
+        public async Task<ActionResult> Confirm([FromRoute]string number, [FromBody] QuoteRequestFormModel quoteRequest)
         {
             await _quoteRequestBuilder.LoadQuoteRequestAsync(number, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
 

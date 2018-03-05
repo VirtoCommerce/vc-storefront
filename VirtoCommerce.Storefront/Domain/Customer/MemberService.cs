@@ -156,7 +156,7 @@ namespace VirtoCommerce.Storefront.Domain
                 {
                     PageNumber = pageNumber,
                     PageSize = pageSize,
-                    Sort = sortInfos.ToString(),
+                    Sort = sortInfos?.ToString(),
                     CustomerId = customer.Id                   
                 };
                 return  _quoteService.SearchQuotes(quoteSearchCriteria);
