@@ -248,7 +248,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
         private void Initialize()
         {
             OrderModule = new OrderModule(this);
-            BaseUri = new System.Uri("http://localhost/admin");
+            BaseUri = new System.Uri("http://localhost/platform2");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
@@ -4476,15 +4476,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the IOperation class.
         /// </summary>
-        public IOperation(string operationType = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), string parentOperationId = default(string), IList<IOperation> childrenOperations = default(IList<IOperation>), string id = default(string))
+        public IOperation(string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), IList<IOperation> childrenOperations = default(IList<IOperation>), string id = default(string))
         {
             OperationType = operationType;
+            ParentOperationId = parentOperationId;
             Number = number;
             IsApproved = isApproved;
             Status = status;
             Comment = comment;
             Currency = currency;
-            ParentOperationId = parentOperationId;
             ChildrenOperations = childrenOperations;
             Id = id;
             CustomInit();
@@ -4499,6 +4499,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "operationType")]
         public string OperationType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "parentOperationId")]
+        public string ParentOperationId { get; set; }
 
         /// <summary>
         /// </summary>
@@ -4524,11 +4529,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "currency")]
         public string Currency { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "parentOperationId")]
-        public string ParentOperationId { get; set; }
 
         /// <summary>
         /// </summary>
@@ -4694,7 +4694,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// </summary>
         /// <param name="valueType">Possible values include: 'Undefined',
         /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
-        /// 'Boolean', 'Html'</param>
+        /// 'Boolean', 'Html', 'Image'</param>
         public DynamicObjectProperty(string objectId = default(string), IList<DynamicPropertyObjectValue> values = default(IList<DynamicPropertyObjectValue>), string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             ObjectId = objectId;
@@ -4774,7 +4774,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'Undefined', 'ShortText',
-        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html'
+        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html',
+        /// 'Image'
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
         public string ValueType { get; set; }
@@ -5095,17 +5096,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "priceWithTax")]
-        public double? PriceWithTax { get; private set; }
+        public double? PriceWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "total")]
-        public double? Total { get; private set; }
+        public double? Total { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "totalWithTax")]
-        public double? TotalWithTax { get; private set; }
+        public double? TotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5115,7 +5116,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "discountAmountWithTax")]
-        public double? DiscountAmountWithTax { get; private set; }
+        public double? DiscountAmountWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5125,7 +5126,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "taxTotal")]
-        public double? TaxTotal { get; private set; }
+        public double? TaxTotal { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5360,7 +5361,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// Initializes a new instance of the PropertyValue class.
         /// </summary>
         /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer'</param>
+        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
+        /// 'GeoPoint'</param>
         public PropertyValue(string propertyId = default(string), string propertyName = default(string), Property property = default(Property), string alias = default(string), string valueId = default(string), object value = default(object), string valueType = default(string), string languageCode = default(string), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             PropertyId = propertyId;
@@ -5417,7 +5419,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Number', 'DateTime', 'Boolean', 'Integer'
+        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
         public string ValueType { get; set; }
@@ -6494,7 +6496,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// Initializes a new instance of the Property class.
         /// </summary>
         /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer'</param>
+        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
+        /// 'GeoPoint'</param>
         /// <param name="type">Possible values include: 'Product', 'Variation',
         /// 'Category', 'Catalog'</param>
         public Property(string catalogId = default(string), Catalog catalog = default(Catalog), string categoryId = default(string), Category category = default(Category), string name = default(string), bool? required = default(bool?), bool? dictionary = default(bool?), bool? multivalue = default(bool?), bool? multilanguage = default(bool?), string valueType = default(string), string type = default(string), IList<PropertyAttribute> attributes = default(IList<PropertyAttribute>), IList<PropertyDictionaryValue> dictionaryValues = default(IList<PropertyDictionaryValue>), IList<PropertyDisplayName> displayNames = default(IList<PropertyDisplayName>), IList<PropertyValidationRule> validationRules = default(IList<PropertyValidationRule>), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
@@ -6575,7 +6578,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Number', 'DateTime', 'Boolean', 'Integer'
+        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
         public string ValueType { get; set; }
@@ -8242,27 +8245,27 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "priceWithTax")]
-        public double? PriceWithTax { get; private set; }
+        public double? PriceWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "placedPrice")]
-        public double? PlacedPrice { get; private set; }
+        public double? PlacedPrice { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "placedPriceWithTax")]
-        public double? PlacedPriceWithTax { get; private set; }
+        public double? PlacedPriceWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "extendedPrice")]
-        public double? ExtendedPrice { get; private set; }
+        public double? ExtendedPrice { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "extendedPriceWithTax")]
-        public double? ExtendedPriceWithTax { get; private set; }
+        public double? ExtendedPriceWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8272,17 +8275,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "discountAmountWithTax")]
-        public double? DiscountAmountWithTax { get; private set; }
+        public double? DiscountAmountWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "discountTotal")]
-        public double? DiscountTotal { get; private set; }
+        public double? DiscountTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "discountTotalWithTax")]
-        public double? DiscountTotalWithTax { get; private set; }
+        public double? DiscountTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8292,7 +8295,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "feeWithTax")]
-        public double? FeeWithTax { get; private set; }
+        public double? FeeWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8302,7 +8305,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "taxTotal")]
-        public double? TaxTotal { get; private set; }
+        public double? TaxTotal { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9017,17 +9020,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "priceWithTax")]
-        public double? PriceWithTax { get; private set; }
+        public double? PriceWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "total")]
-        public double? Total { get; private set; }
+        public double? Total { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "totalWithTax")]
-        public double? TotalWithTax { get; private set; }
+        public double? TotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9037,7 +9040,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "discountAmountWithTax")]
-        public double? DiscountAmountWithTax { get; private set; }
+        public double? DiscountAmountWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9047,7 +9050,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "feeWithTax")]
-        public double? FeeWithTax { get; private set; }
+        public double? FeeWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9057,7 +9060,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "taxTotal")]
-        public double? TaxTotal { get; private set; }
+        public double? TaxTotal { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9394,112 +9397,112 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "total")]
-        public double? Total { get; private set; }
+        public double? Total { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "subTotal")]
-        public double? SubTotal { get; private set; }
+        public double? SubTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "subTotalWithTax")]
-        public double? SubTotalWithTax { get; private set; }
+        public double? SubTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "subTotalDiscount")]
-        public double? SubTotalDiscount { get; private set; }
+        public double? SubTotalDiscount { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "subTotalDiscountWithTax")]
-        public double? SubTotalDiscountWithTax { get; private set; }
+        public double? SubTotalDiscountWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "subTotalTaxTotal")]
-        public double? SubTotalTaxTotal { get; private set; }
+        public double? SubTotalTaxTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "shippingTotal")]
-        public double? ShippingTotal { get; private set; }
+        public double? ShippingTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "shippingTotalWithTax")]
-        public double? ShippingTotalWithTax { get; private set; }
+        public double? ShippingTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "shippingSubTotal")]
-        public double? ShippingSubTotal { get; private set; }
+        public double? ShippingSubTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "shippingSubTotalWithTax")]
-        public double? ShippingSubTotalWithTax { get; private set; }
+        public double? ShippingSubTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "shippingDiscountTotal")]
-        public double? ShippingDiscountTotal { get; private set; }
+        public double? ShippingDiscountTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "shippingDiscountTotalWithTax")]
-        public double? ShippingDiscountTotalWithTax { get; private set; }
+        public double? ShippingDiscountTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "shippingTaxTotal")]
-        public double? ShippingTaxTotal { get; private set; }
+        public double? ShippingTaxTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "paymentTotal")]
-        public double? PaymentTotal { get; private set; }
+        public double? PaymentTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "paymentTotalWithTax")]
-        public double? PaymentTotalWithTax { get; private set; }
+        public double? PaymentTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "paymentSubTotal")]
-        public double? PaymentSubTotal { get; private set; }
+        public double? PaymentSubTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "paymentSubTotalWithTax")]
-        public double? PaymentSubTotalWithTax { get; private set; }
+        public double? PaymentSubTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "paymentDiscountTotal")]
-        public double? PaymentDiscountTotal { get; private set; }
+        public double? PaymentDiscountTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "paymentDiscountTotalWithTax")]
-        public double? PaymentDiscountTotalWithTax { get; private set; }
+        public double? PaymentDiscountTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "paymentTaxTotal")]
-        public double? PaymentTaxTotal { get; private set; }
+        public double? PaymentTaxTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "discountTotal")]
-        public double? DiscountTotal { get; private set; }
+        public double? DiscountTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "discountTotalWithTax")]
-        public double? DiscountTotalWithTax { get; private set; }
+        public double? DiscountTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9509,17 +9512,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "feeWithTax")]
-        public double? FeeWithTax { get; private set; }
+        public double? FeeWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "feeTotal")]
-        public double? FeeTotal { get; private set; }
+        public double? FeeTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "feeTotalWithTax")]
-        public double? FeeTotalWithTax { get; private set; }
+        public double? FeeTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9529,7 +9532,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "taxTotal")]
-        public double? TaxTotal { get; private set; }
+        public double? TaxTotal { get; set; }
 
         /// <summary>
         /// </summary>

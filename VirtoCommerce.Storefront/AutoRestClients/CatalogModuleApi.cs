@@ -51,11 +51,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
         public virtual ICatalogModuleCategories CatalogModuleCategories { get; private set; }
 
         /// <summary>
-        /// Gets the ICatalogModuleExportImport.
-        /// </summary>
-        public virtual ICatalogModuleExportImport CatalogModuleExportImport { get; private set; }
-
-        /// <summary>
         /// Gets the ICatalogModuleListEntry.
         /// </summary>
         public virtual ICatalogModuleListEntry CatalogModuleListEntry { get; private set; }
@@ -278,12 +273,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
         {
             CatalogModuleCatalogs = new CatalogModuleCatalogs(this);
             CatalogModuleCategories = new CatalogModuleCategories(this);
-            CatalogModuleExportImport = new CatalogModuleExportImport(this);
             CatalogModuleListEntry = new CatalogModuleListEntry(this);
             CatalogModuleProducts = new CatalogModuleProducts(this);
             CatalogModuleProperties = new CatalogModuleProperties(this);
             CatalogModuleSearch = new CatalogModuleSearch(this);
-            BaseUri = new System.Uri("http://localhost/admin");
+            BaseUri = new System.Uri("http://localhost/platform2");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
@@ -370,11 +364,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
         ICatalogModuleCategories CatalogModuleCategories { get; }
 
         /// <summary>
-        /// Gets the ICatalogModuleExportImport.
-        /// </summary>
-        ICatalogModuleExportImport CatalogModuleExportImport { get; }
-
-        /// <summary>
         /// Gets the ICatalogModuleListEntry.
         /// </summary>
         ICatalogModuleListEntry CatalogModuleListEntry { get; }
@@ -452,6 +441,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
         /// Get common and virtual Catalogs list with minimal information included.
         /// Returns array of Catalog
         /// </remarks>
+        /// <param name='sort'>
+        /// </param>
+        /// <param name='skip'>
+        /// </param>
+        /// <param name='take'>
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -467,7 +462,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<Catalog>>> GetCatalogsWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<Catalog>>> GetCatalogsWithHttpMessagesAsync(string sort = default(string), int? skip = default(int?), int? take = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -476,12 +471,32 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("sort", sort);
+                tracingParameters.Add("skip", skip);
+                tracingParameters.Add("take", take);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetCatalogs", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
             var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/catalog/catalogs").ToString();
+            List<string> _queryParameters = new List<string>();
+            if (sort != null)
+            {
+                _queryParameters.Add(string.Format("sort={0}", System.Uri.EscapeDataString(sort)));
+            }
+            if (skip != null)
+            {
+                _queryParameters.Add(string.Format("skip={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(skip, Client.SerializationSettings).Trim('"'))));
+            }
+            if (take != null)
+            {
+                _queryParameters.Add(string.Format("take={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(take, Client.SerializationSettings).Trim('"'))));
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -1408,6 +1423,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
         /// Get common and virtual Catalogs list with minimal information
         /// included. Returns array of Catalog
         /// </remarks>
+        /// <param name='sort'>
+        /// </param>
+        /// <param name='skip'>
+        /// </param>
+        /// <param name='take'>
+        /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
         /// </param>
@@ -1420,7 +1441,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<IList<Catalog>>> GetCatalogsWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<Catalog>>> GetCatalogsWithHttpMessagesAsync(string sort = default(string), int? skip = default(int?), int? take = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Updates the specified catalog.
         /// </summary>
@@ -1587,9 +1608,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            public static IList<Catalog> GetCatalogs(this ICatalogModuleCatalogs operations)
+            /// <param name='sort'>
+            /// </param>
+            /// <param name='skip'>
+            /// </param>
+            /// <param name='take'>
+            /// </param>
+            public static IList<Catalog> GetCatalogs(this ICatalogModuleCatalogs operations, string sort = default(string), int? skip = default(int?), int? take = default(int?))
             {
-                return operations.GetCatalogsAsync().GetAwaiter().GetResult();
+                return operations.GetCatalogsAsync(sort, skip, take).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -1602,12 +1629,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
+            /// <param name='sort'>
+            /// </param>
+            /// <param name='skip'>
+            /// </param>
+            /// <param name='take'>
+            /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<Catalog>> GetCatalogsAsync(this ICatalogModuleCatalogs operations, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<Catalog>> GetCatalogsAsync(this ICatalogModuleCatalogs operations, string sort = default(string), int? skip = default(int?), int? take = default(int?), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetCatalogsWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetCatalogsWithHttpMessagesAsync(sort, skip, take, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -3193,785 +3226,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             public static async Task<Category> GetNewCategoryAsync(this ICatalogModuleCategories operations, string catalogId, string parentCategoryId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetNewCategoryWithHttpMessagesAsync(catalogId, parentCategoryId, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-    }
-}
-// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-
-namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Models;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
-
-    /// <summary>
-    /// CatalogModuleExportImport operations.
-    /// </summary>
-    public partial class CatalogModuleExportImport : IServiceOperations<VirtoCommerceCatalogRESTAPIdocumentation>, ICatalogModuleExportImport
-    {
-        /// <summary>
-        /// Initializes a new instance of the CatalogModuleExportImport class.
-        /// </summary>
-        /// <param name='client'>
-        /// Reference to the service client.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        public CatalogModuleExportImport(VirtoCommerceCatalogRESTAPIdocumentation client)
-        {
-            if (client == null)
-            {
-                throw new System.ArgumentNullException("client");
-            }
-            Client = client;
-        }
-
-        /// <summary>
-        /// Gets a reference to the VirtoCommerceCatalogRESTAPIdocumentation
-        /// </summary>
-        public VirtoCommerceCatalogRESTAPIdocumentation Client { get; private set; }
-
-        /// <summary>
-        /// Start catalog data export process.
-        /// </summary>
-        /// <remarks>
-        /// Data export is an async process. An ExportNotification is returned for
-        /// progress reporting.
-        /// </remarks>
-        /// <param name='exportInfo'>
-        /// The export configuration.
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse<ExportNotification>> DoExportWithHttpMessagesAsync(CsvExportInfo exportInfo, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (exportInfo == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "exportInfo");
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("exportInfo", exportInfo);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "DoExport", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/catalog/export").ToString();
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("POST");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if(exportInfo != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(exportInfo, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<ExportNotification>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ExportNotification>(_responseContent, Client.DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
-        /// Gets the CSV mapping configuration.
-        /// </summary>
-        /// <remarks>
-        /// Analyses the supplied file's structure and returns automatic column
-        /// mapping.
-        /// </remarks>
-        /// <param name='fileUrl'>
-        /// The file URL.
-        /// </param>
-        /// <param name='delimiter'>
-        /// The CSV delimiter.
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse<CsvProductMappingConfiguration>> GetMappingConfigurationWithHttpMessagesAsync(string fileUrl, string delimiter = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (fileUrl == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "fileUrl");
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("fileUrl", fileUrl);
-                tracingParameters.Add("delimiter", delimiter);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "GetMappingConfiguration", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/catalog/import/mappingconfiguration").ToString();
-            List<string> _queryParameters = new List<string>();
-            if (fileUrl != null)
-            {
-                _queryParameters.Add(string.Format("fileUrl={0}", System.Uri.EscapeDataString(fileUrl)));
-            }
-            if (delimiter != null)
-            {
-                _queryParameters.Add(string.Format("delimiter={0}", System.Uri.EscapeDataString(delimiter)));
-            }
-            if (_queryParameters.Count > 0)
-            {
-                _url += "?" + string.Join("&", _queryParameters);
-            }
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("GET");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<CsvProductMappingConfiguration>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<CsvProductMappingConfiguration>(_responseContent, Client.DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
-        /// Start catalog data import process.
-        /// </summary>
-        /// <remarks>
-        /// Data import is an async process. An ImportNotification is returned for
-        /// progress reporting.
-        /// </remarks>
-        /// <param name='importInfo'>
-        /// The import data configuration.
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse<ImportNotification>> DoImportWithHttpMessagesAsync(CsvImportInfo importInfo, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (importInfo == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "importInfo");
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("importInfo", importInfo);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "DoImport", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/catalog/import").ToString();
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("POST");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if(importInfo != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(importInfo, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<ImportNotification>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ImportNotification>(_responseContent, Client.DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-    }
-}
-// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-
-namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Models;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
-
-    /// <summary>
-    /// CatalogModuleExportImport operations.
-    /// </summary>
-    public partial interface ICatalogModuleExportImport
-    {
-        /// <summary>
-        /// Start catalog data export process.
-        /// </summary>
-        /// <remarks>
-        /// Data export is an async process. An ExportNotification is returned
-        /// for progress reporting.
-        /// </remarks>
-        /// <param name='exportInfo'>
-        /// The export configuration.
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<ExportNotification>> DoExportWithHttpMessagesAsync(CsvExportInfo exportInfo, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Gets the CSV mapping configuration.
-        /// </summary>
-        /// <remarks>
-        /// Analyses the supplied file's structure and returns automatic column
-        /// mapping.
-        /// </remarks>
-        /// <param name='fileUrl'>
-        /// The file URL.
-        /// </param>
-        /// <param name='delimiter'>
-        /// The CSV delimiter.
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<CsvProductMappingConfiguration>> GetMappingConfigurationWithHttpMessagesAsync(string fileUrl, string delimiter = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Start catalog data import process.
-        /// </summary>
-        /// <remarks>
-        /// Data import is an async process. An ImportNotification is returned
-        /// for progress reporting.
-        /// </remarks>
-        /// <param name='importInfo'>
-        /// The import data configuration.
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<ImportNotification>> DoImportWithHttpMessagesAsync(CsvImportInfo importInfo, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-    }
-}
-// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-
-namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Models;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
-
-    /// <summary>
-    /// Extension methods for CatalogModuleExportImport.
-    /// </summary>
-    public static partial class CatalogModuleExportImportExtensions
-    {
-            /// <summary>
-            /// Start catalog data export process.
-            /// </summary>
-            /// <remarks>
-            /// Data export is an async process. An ExportNotification is returned for
-            /// progress reporting.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='exportInfo'>
-            /// The export configuration.
-            /// </param>
-            public static ExportNotification DoExport(this ICatalogModuleExportImport operations, CsvExportInfo exportInfo)
-            {
-                return operations.DoExportAsync(exportInfo).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Start catalog data export process.
-            /// </summary>
-            /// <remarks>
-            /// Data export is an async process. An ExportNotification is returned for
-            /// progress reporting.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='exportInfo'>
-            /// The export configuration.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<ExportNotification> DoExportAsync(this ICatalogModuleExportImport operations, CsvExportInfo exportInfo, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.DoExportWithHttpMessagesAsync(exportInfo, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <summary>
-            /// Gets the CSV mapping configuration.
-            /// </summary>
-            /// <remarks>
-            /// Analyses the supplied file's structure and returns automatic column
-            /// mapping.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='fileUrl'>
-            /// The file URL.
-            /// </param>
-            /// <param name='delimiter'>
-            /// The CSV delimiter.
-            /// </param>
-            public static CsvProductMappingConfiguration GetMappingConfiguration(this ICatalogModuleExportImport operations, string fileUrl, string delimiter = default(string))
-            {
-                return operations.GetMappingConfigurationAsync(fileUrl, delimiter).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Gets the CSV mapping configuration.
-            /// </summary>
-            /// <remarks>
-            /// Analyses the supplied file's structure and returns automatic column
-            /// mapping.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='fileUrl'>
-            /// The file URL.
-            /// </param>
-            /// <param name='delimiter'>
-            /// The CSV delimiter.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<CsvProductMappingConfiguration> GetMappingConfigurationAsync(this ICatalogModuleExportImport operations, string fileUrl, string delimiter = default(string), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.GetMappingConfigurationWithHttpMessagesAsync(fileUrl, delimiter, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <summary>
-            /// Start catalog data import process.
-            /// </summary>
-            /// <remarks>
-            /// Data import is an async process. An ImportNotification is returned for
-            /// progress reporting.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='importInfo'>
-            /// The import data configuration.
-            /// </param>
-            public static ImportNotification DoImport(this ICatalogModuleExportImport operations, CsvImportInfo importInfo)
-            {
-                return operations.DoImportAsync(importInfo).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Start catalog data import process.
-            /// </summary>
-            /// <remarks>
-            /// Data import is an async process. An ImportNotification is returned for
-            /// progress reporting.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='importInfo'>
-            /// The import data configuration.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<ImportNotification> DoImportAsync(this ICatalogModuleExportImport operations, CsvImportInfo importInfo, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.DoImportWithHttpMessagesAsync(importInfo, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -6335,6 +5589,151 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             return _result;
         }
 
+        /// <summary>
+        /// Return product and product's associations products
+        /// </summary>
+        /// <param name='criteria'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<ProductAssociationSearchResult>> SearchProductAssociationsWithHttpMessagesAsync(ProductAssociationSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (criteria == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "criteria");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "SearchProductAssociations", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/catalog/products/associations/search").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(criteria != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<ProductAssociationSearchResult>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<ProductAssociationSearchResult>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
     }
 }
 // Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
@@ -6602,6 +6001,27 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
         /// Thrown when a required parameter is null
         /// </exception>
         Task<HttpOperationResponse> SaveProductsWithHttpMessagesAsync(IList<Product> products, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Return product and product's associations products
+        /// </summary>
+        /// <param name='criteria'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse<ProductAssociationSearchResult>> SearchProductAssociationsWithHttpMessagesAsync(ProductAssociationSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
@@ -7007,6 +6427,38 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             public static async Task SaveProductsAsync(this ICatalogModuleProducts operations, IList<Product> products, CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.SaveProductsWithHttpMessagesAsync(products, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
+            /// <summary>
+            /// Return product and product's associations products
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='criteria'>
+            /// </param>
+            public static ProductAssociationSearchResult SearchProductAssociations(this ICatalogModuleProducts operations, ProductAssociationSearchCriteria criteria)
+            {
+                return operations.SearchProductAssociationsAsync(criteria).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Return product and product's associations products
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='criteria'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<ProductAssociationSearchResult> SearchProductAssociationsAsync(this ICatalogModuleProducts operations, ProductAssociationSearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.SearchProductAssociationsWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
 
     }
@@ -9094,7 +8546,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
         /// Initializes a new instance of the PropertyValue class.
         /// </summary>
         /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer'</param>
+        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
+        /// 'GeoPoint'</param>
         public PropertyValue(string propertyName = default(string), string propertyId = default(string), string languageCode = default(string), string alias = default(string), string valueType = default(string), string valueId = default(string), object value = default(object), bool? isInherited = default(bool?), bool? propertyMultivalue = default(bool?), string id = default(string))
         {
             PropertyName = propertyName;
@@ -9137,7 +8590,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Number', 'DateTime', 'Boolean', 'Integer'
+        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
         public string ValueType { get; set; }
@@ -9479,7 +8932,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
         /// Initializes a new instance of the Property class.
         /// </summary>
         /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer'</param>
+        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
+        /// 'GeoPoint'</param>
         /// <param name="type">Possible values include: 'Product', 'Variation',
         /// 'Category', 'Catalog'</param>
         public Property(bool? isReadOnly = default(bool?), bool? isManageable = default(bool?), bool? isNew = default(bool?), string catalogId = default(string), string categoryId = default(string), string name = default(string), bool? required = default(bool?), bool? dictionary = default(bool?), bool? multivalue = default(bool?), bool? multilanguage = default(bool?), string valueType = default(string), string type = default(string), IList<PropertyValue> values = default(IList<PropertyValue>), IList<PropertyDictionaryValue> dictionaryValues = default(IList<PropertyDictionaryValue>), IList<PropertyAttribute> attributes = default(IList<PropertyAttribute>), IList<PropertyDisplayName> displayNames = default(IList<PropertyDisplayName>), PropertyValidationRule validationRule = default(PropertyValidationRule), bool? isInherited = default(bool?), string id = default(string))
@@ -9563,7 +9017,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Number', 'DateTime', 'Boolean', 'Integer'
+        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
         public string ValueType { get; set; }
@@ -10308,611 +9762,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
-
-    }
-}
-// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-
-namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
-
-    public partial class CsvProductPropertyMap
-    {
-        /// <summary>
-        /// Initializes a new instance of the CsvProductPropertyMap class.
-        /// </summary>
-        public CsvProductPropertyMap()
-        {
-          CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CsvProductPropertyMap class.
-        /// </summary>
-        public CsvProductPropertyMap(string entityColumnName = default(string), string csvColumnName = default(string), bool? isSystemProperty = default(bool?), bool? isRequired = default(bool?), string customValue = default(string), string stringFormat = default(string), string locale = default(string))
-        {
-            EntityColumnName = entityColumnName;
-            CsvColumnName = csvColumnName;
-            IsSystemProperty = isSystemProperty;
-            IsRequired = isRequired;
-            CustomValue = customValue;
-            StringFormat = stringFormat;
-            Locale = locale;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "entityColumnName")]
-        public string EntityColumnName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "csvColumnName")]
-        public string CsvColumnName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isSystemProperty")]
-        public bool? IsSystemProperty { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isRequired")]
-        public bool? IsRequired { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "customValue")]
-        public string CustomValue { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "stringFormat")]
-        public string StringFormat { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "locale")]
-        public string Locale { get; set; }
-
-    }
-}
-// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-
-namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
-
-    public partial class CsvProductMappingConfiguration
-    {
-        /// <summary>
-        /// Initializes a new instance of the CsvProductMappingConfiguration
-        /// class.
-        /// </summary>
-        public CsvProductMappingConfiguration()
-        {
-          CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CsvProductMappingConfiguration
-        /// class.
-        /// </summary>
-        public CsvProductMappingConfiguration(string eTag = default(string), string delimiter = default(string), IList<string> csvColumns = default(IList<string>), IList<CsvProductPropertyMap> propertyMaps = default(IList<CsvProductPropertyMap>), IList<string> propertyCsvColumns = default(IList<string>))
-        {
-            ETag = eTag;
-            Delimiter = delimiter;
-            CsvColumns = csvColumns;
-            PropertyMaps = propertyMaps;
-            PropertyCsvColumns = propertyCsvColumns;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "eTag")]
-        public string ETag { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "delimiter")]
-        public string Delimiter { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "csvColumns")]
-        public IList<string> CsvColumns { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyMaps")]
-        public IList<CsvProductPropertyMap> PropertyMaps { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyCsvColumns")]
-        public IList<string> PropertyCsvColumns { get; set; }
-
-    }
-}
-// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-
-namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
-
-    public partial class CsvExportInfo
-    {
-        /// <summary>
-        /// Initializes a new instance of the CsvExportInfo class.
-        /// </summary>
-        public CsvExportInfo()
-        {
-          CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CsvExportInfo class.
-        /// </summary>
-        public CsvExportInfo(string catalogId = default(string), IList<string> productIds = default(IList<string>), IList<string> categoryIds = default(IList<string>), string priceListId = default(string), string fulfilmentCenterId = default(string), string currency = default(string), CsvProductMappingConfiguration configuration = default(CsvProductMappingConfiguration))
-        {
-            CatalogId = catalogId;
-            ProductIds = productIds;
-            CategoryIds = categoryIds;
-            PriceListId = priceListId;
-            FulfilmentCenterId = fulfilmentCenterId;
-            Currency = currency;
-            Configuration = configuration;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "catalogId")]
-        public string CatalogId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "productIds")]
-        public IList<string> ProductIds { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "categoryIds")]
-        public IList<string> CategoryIds { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "priceListId")]
-        public string PriceListId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "fulfilmentCenterId")]
-        public string FulfilmentCenterId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "currency")]
-        public string Currency { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "configuration")]
-        public CsvProductMappingConfiguration Configuration { get; set; }
-
-    }
-}
-// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-
-namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
-
-    /// <summary>
-    /// Notification for catalog data export job.
-    /// </summary>
-    public partial class ExportNotification
-    {
-        /// <summary>
-        /// Initializes a new instance of the ExportNotification class.
-        /// </summary>
-        public ExportNotification()
-        {
-          CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ExportNotification class.
-        /// </summary>
-        /// <param name="downloadUrl">Gets or sets the URL for downloading
-        /// exported data.</param>
-        /// <param name="finished">Gets or sets the job finish date and
-        /// time.</param>
-        /// <param name="totalCount">Gets or sets the total count of objects to
-        /// process.</param>
-        /// <param name="processedCount">Gets or sets the count of processed
-        /// objects.</param>
-        /// <param name="errorCount">Gets or sets the count of errors during
-        /// processing.</param>
-        /// <param name="errors">Gets or sets the errors that has occurred
-        /// during processing.</param>
-        public ExportNotification(string downloadUrl = default(string), System.DateTime? finished = default(System.DateTime?), long? totalCount = default(long?), long? processedCount = default(long?), long? errorCount = default(long?), IList<string> errors = default(IList<string>), string id = default(string), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?))
-        {
-            DownloadUrl = downloadUrl;
-            Finished = finished;
-            TotalCount = totalCount;
-            ProcessedCount = processedCount;
-            ErrorCount = errorCount;
-            Errors = errors;
-            Id = id;
-            Creator = creator;
-            Created = created;
-            IsNew = isNew;
-            NotifyType = notifyType;
-            Description = description;
-            Title = title;
-            RepeatCount = repeatCount;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// Gets or sets the URL for downloading exported data.
-        /// </summary>
-        [JsonProperty(PropertyName = "downloadUrl")]
-        public string DownloadUrl { get; set; }
-
-        /// <summary>
-        /// Gets or sets the job finish date and time.
-        /// </summary>
-        [JsonProperty(PropertyName = "finished")]
-        public System.DateTime? Finished { get; set; }
-
-        /// <summary>
-        /// Gets or sets the total count of objects to process.
-        /// </summary>
-        [JsonProperty(PropertyName = "totalCount")]
-        public long? TotalCount { get; set; }
-
-        /// <summary>
-        /// Gets or sets the count of processed objects.
-        /// </summary>
-        [JsonProperty(PropertyName = "processedCount")]
-        public long? ProcessedCount { get; set; }
-
-        /// <summary>
-        /// Gets or sets the count of errors during processing.
-        /// </summary>
-        [JsonProperty(PropertyName = "errorCount")]
-        public long? ErrorCount { get; set; }
-
-        /// <summary>
-        /// Gets or sets the errors that has occurred during processing.
-        /// </summary>
-        [JsonProperty(PropertyName = "errors")]
-        public IList<string> Errors { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "creator")]
-        public string Creator { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "created")]
-        public System.DateTime? Created { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isNew")]
-        public bool? IsNew { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "notifyType")]
-        public string NotifyType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "title")]
-        public string Title { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "repeatCount")]
-        public int? RepeatCount { get; set; }
-
-    }
-}
-// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-
-namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
-
-    public partial class CsvImportInfo
-    {
-        /// <summary>
-        /// Initializes a new instance of the CsvImportInfo class.
-        /// </summary>
-        public CsvImportInfo()
-        {
-          CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CsvImportInfo class.
-        /// </summary>
-        public CsvImportInfo(string catalogId = default(string), string fileUrl = default(string), CsvProductMappingConfiguration configuration = default(CsvProductMappingConfiguration))
-        {
-            CatalogId = catalogId;
-            FileUrl = fileUrl;
-            Configuration = configuration;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "catalogId")]
-        public string CatalogId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "fileUrl")]
-        public string FileUrl { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "configuration")]
-        public CsvProductMappingConfiguration Configuration { get; set; }
-
-    }
-}
-// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-
-namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
-
-    /// <summary>
-    /// Notification for catalog data import job.
-    /// </summary>
-    public partial class ImportNotification
-    {
-        /// <summary>
-        /// Initializes a new instance of the ImportNotification class.
-        /// </summary>
-        public ImportNotification()
-        {
-          CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ImportNotification class.
-        /// </summary>
-        /// <param name="finished">Gets or sets the job finish date and
-        /// time.</param>
-        /// <param name="totalCount">Gets or sets the total count of objects to
-        /// process.</param>
-        /// <param name="processedCount">Gets or sets the count of processed
-        /// objects.</param>
-        /// <param name="errorCount">Gets or sets the count of errors during
-        /// processing.</param>
-        /// <param name="errors">Gets or sets the errors that has occurred
-        /// during processing.</param>
-        public ImportNotification(System.DateTime? finished = default(System.DateTime?), long? totalCount = default(long?), long? processedCount = default(long?), long? errorCount = default(long?), IList<string> errors = default(IList<string>), string id = default(string), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?))
-        {
-            Finished = finished;
-            TotalCount = totalCount;
-            ProcessedCount = processedCount;
-            ErrorCount = errorCount;
-            Errors = errors;
-            Id = id;
-            Creator = creator;
-            Created = created;
-            IsNew = isNew;
-            NotifyType = notifyType;
-            Description = description;
-            Title = title;
-            RepeatCount = repeatCount;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// Gets or sets the job finish date and time.
-        /// </summary>
-        [JsonProperty(PropertyName = "finished")]
-        public System.DateTime? Finished { get; set; }
-
-        /// <summary>
-        /// Gets or sets the total count of objects to process.
-        /// </summary>
-        [JsonProperty(PropertyName = "totalCount")]
-        public long? TotalCount { get; set; }
-
-        /// <summary>
-        /// Gets or sets the count of processed objects.
-        /// </summary>
-        [JsonProperty(PropertyName = "processedCount")]
-        public long? ProcessedCount { get; set; }
-
-        /// <summary>
-        /// Gets or sets the count of errors during processing.
-        /// </summary>
-        [JsonProperty(PropertyName = "errorCount")]
-        public long? ErrorCount { get; set; }
-
-        /// <summary>
-        /// Gets or sets the errors that has occurred during processing.
-        /// </summary>
-        [JsonProperty(PropertyName = "errors")]
-        public IList<string> Errors { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "creator")]
-        public string Creator { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "created")]
-        public System.DateTime? Created { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isNew")]
-        public bool? IsNew { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "notifyType")]
-        public string NotifyType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "title")]
-        public string Title { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "repeatCount")]
-        public int? RepeatCount { get; set; }
 
     }
 }
@@ -11821,7 +10670,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the Product class.
         /// </summary>
-        public Product(string manufacturerPartNumber = default(string), string gtin = default(string), string code = default(string), string name = default(string), string catalogId = default(string), string categoryId = default(string), string outline = default(string), string path = default(string), System.DateTime? indexingDate = default(System.DateTime?), string titularItemId = default(string), bool? isBuyable = default(bool?), bool? isActive = default(bool?), bool? trackInventory = default(bool?), int? maxQuantity = default(int?), int? minQuantity = default(int?), string productType = default(string), string weightUnit = default(string), double? weight = default(double?), string packageType = default(string), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), bool? enableReview = default(bool?), int? maxNumberOfDownload = default(int?), System.DateTime? downloadExpiration = default(System.DateTime?), string downloadType = default(string), bool? hasUserAgreement = default(bool?), string shippingType = default(string), string taxType = default(string), string vendor = default(string), int? priority = default(int?), string imgSrc = default(string), IList<Property> properties = default(IList<Property>), IList<Image> images = default(IList<Image>), IList<Asset> assets = default(IList<Asset>), IList<Product> variations = default(IList<Product>), IList<CategoryLink> links = default(IList<CategoryLink>), IList<EditorialReview> reviews = default(IList<EditorialReview>), IList<ProductAssociation> associations = default(IList<ProductAssociation>), IList<ProductAssociation> referencedAssociations = default(IList<ProductAssociation>), IList<string> securityScopes = default(IList<string>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), IList<Outline> outlines = default(IList<Outline>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Product(string manufacturerPartNumber = default(string), string gtin = default(string), string code = default(string), string name = default(string), string catalogId = default(string), string categoryId = default(string), string outline = default(string), string path = default(string), System.DateTime? indexingDate = default(System.DateTime?), string titularItemId = default(string), bool? isBuyable = default(bool?), bool? isActive = default(bool?), bool? trackInventory = default(bool?), int? maxQuantity = default(int?), int? minQuantity = default(int?), string productType = default(string), string weightUnit = default(string), double? weight = default(double?), string packageType = default(string), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), bool? enableReview = default(bool?), int? maxNumberOfDownload = default(int?), System.DateTime? downloadExpiration = default(System.DateTime?), string downloadType = default(string), bool? hasUserAgreement = default(bool?), string shippingType = default(string), string taxType = default(string), string vendor = default(string), int? priority = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string imgSrc = default(string), IList<Property> properties = default(IList<Property>), IList<Image> images = default(IList<Image>), IList<Asset> assets = default(IList<Asset>), IList<Product> variations = default(IList<Product>), IList<CategoryLink> links = default(IList<CategoryLink>), IList<EditorialReview> reviews = default(IList<EditorialReview>), IList<ProductAssociation> associations = default(IList<ProductAssociation>), IList<ProductAssociation> referencedAssociations = default(IList<ProductAssociation>), IList<string> securityScopes = default(IList<string>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), IList<Outline> outlines = default(IList<Outline>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             ManufacturerPartNumber = manufacturerPartNumber;
             Gtin = gtin;
@@ -11855,6 +10704,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
             TaxType = taxType;
             Vendor = vendor;
             Priority = priority;
+            StartDate = startDate;
+            EndDate = endDate;
             ImgSrc = imgSrc;
             Properties = properties;
             Images = images;
@@ -12043,6 +10894,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "startDate")]
+        public System.DateTime? StartDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "endDate")]
+        public System.DateTime? EndDate { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "imgSrc")]
         public string ImgSrc { get; private set; }
 
@@ -12130,6 +10991,244 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
+
+    public partial class SortInfo
+    {
+        /// <summary>
+        /// Initializes a new instance of the SortInfo class.
+        /// </summary>
+        public SortInfo()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the SortInfo class.
+        /// </summary>
+        /// <param name="sortDirection">Possible values include: 'Ascending',
+        /// 'Descending'</param>
+        public SortInfo(string sortColumn = default(string), string sortDirection = default(string))
+        {
+            SortColumn = sortColumn;
+            SortDirection = sortDirection;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sortColumn")]
+        public string SortColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Ascending', 'Descending'
+        /// </summary>
+        [JsonProperty(PropertyName = "sortDirection")]
+        public string SortDirection { get; set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
+
+    public partial class ProductAssociationSearchCriteria
+    {
+        /// <summary>
+        /// Initializes a new instance of the ProductAssociationSearchCriteria
+        /// class.
+        /// </summary>
+        public ProductAssociationSearchCriteria()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ProductAssociationSearchCriteria
+        /// class.
+        /// </summary>
+        public ProductAssociationSearchCriteria(string group = default(string), IList<string> tags = default(IList<string>), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        {
+            Group = group;
+            Tags = tags;
+            ResponseGroup = responseGroup;
+            ObjectType = objectType;
+            ObjectTypes = objectTypes;
+            ObjectIds = objectIds;
+            SearchPhrase = searchPhrase;
+            LanguageCode = languageCode;
+            Sort = sort;
+            SortInfos = sortInfos;
+            Skip = skip;
+            Take = take;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "group")]
+        public string Group { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "tags")]
+        public IList<string> Tags { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "responseGroup")]
+        public string ResponseGroup { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectTypes")]
+        public IList<string> ObjectTypes { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectIds")]
+        public IList<string> ObjectIds { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "searchPhrase")]
+        public string SearchPhrase { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "languageCode")]
+        public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sort")]
+        public string Sort { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sortInfos")]
+        public IList<SortInfo> SortInfos { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "skip")]
+        public int? Skip { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "take")]
+        public int? Take { get; set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
+
+    public partial class ProductAssociationSearchResult
+    {
+        /// <summary>
+        /// Initializes a new instance of the ProductAssociationSearchResult
+        /// class.
+        /// </summary>
+        public ProductAssociationSearchResult()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ProductAssociationSearchResult
+        /// class.
+        /// </summary>
+        public ProductAssociationSearchResult(int? totalCount = default(int?), IList<Product> results = default(IList<Product>))
+        {
+            TotalCount = totalCount;
+            Results = results;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "totalCount")]
+        public int? TotalCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "results")]
+        public IList<Product> Results { get; set; }
 
     }
 }
@@ -12504,25 +11603,23 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
     using VirtoCommerce.Storefront.AutoRestClients;
     using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
 
-    public partial class SortInfo
+    public partial class GeoPoint
     {
         /// <summary>
-        /// Initializes a new instance of the SortInfo class.
+        /// Initializes a new instance of the GeoPoint class.
         /// </summary>
-        public SortInfo()
+        public GeoPoint()
         {
           CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the SortInfo class.
+        /// Initializes a new instance of the GeoPoint class.
         /// </summary>
-        /// <param name="sortDirection">Possible values include: 'Ascending',
-        /// 'Descending'</param>
-        public SortInfo(string sortColumn = default(string), string sortDirection = default(string))
+        public GeoPoint(double? latitude = default(double?), double? longitude = default(double?))
         {
-            SortColumn = sortColumn;
-            SortDirection = sortDirection;
+            Latitude = latitude;
+            Longitude = longitude;
             CustomInit();
         }
 
@@ -12533,14 +11630,76 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "sortColumn")]
-        public string SortColumn { get; set; }
+        [JsonProperty(PropertyName = "latitude")]
+        public double? Latitude { get; set; }
 
         /// <summary>
-        /// Gets or sets possible values include: 'Ascending', 'Descending'
         /// </summary>
-        [JsonProperty(PropertyName = "sortDirection")]
-        public string SortDirection { get; set; }
+        [JsonProperty(PropertyName = "longitude")]
+        public double? Longitude { get; set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
+
+    public partial class GeoDistanceFilter
+    {
+        /// <summary>
+        /// Initializes a new instance of the GeoDistanceFilter class.
+        /// </summary>
+        public GeoDistanceFilter()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the GeoDistanceFilter class.
+        /// </summary>
+        public GeoDistanceFilter(string fieldName = default(string), GeoPoint location = default(GeoPoint), double? distance = default(double?))
+        {
+            FieldName = fieldName;
+            Location = location;
+            Distance = distance;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "fieldName")]
+        public string FieldName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "location")]
+        public GeoPoint Location { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "distance")]
+        public double? Distance { get; set; }
 
     }
 }
@@ -12577,7 +11736,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the ProductSearchCriteria class.
         /// </summary>
-        public ProductSearchCriteria(string objectType = default(string), string currency = default(string), IList<string> pricelists = default(IList<string>), NumericRange priceRange = default(NumericRange), IList<string> classTypes = default(IList<string>), bool? withHidden = default(bool?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? startDateFrom = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), IList<string> includeAggregations = default(IList<string>), IList<string> excludeAggregations = default(IList<string>), string storeId = default(string), string catalogId = default(string), string outline = default(string), IList<string> outlines = default(IList<string>), IList<string> terms = default(IList<string>), IList<string> userGroups = default(IList<string>), string responseGroup = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public ProductSearchCriteria(string objectType = default(string), string currency = default(string), IList<string> pricelists = default(IList<string>), NumericRange priceRange = default(NumericRange), IList<string> classTypes = default(IList<string>), bool? withHidden = default(bool?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? startDateFrom = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), IList<string> includeAggregations = default(IList<string>), IList<string> excludeAggregations = default(IList<string>), GeoDistanceFilter geoDistanceFilter = default(GeoDistanceFilter), IList<SortInfo> sortInfos = default(IList<SortInfo>), string storeId = default(string), string catalogId = default(string), string outline = default(string), IList<string> outlines = default(IList<string>), IList<string> terms = default(IList<string>), IList<string> userGroups = default(IList<string>), string responseGroup = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), int? skip = default(int?), int? take = default(int?))
         {
             ObjectType = objectType;
             Currency = currency;
@@ -12590,6 +11749,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
             EndDate = endDate;
             IncludeAggregations = includeAggregations;
             ExcludeAggregations = excludeAggregations;
+            GeoDistanceFilter = geoDistanceFilter;
+            SortInfos = sortInfos;
             StoreId = storeId;
             CatalogId = catalogId;
             Outline = outline;
@@ -12602,7 +11763,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
             SearchPhrase = searchPhrase;
             LanguageCode = languageCode;
             Sort = sort;
-            SortInfos = sortInfos;
             Skip = skip;
             Take = take;
             CustomInit();
@@ -12670,6 +11830,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "geoDistanceFilter")]
+        public GeoDistanceFilter GeoDistanceFilter { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sortInfos")]
+        public IList<SortInfo> SortInfos { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "storeId")]
         public string StoreId { get; set; }
 
@@ -12727,11 +11897,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "sort")]
         public string Sort { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "sortInfos")]
-        public IList<SortInfo> SortInfos { get; private set; }
 
         /// <summary>
         /// </summary>

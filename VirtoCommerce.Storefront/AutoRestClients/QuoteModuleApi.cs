@@ -247,7 +247,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
         private void Initialize()
         {
             QuoteModule = new QuoteModule(this);
-            BaseUri = new System.Uri("http://localhost/admin");
+            BaseUri = new System.Uri("http://localhost/platform2");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
@@ -2478,7 +2478,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// Initializes a new instance of the PropertyValue class.
         /// </summary>
         /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer'</param>
+        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
+        /// 'GeoPoint'</param>
         public PropertyValue(string propertyId = default(string), string propertyName = default(string), Property property = default(Property), string alias = default(string), string valueId = default(string), object value = default(object), string valueType = default(string), string languageCode = default(string), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             PropertyId = propertyId;
@@ -2535,7 +2536,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Number', 'DateTime', 'Boolean', 'Integer'
+        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
         public string ValueType { get; set; }
@@ -3601,7 +3602,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// Initializes a new instance of the Property class.
         /// </summary>
         /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer'</param>
+        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
+        /// 'GeoPoint'</param>
         /// <param name="type">Possible values include: 'Product', 'Variation',
         /// 'Category', 'Catalog'</param>
         public Property(string catalogId = default(string), Catalog catalog = default(Catalog), string categoryId = default(string), Category category = default(Category), string name = default(string), bool? required = default(bool?), bool? dictionary = default(bool?), bool? multivalue = default(bool?), bool? multilanguage = default(bool?), string valueType = default(string), string type = default(string), IList<PropertyAttribute> attributes = default(IList<PropertyAttribute>), IList<PropertyDictionaryValue> dictionaryValues = default(IList<PropertyDictionaryValue>), IList<PropertyDisplayName> displayNames = default(IList<PropertyDisplayName>), IList<PropertyValidationRule> validationRules = default(IList<PropertyValidationRule>), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
@@ -3682,7 +3684,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Number', 'DateTime', 'Boolean', 'Integer'
+        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
         public string ValueType { get; set; }
@@ -5762,7 +5764,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// </summary>
         /// <param name="valueType">Possible values include: 'Undefined',
         /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
-        /// 'Boolean', 'Html'</param>
+        /// 'Boolean', 'Html', 'Image'</param>
         public DynamicObjectProperty(string objectId = default(string), IList<DynamicPropertyObjectValue> values = default(IList<DynamicPropertyObjectValue>), string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             ObjectId = objectId;
@@ -5842,7 +5844,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'Undefined', 'ShortText',
-        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html'
+        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html',
+        /// 'Image'
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
         public string ValueType { get; set; }

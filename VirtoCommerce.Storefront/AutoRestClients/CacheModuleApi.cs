@@ -247,7 +247,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CacheModuleApi
         private void Initialize()
         {
             CacheModule = new CacheModule(this);
-            BaseUri = new System.Uri("http://localhost/admin");
+            BaseUri = new System.Uri("http://localhost/platform2");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,

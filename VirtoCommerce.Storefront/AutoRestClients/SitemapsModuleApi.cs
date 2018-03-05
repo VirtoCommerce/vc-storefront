@@ -248,7 +248,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         private void Initialize()
         {
             SitemapsModuleApi = new SitemapsModuleApiOperations(this);
-            BaseUri = new System.Uri("http://localhost/admin");
+            BaseUri = new System.Uri("http://localhost/platform2");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,

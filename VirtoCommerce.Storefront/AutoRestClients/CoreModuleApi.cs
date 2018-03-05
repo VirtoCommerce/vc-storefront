@@ -253,7 +253,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         {
             Commerce = new Commerce(this);
             StorefrontSecurity = new StorefrontSecurity(this);
-            BaseUri = new System.Uri("http://localhost/admin");
+            BaseUri = new System.Uri("http://localhost/platform2");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
@@ -7504,12 +7504,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// </summary>
         /// <param name="userState">Possible values include: 'PendingApproval',
         /// 'Approved', 'Rejected'</param>
-        public ApplicationUserExtended(string id = default(string), string userName = default(string), string email = default(string), string phoneNumber = default(string), string storeId = default(string), string memberId = default(string), string icon = default(string), bool? isAdministrator = default(bool?), string userType = default(string), string userState = default(string), string password = default(string), string passwordHash = default(string), string securityStamp = default(string), IList<ApplicationUserLogin> logins = default(IList<ApplicationUserLogin>), IList<Role> roles = default(IList<Role>), IList<string> permissions = default(IList<string>), IList<ApiAccount> apiAccounts = default(IList<ApiAccount>), IList<OperationLog> operationsLog = default(IList<OperationLog>))
+        public ApplicationUserExtended(string id = default(string), string userName = default(string), string email = default(string), string phoneNumber = default(string), bool? emailConfirmed = default(bool?), bool? phoneNumberConfirmed = default(bool?), bool? twoFactorEnabled = default(bool?), System.DateTime? lockoutEndDateUtc = default(System.DateTime?), bool? lockoutEnabled = default(bool?), int? accessFailedCount = default(int?), string storeId = default(string), string memberId = default(string), string icon = default(string), bool? isAdministrator = default(bool?), string userType = default(string), string userState = default(string), string password = default(string), string passwordHash = default(string), string securityStamp = default(string), IList<ApplicationUserLogin> logins = default(IList<ApplicationUserLogin>), IList<Role> roles = default(IList<Role>), IList<string> permissions = default(IList<string>), IList<ApiAccount> apiAccounts = default(IList<ApiAccount>), IList<OperationLog> operationsLog = default(IList<OperationLog>))
         {
             Id = id;
             UserName = userName;
             Email = email;
             PhoneNumber = phoneNumber;
+            EmailConfirmed = emailConfirmed;
+            PhoneNumberConfirmed = phoneNumberConfirmed;
+            TwoFactorEnabled = twoFactorEnabled;
+            LockoutEndDateUtc = lockoutEndDateUtc;
+            LockoutEnabled = lockoutEnabled;
+            AccessFailedCount = accessFailedCount;
             StoreId = storeId;
             MemberId = memberId;
             Icon = icon;
@@ -7551,6 +7557,36 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "phoneNumber")]
         public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "emailConfirmed")]
+        public bool? EmailConfirmed { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "phoneNumberConfirmed")]
+        public bool? PhoneNumberConfirmed { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "twoFactorEnabled")]
+        public bool? TwoFactorEnabled { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "lockoutEndDateUtc")]
+        public System.DateTime? LockoutEndDateUtc { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "lockoutEnabled")]
+        public bool? LockoutEnabled { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "accessFailedCount")]
+        public int? AccessFailedCount { get; set; }
 
         /// <summary>
         /// </summary>
@@ -7897,7 +7933,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the Contact class.
         /// </summary>
-        public Contact(string salutation = default(string), string fullName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), System.DateTime? birthDate = default(System.DateTime?), string defaultLanguage = default(string), string timeZone = default(string), IList<string> organizations = default(IList<string>), string taxPayerId = default(string), string preferredDelivery = default(string), string preferredCommunication = default(string), IList<ApplicationUserExtended> securityAccounts = default(IList<ApplicationUserExtended>), string name = default(string), string memberType = default(string), IList<Address> addresses = default(IList<Address>), IList<string> phones = default(IList<string>), IList<string> emails = default(IList<string>), IList<Note> notes = default(IList<Note>), IList<string> groups = default(IList<string>), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Contact(string salutation = default(string), string fullName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), System.DateTime? birthDate = default(System.DateTime?), string defaultLanguage = default(string), string timeZone = default(string), IList<string> organizations = default(IList<string>), string taxPayerId = default(string), string preferredDelivery = default(string), string preferredCommunication = default(string), string photoUrl = default(string), IList<ApplicationUserExtended> securityAccounts = default(IList<ApplicationUserExtended>), string name = default(string), string memberType = default(string), IList<Address> addresses = default(IList<Address>), IList<string> phones = default(IList<string>), IList<string> emails = default(IList<string>), IList<Note> notes = default(IList<Note>), IList<string> groups = default(IList<string>), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Salutation = salutation;
             FullName = fullName;
@@ -7911,6 +7947,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
             TaxPayerId = taxPayerId;
             PreferredDelivery = preferredDelivery;
             PreferredCommunication = preferredCommunication;
+            PhotoUrl = photoUrl;
             SecurityAccounts = securityAccounts;
             Name = name;
             MemberType = memberType;
@@ -7993,6 +8030,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "preferredCommunication")]
         public string PreferredCommunication { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "photoUrl")]
+        public string PhotoUrl { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8678,13 +8720,19 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// in</param>
         /// <param name="userState">Possible values include: 'PendingApproval',
         /// 'Approved', 'Rejected'</param>
-        public StorefrontUser(IList<string> allowedStores = default(IList<string>), string id = default(string), string userName = default(string), string email = default(string), string phoneNumber = default(string), string storeId = default(string), string memberId = default(string), string icon = default(string), bool? isAdministrator = default(bool?), string userType = default(string), string userState = default(string), string password = default(string), string passwordHash = default(string), string securityStamp = default(string), IList<ApplicationUserLogin> logins = default(IList<ApplicationUserLogin>), IList<Role> roles = default(IList<Role>), IList<string> permissions = default(IList<string>), IList<ApiAccount> apiAccounts = default(IList<ApiAccount>), IList<OperationLog> operationsLog = default(IList<OperationLog>))
+        public StorefrontUser(IList<string> allowedStores = default(IList<string>), string id = default(string), string userName = default(string), string email = default(string), string phoneNumber = default(string), bool? emailConfirmed = default(bool?), bool? phoneNumberConfirmed = default(bool?), bool? twoFactorEnabled = default(bool?), System.DateTime? lockoutEndDateUtc = default(System.DateTime?), bool? lockoutEnabled = default(bool?), int? accessFailedCount = default(int?), string storeId = default(string), string memberId = default(string), string icon = default(string), bool? isAdministrator = default(bool?), string userType = default(string), string userState = default(string), string password = default(string), string passwordHash = default(string), string securityStamp = default(string), IList<ApplicationUserLogin> logins = default(IList<ApplicationUserLogin>), IList<Role> roles = default(IList<Role>), IList<string> permissions = default(IList<string>), IList<ApiAccount> apiAccounts = default(IList<ApiAccount>), IList<OperationLog> operationsLog = default(IList<OperationLog>))
         {
             AllowedStores = allowedStores;
             Id = id;
             UserName = userName;
             Email = email;
             PhoneNumber = phoneNumber;
+            EmailConfirmed = emailConfirmed;
+            PhoneNumberConfirmed = phoneNumberConfirmed;
+            TwoFactorEnabled = twoFactorEnabled;
+            LockoutEndDateUtc = lockoutEndDateUtc;
+            LockoutEnabled = lockoutEnabled;
+            AccessFailedCount = accessFailedCount;
             StoreId = storeId;
             MemberId = memberId;
             Icon = icon;
@@ -8732,6 +8780,36 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "phoneNumber")]
         public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "emailConfirmed")]
+        public bool? EmailConfirmed { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "phoneNumberConfirmed")]
+        public bool? PhoneNumberConfirmed { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "twoFactorEnabled")]
+        public bool? TwoFactorEnabled { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "lockoutEndDateUtc")]
+        public System.DateTime? LockoutEndDateUtc { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "lockoutEnabled")]
+        public bool? LockoutEnabled { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "accessFailedCount")]
+        public int? AccessFailedCount { get; set; }
 
         /// <summary>
         /// </summary>

@@ -247,7 +247,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
         private void Initialize()
         {
             PricingModule = new PricingModule(this);
-            BaseUri = new System.Uri("http://localhost/admin");
+            BaseUri = new System.Uri("http://localhost/platform2");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
@@ -2128,6 +2128,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
         /// </param>
         /// <param name='criteriaproductIds'>
         /// </param>
+        /// <param name='criteriamodifiedSince'>
+        /// </param>
         /// <param name='criteriakeyword'>
         /// </param>
         /// <param name='criteriasort'>
@@ -2151,7 +2153,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<PricingSearchResultProductPrice>> SearchProductPricesWithHttpMessagesAsync(bool? criteriagroupByProducts = default(bool?), string criteriapriceListId = default(string), IList<string> criteriapriceListIds = default(IList<string>), string criteriaproductId = default(string), IList<string> criteriaproductIds = default(IList<string>), string criteriakeyword = default(string), string criteriasort = default(string), int? criteriaskip = default(int?), int? criteriatake = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<PricingSearchResultProductPrice>> SearchProductPricesWithHttpMessagesAsync(bool? criteriagroupByProducts = default(bool?), string criteriapriceListId = default(string), IList<string> criteriapriceListIds = default(IList<string>), string criteriaproductId = default(string), IList<string> criteriaproductIds = default(IList<string>), System.DateTime? criteriamodifiedSince = default(System.DateTime?), string criteriakeyword = default(string), string criteriasort = default(string), int? criteriaskip = default(int?), int? criteriatake = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -2165,6 +2167,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
                 tracingParameters.Add("criteriapriceListIds", criteriapriceListIds);
                 tracingParameters.Add("criteriaproductId", criteriaproductId);
                 tracingParameters.Add("criteriaproductIds", criteriaproductIds);
+                tracingParameters.Add("criteriamodifiedSince", criteriamodifiedSince);
                 tracingParameters.Add("criteriakeyword", criteriakeyword);
                 tracingParameters.Add("criteriasort", criteriasort);
                 tracingParameters.Add("criteriaskip", criteriaskip);
@@ -2215,6 +2218,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
                         _queryParameters.Add(string.Format("criteria.productIds={0}", System.Uri.EscapeDataString("" + _item)));
                     }
                 }
+            }
+            if (criteriamodifiedSince != null)
+            {
+                _queryParameters.Add(string.Format("criteria.modifiedSince={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(criteriamodifiedSince, Client.SerializationSettings).Trim('"'))));
             }
             if (criteriakeyword != null)
             {
@@ -2595,6 +2602,159 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             var _result = new HttpOperationResponse();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Evaluate product prices for demand catalog
+        /// </summary>
+        /// <remarks>
+        /// Get an array of valid product prices for each currency.
+        /// </remarks>
+        /// <param name='productId'>
+        /// Product id
+        /// </param>
+        /// <param name='catalogId'>
+        /// Catalog id
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<IList<Price>>> EvaluateProductPricesForCatalogWithHttpMessagesAsync(string productId, string catalogId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (productId == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "productId");
+            }
+            if (catalogId == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "catalogId");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("productId", productId);
+                tracingParameters.Add("catalogId", catalogId);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "EvaluateProductPricesForCatalog", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/products/{productId}/{catalogId}/pricesWidget").ToString();
+            _url = _url.Replace("{productId}", System.Uri.EscapeDataString(productId));
+            _url = _url.Replace("{catalogId}", System.Uri.EscapeDataString(catalogId));
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("GET");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<IList<Price>>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<Price>>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
             if (_shouldTrace)
             {
                 ServiceClientTracing.Exit(_invocationId, _result);
@@ -3153,6 +3313,143 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             return _result;
         }
 
+        /// <summary>
+        /// Delete price by ids
+        /// </summary>
+        /// <param name='priceIds'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> DeleteProductPriceWithHttpMessagesAsync(IList<string> priceIds, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (priceIds == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "priceIds");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("priceIds", priceIds);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "DeleteProductPrice", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/pricing/products/prices").ToString();
+            List<string> _queryParameters = new List<string>();
+            if (priceIds != null)
+            {
+                if (priceIds.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("priceIds={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in priceIds)
+                    {
+                        _queryParameters.Add(string.Format("priceIds={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("DELETE");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 204)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
     }
 }
 // Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
@@ -3464,6 +3761,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
         /// </param>
         /// <param name='criteriaproductIds'>
         /// </param>
+        /// <param name='criteriamodifiedSince'>
+        /// </param>
         /// <param name='criteriakeyword'>
         /// </param>
         /// <param name='criteriasort'>
@@ -3484,7 +3783,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<PricingSearchResultProductPrice>> SearchProductPricesWithHttpMessagesAsync(bool? criteriagroupByProducts = default(bool?), string criteriapriceListId = default(string), IList<string> criteriapriceListIds = default(IList<string>), string criteriaproductId = default(string), IList<string> criteriaproductIds = default(IList<string>), string criteriakeyword = default(string), string criteriasort = default(string), int? criteriaskip = default(int?), int? criteriatake = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<PricingSearchResultProductPrice>> SearchProductPricesWithHttpMessagesAsync(bool? criteriagroupByProducts = default(bool?), string criteriapriceListId = default(string), IList<string> criteriapriceListIds = default(IList<string>), string criteriaproductId = default(string), IList<string> criteriaproductIds = default(IList<string>), System.DateTime? criteriamodifiedSince = default(System.DateTime?), string criteriakeyword = default(string), string criteriasort = default(string), int? criteriaskip = default(int?), int? criteriatake = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Evaluate  product prices
         /// </summary>
@@ -3527,6 +3826,34 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
         /// Thrown when a required parameter is null
         /// </exception>
         Task<HttpOperationResponse> UpdateProductPricesWithHttpMessagesAsync(ProductPrice productPrice, string productId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Evaluate product prices for demand catalog
+        /// </summary>
+        /// <remarks>
+        /// Get an array of valid product prices for each currency.
+        /// </remarks>
+        /// <param name='productId'>
+        /// Product id
+        /// </param>
+        /// <param name='catalogId'>
+        /// Catalog id
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse<IList<Price>>> EvaluateProductPricesForCatalogWithHttpMessagesAsync(string productId, string catalogId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='productPrices'>
         /// </param>
         /// <param name='customHeaders'>
@@ -3609,6 +3936,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
         /// Thrown when a required parameter is null
         /// </exception>
         Task<HttpOperationResponse> DeleteProductPricesWithHttpMessagesAsync(string pricelistId, IList<string> productIds, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Delete price by ids
+        /// </summary>
+        /// <param name='priceIds'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse> DeleteProductPriceWithHttpMessagesAsync(IList<string> priceIds, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
@@ -4101,6 +4446,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             /// </param>
             /// <param name='criteriaproductIds'>
             /// </param>
+            /// <param name='criteriamodifiedSince'>
+            /// </param>
             /// <param name='criteriakeyword'>
             /// </param>
             /// <param name='criteriasort'>
@@ -4109,9 +4456,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             /// </param>
             /// <param name='criteriatake'>
             /// </param>
-            public static PricingSearchResultProductPrice SearchProductPrices(this IPricingModule operations, bool? criteriagroupByProducts = default(bool?), string criteriapriceListId = default(string), IList<string> criteriapriceListIds = default(IList<string>), string criteriaproductId = default(string), IList<string> criteriaproductIds = default(IList<string>), string criteriakeyword = default(string), string criteriasort = default(string), int? criteriaskip = default(int?), int? criteriatake = default(int?))
+            public static PricingSearchResultProductPrice SearchProductPrices(this IPricingModule operations, bool? criteriagroupByProducts = default(bool?), string criteriapriceListId = default(string), IList<string> criteriapriceListIds = default(IList<string>), string criteriaproductId = default(string), IList<string> criteriaproductIds = default(IList<string>), System.DateTime? criteriamodifiedSince = default(System.DateTime?), string criteriakeyword = default(string), string criteriasort = default(string), int? criteriaskip = default(int?), int? criteriatake = default(int?))
             {
-                return operations.SearchProductPricesAsync(criteriagroupByProducts, criteriapriceListId, criteriapriceListIds, criteriaproductId, criteriaproductIds, criteriakeyword, criteriasort, criteriaskip, criteriatake).GetAwaiter().GetResult();
+                return operations.SearchProductPricesAsync(criteriagroupByProducts, criteriapriceListId, criteriapriceListIds, criteriaproductId, criteriaproductIds, criteriamodifiedSince, criteriakeyword, criteriasort, criteriaskip, criteriatake).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -4133,6 +4480,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             /// </param>
             /// <param name='criteriaproductIds'>
             /// </param>
+            /// <param name='criteriamodifiedSince'>
+            /// </param>
             /// <param name='criteriakeyword'>
             /// </param>
             /// <param name='criteriasort'>
@@ -4144,9 +4493,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<PricingSearchResultProductPrice> SearchProductPricesAsync(this IPricingModule operations, bool? criteriagroupByProducts = default(bool?), string criteriapriceListId = default(string), IList<string> criteriapriceListIds = default(IList<string>), string criteriaproductId = default(string), IList<string> criteriaproductIds = default(IList<string>), string criteriakeyword = default(string), string criteriasort = default(string), int? criteriaskip = default(int?), int? criteriatake = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<PricingSearchResultProductPrice> SearchProductPricesAsync(this IPricingModule operations, bool? criteriagroupByProducts = default(bool?), string criteriapriceListId = default(string), IList<string> criteriapriceListIds = default(IList<string>), string criteriaproductId = default(string), IList<string> criteriaproductIds = default(IList<string>), System.DateTime? criteriamodifiedSince = default(System.DateTime?), string criteriakeyword = default(string), string criteriasort = default(string), int? criteriaskip = default(int?), int? criteriatake = default(int?), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SearchProductPricesWithHttpMessagesAsync(criteriagroupByProducts, criteriapriceListId, criteriapriceListIds, criteriaproductId, criteriaproductIds, criteriakeyword, criteriasort, criteriaskip, criteriatake, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SearchProductPricesWithHttpMessagesAsync(criteriagroupByProducts, criteriapriceListId, criteriapriceListIds, criteriaproductId, criteriaproductIds, criteriamodifiedSince, criteriakeyword, criteriasort, criteriaskip, criteriatake, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -4217,6 +4566,52 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             public static async Task UpdateProductPricesAsync(this IPricingModule operations, ProductPrice productPrice, string productId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.UpdateProductPricesWithHttpMessagesAsync(productPrice, productId, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
+            /// <summary>
+            /// Evaluate product prices for demand catalog
+            /// </summary>
+            /// <remarks>
+            /// Get an array of valid product prices for each currency.
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='productId'>
+            /// Product id
+            /// </param>
+            /// <param name='catalogId'>
+            /// Catalog id
+            /// </param>
+            public static IList<Price> EvaluateProductPricesForCatalog(this IPricingModule operations, string productId, string catalogId)
+            {
+                return operations.EvaluateProductPricesForCatalogAsync(productId, catalogId).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Evaluate product prices for demand catalog
+            /// </summary>
+            /// <remarks>
+            /// Get an array of valid product prices for each currency.
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='productId'>
+            /// Product id
+            /// </param>
+            /// <param name='catalogId'>
+            /// Catalog id
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<IList<Price>> EvaluateProductPricesForCatalogAsync(this IPricingModule operations, string productId, string catalogId, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.EvaluateProductPricesForCatalogWithHttpMessagesAsync(productId, catalogId, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
 
             /// <param name='operations'>
@@ -4349,6 +4744,35 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
                 (await operations.DeleteProductPricesWithHttpMessagesAsync(pricelistId, productIds, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// Delete price by ids
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='priceIds'>
+            /// </param>
+            public static void DeleteProductPrice(this IPricingModule operations, IList<string> priceIds)
+            {
+                operations.DeleteProductPriceAsync(priceIds).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Delete price by ids
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='priceIds'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task DeleteProductPriceAsync(this IPricingModule operations, IList<string> priceIds, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.DeleteProductPriceWithHttpMessagesAsync(priceIds, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
     }
 }
 // Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
@@ -4384,12 +4808,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the PriceEvaluationContext class.
         /// </summary>
-        public PriceEvaluationContext(string storeId = default(string), string catalogId = default(string), IList<string> productIds = default(IList<string>), IList<string> pricelistIds = default(IList<string>), double? quantity = default(double?), string customerId = default(string), string organizationId = default(string), System.DateTime? certainDate = default(System.DateTime?), string currency = default(string), object contextObject = default(object), string geoCity = default(string), string geoState = default(string), string geoCountry = default(string), string geoContinent = default(string), string geoZipCode = default(string), string geoConnectionType = default(string), string geoTimeZone = default(string), string geoIpRoutingType = default(string), string geoIspSecondLevel = default(string), string geoIspTopLevel = default(string), int? shopperAge = default(int?), string shopperGender = default(string), string language = default(string), IList<string> userGroups = default(IList<string>), string shopperSearchedPhraseInStore = default(string), string shopperSearchedPhraseOnInternet = default(string), string currentUrl = default(string), string referredUrl = default(string))
+        public PriceEvaluationContext(string storeId = default(string), string catalogId = default(string), IList<string> productIds = default(IList<string>), IList<string> pricelistIds = default(IList<string>), bool? returnAllMatchedPrices = default(bool?), double? quantity = default(double?), string customerId = default(string), string organizationId = default(string), System.DateTime? certainDate = default(System.DateTime?), string currency = default(string), object contextObject = default(object), string geoCity = default(string), string geoState = default(string), string geoCountry = default(string), string geoContinent = default(string), string geoZipCode = default(string), string geoConnectionType = default(string), string geoTimeZone = default(string), string geoIpRoutingType = default(string), string geoIspSecondLevel = default(string), string geoIspTopLevel = default(string), int? shopperAge = default(int?), string shopperGender = default(string), string language = default(string), IList<string> userGroups = default(IList<string>), string shopperSearchedPhraseInStore = default(string), string shopperSearchedPhraseOnInternet = default(string), string currentUrl = default(string), string referredUrl = default(string))
         {
             StoreId = storeId;
             CatalogId = catalogId;
             ProductIds = productIds;
             PricelistIds = pricelistIds;
+            ReturnAllMatchedPrices = returnAllMatchedPrices;
             Quantity = quantity;
             CustomerId = customerId;
             OrganizationId = organizationId;
@@ -4441,6 +4866,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "pricelistIds")]
         public IList<string> PricelistIds { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "returnAllMatchedPrices")]
+        public bool? ReturnAllMatchedPrices { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5440,13 +5870,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the PricesSearchCriteria class.
         /// </summary>
-        public PricesSearchCriteria(bool? groupByProducts = default(bool?), string priceListId = default(string), IList<string> priceListIds = default(IList<string>), string productId = default(string), IList<string> productIds = default(IList<string>), string keyword = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public PricesSearchCriteria(bool? groupByProducts = default(bool?), string priceListId = default(string), IList<string> priceListIds = default(IList<string>), string productId = default(string), IList<string> productIds = default(IList<string>), System.DateTime? modifiedSince = default(System.DateTime?), string keyword = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
             GroupByProducts = groupByProducts;
             PriceListId = priceListId;
             PriceListIds = priceListIds;
             ProductId = productId;
             ProductIds = productIds;
+            ModifiedSince = modifiedSince;
             Keyword = keyword;
             Sort = sort;
             SortInfos = sortInfos;
@@ -5484,6 +5915,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "productIds")]
         public IList<string> ProductIds { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedSince")]
+        public System.DateTime? ModifiedSince { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5546,10 +5982,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// Initializes a new instance of the PropertyValue class.
         /// </summary>
         /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer'</param>
-        public PropertyValue(string id = default(string), string propertyName = default(string), string propertyId = default(string), string languageCode = default(string), string alias = default(string), string valueType = default(string), string valueId = default(string), object value = default(object), bool? isInherited = default(bool?), bool? propertyMultivalue = default(bool?))
+        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
+        /// 'GeoPoint'</param>
+        public PropertyValue(string propertyName = default(string), string propertyId = default(string), string languageCode = default(string), string alias = default(string), string valueType = default(string), string valueId = default(string), object value = default(object), bool? isInherited = default(bool?), bool? propertyMultivalue = default(bool?), string id = default(string))
         {
-            Id = id;
             PropertyName = propertyName;
             PropertyId = propertyId;
             LanguageCode = languageCode;
@@ -5559,6 +5995,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             Value = value;
             IsInherited = isInherited;
             PropertyMultivalue = propertyMultivalue;
+            Id = id;
             CustomInit();
         }
 
@@ -5566,11 +6003,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5594,7 +6026,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Number', 'DateTime', 'Boolean', 'Integer'
+        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
         public string ValueType { get; set; }
@@ -5618,6 +6050,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "propertyMultivalue")]
         public bool? PropertyMultivalue { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
     }
 }
@@ -5654,13 +6091,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the PropertyDictionaryValue class.
         /// </summary>
-        public PropertyDictionaryValue(string id = default(string), string propertyId = default(string), string alias = default(string), string languageCode = default(string), string value = default(string))
+        public PropertyDictionaryValue(string propertyId = default(string), string alias = default(string), string languageCode = default(string), string value = default(string), string id = default(string))
         {
-            Id = id;
             PropertyId = propertyId;
             Alias = alias;
             LanguageCode = languageCode;
             Value = value;
+            Id = id;
             CustomInit();
         }
 
@@ -5668,11 +6105,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5693,6 +6125,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "value")]
         public string Value { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
     }
 }
@@ -5729,12 +6166,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the PropertyAttribute class.
         /// </summary>
-        public PropertyAttribute(string id = default(string), Property property = default(Property), string value = default(string), string name = default(string))
+        public PropertyAttribute(Property property = default(Property), string value = default(string), string name = default(string), string id = default(string))
         {
-            Id = id;
             Property = property;
             Value = value;
             Name = name;
+            Id = id;
             CustomInit();
         }
 
@@ -5742,11 +6179,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5762,6 +6194,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
     }
 }
@@ -5855,13 +6292,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the PropertyValidationRule class.
         /// </summary>
-        public PropertyValidationRule(string id = default(string), bool? isUnique = default(bool?), int? charCountMin = default(int?), int? charCountMax = default(int?), string regExp = default(string))
+        public PropertyValidationRule(bool? isUnique = default(bool?), int? charCountMin = default(int?), int? charCountMax = default(int?), string regExp = default(string), string id = default(string))
         {
-            Id = id;
             IsUnique = isUnique;
             CharCountMin = charCountMin;
             CharCountMax = charCountMax;
             RegExp = regExp;
+            Id = id;
             CustomInit();
         }
 
@@ -5869,11 +6306,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5894,6 +6326,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "regExp")]
         public string RegExp { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
     }
 }
@@ -5931,15 +6368,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// Initializes a new instance of the Property class.
         /// </summary>
         /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer'</param>
+        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
+        /// 'GeoPoint'</param>
         /// <param name="type">Possible values include: 'Product', 'Variation',
         /// 'Category', 'Catalog'</param>
-        public Property(bool? isReadOnly = default(bool?), bool? isManageable = default(bool?), bool? isNew = default(bool?), string id = default(string), string catalogId = default(string), string categoryId = default(string), string name = default(string), bool? required = default(bool?), bool? dictionary = default(bool?), bool? multivalue = default(bool?), bool? multilanguage = default(bool?), string valueType = default(string), string type = default(string), IList<PropertyValue> values = default(IList<PropertyValue>), IList<PropertyDictionaryValue> dictionaryValues = default(IList<PropertyDictionaryValue>), IList<PropertyAttribute> attributes = default(IList<PropertyAttribute>), IList<PropertyDisplayName> displayNames = default(IList<PropertyDisplayName>), PropertyValidationRule validationRule = default(PropertyValidationRule), bool? isInherited = default(bool?))
+        public Property(bool? isReadOnly = default(bool?), bool? isManageable = default(bool?), bool? isNew = default(bool?), string catalogId = default(string), string categoryId = default(string), string name = default(string), bool? required = default(bool?), bool? dictionary = default(bool?), bool? multivalue = default(bool?), bool? multilanguage = default(bool?), string valueType = default(string), string type = default(string), IList<PropertyValue> values = default(IList<PropertyValue>), IList<PropertyDictionaryValue> dictionaryValues = default(IList<PropertyDictionaryValue>), IList<PropertyAttribute> attributes = default(IList<PropertyAttribute>), IList<PropertyDisplayName> displayNames = default(IList<PropertyDisplayName>), PropertyValidationRule validationRule = default(PropertyValidationRule), bool? isInherited = default(bool?), string id = default(string))
         {
             IsReadOnly = isReadOnly;
             IsManageable = isManageable;
             IsNew = isNew;
-            Id = id;
             CatalogId = catalogId;
             CategoryId = categoryId;
             Name = name;
@@ -5955,6 +6392,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             DisplayNames = displayNames;
             ValidationRule = validationRule;
             IsInherited = isInherited;
+            Id = id;
             CustomInit();
         }
 
@@ -5977,11 +6415,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "isNew")]
         public bool? IsNew { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
 
         /// <summary>
         /// </summary>
@@ -6020,7 +6453,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Number', 'DateTime', 'Boolean', 'Integer'
+        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
         public string ValueType { get; set; }
@@ -6062,6 +6495,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         [JsonProperty(PropertyName = "isInherited")]
         public bool? IsInherited { get; set; }
 
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
     }
 }
 // Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
@@ -6097,10 +6535,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the Image class.
         /// </summary>
-        public Image(int? sortOrder = default(int?), string id = default(string), string relativeUrl = default(string), string url = default(string), string typeId = default(string), string group = default(string), string name = default(string), string languageCode = default(string), bool? isInherited = default(bool?))
+        public Image(int? sortOrder = default(int?), string relativeUrl = default(string), string url = default(string), string typeId = default(string), string group = default(string), string name = default(string), string languageCode = default(string), bool? isInherited = default(bool?), string id = default(string))
         {
             SortOrder = sortOrder;
-            Id = id;
             RelativeUrl = relativeUrl;
             Url = url;
             TypeId = typeId;
@@ -6108,6 +6545,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             Name = name;
             LanguageCode = languageCode;
             IsInherited = isInherited;
+            Id = id;
             CustomInit();
         }
 
@@ -6120,11 +6558,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "sortOrder")]
         public int? SortOrder { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
 
         /// <summary>
         /// </summary>
@@ -6160,6 +6593,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "isInherited")]
         public bool? IsInherited { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
     }
 }
@@ -6196,12 +6634,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the Asset class.
         /// </summary>
-        public Asset(long? size = default(long?), string readableSize = default(string), string mimeType = default(string), string id = default(string), string relativeUrl = default(string), string url = default(string), string typeId = default(string), string group = default(string), string name = default(string), string languageCode = default(string), bool? isInherited = default(bool?))
+        public Asset(long? size = default(long?), string readableSize = default(string), string mimeType = default(string), string relativeUrl = default(string), string url = default(string), string typeId = default(string), string group = default(string), string name = default(string), string languageCode = default(string), bool? isInherited = default(bool?), string id = default(string))
         {
             Size = size;
             ReadableSize = readableSize;
             MimeType = mimeType;
-            Id = id;
             RelativeUrl = relativeUrl;
             Url = url;
             TypeId = typeId;
@@ -6209,6 +6646,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             Name = name;
             LanguageCode = languageCode;
             IsInherited = isInherited;
+            Id = id;
             CustomInit();
         }
 
@@ -6231,11 +6669,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "mimeType")]
         public string MimeType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
 
         /// <summary>
         /// </summary>
@@ -6271,6 +6704,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "isInherited")]
         public bool? IsInherited { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
     }
 }
@@ -6382,13 +6820,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the EditorialReview class.
         /// </summary>
-        public EditorialReview(string id = default(string), string content = default(string), string reviewType = default(string), string languageCode = default(string), bool? isInherited = default(bool?))
+        public EditorialReview(string content = default(string), string reviewType = default(string), string languageCode = default(string), bool? isInherited = default(bool?), string id = default(string))
         {
-            Id = id;
             Content = content;
             ReviewType = reviewType;
             LanguageCode = languageCode;
             IsInherited = isInherited;
+            Id = id;
             CustomInit();
         }
 
@@ -6396,11 +6834,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
 
         /// <summary>
         /// </summary>
@@ -6421,6 +6854,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "isInherited")]
         public bool? IsInherited { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
     }
 }
@@ -6811,7 +7249,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the Product class.
         /// </summary>
-        public Product(string manufacturerPartNumber = default(string), string gtin = default(string), string code = default(string), string name = default(string), string catalogId = default(string), string categoryId = default(string), string outline = default(string), string path = default(string), System.DateTime? indexingDate = default(System.DateTime?), string titularItemId = default(string), bool? isBuyable = default(bool?), bool? isActive = default(bool?), bool? trackInventory = default(bool?), int? maxQuantity = default(int?), int? minQuantity = default(int?), string productType = default(string), string weightUnit = default(string), double? weight = default(double?), string packageType = default(string), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), bool? enableReview = default(bool?), int? maxNumberOfDownload = default(int?), System.DateTime? downloadExpiration = default(System.DateTime?), string downloadType = default(string), bool? hasUserAgreement = default(bool?), string shippingType = default(string), string taxType = default(string), string vendor = default(string), int? priority = default(int?), string imgSrc = default(string), IList<Property> properties = default(IList<Property>), IList<Image> images = default(IList<Image>), IList<Asset> assets = default(IList<Asset>), IList<Product> variations = default(IList<Product>), IList<CategoryLink> links = default(IList<CategoryLink>), IList<EditorialReview> reviews = default(IList<EditorialReview>), IList<ProductAssociation> associations = default(IList<ProductAssociation>), IList<ProductAssociation> referencedAssociations = default(IList<ProductAssociation>), IList<string> securityScopes = default(IList<string>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), IList<Outline> outlines = default(IList<Outline>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Product(string manufacturerPartNumber = default(string), string gtin = default(string), string code = default(string), string name = default(string), string catalogId = default(string), string categoryId = default(string), string outline = default(string), string path = default(string), System.DateTime? indexingDate = default(System.DateTime?), string titularItemId = default(string), bool? isBuyable = default(bool?), bool? isActive = default(bool?), bool? trackInventory = default(bool?), int? maxQuantity = default(int?), int? minQuantity = default(int?), string productType = default(string), string weightUnit = default(string), double? weight = default(double?), string packageType = default(string), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), bool? enableReview = default(bool?), int? maxNumberOfDownload = default(int?), System.DateTime? downloadExpiration = default(System.DateTime?), string downloadType = default(string), bool? hasUserAgreement = default(bool?), string shippingType = default(string), string taxType = default(string), string vendor = default(string), int? priority = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string imgSrc = default(string), IList<Property> properties = default(IList<Property>), IList<Image> images = default(IList<Image>), IList<Asset> assets = default(IList<Asset>), IList<Product> variations = default(IList<Product>), IList<CategoryLink> links = default(IList<CategoryLink>), IList<EditorialReview> reviews = default(IList<EditorialReview>), IList<ProductAssociation> associations = default(IList<ProductAssociation>), IList<ProductAssociation> referencedAssociations = default(IList<ProductAssociation>), IList<string> securityScopes = default(IList<string>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), IList<Outline> outlines = default(IList<Outline>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             ManufacturerPartNumber = manufacturerPartNumber;
             Gtin = gtin;
@@ -6845,6 +7283,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             TaxType = taxType;
             Vendor = vendor;
             Priority = priority;
+            StartDate = startDate;
+            EndDate = endDate;
             ImgSrc = imgSrc;
             Properties = properties;
             Images = images;
@@ -7030,6 +7470,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "priority")]
         public int? Priority { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "startDate")]
+        public System.DateTime? StartDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "endDate")]
+        public System.DateTime? EndDate { get; set; }
 
         /// <summary>
         /// </summary>

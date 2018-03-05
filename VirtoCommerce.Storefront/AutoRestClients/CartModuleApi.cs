@@ -247,7 +247,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi
         private void Initialize()
         {
             CartModule = new CartModule(this);
-            BaseUri = new System.Uri("http://localhost/admin");
+            BaseUri = new System.Uri("http://localhost/platform2");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
@@ -4029,7 +4029,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// Initializes a new instance of the PropertyValue class.
         /// </summary>
         /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer'</param>
+        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
+        /// 'GeoPoint'</param>
         public PropertyValue(string propertyId = default(string), string propertyName = default(string), Property property = default(Property), string alias = default(string), string valueId = default(string), object value = default(object), string valueType = default(string), string languageCode = default(string), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             PropertyId = propertyId;
@@ -4086,7 +4087,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Number', 'DateTime', 'Boolean', 'Integer'
+        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
         public string ValueType { get; set; }
@@ -5152,7 +5153,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// Initializes a new instance of the Property class.
         /// </summary>
         /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer'</param>
+        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
+        /// 'GeoPoint'</param>
         /// <param name="type">Possible values include: 'Product', 'Variation',
         /// 'Category', 'Catalog'</param>
         public Property(string catalogId = default(string), Catalog catalog = default(Catalog), string categoryId = default(string), Category category = default(Category), string name = default(string), bool? required = default(bool?), bool? dictionary = default(bool?), bool? multivalue = default(bool?), bool? multilanguage = default(bool?), string valueType = default(string), string type = default(string), IList<PropertyAttribute> attributes = default(IList<PropertyAttribute>), IList<PropertyDictionaryValue> dictionaryValues = default(IList<PropertyDictionaryValue>), IList<PropertyDisplayName> displayNames = default(IList<PropertyDisplayName>), IList<PropertyValidationRule> validationRules = default(IList<PropertyValidationRule>), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
@@ -5233,7 +5235,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Number', 'DateTime', 'Boolean', 'Integer'
+        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
         public string ValueType { get; set; }
@@ -7076,7 +7078,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// </summary>
         /// <param name="valueType">Possible values include: 'Undefined',
         /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
-        /// 'Boolean', 'Html'</param>
+        /// 'Boolean', 'Html', 'Image'</param>
         public DynamicObjectProperty(string objectId = default(string), IList<DynamicPropertyObjectValue> values = default(IList<DynamicPropertyObjectValue>), string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             ObjectId = objectId;
@@ -7156,7 +7158,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'Undefined', 'ShortText',
-        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html'
+        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html',
+        /// 'Image'
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
         public string ValueType { get; set; }
@@ -7450,7 +7453,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "listPriceWithTax")]
-        public double? ListPriceWithTax { get; private set; }
+        public double? ListPriceWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -7460,27 +7463,27 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "salePriceWithTax")]
-        public double? SalePriceWithTax { get; private set; }
+        public double? SalePriceWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "placedPrice")]
-        public double? PlacedPrice { get; private set; }
+        public double? PlacedPrice { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "placedPriceWithTax")]
-        public double? PlacedPriceWithTax { get; private set; }
+        public double? PlacedPriceWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "extendedPrice")]
-        public double? ExtendedPrice { get; private set; }
+        public double? ExtendedPrice { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "extendedPriceWithTax")]
-        public double? ExtendedPriceWithTax { get; private set; }
+        public double? ExtendedPriceWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -7490,17 +7493,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "discountAmountWithTax")]
-        public double? DiscountAmountWithTax { get; private set; }
+        public double? DiscountAmountWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "discountTotal")]
-        public double? DiscountTotal { get; private set; }
+        public double? DiscountTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "discountTotalWithTax")]
-        public double? DiscountTotalWithTax { get; private set; }
+        public double? DiscountTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -7510,7 +7513,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "feeWithTax")]
-        public double? FeeWithTax { get; private set; }
+        public double? FeeWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -7525,7 +7528,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "taxTotal")]
-        public double? TaxTotal { get; private set; }
+        public double? TaxTotal { get; set; }
 
         /// <summary>
         /// </summary>
@@ -7671,17 +7674,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "priceWithTax")]
-        public double? PriceWithTax { get; private set; }
+        public double? PriceWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "total")]
-        public double? Total { get; private set; }
+        public double? Total { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "totalWithTax")]
-        public double? TotalWithTax { get; private set; }
+        public double? TotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -7691,7 +7694,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "discountAmountWithTax")]
-        public double? DiscountAmountWithTax { get; private set; }
+        public double? DiscountAmountWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -7701,7 +7704,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "taxTotal")]
-        public double? TaxTotal { get; private set; }
+        public double? TaxTotal { get; set; }
 
         /// <summary>
         /// </summary>
@@ -7977,17 +7980,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "priceWithTax")]
-        public double? PriceWithTax { get; private set; }
+        public double? PriceWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "total")]
-        public double? Total { get; private set; }
+        public double? Total { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "totalWithTax")]
-        public double? TotalWithTax { get; private set; }
+        public double? TotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -7997,7 +8000,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "discountAmountWithTax")]
-        public double? DiscountAmountWithTax { get; private set; }
+        public double? DiscountAmountWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8007,7 +8010,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "feeWithTax")]
-        public double? FeeWithTax { get; private set; }
+        public double? FeeWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8017,7 +8020,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "taxTotal")]
-        public double? TaxTotal { get; private set; }
+        public double? TaxTotal { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8084,7 +8087,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the ShoppingCart class.
         /// </summary>
-        public ShoppingCart(string name = default(string), string storeId = default(string), string channelId = default(string), bool? isAnonymous = default(bool?), string customerId = default(string), string customerName = default(string), string organizationId = default(string), string currency = default(string), string languageCode = default(string), bool? taxIncluded = default(bool?), bool? isRecuring = default(bool?), string comment = default(string), string status = default(string), string weightUnit = default(string), double? weight = default(double?), string validationType = default(string), double? volumetricWeight = default(double?), double? total = default(double?), double? subTotal = default(double?), double? subTotalWithTax = default(double?), double? subTotalDiscount = default(double?), double? subTotalDiscountWithTax = default(double?), double? shippingTotal = default(double?), double? shippingTotalWithTax = default(double?), double? shippingSubTotal = default(double?), double? shippingSubTotalWithTax = default(double?), double? shippingDiscountTotal = default(double?), double? shippingDiscountTotalWithTax = default(double?), double? paymentTotal = default(double?), double? paymentTotalWithTax = default(double?), double? paymentSubTotal = default(double?), double? paymentSubTotalWithTax = default(double?), double? paymentDiscountTotal = default(double?), double? paymentDiscountTotalWithTax = default(double?), double? handlingTotal = default(double?), double? handlingTotalWithTax = default(double?), double? discountAmount = default(double?), double? discountTotal = default(double?), double? discountTotalWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), double? feeTotal = default(double?), double? feeTotalWithTax = default(double?), IList<Address> addresses = default(IList<Address>), IList<LineItem> items = default(IList<LineItem>), IList<Payment> payments = default(IList<Payment>), IList<Shipment> shipments = default(IList<Shipment>), string coupon = default(string), IList<Discount> discounts = default(IList<Discount>), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public ShoppingCart(string name = default(string), string storeId = default(string), string channelId = default(string), bool? isAnonymous = default(bool?), string customerId = default(string), string customerName = default(string), string organizationId = default(string), string currency = default(string), string languageCode = default(string), bool? taxIncluded = default(bool?), bool? isRecuring = default(bool?), string comment = default(string), string status = default(string), string weightUnit = default(string), double? weight = default(double?), string validationType = default(string), double? volumetricWeight = default(double?), double? total = default(double?), double? subTotal = default(double?), double? subTotalWithTax = default(double?), double? subTotalDiscount = default(double?), double? subTotalDiscountWithTax = default(double?), double? shippingTotal = default(double?), double? shippingTotalWithTax = default(double?), double? shippingSubTotal = default(double?), double? shippingSubTotalWithTax = default(double?), double? shippingDiscountTotal = default(double?), double? shippingDiscountTotalWithTax = default(double?), double? paymentTotal = default(double?), double? paymentTotalWithTax = default(double?), double? paymentSubTotal = default(double?), double? paymentSubTotalWithTax = default(double?), double? paymentDiscountTotal = default(double?), double? paymentDiscountTotalWithTax = default(double?), double? handlingTotal = default(double?), double? handlingTotalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), double? discountTotal = default(double?), double? discountTotalWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), double? feeTotal = default(double?), double? feeTotalWithTax = default(double?), IList<Address> addresses = default(IList<Address>), IList<LineItem> items = default(IList<LineItem>), IList<Payment> payments = default(IList<Payment>), IList<Shipment> shipments = default(IList<Shipment>), IList<string> coupons = default(IList<string>), string coupon = default(string), IList<Discount> discounts = default(IList<Discount>), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             StoreId = storeId;
@@ -8123,6 +8126,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
             HandlingTotal = handlingTotal;
             HandlingTotalWithTax = handlingTotalWithTax;
             DiscountAmount = discountAmount;
+            DiscountAmountWithTax = discountAmountWithTax;
             DiscountTotal = discountTotal;
             DiscountTotalWithTax = discountTotalWithTax;
             Fee = fee;
@@ -8133,6 +8137,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
             Items = items;
             Payments = payments;
             Shipments = shipments;
+            Coupons = coupons;
             Coupon = coupon;
             Discounts = discounts;
             TaxType = taxType;
@@ -8242,87 +8247,87 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "total")]
-        public double? Total { get; private set; }
+        public double? Total { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "subTotal")]
-        public double? SubTotal { get; private set; }
+        public double? SubTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "subTotalWithTax")]
-        public double? SubTotalWithTax { get; private set; }
+        public double? SubTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "subTotalDiscount")]
-        public double? SubTotalDiscount { get; private set; }
+        public double? SubTotalDiscount { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "subTotalDiscountWithTax")]
-        public double? SubTotalDiscountWithTax { get; private set; }
+        public double? SubTotalDiscountWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "shippingTotal")]
-        public double? ShippingTotal { get; private set; }
+        public double? ShippingTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "shippingTotalWithTax")]
-        public double? ShippingTotalWithTax { get; private set; }
+        public double? ShippingTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "shippingSubTotal")]
-        public double? ShippingSubTotal { get; private set; }
+        public double? ShippingSubTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "shippingSubTotalWithTax")]
-        public double? ShippingSubTotalWithTax { get; private set; }
+        public double? ShippingSubTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "shippingDiscountTotal")]
-        public double? ShippingDiscountTotal { get; private set; }
+        public double? ShippingDiscountTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "shippingDiscountTotalWithTax")]
-        public double? ShippingDiscountTotalWithTax { get; private set; }
+        public double? ShippingDiscountTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "paymentTotal")]
-        public double? PaymentTotal { get; private set; }
+        public double? PaymentTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "paymentTotalWithTax")]
-        public double? PaymentTotalWithTax { get; private set; }
+        public double? PaymentTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "paymentSubTotal")]
-        public double? PaymentSubTotal { get; private set; }
+        public double? PaymentSubTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "paymentSubTotalWithTax")]
-        public double? PaymentSubTotalWithTax { get; private set; }
+        public double? PaymentSubTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "paymentDiscountTotal")]
-        public double? PaymentDiscountTotal { get; private set; }
+        public double? PaymentDiscountTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "paymentDiscountTotalWithTax")]
-        public double? PaymentDiscountTotalWithTax { get; private set; }
+        public double? PaymentDiscountTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8341,13 +8346,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "discountAmountWithTax")]
+        public double? DiscountAmountWithTax { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "discountTotal")]
-        public double? DiscountTotal { get; private set; }
+        public double? DiscountTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "discountTotalWithTax")]
-        public double? DiscountTotalWithTax { get; private set; }
+        public double? DiscountTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8357,17 +8367,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "feeWithTax")]
-        public double? FeeWithTax { get; private set; }
+        public double? FeeWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "feeTotal")]
-        public double? FeeTotal { get; private set; }
+        public double? FeeTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "feeTotalWithTax")]
-        public double? FeeTotalWithTax { get; private set; }
+        public double? FeeTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8391,6 +8401,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "coupons")]
+        public IList<string> Coupons { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "coupon")]
         public string Coupon { get; set; }
 
@@ -8407,7 +8422,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "taxTotal")]
-        public double? TaxTotal { get; private set; }
+        public double? TaxTotal { get; set; }
 
         /// <summary>
         /// </summary>

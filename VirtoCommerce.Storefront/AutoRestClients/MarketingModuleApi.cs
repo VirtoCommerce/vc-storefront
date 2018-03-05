@@ -253,7 +253,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         {
             MarketingModuleDynamicContent = new MarketingModuleDynamicContent(this);
             MarketingModulePromotion = new MarketingModulePromotion(this);
-            BaseUri = new System.Uri("http://localhost/admin");
+            BaseUri = new System.Uri("http://localhost/platform2");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
@@ -8107,7 +8107,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// </summary>
         /// <param name="valueType">Possible values include: 'Undefined',
         /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
-        /// 'Boolean', 'Html'</param>
+        /// 'Boolean', 'Html', 'Image'</param>
         public DynamicObjectProperty(string objectId = default(string), IList<DynamicPropertyObjectValue> values = default(IList<DynamicPropertyObjectValue>), string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             ObjectId = objectId;
@@ -8187,7 +8187,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'Undefined', 'ShortText',
-        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html'
+        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html',
+        /// 'Image'
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
         public string ValueType { get; set; }
@@ -9476,9 +9477,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// <param name="coupons">List of coupons codes which may be used for
         /// activate that promotion</param>
         /// <param name="priority">Used for choosing in combination</param>
+        /// <param name="isExclusive">If a promotion with this setting is
+        /// applied, no other promotions can be applied to the order.</param>
+        /// <param name="isAllowCombiningWithSelf">If this flag is set to true,
+        /// it allow of this promotion combining with self.
+        /// Special for case when evaluate rewards for multiple coupons from
+        /// same promotion.</param>
         /// <param name="dynamicExpression">Dynamic conditions tree determine
         /// the applicability of this promotion and reward definition</param>
-        public Promotion(string type = default(string), string name = default(string), string store = default(string), string catalog = default(string), string description = default(string), bool? isActive = default(bool?), int? maxUsageCount = default(int?), int? maxPersonalUsageCount = default(int?), IList<string> coupons = default(IList<string>), int? priority = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), PromoDynamicExpressionTree dynamicExpression = default(PromoDynamicExpressionTree), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Promotion(string type = default(string), string name = default(string), string store = default(string), string catalog = default(string), string description = default(string), bool? isActive = default(bool?), int? maxUsageCount = default(int?), int? maxPersonalUsageCount = default(int?), IList<string> coupons = default(IList<string>), int? priority = default(int?), bool? isExclusive = default(bool?), bool? isAllowCombiningWithSelf = default(bool?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), PromoDynamicExpressionTree dynamicExpression = default(PromoDynamicExpressionTree), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Type = type;
             Name = name;
@@ -9490,6 +9497,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
             MaxPersonalUsageCount = maxPersonalUsageCount;
             Coupons = coupons;
             Priority = priority;
+            IsExclusive = isExclusive;
+            IsAllowCombiningWithSelf = isAllowCombiningWithSelf;
             StartDate = startDate;
             EndDate = endDate;
             DynamicExpression = dynamicExpression;
@@ -9566,6 +9575,22 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "priority")]
         public int? Priority { get; set; }
+
+        /// <summary>
+        /// Gets or sets if a promotion with this setting is applied, no other
+        /// promotions can be applied to the order.
+        /// </summary>
+        [JsonProperty(PropertyName = "isExclusive")]
+        public bool? IsExclusive { get; set; }
+
+        /// <summary>
+        /// Gets or sets if this flag is set to true, it allow of this
+        /// promotion combining with self.
+        /// Special for case when evaluate rewards for multiple coupons from
+        /// same promotion.
+        /// </summary>
+        [JsonProperty(PropertyName = "isAllowCombiningWithSelf")]
+        public bool? IsAllowCombiningWithSelf { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9820,7 +9845,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the PromotionEvaluationContext class.
         /// </summary>
-        public PromotionEvaluationContext(IList<string> refusedGiftIds = default(IList<string>), string storeId = default(string), string currency = default(string), string customerId = default(string), bool? isRegisteredUser = default(bool?), bool? isFirstTimeBuyer = default(bool?), bool? isEveryone = default(bool?), double? cartTotal = default(double?), string shipmentMethodCode = default(string), string shipmentMethodOption = default(string), double? shipmentMethodPrice = default(double?), IList<string> availableShipmentMethodCodes = default(IList<string>), string paymentMethodCode = default(string), double? paymentMethodPrice = default(double?), IList<string> availablePaymentMethodCodes = default(IList<string>), string coupon = default(string), IList<ProductPromoEntry> cartPromoEntries = default(IList<ProductPromoEntry>), IList<ProductPromoEntry> promoEntries = default(IList<ProductPromoEntry>), ProductPromoEntry promoEntry = default(ProductPromoEntry), object contextObject = default(object), string geoCity = default(string), string geoState = default(string), string geoCountry = default(string), string geoContinent = default(string), string geoZipCode = default(string), string geoConnectionType = default(string), string geoTimeZone = default(string), string geoIpRoutingType = default(string), string geoIspSecondLevel = default(string), string geoIspTopLevel = default(string), int? shopperAge = default(int?), string shopperGender = default(string), string language = default(string), IList<string> userGroups = default(IList<string>), string shopperSearchedPhraseInStore = default(string), string shopperSearchedPhraseOnInternet = default(string), string currentUrl = default(string), string referredUrl = default(string))
+        public PromotionEvaluationContext(IList<string> refusedGiftIds = default(IList<string>), string storeId = default(string), string currency = default(string), string customerId = default(string), bool? isRegisteredUser = default(bool?), bool? isFirstTimeBuyer = default(bool?), bool? isEveryone = default(bool?), double? cartTotal = default(double?), string shipmentMethodCode = default(string), string shipmentMethodOption = default(string), double? shipmentMethodPrice = default(double?), IList<string> availableShipmentMethodCodes = default(IList<string>), string paymentMethodCode = default(string), double? paymentMethodPrice = default(double?), IList<string> availablePaymentMethodCodes = default(IList<string>), string coupon = default(string), IList<string> coupons = default(IList<string>), IList<ProductPromoEntry> cartPromoEntries = default(IList<ProductPromoEntry>), IList<ProductPromoEntry> promoEntries = default(IList<ProductPromoEntry>), ProductPromoEntry promoEntry = default(ProductPromoEntry), object contextObject = default(object), string geoCity = default(string), string geoState = default(string), string geoCountry = default(string), string geoContinent = default(string), string geoZipCode = default(string), string geoConnectionType = default(string), string geoTimeZone = default(string), string geoIpRoutingType = default(string), string geoIspSecondLevel = default(string), string geoIspTopLevel = default(string), int? shopperAge = default(int?), string shopperGender = default(string), string language = default(string), IList<string> userGroups = default(IList<string>), string shopperSearchedPhraseInStore = default(string), string shopperSearchedPhraseOnInternet = default(string), string currentUrl = default(string), string referredUrl = default(string))
         {
             RefusedGiftIds = refusedGiftIds;
             StoreId = storeId;
@@ -9838,6 +9863,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
             PaymentMethodPrice = paymentMethodPrice;
             AvailablePaymentMethodCodes = availablePaymentMethodCodes;
             Coupon = coupon;
+            Coupons = coupons;
             CartPromoEntries = cartPromoEntries;
             PromoEntries = promoEntries;
             PromoEntry = promoEntry;
@@ -9947,6 +9973,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "coupon")]
         public string Coupon { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "coupons")]
+        public IList<string> Coupons { get; set; }
 
         /// <summary>
         /// </summary>
@@ -10295,9 +10326,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the CouponSearchCriteria class.
         /// </summary>
-        public CouponSearchCriteria(string code = default(string), string promotionId = default(string), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public CouponSearchCriteria(string code = default(string), IList<string> codes = default(IList<string>), string promotionId = default(string), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
             Code = code;
+            Codes = codes;
             PromotionId = promotionId;
             ResponseGroup = responseGroup;
             ObjectType = objectType;
@@ -10321,6 +10353,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "code")]
         public string Code { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "codes")]
+        public IList<string> Codes { get; set; }
 
         /// <summary>
         /// </summary>
