@@ -277,7 +277,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             CatalogModuleProducts = new CatalogModuleProducts(this);
             CatalogModuleProperties = new CatalogModuleProperties(this);
             CatalogModuleSearch = new CatalogModuleSearch(this);
-            BaseUri = new System.Uri("http://localhost/platform2");
+            BaseUri = new System.Uri("http://localhost/admin");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,

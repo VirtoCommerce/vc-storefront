@@ -247,7 +247,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi
         private void Initialize()
         {
             CartModule = new CartModule(this);
-            BaseUri = new System.Uri("http://localhost/platform2");
+            BaseUri = new System.Uri("http://localhost/admin");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,

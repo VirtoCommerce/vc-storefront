@@ -247,7 +247,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
         private void Initialize()
         {
             PricingModule = new PricingModule(this);
-            BaseUri = new System.Uri("http://localhost/platform2");
+            BaseUri = new System.Uri("http://localhost/admin");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,

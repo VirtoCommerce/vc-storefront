@@ -253,7 +253,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         {
             MarketingModuleDynamicContent = new MarketingModuleDynamicContent(this);
             MarketingModulePromotion = new MarketingModulePromotion(this);
-            BaseUri = new System.Uri("http://localhost/platform2");
+            BaseUri = new System.Uri("http://localhost/admin");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
