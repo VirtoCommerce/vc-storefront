@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.Storefront.Common;
+
+using VirtoCommerce.Storefront.Controllers.Api;
+
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Catalog;
@@ -170,6 +173,11 @@ namespace VirtoCommerce.Storefront.Domain
         public static cartDto.DynamicObjectProperty ToCartDynamicPropertyDto(this DynamicProperty property)
         {
             return CartConverterInstance.ToCartDynamicPropertyDto(property);
+        }
+
+        public static cartDto.ShoppingCartSearchCriteria ToSearchCriteriaDto(this ShoppingCartSearchCriteria criteria)
+        {
+            return CartConverterInstance.ToSearchCriteriaDto(criteria);
         }
     }
 
@@ -867,6 +875,23 @@ namespace VirtoCommerce.Storefront.Domain
             result.Quantity = lineItem.Quantity;
             result.InStockQuantity = lineItem.InStockQuantity;
             result.Variations = null; // TODO
+
+            return result;
+        }
+
+        public virtual cartDto.ShoppingCartSearchCriteria ToSearchCriteriaDto(ShoppingCartSearchCriteria criteria)
+        {
+            var result = new cartDto.ShoppingCartSearchCriteria();
+
+            result.Name = criteria.Name;
+            result.StoreId = criteria.StoreId;
+            result.CustomerId = criteria.Customer?.Id;
+            result.Currency = criteria.Currency?.Code;
+            //result.LanguageCode = criteria.Language?.CultureName;
+            
+            result.Skip = criteria.Start;
+            result.Take = criteria.PageSize;
+            result.Sort = criteria.Sort;
 
             return result;
         }

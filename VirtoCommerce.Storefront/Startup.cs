@@ -15,6 +15,7 @@ using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Binders;
 using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Domain;
+using VirtoCommerce.Storefront.Domain.Cart;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
@@ -93,6 +94,7 @@ namespace VirtoCommerce.Storefront
             services.AddTransient<IQuoteRequestBuilder, QuoteRequestBuilder>();
             services.AddTransient<ICartBuilder, CartBuilder>();
             services.AddSingleton<IBlobChangesWatcher, BlobChangesWatcher>();
+            services.AddSingleton<ICartService, CartService>();
 
             //Register events framework dependencies
             services.AddSingleton(new InProcessBus());

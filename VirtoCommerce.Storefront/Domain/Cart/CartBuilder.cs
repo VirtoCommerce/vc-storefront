@@ -38,8 +38,10 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly ITaxEvaluator _taxEvaluator;
         private readonly ISubscriptionService _subscriptionService;
 
+        public readonly ICartService _cartService;
+
         public CartBuilder(IWorkContextAccessor workContextAccessor, ICartModule cartApi, ICatalogService catalogSearchService,
-            IMemoryCache memoryCache, IPromotionEvaluator promotionEvaluator, ITaxEvaluator taxEvaluator, ISubscriptionService subscriptionService)
+            IMemoryCache memoryCache, IPromotionEvaluator promotionEvaluator, ITaxEvaluator taxEvaluator, ISubscriptionService subscriptionService, ICartService cartService)
         {
             _cartApi = cartApi;
             _catalogService = catalogSearchService;
@@ -48,6 +50,7 @@ namespace VirtoCommerce.Storefront.Domain
             _promotionEvaluator = promotionEvaluator;
             _taxEvaluator = taxEvaluator;
             _subscriptionService = subscriptionService;
+            _cartService = cartService;
         }
 
         #region ICartBuilder Members
@@ -81,10 +84,8 @@ namespace VirtoCommerce.Storefront.Domain
                needReevaluate = true;
 
                var cartSearchCriteria = CreateCartSearchCriteria(cartName, store, user, language, currency);
-               var cartSearchResult = await _cartApi.SearchAsync(cartSearchCriteria);
-
-               var cartDto = cartSearchResult.Results.FirstOrDefault();
-               var cart = cartDto?.ToShoppingCart(currency, language, user) ?? CreateCart(cartName, store, user, language, currency);
+               var cartSearchResult = await _cartService.SearchShoppingCartsAsync(cartSearchCriteria);
+               var cart = cartSearchResult.FirstOrDefault() ?? CreateCart(cartName, store, user, language, currency);
 
                //Load cart dependencies
                await PrepareCartAsync(cart, store);
@@ -449,14 +450,15 @@ namespace VirtoCommerce.Storefront.Domain
 
         #endregion      
 
-        protected virtual cartModel.ShoppingCartSearchCriteria CreateCartSearchCriteria(string cartName, Store store, User user, Language language, Currency currency)
+        protected virtual ShoppingCartSearchCriteria CreateCartSearchCriteria(string cartName, Store store, User user, Language language, Currency currency)
         {
-            return new cartModel.ShoppingCartSearchCriteria
+            return new ShoppingCartSearchCriteria
             {
                 StoreId = store.Id,
-                CustomerId = user.Id,
+                Customer = user,
                 Name = cartName,
-                Currency = currency.Code,
+                Currency = currency,
+                Language = language
             };
         }
 
