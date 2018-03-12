@@ -14,7 +14,7 @@ namespace VirtoCommerce.Storefront.Model
 
         public static decimal TaxPercentRound(decimal percent)
         {
-            return Math.Round(percent, 3, MidpointRounding.AwayFromZero);
+            return Math.Round(percent, 4, MidpointRounding.AwayFromZero);
         }
     }
 }

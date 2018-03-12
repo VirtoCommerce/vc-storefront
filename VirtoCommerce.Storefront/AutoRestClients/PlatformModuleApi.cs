@@ -10,8 +10,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -343,8 +345,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -444,6 +448,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -765,6 +770,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <param name='name'>
         /// Image name.
         /// </param>
+        /// <param name='uploadedFile'>
+        /// Upload File
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -786,7 +794,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<BlobInfo>>> UploadAssetWithHttpMessagesAsync(string folderUrl, string url = default(string), string name = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<BlobInfo>>> UploadAssetWithHttpMessagesAsync(string folderUrl, string url = default(string), string name = default(string), Stream uploadedFile = default(Stream), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (folderUrl == null)
             {
@@ -802,6 +810,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 tracingParameters.Add("folderUrl", folderUrl);
                 tracingParameters.Add("url", url);
                 tracingParameters.Add("name", name);
+                tracingParameters.Add("uploadedFile", uploadedFile);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "UploadAsset", tracingParameters);
             }
@@ -847,6 +856,22 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
+            MultipartFormDataContent _multiPartContent = new MultipartFormDataContent();
+            if (uploadedFile != null)
+            {
+                 StreamContent _uploadedFile = new StreamContent(uploadedFile);
+                _uploadedFile.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                FileStream _uploadedFileAsFileStream = uploadedFile as FileStream;
+                if (_uploadedFileAsFileStream != null)
+                {
+                    ContentDispositionHeaderValue _contentDispositionHeaderValue = new ContentDispositionHeaderValue("form-data");
+                    _contentDispositionHeaderValue.Name = "uploadedFile";
+                    _contentDispositionHeaderValue.FileName = _uploadedFileAsFileStream.Name;
+                    _uploadedFile.Headers.ContentDisposition = _contentDispositionHeaderValue;
+                }
+                _multiPartContent.Add(_uploadedFile, "uploadedFile");
+            }
+            _httpRequest.Content = _multiPartContent;
             // Set Credentials
             if (Client.Credentials != null)
             {
@@ -1124,7 +1149,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(folder, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -1193,8 +1218,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -1258,6 +1285,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <param name='name'>
         /// Image name.
         /// </param>
+        /// <param name='uploadedFile'>
+        /// Upload File
+        /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
         /// </param>
@@ -1273,7 +1303,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<IList<BlobInfo>>> UploadAssetWithHttpMessagesAsync(string folderUrl, string url = default(string), string name = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<BlobInfo>>> UploadAssetWithHttpMessagesAsync(string folderUrl, string url = default(string), string name = default(string), Stream uploadedFile = default(Stream), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Delete blobs by urls
         /// </summary>
@@ -1324,8 +1354,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -1421,9 +1453,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='name'>
             /// Image name.
             /// </param>
-            public static IList<BlobInfo> UploadAsset(this IAssets operations, string folderUrl, string url = default(string), string name = default(string))
+            /// <param name='uploadedFile'>
+            /// Upload File
+            /// </param>
+            public static IList<BlobInfo> UploadAsset(this IAssets operations, string folderUrl, string url = default(string), string name = default(string), Stream uploadedFile = default(Stream))
             {
-                return operations.UploadAssetAsync(folderUrl, url, name).GetAwaiter().GetResult();
+                return operations.UploadAssetAsync(folderUrl, url, name, uploadedFile).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -1444,12 +1479,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='name'>
             /// Image name.
             /// </param>
+            /// <param name='uploadedFile'>
+            /// Upload File
+            /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<BlobInfo>> UploadAssetAsync(this IAssets operations, string folderUrl, string url = default(string), string name = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<BlobInfo>> UploadAssetAsync(this IAssets operations, string folderUrl, string url = default(string), string name = default(string), Stream uploadedFile = default(Stream), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.UploadAssetWithHttpMessagesAsync(folderUrl, url, name, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.UploadAssetWithHttpMessagesAsync(folderUrl, url, name, uploadedFile, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -1530,6 +1568,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -1910,7 +1949,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(property, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -2068,7 +2107,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(property, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -2487,7 +2526,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(items, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -2710,8 +2749,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -2911,8 +2952,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -3227,6 +3270,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -3416,8 +3460,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -3465,8 +3511,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -3529,6 +3577,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -3829,8 +3878,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -3888,8 +3939,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -3974,6 +4027,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -4312,7 +4366,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(moduleDescriptors, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -4458,7 +4512,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(moduleDescriptors, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -4730,7 +4784,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(modules, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -4876,7 +4930,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(modules, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -5194,8 +5248,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -5384,8 +5440,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -5684,6 +5742,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -6355,7 +6414,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(notificationTemplate, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -6807,7 +6866,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(request, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -6961,7 +7020,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(request, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -7055,6 +7114,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <param name='count'>
         /// Page setting count
         /// </param>
+        /// <param name='sort'>
+        /// Sort expression
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -7076,7 +7138,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<SearchNotificationsResult>> GetObjectNotificationJournalWithHttpMessagesAsync(string objectId, string objectTypeId, int start, int count, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<SearchNotificationsResult>> GetObjectNotificationJournalWithHttpMessagesAsync(string objectId, string objectTypeId, int start, int count, string sort, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (objectId == null)
             {
@@ -7085,6 +7147,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             if (objectTypeId == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "objectTypeId");
+            }
+            if (sort == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "sort");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -7097,6 +7163,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 tracingParameters.Add("objectTypeId", objectTypeId);
                 tracingParameters.Add("start", start);
                 tracingParameters.Add("count", count);
+                tracingParameters.Add("sort", sort);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetObjectNotificationJournal", tracingParameters);
             }
@@ -7108,6 +7175,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             List<string> _queryParameters = new List<string>();
             _queryParameters.Add(string.Format("start={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(start, Client.SerializationSettings).Trim('"'))));
             _queryParameters.Add(string.Format("count={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(count, Client.SerializationSettings).Trim('"'))));
+            if (sort != null)
+            {
+                _queryParameters.Add(string.Format("sort={0}", System.Uri.EscapeDataString(sort)));
+            }
             if (_queryParameters.Count > 0)
             {
                 _url += "?" + string.Join("&", _queryParameters);
@@ -7220,6 +7291,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <param name='count'>
         /// Page setting count
         /// </param>
+        /// <param name='sort'>
+        /// Sort expression
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -7232,11 +7306,21 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<SearchNotificationsResult>> GetNotificationJournalWithHttpMessagesAsync(int start, int count, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<SearchNotificationsResult>> GetNotificationJournalWithHttpMessagesAsync(int start, int count, string sort, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (sort == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "sort");
+            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -7246,6 +7330,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("start", start);
                 tracingParameters.Add("count", count);
+                tracingParameters.Add("sort", sort);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetNotificationJournal", tracingParameters);
             }
@@ -7255,6 +7340,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             List<string> _queryParameters = new List<string>();
             _queryParameters.Add(string.Format("start={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(start, Client.SerializationSettings).Trim('"'))));
             _queryParameters.Add(string.Format("count={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(count, Client.SerializationSettings).Trim('"'))));
+            if (sort != null)
+            {
+                _queryParameters.Add(string.Format("sort={0}", System.Uri.EscapeDataString(sort)));
+            }
             if (_queryParameters.Count > 0)
             {
                 _url += "?" + string.Join("&", _queryParameters);
@@ -7563,7 +7652,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(ids, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -7632,8 +7721,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -7902,6 +7993,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <param name='count'>
         /// Page setting count
         /// </param>
+        /// <param name='sort'>
+        /// Sort expression
+        /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
         /// </param>
@@ -7917,7 +8011,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<SearchNotificationsResult>> GetObjectNotificationJournalWithHttpMessagesAsync(string objectId, string objectTypeId, int start, int count, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<SearchNotificationsResult>> GetObjectNotificationJournalWithHttpMessagesAsync(string objectId, string objectTypeId, int start, int count, string sort, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Get all notification journal
         /// </summary>
@@ -7933,6 +8027,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <param name='count'>
         /// Page setting count
         /// </param>
+        /// <param name='sort'>
+        /// Sort expression
+        /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
         /// </param>
@@ -7945,7 +8042,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<SearchNotificationsResult>> GetNotificationJournalWithHttpMessagesAsync(int start, int count, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse<SearchNotificationsResult>> GetNotificationJournalWithHttpMessagesAsync(int start, int count, string sort, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Get sending notification
         /// </summary>
@@ -8001,8 +8101,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -8428,9 +8530,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='count'>
             /// Page setting count
             /// </param>
-            public static SearchNotificationsResult GetObjectNotificationJournal(this INotifications operations, string objectId, string objectTypeId, int start, int count)
+            /// <param name='sort'>
+            /// Sort expression
+            /// </param>
+            public static SearchNotificationsResult GetObjectNotificationJournal(this INotifications operations, string objectId, string objectTypeId, int start, int count, string sort)
             {
-                return operations.GetObjectNotificationJournalAsync(objectId, objectTypeId, start, count).GetAwaiter().GetResult();
+                return operations.GetObjectNotificationJournalAsync(objectId, objectTypeId, start, count, sort).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -8457,12 +8562,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='count'>
             /// Page setting count
             /// </param>
+            /// <param name='sort'>
+            /// Sort expression
+            /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<SearchNotificationsResult> GetObjectNotificationJournalAsync(this INotifications operations, string objectId, string objectTypeId, int start, int count, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<SearchNotificationsResult> GetObjectNotificationJournalAsync(this INotifications operations, string objectId, string objectTypeId, int start, int count, string sort, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetObjectNotificationJournalWithHttpMessagesAsync(objectId, objectTypeId, start, count, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetObjectNotificationJournalWithHttpMessagesAsync(objectId, objectTypeId, start, count, sort, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -8486,9 +8594,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='count'>
             /// Page setting count
             /// </param>
-            public static SearchNotificationsResult GetNotificationJournal(this INotifications operations, int start, int count)
+            /// <param name='sort'>
+            /// Sort expression
+            /// </param>
+            public static SearchNotificationsResult GetNotificationJournal(this INotifications operations, int start, int count, string sort)
             {
-                return operations.GetNotificationJournalAsync(start, count).GetAwaiter().GetResult();
+                return operations.GetNotificationJournalAsync(start, count, sort).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -8509,12 +8620,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='count'>
             /// Page setting count
             /// </param>
+            /// <param name='sort'>
+            /// Sort expression
+            /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<SearchNotificationsResult> GetNotificationJournalAsync(this INotifications operations, int start, int count, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<SearchNotificationsResult> GetNotificationJournalAsync(this INotifications operations, int start, int count, string sort, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetNotificationJournalWithHttpMessagesAsync(start, count, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetNotificationJournalWithHttpMessagesAsync(start, count, sort, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -8602,6 +8716,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -8831,7 +8946,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(userProfile, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -8900,8 +9015,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -8961,8 +9078,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -9048,6 +9167,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -9155,7 +9275,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -9368,8 +9488,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -9433,8 +9555,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -9525,6 +9649,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -9636,7 +9761,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(model, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -10138,7 +10263,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(role, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -10284,7 +10409,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(request, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -10858,7 +10983,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(account, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -10986,7 +11111,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(user, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -11132,7 +11257,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(request, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -11887,7 +12012,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(user, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -12041,7 +12166,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(changePassword, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -12195,7 +12320,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(resetPassword, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -12348,7 +12473,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(resetPassword, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -12564,6 +12689,288 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             return _result;
         }
 
+        /// <summary>
+        /// Checks if user locked
+        /// </summary>
+        /// <param name='id'>
+        /// User id
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<UserLockedResult>> IsUserLockedAsyncWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (id == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "id");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("id", id);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "IsUserLockedAsync", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/security/users/{id}/locked").ToString();
+            _url = _url.Replace("{id}", System.Uri.EscapeDataString(id));
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("GET");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<UserLockedResult>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<UserLockedResult>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Unlock user
+        /// </summary>
+        /// <param name='id'>
+        /// &amp;gt;User id
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<SecurityResult>> UnlockUserAsyncWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (id == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "id");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("id", id);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "UnlockUserAsync", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/security/users/{id}/unlock").ToString();
+            _url = _url.Replace("{id}", System.Uri.EscapeDataString(id));
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<SecurityResult>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<SecurityResult>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
     }
 }
 // Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
@@ -12578,8 +12985,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -13042,6 +13451,50 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// Thrown when a required parameter is null
         /// </exception>
         Task<HttpOperationResponse<SecurityResult>> RequestPasswordResetWithHttpMessagesAsync(string loginOrEmail, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Checks if user locked
+        /// </summary>
+        /// <param name='id'>
+        /// User id
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse<UserLockedResult>> IsUserLockedAsyncWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Unlock user
+        /// </summary>
+        /// <param name='id'>
+        /// &amp;gt;User id
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse<SecurityResult>> UnlockUserAsyncWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
@@ -13056,8 +13509,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -13789,6 +14244,74 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 }
             }
 
+            /// <summary>
+            /// Checks if user locked
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='id'>
+            /// User id
+            /// </param>
+            public static UserLockedResult IsUserLockedAsync(this ISecurity operations, string id)
+            {
+                return operations.IsUserLockedAsyncAsync(id).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Checks if user locked
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='id'>
+            /// User id
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<UserLockedResult> IsUserLockedAsyncAsync(this ISecurity operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.IsUserLockedAsyncWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Unlock user
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='id'>
+            /// &amp;gt;User id
+            /// </param>
+            public static SecurityResult UnlockUserAsync(this ISecurity operations, string id)
+            {
+                return operations.UnlockUserAsyncAsync(id).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Unlock user
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='id'>
+            /// &amp;gt;User id
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<SecurityResult> UnlockUserAsyncAsync(this ISecurity operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.UnlockUserAsyncWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
     }
 }
 // Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
@@ -13806,6 +14329,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -14035,7 +14559,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(settings, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -14512,8 +15036,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -14633,8 +15159,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -14812,9 +15340,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -14893,9 +15423,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -14992,9 +15524,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -15061,9 +15595,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -15118,9 +15654,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -15142,7 +15680,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         /// <param name="valueType">Possible values include: 'Undefined',
         /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
-        /// 'Boolean', 'Html'</param>
+        /// 'Boolean', 'Html', 'Image'</param>
         public DynamicProperty(string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
@@ -15210,7 +15748,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'Undefined', 'ShortText',
-        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html'
+        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html',
+        /// 'Image'
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
         public string ValueType { get; set; }
@@ -15258,9 +15797,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -15317,9 +15858,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -15412,9 +15955,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -15475,9 +16020,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -15532,9 +16079,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -15697,9 +16246,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -15754,9 +16305,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -15776,11 +16329,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the ModulePushNotification class.
         /// </summary>
-        public ModulePushNotification(IList<ProgressMessage> progressLog = default(IList<ProgressMessage>), System.DateTime? started = default(System.DateTime?), System.DateTime? finished = default(System.DateTime?), string id = default(string), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?))
+        public ModulePushNotification(System.DateTime? started = default(System.DateTime?), System.DateTime? finished = default(System.DateTime?), IList<ProgressMessage> progressLog = default(IList<ProgressMessage>), string id = default(string), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?))
         {
-            ProgressLog = progressLog;
             Started = started;
             Finished = finished;
+            ProgressLog = progressLog;
             Id = id;
             Creator = creator;
             Created = created;
@@ -15799,11 +16352,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "progressLog")]
-        public IList<ProgressMessage> ProgressLog { get; set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "started")]
         public System.DateTime? Started { get; set; }
 
@@ -15811,6 +16359,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "finished")]
         public System.DateTime? Finished { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "progressLog")]
+        public IList<ProgressMessage> ProgressLog { get; set; }
 
         /// <summary>
         /// </summary>
@@ -15865,9 +16418,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -15889,11 +16444,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// Initializes a new instance of the ModuleAutoInstallPushNotification
         /// class.
         /// </summary>
-        public ModuleAutoInstallPushNotification(IList<ProgressMessage> progressLog = default(IList<ProgressMessage>), System.DateTime? started = default(System.DateTime?), System.DateTime? finished = default(System.DateTime?), string id = default(string), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?))
+        public ModuleAutoInstallPushNotification(System.DateTime? started = default(System.DateTime?), System.DateTime? finished = default(System.DateTime?), IList<ProgressMessage> progressLog = default(IList<ProgressMessage>), string id = default(string), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?))
         {
-            ProgressLog = progressLog;
             Started = started;
             Finished = finished;
+            ProgressLog = progressLog;
             Id = id;
             Creator = creator;
             Created = created;
@@ -15912,11 +16467,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "progressLog")]
-        public IList<ProgressMessage> ProgressLog { get; set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "started")]
         public System.DateTime? Started { get; set; }
 
@@ -15924,6 +16474,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "finished")]
         public System.DateTime? Finished { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "progressLog")]
+        public IList<ProgressMessage> ProgressLog { get; set; }
 
         /// <summary>
         /// </summary>
@@ -15978,9 +16533,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -16176,9 +16733,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -16295,9 +16854,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -16394,9 +16955,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -16469,9 +17032,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -16530,9 +17095,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -16587,9 +17154,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -16644,9 +17213,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -16796,9 +17367,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -16853,9 +17426,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -16942,9 +17517,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -17035,9 +17612,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -17100,9 +17679,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -17163,9 +17744,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -17220,9 +17803,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -17283,9 +17868,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -17370,9 +17957,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -17439,9 +18028,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -17523,9 +18114,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -17626,9 +18219,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -17650,12 +18245,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         /// <param name="userState">Possible values include: 'PendingApproval',
         /// 'Approved', 'Rejected'</param>
-        public ApplicationUserExtended(string id = default(string), string userName = default(string), string email = default(string), string phoneNumber = default(string), string storeId = default(string), string memberId = default(string), string icon = default(string), bool? isAdministrator = default(bool?), string userType = default(string), string userState = default(string), string password = default(string), string passwordHash = default(string), string securityStamp = default(string), IList<ApplicationUserLogin> logins = default(IList<ApplicationUserLogin>), IList<Role> roles = default(IList<Role>), IList<string> permissions = default(IList<string>), IList<ApiAccount> apiAccounts = default(IList<ApiAccount>), IList<OperationLog> operationsLog = default(IList<OperationLog>))
+        public ApplicationUserExtended(string id = default(string), string userName = default(string), string email = default(string), string phoneNumber = default(string), bool? emailConfirmed = default(bool?), bool? phoneNumberConfirmed = default(bool?), bool? twoFactorEnabled = default(bool?), System.DateTime? lockoutEndDateUtc = default(System.DateTime?), bool? lockoutEnabled = default(bool?), int? accessFailedCount = default(int?), string storeId = default(string), string memberId = default(string), string icon = default(string), bool? isAdministrator = default(bool?), string userType = default(string), string userState = default(string), string password = default(string), string passwordHash = default(string), string securityStamp = default(string), IList<ApplicationUserLogin> logins = default(IList<ApplicationUserLogin>), IList<Role> roles = default(IList<Role>), IList<string> permissions = default(IList<string>), IList<ApiAccount> apiAccounts = default(IList<ApiAccount>), IList<OperationLog> operationsLog = default(IList<OperationLog>))
         {
             Id = id;
             UserName = userName;
             Email = email;
             PhoneNumber = phoneNumber;
+            EmailConfirmed = emailConfirmed;
+            PhoneNumberConfirmed = phoneNumberConfirmed;
+            TwoFactorEnabled = twoFactorEnabled;
+            LockoutEndDateUtc = lockoutEndDateUtc;
+            LockoutEnabled = lockoutEnabled;
+            AccessFailedCount = accessFailedCount;
             StoreId = storeId;
             MemberId = memberId;
             Icon = icon;
@@ -17697,6 +18298,36 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "phoneNumber")]
         public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "emailConfirmed")]
+        public bool? EmailConfirmed { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "phoneNumberConfirmed")]
+        public bool? PhoneNumberConfirmed { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "twoFactorEnabled")]
+        public bool? TwoFactorEnabled { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "lockoutEndDateUtc")]
+        public System.DateTime? LockoutEndDateUtc { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "lockoutEnabled")]
+        public bool? LockoutEnabled { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "accessFailedCount")]
+        public int? AccessFailedCount { get; set; }
 
         /// <summary>
         /// </summary>
@@ -17783,9 +18414,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -17846,9 +18479,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -17903,9 +18538,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -17978,9 +18615,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -18035,9 +18674,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -18092,9 +18733,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -18143,9 +18786,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -18206,9 +18851,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
@@ -18263,9 +18910,64 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
+
+    public partial class UserLockedResult
+    {
+        /// <summary>
+        /// Initializes a new instance of the UserLockedResult class.
+        /// </summary>
+        public UserLockedResult()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the UserLockedResult class.
+        /// </summary>
+        public UserLockedResult(bool? locked = default(bool?))
+        {
+            Locked = locked;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "locked")]
+        public bool? Locked { get; set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using VirtoCommerce.Storefront;
