@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
@@ -41,7 +40,6 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                 throw new ArgumentNullException(nameof(criteria.Currency));
             }
 
-
             if (criteria?.Customer == null)
             {
                 throw new ArgumentNullException(nameof(criteria.Customer));
@@ -50,13 +48,17 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             var workContext = _workContextAccessor.WorkContext;
             var resultDto = await _cartApi.SearchAsync(criteria.ToSearchCriteriaDto());
             var result = resultDto.Results.Select(x => x.ToShoppingCart(criteria.Currency, criteria.Language, criteria.Customer)).ToList();
-            //var result = resultDto.Results.Select(x => x.ToShoppingCart(workContext.CurrentCurrency, workContext.CurrentLanguage, workContext.CurrentUser)).ToList();
             return new StaticPagedList<ShoppingCart>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalCount.Value);
         }
 
         public async Task DeleteCartsByIdsAsync(string[] ids)
         {
             await _cartApi.DeleteCartsAsync(ids);
+
+            foreach (var id in ids)
+            {
+                CartCacheRegion.ExpireCart(new ShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage) { Id = id });
+            }
         }
     }
 }

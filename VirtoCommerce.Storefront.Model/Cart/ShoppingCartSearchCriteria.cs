@@ -34,6 +34,8 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
         public string Name { get; set; }
 
+        public string Type { get; set; }
+
         [IgnoreDataMember]
         public User Customer { get; set; }
 

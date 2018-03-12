@@ -92,9 +92,13 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<CognitiveRecommendationsProvider>();
             services.AddSingleton<IRecommendationProviderFactory, RecommendationProviderFactory>(provider => new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(), provider.GetService<CognitiveRecommendationsProvider>()));
             services.AddTransient<IQuoteRequestBuilder, QuoteRequestBuilder>();
-            services.AddTransient<ICartBuilder, CartBuilder>();
             services.AddSingleton<IBlobChangesWatcher, BlobChangesWatcher>();
             services.AddSingleton<ICartService, CartService>();
+
+            services.AddTransient<ICartBuilder, CartBuilder>(p => new CartBuilder("cart", p.GetService<IWorkContextAccessor>(), p.GetService<AutoRestClients.CartModuleApi.ICartModule>(), p.GetService<ICatalogService>(), p.GetService<Microsoft.Extensions.Caching.Memory.IMemoryCache>(), p.GetService<IPromotionEvaluator>(), p.GetService<ITaxEvaluator>(),
+                p.GetService<ISubscriptionService>(), p.GetService<ICartService>()));
+            services.AddTransient<IWishlistBuilder, CartBuilder>(p => new CartBuilder("wishlist", p.GetService<IWorkContextAccessor>(), p.GetService<AutoRestClients.CartModuleApi.ICartModule>(), p.GetService<ICatalogService>(), p.GetService<Microsoft.Extensions.Caching.Memory.IMemoryCache>(), p.GetService<IPromotionEvaluator>(), p.GetService<ITaxEvaluator>(),
+                p.GetService<ISubscriptionService>(), p.GetService<ICartService>()));
 
             //Register events framework dependencies
             services.AddSingleton(new InProcessBus());

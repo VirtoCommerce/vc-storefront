@@ -1,34 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using PagedList.Core;
-using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
-using VirtoCommerce.Storefront.Domain;
-using VirtoCommerce.Storefront.AutoRestClients.CartModuleApi;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Lists;
 using VirtoCommerce.Storefront.Model.Services;
-using cartModel = VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models;
-
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
     public class ApiListsController : StorefrontControllerBase
     {
-        private readonly ICartBuilder _wishlistBuilder;
+        private readonly IWishlistBuilder _wishlistBuilder;
+        private readonly ICartBuilder _cartBuilder;
         private readonly ICatalogService _catalogService;
         private readonly ICartService _cartService;
 
-        public ApiListsController(IWorkContextAccessor workContextAccessor, ICatalogService catalogService, ICartBuilder cartBuilder, IStorefrontUrlBuilder urlBuilder, ICartService cartService)
+        public ApiListsController(IWorkContextAccessor workContextAccessor, ICatalogService catalogService, IWishlistBuilder listBuilder, ICartBuilder cartBuilder, IStorefrontUrlBuilder urlBuilder, ICartService cartService)
             : base(workContextAccessor, urlBuilder)
         {
-            _wishlistBuilder = cartBuilder;
+            _wishlistBuilder = listBuilder;
+            _cartBuilder = cartBuilder;
             _catalogService = catalogService;
             _cartService = cartService;
         }
@@ -67,8 +62,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Json(result);
         }
 
-
-
         // POST: storefrontapi/lists/items
         [HttpPost]
         public async Task<ActionResult> AddItemToList([FromBody] AddListItem listItem)
@@ -102,15 +95,17 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
         }
 
+        // POST: storefrontapi/lists/search
         [HttpPost]
-        public async Task<ActionResult> SearchLists([FromForm] ShoppingCartSearchCriteria searchCriteria)
+        public async Task<ActionResult> SearchLists([FromBody] ShoppingCartSearchCriteria searchCriteria)
         {
             if (searchCriteria == null)
             {
                 searchCriteria = new ShoppingCartSearchCriteria();
             }
 
-            //restricting ajax query to lists search, only paging and sorting are available
+            //restricting query to lists search, only paging and sorting are available
+            searchCriteria.Type = "wishlist";
             searchCriteria.StoreId = WorkContext.CurrentStore.Id;
             searchCriteria.Customer = WorkContext.CurrentUser;
             searchCriteria.Currency = WorkContext.CurrentCurrency;
@@ -118,47 +113,34 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             var cartPagedList = await _cartService.SearchShoppingCartsAsync(searchCriteria);
 
-            //todo: move "default" cart filtering to module api
-            var currentCartId = WorkContext.CurrentCart.Value?.Id;
-            if (!currentCartId.IsNullOrEmpty())
+            ////todo: move "default" cart filtering to module api
+            //var currentCartId = WorkContext.CurrentCart.Value?.Id;
+            //if (!currentCartId.IsNullOrEmpty())
+            //{
+            //    var filteredCarts = cartPagedList.Where(x => x.Id != currentCartId).ToList();
+            //    cartPagedList = new StaticPagedList<ShoppingCart>(filteredCarts, searchCriteria.PageNumber, searchCriteria.PageSize, cartPagedList.TotalItemCount);
+            //}
+
+            return Json(new
             {
-                var filteredCarts = cartPagedList.Where(x => x.Id != currentCartId).ToList();
-                cartPagedList = new StaticPagedList<ShoppingCart>(filteredCarts, searchCriteria.PageNumber, searchCriteria.PageSize, cartPagedList.TotalItemCount);
-            }
-            return Json(cartPagedList);
+                Results = cartPagedList,
+                TotalCount = cartPagedList.TotalItemCount
+            });
         }
 
+        // POST: storefrontapi/lists/{listName}/create
         [HttpPost]
         public async Task<ActionResult> CreateList(string listName)
         {
             var wishlistBuilder = await LoadOrCreateWishlistAsync(listName);
-            await wishlistBuilder.SaveAsync();
+            if (wishlistBuilder.Cart.IsTransient())
+            {
+                await wishlistBuilder.SaveAsync();
+            }
             return Json(wishlistBuilder.Cart);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> CreatePredefindedLists([FromBody] string[] listNames)
-        {
-            foreach(var listName in listNames)
-            {
-                var searchCriteria = new ShoppingCartSearchCriteria()
-                {
-                    Name = listName,
-                    StoreId = WorkContext.CurrentStore.Id,
-                    Customer = WorkContext.CurrentUser,
-                    Currency = WorkContext.CurrentCurrency,
-                    Language = WorkContext.CurrentLanguage,
-                };
-                var searcResults = await _cartService.SearchShoppingCartsAsync(searchCriteria);
-                if (!searcResults.Any())
-                {
-                    var wishlistBuilder = await LoadOrCreateWishlistAsync(listName);
-                    await wishlistBuilder.SaveAsync();
-                }
-            }
-            return Ok();
-        }
-
+        // DELETE: storefrontapi/lists/deletelistsbyids?listIds=...&listIds=...
         [HttpDelete]
         public async Task<ActionResult> DeleteListsByIds(string[] listIds)
         {
@@ -166,6 +148,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Ok();
         }
 
+        // POST: storefrontapi/lists/{listName}/mergewithcurrentcart
         [HttpPost]
         public async Task<ActionResult> MergeWithCurrentCart(string listName)
         {
@@ -177,27 +160,32 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var list = wishlistBuilder.Cart;
 
                 //load or create default cart
-                wishlistBuilder = await LoadOrCreateWishlistAsync(currentCartName);
+                var cartBuilder = await LoadOrCreateDefaultCartAsync(currentCartName);
                 foreach(var lineItem in list.Items)
                 {
-                    await wishlistBuilder.AddItemAsync(lineItem.Product, 1);
+                    await cartBuilder.AddItemAsync(lineItem.Product, 1);
                 }
 
-                await wishlistBuilder.SaveAsync();
-
+                await cartBuilder.SaveAsync();
                 return Ok();
             }
         }
 
         private static string GetAsyncLockCartKey(WorkContext context, string listName)
         {
-            return string.Join(":", listName, context.CurrentUser.Id, context.CurrentStore.Id);
+            return string.Join(":", listName, "wishlist", context.CurrentUser.Id, context.CurrentStore.Id);
         }
 
         private async Task<ICartBuilder> LoadOrCreateWishlistAsync(string listName)
         {
             await _wishlistBuilder.LoadOrCreateNewTransientCartAsync(listName, WorkContext.CurrentStore, WorkContext.CurrentUser, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
             return _wishlistBuilder;
+        }
+
+        private async Task<ICartBuilder> LoadOrCreateDefaultCartAsync(string currentCartName)
+        {
+            await _cartBuilder.LoadOrCreateNewTransientCartAsync(currentCartName, WorkContext.CurrentStore, WorkContext.CurrentUser, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
+            return _cartBuilder;
         }
     }
 }

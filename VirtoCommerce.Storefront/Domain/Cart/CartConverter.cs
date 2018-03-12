@@ -551,6 +551,7 @@ namespace VirtoCommerce.Storefront.Domain
             result.OrganizationId = cartDto.OrganizationId;
             result.Status = cartDto.Status;
             result.StoreId = cartDto.StoreId;
+            result.Type = cartDto.Type;
        
             result.Customer = user;
 
@@ -622,6 +623,7 @@ namespace VirtoCommerce.Storefront.Domain
             result.OrganizationId = cart.OrganizationId;
             result.Status = cart.Status;
             result.StoreId = cart.StoreId;
+            result.Type = cart.Type;
 
             if (cart.Language != null)
             {
@@ -884,6 +886,7 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new cartDto.ShoppingCartSearchCriteria();
 
             result.Name = criteria.Name;
+            result.Type = criteria.Type;
             result.StoreId = criteria.StoreId;
             result.CustomerId = criteria.Customer?.Id;
             result.Currency = criteria.Currency?.Code;

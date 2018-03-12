@@ -17,6 +17,8 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
     {
         ShoppingCart Cart { get; }
 
+        string Type { get; }
+
         /// <summary>
         ///  Capture cart and all next changes will be implemented on it
         /// </summary>
