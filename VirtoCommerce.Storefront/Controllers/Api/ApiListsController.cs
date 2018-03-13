@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PagedList.Core;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Lists;
@@ -113,14 +112,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             var cartPagedList = await _listService.SearchWishlistsAsync(searchCriteria);
 
-            ////todo: move "default" cart filtering to module api
-            //var currentCartId = WorkContext.CurrentCart.Value?.Id;
-            //if (!currentCartId.IsNullOrEmpty())
-            //{
-            //    var filteredCarts = cartPagedList.Where(x => x.Id != currentCartId).ToList();
-            //    cartPagedList = new StaticPagedList<ShoppingCart>(filteredCarts, searchCriteria.PageNumber, searchCriteria.PageSize, cartPagedList.TotalItemCount);
-            //}
-
             return Json(new
             {
                 Results = cartPagedList,
@@ -132,12 +123,18 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost]
         public async Task<ActionResult> CreateList(string listName, string type)
         {
-            var wishlistBuilder = await LoadOrCreateWishlistAsync(listName, type);
-            if (wishlistBuilder.Cart.IsTransient())
+            var list = await _listService.CreateListAsync(new Wishlist(WorkContext.CurrentCurrency, WorkContext.CurrentLanguage)
             {
-                await wishlistBuilder.SaveAsync();
-            }
-            return Json(wishlistBuilder.Cart);
+                CustomerId = WorkContext.CurrentUser.Id,
+                Name = listName,
+                StoreId = WorkContext.CurrentStore.Id,
+                Customer = WorkContext.CurrentUser,
+                Type = type,
+                IsAnonymous = !WorkContext.CurrentUser.IsRegisteredUser,
+                CustomerName = WorkContext.CurrentUser.IsRegisteredUser ? WorkContext.CurrentUser.UserName : StorefrontClaims.AnonymousUsername
+            });
+
+            return Json(list);
         }
 
         // DELETE: storefrontapi/lists/deletelistsbyids?listIds=...&listIds=...
@@ -161,10 +158,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
                 //load or create default cart
                 var cartBuilder = await LoadOrCreateDefaultCartAsync(currentCartName);
-                foreach(var lineItem in list.Items)
-                {
-                    await cartBuilder.AddItemAsync(lineItem.Product, 1);
-                }
+                await cartBuilder.MergeWithCartAsync(list);
 
                 await cartBuilder.SaveAsync();
                 return Ok();

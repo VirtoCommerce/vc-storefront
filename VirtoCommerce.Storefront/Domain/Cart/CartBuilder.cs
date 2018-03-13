@@ -266,13 +266,21 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 await AddLineItemAsync(lineItem);
             }
-            Cart.Coupon = cart.Coupon;
 
-            Cart.Shipments.Clear();
-            Cart.Shipments = cart.Shipments;
+            if (cart.Coupon != null)
+            {
+                Cart.Coupon = cart.Coupon;
+            }
 
-            Cart.Payments.Clear();
-            Cart.Payments = cart.Payments;
+            foreach(var shipment in cart.Shipments)
+            {
+                await AddOrUpdateShipmentAsync(shipment);
+            }
+
+            foreach (var payment in cart.Payments)
+            {
+                await AddOrUpdatePaymentAsync(payment);
+            }
         }
 
         public virtual async Task RemoveCartAsync()

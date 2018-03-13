@@ -9,5 +9,7 @@ namespace VirtoCommerce.Storefront.Model.Lists.Services
         Task<IPagedList<Wishlist>> SearchWishlistsAsync(WishlistSearchCriteria criteria);
 
         Task DeleteListsByIdsAsync(string[] ids);
+
+        Task<Wishlist> CreateListAsync(Wishlist wishlis);
     }
 }
