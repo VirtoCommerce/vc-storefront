@@ -29,6 +29,7 @@ using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Inventory.Services;
 using VirtoCommerce.Storefront.Model.LinkList.Services;
+using VirtoCommerce.Storefront.Model.Lists.Services;
 using VirtoCommerce.Storefront.Model.Marketing.Services;
 using VirtoCommerce.Storefront.Model.Order.Services;
 using VirtoCommerce.Storefront.Model.Pricing.Services;
@@ -93,12 +94,9 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IRecommendationProviderFactory, RecommendationProviderFactory>(provider => new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(), provider.GetService<CognitiveRecommendationsProvider>()));
             services.AddTransient<IQuoteRequestBuilder, QuoteRequestBuilder>();
             services.AddSingleton<IBlobChangesWatcher, BlobChangesWatcher>();
-            services.AddSingleton<ICartService, CartService>();
-
-            services.AddTransient<ICartBuilder, CartBuilder>(p => new CartBuilder("cart", p.GetService<IWorkContextAccessor>(), p.GetService<AutoRestClients.CartModuleApi.ICartModule>(), p.GetService<ICatalogService>(), p.GetService<Microsoft.Extensions.Caching.Memory.IMemoryCache>(), p.GetService<IPromotionEvaluator>(), p.GetService<ITaxEvaluator>(),
-                p.GetService<ISubscriptionService>(), p.GetService<ICartService>()));
-            services.AddTransient<IWishlistBuilder, CartBuilder>(p => new CartBuilder("wishlist", p.GetService<IWorkContextAccessor>(), p.GetService<AutoRestClients.CartModuleApi.ICartModule>(), p.GetService<ICatalogService>(), p.GetService<Microsoft.Extensions.Caching.Memory.IMemoryCache>(), p.GetService<IPromotionEvaluator>(), p.GetService<ITaxEvaluator>(),
-                p.GetService<ISubscriptionService>(), p.GetService<ICartService>()));
+            services.AddSingleton<IWishlistService, WishlistService>();
+            services.AddTransient<ICartBuilder, CartBuilder>();
+            services.AddTransient<IWishlistBuilder, CartBuilder>();
 
             //Register events framework dependencies
             services.AddSingleton(new InProcessBus());

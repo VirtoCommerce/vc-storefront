@@ -8,6 +8,7 @@ using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Lists;
+using VirtoCommerce.Storefront.Model.Lists.Services;
 using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
@@ -17,24 +18,24 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private readonly IWishlistBuilder _wishlistBuilder;
         private readonly ICartBuilder _cartBuilder;
         private readonly ICatalogService _catalogService;
-        private readonly ICartService _cartService;
+        private readonly IWishlistService _listService;
 
-        public ApiListsController(IWorkContextAccessor workContextAccessor, ICatalogService catalogService, IWishlistBuilder listBuilder, ICartBuilder cartBuilder, IStorefrontUrlBuilder urlBuilder, ICartService cartService)
+        public ApiListsController(IWorkContextAccessor workContextAccessor, ICatalogService catalogService, IWishlistBuilder listBuilder, ICartBuilder cartBuilder, IStorefrontUrlBuilder urlBuilder, IWishlistService listService)
             : base(workContextAccessor, urlBuilder)
         {
             _wishlistBuilder = listBuilder;
             _cartBuilder = cartBuilder;
             _catalogService = catalogService;
-            _cartService = cartService;
+            _listService = listService;
         }
 
-        // GET: storefrontapi/lists
+        // GET: storefrontapi/lists/{listName}/{type}
         [HttpGet]
-        public async Task<ActionResult> GetListByName(string listName)
+        public async Task<ActionResult> GetListByName(string listName, string type)
         {
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listName)).LockAsync())
+            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listName, type)).LockAsync())
             {
-                var wishlistBuilder = await LoadOrCreateWishlistAsync(listName);
+                var wishlistBuilder = await LoadOrCreateWishlistAsync(listName, type);
                 await wishlistBuilder.ValidateAsync();
                 return Json(wishlistBuilder.Cart);
             }
@@ -48,9 +49,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             //Need lock to prevent concurrent access to same cart
             foreach (var listName in request.ListNames)
             {
-                using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listName)).LockAsync())
+                using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listName, request.Type)).LockAsync())
                 {
-                    var wishlistBuilder = await LoadOrCreateWishlistAsync(listName);
+                    var wishlistBuilder = await LoadOrCreateWishlistAsync(listName, request.Type);
                     await wishlistBuilder.ValidateAsync();
                     var hasProduct = wishlistBuilder.Cart.Items.Any(x => x.ProductId == request.ProductId);
                     if (hasProduct)
@@ -67,9 +68,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         public async Task<ActionResult> AddItemToList([FromBody] AddListItem listItem)
         {
             //Need lock to prevent concurrent access to same cart
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listItem.ListName)).LockAsync())
+            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listItem.ListName, listItem.Type)).LockAsync())
             {
-                var wishlistBuilder = await LoadOrCreateWishlistAsync(listItem.ListName);
+                var wishlistBuilder = await LoadOrCreateWishlistAsync(listItem.ListName, listItem.Type);
 
                 var products = await _catalogService.GetProductsAsync(new[] { listItem.ProductId }, Model.Catalog.ItemResponseGroup.Inventory | Model.Catalog.ItemResponseGroup.ItemWithPrices);
                 if (products != null && products.Any())
@@ -81,14 +82,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
         }
 
-        // DELETE: storefrontapi/lists/items?id=...
+        // DELETE: storefrontapi/lists/{listName}/type/items/{lineItemId}
         [HttpDelete]
-        public async Task<ActionResult> RemoveItemFromList(string lineItemId, string listName)
+        public async Task<ActionResult> RemoveItemFromList(string lineItemId, string listName, string type)
         {
             //Need lock to prevent concurrent access to same cart
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listName)).LockAsync())
+            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listName, type)).LockAsync())
             {
-                var wishlistBuilder = await LoadOrCreateWishlistAsync(listName);
+                var wishlistBuilder = await LoadOrCreateWishlistAsync(listName, type);
                 await wishlistBuilder.RemoveItemAsync(lineItemId);
                 await wishlistBuilder.SaveAsync();
                 return Json(new { ItemsCount = wishlistBuilder.Cart.ItemsQuantity });
@@ -97,21 +98,20 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/lists/search
         [HttpPost]
-        public async Task<ActionResult> SearchLists([FromBody] ShoppingCartSearchCriteria searchCriteria)
+        public async Task<ActionResult> SearchLists([FromBody] WishlistSearchCriteria searchCriteria)
         {
             if (searchCriteria == null)
             {
-                searchCriteria = new ShoppingCartSearchCriteria();
+                searchCriteria = new WishlistSearchCriteria();
             }
 
             //restricting query to lists search, only paging and sorting are available
-            searchCriteria.Type = "wishlist";
             searchCriteria.StoreId = WorkContext.CurrentStore.Id;
             searchCriteria.Customer = WorkContext.CurrentUser;
             searchCriteria.Currency = WorkContext.CurrentCurrency;
             searchCriteria.Language = WorkContext.CurrentLanguage;
 
-            var cartPagedList = await _cartService.SearchShoppingCartsAsync(searchCriteria);
+            var cartPagedList = await _listService.SearchShoppingCartsAsync(searchCriteria);
 
             ////todo: move "default" cart filtering to module api
             //var currentCartId = WorkContext.CurrentCart.Value?.Id;
@@ -128,11 +128,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             });
         }
 
-        // POST: storefrontapi/lists/{listName}/create
+        // POST: storefrontapi/lists/{listName}/{type}/create
         [HttpPost]
-        public async Task<ActionResult> CreateList(string listName)
+        public async Task<ActionResult> CreateList(string listName, string type)
         {
-            var wishlistBuilder = await LoadOrCreateWishlistAsync(listName);
+            var wishlistBuilder = await LoadOrCreateWishlistAsync(listName, type);
             if (wishlistBuilder.Cart.IsTransient())
             {
                 await wishlistBuilder.SaveAsync();
@@ -144,19 +144,19 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpDelete]
         public async Task<ActionResult> DeleteListsByIds(string[] listIds)
         {
-            await _cartService.DeleteCartsByIdsAsync(listIds);
+            await _listService.DeleteListsByIdsAsync(listIds);
             return Ok();
         }
 
-        // POST: storefrontapi/lists/{listName}/mergewithcurrentcart
+        // POST: storefrontapi/lists/{listName}/{type}/mergewithcurrentcart
         [HttpPost]
-        public async Task<ActionResult> MergeWithCurrentCart(string listName)
+        public async Task<ActionResult> MergeWithCurrentCart(string listName, string type)
         {
             var currentCartName = WorkContext.CurrentCart.Value?.Name;
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, currentCartName)).LockAsync())
+            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, currentCartName, string.Empty)).LockAsync())
             {
                 //load list
-                var wishlistBuilder = await LoadOrCreateWishlistAsync(listName);
+                var wishlistBuilder = await LoadOrCreateWishlistAsync(listName, type);
                 var list = wishlistBuilder.Cart;
 
                 //load or create default cart
@@ -171,14 +171,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
         }
 
-        private static string GetAsyncLockCartKey(WorkContext context, string listName)
+        private static string GetAsyncLockCartKey(WorkContext context, string listName, string type)
         {
-            return string.Join(":", listName, "wishlist", context.CurrentUser.Id, context.CurrentStore.Id);
+            return string.Join(":", listName, context.CurrentUser.Id, context.CurrentStore.Id, type);
         }
 
-        private async Task<ICartBuilder> LoadOrCreateWishlistAsync(string listName)
+        private async Task<ICartBuilder> LoadOrCreateWishlistAsync(string listName, string type)
         {
-            await _wishlistBuilder.LoadOrCreateNewTransientCartAsync(listName, WorkContext.CurrentStore, WorkContext.CurrentUser, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
+            await _wishlistBuilder.LoadOrCreateNewTransientCartAsync(listName, WorkContext.CurrentStore, WorkContext.CurrentUser, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency, type);
             return _wishlistBuilder;
         }
 
