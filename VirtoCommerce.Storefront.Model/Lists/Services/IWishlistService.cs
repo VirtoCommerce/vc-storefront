@@ -6,7 +6,7 @@ namespace VirtoCommerce.Storefront.Model.Lists.Services
 {
     public interface IWishlistService
     {
-        Task<IPagedList<Wishlist>> SearchShoppingCartsAsync(WishlistSearchCriteria criteria);
+        Task<IPagedList<Wishlist>> SearchWishlistsAsync(WishlistSearchCriteria criteria);
 
         Task DeleteListsByIdsAsync(string[] ids);
     }

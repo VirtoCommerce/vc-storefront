@@ -111,7 +111,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             searchCriteria.Currency = WorkContext.CurrentCurrency;
             searchCriteria.Language = WorkContext.CurrentLanguage;
 
-            var cartPagedList = await _listService.SearchShoppingCartsAsync(searchCriteria);
+            var cartPagedList = await _listService.SearchWishlistsAsync(searchCriteria);
 
             ////todo: move "default" cart filtering to module api
             //var currentCartId = WorkContext.CurrentCart.Value?.Id;

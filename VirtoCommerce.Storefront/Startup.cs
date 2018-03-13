@@ -16,6 +16,7 @@ using VirtoCommerce.Storefront.Binders;
 using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Cart;
+using VirtoCommerce.Storefront.Domain.Lists;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
@@ -96,7 +97,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IBlobChangesWatcher, BlobChangesWatcher>();
             services.AddSingleton<IWishlistService, WishlistService>();
             services.AddTransient<ICartBuilder, CartBuilder>();
-            services.AddTransient<IWishlistBuilder, CartBuilder>();
+            services.AddTransient<IWishlistBuilder, WishlistBuilder>();
 
             //Register events framework dependencies
             services.AddSingleton(new InProcessBus());

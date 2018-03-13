@@ -26,6 +26,7 @@ using VirtoCommerce.Storefront.Model.Services;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 using VirtoCommerce.Storefront.Model.Tax.Services;
+using cartModel = VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -38,10 +39,9 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IPromotionEvaluator _promotionEvaluator;
         private readonly ITaxEvaluator _taxEvaluator;
         private readonly ISubscriptionService _subscriptionService;
-        public readonly IWishlistService _listService;
 
         public CartBuilder(IWorkContextAccessor workContextAccessor, ICartModule cartApi, ICatalogService catalogSearchService,
-            IMemoryCache memoryCache, IPromotionEvaluator promotionEvaluator, ITaxEvaluator taxEvaluator, ISubscriptionService subscriptionService, IWishlistService listService)
+            IMemoryCache memoryCache, IPromotionEvaluator promotionEvaluator, ITaxEvaluator taxEvaluator, ISubscriptionService subscriptionService)
         {
             _cartApi = cartApi;
             _catalogService = catalogSearchService;
@@ -50,7 +50,6 @@ namespace VirtoCommerce.Storefront.Domain
             _promotionEvaluator = promotionEvaluator;
             _taxEvaluator = taxEvaluator;
             _subscriptionService = subscriptionService;
-            _listService = listService;
         }
 
         #region ICartBuilder Members
@@ -84,8 +83,9 @@ namespace VirtoCommerce.Storefront.Domain
                 needReevaluate = true;
 
                 var cartSearchCriteria = CreateCartSearchCriteria(cartName, store, user, language, currency, type);
-                var cartSearchResult = await _listService.SearchShoppingCartsAsync(cartSearchCriteria);
-                var cart = cartSearchResult.FirstOrDefault() ?? CreateCart(cartName, store, user, language, currency, type);
+                var cartSearchResult = await _cartApi.SearchAsync(cartSearchCriteria);
+                var cartDto = cartSearchResult.Results.FirstOrDefault();
+                var cart = cartDto?.ToShoppingCart(currency, language, user) ?? CreateCart(cartName, store, user, language, currency, type);
 
                 //Load cart dependencies
                 await PrepareCartAsync(cart, store);
@@ -448,17 +448,16 @@ namespace VirtoCommerce.Storefront.Domain
             await TakeCartAsync(cart);
         }
 
-        #endregion      
+        #endregion
 
-        protected virtual WishlistSearchCriteria CreateCartSearchCriteria(string cartName, Store store, User user, Language language, Currency currency, string type)
+        protected virtual cartModel.ShoppingCartSearchCriteria CreateCartSearchCriteria(string cartName, Store store, User user, Language language, Currency currency, string type)
         {
-            return new WishlistSearchCriteria
+            return new cartModel.ShoppingCartSearchCriteria
             {
                 StoreId = store.Id,
-                Customer = user,
+                CustomerId = user.Id,
                 Name = cartName,
-                Currency = currency,
-                Language = language,
+                Currency = currency.Code,
                 Type = type
             };
         }

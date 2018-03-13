@@ -25,7 +25,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             _workContextAccessor = workContextAccessor;
         }
 
-        public async Task<IPagedList<Wishlist>> SearchShoppingCartsAsync(WishlistSearchCriteria criteria)
+        public async Task<IPagedList<Wishlist>> SearchWishlistsAsync(WishlistSearchCriteria criteria)
         {
             if (criteria == null)
             {
