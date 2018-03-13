@@ -2,6 +2,7 @@
 using PagedList.Core;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -94,6 +95,7 @@ namespace VirtoCommerce.Storefront.Domain
                 existContact.FirstName = contactUpdateInfo.FirstName;
                 existContact.LastName = contactUpdateInfo.LastName;
                 existContact.Email = contactUpdateInfo.Email;
+                existContact.PhotoUrl = contactUpdateInfo.PhotoUrl;
 
                 var contactDto = existContact.ToCustomerContactDto();
                 await _customerApi.UpdateContactAsync(contactDto);

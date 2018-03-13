@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Model;
@@ -14,6 +15,8 @@ using VirtoCommerce.Storefront.Model.Security.Events;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using Microsoft.Extensions.Options;
+using VirtoCommerce.Storefront.Model.Customer;
+using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Security.Specifications;
 
 namespace VirtoCommerce.Storefront.Controllers
@@ -26,7 +29,7 @@ namespace VirtoCommerce.Storefront.Controllers
         private readonly IStorefrontSecurity _commerceCoreApi;
         private readonly IStorefrontUrlBuilder _urlBuilder;
         private readonly StorefrontOptions _options;
-        
+
         private readonly string[] _firstNameClaims = { ClaimTypes.GivenName, "urn:github:name", ClaimTypes.Name };
 
         public AccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<User> signInManager,
@@ -105,7 +108,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
             return View("customers/register", WorkContext);
         }
-
+        
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string code)
@@ -390,5 +393,94 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View("customers/account", WorkContext);
             }
         }
+
+        #region Registration by invite
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult RegisterByInvite()
+        {
+            if (_options.InviteRegistration)
+                return View("customers/invite", WorkContext);
+
+            WorkContext.ErrorMessage = "Registration through invitations is not available";
+            return View("error");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RegisterByInvite([FromForm] GetInvite formModel)
+        {
+            var registerUser = new Register { Email = formModel.Email, FirstName = formModel.Email, UserName = formModel.Email };
+
+            var user = registerUser.ToUser();
+            user.StoreId = WorkContext.CurrentStore.Id;
+
+            var result = await _signInManager.UserManager.CreateAsync(user);
+            if (result.Succeeded)
+            {
+                user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
+
+                if (_options.InviteRegistration)
+                {
+                    var callbackUrl = Url.Action("ConfirmInvite", "Account", new { UserId = user.Id, Code = "token" }, protocol: Request.Scheme);
+                    await _commerceCoreApi.SendEmailConfirmationAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName, callbackUrl);
+                }
+                return StoreFrontRedirect("customers/invite-done");
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("form", error.Description);
+                }
+            }
+
+            return View("customers/invite-done", WorkContext);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult> ConfirmInvite(string code, string email)
+        {
+            var user = await _signInManager.UserManager.FindByEmailAsync(email);
+
+            if (string.IsNullOrEmpty(code) && string.IsNullOrEmpty(user.Id))
+            {
+                WorkContext.ErrorMessage = "Error in URL format";
+
+                return View("error", WorkContext);
+            }
+
+            if (user == null)
+            {
+                WorkContext.ErrorMessage = "User was not found.";
+                return View("error", WorkContext);
+            }
+            WorkContext.ResetPassword = new ResetPassword
+            {
+                Token = code,
+                Email = user.Email
+            };
+            return View("customers/register-invite", WorkContext);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ConfirmInvite([FromForm] InviteRegister formModel)
+        {
+            var result = await _commerceCoreApi.ConfirmEmailAsync(WorkContext.CurrentUser.Id, formModel.Token);
+
+            if (!result.Succeeded.HasValue || !result.Succeeded.Value)
+            {
+                return View("error");
+            }
+
+            return View("confirmation-done");
+        }
+
+        #endregion
     }
 }

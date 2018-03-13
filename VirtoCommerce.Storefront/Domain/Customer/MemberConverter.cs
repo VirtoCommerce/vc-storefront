@@ -143,7 +143,8 @@ namespace VirtoCommerce.Storefront.Domain
                 LastName = contactDto.LastName,
                 Emails = contactDto.Emails,
                 TimeZone = contactDto.TimeZone,
-                DefaultLanguage = contactDto.DefaultLanguage
+                DefaultLanguage = contactDto.DefaultLanguage,
+                PhotoUrl = contactDto.PhotoUrl
             };
 
             if (contactDto.Addresses != null)
@@ -176,7 +177,8 @@ namespace VirtoCommerce.Storefront.Domain
                 FullName = customer.FullName,
                 LastName = customer.LastName,
                 MiddleName = customer.MiddleName,
-                MemberType = "Contact"
+                MemberType = "Contact",
+                PhotoUrl = customer.PhotoUrl
             };
             if (!customer.UserGroups.IsNullOrEmpty())
             {

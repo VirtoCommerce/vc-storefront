@@ -40,6 +40,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 result.MiddleName = contact.MiddleName;
                 result.Name = contact.FullName;
                 result.TimeZone = contact.TimeZone;
+                result.PhotoUrl = contact.PhotoUrl;
                 if (contact.DefaultAddress != null)
                 {
                     result.DefaultAddress = ToLiquidAddress(contact.DefaultAddress);
@@ -82,7 +83,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                     result.Metafields = new MetaFieldNamespacesCollection(new[] { new MetafieldsCollection("dynamic_properties", workContext.CurrentLanguage, contact.DynamicProperties) });
                 }
             }
-            
 
             return result;
         }
