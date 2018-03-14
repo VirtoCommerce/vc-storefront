@@ -1,4 +1,5 @@
 ﻿using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Lists;
 using VirtoCommerce.Storefront.Model.Security;
@@ -21,6 +22,11 @@ namespace VirtoCommerce.Storefront.Domain.Lists
             return WishlistConverterInstance.ToWishlist(cartDto, currency, language, user);
         }
 
+        public static Wishlist ToWishlist(this ShoppingCart cart, Currency currency, Language language, User user)
+        {
+            return WishlistConverterInstance.ToWishlist(cart, currency, language, user);
+        }
+
         public static cartDto.ShoppingCartSearchCriteria ToSearchCriteriaDto(this WishlistSearchCriteria criteria)
         {
             return WishlistConverterInstance.ToSearchCriteriaDto(criteria);
@@ -31,9 +37,15 @@ namespace VirtoCommerce.Storefront.Domain.Lists
     {
         public virtual Wishlist ToWishlist(cartDto.ShoppingCart cartDto, Currency currency, Language language, User user)
         {
+            var cart = base.ToShoppingCart(cartDto, currency, language, user);
+            var result = cart.ToWishlist(currency, language, user);
+            return result;
+        }
+
+        public virtual Wishlist ToWishlist(ShoppingCart cart, Currency currency, Language language, User user)
+        {
             var result = new Wishlist(currency, language);
 
-            var cart = base.ToShoppingCart(cartDto, currency, language, user);
             result.ChannelId = cart.ChannelId;
             result.Comment = cart.Comment;
             result.CustomerId = cart.CustomerId;
@@ -74,7 +86,7 @@ namespace VirtoCommerce.Storefront.Domain.Lists
             result.StoreId = criteria.StoreId;
             result.CustomerId = criteria.Customer?.Id;
             result.Currency = criteria.Currency?.Code;
-            //result.LanguageCode = criteria.Language?.CultureName;
+            result.LanguageCode = criteria.Language?.CultureName;
 
             result.Skip = criteria.Start;
             result.Take = criteria.PageSize;

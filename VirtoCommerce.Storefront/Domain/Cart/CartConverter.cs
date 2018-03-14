@@ -601,11 +601,6 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        //public virtual Wishlist ToWishlist(cartDto.ShoppingCart cartDto, Currency currency, Language language, User user)
-        //{
-        //    var 
-        //}
-
         public virtual cartDto.ShoppingCart ToShoppingCartDto(ShoppingCart cart)
         {
             var result = new cartDto.ShoppingCart();

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using PagedList.Core;
 using VirtoCommerce.Storefront.Model.Lists;
+using VirtoCommerce.Storefront.Model.Security;
 
 namespace VirtoCommerce.Storefront.Model.Lists.Services
 {
@@ -11,5 +12,7 @@ namespace VirtoCommerce.Storefront.Model.Lists.Services
         Task DeleteListsByIdsAsync(string[] ids);
 
         Task<Wishlist> CreateListAsync(Wishlist wishlis);
+
+        Task<int> GetWishlistCountByCustomer(User customer);
     }
 }

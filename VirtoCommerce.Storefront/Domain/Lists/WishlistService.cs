@@ -11,6 +11,8 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Lists;
 using VirtoCommerce.Storefront.Model.Lists.Services;
+using System.Collections.Generic;
+using VirtoCommerce.Storefront.Model.Security;
 
 namespace VirtoCommerce.Storefront.Domain.Cart
 {
@@ -49,7 +51,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                 throw new ArgumentNullException(nameof(criteria.Customer));
             }
 
-            var cacheKey = CacheKey.With(GetType(), "SearchWishlistsAsync", criteria.GetHashCode().ToString(), criteria.StoreId, criteria.Language.CultureName, criteria.Currency.Code);
+            var cacheKey = CacheKey.With(GetType(), "SearchWishlistsAsync", criteria.GetHashCode().ToString());
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(WishlistCacheRegion.CreateSearchResultsChangeToken(criteria.Customer.Id));
@@ -71,13 +73,37 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
         public async Task DeleteListsByIdsAsync(string[] ids)
         {
-            await _cartApi.DeleteCartsAsync(ids);
+            //filter out carts that don't belong to the current user
+            var ownedCartsIds = new List<string>();
+            foreach(string id in ids)
+            {
+                var cart = await _cartApi.GetCartByIdAsync(id);
+                if (cart != null && cart.CustomerId == _workContextAccessor.WorkContext.CurrentUser.Id)
+                {
+                    ownedCartsIds.Add(id);
+                }
+            }
+
+            await _cartApi.DeleteCartsAsync(ownedCartsIds);
 
             foreach (var id in ids)
             {
                 WishlistCacheRegion.ExpireSearchResults(_workContextAccessor.WorkContext.CurrentUser.Id);
                 CartCacheRegion.ExpireCart(new ShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage) { Id = id });
             }
+        }
+
+        public async Task<int> GetWishlistCountByCustomer(User customer)
+        {
+            //check for litim by customer
+            var searchCriteria = new WishlistSearchCriteria()
+            {
+                PageSize = 0,
+                Customer = customer
+            };
+
+            var resultDto = await _cartApi.SearchAsync(searchCriteria.ToSearchCriteriaDto());
+            return resultDto.TotalCount - 1 ?? 0;
         }
     }
 }

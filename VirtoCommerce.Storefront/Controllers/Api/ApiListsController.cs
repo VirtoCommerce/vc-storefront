@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Domain.Lists;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart.Services;
@@ -18,14 +20,16 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private readonly ICartBuilder _cartBuilder;
         private readonly ICatalogService _catalogService;
         private readonly IWishlistService _listService;
+        private readonly StorefrontOptions _options;
 
-        public ApiListsController(IWorkContextAccessor workContextAccessor, ICatalogService catalogService, IWishlistBuilder listBuilder, ICartBuilder cartBuilder, IStorefrontUrlBuilder urlBuilder, IWishlistService listService)
+        public ApiListsController(IWorkContextAccessor workContextAccessor, ICatalogService catalogService, IWishlistBuilder listBuilder, ICartBuilder cartBuilder, IStorefrontUrlBuilder urlBuilder, IWishlistService listService, IOptions<StorefrontOptions> options)
             : base(workContextAccessor, urlBuilder)
         {
             _wishlistBuilder = listBuilder;
             _cartBuilder = cartBuilder;
             _catalogService = catalogService;
             _listService = listService;
+            _options = options.Value;
         }
 
         // GET: storefrontapi/lists/{listName}/{type}
@@ -35,7 +39,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listName, type)).LockAsync())
             {
                 var wishlistBuilder = await LoadOrCreateWishlistAsync(listName, type);
-                await wishlistBuilder.ValidateAsync();
                 return Json(wishlistBuilder.Cart);
             }
         }
@@ -123,16 +126,20 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost]
         public async Task<ActionResult> CreateList(string listName, string type)
         {
-            var list = await _listService.CreateListAsync(new Wishlist(WorkContext.CurrentCurrency, WorkContext.CurrentLanguage)
+            var totalCount = await _listService.GetWishlistCountByCustomer(WorkContext.CurrentUser);
+            if (totalCount >= _options.WishlistLimit)
             {
-                CustomerId = WorkContext.CurrentUser.Id,
-                Name = listName,
-                StoreId = WorkContext.CurrentStore.Id,
-                Customer = WorkContext.CurrentUser,
-                Type = type,
-                IsAnonymous = !WorkContext.CurrentUser.IsRegisteredUser,
-                CustomerName = WorkContext.CurrentUser.IsRegisteredUser ? WorkContext.CurrentUser.UserName : StorefrontClaims.AnonymousUsername
-            });
+                return Json(new
+                {
+                    Error = "Wishlists count exceeds limit"
+                });
+            }
+
+            var list = (await LoadOrCreateWishlistAsync(listName, type)).Cart;
+            if (list.IsTransient())
+            {
+                list = await _listService.CreateListAsync(list.ToWishlist(WorkContext.CurrentCurrency, WorkContext.CurrentLanguage, WorkContext.CurrentUser));
+            }
 
             return Json(list);
         }
