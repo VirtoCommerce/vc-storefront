@@ -407,6 +407,17 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("error");
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult GetInviteAgain()
+        {
+            if (_options.InviteRegistration)
+                return View("customers/invite_again", WorkContext);
+
+            WorkContext.ErrorMessage = "Registration through invitations is not available";
+            return View("error");
+        }
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -424,10 +435,10 @@ namespace VirtoCommerce.Storefront.Controllers
 
                 if (_options.InviteRegistration)
                 {
-                    var callbackUrl = Url.Action("ConfirmInvite", "Account", new { UserId = user.Id, Code = "token" }, protocol: Request.Scheme);
-                    await _commerceCoreApi.SendEmailConfirmationAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName, callbackUrl);
+                    var callbackUrl = Url.Action("ConfirmInvite", "Account", new { Email = user.Email, Code = "token" }, protocol: Request.Scheme);
+                    await _commerceCoreApi.GenerateInviteTokenAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName, callbackUrl);
                 }
-                return StoreFrontRedirect("customers/invite-done");
+                return View("customers/invite_done", WorkContext);
             }
             else
             {
@@ -437,12 +448,12 @@ namespace VirtoCommerce.Storefront.Controllers
                 }
             }
 
-            return View("customers/invite-done", WorkContext);
+            return View("customers/invite", WorkContext);
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmInvite(string code, string email)
+        public async Task<ActionResult> ConfirmInvite(string email, string code)
         {
             var user = await _signInManager.UserManager.FindByEmailAsync(email);
 
@@ -455,7 +466,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
             if (user == null)
             {
-                WorkContext.ErrorMessage = "User was not found.";
+                WorkContext.ErrorMessage = "Invite was not found.";
                 return View("error", WorkContext);
             }
             WorkContext.ResetPassword = new ResetPassword
@@ -463,7 +474,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 Token = code,
                 Email = user.Email
             };
-            return View("customers/register-invite", WorkContext);
+            return View("customers/register_invite", WorkContext);
         }
 
         [HttpPost]
@@ -471,14 +482,41 @@ namespace VirtoCommerce.Storefront.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ConfirmInvite([FromForm] InviteRegister formModel)
         {
-            var result = await _commerceCoreApi.ConfirmEmailAsync(WorkContext.CurrentUser.Id, formModel.Token);
-
-            if (!result.Succeeded.HasValue || !result.Succeeded.Value)
+            if (formModel.Email == null || formModel.Token == null)
             {
-                return View("error");
+                WorkContext.ErrorMessage = "Not enough info for registration by invite";
+                return View("error", WorkContext);
             }
 
-            return View("confirmation-done");
+            var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
+
+            if (user == null)
+            {
+                return RedirectToPage("./RegisterByInvite");
+
+            }
+            var result = await _signInManager.UserManager.ResetPasswordAsync(user, formModel.Token, formModel.Password);
+
+            if (result.Succeeded)
+            {
+                var registerUser = new Register { FirstName = formModel.FirstName, LastName = formModel.LastName,
+                    Email = formModel.Email, UserName = formModel.Email, Password = formModel.Password};
+
+                await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, registerUser.ToUserRegistrationInfo()));
+                await _signInManager.SignInAsync(user, isPersistent: true);
+                await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+
+                return StoreFrontRedirect("~/account");
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            return View("customers/register_invite", WorkContext);
         }
 
         #endregion

@@ -125,7 +125,9 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("Account.ExternalLoginCallback", "account/externallogincallback", defaults: new { controller = "Account", action = "ExternalLoginCallback" });
             routes.MapStorefrontRoute("Account.ImpersonateUser", "account/impersonate/{userId}", defaults: new { controller = "Account", action = "ImpersonateUser" });
             routes.MapStorefrontRoute("Account.ConfirmEmail", "account/confirmemail", defaults: new { controller = "Account", action = "ConfirmEmail" });
-
+            routes.MapStorefrontRoute("Account.RegisterByInvite", "account/registerbyinvite", defaults: new { controller = "Account", action = "RegisterByInvite" });
+            routes.MapStorefrontRoute("Account.ConfirmInvite", "account/confirminvite", defaults: new { controller = "Account", action = "ConfirmInvite" });
+            routes.MapStorefrontRoute("Account.GetInviteAgain", "account/getinviteagain", defaults: new { controller = "Account", action = "GetInviteAgain" });
             // Cart
             routes.MapStorefrontRoute("Cart.Index", "cart", defaults: new { controller = "Cart", action = "Index" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));
             routes.MapStorefrontRoute("Cart.Checkout", "cart/checkout", defaults: new { controller = "Cart", action = "Checkout" });
