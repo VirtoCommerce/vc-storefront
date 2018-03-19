@@ -256,8 +256,9 @@ namespace VirtoCommerce.Storefront.Domain
 
             //Reset primary keys for all aggregated entities before merge
             //To prevent insertions same Ids for target cart
+            //exclude user because it might be the current one
             var entities = cart.GetFlatObjectsListWithInterface<IEntity>();
-            foreach (var entity in entities)
+            foreach (var entity in entities.Where(x => !(x is User)).ToList())
             {
                 entity.Id = null;
             }
@@ -272,7 +273,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Cart.Coupon = cart.Coupon;
             }
 
-            foreach(var shipment in cart.Shipments)
+            foreach (var shipment in cart.Shipments)
             {
                 await AddOrUpdateShipmentAsync(shipment);
             }
