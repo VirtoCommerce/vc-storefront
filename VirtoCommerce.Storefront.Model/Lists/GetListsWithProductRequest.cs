@@ -11,6 +11,12 @@ namespace VirtoCommerce.Storefront.Model.Lists
         public string[] ListNames { get; set; }
 
         /// <summary>
+        /// list type
+        /// </summary>
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        /// <summary>
         /// Gets or sets the value of product id to search for
         /// </summary>
         [JsonProperty("productId")]

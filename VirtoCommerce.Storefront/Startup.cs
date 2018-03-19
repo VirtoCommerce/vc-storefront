@@ -15,6 +15,8 @@ using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Binders;
 using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Domain;
+using VirtoCommerce.Storefront.Domain.Cart;
+using VirtoCommerce.Storefront.Domain.Lists;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
@@ -28,6 +30,7 @@ using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Inventory.Services;
 using VirtoCommerce.Storefront.Model.LinkList.Services;
+using VirtoCommerce.Storefront.Model.Lists.Services;
 using VirtoCommerce.Storefront.Model.Marketing.Services;
 using VirtoCommerce.Storefront.Model.Order.Services;
 using VirtoCommerce.Storefront.Model.Pricing.Services;
@@ -91,8 +94,10 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<CognitiveRecommendationsProvider>();
             services.AddSingleton<IRecommendationProviderFactory, RecommendationProviderFactory>(provider => new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(), provider.GetService<CognitiveRecommendationsProvider>()));
             services.AddTransient<IQuoteRequestBuilder, QuoteRequestBuilder>();
-            services.AddTransient<ICartBuilder, CartBuilder>();
             services.AddSingleton<IBlobChangesWatcher, BlobChangesWatcher>();
+            services.AddSingleton<IWishlistService, WishlistService>();
+            services.AddTransient<ICartBuilder, CartBuilder>();
+            services.AddTransient<IWishlistBuilder, WishlistBuilder>();
 
             //Register events framework dependencies
             services.AddSingleton(new InProcessBus());
