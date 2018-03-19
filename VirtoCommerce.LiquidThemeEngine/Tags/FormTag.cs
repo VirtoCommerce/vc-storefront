@@ -32,6 +32,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Tags
             _formsMap["customer_address"] = "~/account/addresses";
             //Generates a form for logging into Customer Accounts on the login.liquid template.
             _formsMap["customer_login"] = "~/account/login";
+            //Generates a form for recovering a lost user name on the login.liquid template.
+            _formsMap["recover_customer_login"] = "~/account/forgotlogin";
             //Generates a form for recovering a lost password on the login.liquid template.
             _formsMap["recover_customer_password"] = "~/account/forgotpassword";
             //Generates a form for setting a new password on the reset_password.liquid template.

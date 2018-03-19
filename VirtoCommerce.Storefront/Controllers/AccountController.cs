@@ -288,6 +288,31 @@ namespace VirtoCommerce.Storefront.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        public ActionResult ForgotLogin()
+        {
+            return View("customers/forgot_login", WorkContext);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ForgotLogin(ForgotPassword formModel)
+        {
+            var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
+            if (user != null)
+            {
+                await _commerceCoreApi.SendUserNameNotificationAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName);
+            }
+            else
+            {
+                ModelState.AddModelError("form", "User not found");
+            }
+
+            return View("customers/forgot_login", WorkContext);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
             return View("customers/forgot_password", WorkContext);
