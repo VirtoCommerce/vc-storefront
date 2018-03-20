@@ -764,14 +764,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <param name='folderUrl'>
         /// Parent folder url (relative or absolute).
         /// </param>
-        /// <param name='uploadedFile'>
-        /// Upload File
-        /// </param>
         /// <param name='url'>
         /// Url for uploaded remote resource (optional)
         /// </param>
         /// <param name='name'>
         /// Image name.
+        /// </param>
+        /// <param name='uploadedFile'>
+        /// Upload File
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -794,15 +794,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<BlobInfo>>> UploadAssetWithHttpMessagesAsync(string folderUrl, Stream uploadedFile, string url = default(string), string name = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<BlobInfo>>> UploadAssetWithHttpMessagesAsync(string folderUrl, string url = default(string), string name = default(string), Stream uploadedFile = default(Stream), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (folderUrl == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "folderUrl");
-            }
-            if (uploadedFile == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "uploadedFile");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1283,14 +1279,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <param name='folderUrl'>
         /// Parent folder url (relative or absolute).
         /// </param>
-        /// <param name='uploadedFile'>
-        /// Upload File
-        /// </param>
         /// <param name='url'>
         /// Url for uploaded remote resource (optional)
         /// </param>
         /// <param name='name'>
         /// Image name.
+        /// </param>
+        /// <param name='uploadedFile'>
+        /// Upload File
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1307,7 +1303,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<IList<BlobInfo>>> UploadAssetWithHttpMessagesAsync(string folderUrl, Stream uploadedFile, string url = default(string), string name = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<BlobInfo>>> UploadAssetWithHttpMessagesAsync(string folderUrl, string url = default(string), string name = default(string), Stream uploadedFile = default(Stream), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Delete blobs by urls
         /// </summary>
@@ -1451,18 +1447,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='folderUrl'>
             /// Parent folder url (relative or absolute).
             /// </param>
-            /// <param name='uploadedFile'>
-            /// Upload File
-            /// </param>
             /// <param name='url'>
             /// Url for uploaded remote resource (optional)
             /// </param>
             /// <param name='name'>
             /// Image name.
             /// </param>
-            public static IList<BlobInfo> UploadAsset(this IAssets operations, string folderUrl, Stream uploadedFile, string url = default(string), string name = default(string))
+            /// <param name='uploadedFile'>
+            /// Upload File
+            /// </param>
+            public static IList<BlobInfo> UploadAsset(this IAssets operations, string folderUrl, string url = default(string), string name = default(string), Stream uploadedFile = default(Stream))
             {
-                return operations.UploadAssetAsync(folderUrl, uploadedFile, url, name).GetAwaiter().GetResult();
+                return operations.UploadAssetAsync(folderUrl, url, name, uploadedFile).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -1477,21 +1473,21 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='folderUrl'>
             /// Parent folder url (relative or absolute).
             /// </param>
-            /// <param name='uploadedFile'>
-            /// Upload File
-            /// </param>
             /// <param name='url'>
             /// Url for uploaded remote resource (optional)
             /// </param>
             /// <param name='name'>
             /// Image name.
             /// </param>
+            /// <param name='uploadedFile'>
+            /// Upload File
+            /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<BlobInfo>> UploadAssetAsync(this IAssets operations, string folderUrl, Stream uploadedFile, string url = default(string), string name = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<BlobInfo>> UploadAssetAsync(this IAssets operations, string folderUrl, string url = default(string), string name = default(string), Stream uploadedFile = default(Stream), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.UploadAssetWithHttpMessagesAsync(folderUrl, uploadedFile, url, name, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.UploadAssetWithHttpMessagesAsync(folderUrl, url, name, uploadedFile, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
