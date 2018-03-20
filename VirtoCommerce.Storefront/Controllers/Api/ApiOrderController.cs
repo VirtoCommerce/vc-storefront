@@ -41,7 +41,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Json(new
             {
                 Results = result.CustomerOrders.Select(x => x.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage)),
-                TotalCount = result.TotalCount
+                 result.TotalCount
             });
         }
 

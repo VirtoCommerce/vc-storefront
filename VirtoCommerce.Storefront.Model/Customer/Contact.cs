@@ -42,17 +42,7 @@ namespace VirtoCommerce.Storefront.Model.Customer
         /// </summary>
         public Address DefaultAddress { get; set; }
 
-        [JsonIgnore]
-        [IgnoreDataMember]
-        public IMutablePagedList<CustomerOrder> Orders { get; set; }
-
-        [JsonIgnore]
-        [IgnoreDataMember]
-        public IMutablePagedList<QuoteRequest> QuoteRequests { get; set; }
-
-        [JsonIgnore]
-        [IgnoreDataMember]
-        public IMutablePagedList<Subscription> Subscriptions { get; set; }
+     
 
     }
 }

@@ -5,6 +5,9 @@ using System.Runtime.Serialization;
 using System.Text;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
+using VirtoCommerce.Storefront.Model.Order;
+using VirtoCommerce.Storefront.Model.Quote;
+using VirtoCommerce.Storefront.Model.Subscriptions;
 
 namespace VirtoCommerce.Storefront.Model.Security
 {
@@ -71,5 +74,26 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// Member associated with user 
         /// </summary>
         public Lazy<Contact> Contact { get; set; }
+
+        /// <summary>
+        /// All user orders
+        /// </summary>
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public IMutablePagedList<CustomerOrder> Orders { get; set; }
+
+        /// <summary>
+        /// All user RFQ
+        /// </summary>
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public IMutablePagedList<QuoteRequest> QuoteRequests { get; set; }
+
+        /// <summary>
+        /// All user subscriptions
+        /// </summary>
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public IMutablePagedList<Subscription> Subscriptions { get; set; }
     }
 }

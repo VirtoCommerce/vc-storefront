@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using PagedList.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,35 @@ namespace VirtoCommerce.Storefront.Domain
                  return quoteRequestBuilder.QuoteRequest;
              };
             return builder.WithQuotesAsync(factory);
+        }
+
+        public static Task WithUserQuotesAsync(this IWorkContextBuilder builder, Func<IMutablePagedList<Model.Quote.QuoteRequest>> factory)
+        {
+            builder.WorkContext.CurrentUser.QuoteRequests = factory();
+            return Task.CompletedTask;
+        }
+
+        public static Task WithUserQuotesAsync(this IWorkContextBuilder builder)
+        {
+            if (builder.WorkContext.CurrentUser != null)
+            {
+                var serviceProvider = builder.HttpContext.RequestServices;
+                var quoteService = serviceProvider.GetRequiredService<IQuoteService>();
+              
+                Func<int, int, IEnumerable<SortInfo>, IPagedList<Model.Quote.QuoteRequest>> factory = (pageNumber, pageSize, sortInfos) =>
+                {
+                    var quoteSearchCriteria = new Model.Quote.QuoteSearchCriteria
+                    {
+                        PageNumber = pageNumber,
+                        PageSize = pageSize,
+                        Sort = sortInfos?.ToString(),
+                        CustomerId = builder.WorkContext.CurrentUser.Id
+                    };
+                    return quoteService.SearchQuotes(quoteSearchCriteria);
+                };
+                return builder.WithUserQuotesAsync(() => new MutablePagedList<Model.Quote.QuoteRequest>(factory, 1, Model.Quote.QuoteSearchCriteria.DefaultPageSize));
+            }
+            return Task.CompletedTask;
         }
 
     }

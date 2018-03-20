@@ -52,7 +52,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpGet]
         public ActionResult GetOrderDetails(string number)
         {
-            var order = WorkContext.CurrentUser?.Contact?.Value?.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(number));
+            var order = WorkContext.CurrentUser?.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(number));
             if (order != null)
             {
                 WorkContext.CurrentOrder = order;

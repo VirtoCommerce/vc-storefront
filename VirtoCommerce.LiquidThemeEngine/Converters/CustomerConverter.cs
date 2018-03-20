@@ -30,6 +30,23 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 UserName = user.UserName
             };
 
+            if (user.Orders != null)
+            {
+                result.Orders = new MutablePagedList<Order>((pageNumber, pageSize, sortInfos) =>
+                {
+                    user.Orders.Slice(pageNumber, pageSize, sortInfos);
+                    return new StaticPagedList<Order>(user.Orders.Select(x => ToLiquidOrder(x, workContext.CurrentLanguage, urlBuilder)), user.Orders);
+                }, user.Orders.PageNumber, user.Orders.PageSize);
+            }
+
+            if (user.QuoteRequests != null)
+            {
+                result.QuoteRequests = new MutablePagedList<QuoteRequest>((pageNumber, pageSize, sortInfos) =>
+                {
+                    user.QuoteRequests.Slice(pageNumber, pageSize, sortInfos);
+                    return new StaticPagedList<QuoteRequest>(user.QuoteRequests.Select(x => ToLiquidQuoteRequest(x)), user.QuoteRequests);
+                }, user.QuoteRequests.PageNumber, user.QuoteRequests.PageSize);
+            }
 
             var contact = user?.Contact?.Value;
             if (contact != null)
@@ -57,24 +74,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 {
                     var addresses = contact.Addresses.Select(a => ToLiquidAddress(a)).ToList();
                     result.Addresses = new MutablePagedList<Address>(addresses);
-                }
-
-                if (contact.Orders != null)
-                {
-                    result.Orders = new MutablePagedList<Order>((pageNumber, pageSize, sortInfos) =>
-                    {
-                        contact.Orders.Slice(pageNumber, pageSize, sortInfos);
-                        return new StaticPagedList<Order>(contact.Orders.Select(x => ToLiquidOrder(x, workContext.CurrentLanguage, urlBuilder)), contact.Orders);
-                    }, contact.Orders.PageNumber, contact.Orders.PageSize);
-                }
-
-                if (contact.QuoteRequests != null)
-                {
-                    result.QuoteRequests = new MutablePagedList<QuoteRequest>((pageNumber, pageSize, sortInfos) =>
-                    {
-                        contact.QuoteRequests.Slice(pageNumber, pageSize, sortInfos);
-                        return new StaticPagedList<QuoteRequest>(contact.QuoteRequests.Select(x => ToLiquidQuoteRequest(x)), contact.QuoteRequests);
-                    }, contact.QuoteRequests.PageNumber, contact.QuoteRequests.PageSize);
                 }
 
                 if (contact.DynamicProperties != null)

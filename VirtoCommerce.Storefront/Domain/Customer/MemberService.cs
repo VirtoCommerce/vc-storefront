@@ -1,30 +1,18 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using PagedList.Core;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
+using PagedList.Core;
 using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
-using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
-using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Services;
-using VirtoCommerce.Storefront.Model.Order;
-using VirtoCommerce.Storefront.Model.Order.Events;
-using VirtoCommerce.Storefront.Model.Order.Services;
-using VirtoCommerce.Storefront.Model.Quote;
-using VirtoCommerce.Storefront.Model.Quote.Services;
-using VirtoCommerce.Storefront.Model.Security.Events;
 using VirtoCommerce.Storefront.Model.Stores;
-using VirtoCommerce.Storefront.Model.Subscriptions;
-using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 using customerDto = VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
@@ -32,20 +20,13 @@ namespace VirtoCommerce.Storefront.Domain
     public class MemberService : IMemberService
     {
         private readonly ICustomerModule _customerApi;
-        private readonly ICustomerOrderService _orderService;
-        private readonly IQuoteService _quoteService;
-        private readonly ISubscriptionService _subscriptionService;
         private readonly IMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
 
-        public MemberService(ICustomerModule customerApi, ICustomerOrderService orderService,
-            IQuoteService quoteService, ISubscriptionService subscriptionService, IMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
+        public MemberService(ICustomerModule customerApi, IMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
         {
             _customerApi = customerApi;
-            _orderService = orderService;
-            _quoteService = quoteService;
             _memoryCache = memoryCache;
-            _subscriptionService = subscriptionService;
             _apiChangesWatcher = changesWatcher;
         }
 
@@ -72,10 +53,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (dto != null)
             {
-                result = dto.ToContact();
-                result.Orders = LazyLoadCustomerOrders(result);
-                result.QuoteRequests = LazyLoadCustomerQuotes(result);
-                result.Subscriptions = LazyLoadCustomerSubscriptions(result);
+                result = dto.ToContact();             
             }
             return result;
         }
@@ -147,55 +125,6 @@ namespace VirtoCommerce.Storefront.Domain
             return new StaticPagedList<Vendor>(vendors, pageNumber, pageSize, vendorSearchResult.TotalCount.Value);
         }
         #endregion      
-
-        protected virtual IMutablePagedList<QuoteRequest> LazyLoadCustomerQuotes(Contact customer)
-        {
-            Func<int, int, IEnumerable<SortInfo>, IPagedList<QuoteRequest>> quotesGetter = (pageNumber, pageSize, sortInfos) =>
-            {
-                var quoteSearchCriteria = new QuoteSearchCriteria
-                {
-                    PageNumber = pageNumber,
-                    PageSize = pageSize,
-                    Sort = sortInfos?.ToString(),
-                    CustomerId = customer.Id                   
-                };
-                return  _quoteService.SearchQuotes(quoteSearchCriteria);
-            };
-            return new MutablePagedList<QuoteRequest>(quotesGetter, 1, QuoteSearchCriteria.DefaultPageSize);
-        }
-
-        protected virtual IMutablePagedList<CustomerOrder> LazyLoadCustomerOrders(Contact customer)
-        {
-            var orderSearchcriteria = new OrderSearchCriteria
-            {
-                CustomerId = customer.Id             
-            };
-
-            Func<int, int, IEnumerable<SortInfo>, IPagedList<CustomerOrder>> ordersGetter = (pageNumber, pageSize, sortInfos) =>
-            {
-                orderSearchcriteria.PageNumber = pageNumber;
-                orderSearchcriteria.PageSize = pageSize;
-                return _orderService.SearchOrders(orderSearchcriteria);
-            };
-            return new MutablePagedList<CustomerOrder>(ordersGetter, 1, OrderSearchCriteria.DefaultPageSize);
-        }
-
-        protected virtual IMutablePagedList<Subscription> LazyLoadCustomerSubscriptions(Contact customer)
-        {
-            var subscriptionSearchcriteria = new SubscriptionSearchCriteria
-            {
-                CustomerId = customer.Id             
-            };
-
-            Func<int, int, IEnumerable<SortInfo>, IPagedList<Subscription>> subscriptionGetter = (pageNumber, pageSize, sortInfos) =>
-            {
-                subscriptionSearchcriteria.PageNumber = pageNumber;
-                subscriptionSearchcriteria.PageSize = pageSize;          
-                return _subscriptionService.SearchSubscription(subscriptionSearchcriteria);
-            };
-            return new MutablePagedList<Subscription>(subscriptionGetter, 1, SubscriptionSearchCriteria.DefaultPageSize);
-        }
-
     }
 }
 
