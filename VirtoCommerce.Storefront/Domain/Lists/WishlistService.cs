@@ -73,7 +73,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
         public async Task DeleteListsByIdsAsync(string[] ids)
         {
-            //filter out carts that don't belong to the current user
+            //filter out the lists that don't belong to the current user
             var ownedCartsIds = new List<string>();
             foreach(string id in ids)
             {
@@ -95,7 +95,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
         public async Task<int> GetWishlistCountByCustomer(User customer)
         {
-            //check for litim by customer
+            //check for limit by customer
             var searchCriteria = new WishlistSearchCriteria()
             {
                 PageSize = 0,

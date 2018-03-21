@@ -48,7 +48,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         public async Task<ActionResult> GetListsWithProduct([FromBody] GetListsWithProductRequest request)
         {
             var result = new List<string>();
-            //Need lock to prevent concurrent access to same cart
+            //Need lock to prevent concurrent access to same list
             foreach (var listName in request.ListNames)
             {
                 using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listName, request.Type)).LockAsync())
@@ -69,7 +69,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost]
         public async Task<ActionResult> AddItemToList([FromBody] AddListItem listItem)
         {
-            //Need lock to prevent concurrent access to same cart
+            //Need lock to prevent concurrent access to same list
             using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listItem.ListName, listItem.Type)).LockAsync())
             {
                 var wishlistBuilder = await LoadOrCreateWishlistAsync(listItem.ListName, listItem.Type);
@@ -88,7 +88,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpDelete]
         public async Task<ActionResult> RemoveItemFromList(string lineItemId, string listName, string type)
         {
-            //Need lock to prevent concurrent access to same cart
+            //Need lock to prevent concurrent access to same list
             using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listName, type)).LockAsync())
             {
                 var wishlistBuilder = await LoadOrCreateWishlistAsync(listName, type);
@@ -107,7 +107,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 searchCriteria = new WishlistSearchCriteria();
             }
 
-            //restricting query to lists search, only paging and sorting are available
+            //restricting query to lists belongs to other customers
             searchCriteria.StoreId = WorkContext.CurrentStore.Id;
             searchCriteria.Customer = WorkContext.CurrentUser;
             searchCriteria.Currency = WorkContext.CurrentCurrency;
