@@ -14,6 +14,7 @@ using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Security;
 using platformSecurityDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using System.Threading;
+using SignInResult = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models.SignInResult;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
@@ -114,7 +115,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             var result = await _commerceCoreApi.PasswordSignInAsync(user.UserName, password);
             return result.Status.EqualsInvariant("success") ? PasswordVerificationResult.Success : PasswordVerificationResult.Failed;
         }
-       
+
         public override async Task<IdentityResult> ChangePasswordAsync(User user, string currentPassword, string newPassword)
         {
             var changePassword = new platformSecurityDto.ChangePasswordInfo
@@ -156,8 +157,15 @@ namespace VirtoCommerce.Storefront.Domain.Security
     }
 
     //Stub for UserManager
-    public class UserStoreStub : IUserStore<User>, IUserPasswordStore<User>
+    public class UserStoreStub : IUserStore<User>, IUserPasswordStore<User>, IUserLockoutStore<User>
     {
+        private readonly IStorefrontSecurity _commerceCoreApi;
+
+        public UserStoreStub(IStorefrontSecurity commerceCoreApi)
+        {
+            _commerceCoreApi = commerceCoreApi;
+        }
+
         public Task AddLoginAsync(User user, UserLoginInfo login, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -236,9 +244,50 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
         {
+            var result = new platformSecurityDto.SecurityResult { Succeeded = true };
+            return Task.Factory.StartNew<IdentityResult>(() => result.ToIdentityResult() , cancellationToken);
+        }
+
+        #region LockoutStore
+
+        public async Task<DateTimeOffset?> GetLockoutEndDateAsync(User user, CancellationToken cancellationToken)
+        {
+            var result = await _commerceCoreApi.GetLockoutEndDateAsync(user.UserName, cancellationToken);
+            return await Task.Factory.StartNew<DateTimeOffset?>(() => result.LockoutEndDate, cancellationToken);
+        }
+
+        public Task SetLockoutEndDateAsync(User user, DateTimeOffset? lockoutEnd, CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task<int> IncrementAccessFailedCountAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.Factory.StartNew<int>(() => 5, cancellationToken);
+        }
+
+        public Task ResetAccessFailedCountAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task<int> GetAccessFailedCountAsync(User user, CancellationToken cancellationToken)
+        {
             throw new NotImplementedException();
         }
+
+        public async Task<bool> GetLockoutEnabledAsync(User user, CancellationToken cancellationToken)
+        {
+            //return Task.Factory.StartNew<bool>(() => true, cancellationToken);
+            var result = await _commerceCoreApi.GetLockoutEnabledAsync(user.UserName, cancellationToken);
+            return await Task.Factory.StartNew<bool>(() => result.LockoutEnabled.GetValueOrDefault(true), cancellationToken);
+        }
+
+        public Task SetLockoutEnabledAsync(User user, bool enabled, CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        #endregion
     }
-
-
 }
