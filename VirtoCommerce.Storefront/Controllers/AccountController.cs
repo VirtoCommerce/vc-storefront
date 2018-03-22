@@ -301,7 +301,7 @@ namespace VirtoCommerce.Storefront.Controllers
             var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
             if (user != null)
             {
-                await _commerceCoreApi.SendUserNameNotificationAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName);
+                await _commerceCoreApi.RemindUserNameNotificationWithHttpMessagesAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName);
             }
             else
             {
