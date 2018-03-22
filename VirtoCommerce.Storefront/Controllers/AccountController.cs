@@ -451,6 +451,12 @@ namespace VirtoCommerce.Storefront.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RegisterByInvite([FromForm] GetInvite formModel)
         {
+            if (formModel.Email == null)
+            {
+                WorkContext.ErrorMessage = "Not enough info for registration by invite";
+                return View("error", WorkContext);
+            }
+
             var registerUser = new Register { Email = formModel.Email, FirstName = formModel.Email, UserName = formModel.Email };
 
             var user = registerUser.ToUser();
