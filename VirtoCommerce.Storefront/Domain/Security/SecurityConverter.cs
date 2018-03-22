@@ -37,6 +37,10 @@ namespace VirtoCommerce.Storefront.Domain.Security
         {
             return ConverterInstance.ToUserRegistrationInfo(registerForm);
         }
+        public static UserRegistrationInfo ToUserRegistrationInfo(this InviteRegister registerForm)
+        {
+            return ConverterInstance.ToUserRegistrationInfo(registerForm);
+        }
         public static IdentityResult ToIdentityResult(this securityDto.SecurityResult resultDto)
         {
             return ConverterInstance.ToIdentityResult(resultDto);
@@ -71,6 +75,20 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return result;
 
         }
+        public virtual UserRegistrationInfo ToUserRegistrationInfo(InviteRegister registerForm)
+        {
+            var result = new UserRegistrationInfo
+            {
+                Email = registerForm.Email,
+                FirstName = registerForm.FirstName,
+                LastName = registerForm.LastName,
+                Password = registerForm.Password,
+                UserName = registerForm.Email
+            };
+            return result;
+
+        }
+
         public virtual User ToUser(Register registerForm)
         {
             var result = new User

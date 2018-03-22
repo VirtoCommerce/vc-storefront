@@ -421,6 +421,35 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        public async Task<ActionResult> GetInviteAgain([FromForm] GetInvite formModel)
+        {
+            if (formModel.Email == null )
+            {
+                WorkContext.ErrorMessage = "Not enough info for registration by invite";
+                return View("error", WorkContext);
+            }
+
+            var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
+
+            if (user == null)
+                return RedirectToPage("./RegisterByInvite");
+
+
+            if (_options.InviteRegistration)
+            {
+                var callbackUrl = Url.Action("ConfirmInvite", "Account", new { Email = user.Email, Code = "token" }, protocol: Request.Scheme);
+                await _commerceCoreApi.GenerateInviteTokenAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName, callbackUrl);
+
+                return View("customers/invite_done", WorkContext);
+            }
+
+            WorkContext.ErrorMessage = "Registration through invitations is not available";
+            return View("error");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> RegisterByInvite([FromForm] GetInvite formModel)
         {
             var registerUser = new Register { Email = formModel.Email, FirstName = formModel.Email, UserName = formModel.Email };
@@ -499,14 +528,9 @@ namespace VirtoCommerce.Storefront.Controllers
 
             if (result.Succeeded)
             {
-                var registerUser = new Register { FirstName = formModel.FirstName, LastName = formModel.LastName,
-                    Email = formModel.Email, UserName = formModel.Email, Password = formModel.Password};
-
-                await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, registerUser.ToUserRegistrationInfo()));
+                await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, formModel.ToUserRegistrationInfo()));
                 await _signInManager.SignInAsync(user, isPersistent: true);
                 await _publisher.Publish(new UserLoginEvent(WorkContext, user));
-
-                return StoreFrontRedirect("~/account");
             }
             else
             {
