@@ -465,6 +465,11 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// </value>
         public IList<TaxDetail> TaxDetails { get; set; }
 
+        /// <summary>
+        /// Gets or sets shopping cart type - Cart, Wishlist
+        /// </summary>
+        public string Type { get; set; }
+
         public void ApplyTaxRates(IEnumerable<TaxRate> taxRates)
         {
             TaxPercentRate = 0m;

@@ -43,7 +43,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         {
             if (WorkContext.CurrentUser.IsRegisteredUser)
             {
-                var entries = WorkContext.CurrentUser?.Contact?.Value?.QuoteRequests;
+                var entries = WorkContext.CurrentUser?.QuoteRequests;
                 if (entries != null)
                 {
                     entries.Slice(pageNumber, pageSize, sortInfos);

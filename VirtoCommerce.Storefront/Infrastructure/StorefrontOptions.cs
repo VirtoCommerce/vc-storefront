@@ -12,6 +12,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
         public LiquidThemeEngineOptions LiquidThemeEngine { get; set; }
         public RequireHttpsOptions RequireHttps { get; set; }
         public bool SendAccountConfirmation { get; set; } =  false;
+        public int WishlistLimit { get; set; }
         public bool InviteRegistration { get; set; } = false;
     }
 }
