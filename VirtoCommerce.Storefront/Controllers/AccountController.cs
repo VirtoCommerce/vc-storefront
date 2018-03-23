@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Model;
@@ -15,8 +14,6 @@ using VirtoCommerce.Storefront.Model.Security.Events;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using Microsoft.Extensions.Options;
-using VirtoCommerce.Storefront.Model.Customer;
-using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Security.Specifications;
 
 namespace VirtoCommerce.Storefront.Controllers
