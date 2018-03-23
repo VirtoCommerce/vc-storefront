@@ -57,7 +57,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 result.MiddleName = contact.MiddleName;
                 result.Name = contact.FullName;
                 result.TimeZone = contact.TimeZone;
-                result.PhotoUrl = contact.PhotoUrl;
                 if (contact.DefaultAddress != null)
                 {
                     result.DefaultAddress = ToLiquidAddress(contact.DefaultAddress);
