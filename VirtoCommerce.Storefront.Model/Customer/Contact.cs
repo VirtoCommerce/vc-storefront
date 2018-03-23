@@ -31,7 +31,6 @@ namespace VirtoCommerce.Storefront.Model.Customer
         public Address DefaultBillingAddress { get; set; }
         public Address DefaultShippingAddress { get; set; }
 
-        public string PhotoUrl { get; set; }
 
         /// <summary>
         /// Returns true if the customer accepts marketing, returns false if the customer does not.

@@ -133,7 +133,5 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// The user name of an operator who has loggen in on behalf of a customer
         /// </summary>
         public string OperatorUserName { get; set; }
-        [DataMember]
-        public string PhotoUrl { get; set; }
     }
 }

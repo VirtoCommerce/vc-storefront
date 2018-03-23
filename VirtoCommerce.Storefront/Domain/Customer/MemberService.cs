@@ -73,7 +73,6 @@ namespace VirtoCommerce.Storefront.Domain
                 existContact.FirstName = contactUpdateInfo.FirstName;
                 existContact.LastName = contactUpdateInfo.LastName;
                 existContact.Email = contactUpdateInfo.Email;
-                existContact.PhotoUrl = contactUpdateInfo.PhotoUrl;
 
                 var contactDto = existContact.ToCustomerContactDto();
                 await _customerApi.UpdateContactAsync(contactDto);
