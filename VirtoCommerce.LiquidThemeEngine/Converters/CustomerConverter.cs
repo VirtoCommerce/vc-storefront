@@ -80,8 +80,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 {
                     result.Metafields = new MetaFieldNamespacesCollection(new[] { new MetafieldsCollection("dynamic_properties", workContext.CurrentLanguage, contact.DynamicProperties) });
                 }
-            }
-            
+            }         
             
             return result;
         }
