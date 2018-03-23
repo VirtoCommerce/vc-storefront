@@ -437,7 +437,7 @@ namespace VirtoCommerce.Storefront.Controllers
             if (_options.InviteRegistration)
             {
                 var callbackUrl = Url.Action("ConfirmInvite", "Account", new { Email = user.Email, Code = "token" }, protocol: Request.Scheme);
-                await _commerceCoreApi.GenerateInviteTokenAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName, callbackUrl);
+                await _commerceCoreApi.SendRegistrationInvitationAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName, callbackUrl);
 
                 return View("customers/invite_done", WorkContext);
             }
@@ -470,7 +470,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 if (_options.InviteRegistration)
                 {
                     var callbackUrl = Url.Action("ConfirmInvite", "Account", new { Email = user.Email, Code = "token" }, protocol: Request.Scheme);
-                    await _commerceCoreApi.GenerateInviteTokenAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName, callbackUrl);
+                    await _commerceCoreApi.SendRegistrationInvitationAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName, callbackUrl);
                 }
                 return View("customers/invite_done", WorkContext);
             }
