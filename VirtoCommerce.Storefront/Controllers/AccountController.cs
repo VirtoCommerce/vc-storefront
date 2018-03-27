@@ -533,6 +533,8 @@ namespace VirtoCommerce.Storefront.Controllers
                 await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, formModel.ToUserRegistrationInfo()));
                 await _signInManager.SignInAsync(user, isPersistent: true);
                 await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+
+                return View("customers/account", WorkContext);
             }
             else
             {
