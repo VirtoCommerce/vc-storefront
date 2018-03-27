@@ -8,7 +8,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionAuthorizationRequirement requirement)
         {
-            if (context.User.HasClaim(SecurityConstants.Claims.IsAdministratorClaimType, true.ToString()))
+            if (context.User.IsInRole(SecurityConstants.Roles.Administrator))
             {
                 context.Succeed(requirement);
             }

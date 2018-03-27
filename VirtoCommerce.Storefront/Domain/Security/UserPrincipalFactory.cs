@@ -33,7 +33,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
             if (user.IsAdministrator)
             {
-                identity.AddClaim(new Claim(SecurityConstants.Claims.IsAdministratorClaimType, true.ToString()));
+                identity.AddClaim(new Claim(ClaimTypes.Role, SecurityConstants.Roles.Administrator));
             }
 
             if (user.SelectedCurrencyCode != null)
@@ -62,6 +62,13 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 foreach(var permission in user.Permissions)
                 {
                     identity.AddClaim(new Claim(SecurityConstants.Claims.PermissionClaimType, permission));
+                }
+            }
+            if (!user.Roles.IsNullOrEmpty())
+            {
+                foreach (var role in user.Roles)
+                {
+                    identity.AddClaim(new Claim(ClaimTypes.Role, role));
                 }
             }
             var principal = new ClaimsPrincipal(identity);

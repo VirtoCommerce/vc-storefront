@@ -79,6 +79,10 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// All user permissions
         /// </summary>
         public IEnumerable<string> Permissions { get; set; }
+        /// <summary>
+        /// All user roles
+        /// </summary>
+        public IEnumerable<string> Roles { get; set; }
 
         /// <summary>
         /// All user orders

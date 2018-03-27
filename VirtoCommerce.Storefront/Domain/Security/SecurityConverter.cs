@@ -120,7 +120,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 StoreId = userDto.StoreId,
                 IsRegisteredUser = true,
                 IsAdministrator = userDto.IsAdministrator ?? false,
-                Permissions = userDto.Permissions
+                Permissions = userDto.Permissions,
+                Roles = userDto.Roles?.Select(x => x.Name)
             };
 
             if (!userDto.Logins.IsNullOrEmpty())
