@@ -482,7 +482,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Customer = user,
                 Type = type,
                 IsAnonymous = !user.IsRegisteredUser,
-                CustomerName = user.IsRegisteredUser ? user.UserName : StorefrontClaims.AnonymousUsername
+                CustomerName = user.IsRegisteredUser ? user.UserName : SecurityConstants.AnonymousUsername
             };
 
             return cart;

@@ -31,26 +31,38 @@ namespace VirtoCommerce.Storefront.Domain.Security
             identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
 
-    
-            if(user.SelectedCurrencyCode != null)
+            if (user.IsAdministrator)
             {
-                identity.AddClaim(new Claim(StorefrontClaims.CurrencyClaimType, user.SelectedCurrencyCode));
+                identity.AddClaim(new Claim(SecurityConstants.Claims.IsAdministratorClaimType, true.ToString()));
+            }
+
+            if (user.SelectedCurrencyCode != null)
+            {
+                identity.AddClaim(new Claim(SecurityConstants.Claims.CurrencyClaimType, user.SelectedCurrencyCode));
             }
 
             if (!user.AllowedStores.IsNullOrEmpty())
             {
-                identity.AddClaim(new Claim(StorefrontClaims.AllowedStoresClaimType, string.Join(",", user.AllowedStores)));
+                identity.AddClaim(new Claim(SecurityConstants.Claims.AllowedStoresClaimType, string.Join(",", user.AllowedStores)));
             }
 
             if (!string.IsNullOrEmpty(user.OperatorUserName))
             {
-                identity.AddClaim(new Claim(StorefrontClaims.OperatorUserNameClaimType, user.OperatorUserName));
+                identity.AddClaim(new Claim(SecurityConstants.Claims.OperatorUserNameClaimType, user.OperatorUserName));
             }
 
             if (!string.IsNullOrEmpty(user.OperatorUserId))
             {
-                identity.AddClaim(new Claim(StorefrontClaims.OperatorUserIdClaimType, user.OperatorUserId));
-                identity.AddClaim(new Claim(StorefrontClaims.OperatorUserNameClaimType, user.OperatorUserName));
+                identity.AddClaim(new Claim(SecurityConstants.Claims.OperatorUserIdClaimType, user.OperatorUserId));
+                identity.AddClaim(new Claim(SecurityConstants.Claims.OperatorUserNameClaimType, user.OperatorUserName));
+            }
+
+            if(!user.Permissions.IsNullOrEmpty())
+            {
+                foreach(var permission in user.Permissions)
+                {
+                    identity.AddClaim(new Claim(SecurityConstants.Claims.PermissionClaimType, permission));
+                }
             }
             var principal = new ClaimsPrincipal(identity);
 

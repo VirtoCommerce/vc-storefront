@@ -4,7 +4,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Security.Specifications;
@@ -50,7 +49,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 user = new User
                 {
                     Id = Guid.NewGuid().ToString(),
-                    UserName = StorefrontClaims.AnonymousUsername,
+                    UserName = SecurityConstants.AnonymousUsername,
                 };
                 //Workaround: Do not sign out for js map requests they are always coming without authentication
                 if (!builder.HttpContext.Request.Path.Value.EndsWith(".map"))
@@ -60,9 +59,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 }
             }
             //Restore some properties from claims
-            user.OperatorUserId = builder.HttpContext.User.FindFirstValue(StorefrontClaims.OperatorUserIdClaimType);
-            user.OperatorUserName = builder.HttpContext.User.FindFirstValue(StorefrontClaims.OperatorUserNameClaimType);
-            user.SelectedCurrencyCode = builder.HttpContext.User.FindFirstValue(StorefrontClaims.CurrencyClaimType);
+            user.OperatorUserId = builder.HttpContext.User.FindFirstValue(SecurityConstants.Claims.OperatorUserIdClaimType);
+            user.OperatorUserName = builder.HttpContext.User.FindFirstValue(SecurityConstants.Claims.OperatorUserNameClaimType);
+            user.SelectedCurrencyCode = builder.HttpContext.User.FindFirstValue(SecurityConstants.Claims.CurrencyClaimType);
 
             builder.WorkContext.CurrentUser = user;
         }

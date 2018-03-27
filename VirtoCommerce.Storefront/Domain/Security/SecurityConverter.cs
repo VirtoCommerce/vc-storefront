@@ -94,7 +94,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 UserName = user.UserName,
                 UserType = "Customer",
                 StoreId = user.StoreId,
-                MemberId = user.ContactId                
+                MemberId = user.ContactId,
             };
             if(!user.ExternalLogins.IsNullOrEmpty())
             {
@@ -119,7 +119,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 UserName = userDto.UserName,
                 StoreId = userDto.StoreId,
                 IsRegisteredUser = true,
-                IsAdministrator = userDto.IsAdministrator ?? false
+                IsAdministrator = userDto.IsAdministrator ?? false,
+                Permissions = userDto.Permissions
             };
 
             if (!userDto.Logins.IsNullOrEmpty())

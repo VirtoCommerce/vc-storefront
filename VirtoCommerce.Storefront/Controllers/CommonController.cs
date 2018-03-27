@@ -33,7 +33,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// GET : /resetcache
         /// </summary>
         /// <returns></returns>
-        [Authorize(Policy = "CanResetCache")]
+        [Authorize(SecurityConstants.Permissions.CanResetCache)]
         public ActionResult ResetCache()
         {
 

@@ -76,6 +76,11 @@ namespace VirtoCommerce.Storefront.Model.Security
         public Lazy<Contact> Contact { get; set; }
 
         /// <summary>
+        /// All user permissions
+        /// </summary>
+        public IEnumerable<string> Permissions { get; set; }
+
+        /// <summary>
         /// All user orders
         /// </summary>
         [JsonIgnore]
