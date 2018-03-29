@@ -42,8 +42,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Tags
             _formsMap["register_by_invite"] = "~/account/registerbyinvite";
             //Generates a form for confirm registration by invite
             _formsMap["confirm_invite"] = "~/account/confirminvite";
-            //Generates a form for registration by invite again
-            _formsMap["register_by_invite_again"] = "~/account/getinviteagain";
         }
 
         #region Public Methods and Operators

@@ -14,6 +14,7 @@ using VirtoCommerce.Storefront.Model.Security.Events;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using Microsoft.Extensions.Options;
+using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Security.Specifications;
 
 namespace VirtoCommerce.Storefront.Controllers
@@ -26,11 +27,12 @@ namespace VirtoCommerce.Storefront.Controllers
         private readonly IStorefrontSecurity _commerceCoreApi;
         private readonly IStorefrontUrlBuilder _urlBuilder;
         private readonly StorefrontOptions _options;
+        private readonly IMemberService _memberService;
 
         private readonly string[] _firstNameClaims = { ClaimTypes.GivenName, "urn:github:name", ClaimTypes.Name };
 
         public AccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<User> signInManager,
-            IEventPublisher publisher, IStorefrontSecurity commerceCoreApi, IOptions<StorefrontOptions> options)
+            IEventPublisher publisher, IStorefrontSecurity commerceCoreApi, IOptions<StorefrontOptions> options, IMemberService memberService)
             : base(workContextAccessor, urlBuilder)
         {
             _signInManager = signInManager;
@@ -38,6 +40,7 @@ namespace VirtoCommerce.Storefront.Controllers
             _commerceCoreApi = commerceCoreApi;
             _urlBuilder = urlBuilder;
             _options = options.Value;
+            _memberService = memberService;
         }
 
         //GET: /account
@@ -418,34 +421,6 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> GetInviteAgain([FromForm] GetInvite formModel)
-        {
-            if (formModel.Email == null )
-            {
-                WorkContext.ErrorMessage = "Not enough info for registration by invite";
-                return View("error", WorkContext);
-            }
-
-            var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
-
-            if (user == null)
-                return RedirectToPage("./RegisterByInvite");
-
-            if (_options.InviteRegistration)
-            {
-                var callbackUrl = Url.Action("ConfirmInvite", "Account", new { Email = user.Email, Code = "token" }, protocol: Request.Scheme);
-                await _commerceCoreApi.SendRegistrationInvitationAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName, callbackUrl);
-
-                return View("customers/invite_done", WorkContext);
-            }
-
-            WorkContext.ErrorMessage = "Registration through invitations is not available";
-            return View("error");
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> RegisterByInvite([FromForm] GetInvite formModel)
         {
             if (formModel.Email == null)
@@ -454,32 +429,60 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View("error", WorkContext);
             }
 
-            var registerUser = new Register { Email = formModel.Email, FirstName = formModel.Email, UserName = formModel.Email };
-
-            var user = registerUser.ToUser();
-            user.StoreId = WorkContext.CurrentStore.Id;
-
-            var result = await _signInManager.UserManager.CreateAsync(user);
-            if (result.Succeeded)
+            if (!_options.InviteRegistration)
             {
-                user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
+                WorkContext.ErrorMessage = "Registration through invitations is not available";
+                return View("error", WorkContext);
+            }
+            var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
 
-                if (_options.InviteRegistration)
+            //new user
+            if (user == null)
+            {
+                var registerUser = new Register { Email = formModel.Email, FirstName = formModel.Email, UserName = formModel.Email };
+
+                var newUser = registerUser.ToUser();
+                newUser.StoreId = WorkContext.CurrentStore.Id;
+
+                var result = await _signInManager.UserManager.CreateAsync(newUser);
+
+                if (result.Succeeded)
                 {
+                    user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
+
                     var callbackUrl = Url.Action("ConfirmInvite", "Account", new { Email = user.Email, Code = "token" }, protocol: Request.Scheme);
                     await _commerceCoreApi.SendRegistrationInvitationAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName, callbackUrl);
+
+                    return View("customers/invite_done", WorkContext);
                 }
-                return View("customers/invite_done", WorkContext);
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("form", error.Description);
+                    }
+                }
+                return View("customers/invite", WorkContext);
             }
+            // get invite again
             else
             {
-                foreach (var error in result.Errors)
+                var activatedUser = await _memberService.GetContactByIdAsync(user.ContactId);
+
+                //if account not activate
+                if (activatedUser == null)
                 {
-                    ModelState.AddModelError("form", error.Description);
+                    var callbackUrl = Url.Action("ConfirmInvite", "Account", new { Email = user.Email, Code = "token"}, protocol: Request.Scheme);
+                    await _commerceCoreApi.SendRegistrationInvitationAsync(user.Id, WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage.CultureName, callbackUrl);
+
+                    return View("customers/invite_done", WorkContext);
+                }
+                else
+                {
+                    WorkContext.ErrorMessage = "Sorry user already activated.";
+                    return View("error", WorkContext);
                 }
             }
-
-            return View("customers/invite", WorkContext);
         }
 
         [HttpGet]
@@ -523,9 +526,9 @@ namespace VirtoCommerce.Storefront.Controllers
 
             if (user == null)
             {
-                return RedirectToPage("./RegisterByInvite");
-
+                return RedirectToPage("./RegisterInvite");
             }
+
             var result = await _signInManager.UserManager.ResetPasswordAsync(user, formModel.Token, formModel.Password);
 
             if (result.Succeeded)
@@ -534,7 +537,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 await _signInManager.SignInAsync(user, isPersistent: true);
                 await _publisher.Publish(new UserLoginEvent(WorkContext, user));
 
-                return View("customers/account", WorkContext);
+                return StoreFrontRedirect("~/account");
             }
             else
             {
