@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using PagedList.Core;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
+using PagedList.Core;
 using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
@@ -12,6 +12,7 @@ using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Customer.Services;
+using VirtoCommerce.Storefront.Model.Derivatives.Services;
 using VirtoCommerce.Storefront.Model.Inventory.Services;
 using VirtoCommerce.Storefront.Model.Pricing.Services;
 using VirtoCommerce.Storefront.Model.Services;
@@ -28,12 +29,13 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IPricingService _pricingService;
         private readonly IMemberService _customerService;
         private readonly ISubscriptionService _subscriptionService;
+        private readonly IDerivativeService _derivativeService;
         private readonly IInventoryService _inventoryService;
         private readonly IMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
 
         public CatalogService(IWorkContextAccessor workContextAccessor, ICatalogModuleCategories categoriesApi, ICatalogModuleProducts productsApi,
-                              ICatalogModuleSearch searchApi, IPricingService pricingService, IMemberService customerService, ISubscriptionService subscriptionService,
+                              ICatalogModuleSearch searchApi, IPricingService pricingService, IMemberService customerService, ISubscriptionService subscriptionService, IDerivativeService derivativeService,
                               IInventoryService inventoryService, IMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
         {
             _workContextAccessor = workContextAccessor;
@@ -45,6 +47,7 @@ namespace VirtoCommerce.Storefront.Domain
             _inventoryService = inventoryService;
             _customerService = customerService;
             _subscriptionService = subscriptionService;
+            _derivativeService = derivativeService;
             _memoryCache = memoryCache;
             _apiChangesWatcher = changesWatcher;
         }
@@ -99,6 +102,11 @@ namespace VirtoCommerce.Storefront.Domain
                     if (workContext.CurrentStore.SubscriptionEnabled && responseGroup.HasFlag(ItemResponseGroup.ItemWithPaymentPlan))
                     {
                         taskList.Add(LoadProductPaymentPlanAsync(allProducts, workContext));
+                    }
+
+                    if (responseGroup.HasFlag(ItemResponseGroup.ItemWithDerivativeInfo))
+                    {
+                        taskList.Add(LoadProductDerivativeInfoAsync(allProducts, workContext));
                     }
 
                     await Task.WhenAll(taskList.ToArray());
@@ -182,7 +190,7 @@ namespace VirtoCommerce.Storefront.Domain
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
                 cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
 
-                return await _productsApi.GetProductByPlentyIdsAsync(ids, ((int)responseGroup).ToString());            
+                return await _productsApi.GetProductByPlentyIdsAsync(ids, ((int)responseGroup).ToString());
             });
             return result.Select(x => x.ToProduct(workContext.CurrentLanguage, workContext.CurrentCurrency, workContext.CurrentStore)).ToArray();
         }
@@ -213,7 +221,7 @@ namespace VirtoCommerce.Storefront.Domain
                 var searchCriteria = criteria.ToCategorySearchCriteriaDto(workContext);
                 return await _searchApi.SearchCategoriesAsync(searchCriteria);
 
-            
+
             });
             var result = new PagedList<Category>(new List<Category>().AsQueryable(), 1, 1);
             if (searchResult.Items != null)
@@ -376,14 +384,19 @@ namespace VirtoCommerce.Storefront.Domain
         {
             await _inventoryService.EvaluateProductInventoriesAsync(products, workContext);
         }
-         
+
         protected virtual async Task LoadProductPaymentPlanAsync(List<Product> products, WorkContext workContext)
         {
             var paymentPlans = await _subscriptionService.GetPaymentPlansByIdsAsync(products.Select(x => x.Id).ToArray());
             foreach (var product in products)
             {
-                product.PaymentPlan = paymentPlans.FirstOrDefault(x=> product.Equals(x));
+                product.PaymentPlan = paymentPlans.FirstOrDefault(x => product.Equals(x));
             }
+        }
+
+        protected virtual async Task LoadProductDerivativeInfoAsync(List<Product> products, WorkContext workContext)
+        {
+             await _derivativeService.EvaluateProductDerivativeInfoAsync(products, workContext);
         }
 
         protected virtual void SetChildCategoriesLazyLoading(Category[] categories)

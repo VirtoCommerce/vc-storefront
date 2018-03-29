@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Derivatives;
 using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Subscriptions;
 
@@ -287,6 +288,21 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public PaymentPlan PaymentPlan { get; set; }
 
         /// <summary>
+        /// Mandatory Derivative contract info
+        /// </summary>
+        public DerivativeInfo MandatoryDerivativeInfo { get; set; }
+
+        /// <summary>
+        /// Optional Derivative contract info
+        /// </summary>
+        public DerivativeInfo OptionalDerivativeInfo { get; set; }
+
+        /// <summary>
+        /// Product Derivative contracts
+        /// </summary>
+        public IList<Derivative> Derivatives { get; set; }
+
+        /// <summary>
         /// Apply prices to product
         /// </summary>
         /// <param name="prices"></param>
@@ -425,7 +441,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         #endregion
 
-  
+
 
         public override string ToString()
         {
