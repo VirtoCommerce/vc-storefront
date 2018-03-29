@@ -77,7 +77,7 @@ namespace VirtoCommerce.Storefront.Domain
                 await _customerApi.UpdateContactAsync(contactDto);
 
                 //Invalidate cache
-                CustomerCacheRegion.ExpireCustomer(existContact.Id);
+                CustomerCacheRegion.ExpireMember(existContact.Id);
             }
         }
 
@@ -89,7 +89,7 @@ namespace VirtoCommerce.Storefront.Domain
                 await _customerApi.UpdateAddessesAsync(contactId, addresses.Select(x => x.ToCustomerAddressDto()).ToList());
 
                 //Invalidate cache
-                CustomerCacheRegion.ExpireCustomer(existContact.Id);
+                CustomerCacheRegion.ExpireMember(existContact.Id);
             }
         }       
 
@@ -124,7 +124,39 @@ namespace VirtoCommerce.Storefront.Domain
             var vendors = vendorSearchResult.Vendors.Select(x => x.ToVendor(language, store));       
             return new StaticPagedList<Vendor>(vendors, pageNumber, pageSize, vendorSearchResult.TotalCount.Value);
         }
-        #endregion      
+
+        public async Task<Organization> GetOrganizationByIdAsync(string organizationId)
+        {
+            Organization result = null;
+            var cacheKey = CacheKey.With(GetType(), "GetOrganizationByIdAsync", organizationId);
+            var dto = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                var organizationDto = await _customerApi.GetOrganizationByIdAsync(organizationId);
+                if (organizationDto != null)
+                {
+                    cacheEntry.AddExpirationToken(CustomerCacheRegion.CreateChangeToken(organizationDto.Id));
+                    cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
+                }
+                return organizationDto;
+            });
+
+            if (dto != null)
+            {
+                result = dto.ToOrganization();
+            }
+            return result;
+        }
+
+        public Organization GetOrganizationById(string organizationId)
+        {
+            return Task.Factory.StartNew(() => GetOrganizationByIdAsync(organizationId), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+        }
+
+        public Task CreateOrganizationAsync(Organization organization)
+        {
+            throw new System.NotImplementedException();
+        }
+        #endregion
     }
 }
 

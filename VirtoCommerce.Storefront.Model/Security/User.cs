@@ -29,6 +29,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         public string UserName { get; set; }
         public string UserNameNormalized => UserName?.ToUpper();
         public string Password { get; set; }
+        public string PasswordHash { get; set; }
 
         public string PhoneNumber { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
@@ -38,10 +39,24 @@ namespace VirtoCommerce.Storefront.Model.Security
         public string Email { get; set; }
         public string EmailNormalized => Email?.ToUpper();
 
+        public bool EmailConfirmed { get; set; }
+
         public string DefaultLanguage { get; set; }
 
         public bool TwoFactorEnabled { get; set; }
 
+        /// <summary>
+        ///  Used to record failures for the purposes of lockout
+        /// </summary>
+        public virtual int AccessFailedCount { get; set; }
+        /// <summary>
+        /// Is lockout enabled for this user
+        /// </summary>
+        public virtual bool LockoutEnabled { get; set; }
+        /// <summary>
+        /// DateTime in UTC when lockout ends, any time in the past is considered not locked out.
+        /// </summary>
+        public virtual DateTime? LockoutEndDateUtc { get; set; }
         /// <summary>
         /// Returns true if user authenticated  returns false if it anonymous. 
         /// </summary>

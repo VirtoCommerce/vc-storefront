@@ -6,6 +6,7 @@ using securityDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Model
 using platformSecurityDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using VirtoCommerce.Storefront.Common;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
@@ -14,13 +15,13 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public static SecurityConverter ConverterInstance =>
             new SecurityConverter();
 
-        public static securityDto.ApplicationUserExtended ToUserDto(this User user)
+        public static securityDto.ApplicationUserExtended ToUserDto(this User user, IEnumerable<platformSecurityDto.Role> allPlatformRoles = null)
         {
-            return ConverterInstance.ToUserDto(user);
+            return ConverterInstance.ToUserDto(user, allPlatformRoles);
         }
-        public static platformSecurityDto.ApplicationUserExtended ToPlatformUserDto(this User user)
+        public static platformSecurityDto.ApplicationUserExtended ToPlatformUserDto(this User user, IEnumerable<platformSecurityDto.Role> allPlatformRoles = null)
         {
-            return ConverterInstance.ToUserDto(user).JsonConvert<platformSecurityDto.ApplicationUserExtended>();
+            return ConverterInstance.ToUserDto(user, allPlatformRoles).JsonConvert<platformSecurityDto.ApplicationUserExtended>();
         }
 
         public static User ToUser(this securityDto.StorefrontUser userDto)
@@ -66,7 +67,13 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 FirstName = registerForm.FirstName,
                 LastName = registerForm.LastName,
                 Password = registerForm.Password,
-                UserName = registerForm.UserName
+                UserName = registerForm.UserName,
+                Address = registerForm.Address,
+                Name = registerForm.Name,
+                ExistOrganizationId = registerForm.OrganizationId,
+                NewOrganizationName = registerForm.OrganizationName,
+                Role = registerForm.Role,
+                StoreId = registerForm.StoreId
             };
             return result;
 
@@ -77,14 +84,17 @@ namespace VirtoCommerce.Storefront.Domain.Security
             {
                 Email = registerForm.Email,
                 UserName = registerForm.UserName,
-                Password = registerForm.Password
+                Password = registerForm.Password,
             };
-         
+            if (!string.IsNullOrEmpty(registerForm.Role))
+            {
+                result.Roles = new[] { registerForm.Role };
+            }
 
             return result;
         }
 
-        public virtual securityDto.ApplicationUserExtended ToUserDto(User user)
+        public virtual securityDto.ApplicationUserExtended ToUserDto(User user, IEnumerable<platformSecurityDto.Role> allPlatformRoles = null)
         {
             var result = new securityDto.ApplicationUserExtended
             {
@@ -95,8 +105,19 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 UserType = "Customer",
                 StoreId = user.StoreId,
                 MemberId = user.ContactId,
+                AccessFailedCount = user.AccessFailedCount,
+                EmailConfirmed = user.EmailConfirmed,
+                LockoutEnabled = user.LockoutEnabled,
+                LockoutEndDateUtc = user.LockoutEndDateUtc,
+                TwoFactorEnabled = user.TwoFactorEnabled
             };
-            if(!user.ExternalLogins.IsNullOrEmpty())
+
+            if (!user.Roles.IsNullOrEmpty() && allPlatformRoles != null)
+            {
+                //Need to convert role names to the registered in the platform roles entities 
+                result.Roles = allPlatformRoles.Join(user.Roles, x => x.Name, y => y, (x, y) => new securityDto.Role { Id = x.Id }).ToList();
+            }
+            if (!user.ExternalLogins.IsNullOrEmpty())
             {
                 result.Logins = user.ExternalLogins.Select(x => new securityDto.ApplicationUserLogin
                 {
@@ -121,7 +142,11 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 IsRegisteredUser = true,
                 IsAdministrator = userDto.IsAdministrator ?? false,
                 Permissions = userDto.Permissions,
-                Roles = userDto.Roles?.Select(x => x.Name)
+                Roles = userDto.Roles?.Select(x => x.Name),
+                AccessFailedCount = userDto.AccessFailedCount ?? 0,
+                LockoutEnabled = userDto.LockoutEnabled ?? false,
+                EmailConfirmed = userDto.EmailConfirmed ?? false,
+                LockoutEndDateUtc = userDto.LockoutEndDateUtc
             };
 
             if (!userDto.Logins.IsNullOrEmpty())

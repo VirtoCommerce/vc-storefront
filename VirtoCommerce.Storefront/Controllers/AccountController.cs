@@ -181,7 +181,6 @@ namespace VirtoCommerce.Storefront.Controllers
                 }
 
             }
-            //TODO: Locked out not work. Need to add some API methods to support lockout data.
             if (loginResult.IsLockedOut)
             {
                 return View("lockedout", WorkContext);

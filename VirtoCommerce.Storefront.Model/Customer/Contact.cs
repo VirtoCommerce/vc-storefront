@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Order;
@@ -31,6 +32,7 @@ namespace VirtoCommerce.Storefront.Model.Customer
         public Address DefaultBillingAddress { get; set; }
         public Address DefaultShippingAddress { get; set; }
 
+        public IList<Organization> Organizations { get; set; } = new List<Organization>();
 
         /// <summary>
         /// Returns true if the customer accepts marketing, returns false if the customer does not.

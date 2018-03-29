@@ -6,7 +6,7 @@ using VirtoCommerce.Storefront.Model.Security.Events;
 
 namespace VirtoCommerce.Storefront.Domain.Customer.Handlers
 {
-    public class SecurityEventsHandler : IEventHandler<UserRegisteredEvent>
+    public  class SecurityEventsHandler : IEventHandler<UserRegisteredEvent>
     {
         private readonly IMemberService _memberService;
         public SecurityEventsHandler(IMemberService memberService)
@@ -18,14 +18,15 @@ namespace VirtoCommerce.Storefront.Domain.Customer.Handlers
         public virtual async Task Handle(UserRegisteredEvent @event)
         {
             //Need to create new contact related to new user with same Id
-            var registrationData = @event.RegistrationInfo;
+            var registrationData = @event.RegistrationInfo;           
+
             var contact = new Contact
             {
                 Id = @event.User.Id,
-                Name = registrationData.UserName,
+                Name = registrationData.Name ?? registrationData.UserName,
                 FullName = string.Join(" ", registrationData.FirstName, registrationData.LastName),
                 FirstName = registrationData.FirstName,
-                LastName = registrationData.LastName
+                LastName = registrationData.LastName,
             };
             if (!string.IsNullOrEmpty(registrationData.Email))
             {
@@ -34,6 +35,21 @@ namespace VirtoCommerce.Storefront.Domain.Customer.Handlers
             if (string.IsNullOrEmpty(contact.FullName) || string.IsNullOrWhiteSpace(contact.FullName))
             {
                 contact.FullName = registrationData.Email;
+            }
+            if (registrationData.Address != null)
+            {
+                contact.Addresses = new[] { registrationData.Address };
+            }
+            //Try to register organization first
+            if (!string.IsNullOrEmpty(registrationData.NewOrganizationName))
+            {
+                var organization = new Organization
+                {
+                    Name = registrationData.NewOrganizationName,
+                    Addresses = contact.Addresses
+                };               
+                await _memberService.CreateOrganizationAsync(organization);
+                contact.Organizations.Add(organization);
             }
             await _memberService.CreateContactAsync(contact);
         }

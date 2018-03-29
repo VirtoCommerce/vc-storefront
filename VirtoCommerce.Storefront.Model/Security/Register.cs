@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 
 namespace VirtoCommerce.Storefront.Model.Security
 {
@@ -14,5 +15,17 @@ namespace VirtoCommerce.Storefront.Model.Security
         public string UserName { get; set; }
         [FromForm(Name = "customer[password]")]
         public string Password { get; set; }
+        [FromForm(Name = "customer[store_id]")]
+        public string StoreId { get; set; }
+        [FromForm(Name = "customer[role]")]
+        public string Role { get; set; }
+        [FromForm(Name = "customer[organization_name]")]
+        public string OrganizationName { get; set; }
+        [FromForm(Name = "customer[organization_id]")]
+        public string OrganizationId { get; set; }
+        [FromForm(Name = "customer[name]")]
+        public string Name { get; set; }
+        [FromForm]
+        public Address Address { get; set; }
     }
 }

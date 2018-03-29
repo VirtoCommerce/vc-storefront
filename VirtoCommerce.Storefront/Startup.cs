@@ -200,6 +200,9 @@ namespace VirtoCommerce.Storefront
                 options.Password.RequireUppercase = true;
                 options.Password.RequireDigit = false;
                 options.Password.RequireNonAlphanumeric = false;
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
             }).AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(options =>
