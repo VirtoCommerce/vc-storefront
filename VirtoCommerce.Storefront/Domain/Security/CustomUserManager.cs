@@ -159,11 +159,11 @@ namespace VirtoCommerce.Storefront.Domain.Security
     //Stub for UserManager
     public class UserStoreStub : IUserStore<User>, IUserPasswordStore<User>, IUserLockoutStore<User>
     {
-        private readonly IStorefrontSecurity _commerceCoreApi;
+        private readonly ISecurity _platformSecurityApi;
 
-        public UserStoreStub(IStorefrontSecurity commerceCoreApi)
+        public UserStoreStub(ISecurity platformSecurityApi)
         {
-            _commerceCoreApi = commerceCoreApi;
+            _platformSecurityApi = platformSecurityApi;
         }
 
         public Task AddLoginAsync(User user, UserLoginInfo login, CancellationToken cancellationToken)
@@ -252,8 +252,12 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public async Task<DateTimeOffset?> GetLockoutEndDateAsync(User user, CancellationToken cancellationToken)
         {
-            var result = await _commerceCoreApi.GetLockoutEndDateAsync(user.UserName, cancellationToken);
-            return await Task.Factory.StartNew<DateTimeOffset?>(() => result.LockoutEndDate, cancellationToken);
+            var result = await _platformSecurityApi.LockoutEndDateAsyncAsync(user.Id, cancellationToken: cancellationToken);
+            if (result != null)
+            {
+                return result.LockoutEndDate.GetValueOrDefault(DateTime.UtcNow);
+            }
+            return null;
         }
 
         public Task SetLockoutEndDateAsync(User user, DateTimeOffset? lockoutEnd, CancellationToken cancellationToken)
@@ -263,6 +267,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public Task<int> IncrementAccessFailedCountAsync(User user, CancellationToken cancellationToken)
         {
+            //ToDO add method to platform
             return Task.Factory.StartNew<int>(() => 5, cancellationToken);
         }
 
@@ -273,14 +278,18 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public Task<int> GetAccessFailedCountAsync(User user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            //ToDO add method to platform
+            return Task.Factory.StartNew<int>(() => 5, cancellationToken);
         }
 
         public async Task<bool> GetLockoutEnabledAsync(User user, CancellationToken cancellationToken)
         {
-            //return Task.Factory.StartNew<bool>(() => true, cancellationToken);
-            var result = await _commerceCoreApi.GetLockoutEnabledAsync(user.UserName, cancellationToken);
-            return await Task.Factory.StartNew<bool>(() => result.LockoutEnabled.GetValueOrDefault(true), cancellationToken);
+            var result = await _platformSecurityApi.LockoutEnabledAsyncAsync(user.Id, cancellationToken: cancellationToken);
+            if (result != null)
+            {
+               return result.LockoutEnable.GetValueOrDefault(true);
+            }
+            return false;
         }
 
         public Task SetLockoutEnabledAsync(User user, bool enabled, CancellationToken cancellationToken)
