@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using PagedList.Core;
 using VirtoCommerce.Storefront.AutoRestClients.DerivativesModuleApi;
-using VirtoCommerce.Storefront.AutoRestClients.DerivativesModuleApi.Models;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
@@ -46,9 +46,9 @@ namespace VirtoCommerce.Storefront.Domain.Derivatives
             var searchResult = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
-                cacheEntry.AddExpirationToken(InventoryCacheRegion.CreateChangeToken());
+                cacheEntry.AddExpirationToken(DerivativesCacheRegion.CreateChangeToken());
 
-                var criteria = new DerivativeSearchCriteria
+                var criteria = new AutoRestClients.DerivativesModuleApi.Models.DerivativeSearchCriteria
                 {
                     ProductIds = productIds,
                     MemberIds = new[] { workContext.CurrentUser.ContactId },
@@ -89,6 +89,51 @@ namespace VirtoCommerce.Storefront.Domain.Derivatives
                     };
                 }
             }
+        }
+
+        public async Task<IList<Derivative>> GetDerivativesAsync(string[] ids)
+        {
+            var cacheKey = CacheKey.With(GetType(), "GetDerivativesAsync", ids.GetOrderIndependentHashCode().ToString());
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                cacheEntry.AddExpirationToken(DerivativesCacheRegion.CreateChangeToken());
+                return (await _derivativesApi.GetByIdsAsync(ids)).Select(x => x.ToDerivative()).ToList();
+            });
+        }
+
+        public async Task<IPagedList<Derivative>> SearchDerivativesAsync(DerivativeSearchCriteria criteria)
+        {
+            if (criteria == null)
+            {
+                throw new ArgumentNullException(nameof(criteria));
+            }
+
+            var cacheKey = CacheKey.With(GetType(), "SearchDerivativesAsync", criteria.GetHashCode().ToString());
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                cacheEntry.AddExpirationToken(DerivativesCacheRegion.CreateChangeToken());
+                var resultDto = await _derivativesApi.SearchAsync(criteria.ToSearchCriteriaDto(_workContextAccessor.WorkContext));
+
+                var result = resultDto.Derivatives.Select(x => x.ToDerivative()).ToList();
+                return new StaticPagedList<Derivative>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalDerivativesCount.Value);
+            });
+        }
+
+        public async Task<IPagedList<DerivativeItem>> SearchDerivativeItemsAsync(DerivativeItemSearchCriteria criteria)
+        {
+            if (criteria == null)
+            {
+                throw new ArgumentNullException(nameof(criteria));
+            }
+
+            var cacheKey = CacheKey.With(GetType(), "SearchDerivativeItemsAsync", criteria.GetHashCode().ToString());
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                cacheEntry.AddExpirationToken(DerivativesCacheRegion.CreateChangeToken());
+                var resultDto = await _derivativesApi.SearchAsync(criteria.ToSearchCriteriaDto(_workContextAccessor.WorkContext));
+                var result = resultDto.Items.Select(x => x.ToDerivativeItem()).ToList();
+                return new StaticPagedList<DerivativeItem>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalItemsCount.Value);
+            });
         }
     }
 }

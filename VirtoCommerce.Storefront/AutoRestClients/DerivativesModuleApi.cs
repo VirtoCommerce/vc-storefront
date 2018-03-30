@@ -521,7 +521,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativesModuleApi
             return _result;
         }
 
-        /// <param name='id'>
+        /// <param name='ids'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -544,11 +544,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativesModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Derivative>> GetWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<Derivative>>> GetByIdsWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (id == null)
+            if (ids == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "id");
+                throw new ValidationException(ValidationRules.CannotBeNull, "ids");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -557,14 +557,32 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativesModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("id", id);
+                tracingParameters.Add("ids", ids);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "Get", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "GetByIds", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/derivatives/{id}").ToString();
-            _url = _url.Replace("{id}", System.Uri.EscapeDataString(id));
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/derivatives").ToString();
+            List<string> _queryParameters = new List<string>();
+            if (ids != null)
+            {
+                if (ids.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in ids)
+                    {
+                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -630,7 +648,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativesModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<Derivative>();
+            var _result = new HttpOperationResponse<IList<Derivative>>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -639,7 +657,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativesModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<Derivative>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<Derivative>>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -958,7 +976,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativesModuleApi
         /// Thrown when a required parameter is null
         /// </exception>
         Task<HttpOperationResponse<DerivativeSearchResult>> SearchWithHttpMessagesAsync(DerivativeSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='id'>
+        /// <param name='ids'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -975,7 +993,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativesModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<Derivative>> GetWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<Derivative>>> GetByIdsWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='items'>
         /// </param>
         /// <param name='customHeaders'>
@@ -1062,24 +1080,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativesModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='id'>
+            /// <param name='ids'>
             /// </param>
-            public static Derivative Get(this IDerivativeOperations operations, string id)
+            public static IList<Derivative> GetByIds(this IDerivativeOperations operations, IList<string> ids)
             {
-                return operations.GetAsync(id).GetAwaiter().GetResult();
+                return operations.GetByIdsAsync(ids).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='id'>
+            /// <param name='ids'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Derivative> GetAsync(this IDerivativeOperations operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<Derivative>> GetByIdsAsync(this IDerivativeOperations operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetByIdsWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }

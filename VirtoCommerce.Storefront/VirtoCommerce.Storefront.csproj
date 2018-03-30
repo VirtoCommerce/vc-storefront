@@ -40,6 +40,7 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.0.0" />
     <PackageReference Include="Microsoft.SyndicationFeed.ReaderWriter" Version="1.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
     <PackageReference Include="MimeTypes" Version="1.0.6" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
     <PackageReference Include="Scrutor" Version="2.1.2" />
