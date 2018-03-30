@@ -9,7 +9,10 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             var result = true;
             if (product.TrackInventory && product.Inventory != null)
             {
-                result = product.Inventory.AllowPreorder == true || product.Inventory.AllowBackorder == true || product.AvailableQuantity > 0;
+                result = product.Inventory.AllowPreorder == true
+                    || product.Inventory.AllowBackorder == true
+                    || product.AvailableQuantity > 0
+                    || product.MandatoryDerivativeInfo?.RemainingQuantity > 0;
             }
             return result;
         }

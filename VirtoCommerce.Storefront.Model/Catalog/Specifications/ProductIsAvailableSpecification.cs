@@ -18,11 +18,12 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             {
                 result = _product.Inventory.AllowPreorder == true ||
                               _product.Inventory.AllowBackorder == true ||
-                              _product.AvailableQuantity >= requestedQuantity;
+                              _product.AvailableQuantity >= requestedQuantity ||
+                              _product.MandatoryDerivativeInfo?.RemainingQuantity >= requestedQuantity;
             }
 
             return result;
         }
-        
+
     }
 }
