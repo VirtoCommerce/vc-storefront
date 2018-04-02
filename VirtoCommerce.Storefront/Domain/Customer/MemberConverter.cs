@@ -28,6 +28,11 @@ namespace VirtoCommerce.Storefront.Domain
             return CustomerConverterInstance.ToContactDto(customer);
         }
 
+        public static customerDto.Organization ToOrganizationDto(this Organization org)
+        {
+            return CustomerConverterInstance.ToOrganizationDto(org);
+        }
+
         public static coreDto.Contact ToCoreContactDto(this Contact customer)
         {
             return CustomerConverterInstance.ToCoreContactDto(customer);
@@ -222,6 +227,29 @@ namespace VirtoCommerce.Storefront.Domain
                 retVal.Emails = customer.Emails;
             }
            
+            return retVal;
+        }
+
+        public virtual customerDto.Organization ToOrganizationDto(Organization org)
+        {
+            var retVal = new customerDto.Organization
+            {
+                Id = org.Id,
+                Name = org.Name,
+                MemberType = "Organization"
+            };
+            if (!org.UserGroups.IsNullOrEmpty())
+            {
+                retVal.Groups = org.UserGroups.ToArray();
+            }
+            if (!org.Addresses.IsNullOrEmpty())
+            {
+                retVal.Addresses = org.Addresses.Select(ToCustomerAddressDto).ToList();
+            }
+            if (!org.Emails.IsNullOrEmpty())
+            {
+                retVal.Emails = org.Emails;
+            }
             return retVal;
         }
 

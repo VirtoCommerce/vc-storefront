@@ -152,9 +152,11 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.Factory.StartNew(() => GetOrganizationByIdAsync(organizationId), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
         }
 
-        public Task CreateOrganizationAsync(Organization organization)
+        public async Task CreateOrganizationAsync(Organization organization)
         {
-            throw new System.NotImplementedException();
+            var orgDto = organization.ToOrganizationDto();
+            var org = await _customerApi.CreateOrganizationAsync(orgDto);
+            organization.Id = org.Id;
         }
         #endregion
     }

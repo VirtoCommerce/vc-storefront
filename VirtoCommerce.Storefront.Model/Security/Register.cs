@@ -5,6 +5,9 @@ namespace VirtoCommerce.Storefront.Model.Security
 {
     public partial class Register 
     {
+        [FromForm(Name = "customer[type]")]
+        public string Type { get; set; }
+
         [FromForm(Name = "customer[first_name]")]
         public string FirstName { get; set; }
         [FromForm(Name = "customer[last_name]")]
@@ -25,7 +28,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         public string OrganizationId { get; set; }
         [FromForm(Name = "customer[name]")]
         public string Name { get; set; }
-        [FromForm]
+        [FromForm(Name = "customer[address]")]
         public Address Address { get; set; }
     }
 }
