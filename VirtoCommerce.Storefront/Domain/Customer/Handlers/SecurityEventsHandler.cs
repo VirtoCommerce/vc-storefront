@@ -18,7 +18,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer.Handlers
         public virtual async Task Handle(UserRegisteredEvent @event)
         {
             //Need to create new contact related to new user with same Id
-            var registrationData = @event.RegistrationInfo;           
+            var registrationData = @event.UserRegistration;           
 
             var contact = new Contact
             {
@@ -41,15 +41,15 @@ namespace VirtoCommerce.Storefront.Domain.Customer.Handlers
                 contact.Addresses = new[] { registrationData.Address };
             }
             //Try to register organization first
-            if (!string.IsNullOrEmpty(registrationData.NewOrganizationName))
+            if (!string.IsNullOrEmpty(registrationData.OrganizationName))
             {
                 var organization = new Organization
                 {
-                    Name = registrationData.NewOrganizationName,
+                    Name = registrationData.OrganizationName,
                     Addresses = contact.Addresses
                 };               
                 await _memberService.CreateOrganizationAsync(organization);
-                contact.Organizations.Add(organization);
+                contact.Organization = organization;
             }
             await _memberService.CreateContactAsync(contact);
         }

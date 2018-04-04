@@ -27,7 +27,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// Security account user name
         /// </summary>
         public string UserName { get; set; }
-        public string UserNameNormalized => UserName?.ToUpper();
+        public string NormalizedUserName { get; set; }
         public string Password { get; set; }
         public string PasswordHash { get; set; }
 
@@ -37,7 +37,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// Returns the email address of the customer.
         /// </summary>
         public string Email { get; set; }
-        public string EmailNormalized => Email?.ToUpper();
+        public string NormalizedEmail { get; set; }
 
         public bool EmailConfirmed { get; set; }
 

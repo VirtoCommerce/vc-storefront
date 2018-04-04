@@ -58,16 +58,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             };
             var resultDto = await _platformSecurityApi.ChangePasswordAsync(user.UserName, changePassword);
             return resultDto.ToIdentityResult();
-
         }
-
-        public override async Task<IdentityResult> ResetPasswordAsync(User user, string token, string newPassword)
-        {
-            var resultDto = await _commerceCoreApi.ResetPasswordAsync(user.Id, token, newPassword);
-            return resultDto.ToIdentityResult();
-        }
-
-        
 
     }
 
@@ -144,7 +135,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public Task SetNormalizedUserNameAsync(User user, string normalizedName, CancellationToken cancellationToken)
         {
-            user.UserName = normalizedName;
+            user.NormalizedUserName = normalizedName;
             return Task.CompletedTask;
         }
 
@@ -244,7 +235,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.EmailNormalized);
+            return Task.FromResult(user.NormalizedEmail);
         }
 
         public Task SetEmailAsync(User user, string email, CancellationToken cancellationToken)
@@ -261,7 +252,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public Task SetNormalizedEmailAsync(User user, string normalizedEmail, CancellationToken cancellationToken)
         {
-            user.Email = normalizedEmail;
+            user.NormalizedEmail = normalizedEmail;
             return Task.CompletedTask;
         }
 
@@ -325,8 +316,6 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public Task SetPasswordHashAsync(User user, string passwordHash, CancellationToken cancellationToken)
         {
-            //This hash never be passed to the platform user through API call, platform will generate new hash from given password
-            //Method overridden only for correct UserManager.UserCreate(user, password) call
             user.PasswordHash = passwordHash;
             return Task.CompletedTask;
         }

@@ -18,6 +18,8 @@
             public const string Customer = "Customer";
             public const string Operator = "Operator";
             public const string Administrator = "Administrator";
+            public const string OrganizationOwner = "OrganizationOwner";
+            public const string OrganizationMember = "OrganizationMember";
         }
 
         public static class Permissions

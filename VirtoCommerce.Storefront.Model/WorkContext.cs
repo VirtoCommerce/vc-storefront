@@ -38,6 +38,7 @@ namespace VirtoCommerce.Storefront.Model
       
         public NameValueCollection QueryString { get; set; }
 
+        
         /// <summary>
         /// Current user
         /// </summary>
@@ -222,6 +223,8 @@ namespace VirtoCommerce.Storefront.Model
         /// Gets or sets the dictionary of application settings
         /// </summary>
         public IDictionary<string, object> ApplicationSettings { get; set; }
+
+        public UserRegistration UserRegistration { get; set; }
 
         public ResetPassword ResetPassword { get; set; }
         /// <summary>

@@ -32,7 +32,7 @@ namespace VirtoCommerce.Storefront.Model.Customer
         public Address DefaultBillingAddress { get; set; }
         public Address DefaultShippingAddress { get; set; }
 
-        public IList<Organization> Organizations { get; set; } = new List<Organization>();
+        public Organization Organization { get; set; }
 
         /// <summary>
         /// Returns true if the customer accepts marketing, returns false if the customer does not.

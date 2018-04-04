@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -225,6 +226,11 @@ namespace VirtoCommerce.Storefront.Domain
             if (!customer.Emails.IsNullOrEmpty())
             {
                 retVal.Emails = customer.Emails;
+            }
+            //Support only one organization then
+            if(customer.Organization != null)
+            {
+                retVal.Organizations = new List<string>() { customer.Organization.Id };
             }
            
             return retVal;

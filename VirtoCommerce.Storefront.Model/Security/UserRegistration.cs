@@ -1,18 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace VirtoCommerce.Storefront.Model.Security
 {
-    public partial class Register 
+    public partial class UserRegistration 
     {
         [FromForm(Name = "customer[type]")]
         public string Type { get; set; }
+        [FromForm(Name = "customer[token]")]
+        public string Token { get; set; }
 
         [FromForm(Name = "customer[first_name]")]
         public string FirstName { get; set; }
         [FromForm(Name = "customer[last_name]")]
         public string LastName { get; set; }
         [FromForm(Name = "customer[email]")]
+        [EmailAddress]
         public string Email { get; set; }
         [FromForm(Name = "customer[user_name]")]
         public string UserName { get; set; }

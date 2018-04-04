@@ -53,7 +53,12 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (dto != null)
             {
-                result = dto.ToContact();             
+                result = dto.ToContact();
+                if (!dto.Organizations.IsNullOrEmpty())
+                {
+                    //Load contact organization
+                    result.Organization = await GetOrganizationByIdAsync(dto.Organizations.FirstOrDefault());
+                }
             }
             return result;
         }
@@ -143,6 +148,23 @@ namespace VirtoCommerce.Storefront.Domain
             if (dto != null)
             {
                 result = dto.ToOrganization();
+
+                //Lazy load organization contacts
+                result.Contacts = new MutablePagedList<Contact>((pageNumber, pageSize, sortInfos) =>
+                {
+                    var criteria = new OrganizationContactsSearchCriteria
+                    {
+                        OrganizationId = result.Id,
+                        PageNumber = pageNumber,
+                        PageSize = pageSize                        
+                    };
+                    if (!sortInfos.IsNullOrEmpty())
+                    {
+                        criteria.Sort = SortInfo.ToString(sortInfos);
+                    }
+                    return SearchOrganizationContacts(criteria);
+                  
+                }, 1, 20);
             }
             return result;
         }
@@ -157,6 +179,27 @@ namespace VirtoCommerce.Storefront.Domain
             var orgDto = organization.ToOrganizationDto();
             var org = await _customerApi.CreateOrganizationAsync(orgDto);
             organization.Id = org.Id;
+        }
+
+        public IPagedList<Contact> SearchOrganizationContacts(OrganizationContactsSearchCriteria criteria)
+        {
+            return Task.Factory.StartNew(() => SearchOrganizationContactsAsync(criteria), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+        }
+
+        public async Task<IPagedList<Contact>> SearchOrganizationContactsAsync(OrganizationContactsSearchCriteria criteria)
+        {
+            var criteriaDto = new customerDto.MembersSearchCriteria
+            {
+                MemberId = criteria.OrganizationId,
+                Skip = (criteria.PageNumber - 1) * criteria.PageSize,
+                Take = criteria.PageSize,
+                Sort = criteria.Sort,
+                SearchPhrase = criteria.SearchPhrase
+            };
+            
+            var searchResult = await _customerApi.SearchAsync(criteriaDto);
+            var contacts = _customerApi.GetContactsByIds(searchResult.Results.Select(x => x.Id).ToList()).Select(x => x.ToContact()).ToList();
+            return new StaticPagedList<Contact>(contacts, criteria.PageNumber, criteria.PageSize, searchResult.TotalCount.Value);
         }
         #endregion
     }
