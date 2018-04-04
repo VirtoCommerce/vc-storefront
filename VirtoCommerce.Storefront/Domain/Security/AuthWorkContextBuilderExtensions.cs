@@ -63,6 +63,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             user.OperatorUserName = builder.HttpContext.User.FindFirstValue(SecurityConstants.Claims.OperatorUserNameClaimType);
             user.SelectedCurrencyCode = builder.HttpContext.User.FindFirstValue(SecurityConstants.Claims.CurrencyClaimType);
 
+            user.AvailableRoles = new[] { SecurityConstants.Roles.OrganizationMember, SecurityConstants.Roles.OrganizationOwner };
             builder.WorkContext.CurrentUser = user;
         }
     }

@@ -1,10 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Order;
-using VirtoCommerce.Storefront.Model.Quote;
-using VirtoCommerce.Storefront.Model.Subscriptions;
+﻿using System.Collections.Generic;
 
 namespace VirtoCommerce.Storefront.Model.Customer
 {
@@ -13,6 +7,7 @@ namespace VirtoCommerce.Storefront.Model.Customer
     /// </summary>
     public partial class Contact : Member
     {
+        public bool IsActive { get; set; } = true;
         public string FullName { get; set; }
         /// <summary>
         /// Returns the first name of the customer.
@@ -44,7 +39,10 @@ namespace VirtoCommerce.Storefront.Model.Customer
         /// </summary>
         public Address DefaultAddress { get; set; }
 
-     
+        /// <summary>
+        /// All contact security accounts
+        /// </summary>
+        public IEnumerable<SecurityAccount> SecurityAccounts { get; set; }   
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
@@ -172,7 +173,17 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 result.DynamicProperties = contactDto.DynamicProperties.Select(ToDynamicProperty).ToList();
             }
-
+            if(!contactDto.SecurityAccounts.IsNullOrEmpty())
+            {
+                result.SecurityAccounts = contactDto.SecurityAccounts.Select(x => new SecurityAccount
+                {
+                    Id = x.Id,
+                    Roles = x.Roles?.Select(role => role.Name).ToList(),
+                    IsLockedOut =  x.LockoutEndDateUtc != null ? x.LockoutEndDateUtc.Value > DateTime.UtcNow : false,
+                    UserName = x.UserName,
+                });
+                result.IsActive = !result.SecurityAccounts.Any(x => x.IsLockedOut);
+            }
             return result;
         }
 
@@ -181,6 +192,7 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new Organization
             {
                 Id = organizaionDto.Id,
+                Name = organizaionDto.Name,
                 MemberType = organizaionDto.MemberType,
                 UserGroups = organizaionDto.Groups,             
                 Emails = organizaionDto.Emails

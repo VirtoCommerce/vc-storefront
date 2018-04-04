@@ -181,6 +181,13 @@ namespace VirtoCommerce.Storefront.Domain
             organization.Id = org.Id;
         }
 
+        public async Task UpdateOrganizationAsync(Organization organization)
+        {
+            var orgDto = organization.ToOrganizationDto();
+            await _customerApi.UpdateOrganizationAsync(orgDto);
+            CustomerCacheRegion.ExpireMember(organization.Id);
+        }
+
         public IPagedList<Contact> SearchOrganizationContacts(OrganizationContactsSearchCriteria criteria)
         {
             return Task.Factory.StartNew(() => SearchOrganizationContactsAsync(criteria), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
@@ -199,6 +206,7 @@ namespace VirtoCommerce.Storefront.Domain
             
             var searchResult = await _customerApi.SearchAsync(criteriaDto);
             var contacts = _customerApi.GetContactsByIds(searchResult.Results.Select(x => x.Id).ToList()).Select(x => x.ToContact()).ToList();
+
             return new StaticPagedList<Contact>(contacts, criteria.PageNumber, criteria.PageSize, searchResult.TotalCount.Value);
         }
         #endregion

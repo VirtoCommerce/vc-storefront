@@ -3,12 +3,10 @@ using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Security
 {
-    public partial class UserInvitation : ValueObject
+    public partial class UsersInvitation : ValueObject
     {
-        public string OrganizationId { get; set; }
-        public string Email { get; set; }
-        public string UserName { get; set; }
         public string Message { get; set; }
         public IList<string> Roles { get; set; }
+        public IList<string> Emails { get; set; }
     }
 }

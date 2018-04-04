@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +9,7 @@ using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using VirtoCommerce.Storefront.Domain.Common;
+using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Domain.Security.Notifications;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -15,6 +17,7 @@ using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Security;
+using VirtoCommerce.Storefront.Model.Security.Events;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
@@ -45,47 +48,112 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Json(WorkContext.CurrentUser);
         }
 
+        // DELETE: storefrontapi/account/{userName}
+        [HttpDelete]
+        public async Task<ActionResult> DeleteUser([FromRoute] string userName)
+        {
+            //TODO: Authorization check
+            var result = IdentityResult.Success;
+            var user = await _signInManager.UserManager.FindByNameAsync(userName);
+            if(user != null)
+            {
+                result = await _signInManager.UserManager.DeleteAsync(user);
+                if(result.Succeeded)
+                {
+                   await _publisher.Publish(new UserDeletedEvent(WorkContext, user));
+                }
+            }
+            return Json(result);
+        }
+
+        // POST: storefrontapi/account/user
+        [HttpPost]
+        public async Task<ActionResult> RegisterNewUser([FromBody] UserRegistration registration)
+        {
+            var result = IdentityResult.Success;
+
+            TryValidateModel(registration);
+            //TODO: Authorization check
+            //Allow to register new users within own organization
+            registration.OrganizationId = WorkContext.CurrentUser?.Contact?.Value?.Organization?.Id;
+            if (ModelState.IsValid)
+            {
+                var user = registration.ToUser();
+                user.StoreId = WorkContext.CurrentStore.Id;
+                
+                result = await _signInManager.UserManager.CreateAsync(user, registration.Password);
+                if (result.Succeeded == true)
+                {
+                    user = await _signInManager.UserManager.FindByNameAsync(user.UserName);
+                    await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, registration));
+                }               
+            }
+            else
+            {
+                result = IdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors).Select(x => new IdentityError { Description = x.ErrorMessage }).ToArray());
+            }
+            return Json(result);
+        }
+
         // POST: storefrontapi/account/invitation
         [HttpPost]
-        public async Task<ActionResult> CreateUserInvitation([FromBody] UserInvitation invitation)
+        public async Task<ActionResult> CreateUserInvitation([FromBody] UsersInvitation invitation)
         {
             var result = IdentityResult.Success;
             //TODO: Authorization check
             //TODO: Implement case for invite already exist user to organization
             //Allow to invite only in own organization
-            invitation.OrganizationId = WorkContext.CurrentUser?.Contact?.Value?.Organization?.Id;
-            var user = await _signInManager.UserManager.FindByEmailAsync(invitation.Email);
+            var organizationId = WorkContext.CurrentUser?.Contact?.Value?.Organization?.Id;
 
-            if (user == null)
+            foreach (var email in invitation.Emails)
             {
-                user = new User
+                var user = await _signInManager.UserManager.FindByEmailAsync(email);
+
+                if (user == null)
                 {
-                    UserName = invitation.UserName ?? invitation.Email,
-                    StoreId = WorkContext.CurrentStore.Id,
-                    Roles = invitation.Roles,
-                    Email = invitation.Email,
-                };
-                result = await _signInManager.UserManager.CreateAsync(user);
-            }
-          
-            if (result.Succeeded)
-            {
-                user = await _signInManager.UserManager.FindByNameAsync(user.UserName);
-                var token = await _signInManager.UserManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.Action("ConfirmInvitation", "Account", new { invitation.OrganizationId, user.Email, Token = token }, Request.Scheme);
-                var inviteNotification = new RegistrationInvitationNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                    user = new User
+                    {
+                        UserName = email,
+                        StoreId = WorkContext.CurrentStore.Id,
+                        Roles = invitation.Roles,
+                        Email = email,
+                    };
+                    result = await _signInManager.UserManager.CreateAsync(user);
+                }
+                if (result.Succeeded)
                 {
-                    InviteUrl = callbackUrl,
-                    Sender = WorkContext.CurrentStore.Email,
-                    Recipient = user.Email
-                };
-                var sendingResult = await _platformNotificationApi.SendNotificationAsync(inviteNotification.ToNotificationDto());
-                if (sendingResult.IsSuccess != true)
-                {
-                    result = IdentityResult.Failed(new IdentityError() { Description = sendingResult.ErrorMessage });
+                    user = await _signInManager.UserManager.FindByNameAsync(user.UserName);
+                    var token = await _signInManager.UserManager.GeneratePasswordResetTokenAsync(user);
+                    var callbackUrl = Url.Action("ConfirmInvitation", "Account", new { OrganizationId =  organizationId, user.Email, Token = token }, Request.Scheme);
+                    var inviteNotification = new RegistrationInvitationNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                    {
+                        InviteUrl = callbackUrl,
+                        Sender = WorkContext.CurrentStore.Email,
+                        Recipient = user.Email
+                    };
+                    var sendingResult = await _platformNotificationApi.SendNotificationAsync(inviteNotification.ToNotificationDto());
+                    if (sendingResult.IsSuccess != true)
+                    {
+                        var errors = result.Errors.Concat(new IdentityError[] { new IdentityError() { Description = sendingResult.ErrorMessage } }).ToArray();
+                        result = IdentityResult.Failed(errors);
+                    }
                 }
             }
             return Json(result);
+        }
+
+        // PUT: storefrontapi/account/organization
+        [HttpPut]
+        public async Task<ActionResult> UpdateCustomerOrganization([FromBody] Organization organization)
+        {
+            //TODO: Add authorization checks
+            var userOrganizationId = WorkContext.CurrentUser?.Contact?.Value?.Organization?.Id;
+            //Allow update only organization which user belongs to
+            if (organization.Id == userOrganizationId)
+            {
+                await _memberService.UpdateOrganizationAsync(organization);
+            }
+            return Ok();
         }
 
         // GET: storefrontapi/account/organization
@@ -97,7 +165,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/organization/contacts/search
         [HttpPost]
-        public async Task<ActionResult> GetCustomerOrganizationContactsAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
+        public async Task<ActionResult> SearchCustomerOrganizationContactsAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
         {
             //TODO: Add authorization checks
             //Allow search only in own organization
@@ -105,9 +173,38 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             if (searchCriteria.OrganizationId != null)
             {
                 var result = await _memberService.SearchOrganizationContactsAsync(searchCriteria);
-                return Json(result);
+                return Json(new { TotalCount = result.TotalItemCount, Results = result.ToArray() });
             }
             return Ok();
+        }
+
+        // POST: storefrontapi/account/{userName}/lock
+        [HttpPost]
+        public async Task<ActionResult> LockUser([FromRoute]string userName)
+        {
+            //TODO: Add authorization checks
+            var result = IdentityResult.Success;
+            var user = await _signInManager.UserManager.FindByNameAsync(userName);
+            if (user != null)
+            {
+                await _signInManager.UserManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
+            }
+            return Json(result);
+        }
+
+        // POST: storefrontapi/account/{userName}/unlock
+        [HttpPost]
+        public async Task<ActionResult> UnlockUser([FromRoute] string userName)
+        {
+            //TODO: Add authorization checks
+            var result = IdentityResult.Success;
+            var user = await _signInManager.UserManager.FindByNameAsync(userName);
+            if (user != null)
+            {
+                await _signInManager.UserManager.ResetAccessFailedCountAsync(user);
+                await _signInManager.UserManager.SetLockoutEndDateAsync(user, DateTimeOffset.MinValue);
+            }
+            return Json(result);
         }
 
         // POST: storefrontapi/account
