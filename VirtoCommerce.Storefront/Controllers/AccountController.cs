@@ -124,7 +124,8 @@ namespace VirtoCommerce.Storefront.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult ConfirmInvitation([FromQuery] string organizationId, [FromQuery] string email, [FromQuery] string token)
+        public ActionResult ConfirmInvitation(string organizationId, string email, string token)
+
         {
             WorkContext.UserRegistration = new UserRegistration
             {
@@ -138,7 +139,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ConfirmInvitation([FromForm] UserRegistration register)
+        public async Task<ActionResult> ConfirmInvitation(UserRegistration register)
         {   
             var result = IdentityResult.Success;
             var user = await _signInManager.UserManager.FindByEmailAsync(register.Email);
@@ -150,6 +151,8 @@ namespace VirtoCommerce.Storefront.Controllers
                     await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, register));
                     await _signInManager.SignInAsync(user, isPersistent: true);
                     await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+
+                    return View("customers/confirm_invitation_done", WorkContext);
                 }
             }           
             foreach (var error in result.Errors)
