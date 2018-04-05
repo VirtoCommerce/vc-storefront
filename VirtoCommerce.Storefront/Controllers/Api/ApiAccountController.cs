@@ -43,9 +43,23 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // GET: storefrontapi/account
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult GetCurrentCustomer()
+        public ActionResult GetCurrentUser()
         {       
             return Json(WorkContext.CurrentUser);
+        }
+
+        /// <summary>
+        /// // GET: storefrontapi/account/organization/contacts/{contactId}
+        /// </summary>
+        /// <param name="contactId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult> GetOrganizationContactById([FromRoute] string contactId)
+        {
+            //TODO: Authorization check
+            //TODO: Do not return users don't belongs to the current user organization
+            var result = await _memberService.GetContactByIdAsync(contactId);
+            return Json(result);
         }
 
         // DELETE: storefrontapi/account/{userName}
@@ -209,10 +223,33 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account
         [HttpPost]
-        public async Task<ActionResult> UpdateAccount([FromBody] ContactUpdateInfo updateInfo)
+        public async Task<ActionResult> UpdateAccount([FromBody] UserUpdateInfo userUpdateInfo)
         {
-            await _memberService.UpdateContactAsync(WorkContext.CurrentUser.ContactId, updateInfo);
-
+            //TODO:Check authorization
+            if (string.IsNullOrEmpty(userUpdateInfo.Id))
+            {
+                userUpdateInfo.Id = WorkContext.CurrentUser.Id;
+            }
+            if (!string.IsNullOrEmpty(userUpdateInfo.Id))
+            {
+                var user = await _signInManager.UserManager.FindByIdAsync(userUpdateInfo.Id);
+                if (user != null)
+                {
+                    if (user.ContactId != null)
+                    {
+                        var contact = await _memberService.GetContactByIdAsync(user.ContactId);
+                        if (contact != null)
+                        {
+                            contact.FirstName = userUpdateInfo.FirstName;
+                            contact.LastName = userUpdateInfo.LastName;
+                            await _memberService.UpdateContactAsync(contact);
+                        }
+                    }
+                    user.Email = userUpdateInfo.Email;
+                    user.Roles = userUpdateInfo.Roles;
+                    await _signInManager.UserManager.UpdateAsync(user);
+                }
+            }
             return Ok();
         }
 

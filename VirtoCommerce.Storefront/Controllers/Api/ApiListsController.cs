@@ -34,7 +34,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // GET: storefrontapi/lists/{listName}/{type}
         [HttpGet]
-        public async Task<ActionResult> GetListByName(string listName, string type)
+        public async Task<ActionResult> GetListByName([FromRoute]string listName, [FromRoute]string type)
         {
             using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listName, type)).LockAsync())
             {

@@ -67,8 +67,8 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("API.UserActions.SaveEventInfo", "storefrontapi/useractions/eventinfo", new { controller = "ApiUserActions", action = "SaveEventInfo" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
 
             // Account API
-            routes.MapStorefrontRoute("API.Account.GetCurrentCustomer", "storefrontapi/account", new { controller = "ApiAccount", action = "GetCurrentCustomer" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));
-           
+            routes.MapStorefrontRoute("API.Account.GetCurrentUser", "storefrontapi/account", new { controller = "ApiAccount", action = "GetCurrentUser" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));
+            routes.MapStorefrontRoute("API.Account.GetUserOrganizationContactById", "storefrontapi/account/organization/contacts/{contactId}", new { controller = "ApiAccount", action = "GetOrganizationContactById" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));
             routes.MapStorefrontRoute("API.Account.UpdateAccount", "storefrontapi/account", new { controller = "ApiAccount", action = "UpdateAccount" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("API.Account.ChangePassword", "storefrontapi/account/password", new { controller = "ApiAccount", action = "ChangePassword" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("API.Account.UpdateAddresses", "storefrontapi/account/addresses", new { controller = "ApiAccount", action = "UpdateAddresses" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));

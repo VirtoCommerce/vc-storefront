@@ -68,22 +68,12 @@ namespace VirtoCommerce.Storefront.Domain
             var contactDto = contact.ToCustomerContactDto();
             await _customerApi.CreateContactAsync(contactDto);
         }
-        
-        public virtual async Task UpdateContactAsync(string contactId, ContactUpdateInfo contactUpdateInfo)
+
+        public virtual async Task UpdateContactAsync(Contact contact)
         {
-            var existContact = await GetContactByIdAsync(contactId);
-            if (existContact != null)
-            {
-                existContact.FirstName = contactUpdateInfo.FirstName;
-                existContact.LastName = contactUpdateInfo.LastName;
-                existContact.Email = contactUpdateInfo.Email;
-
-                var contactDto = existContact.ToCustomerContactDto();
-                await _customerApi.UpdateContactAsync(contactDto);
-
-                //Invalidate cache
-                CustomerCacheRegion.ExpireMember(existContact.Id);
-            }
+            await _customerApi.UpdateContactAsync(contact.ToCustomerContactDto());
+            //Invalidate cache
+            CustomerCacheRegion.ExpireMember(contact.Id);
         }
 
         public async Task UpdateContactAddressesAsync(string contactId, IList<Address> addresses)

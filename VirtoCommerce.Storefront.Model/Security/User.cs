@@ -100,11 +100,6 @@ namespace VirtoCommerce.Storefront.Model.Security
         public IEnumerable<string> Roles { get; set; }
 
         /// <summary>
-        /// All roles available for assignments
-        /// </summary>
-        public IEnumerable<string> AvailableRoles { get; set; }
-
-        /// <summary>
         /// All user orders
         /// </summary>
         [JsonIgnore]

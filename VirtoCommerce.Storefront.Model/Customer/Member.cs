@@ -14,14 +14,7 @@ namespace VirtoCommerce.Storefront.Model.Customer
             get
             {
                 return Emails.OrderBy(x => x).FirstOrDefault();
-            }
-            set
-            {
-                if(!Emails.Contains(value))
-                {
-                    Emails.Add(value);
-                }
-            }
+            }         
         }
 
         /// <summary>

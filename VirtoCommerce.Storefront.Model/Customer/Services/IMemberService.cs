@@ -11,7 +11,7 @@ namespace VirtoCommerce.Storefront.Model.Customer.Services
         Task<Contact> GetContactByIdAsync(string contactId);
         Contact GetContactById(string contactId);
         Task CreateContactAsync(Contact contact);
-        Task UpdateContactAsync(string contactId, ContactUpdateInfo updateInfo);
+        Task UpdateContactAsync(Contact contact);
         Task UpdateContactAddressesAsync(string contactId, IList<Address> addresses);
 
         IPagedList<Contact> SearchOrganizationContacts(OrganizationContactsSearchCriteria criteria);
