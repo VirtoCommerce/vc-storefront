@@ -24,16 +24,16 @@ namespace VirtoCommerce.Storefront.Controllers.Api
     public class ApiAccountController : StorefrontControllerBase
     {
         private readonly IEventPublisher _publisher;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
         private readonly IMemberService _memberService;
         private readonly IStorefrontSecurity _commerceCoreApi;
         private readonly INotifications _platformNotificationApi;
 
-        public ApiAccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<User> signInManager,
+        public ApiAccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, UserManager<User> userManager,
                                     IMemberService memberService, IEventPublisher publisher, IStorefrontSecurity commerceCoreApi, INotifications platformNotificationApi)
             : base(workContextAccessor, urlBuilder)
         {
-            _signInManager = signInManager;
+            _userManager = userManager;
             _memberService = memberService;
             _publisher = publisher;
             _commerceCoreApi = commerceCoreApi;
@@ -49,16 +49,16 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         /// <summary>
-        /// // GET: storefrontapi/account/organization/contacts/{contactId}
+        /// // GET: storefrontapi/account/{userId}
         /// </summary>
         /// <param name="contactId"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult> GetOrganizationContactById([FromRoute] string contactId)
+        public async Task<ActionResult> GetUserById([FromRoute] string userId)
         {
             //TODO: Authorization check
             //TODO: Do not return users don't belongs to the current user organization
-            var result = await _memberService.GetContactByIdAsync(contactId);
+            var result = await _userManager.FindByIdAsync(userId);          
             return Json(result);
         }
 
@@ -68,10 +68,10 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         {
             //TODO: Authorization check
             var result = IdentityResult.Success;
-            var user = await _signInManager.UserManager.FindByNameAsync(userName);
+            var user = await _userManager.FindByNameAsync(userName);
             if(user != null)
             {
-                result = await _signInManager.UserManager.DeleteAsync(user);
+                result = await _userManager.DeleteAsync(user);
                 if(result.Succeeded)
                 {
                    await _publisher.Publish(new UserDeletedEvent(WorkContext, user));
@@ -95,10 +95,10 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var user = registration.ToUser();
                 user.StoreId = WorkContext.CurrentStore.Id;
                 
-                result = await _signInManager.UserManager.CreateAsync(user, registration.Password);
+                result = await _userManager.CreateAsync(user, registration.Password);
                 if (result.Succeeded == true)
                 {
-                    user = await _signInManager.UserManager.FindByNameAsync(user.UserName);
+                    user = await _userManager.FindByNameAsync(user.UserName);
                     await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, registration));
                 }               
             }
@@ -121,7 +121,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             foreach (var email in invitation.Emails)
             {
-                var user = await _signInManager.UserManager.FindByEmailAsync(email);
+                var user = await _userManager.FindByEmailAsync(email);
 
                 if (user == null)
                 {
@@ -132,12 +132,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         Roles = invitation.Roles,
                         Email = email,
                     };
-                    result = await _signInManager.UserManager.CreateAsync(user);
+                    result = await _userManager.CreateAsync(user);
                 }
                 if (result.Succeeded)
                 {
-                    user = await _signInManager.UserManager.FindByNameAsync(user.UserName);
-                    var token = await _signInManager.UserManager.GeneratePasswordResetTokenAsync(user);
+                    user = await _userManager.FindByNameAsync(user.UserName);
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                     var callbackUrl = Url.Action("ConfirmInvitation", "Account", new { OrganizationId =  organizationId, user.Email, Token = token }, Request.Scheme);
                     var inviteNotification = new RegistrationInvitationNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
                     {
@@ -177,46 +177,57 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Json(WorkContext.CurrentUser?.Contact?.Value?.Organization);
         }
 
-        // POST: storefrontapi/account/organization/contacts/search
+        // POST: storefrontapi/account/organization/users/search
         [HttpPost]
-        public async Task<ActionResult> SearchCustomerOrganizationContactsAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
+        public async Task<ActionResult> SearchOrganizationUsersAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
         {
             //TODO: Add authorization checks
-            //Allow search only in own organization
+            //Allow search only within own organization
             searchCriteria.OrganizationId = WorkContext.CurrentUser?.Contact?.Value?.Organization?.Id;
             if (searchCriteria.OrganizationId != null)
             {
-                var result = await _memberService.SearchOrganizationContactsAsync(searchCriteria);
-                return Json(new { TotalCount = result.TotalItemCount, Results = result.ToArray() });
+                var contactsSearchResult = await _memberService.SearchOrganizationContactsAsync(searchCriteria);
+                var userIds = contactsSearchResult.Select(x => x.SecurityAccounts.FirstOrDefault()).OfType<SecurityAccount>().Select(x=>x.Id);
+                var users = new List<User>();
+                foreach(var userId in userIds)
+                {
+                    var user = await _userManager.FindByIdAsync(userId);
+                    if(user != null)
+                    {
+                        user.Contact = new Lazy<Contact>(contactsSearchResult.First(x=> x.Id == user.ContactId));
+                        users.Add(user);
+                    }
+                }
+                return Json(new { TotalCount = contactsSearchResult.TotalItemCount, Results = users });
             }
             return Ok();
         }
 
-        // POST: storefrontapi/account/{userName}/lock
+        // POST: storefrontapi/account/{userId}/lock
         [HttpPost]
-        public async Task<ActionResult> LockUser([FromRoute]string userName)
+        public async Task<ActionResult> LockUser([FromRoute]string userId)
         {
             //TODO: Add authorization checks
             var result = IdentityResult.Success;
-            var user = await _signInManager.UserManager.FindByNameAsync(userName);
+            var user = await _userManager.FindByIdAsync(userId);
             if (user != null)
             {
-                await _signInManager.UserManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
+                await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
             }
             return Json(result);
         }
 
-        // POST: storefrontapi/account/{userName}/unlock
+        // POST: storefrontapi/account/{userId}/unlock
         [HttpPost]
-        public async Task<ActionResult> UnlockUser([FromRoute] string userName)
+        public async Task<ActionResult> UnlockUser([FromRoute] string userId)
         {
             //TODO: Add authorization checks
             var result = IdentityResult.Success;
-            var user = await _signInManager.UserManager.FindByNameAsync(userName);
+            var user = await _userManager.FindByIdAsync(userId);
             if (user != null)
             {
-                await _signInManager.UserManager.ResetAccessFailedCountAsync(user);
-                await _signInManager.UserManager.SetLockoutEndDateAsync(user, DateTimeOffset.MinValue);
+                await _userManager.ResetAccessFailedCountAsync(user);
+                await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MinValue);
             }
             return Json(result);
         }
@@ -232,7 +243,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
             if (!string.IsNullOrEmpty(userUpdateInfo.Id))
             {
-                var user = await _signInManager.UserManager.FindByIdAsync(userUpdateInfo.Id);
+                var user = await _userManager.FindByIdAsync(userUpdateInfo.Id);
                 if (user != null)
                 {
                     if (user.ContactId != null)
@@ -247,7 +258,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     }
                     user.Email = userUpdateInfo.Email;
                     user.Roles = userUpdateInfo.Roles;
-                    await _signInManager.UserManager.UpdateAsync(user);
+                    await _userManager.UpdateAsync(user);
                 }
             }
             return Ok();
@@ -263,7 +274,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 NewPassword = formModel.NewPassword,
             };
 
-            var result = await _signInManager.UserManager.ChangePasswordAsync(WorkContext.CurrentUser, formModel.OldPassword, formModel.NewPassword);
+            var result = await _userManager.ChangePasswordAsync(WorkContext.CurrentUser, formModel.OldPassword, formModel.NewPassword);
 
             return Json(new {  result.Succeeded, Errors = result.Errors.Select(x => x.Description) });
         }

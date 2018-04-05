@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Specifications;
 using VirtoCommerce.Storefront.Model.Stores;
@@ -16,11 +17,11 @@ namespace VirtoCommerce.Storefront.Model.Security.Specifications
         {
             if (store == null)
                 throw new ArgumentNullException(nameof(store));
-            //Allow to login to store for administrators or for users don't assigned to store
-            var result = _user.IsAdministrator || _user.AllowedStores.IsNullOrEmpty();
+            //Allow to login to store for administrators or for users not assigned to store
+            var result = _user.IsAdministrator || _user.StoreId.IsNullOrEmpty();
             if(!result)
-            {
-                result = _user.AllowedStores.Contains(store.Id);
+            {   
+                result = store.TrustedGroups.Concat(new[] { store.Id } ).Contains(_user.StoreId);
             }
             return result;
         }

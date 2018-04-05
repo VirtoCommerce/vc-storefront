@@ -64,5 +64,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             user.SelectedCurrencyCode = builder.HttpContext.User.FindFirstValue(SecurityConstants.Claims.CurrencyClaimType);
             builder.WorkContext.CurrentUser = user;
         }
+
+
     }
 }

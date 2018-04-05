@@ -41,11 +41,6 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 identity.AddClaim(new Claim(SecurityConstants.Claims.CurrencyClaimType, user.SelectedCurrencyCode));
             }
 
-            if (!user.AllowedStores.IsNullOrEmpty())
-            {
-                identity.AddClaim(new Claim(SecurityConstants.Claims.AllowedStoresClaimType, string.Join(",", user.AllowedStores)));
-            }
-
             if (!string.IsNullOrEmpty(user.OperatorUserName))
             {
                 identity.AddClaim(new Claim(SecurityConstants.Claims.OperatorUserNameClaimType, user.OperatorUserName));

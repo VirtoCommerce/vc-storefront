@@ -15,7 +15,6 @@ namespace VirtoCommerce.Storefront.Model.Security
     {
         public User()
         {
-            AllowedStores = new List<string>();
             ExternalLogins = new List<ExternalUserLoginInfo>();
         }
 
@@ -30,7 +29,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         public string NormalizedUserName { get; set; }
         public string Password { get; set; }
         public string PasswordHash { get; set; }
-
+        public string SecurityStamp { get; set; }
         public string PhoneNumber { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
         /// <summary>
@@ -73,12 +72,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// The user name of an operator who has loggen in on behalf of a customer
         /// </summary>
         public string OperatorUserName { get; set; }
-
-        /// <summary>
-        /// List of stores which user can sign in
-        /// </summary>
-        public IList<string> AllowedStores { get; set; }
-
+      
         public IList<ExternalUserLoginInfo> ExternalLogins { get; set; }
 
         //Selected and persisted currency code

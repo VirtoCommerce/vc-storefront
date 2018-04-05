@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
@@ -38,6 +39,11 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual async Task<Contact> GetContactByIdAsync(string contactId)
         {
+            if(contactId == null)
+            {
+                throw new ArgumentNullException(nameof(contactId));
+            }
+
             Contact result = null;
             var cacheKey = CacheKey.With(GetType(), "GetContactByIdAsync", contactId);
             var dto = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
