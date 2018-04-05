@@ -170,11 +170,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Ok();
         }
 
-        // GET: storefrontapi/account/organization
+        // GET: storefrontapi/account/organization/current
         [HttpGet]
         public ActionResult GetCustomerOrganization()
         {
-            return Json(WorkContext.CurrentUser?.Contact?.Value?.Organization);
+            var result = WorkContext.CurrentUser?.Contact?.Value?.Organization;
+            return Json(result);
         }
 
         // POST: storefrontapi/account/organization/users/search
