@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -13,7 +15,11 @@ namespace VirtoCommerce.Storefront.Domain
     {
         public static MemberConverter CustomerConverterInstance => new MemberConverter();
 
-       
+        public static Organization ToOrganization(this customerDto.Organization organizationDto)
+        {
+            return CustomerConverterInstance.ToOrganization(organizationDto);
+        }
+
         public static Contact ToContact(this customerDto.Contact contactDto)
         {
             return CustomerConverterInstance.ToContact(contactDto);
@@ -22,6 +28,11 @@ namespace VirtoCommerce.Storefront.Domain
         public static customerDto.Contact ToCustomerContactDto(this Contact customer)
         {
             return CustomerConverterInstance.ToContactDto(customer);
+        }
+
+        public static customerDto.Organization ToOrganizationDto(this Organization org)
+        {
+            return CustomerConverterInstance.ToOrganizationDto(org);
         }
 
         public static coreDto.Contact ToCoreContactDto(this Contact customer)
@@ -162,11 +173,49 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 result.DynamicProperties = contactDto.DynamicProperties.Select(ToDynamicProperty).ToList();
             }
+            if(!contactDto.SecurityAccounts.IsNullOrEmpty())
+            {
+                result.SecurityAccounts = contactDto.SecurityAccounts.Select(x => new SecurityAccount
+                {
+                    Id = x.Id,
+                    Roles = x.Roles?.Select(role => role.Name).ToList(),
+                    IsLockedOut =  x.LockoutEndDateUtc != null ? x.LockoutEndDateUtc.Value > DateTime.UtcNow : false,
+                    UserName = x.UserName,
+                });
+                result.IsActive = !result.SecurityAccounts.Any(x => x.IsLockedOut);
+            }
+            return result;
+        }
+
+        public virtual Organization ToOrganization(customerDto.Organization organizaionDto)
+        {
+            var result = new Organization
+            {
+                Id = organizaionDto.Id,
+                Name = organizaionDto.Name,
+                MemberType = organizaionDto.MemberType,
+                UserGroups = organizaionDto.Groups,             
+                Emails = organizaionDto.Emails
+            };
+
+            if (organizaionDto.Addresses != null)
+            {
+                result.Addresses = organizaionDto.Addresses.Select(ToAddress).ToList();
+            }
+    
+            if (organizaionDto.Emails != null)
+            {
+                result.Emails = organizaionDto.Emails;
+            }
+            if (!organizaionDto.DynamicProperties.IsNullOrEmpty())
+            {
+                result.DynamicProperties = organizaionDto.DynamicProperties.Select(ToDynamicProperty).ToList();
+            }
 
             return result;
         }
 
-        
+
         public virtual customerDto.Contact ToContactDto(Contact customer)
         {
             var retVal = new customerDto.Contact
@@ -190,7 +239,35 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 retVal.Emails = customer.Emails;
             }
+            //Support only one organization then
+            if(customer.Organization != null)
+            {
+                retVal.Organizations = new List<string>() { customer.Organization.Id };
+            }
            
+            return retVal;
+        }
+
+        public virtual customerDto.Organization ToOrganizationDto(Organization org)
+        {
+            var retVal = new customerDto.Organization
+            {
+                Id = org.Id,
+                Name = org.Name,
+                MemberType = "Organization"
+            };
+            if (!org.UserGroups.IsNullOrEmpty())
+            {
+                retVal.Groups = org.UserGroups.ToArray();
+            }
+            if (!org.Addresses.IsNullOrEmpty())
+            {
+                retVal.Addresses = org.Addresses.Select(ToCustomerAddressDto).ToList();
+            }
+            if (!org.Emails.IsNullOrEmpty())
+            {
+                retVal.Emails = org.Emails;
+            }
             return retVal;
         }
 

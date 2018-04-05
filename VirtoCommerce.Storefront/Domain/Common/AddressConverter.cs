@@ -38,14 +38,14 @@ namespace VirtoCommerce.Storefront.Domain
 
             retVal.City = address.City;
             retVal.CountryCode = address.CountryCode;
-            retVal.CountryName = address.CountryName;
+            retVal.CountryName = address.CountryName ?? address.CountryCode;
             retVal.Email = address.Email;
             retVal.FirstName = address.FirstName;
             retVal.LastName = address.LastName;
             retVal.Line1 = address.Line1;
             retVal.Line2 = address.Line2;
             retVal.MiddleName = address.MiddleName;
-            retVal.Name = address.Name;
+            retVal.Name = address.Name ?? address.Line1;
             retVal.Organization = address.Organization;
             retVal.Phone = address.Phone;
             retVal.PostalCode = address.PostalCode;

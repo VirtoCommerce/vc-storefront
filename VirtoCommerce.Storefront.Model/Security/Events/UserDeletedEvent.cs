@@ -2,17 +2,15 @@
 
 namespace VirtoCommerce.Storefront.Model.Security.Events
 {
-    public class UserRegisteredEvent : DomainEvent
+    public class UserDeletedEvent : DomainEvent
     {
-        public UserRegisteredEvent(WorkContext workContext, User user, UserRegistration registration)
+        public UserDeletedEvent(WorkContext workContext, User user)
         {
             WorkContext = workContext;
             User = user;
-            UserRegistration = registration;
         }
 
         public WorkContext WorkContext { get; set; }
         public User User { get; set; }
-        public UserRegistration UserRegistration { get; set; }
     }
 }
