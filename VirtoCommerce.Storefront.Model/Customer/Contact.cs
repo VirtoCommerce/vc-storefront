@@ -27,6 +27,7 @@ namespace VirtoCommerce.Storefront.Model.Customer
         public Address DefaultBillingAddress { get; set; }
         public Address DefaultShippingAddress { get; set; }
 
+        public string OrganizationId { get; set; }
         public Organization Organization { get; set; }
 
         /// <summary>

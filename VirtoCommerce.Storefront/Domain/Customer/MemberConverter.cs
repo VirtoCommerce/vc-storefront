@@ -154,7 +154,8 @@ namespace VirtoCommerce.Storefront.Domain
                 LastName = contactDto.LastName,
                 Emails = contactDto.Emails,
                 TimeZone = contactDto.TimeZone,
-                DefaultLanguage = contactDto.DefaultLanguage
+                DefaultLanguage = contactDto.DefaultLanguage,
+                OrganizationId = contactDto.Organizations?.FirstOrDefault()
             };
 
             if (contactDto.Addresses != null)
@@ -225,7 +226,7 @@ namespace VirtoCommerce.Storefront.Domain
                 FullName = customer.FullName,
                 LastName = customer.LastName,
                 MiddleName = customer.MiddleName,
-                MemberType = "Contact"
+                MemberType = "Contact",
             };
             if (!customer.UserGroups.IsNullOrEmpty())
             {
@@ -239,10 +240,11 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 retVal.Emails = customer.Emails;
             }
+
             //Support only one organization then
-            if(customer.Organization != null)
+            if(customer.OrganizationId != null)
             {
-                retVal.Organizations = new List<string>() { customer.Organization.Id };
+                retVal.Organizations = new List<string>() { customer.OrganizationId };
             }
            
             return retVal;

@@ -18,7 +18,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer.Handlers
         public virtual async Task Handle(UserRegisteredEvent @event)
         {
             //Need to create new contact related to new user with same Id
-            var registrationData = @event.UserRegistration;           
+            var registrationData = @event.UserRegistration;
 
             var contact = new Contact
             {
@@ -27,6 +27,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer.Handlers
                 FullName = string.Join(" ", registrationData.FirstName, registrationData.LastName),
                 FirstName = registrationData.FirstName,
                 LastName = registrationData.LastName,
+                OrganizationId = registrationData.OrganizationId
             };
             if (!string.IsNullOrEmpty(registrationData.Email))
             {
@@ -41,7 +42,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer.Handlers
                 contact.Addresses = new[] { registrationData.Address };
             }
             //Try to register organization first
-            if (!string.IsNullOrEmpty(registrationData.OrganizationName))
+            if (string.IsNullOrEmpty(registrationData.OrganizationId) && !string.IsNullOrEmpty(registrationData.OrganizationName))
             {
                 var organization = new Organization
                 {
@@ -50,6 +51,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer.Handlers
                 };               
                 await _memberService.CreateOrganizationAsync(organization);
                 contact.Organization = organization;
+                contact.OrganizationId = organization.Id;
             }
             await _memberService.CreateContactAsync(contact);
         }

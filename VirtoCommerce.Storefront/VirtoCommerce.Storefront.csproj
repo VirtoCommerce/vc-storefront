@@ -25,6 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\%2a%2a" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="IISUrlRewrite.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -55,6 +59,7 @@
 
   <ItemGroup>
     <Folder Include="AutoRestClients\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
