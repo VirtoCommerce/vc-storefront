@@ -50,7 +50,7 @@ namespace VirtoCommerce.Storefront.Domain
             var cacheKey = CacheKey.With(GetType(), "LoadStoreStaticContent", store.Id);
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { StaticContentCacheRegion.CreateChangeToken(), _contentBlobProvider.Watch(baseStoreContentPath + "/*") }));
+                cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { StaticContentCacheRegion.CreateChangeToken(), _contentBlobProvider.Watch(baseStoreContentPath + "/**/*") }));
 
                 var retVal = new List<ContentItem>();              
                 const string searchPattern = "*.*";
