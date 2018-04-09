@@ -109,11 +109,14 @@ namespace VirtoCommerce.Storefront.Domain.Derivatives
         {
             var result = new derivativesDto.DerivativeContractItemSearchCriteria
             {
-                MemberIds = new[] { workContext.CurrentUser.ContactId },
-                OnlyActive = criteria.OnlyActive,
+                DerivativeContractIds = criteria.DerivativeContractIds,
                 Types = criteria.Types?.Select(x => x.ToString()).ToList(),
+                MemberIds = new[] { workContext.CurrentUser.ContactId },
+                FulfillmentCenterIds = criteria.FulfillmentCenterIds,
+                ProductIds = criteria.ProductIds,
                 StartDateRange = criteria.StartDateRange.ToDateTimeRange(),
                 EndDateRange = criteria.EndDateRange.ToDateTimeRange(),
+                OnlyActive = criteria.OnlyActive,
                 Sort = criteria.SortBy,
                 Skip = criteria.Start,
                 Take = criteria.PageSize
