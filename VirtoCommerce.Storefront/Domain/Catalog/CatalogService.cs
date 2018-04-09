@@ -11,8 +11,8 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
+using VirtoCommerce.Storefront.Model.Contracts.Services;
 using VirtoCommerce.Storefront.Model.Customer.Services;
-using VirtoCommerce.Storefront.Model.Derivatives.Services;
 using VirtoCommerce.Storefront.Model.Inventory.Services;
 using VirtoCommerce.Storefront.Model.Pricing.Services;
 using VirtoCommerce.Storefront.Model.Services;
@@ -29,13 +29,13 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IPricingService _pricingService;
         private readonly IMemberService _customerService;
         private readonly ISubscriptionService _subscriptionService;
-        private readonly IDerivativeService _derivativeService;
+        private readonly IDerivativeContractService _derivativeService;
         private readonly IInventoryService _inventoryService;
         private readonly IMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
 
         public CatalogService(IWorkContextAccessor workContextAccessor, ICatalogModuleCategories categoriesApi, ICatalogModuleProducts productsApi,
-                              ICatalogModuleSearch searchApi, IPricingService pricingService, IMemberService customerService, ISubscriptionService subscriptionService, IDerivativeService derivativeService,
+                              ICatalogModuleSearch searchApi, IPricingService pricingService, IMemberService customerService, ISubscriptionService subscriptionService, IDerivativeContractService derivativeService,
                               IInventoryService inventoryService, IMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
         {
             _workContextAccessor = workContextAccessor;

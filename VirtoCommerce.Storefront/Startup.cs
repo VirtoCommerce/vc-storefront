@@ -28,8 +28,8 @@ using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Bus;
 using VirtoCommerce.Storefront.Model.Common.Events;
+using VirtoCommerce.Storefront.Model.Contracts.Services;
 using VirtoCommerce.Storefront.Model.Customer.Services;
-using VirtoCommerce.Storefront.Model.Derivatives.Services;
 using VirtoCommerce.Storefront.Model.Inventory.Services;
 using VirtoCommerce.Storefront.Model.LinkList.Services;
 using VirtoCommerce.Storefront.Model.Lists.Services;
@@ -82,7 +82,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<ICustomerOrderService, CustomerOrderService>();
             services.AddSingleton<IQuoteService, QuoteService>();
             services.AddSingleton<ISubscriptionService, SubscriptionService>();
-            services.AddSingleton<IDerivativeService, DerivativeService>();
+            services.AddSingleton<IDerivativeContractService, DerivativeService>();
             services.AddSingleton<ICatalogService, CatalogService>();
             services.AddSingleton<IInventoryService, InventoryService>();
             services.AddSingleton<IPricingService, PricingService>();

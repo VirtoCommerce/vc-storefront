@@ -1,33 +1,70 @@
 ﻿using System;
 using System.Linq;
+using VirtoCommerce.DerivativeContractsModule.Core.Model;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Derivatives;
-using derivativesDto = VirtoCommerce.Storefront.AutoRestClients.DerivativesModuleApi.Models;
+using VirtoCommerce.Storefront.Model.Contracts;
+using derivativesDto = VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain.Derivatives
 {
-    public static class DerivativeConverter
+    public static class DerivativeConverterExtension
     {
-        public static Derivative ToDerivative(this derivativesDto.Derivative dto)
+        public static DerivativeConverter DerivativeConverterInstance => new DerivativeConverter();
+
+        public static DerivativeContract ToDerivativeContract(this derivativesDto.DerivativeContract dto)
         {
-            var result = new Derivative
+            return DerivativeConverterInstance.ToDerivativeContract(dto);
+        }
+
+        public static DerivativeContractItem ToDerivativeContractItem(this derivativesDto.DerivativeContractItem dto)
+        {
+            return DerivativeConverterInstance.ToDerivativeContractItem(dto);
+        }
+
+        public static DerivativeContractInfo ToDerivativeInfo(this derivativesDto.DerivativeContractInfo dto)
+        {
+            return DerivativeConverterInstance.ToDerivativeInfo(dto);
+        }
+
+        public static derivativesDto.DerivativeContractSearchCriteria ToSearchCriteriaDto(this DerivativeContractSearchCriteria criteria, WorkContext workContext)
+        {
+            return DerivativeConverterInstance.ToSearchCriteriaDto(criteria, workContext);
+        }
+
+        public static derivativesDto.DerivativeContractItemSearchCriteria ToSearchCriteriaDto(this DerivativeContractItemSearchCriteria criteria, WorkContext workContext)
+        {
+            return DerivativeConverterInstance.ToSearchCriteriaDto(criteria, workContext);
+        }
+
+        public static derivativesDto.DateTimeRange ToDateTimeRange(this DateTimeRange range)
+        {
+            return DerivativeConverterInstance.ToDateTimeRange(range);
+        }
+    }
+
+    public partial class DerivativeConverter
+    {
+        public virtual DerivativeContract ToDerivativeContract(derivativesDto.DerivativeContract dto)
+        {
+            var result = new DerivativeContract
             {
-                EndDate = dto.EndDate,
                 Id = dto.Id,
-                IsActive = dto.IsActive == true,
                 MemberId = dto.MemberId,
+                Type = EnumUtility.SafeParse(dto.Type, DerivativeContractType.Forward),
                 StartDate = dto.StartDate ?? default(DateTime),
-                Type = EnumUtility.SafeParse(dto.Type, DerivativeType.Forward)
+                EndDate = dto.EndDate,
+                IsActive = dto.IsActive == true
             };
 
             return result;
         }
-        public static DerivativeItem ToDerivativeItem(this derivativesDto.DerivativeItem dto)
+
+        public virtual DerivativeContractItem ToDerivativeContractItem(derivativesDto.DerivativeContractItem dto)
         {
-            var result = new DerivativeItem
+            var result = new DerivativeContractItem
             {
-                DerivativeId = dto.DerivativeId,
+                DerivativeContractId = dto.DerivativeContractId,
                 FulfillmentCenterId = dto.FulfillmentCenterId,
                 ProductId = dto.ProductId,
                 ContractSize = (decimal)dto.ContractSize,
@@ -38,40 +75,62 @@ namespace VirtoCommerce.Storefront.Domain.Derivatives
             return result;
         }
 
-        public static derivativesDto.DerivativeSearchCriteria ToSearchCriteriaDto(this DerivativeSearchCriteria criteria, WorkContext workContext)
+        public virtual DerivativeContractInfo ToDerivativeInfo(derivativesDto.DerivativeContractInfo dto)
         {
-            var result = new derivativesDto.DerivativeSearchCriteria
+            var result = new DerivativeContractInfo
             {
-                FulfillmentCenterIds = workContext.CurrentStore.FulfilmentCenters.Select(x => x.Id).ToArray(),
-                LanguageCode = workContext.CurrentLanguage.TwoLetterLanguageName,
+                ProductId = dto.ProductId,
+                Type = EnumUtility.SafeParse(dto.Type, DerivativeContractType.Forward),
+                ContractSize = (decimal)dto.ContractSize,
+                PurchasedQuantity = (decimal)dto.PurchasedQuantity,
+                RemainingQuantity = (decimal)dto.RemainingQuantity
+            };
+            return result;
+        }
+
+        public virtual derivativesDto.DerivativeContractSearchCriteria ToSearchCriteriaDto(DerivativeContractSearchCriteria criteria, WorkContext workContext)
+        {
+            var result = new derivativesDto.DerivativeContractSearchCriteria
+            {
                 MemberIds = new[] { workContext.CurrentUser.ContactId },
                 OnlyActive = criteria.OnlyActive,
                 Types = criteria.Types?.Select(x => x.ToString()).ToList(),
-
+                StartDateRange = criteria.StartDateRange.ToDateTimeRange(),
+                EndDateRange = criteria.EndDateRange.ToDateTimeRange(),
+                Sort = criteria.SortBy,
                 Skip = criteria.Start,
-                Take = criteria.PageSize,
-                Sort = criteria.SortBy
+                Take = criteria.PageSize
             };
 
             return result;
         }
 
-        public static derivativesDto.DerivativeSearchCriteria ToSearchCriteriaDto(this DerivativeItemSearchCriteria criteria, WorkContext workContext)
+        public virtual derivativesDto.DerivativeContractItemSearchCriteria ToSearchCriteriaDto(DerivativeContractItemSearchCriteria criteria, WorkContext workContext)
         {
-            var result = new derivativesDto.DerivativeSearchCriteria
+            var result = new derivativesDto.DerivativeContractItemSearchCriteria
             {
-                FulfillmentCenterIds = workContext.CurrentStore.FulfilmentCenters.Select(x => x.Id).ToArray(),
-                LanguageCode = workContext.CurrentLanguage.TwoLetterLanguageName,
                 MemberIds = new[] { workContext.CurrentUser.ContactId },
                 OnlyActive = criteria.OnlyActive,
-                ProductIds = criteria.ProductIds,
                 Types = criteria.Types?.Select(x => x.ToString()).ToList(),
-
+                StartDateRange = criteria.StartDateRange.ToDateTimeRange(),
+                EndDateRange = criteria.EndDateRange.ToDateTimeRange(),
+                Sort = criteria.SortBy,
                 Skip = criteria.Start,
-                Take = criteria.PageSize,
-                Sort = criteria.SortBy
+                Take = criteria.PageSize
             };
 
+            return result;
+        }
+
+        public virtual derivativesDto.DateTimeRange ToDateTimeRange(DateTimeRange range)
+        {
+            var result = new derivativesDto.DateTimeRange
+            {
+                EarlierDate = range.EarlierDate,
+                LaterDate = range.LaterDate,
+                IncludeEarlier = range.IncludeEarlier,
+                IncludeLater = range.IncludeLater
+            };
             return result;
         }
     }

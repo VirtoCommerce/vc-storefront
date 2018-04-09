@@ -55,9 +55,10 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("API.Common.Feedback", "storefrontapi/feedback", defaults: new { controller = "ApiCommon", action = "Feedback" });
 
             // Derivatives API
-            routes.MapStorefrontRoute("API.Derivatives.GetDerivativesByIds", "storefrontapi/derivatives", defaults: new { controller = "ApiDerivative", action = "GetDerivativesByIds" });
-            routes.MapStorefrontRoute("API.Derivatives.SearchDerivatives", "storefrontapi/derivatives/search", defaults: new { controller = "ApiDerivative", action = "SearchDerivatives" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
-            routes.MapStorefrontRoute("API.Derivatives.SearchDerivativeItems", "storefrontapi/derivatives/searchitems", defaults: new { controller = "ApiDerivative", action = "SearchDerivativeItems" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
+            routes.MapStorefrontRoute("API.Contracts.Derivative.GetByIds", "storefrontapi/contracts/derivative", defaults: new { controller = "ApiDerivativeContract", action = "GetDerivativeContractsByIds" });
+            routes.MapStorefrontRoute("API.Contracts.Derivative.GetByItemsIds", "storefrontapi/contracts/derivative/items", defaults: new { controller = "ApiDerivativeContract", action = "GetDerivativeContractItemsByIds" });
+            routes.MapStorefrontRoute("API.Contracts.Derivative.Search", "storefrontapi/contracts/derivative/search", defaults: new { controller = "ApiDerivativeContract", action = "SearchDerivativeContracts" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
+            routes.MapStorefrontRoute("API.Contracts.Derivative.SearchItems", "storefrontapi/contracts/derivative/items/search", defaults: new { controller = "ApiDerivativeContract", action = "SearchDerivativeContractItems" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
 
             // Pricing API
             routes.MapStorefrontRoute("API.Pricing.GetActualProductPrices", "storefrontapi/pricing/actualprices", defaults: new { controller = "ApiPricing", action = "GetActualProductPrices" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));

@@ -4,28 +4,31 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using PagedList.Core;
-using VirtoCommerce.Storefront.AutoRestClients.DerivativesModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi;
 using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
-using VirtoCommerce.Storefront.Model.Derivatives;
-using VirtoCommerce.Storefront.Model.Derivatives.Services;
+using VirtoCommerce.Storefront.Model.Contracts;
+using VirtoCommerce.Storefront.Model.Contracts.Services;
 
 namespace VirtoCommerce.Storefront.Domain.Derivatives
 {
-    public class DerivativeService : IDerivativeService
+    public class DerivativeService : IDerivativeContractService
     {
-        private readonly IDerivativeOperations _derivativesApi;
+        private readonly IDerivativeContractOperations _derivativesApi;
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IMemoryCache _memoryCache;
+        private readonly IApiChangesWatcher _apiChangesWatcher;
 
-        public DerivativeService(IDerivativeOperations derivativesApi, IWorkContextAccessor workContextAccessor, IMemoryCache memoryCache)
+        public DerivativeService(IDerivativeContractOperations derivativesApi, IWorkContextAccessor workContextAccessor, IMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
         {
             _derivativesApi = derivativesApi;
             _workContextAccessor = workContextAccessor;
             _memoryCache = memoryCache;
+            _apiChangesWatcher = changesWatcher;
         }
 
         public virtual async Task EvaluateProductDerivativeInfoAsync(List<Product> products, WorkContext workContext)
@@ -42,97 +45,82 @@ namespace VirtoCommerce.Storefront.Domain.Derivatives
             }
 
             var productIds = products.Select(x => x.Id).ToList();
-            var cacheKey = CacheKey.With(GetType(), "EvaluateProductDerivativeInfoAsync", productIds.GetOrderIndependentHashCode().ToString());
-            var searchResult = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            var cacheKey = CacheKey.With(GetType(), nameof(EvaluateProductDerivativeInfoAsync), productIds.GetOrderIndependentHashCode().ToString());
+            var derivativeContractInfos = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async cacheEntry =>
             {
                 cacheEntry.SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
                 cacheEntry.AddExpirationToken(DerivativesCacheRegion.CreateChangeToken());
+                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
 
-                var criteria = new AutoRestClients.DerivativesModuleApi.Models.DerivativeSearchCriteria
+                var context = new AutoRestClients.DerivativeContractsModuleApi.Models.DerivativeContractInfoEvaluationContext
                 {
+                    MemberId = workContext.CurrentUser.ContactId,
                     ProductIds = productIds,
-                    MemberIds = new[] { workContext.CurrentUser.ContactId },
-                    FulfillmentCenterIds = products.Select(x => x.Inventory?.FulfillmentCenterId)
-                                                    .Where(x => !string.IsNullOrEmpty(x))
-                                                    .Distinct()
-                                                    .ToArray()
+                    OnlyActive = true
                 };
 
-                return await _derivativesApi.SearchAsync(criteria);
+                return await _derivativesApi.EvaluatePromotionsAsync(context);
             });
 
-            var mandatoryDerivatives = searchResult.Derivatives.Where(x => x.IsActive == true && new[] { "Forward", "Futures", "CallOption" }.Contains(x.Type)).Select(x => x.Id);
-            var optionalDerivatives = searchResult.Derivatives.Where(x => x.IsActive == true && x.Type == "PutOption").Select(x => x.Id);
             foreach (var item in products)
             {
-                item.Derivatives = searchResult.Derivatives.Select(x => x.ToDerivative()).ToList();
-
-                var filteredProductItems = searchResult.Items.Where(x => x.ProductId == item.Id && mandatoryDerivatives.Contains(x.DerivativeId)).ToArray();
-                if (filteredProductItems.Any())
-                {
-                    item.MandatoryDerivativeInfo = new DerivativeInfo
-                    {
-                        ContractSize = filteredProductItems.Sum(x => (decimal)x.ContractSize),
-                        PurchasedQuantity = filteredProductItems.Sum(x => (decimal)x.PurchasedQuantity),
-                        RemainingQuantity = filteredProductItems.Sum(x => (decimal)x.RemainingQuantity)
-                    };
-                }
-
-                filteredProductItems = searchResult.Items.Where(x => x.ProductId == item.Id && optionalDerivatives.Contains(x.DerivativeId)).ToArray();
-                if (filteredProductItems.Any())
-                {
-                    item.OptionalDerivativeInfo = new DerivativeInfo
-                    {
-                        ContractSize = filteredProductItems.Sum(x => (decimal)x.ContractSize),
-                        PurchasedQuantity = filteredProductItems.Sum(x => (decimal)x.PurchasedQuantity),
-                        RemainingQuantity = filteredProductItems.Sum(x => (decimal)x.RemainingQuantity)
-                    };
-                }
+                item.DerivativeInfos = derivativeContractInfos.Select(dci => dci.ToDerivativeInfo()).Where(dci => dci.ProductId == item.Id).ToList();
             }
         }
 
-        public async Task<IList<Derivative>> GetDerivativesAsync(string[] ids)
+        public async Task<IList<DerivativeContract>> GetDerivativeContractsAsync(string[] ids)
         {
-            var cacheKey = CacheKey.With(GetType(), "GetDerivativesAsync", ids.GetOrderIndependentHashCode().ToString());
-            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            var cacheKey = CacheKey.With(GetType(), nameof(GetDerivativeContractsAsync), ids.GetOrderIndependentHashCode().ToString());
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async cacheEntry =>
             {
                 cacheEntry.AddExpirationToken(DerivativesCacheRegion.CreateChangeToken());
-                return (await _derivativesApi.GetByIdsAsync(ids)).Select(x => x.ToDerivative()).ToList();
+                return (await _derivativesApi.GetByIdsAsync(ids)).Select(x => x.ToDerivativeContract()).ToList();
             });
         }
 
-        public async Task<IPagedList<Derivative>> SearchDerivativesAsync(DerivativeSearchCriteria criteria)
+        public async Task<IList<DerivativeContract>> GetDerivativeContractItemsAsync(string[] ids)
+        {
+            var cacheKey = CacheKey.With(GetType(), nameof(GetDerivativeContractItemsAsync), ids.GetOrderIndependentHashCode().ToString());
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async cacheEntry =>
+            {
+                cacheEntry.AddExpirationToken(DerivativesCacheRegion.CreateChangeToken());
+                return (await _derivativesApi.GetByIdsAsync(ids)).Select(x => x.ToDerivativeContract()).ToList();
+            });
+        }
+
+        public async Task<IPagedList<DerivativeContract>> SearchDerivativeContractsAsync(DerivativeContractSearchCriteria criteria)
         {
             if (criteria == null)
             {
                 throw new ArgumentNullException(nameof(criteria));
             }
 
-            var cacheKey = CacheKey.With(GetType(), "SearchDerivativesAsync", criteria.GetHashCode().ToString());
-            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            var cacheKey = CacheKey.With(GetType(), nameof(SearchDerivativeContractsAsync), criteria.GetHashCode().ToString());
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async cacheEntry =>
             {
                 cacheEntry.AddExpirationToken(DerivativesCacheRegion.CreateChangeToken());
                 var resultDto = await _derivativesApi.SearchAsync(criteria.ToSearchCriteriaDto(_workContextAccessor.WorkContext));
 
-                var result = resultDto.Derivatives.Select(x => x.ToDerivative()).ToList();
-                return new StaticPagedList<Derivative>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalDerivativesCount.Value);
+                var result = resultDto.Results.Select(x => x.ToDerivativeContract()).ToList();
+                return new StaticPagedList<DerivativeContract>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalCount ?? 0);
             });
         }
 
-        public async Task<IPagedList<DerivativeItem>> SearchDerivativeItemsAsync(DerivativeItemSearchCriteria criteria)
+        public async Task<IPagedList<DerivativeContractItem>> SearchDerivativeContractItemsAsync(DerivativeContractItemSearchCriteria criteria)
         {
             if (criteria == null)
             {
                 throw new ArgumentNullException(nameof(criteria));
             }
 
-            var cacheKey = CacheKey.With(GetType(), "SearchDerivativeItemsAsync", criteria.GetHashCode().ToString());
-            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            var cacheKey = CacheKey.With(GetType(), nameof(SearchDerivativeContractItemsAsync), criteria.GetHashCode().ToString());
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async cacheEntry =>
             {
                 cacheEntry.AddExpirationToken(DerivativesCacheRegion.CreateChangeToken());
-                var resultDto = await _derivativesApi.SearchAsync(criteria.ToSearchCriteriaDto(_workContextAccessor.WorkContext));
-                var result = resultDto.Items.Select(x => x.ToDerivativeItem()).ToList();
-                return new StaticPagedList<DerivativeItem>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalItemsCount.Value);
+                var resultDto = await _derivativesApi.SearchItemsAsync(criteria.ToSearchCriteriaDto(_workContextAccessor.WorkContext));
+
+                var result = resultDto.Results.Select(x => x.ToDerivativeContractItem()).ToList();
+                return new StaticPagedList<DerivativeContractItem>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalCount ?? 0);
             });
         }
     }

@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using VirtoCommerce.Storefront.Model.Common;
+﻿using VirtoCommerce.Storefront.Model.Common;
 
-namespace VirtoCommerce.Storefront.Model.Derivatives
+namespace VirtoCommerce.Storefront.Model.Contracts
 {
-    public class DerivativeItem : ValueObject
+    public partial class DerivativeContractItem : ValueObject
     {
-        public string DerivativeId { get; set; }
+        public string DerivativeContractId { get; set; }
+
         public string FulfillmentCenterId { get; set; }
+
         public string ProductId { get; set; }
+
         public decimal ContractSize { get; set; }
+
         public decimal PurchasedQuantity { get; set; }
+
         public decimal RemainingQuantity { get; set; }
     }
 }
