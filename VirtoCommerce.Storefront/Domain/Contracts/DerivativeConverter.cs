@@ -92,11 +92,11 @@ namespace VirtoCommerce.Storefront.Domain.Derivatives
         {
             var result = new derivativesDto.DerivativeContractSearchCriteria
             {
-                MemberIds = new[] { workContext.CurrentUser.ContactId },
-                OnlyActive = criteria.OnlyActive,
                 Types = criteria.Types?.Select(x => x.ToString()).ToList(),
-                StartDateRange = criteria.StartDateRange.ToDateTimeRange(),
-                EndDateRange = criteria.EndDateRange.ToDateTimeRange(),
+                MemberIds = new[] { workContext.CurrentUser.ContactId },
+                StartDateRange = criteria.StartDateRange?.ToDateTimeRange(),
+                EndDateRange = criteria.EndDateRange?.ToDateTimeRange(),
+                OnlyActive = criteria.OnlyActive,
                 Sort = criteria.SortBy,
                 Skip = criteria.Start,
                 Take = criteria.PageSize
@@ -114,8 +114,8 @@ namespace VirtoCommerce.Storefront.Domain.Derivatives
                 MemberIds = new[] { workContext.CurrentUser.ContactId },
                 FulfillmentCenterIds = criteria.FulfillmentCenterIds,
                 ProductIds = criteria.ProductIds,
-                StartDateRange = criteria.StartDateRange.ToDateTimeRange(),
-                EndDateRange = criteria.EndDateRange.ToDateTimeRange(),
+                StartDateRange = criteria.StartDateRange?.ToDateTimeRange(),
+                EndDateRange = criteria.EndDateRange?.ToDateTimeRange(),
                 OnlyActive = criteria.OnlyActive,
                 Sort = criteria.SortBy,
                 Skip = criteria.Start,
