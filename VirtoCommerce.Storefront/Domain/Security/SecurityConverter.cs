@@ -44,7 +44,6 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 Email = user.Email,
                 Password = user.Password,
                 UserName = user.UserName,
-                UserType = "Customer",
                 StoreId = user.StoreId,
                 MemberId = user.ContactId,
                 AccessFailedCount = user.AccessFailedCount,
@@ -53,7 +52,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 LockoutEndDateUtc = user.LockoutEndDateUtc,
                 TwoFactorEnabled = user.TwoFactorEnabled,
                 SecurityStamp = user.SecurityStamp,
-                PasswordHash = user.PasswordHash
+                PasswordHash = user.PasswordHash,
+                UserState = user.UserState,
+                UserType = user.UserType
             };
 
             if (!user.Roles.IsNullOrEmpty() && allPlatformRoles != null)
@@ -92,6 +93,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 LockoutEndDateUtc = userDto.LockoutEndDateUtc,
                 PasswordHash = userDto.PasswordHash,
                 SecurityStamp = userDto.SecurityStamp,
+                UserState = userDto.UserState,
+                UserType = userDto.UserType
             };
 
             if (!userDto.Logins.IsNullOrEmpty())

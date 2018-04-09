@@ -145,17 +145,20 @@ namespace VirtoCommerce.Storefront
 
             //Resource-based authorization that requires API permissions for some operations
             services.AddSingleton<IAuthorizationHandler, CanImpersonateAuthorizationHandler>();
-            services.AddSingleton<IAuthorizationHandler, ContentItemAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, CanReadContentItemAuthorizationHandler>();
             // register the AuthorizationPolicyProvider which dynamically registers authorization policies for each permission defined in the platform 
             services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
             //Storefront authorization handler for policy based on permissions 
             services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, CanEditOrganizationResourceAuthorizationHandler>();
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("CanImpersonate",
+                options.AddPolicy(CanImpersonateAuthorizationRequirement.PolicyName,
                                   policy => policy.Requirements.Add(new CanImpersonateAuthorizationRequirement()));
-                options.AddPolicy("CanReadContentItem",
-                                policy => policy.Requirements.Add(new ContentItemAuthorizeRequirement()));
+                options.AddPolicy(CanReadContentItemAuthorizeRequirement.PolicyName,
+                                policy => policy.Requirements.Add(new CanReadContentItemAuthorizeRequirement()));
+                options.AddPolicy(CanEditOrganizationResourceAuthorizeRequirement.PolicyName,
+                               policy => policy.Requirements.Add(new CanEditOrganizationResourceAuthorizeRequirement()));
             });
 
 
@@ -302,6 +305,8 @@ namespace VirtoCommerce.Storefront
             {
                 routes.MapStorefrontRoutes();
             });
+
+            app.UseStorefrontRoles();
 
 
         }

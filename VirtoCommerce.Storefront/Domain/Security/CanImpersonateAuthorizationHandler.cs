@@ -7,6 +7,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
 {
     public class CanImpersonateAuthorizationRequirement : IAuthorizationRequirement
     {
+        public const string PolicyName = "CanImpersonate";
     }
     public class CanImpersonateAuthorizationHandler : AuthorizationHandler<CanImpersonateAuthorizationRequirement>
     {

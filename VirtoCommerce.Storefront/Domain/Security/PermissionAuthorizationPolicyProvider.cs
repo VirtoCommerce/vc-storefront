@@ -15,7 +15,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
     /// </summary>
     public class PermissionAuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider
     {
-         private readonly IMemoryCache _memoryCache;
+        private readonly IMemoryCache _memoryCache;
         private readonly ISecurity _platformSecurityApi;
         public PermissionAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options, ISecurity platformSecurityApi, IMemoryCache memoryCache)
             : base(options)
@@ -50,6 +50,11 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 {
                     resultLookup[permission.Id] = new AuthorizationPolicyBuilder().AddRequirements(new PermissionAuthorizationRequirement { Permission = permission.Id }).Build();
                 }
+
+                //Register storefront permissions
+                //TOD: Need to refactor registration process
+                resultLookup[SecurityConstants.Permissions.CanEditOrganization] = new AuthorizationPolicyBuilder().AddRequirements(new PermissionAuthorizationRequirement { Permission = SecurityConstants.Permissions.CanEditOrganization }).Build();
+
                 return resultLookup;
             });
             return result;

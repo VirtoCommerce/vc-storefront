@@ -160,7 +160,7 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Coupon = promoEvalContext.Cart.Coupon != null ? promoEvalContext.Cart.Coupon.Code : null;
                 result.Currency = promoEvalContext.Cart.Currency.Code;
                 result.CustomerId = promoEvalContext.Cart.Customer.Id;                
-                result.UserGroups = promoEvalContext.Cart.Customer?.Contact?.Value?.UserGroups;
+                result.UserGroups = promoEvalContext.Cart.Customer?.Contact?.UserGroups;
                 result.IsRegisteredUser = promoEvalContext.Cart.Customer.IsRegisteredUser;
                 result.Language = promoEvalContext.Cart.Language.CultureName;
                 //Set cart line items as default promo items
@@ -191,7 +191,7 @@ namespace VirtoCommerce.Storefront.Domain
                 result.PromoEntry = promoEvalContext.Product.ToProductPromoEntryDto();
             }
             
-            result.UserGroups = promoEvalContext?.User?.Contact?.Value?.UserGroups;
+            result.UserGroups = promoEvalContext?.User?.Contact?.UserGroups;
 
             result.CustomerId = promoEvalContext.User.Id;
             result.IsEveryone = true;

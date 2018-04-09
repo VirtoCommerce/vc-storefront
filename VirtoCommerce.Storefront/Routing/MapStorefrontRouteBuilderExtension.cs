@@ -79,7 +79,7 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("API.Account.RegisterNewUser", "storefrontapi/account/user", new { controller = "ApiAccount", action = "RegisterNewUser" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("API.Account.LockUser", "storefrontapi/account/{userId}/lock", new { controller = "ApiAccount", action = "LockUser" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("API.Account.UnlockUser", "storefrontapi/account/{userId}/unlock", new { controller = "ApiAccount", action = "UnlockUser" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
-            routes.MapStorefrontRoute("API.Account.DeleteUser", "storefrontapi/account/{userName}", new { controller = "ApiAccount", action = "DeleteUser" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("DELETE") }));
+            routes.MapStorefrontRoute("API.Account.DeleteUser", "storefrontapi/account/{userId}", new { controller = "ApiAccount", action = "DeleteUser" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("DELETE") }));
 
 
             // Order API

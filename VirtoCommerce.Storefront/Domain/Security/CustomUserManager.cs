@@ -70,13 +70,10 @@ namespace VirtoCommerce.Storefront.Domain.Security
                return null;
            }, cacheNullValue: false);
 
-
+            //Load user associated contact
             if (result != null && result.ContactId != null)
             {
-                result.Contact = new Lazy<Model.Customer.Contact>(() =>
-                {
-                    return _memberService.GetContactById(result.ContactId);
-                });
+                result.Contact = await _memberService.GetContactByIdAsync(result.ContactId);
             }
             return result;
         }
@@ -95,12 +92,10 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 return null;
             }, cacheNullValue: false);
 
+            //Load user associated contact
             if (result != null && result.ContactId != null)
             {
-                result.Contact = new Lazy<Model.Customer.Contact>(() =>
-               {
-                   return _memberService.GetContactById(result.ContactId);
-               });
+                result.Contact = await _memberService.GetContactByIdAsync(result.ContactId);
             }
             return result;
         }
@@ -209,12 +204,10 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 return null;
             }, cacheNullValue: false);
 
+            //Load user associated contact
             if (result != null && result.ContactId != null)
             {
-                result.Contact = new Lazy<Model.Customer.Contact>(() =>
-                {
-                    return _memberService.GetContactById(result.ContactId);
-                });
+                result.Contact = await _memberService.GetContactByIdAsync(result.ContactId);
             }
 
             return result;
@@ -282,12 +275,10 @@ namespace VirtoCommerce.Storefront.Domain.Security
             }, cacheNullValue: false);
 
 
+            //Load user associated contact
             if (result != null && result.ContactId != null)
             {
-                result.Contact = new Lazy<Model.Customer.Contact>(() =>
-                {
-                    return _memberService.GetContactById(result.ContactId);
-                });
+                result.Contact = await _memberService.GetContactByIdAsync(result.ContactId);
             }
             return result;
         }

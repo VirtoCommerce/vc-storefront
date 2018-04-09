@@ -28,9 +28,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private readonly IMemberService _memberService;
         private readonly IStorefrontSecurity _commerceCoreApi;
         private readonly INotifications _platformNotificationApi;
+        private readonly IAuthorizationService _authorizationService;
 
-        public ApiAccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, UserManager<User> userManager,
-                                    IMemberService memberService, IEventPublisher publisher, IStorefrontSecurity commerceCoreApi, INotifications platformNotificationApi)
+        public ApiAccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, UserManager<User> userManager, IAuthorizationService authorizationService,
+        IMemberService memberService, IEventPublisher publisher, IStorefrontSecurity commerceCoreApi,
+                                    INotifications platformNotificationApi)
             : base(workContextAccessor, urlBuilder)
         {
             _userManager = userManager;
@@ -38,6 +40,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             _publisher = publisher;
             _commerceCoreApi = commerceCoreApi;
             _platformNotificationApi = platformNotificationApi;
+            _authorizationService = authorizationService;
         }
 
         // GET: storefrontapi/account
@@ -54,23 +57,37 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         /// <param name="contactId"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
         public async Task<ActionResult> GetUserById([FromRoute] string userId)
         {
-            //TODO: Authorization check
-            //TODO: Do not return users don't belongs to the current user organization
-            var result = await _userManager.FindByIdAsync(userId);          
-            return Json(result);
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null && !string.IsNullOrEmpty(user.ContactId))
+            {
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, user?.Contact?.Organization, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
+                if (!authorizationResult.Succeeded)
+                {
+                    return Unauthorized();
+                }
+            }
+            return Json(user);
         }
 
-        // DELETE: storefrontapi/account/{userName}
+        // DELETE: storefrontapi/account/{userId}
         [HttpDelete]
-        public async Task<ActionResult> DeleteUser([FromRoute] string userName)
+        [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
+        public async Task<ActionResult> DeleteUser([FromRoute] string userId)
         {
             //TODO: Authorization check
             var result = IdentityResult.Success;
-            var user = await _userManager.FindByNameAsync(userName);
+            var user = await _userManager.FindByIdAsync(userId);
             if(user != null)
             {
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, user?.Contact?.Organization, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
+                if (!authorizationResult.Succeeded)
+                {
+                    return Unauthorized();
+                }
+
                 result = await _userManager.DeleteAsync(user);
                 if(result.Succeeded)
                 {
@@ -82,16 +99,22 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/user
         [HttpPost]
+        [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
         public async Task<ActionResult> RegisterNewUser([FromBody] UserRegistration registration)
         {
             var result = IdentityResult.Success;
 
             TryValidateModel(registration);
-            //TODO: Authorization check
-            //Allow to register new users within own organization
-            registration.OrganizationId = WorkContext.CurrentUser?.Contact?.Value?.Organization?.Id;
+           
             if (ModelState.IsValid)
             {
+                //Allow to register new users only within own organization
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, new Organization { Id = registration.OrganizationId }, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
+                if (!authorizationResult.Succeeded)
+                {
+                    return Unauthorized();
+                }
+
                 var user = registration.ToUser();
                 user.StoreId = WorkContext.CurrentStore.Id;
                 
@@ -111,18 +134,16 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/invitation
         [HttpPost]
+        [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
         public async Task<ActionResult> CreateUserInvitation([FromBody] UsersInvitation invitation)
         {
             var result = IdentityResult.Success;
-            //TODO: Authorization check
             //TODO: Implement case for invite already exist user to organization
-            //Allow to invite only in own organization
-            var organizationId = WorkContext.CurrentUser?.Contact?.Value?.Organization?.Id;
-
+            //Allow to invite only within own organization
+            var organizationId = WorkContext.CurrentUser?.Contact?.Organization?.Id;
             foreach (var email in invitation.Emails)
             {
                 var user = await _userManager.FindByEmailAsync(email);
-
                 if (user == null)
                 {
                     user = new User
@@ -158,15 +179,17 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // PUT: storefrontapi/account/organization
         [HttpPut]
+        [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
         public async Task<ActionResult> UpdateCustomerOrganization([FromBody] Organization organization)
-        {
-            //TODO: Add authorization checks
-            var userOrganizationId = WorkContext.CurrentUser?.Contact?.Value?.Organization?.Id;
-            //Allow update only organization which user belongs to
-            if (organization.Id == userOrganizationId)
+        {   
+            //Allow to register new users only within own organization
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, organization, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
+            if (!authorizationResult.Succeeded)
             {
-                await _memberService.UpdateOrganizationAsync(organization);
+                return Unauthorized();
             }
+            await _memberService.UpdateOrganizationAsync(organization);
+            
             return Ok();
         }
 
@@ -174,17 +197,22 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpGet]
         public ActionResult GetCustomerOrganization()
         {
-            var result = WorkContext.CurrentUser?.Contact?.Value?.Organization;
+            var result = WorkContext.CurrentUser?.Contact?.Organization;
             return Json(result);
         }
 
         // POST: storefrontapi/account/organization/users/search
         [HttpPost]
+        [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
         public async Task<ActionResult> SearchOrganizationUsersAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
         {
-            //TODO: Add authorization checks
-            //Allow search only within own organization
-            searchCriteria.OrganizationId = WorkContext.CurrentUser?.Contact?.Value?.Organization?.Id;
+            searchCriteria.OrganizationId = searchCriteria.OrganizationId ?? WorkContext.CurrentUser?.Contact?.Organization?.Id;
+            //Allow to register new users only within own organization
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, new Organization { Id = searchCriteria.OrganizationId }, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
+            if (!authorizationResult.Succeeded)
+            {
+                return Unauthorized();
+            }
             if (searchCriteria.OrganizationId != null)
             {
                 var contactsSearchResult = await _memberService.SearchOrganizationContactsAsync(searchCriteria);
@@ -195,8 +223,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     var user = await _userManager.FindByIdAsync(userId);
                     if(user != null)
                     {
-                        user.Contact = new Lazy<Contact>(contactsSearchResult.First(x=> x.Id == user.ContactId));
-                        users.Add(user);
+                       users.Add(user);
                     }
                 }
                 return Json(new { TotalCount = contactsSearchResult.TotalItemCount, Results = users });
@@ -206,6 +233,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/{userId}/lock
         [HttpPost]
+        [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
         public async Task<ActionResult> LockUser([FromRoute]string userId)
         {
             //TODO: Add authorization checks
@@ -213,6 +241,13 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             var user = await _userManager.FindByIdAsync(userId);
             if (user != null)
             {
+                //Allow to register new users only within own organization
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, user?.Contact?.Organization, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
+                if (!authorizationResult.Succeeded)
+                {
+                    return Unauthorized();
+                }
+
                 await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
             }
             return Json(result);
@@ -220,6 +255,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/{userId}/unlock
         [HttpPost]
+        [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
         public async Task<ActionResult> UnlockUser([FromRoute] string userId)
         {
             //TODO: Add authorization checks
@@ -227,6 +263,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             var user = await _userManager.FindByIdAsync(userId);
             if (user != null)
             {
+                //Allow to register new users only within own organization
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, user?.Contact?.Organization, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
+                if (!authorizationResult.Succeeded)
+                {
+                    return Unauthorized();
+                }
+
+
                 await _userManager.ResetAccessFailedCountAsync(user);
                 await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MinValue);
             }

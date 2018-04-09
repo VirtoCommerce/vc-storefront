@@ -69,7 +69,7 @@ namespace VirtoCommerce.Storefront.JsonConverters
             //Use serializer with your setting do not containing this converter to prevent infinite recursion calls.
             serializer = JsonSerializer.Create(_jsonSettings);
             var result = JObject.FromObject(user, serializer);
-            var contact = user?.Contact?.Value;
+            var contact = user?.Contact;
 
             if (contact != null)
             {

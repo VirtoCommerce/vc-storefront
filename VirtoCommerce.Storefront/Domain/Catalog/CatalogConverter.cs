@@ -254,7 +254,7 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Terms.Add(string.Concat("vendor:", criteria.VendorId));
             }
             // Add user groups to terms
-            var contact = workContext.CurrentUser?.Contact?.Value;
+            var contact = workContext.CurrentUser?.Contact;
             if (contact != null && !contact.UserGroups.IsNullOrEmpty())
             {
                 if (result.UserGroups == null)
@@ -293,7 +293,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Take = criteria.PageSize,
                 ResponseGroup = ((int)criteria.ResponseGroup).ToString(),
             };
-            var contact = workContext.CurrentUser?.Contact?.Value;
+            var contact = workContext.CurrentUser?.Contact;
             if (contact != null && !contact.UserGroups.IsNullOrEmpty())
             {
                 if (result.UserGroups == null)

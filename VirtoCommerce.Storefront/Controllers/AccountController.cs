@@ -174,7 +174,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("confirmation-done");
         }
 
-        [Authorize(Policy = "CanImpersonate")]
+        [Authorize(Policy = CanImpersonateAuthorizationRequirement.PolicyName)]
         public async Task<IActionResult> ImpersonateUser(string userId)
         {
             var user = await _signInManager.UserManager.FindByNameAsync(User.Identity.Name);
@@ -451,7 +451,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 email = user.Email ?? user.UserName;
                 if (user.Contact != null)
                 {
-                    email = user.Contact?.Value?.Email ?? email;
+                    email = user.Contact?.Email ?? email;
                 }
             }
             return email;

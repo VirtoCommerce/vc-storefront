@@ -65,7 +65,6 @@ namespace VirtoCommerce.Storefront.Middleware
             await builder.WithBlogsAsync(workContext.CurrentStore, workContext.CurrentLanguage);
             await builder.WithPricelistsAsync();
             await builder.WithQuotesAsync(workContext.CurrentStore, workContext.CurrentUser, workContext.CurrentCurrency, workContext.CurrentLanguage);
-            await builder.WithUserContactAsync();
             await builder.WithUserOrdersAsync();
             await builder.WithUserQuotesAsync();
             await builder.WithUserSubscriptionsAsync();

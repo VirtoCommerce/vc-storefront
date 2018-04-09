@@ -17,11 +17,14 @@
             public const string Customer = "Customer";
             public const string Operator = "Operator";
             public const string Administrator = "Administrator";
+            public const string OrganizationMaintainer  = "Organization maintainer";
+            public const string OrganizationEmployee = "Employee";
         }
 
         public static class Permissions
         {
             public const string CanResetCache = "cache:reset";
+            public const string CanEditOrganization = "storefront:organization:edit";
         }
     }
 }
