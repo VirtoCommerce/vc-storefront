@@ -34,6 +34,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 result.ProvinceCode = address.RegionId;
                 result.Zip = address.PostalCode;
                 result.Country = address.CountryName;
+                result.CountryCode = address.CountryCode;
                 result.Id = address.GetHashCode().ToString();
             }
 

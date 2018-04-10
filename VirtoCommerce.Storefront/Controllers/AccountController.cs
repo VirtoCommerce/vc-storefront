@@ -81,20 +81,20 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register([FromForm] UserRegistration formModel)
+        public async Task<ActionResult> Register([FromForm] UserRegistration registration)
         {
-            TryValidateModel(formModel);
+            TryValidateModel(registration);
 
             if (ModelState.IsValid)
             {
-                var user = formModel.ToUser();
+                var user = registration.ToUser();
                 user.StoreId = WorkContext.CurrentStore.Id;
 
-                var result = await _signInManager.UserManager.CreateAsync(user, formModel.Password);
+                var result = await _signInManager.UserManager.CreateAsync(user, registration.Password);
                 if (result.Succeeded == true)
                 {
                     user = await _signInManager.UserManager.FindByNameAsync(user.UserName);
-                    await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, formModel));
+                    await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, registration));
                     await _signInManager.SignInAsync(user, isPersistent: true);
                     await _publisher.Publish(new UserLoginEvent(WorkContext, user));
                     if (_options.SendAccountConfirmation)
@@ -119,6 +119,7 @@ namespace VirtoCommerce.Storefront.Controllers
                     }
                 }
             }
+            WorkContext.UserRegistration = registration;
             return View("customers/register", WorkContext);
         }
 
@@ -159,6 +160,8 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
+
+            WorkContext.UserRegistration = register;
             return View("customers/confirm_invitation");
         }
 
@@ -237,6 +240,7 @@ namespace VirtoCommerce.Storefront.Controllers
             }
 
             ModelState.AddModelError("form", "Login attempt failed.");
+            WorkContext.UserLogin = login;
             return View("customers/login", WorkContext);
 
         }
