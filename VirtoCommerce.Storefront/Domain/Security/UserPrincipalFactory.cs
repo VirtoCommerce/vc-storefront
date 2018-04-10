@@ -63,7 +63,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             {
                 foreach (var role in user.Roles)
                 {
-                    identity.AddClaim(new Claim(ClaimTypes.Role, role));
+                    identity.AddClaim(new Claim(ClaimTypes.Role, role.Id));
                 }
             }
             var principal = new ClaimsPrincipal(identity);

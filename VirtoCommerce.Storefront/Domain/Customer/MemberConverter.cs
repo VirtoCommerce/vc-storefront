@@ -183,7 +183,6 @@ namespace VirtoCommerce.Storefront.Domain
                     IsLockedOut =  x.LockoutEndDateUtc != null ? x.LockoutEndDateUtc.Value > DateTime.UtcNow : false,
                     UserName = x.UserName,
                 });
-                result.IsActive = !result.SecurityAccounts.Any(x => x.IsLockedOut);
             }
             return result;
         }

@@ -43,6 +43,13 @@ namespace VirtoCommerce.Storefront.Model.Security
         public string DefaultLanguage { get; set; }
 
         public bool TwoFactorEnabled { get; set; }
+        public bool IsLockedOut
+        {
+            get
+            {
+                return LockoutEndDateUtc != null ? LockoutEndDateUtc.Value > DateTime.UtcNow : false;
+            }
+        }
 
         /// <summary>
         ///  Used to record failures for the purposes of lockout
@@ -93,7 +100,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// <summary>
         /// All user roles
         /// </summary>
-        public IEnumerable<string> Roles { get; set; }
+        public IEnumerable<Role> Roles { get; set; }
 
         /// <summary>
         /// All user orders

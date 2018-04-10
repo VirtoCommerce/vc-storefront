@@ -6,8 +6,7 @@ namespace VirtoCommerce.Storefront.Model.Customer
     /// Represent customer information structure 
     /// </summary>
     public partial class Contact : Member
-    {
-        public bool IsActive { get; set; } = true;
+    {  
         public string FullName { get; set; }
         /// <summary>
         /// Returns the first name of the customer.

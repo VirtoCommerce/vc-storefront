@@ -9,13 +9,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
-using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Security;
-using platformSecurityDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
@@ -45,7 +43,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         #region IUserStore<User> members
         public async Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken)
         {
-            var dtoUser = user.ToUserDto(await GetAllPlatformRolesAsync());
+            var dtoUser = user.ToUserDto();
             var resultDto = await _platformSecurityApi.CreateAsyncAsync(dtoUser);
             return resultDto.ToIdentityResult();
         }
@@ -129,23 +127,13 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public async Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
         {
-            var dtoUser = user.ToUserDto(await GetAllPlatformRolesAsync());
+            var dtoUser = user.ToUserDto();
             var resultDto = await _platformSecurityApi.UpdateAsyncAsync(dtoUser);
             //Evict user from the cache
             SecurityCacheRegion.ExpireUser(user.Id);
             return resultDto.ToIdentityResult();
         }
 
-        private async Task<IEnumerable<platformSecurityDto.Role>> GetAllPlatformRolesAsync()
-        {
-            var cacheKey = CacheKey.With(GetType(), "GetAllPlatformRolesLookup");
-            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-            {
-                cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken());
-                var result = await _platformSecurityApi.SearchRolesAsync(new platformSecurityDto.RoleSearchRequest { TakeCount = int.MaxValue });
-                return result.Roles;
-            });
-        }
         #endregion
 
         #region IUserLockoutStore<User> members

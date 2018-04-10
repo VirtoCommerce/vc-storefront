@@ -119,6 +119,11 @@ namespace VirtoCommerce.Storefront.Model
         /// </summary>
         public IList<Currency> AllCurrencies { get; set; }
 
+        /// <summary>
+        /// List of all available roles
+        /// </summary>
+        public IEnumerable<Role> AvailableRoles { get; set; }
+
         public string ErrorMessage { get; set; }
         /// <summary>
         /// List of active pricelists

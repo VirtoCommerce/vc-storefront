@@ -228,6 +228,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 result.PageSize = workContext.PageSize ?? 0;
             }
 
+            if (workContext.AvailableRoles != null)
+            {
+                result.AvailableRoles = workContext.AvailableRoles.Select(x => new Role
+                {
+                    Id = x.Id,
+                    Name = x.Name
+                }).ToArray();
+            }
+
             return result;
         }
     }

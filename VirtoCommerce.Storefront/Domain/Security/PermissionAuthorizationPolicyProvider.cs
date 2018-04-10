@@ -52,9 +52,11 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 }
 
                 //Register storefront permissions
-                //TOD: Need to refactor registration process
-                resultLookup[SecurityConstants.Permissions.CanEditOrganization] = new AuthorizationPolicyBuilder().AddRequirements(new PermissionAuthorizationRequirement { Permission = SecurityConstants.Permissions.CanEditOrganization }).Build();
-
+                foreach (var permission in SecurityConstants.Permissions.AllPermissions)
+                {
+                    resultLookup[permission] = new AuthorizationPolicyBuilder().AddRequirements(new PermissionAuthorizationRequirement { Permission = permission }).Build();
+                }
+              
                 return resultLookup;
             });
             return result;

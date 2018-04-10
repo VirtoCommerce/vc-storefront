@@ -19,7 +19,16 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return IdentityResult.Failed(resultDto.Errors.Select(x => new IdentityError { Description = x }).ToArray());
         }
 
-       
+        public static dto.Role ToRoleDto(this Role role)
+        {
+            return new dto.Role
+            {
+                Id = role.Id,
+                Name = role.Name,
+                Permissions = role?.Permissions.Select(x => new dto.Permission { Id = x, Name = x }).ToList()
+            };
+        }
+
         public static  User ToUser(this UserRegistration registerForm)
         {
             var result = new User
@@ -30,13 +39,13 @@ namespace VirtoCommerce.Storefront.Domain.Security
             };
             if (!string.IsNullOrEmpty(registerForm.Role))
             {
-                result.Roles = new[] { registerForm.Role };
+                result.Roles = new[] { new Role { Id = registerForm.Role } };
             }
 
             return result;
         }
 
-        public static dto.ApplicationUserExtended ToUserDto(this User user, IEnumerable<dto.Role> allPlatformRoles = null)
+        public static dto.ApplicationUserExtended ToUserDto(this User user)
         {
             var result = new dto.ApplicationUserExtended
             {
@@ -57,10 +66,10 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 UserType = user.UserType
             };
 
-            if (!user.Roles.IsNullOrEmpty() && allPlatformRoles != null)
+            if (!user.Roles.IsNullOrEmpty())
             {
                 //Need to convert role names to the registered in the platform roles entities 
-                result.Roles = allPlatformRoles.Join(user.Roles, x => x.Name, y => y, (x, y) => new dto.Role { Id = x.Id }).ToList();
+                result.Roles = user.Roles.Select(ToRoleDto).ToList();
             }
             if (!user.ExternalLogins.IsNullOrEmpty())
             {
@@ -85,8 +94,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 StoreId = userDto.StoreId,
                 IsRegisteredUser = true,
                 IsAdministrator = userDto.IsAdministrator ?? false,
-                Permissions = userDto.Permissions,
-                Roles = userDto.Roles?.Select(x => x.Name),
+                Permissions = userDto.Permissions,              
                 AccessFailedCount = userDto.AccessFailedCount ?? 0,
                 LockoutEnabled = userDto.LockoutEnabled ?? false,
                 EmailConfirmed = userDto.EmailConfirmed ?? false,
@@ -96,6 +104,15 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 UserState = userDto.UserState,
                 UserType = userDto.UserType
             };
+
+            if (!userDto.Roles.IsNullOrEmpty())
+            {
+                result.Roles = userDto.Roles.Select(x => new Role
+                {
+                    Id = x.Id,
+                    Name = x.Name
+                });
+            }
 
             if (!userDto.Logins.IsNullOrEmpty())
             {
