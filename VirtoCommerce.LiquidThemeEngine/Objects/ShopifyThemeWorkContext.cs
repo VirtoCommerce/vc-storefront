@@ -114,6 +114,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
 
         public Shop[] AllStores { get; set; }
 
+        public Role[] AvailableRoles { get; set; }
+
         public IMutablePagedList<Vendor> Vendors { get; set; }
 
         /// <summary>

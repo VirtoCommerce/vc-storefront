@@ -75,6 +75,15 @@ namespace VirtoCommerce.Storefront.Domain
             await _customerApi.CreateContactAsync(contactDto);
         }
 
+
+        public virtual async Task DeleteContactAsync(string contactId)
+        {
+            await _customerApi.DeleteContactsAsync(new[] { contactId });
+            //Invalidate cache
+            CustomerCacheRegion.ExpireMember(contactId);
+        }
+
+
         public virtual async Task UpdateContactAsync(Contact contact)
         {
             await _customerApi.UpdateContactAsync(contact.ToCustomerContactDto());

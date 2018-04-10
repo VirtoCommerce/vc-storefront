@@ -57,7 +57,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         /// <param name="contactId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
+        [Authorize(SecurityConstants.Permissions.CanViewUsers)]
         public async Task<ActionResult> GetUserById([FromRoute] string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -74,7 +74,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // DELETE: storefrontapi/account/{userId}
         [HttpDelete]
-        [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
+        [Authorize(SecurityConstants.Permissions.CanDeleteUsers)]
         public async Task<ActionResult> DeleteUser([FromRoute] string userId)
         {
             //TODO: Authorization check
@@ -99,7 +99,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/user
         [HttpPost]
-        [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
+        [Authorize(SecurityConstants.Permissions.CanCreateUsers)]
         public async Task<ActionResult> RegisterNewUser([FromBody] UserRegistration registration)
         {
             var result = IdentityResult.Success;
@@ -134,7 +134,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/invitation
         [HttpPost]
-        [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
+        [Authorize(SecurityConstants.Permissions.CanInviteUsers)]
         public async Task<ActionResult> CreateUserInvitation([FromBody] UsersInvitation invitation)
         {
             var result = IdentityResult.Success;
@@ -150,7 +150,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     {
                         UserName = email,
                         StoreId = WorkContext.CurrentStore.Id,
-                        Roles = invitation.Roles,
+                        Roles = invitation.Roles?.Select(x => new Model.Security.Role { Id = x }),
                         Email = email,
                     };
                     result = await _userManager.CreateAsync(user);
@@ -203,7 +203,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/organization/users/search
         [HttpPost]
-        [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
+        [Authorize(SecurityConstants.Permissions.CanViewUsers)]
         public async Task<ActionResult> SearchOrganizationUsersAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
         {
             searchCriteria.OrganizationId = searchCriteria.OrganizationId ?? WorkContext.CurrentUser?.Contact?.Organization?.Id;
@@ -216,7 +216,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             if (searchCriteria.OrganizationId != null)
             {
                 var contactsSearchResult = await _memberService.SearchOrganizationContactsAsync(searchCriteria);
-                var userIds = contactsSearchResult.Select(x => x.SecurityAccounts.FirstOrDefault()).OfType<SecurityAccount>().Select(x=>x.Id);
+                var userIds = contactsSearchResult.Select(x => x.SecurityAccounts?.FirstOrDefault()).OfType<SecurityAccount>().Select(x=>x.Id);
                 var users = new List<User>();
                 foreach(var userId in userIds)
                 {
@@ -233,7 +233,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/{userId}/lock
         [HttpPost]
-        [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
+        [Authorize(SecurityConstants.Permissions.CanEditUsers)]
         public async Task<ActionResult> LockUser([FromRoute]string userId)
         {
             //TODO: Add authorization checks
@@ -255,7 +255,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/{userId}/unlock
         [HttpPost]
-        [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
+        [Authorize(SecurityConstants.Permissions.CanEditUsers)]
         public async Task<ActionResult> UnlockUser([FromRoute] string userId)
         {
             //TODO: Add authorization checks
@@ -269,8 +269,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 {
                     return Unauthorized();
                 }
-
-
                 await _userManager.ResetAccessFailedCountAsync(user);
                 await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MinValue);
             }
@@ -286,23 +284,36 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 userUpdateInfo.Id = WorkContext.CurrentUser.Id;
             }
+            var isSelfEditing = userUpdateInfo.Id == WorkContext.CurrentUser.Id;
+
+
             if (!string.IsNullOrEmpty(userUpdateInfo.Id))
             {
                 var user = await _userManager.FindByIdAsync(userUpdateInfo.Id);
                 if (user != null)
                 {
-                    if (user.ContactId != null)
+                    if (!isSelfEditing)
                     {
-                        var contact = await _memberService.GetContactByIdAsync(user.ContactId);
-                        if (contact != null)
+                        var authorizationResult = await _authorizationService.AuthorizeAsync(User, null, SecurityConstants.Permissions.CanEditUsers);
+                        if (authorizationResult.Succeeded)
                         {
-                            contact.FirstName = userUpdateInfo.FirstName;
-                            contact.LastName = userUpdateInfo.LastName;
-                            await _memberService.UpdateContactAsync(contact);
+                            authorizationResult = await _authorizationService.AuthorizeAsync(User, user?.Contact?.Organization, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
+                        }
+                        if (!authorizationResult.Succeeded)
+                        {
+                            return Unauthorized();
                         }
                     }
+
+                    if (user.Contact != null)
+                    {
+                        user.Contact.FirstName = userUpdateInfo.FirstName;
+                        user.Contact.LastName = userUpdateInfo.LastName;
+                        await _memberService.UpdateContactAsync(user.Contact);
+                    }
+
                     user.Email = userUpdateInfo.Email;
-                    user.Roles = userUpdateInfo.Roles;
+                    user.Roles = userUpdateInfo.Roles?.Select(x=> new Model.Security.Role { Id = x });
                     await _userManager.UpdateAsync(user);
                 }
             }
