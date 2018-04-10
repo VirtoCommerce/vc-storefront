@@ -4,12 +4,12 @@ namespace VirtoCommerce.DerivativeContractsModule.Core.Model
 {
     public class DateTimeRange
     {
-        public DateTime? EarlierDate { get; set; }
+        public DateTime? FromDate { get; set; }
 
-        public DateTime? LaterDate { get; set; }
+        public DateTime? ToDate { get; set; }
 
-        public bool IncludeEarlier { get; set; }
+        public bool IncludeFrom { get; set; }
 
-        public bool IncludeLater { get; set; }
+        public bool IncludeTo { get; set; }
     }
 }

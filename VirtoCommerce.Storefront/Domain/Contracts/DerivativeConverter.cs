@@ -129,10 +129,10 @@ namespace VirtoCommerce.Storefront.Domain.Derivatives
         {
             var result = new derivativesDto.DateTimeRange
             {
-                EarlierDate = range.EarlierDate,
-                LaterDate = range.LaterDate,
-                IncludeEarlier = range.IncludeEarlier,
-                IncludeLater = range.IncludeLater
+                FromDate = range.FromDate,
+                ToDate = range.ToDate,
+                IncludeFrom = range.IncludeFrom,
+                IncludeTo = range.IncludeTo
             };
             return result;
         }

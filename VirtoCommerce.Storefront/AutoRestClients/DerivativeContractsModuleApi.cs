@@ -2306,12 +2306,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi.
         /// <summary>
         /// Initializes a new instance of the DateTimeRange class.
         /// </summary>
-        public DateTimeRange(System.DateTime? earlierDate = default(System.DateTime?), System.DateTime? laterDate = default(System.DateTime?), bool? includeEarlier = default(bool?), bool? includeLater = default(bool?))
+        public DateTimeRange(System.DateTime? fromDate = default(System.DateTime?), System.DateTime? toDate = default(System.DateTime?), bool? includeFrom = default(bool?), bool? includeTo = default(bool?))
         {
-            EarlierDate = earlierDate;
-            LaterDate = laterDate;
-            IncludeEarlier = includeEarlier;
-            IncludeLater = includeLater;
+            FromDate = fromDate;
+            ToDate = toDate;
+            IncludeFrom = includeFrom;
+            IncludeTo = includeTo;
             CustomInit();
         }
 
@@ -2322,23 +2322,23 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi.
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "earlierDate")]
-        public System.DateTime? EarlierDate { get; set; }
+        [JsonProperty(PropertyName = "fromDate")]
+        public System.DateTime? FromDate { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "laterDate")]
-        public System.DateTime? LaterDate { get; set; }
+        [JsonProperty(PropertyName = "toDate")]
+        public System.DateTime? ToDate { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "includeEarlier")]
-        public bool? IncludeEarlier { get; set; }
+        [JsonProperty(PropertyName = "includeFrom")]
+        public bool? IncludeFrom { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "includeLater")]
-        public bool? IncludeLater { get; set; }
+        [JsonProperty(PropertyName = "includeTo")]
+        public bool? IncludeTo { get; set; }
 
     }
 }
