@@ -2195,7 +2195,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi.
         /// <summary>
         /// Initializes a new instance of the DerivativeContractItem class.
         /// </summary>
-        public DerivativeContractItem(string derivativeContractId = default(string), string fulfillmentCenterId = default(string), string productId = default(string), double? contractSize = default(double?), double? purchasedQuantity = default(double?), double? remainingQuantity = default(double?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public DerivativeContractItem(string derivativeContractId = default(string), string fulfillmentCenterId = default(string), string productId = default(string), long? contractSize = default(long?), long? purchasedQuantity = default(long?), long? remainingQuantity = default(long?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             DerivativeContractId = derivativeContractId;
             FulfillmentCenterId = fulfillmentCenterId;
@@ -2234,17 +2234,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi.
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "contractSize")]
-        public double? ContractSize { get; set; }
+        public long? ContractSize { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "purchasedQuantity")]
-        public double? PurchasedQuantity { get; set; }
+        public long? PurchasedQuantity { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "remainingQuantity")]
-        public double? RemainingQuantity { get; private set; }
+        public long? RemainingQuantity { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -2574,7 +2574,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi.
         /// </summary>
         /// <param name="type">Possible values include: 'Forward', 'Futures',
         /// 'PutOption', 'CallOption'</param>
-        public DerivativeContractInfo(string productId = default(string), string type = default(string), double? contractSize = default(double?), double? purchasedQuantity = default(double?), double? remainingQuantity = default(double?))
+        public DerivativeContractInfo(string productId = default(string), string type = default(string), long? contractSize = default(long?), long? purchasedQuantity = default(long?), long? remainingQuantity = default(long?))
         {
             ProductId = productId;
             Type = type;
@@ -2604,17 +2604,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi.
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "contractSize")]
-        public double? ContractSize { get; set; }
+        public long? ContractSize { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "purchasedQuantity")]
-        public double? PurchasedQuantity { get; set; }
+        public long? PurchasedQuantity { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "remainingQuantity")]
-        public double? RemainingQuantity { get; set; }
+        public long? RemainingQuantity { get; set; }
 
     }
 }

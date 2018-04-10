@@ -67,9 +67,9 @@ namespace VirtoCommerce.Storefront.Domain.Derivatives
                 DerivativeContractId = dto.DerivativeContractId,
                 FulfillmentCenterId = dto.FulfillmentCenterId,
                 ProductId = dto.ProductId,
-                ContractSize = (decimal)dto.ContractSize,
-                PurchasedQuantity = (decimal)dto.PurchasedQuantity,
-                RemainingQuantity = (decimal)dto.RemainingQuantity
+                ContractSize = dto.ContractSize.Value,
+                PurchasedQuantity = dto.PurchasedQuantity.Value,
+                RemainingQuantity = dto.RemainingQuantity.Value
             };
 
             return result;
@@ -81,9 +81,9 @@ namespace VirtoCommerce.Storefront.Domain.Derivatives
             {
                 ProductId = dto.ProductId,
                 Type = EnumUtility.SafeParse(dto.Type, DerivativeContractType.Forward),
-                ContractSize = (decimal)dto.ContractSize,
-                PurchasedQuantity = (decimal)dto.PurchasedQuantity,
-                RemainingQuantity = (decimal)dto.RemainingQuantity
+                ContractSize = dto.ContractSize.Value,
+                PurchasedQuantity = dto.PurchasedQuantity.Value,
+                RemainingQuantity = dto.RemainingQuantity.Value
             };
             return result;
         }
