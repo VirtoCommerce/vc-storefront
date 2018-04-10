@@ -224,7 +224,15 @@ namespace VirtoCommerce.Storefront.Model
         /// </summary>
         public IDictionary<string, object> ApplicationSettings { get; set; }
 
+        /// <summary>
+        /// Represents user registration data required to bind entered user data in the register form
+        /// </summary>
         public UserRegistration UserRegistration { get; set; }
+
+        /// <summary>
+        /// Represents user login data required to bind entered user data in the login form
+        /// </summary>
+        public Login UserLogin { get; set; }
 
         public ResetPassword ResetPassword { get; set; }
         /// <summary>
