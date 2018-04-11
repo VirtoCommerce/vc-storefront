@@ -964,7 +964,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> Update1WithHttpMessagesAsync(IList<DerivativeContractItem> derivativeContractItems, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> UpdateItemsWithHttpMessagesAsync(IList<DerivativeContractItem> derivativeContractItems, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (derivativeContractItems == null)
             {
@@ -979,7 +979,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("derivativeContractItems", derivativeContractItems);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "Update1", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdateItems", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
@@ -1732,7 +1732,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse> Update1WithHttpMessagesAsync(IList<DerivativeContractItem> derivativeContractItems, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> UpdateItemsWithHttpMessagesAsync(IList<DerivativeContractItem> derivativeContractItems, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='ids'>
         /// </param>
         /// <param name='customHeaders'>
@@ -1932,9 +1932,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi
             /// </param>
             /// <param name='derivativeContractItems'>
             /// </param>
-            public static void Update1(this IDerivativeContractOperations operations, IList<DerivativeContractItem> derivativeContractItems)
+            public static void UpdateItems(this IDerivativeContractOperations operations, IList<DerivativeContractItem> derivativeContractItems)
             {
-                operations.Update1Async(derivativeContractItems).GetAwaiter().GetResult();
+                operations.UpdateItemsAsync(derivativeContractItems).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
@@ -1945,9 +1945,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task Update1Async(this IDerivativeContractOperations operations, IList<DerivativeContractItem> derivativeContractItems, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task UpdateItemsAsync(this IDerivativeContractOperations operations, IList<DerivativeContractItem> derivativeContractItems, CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.Update1WithHttpMessagesAsync(derivativeContractItems, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.UpdateItemsWithHttpMessagesAsync(derivativeContractItems, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <param name='operations'>
@@ -2909,7 +2909,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi.
         /// Initializes a new instance of the
         /// DerivativeContractItemSearchCriteria class.
         /// </summary>
-        public DerivativeContractItemSearchCriteria(string derivativeContractIds = default(string), string fulfillmentCenterIds = default(string), string productIds = default(string), IList<string> memberIds = default(IList<string>), IList<string> types = default(IList<string>), DateTimeRange startDateRange = default(DateTimeRange), DateTimeRange endDateRange = default(DateTimeRange), bool? onlyActive = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public DerivativeContractItemSearchCriteria(IList<string> derivativeContractIds = default(IList<string>), IList<string> fulfillmentCenterIds = default(IList<string>), IList<string> productIds = default(IList<string>), IList<string> memberIds = default(IList<string>), IList<string> types = default(IList<string>), DateTimeRange startDateRange = default(DateTimeRange), DateTimeRange endDateRange = default(DateTimeRange), bool? onlyActive = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
             DerivativeContractIds = derivativeContractIds;
             FulfillmentCenterIds = fulfillmentCenterIds;
@@ -2940,17 +2940,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi.
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "derivativeContractIds")]
-        public string DerivativeContractIds { get; set; }
+        public IList<string> DerivativeContractIds { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "fulfillmentCenterIds")]
-        public string FulfillmentCenterIds { get; set; }
+        public IList<string> FulfillmentCenterIds { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "productIds")]
-        public string ProductIds { get; set; }
+        public IList<string> ProductIds { get; set; }
 
         /// <summary>
         /// </summary>
