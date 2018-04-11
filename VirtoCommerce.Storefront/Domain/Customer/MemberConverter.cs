@@ -5,92 +5,39 @@ using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
+using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Stores;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 using customerDto = VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
-    public static class CustomerConverterExtension
-    {
-        public static MemberConverter CustomerConverterInstance => new MemberConverter();
-
-        public static Organization ToOrganization(this customerDto.Organization organizationDto)
-        {
-            return CustomerConverterInstance.ToOrganization(organizationDto);
-        }
-
-        public static Contact ToContact(this customerDto.Contact contactDto)
-        {
-            return CustomerConverterInstance.ToContact(contactDto);
-        }
-
-        public static customerDto.Contact ToCustomerContactDto(this Contact customer)
-        {
-            return CustomerConverterInstance.ToContactDto(customer);
-        }
-
-        public static customerDto.Organization ToOrganizationDto(this Organization org)
-        {
-            return CustomerConverterInstance.ToOrganizationDto(org);
-        }
-
-        public static coreDto.Contact ToCoreContactDto(this Contact customer)
-        {
-            return CustomerConverterInstance.ToCoreContactDto(customer);
-        }
-
-        public static Vendor ToVendor(this customerDto.Vendor vendorDto, Language currentLanguage, Store store)
-        {
-            return CustomerConverterInstance.ToVendor(vendorDto, currentLanguage, store);
-        }
-
-        public static Address ToAddress(this customerDto.Address addressDto)
-        {
-            return CustomerConverterInstance.ToAddress(addressDto);
-        }
-
-        public static customerDto.Address ToCustomerAddressDto(this Address address)
-        {
-            return CustomerConverterInstance.ToCustomerAddressDto(address);
-        }
-
-        public static DynamicProperty ToDynamicProperty(this customerDto.DynamicObjectProperty propertyDto)
-        {
-            return CustomerConverterInstance.ToDynamicProperty(propertyDto);
-        }
-
-        public static customerDto.DynamicObjectProperty ToCustomerDynamicPropertyDto(this DynamicProperty property)
-        {
-            return CustomerConverterInstance.ToDynamicPropertyDto(property);
-        }
-    }
-
-    public partial class MemberConverter
+    
+    public static partial class MemberConverter
     {
         private static readonly char[] _nameSeparator = { ' ' };
 
-        public virtual DynamicProperty ToDynamicProperty(customerDto.DynamicObjectProperty propertyDto)
+        public static  DynamicProperty ToDynamicProperty(this customerDto.DynamicObjectProperty propertyDto)
         {
             return propertyDto.JsonConvert<coreDto.DynamicObjectProperty>().ToDynamicProperty();
         }
 
-        public virtual customerDto.DynamicObjectProperty ToDynamicPropertyDto(DynamicProperty property)
+        public static customerDto.DynamicObjectProperty ToCustomerDynamicPropertyDto(this DynamicProperty property)
         {
             return property.ToDynamicPropertyDto().JsonConvert<customerDto.DynamicObjectProperty>();
         }
 
-        public virtual Address ToAddress(customerDto.Address addressDto)
+        public static Address ToAddress(this customerDto.Address addressDto)
         {
             return addressDto.JsonConvert<coreDto.Address>().ToAddress();
         }
 
-        public virtual customerDto.Address ToCustomerAddressDto(Address address)
+        public static customerDto.Address ToCustomerAddressDto(this Address address)
         {
             return address.ToCoreAddressDto().JsonConvert<customerDto.Address>();
         }
 
-        public virtual Vendor ToVendor(customerDto.Vendor vendorDto, Language currentLanguage, Store store)
+        public static Vendor ToVendor(this customerDto.Vendor vendorDto, Language currentLanguage, Store store)
         {
             Vendor result = null;
 
@@ -141,8 +88,45 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
+        public static Organization ToOrganization(this OrganizationRegistration orgRegistration)
+        {
+            var organization = new Organization
+            {
+                Name = orgRegistration.OrganizationName,
+            };
+            if (organization.Addresses != null)
+            {
+                organization.Addresses.Add(orgRegistration.Address);
+            }
+            return organization;
+        }
 
-        public virtual Contact ToContact(customerDto.Contact contactDto)
+     
+        public static Contact ToContact(this UserRegistration userRegistration)
+        {
+            var result = new Contact
+            {
+                Name = userRegistration.Name ?? userRegistration.UserName,
+                FullName = string.Join(" ", userRegistration.FirstName, userRegistration.LastName),
+                FirstName = userRegistration.FirstName,
+                LastName = userRegistration.LastName,
+            };
+            if (!string.IsNullOrEmpty(userRegistration.Email))
+            {
+                result.Emails.Add(userRegistration.Email);
+            }
+            if (string.IsNullOrEmpty(result.FullName) || string.IsNullOrWhiteSpace(result.FullName))
+            {
+                result.FullName = userRegistration.Email;
+            }
+            if (userRegistration.Address != null)
+            {
+                result.Addresses = new[] { userRegistration.Address };
+            }
+            return result;
+        }
+
+        public static Contact ToContact(this customerDto.Contact contactDto)
         {
             var result = new Contact
             {
@@ -187,7 +171,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual Organization ToOrganization(customerDto.Organization organizaionDto)
+        public static Organization ToOrganization(this customerDto.Organization organizaionDto)
         {
             var result = new Organization
             {
@@ -216,7 +200,7 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
 
-        public virtual customerDto.Contact ToContactDto(Contact customer)
+        public static customerDto.Contact ToContactDto(this Contact customer)
         {
             var retVal = new customerDto.Contact
             {
@@ -249,7 +233,7 @@ namespace VirtoCommerce.Storefront.Domain
             return retVal;
         }
 
-        public virtual customerDto.Organization ToOrganizationDto(Organization org)
+        public static customerDto.Organization ToOrganizationDto(this Organization org)
         {
             var retVal = new customerDto.Organization
             {
@@ -272,9 +256,9 @@ namespace VirtoCommerce.Storefront.Domain
             return retVal;
         }
 
-        public virtual coreDto.Contact ToCoreContactDto(Contact contact)
+        public static coreDto.Contact ToCoreContactDto(this Contact contact)
         {
-            return contact.ToCustomerContactDto().JsonConvert<coreDto.Contact>();        
+            return contact.ToContactDto().JsonConvert<coreDto.Contact>();        
         }
     }
 }

@@ -10,7 +10,7 @@ namespace VirtoCommerce.Storefront.Model.Customer.Services
     {
         Task<Contact> GetContactByIdAsync(string contactId);
         Contact GetContactById(string contactId);
-        Task CreateContactAsync(Contact contact);
+        Task<Contact> CreateContactAsync(Contact contact);
         Task UpdateContactAsync(Contact contact);
         Task UpdateContactAddressesAsync(string contactId, IList<Address> addresses);
         Task DeleteContactAsync(string contactId);
@@ -20,7 +20,7 @@ namespace VirtoCommerce.Storefront.Model.Customer.Services
 
         Task<Organization> GetOrganizationByIdAsync(string organizationId);
         Organization GetOrganizationById(string organizationId);
-        Task CreateOrganizationAsync(Organization organization);
+        Task<Organization> CreateOrganizationAsync(Organization organization);
         Task UpdateOrganizationAsync(Organization organization);
 
 

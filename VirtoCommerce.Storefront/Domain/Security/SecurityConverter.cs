@@ -36,12 +36,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 Email = registerForm.Email,
                 UserName = registerForm.UserName,
                 Password = registerForm.Password,
-            };
-            if (!string.IsNullOrEmpty(registerForm.Role))
-            {
-                result.Roles = new[] { new Role { Id = registerForm.Role } };
-            }
-
+            };          
             return result;
         }
 
@@ -54,7 +49,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 Password = user.Password,
                 UserName = user.UserName,
                 StoreId = user.StoreId,
-                MemberId = user.ContactId,
+                MemberId = user.Contact?.Id ?? user.ContactId,
                 AccessFailedCount = user.AccessFailedCount,
                 EmailConfirmed = user.EmailConfirmed,
                 LockoutEnabled = user.LockoutEnabled,

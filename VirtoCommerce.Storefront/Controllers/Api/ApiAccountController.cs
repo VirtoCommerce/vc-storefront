@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
+using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Common;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Domain.Security.Notifications;
@@ -97,10 +98,46 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Json(result);
         }
 
+        // POST: storefrontapi/account/organization
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RegisterOrganization([FromBody] OrganizationRegistration orgRegistration)
+        {
+            var result = IdentityResult.Success;
+
+            TryValidateModel(orgRegistration);
+
+            if (ModelState.IsValid)
+            {
+                var organization = orgRegistration.ToOrganization();
+                organization = await _memberService.CreateOrganizationAsync(organization);
+                var contact = orgRegistration.ToContact();
+                contact.OrganizationId = organization.Id;
+              
+                var user = orgRegistration.ToUser();
+                user.Contact = contact;
+                user.StoreId = WorkContext.CurrentStore.Id;
+                user.Roles = new [] { SecurityConstants.Roles.OrganizationMaintainer };
+
+                result = await _userManager.CreateAsync(user, orgRegistration.Password);
+                if (result.Succeeded)
+                {
+                    user = await _userManager.FindByNameAsync(user.UserName);
+                    await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, orgRegistration));
+                }
+            }
+            else
+            {
+                result = IdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors).Select(x => new IdentityError { Description = x.ErrorMessage }).ToArray());
+            }
+         
+            return Json(result);
+        }
+
         // POST: storefrontapi/account/user
         [HttpPost]
         [Authorize(SecurityConstants.Permissions.CanCreateUsers)]
-        public async Task<ActionResult> RegisterNewUser([FromBody] UserRegistration registration)
+        public async Task<ActionResult> RegisterUser([FromBody] OrganizationUserRegistration registration)
         {
             var result = IdentityResult.Success;
 
@@ -115,9 +152,13 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     return Unauthorized();
                 }
 
+                var contact = registration.ToContact();
+                contact.OrganizationId = registration.OrganizationId;
+               
                 var user = registration.ToUser();
+                user.Contact = contact;
                 user.StoreId = WorkContext.CurrentStore.Id;
-                
+
                 result = await _userManager.CreateAsync(user, registration.Password);
                 if (result.Succeeded == true)
                 {
@@ -180,7 +221,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // PUT: storefrontapi/account/organization
         [HttpPut]
         [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
-        public async Task<ActionResult> UpdateCustomerOrganization([FromBody] Organization organization)
+        public async Task<ActionResult> UpdateOrganization([FromBody] Organization organization)
         {   
             //Allow to register new users only within own organization
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, organization, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
