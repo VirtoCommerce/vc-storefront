@@ -1,30 +1,29 @@
-﻿using Microsoft.Extensions.Primitives;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Threading;
+using Microsoft.Extensions.Primitives;
 using VirtoCommerce.Storefront.Model.Common.Caching;
-using VirtoCommerce.Storefront.Model.Customer;
 
 namespace VirtoCommerce.Storefront.Domain
 {
     public class CustomerCacheRegion : CancellableCacheRegion<CustomerCacheRegion>
     {
-        private static readonly ConcurrentDictionary<string, CancellationTokenSource> _customerRegionTokenLookup =
+        private static readonly ConcurrentDictionary<string, CancellationTokenSource> _memberRegionTokenLookup =
           new ConcurrentDictionary<string, CancellationTokenSource>();
 
-        public static IChangeToken CreateChangeToken(string customerId)
+        public static IChangeToken CreateChangeToken(string memberId)
         {
-            if (customerId == null)
+            if (memberId == null)
             {
-                throw new ArgumentNullException(nameof(customerId));
+                throw new ArgumentNullException(nameof(memberId));
             }
-            var cancellationTokenSource = _customerRegionTokenLookup.GetOrAdd(customerId, new CancellationTokenSource());
+            var cancellationTokenSource = _memberRegionTokenLookup.GetOrAdd(memberId, new CancellationTokenSource());
             return new CompositeChangeToken(new[] { CreateChangeToken(), new CancellationChangeToken(cancellationTokenSource.Token) });
         }
 
-        public static void ExpireCustomer(string customerId)
+        public static void ExpireMember(string memberId)
         {
-            if (_customerRegionTokenLookup.TryRemove(customerId, out CancellationTokenSource token))
+            if (_memberRegionTokenLookup.TryRemove(memberId, out CancellationTokenSource token))
             {
                 token.Cancel();
             }

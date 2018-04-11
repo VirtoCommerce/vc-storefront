@@ -38,6 +38,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Tags
             _formsMap["reset_customer_password"] = "~/account/resetpassword";
             // Generates a form for adding product to customer wishlist (temporary without actual URL)
             _formsMap["customer"] = "~";
+            //Generates a form for registration by invite
+            _formsMap["register_by_invite"] = "~/account/registerbyinvite";
+            //Generates a form for confirm registration by invite
+            _formsMap["confirm_invite"] = "~/account/confirminvite";
         }
 
         #region Public Methods and Operators

@@ -73,5 +73,6 @@ namespace VirtoCommerce.Storefront.Domain
             }
             return Task.CompletedTask;
         }
+
     }
 }

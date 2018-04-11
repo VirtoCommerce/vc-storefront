@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Security
 {
-    public class ExternalUserLoginInfo
+    public class ExternalUserLoginInfo : ValueObject
     {
      
         //  Examples of the provider may be Local, Facebook, Google, etc.
@@ -22,5 +21,11 @@ namespace VirtoCommerce.Storefront.Model.Security
         // Summary:
         //     Gets or sets the display name for the provider.
         public string ProviderDisplayName { get; set; }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return LoginProvider;
+            yield return ProviderKey;
+        }
     }
 }

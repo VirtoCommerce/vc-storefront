@@ -27,8 +27,9 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// Security account user name
         /// </summary>
         public string UserName { get; set; }
-        public string UserNameNormalized => UserName?.ToUpper();
+        public string NormalizedUserName { get; set; }
         public string Password { get; set; }
+        public string PasswordHash { get; set; }
 
         public string PhoneNumber { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
@@ -36,12 +37,26 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// Returns the email address of the customer.
         /// </summary>
         public string Email { get; set; }
-        public string EmailNormalized => Email?.ToUpper();
+        public string NormalizedEmail { get; set; }
+
+        public bool EmailConfirmed { get; set; }
 
         public string DefaultLanguage { get; set; }
 
         public bool TwoFactorEnabled { get; set; }
 
+        /// <summary>
+        ///  Used to record failures for the purposes of lockout
+        /// </summary>
+        public virtual int AccessFailedCount { get; set; }
+        /// <summary>
+        /// Is lockout enabled for this user
+        /// </summary>
+        public virtual bool LockoutEnabled { get; set; }
+        /// <summary>
+        /// DateTime in UTC when lockout ends, any time in the past is considered not locked out.
+        /// </summary>
+        public virtual DateTime? LockoutEndDateUtc { get; set; }
         /// <summary>
         /// Returns true if user authenticated  returns false if it anonymous. 
         /// </summary>
@@ -74,6 +89,20 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// Member associated with user 
         /// </summary>
         public Lazy<Contact> Contact { get; set; }
+
+        /// <summary>
+        /// All user permissions
+        /// </summary>
+        public IEnumerable<string> Permissions { get; set; }
+        /// <summary>
+        /// All user roles
+        /// </summary>
+        public IEnumerable<string> Roles { get; set; }
+
+        /// <summary>
+        /// All roles available for assignments
+        /// </summary>
+        public IEnumerable<string> AvailableRoles { get; set; }
 
         /// <summary>
         /// All user orders

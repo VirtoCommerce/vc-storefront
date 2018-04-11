@@ -173,6 +173,26 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                     Token = workContext.ResetPassword.Token
                 };
             }
+            if (workContext.UserRegistration != null)
+            {
+                var userRegistration = workContext.UserRegistration;
+                result.UserRegistration = new UserRegistration
+                {
+                    Address = userRegistration.Address?.ToShopifyModel(),
+                    Email = userRegistration.Email,
+                    Token = userRegistration.Token,
+                    FirstName = userRegistration.FirstName,
+                    LastName = userRegistration.LastName,
+                    OrganizationId = userRegistration.OrganizationId,
+                    Name = userRegistration.Name,
+                    OrganizationName = userRegistration.OrganizationName,
+                    Role = userRegistration.Role,
+                    StoreId = userRegistration.StoreId,
+                    UserName = userRegistration.UserName,
+                    Type = userRegistration.Type
+                };
+            }
+
             //if (workContext.Login != null)
             //{
             //    result.Form = workContext.Login.ToShopifyModel();
