@@ -338,7 +338,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     return Unauthorized();
                 }
                 await _userManager.ResetAccessFailedCountAsync(user);
-                await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MinValue);
+                await _userManager.SetLockoutEndDateAsync(user, null);
             }
             return Json(result);
         }
