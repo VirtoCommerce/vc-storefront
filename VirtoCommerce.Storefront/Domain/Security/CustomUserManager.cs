@@ -43,6 +43,10 @@ namespace VirtoCommerce.Storefront.Domain.Security
         #region IUserStore<User> members
         public async Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken)
         {
+            if(user.Contact != null)
+            {
+                user.Contact = await _memberService.CreateContactAsync(user.Contact);
+            }
             var dtoUser = user.ToUserDto();
             var resultDto = await _platformSecurityApi.CreateAsyncAsync(dtoUser);
             return resultDto.ToIdentityResult();
@@ -127,8 +131,14 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public async Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
         {
+            if (user.Contact != null)
+            {
+                await _memberService.UpdateContactAsync(user.Contact);
+            }
+            
             var dtoUser = user.ToUserDto();
             var resultDto = await _platformSecurityApi.UpdateAsyncAsync(dtoUser);
+
             //Evict user from the cache
             SecurityCacheRegion.ExpireUser(user.Id);
             return resultDto.ToIdentityResult();

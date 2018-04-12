@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Security;
@@ -29,19 +28,24 @@ namespace VirtoCommerce.Storefront.Domain.Security
             };
         }
 
+        public static User ToUser(this OrganizationUserRegistration registerForm)
+        {
+            var result = ((UserRegistration)registerForm).ToUser();
+            if (!string.IsNullOrEmpty(registerForm.Role))
+            {
+                result.Roles = new[] { new Role { Id = registerForm.Role } };
+            }
+            return result;
+        }
+
         public static  User ToUser(this UserRegistration registerForm)
         {
             var result = new User
             {
                 Email = registerForm.Email,
                 UserName = registerForm.UserName,
-                Password = registerForm.Password,
+                Password = registerForm.Password               
             };
-            if (!string.IsNullOrEmpty(registerForm.Role))
-            {
-                result.Roles = new[] { new Role { Id = registerForm.Role } };
-            }
-
             return result;
         }
 
@@ -54,7 +58,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 Password = user.Password,
                 UserName = user.UserName,
                 StoreId = user.StoreId,
-                MemberId = user.ContactId,
+                MemberId = user.Contact?.Id ?? user.ContactId,
                 AccessFailedCount = user.AccessFailedCount,
                 EmailConfirmed = user.EmailConfirmed,
                 LockoutEnabled = user.LockoutEnabled,
@@ -63,7 +67,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 SecurityStamp = user.SecurityStamp,
                 PasswordHash = user.PasswordHash,
                 UserState = user.UserState,
-                UserType = user.UserType
+                UserType = user.UserType,
+                IsAdministrator = user.IsAdministrator
             };
 
             if (!user.Roles.IsNullOrEmpty())

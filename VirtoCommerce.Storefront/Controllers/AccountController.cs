@@ -4,20 +4,21 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
+using VirtoCommerce.Storefront.Domain;
+using VirtoCommerce.Storefront.Domain.Common;
 using VirtoCommerce.Storefront.Domain.Security;
+using VirtoCommerce.Storefront.Domain.Security.Notifications;
+using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Security.Events;
-using VirtoCommerce.Storefront.Extensions;
-using VirtoCommerce.Storefront.Infrastructure;
-using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.Model.Security.Specifications;
-using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
-using VirtoCommerce.Storefront.Domain.Security.Notifications;
-using VirtoCommerce.Storefront.Domain.Common;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
@@ -87,7 +88,9 @@ namespace VirtoCommerce.Storefront.Controllers
 
             if (ModelState.IsValid)
             {
+                //Register user
                 var user = registration.ToUser();
+                user.Contact = registration.ToContact();
                 user.StoreId = WorkContext.CurrentStore.Id;
 
                 var result = await _signInManager.UserManager.CreateAsync(user, registration.Password);
@@ -128,7 +131,7 @@ namespace VirtoCommerce.Storefront.Controllers
         public ActionResult ConfirmInvitation(string organizationId, string email, string token)
 
         {
-            WorkContext.UserRegistration = new UserRegistration
+            WorkContext.UserRegistration = new UserRegistrationByInvitation
             {
                 Email = email,
                 OrganizationId = organizationId,
@@ -140,22 +143,37 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ConfirmInvitation(UserRegistration register)
+        public async Task<ActionResult> ConfirmInvitation([FromForm] UserRegistrationByInvitation register)
         {   
             var result = IdentityResult.Success;
-            var user = await _signInManager.UserManager.FindByEmailAsync(register.Email);
-            if (user != null)
-            {
-                result = await _signInManager.UserManager.ResetPasswordAsync(user, register.Token, register.Password);
-                if (result.Succeeded)
-                {
-                    await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, register));
-                    await _signInManager.SignInAsync(user, isPersistent: true);
-                    await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+            TryValidateModel(register);
 
-                    return View("customers/confirm_invitation_done", WorkContext);
+            if (ModelState.IsValid)
+            {
+                var user = await _signInManager.UserManager.FindByEmailAsync(register.Email);
+                if (user != null)
+                {
+                    if(user.UserName != register.UserName)
+                    {
+                        user.UserName = register.UserName;
+                    }
+                    result = await _signInManager.UserManager.ResetPasswordAsync(user, register.Token, register.Password);
+                    if (result.Succeeded)
+                    {
+                        user.Contact = register.ToContact();
+                        user.Contact.OrganizationId = register.OrganizationId;
+                        result = await _signInManager.UserManager.UpdateAsync(user);
+                        if (result.Succeeded)
+                        {
+                            await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, register));
+                            await _signInManager.SignInAsync(user, isPersistent: true);
+                            await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                        }
+                        return View("customers/confirm_invitation_done", WorkContext);
+                    }
                 }
-            }           
+            }
+
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);

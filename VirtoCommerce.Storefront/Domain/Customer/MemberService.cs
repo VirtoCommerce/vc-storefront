@@ -68,12 +68,13 @@ namespace VirtoCommerce.Storefront.Domain
             }
             return result;
         }
-        
-        public virtual async Task CreateContactAsync(Contact contact)
+
+        public virtual async Task<Contact> CreateContactAsync(Contact contact)
         {
-            var contactDto = contact.ToCustomerContactDto();
-            await _customerApi.CreateContactAsync(contactDto);
-        }
+            var contactDto = contact.ToContactDto();
+            var result = await _customerApi.CreateContactAsync(contactDto);
+            return result?.ToContact();
+          }
 
 
         public virtual async Task DeleteContactAsync(string contactId)
@@ -86,7 +87,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual async Task UpdateContactAsync(Contact contact)
         {
-            await _customerApi.UpdateContactAsync(contact.ToCustomerContactDto());
+            await _customerApi.UpdateContactAsync(contact.ToContactDto());
             //Invalidate cache
             CustomerCacheRegion.ExpireMember(contact.Id);
         }
@@ -179,11 +180,11 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.Factory.StartNew(() => GetOrganizationByIdAsync(organizationId), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
         }
 
-        public async Task CreateOrganizationAsync(Organization organization)
+        public async Task<Organization> CreateOrganizationAsync(Organization organization)
         {
             var orgDto = organization.ToOrganizationDto();
-            var org = await _customerApi.CreateOrganizationAsync(orgDto);
-            organization.Id = org.Id;
+            var result = await _customerApi.CreateOrganizationAsync(orgDto);
+            return result?.ToOrganization();
         }
 
         public async Task UpdateOrganizationAsync(Organization organization)
