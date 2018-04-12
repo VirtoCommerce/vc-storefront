@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using VirtoCommerce.Storefront.Model.Common;
@@ -97,6 +98,17 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// All user permissions
         /// </summary>
         public IEnumerable<string> Permissions { get; set; }
+
+        /// <summary>
+        /// Single user role
+        /// </summary>
+        public Role Role
+        {
+            get
+            {
+                return Roles?.FirstOrDefault();
+            }
+        }
         /// <summary>
         /// All user roles
         /// </summary>

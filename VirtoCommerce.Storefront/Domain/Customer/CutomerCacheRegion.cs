@@ -23,9 +23,12 @@ namespace VirtoCommerce.Storefront.Domain
 
         public static void ExpireMember(string memberId)
         {
-            if (_memberRegionTokenLookup.TryRemove(memberId, out CancellationTokenSource token))
+            if (!string.IsNullOrEmpty(memberId))
             {
-                token.Cancel();
+                if (_memberRegionTokenLookup.TryRemove(memberId, out CancellationTokenSource token))
+                {
+                    token.Cancel();
+                }
             }
         }
     }

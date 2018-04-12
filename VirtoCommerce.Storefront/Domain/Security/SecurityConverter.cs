@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Security;
@@ -29,14 +28,24 @@ namespace VirtoCommerce.Storefront.Domain.Security
             };
         }
 
+        public static User ToUser(this OrganizationUserRegistration registerForm)
+        {
+            var result = ((UserRegistration)registerForm).ToUser();
+            if (!string.IsNullOrEmpty(registerForm.Role))
+            {
+                result.Roles = new[] { new Role { Id = registerForm.Role } };
+            }
+            return result;
+        }
+
         public static  User ToUser(this UserRegistration registerForm)
         {
             var result = new User
             {
                 Email = registerForm.Email,
                 UserName = registerForm.UserName,
-                Password = registerForm.Password,
-            };          
+                Password = registerForm.Password               
+            };
             return result;
         }
 

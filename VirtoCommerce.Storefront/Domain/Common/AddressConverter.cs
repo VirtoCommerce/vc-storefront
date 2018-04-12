@@ -45,14 +45,13 @@ namespace VirtoCommerce.Storefront.Domain
             retVal.Line1 = address.Line1;
             retVal.Line2 = address.Line2;
             retVal.MiddleName = address.MiddleName;
-            retVal.Name = address.Name ?? address.Line1;
+            retVal.Name = address.Name ?? address.ToString();
             retVal.Organization = address.Organization;
             retVal.Phone = address.Phone;
             retVal.PostalCode = address.PostalCode;
             retVal.RegionId = address.RegionId;
             retVal.RegionName = address.RegionName;
             retVal.Zip = address.Zip;
-
             retVal.AddressType = address.Type.ToString();
 
             return retVal;

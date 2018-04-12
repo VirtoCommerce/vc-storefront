@@ -26,12 +26,13 @@ namespace VirtoCommerce.Storefront.Controllers.Api
     {
         private readonly IEventPublisher _publisher;
         private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly IMemberService _memberService;
         private readonly IStorefrontSecurity _commerceCoreApi;
         private readonly INotifications _platformNotificationApi;
         private readonly IAuthorizationService _authorizationService;
 
-        public ApiAccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, UserManager<User> userManager, IAuthorizationService authorizationService,
+        public ApiAccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, UserManager<User> userManager, SignInManager<User> signInManager, IAuthorizationService authorizationService,
         IMemberService memberService, IEventPublisher publisher, IStorefrontSecurity commerceCoreApi,
                                     INotifications platformNotificationApi)
             : base(workContextAccessor, urlBuilder)
@@ -42,6 +43,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             _commerceCoreApi = commerceCoreApi;
             _platformNotificationApi = platformNotificationApi;
             _authorizationService = authorizationService;
+            _signInManager = signInManager;
         }
 
         // GET: storefrontapi/account
@@ -124,6 +126,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 {
                     user = await _userManager.FindByNameAsync(user.UserName);
                     await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, orgRegistration));
+                    await _signInManager.SignInAsync(user, isPersistent: true);
+                    await _publisher.Publish(new UserLoginEvent(WorkContext, user));
                 }
             }
             else
@@ -158,7 +162,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var user = registration.ToUser();
                 user.Contact = contact;
                 user.StoreId = WorkContext.CurrentStore.Id;
-
+               
                 result = await _userManager.CreateAsync(user, registration.Password);
                 if (result.Succeeded == true)
                 {
@@ -175,45 +179,68 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/invitation
         [HttpPost]
-        [Authorize(SecurityConstants.Permissions.CanInviteUsers)]
         public async Task<ActionResult> CreateUserInvitation([FromBody] UsersInvitation invitation)
         {
             var result = IdentityResult.Success;
-            //TODO: Implement case for invite already exist user to organization
-            //Allow to invite only within own organization
-            var organizationId = WorkContext.CurrentUser?.Contact?.Organization?.Id;
-            foreach (var email in invitation.Emails)
+            TryValidateModel(invitation);
+
+            if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(email);
-                if (user == null)
+                var organizationId = WorkContext.CurrentUser?.Contact?.Organization?.Id;
+                //If it is organization invitation need to check authorization for this action
+                if(!string.IsNullOrEmpty(organizationId))
                 {
-                    user = new User
+                    var authorizationResult = await _authorizationService.AuthorizeAsync(User, null, SecurityConstants.Permissions.CanInviteUsers);
+                    if (!authorizationResult.Succeeded)
                     {
-                        UserName = email,
-                        StoreId = WorkContext.CurrentStore.Id,
-                        Roles = invitation.Roles?.Select(x => new Model.Security.Role { Id = x }),
-                        Email = email,
-                    };
-                    result = await _userManager.CreateAsync(user);
-                }
-                if (result.Succeeded)
-                {
-                    user = await _userManager.FindByNameAsync(user.UserName);
-                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                    var callbackUrl = Url.Action("ConfirmInvitation", "Account", new { OrganizationId =  organizationId, user.Email, Token = token }, Request.Scheme);
-                    var inviteNotification = new RegistrationInvitationNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
-                    {
-                        InviteUrl = callbackUrl,
-                        Sender = WorkContext.CurrentStore.Email,
-                        Recipient = user.Email
-                    };
-                    var sendingResult = await _platformNotificationApi.SendNotificationAsync(inviteNotification.ToNotificationDto());
-                    if (sendingResult.IsSuccess != true)
-                    {
-                        var errors = result.Errors.Concat(new IdentityError[] { new IdentityError() { Description = sendingResult.ErrorMessage } }).ToArray();
-                        result = IdentityResult.Failed(errors);
+                        return Unauthorized();
                     }
                 }
+                
+                foreach (var email in invitation.Emails)
+                {
+                    var user = await _userManager.FindByEmailAsync(email);
+                    if (user == null)
+                    {
+                        user = new User
+                        {
+                            UserName = email,
+                            StoreId = WorkContext.CurrentStore.Id,
+                            Email = email,
+                        };
+                        var roles = invitation.Roles?.Select(x => new Model.Security.Role { Id = x }).ToList();
+                        //Add default role for organization member invitation
+                        if (roles.IsNullOrEmpty() && !string.IsNullOrEmpty(organizationId))
+                        {
+                            roles.Add(SecurityConstants.Roles.OrganizationEmployee);
+                        }
+                        user.Roles = roles;
+                        result = await _userManager.CreateAsync(user);
+                    }
+
+                    if (result.Succeeded)
+                    {
+                        user = await _userManager.FindByNameAsync(user.UserName);
+                        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                        var callbackUrl = Url.Action("ConfirmInvitation", "Account", new { OrganizationId = organizationId, user.Email, Token = token }, Request.Scheme);
+                        var inviteNotification = new RegistrationInvitationNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                        {
+                            InviteUrl = callbackUrl,
+                            Sender = WorkContext.CurrentStore.Email,
+                            Recipient = user.Email
+                        };
+                        var sendingResult = await _platformNotificationApi.SendNotificationAsync(inviteNotification.ToNotificationDto());
+                        if (sendingResult.IsSuccess != true)
+                        {
+                            var errors = result.Errors.Concat(new IdentityError[] { new IdentityError() { Description = sendingResult.ErrorMessage } }).ToArray();
+                            result = IdentityResult.Failed(errors);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                result = IdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors).Select(x => new IdentityError { Description = x.ErrorMessage }).ToArray());
             }
             return Json(result);
         }

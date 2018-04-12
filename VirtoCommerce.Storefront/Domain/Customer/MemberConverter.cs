@@ -217,8 +217,26 @@ namespace VirtoCommerce.Storefront.Domain
             }
             if (!customer.Addresses.IsNullOrEmpty())
             {
-                retVal.Addresses = customer.Addresses.Select(ToCustomerAddressDto).ToList();
+                retVal.Addresses = new List<customerDto.Address>();
+                foreach(var address in customer.Addresses)
+                {
+                    var addressDto = address.ToCustomerAddressDto();
+                    if(string.IsNullOrEmpty(addressDto.FirstName))
+                    {
+                        addressDto.FirstName = customer.FirstName;
+                    }
+                    if (string.IsNullOrEmpty(addressDto.LastName))
+                    {
+                        addressDto.LastName = customer.LastName;
+                    }
+                    if (string.IsNullOrEmpty(addressDto.Email))
+                    {
+                        addressDto.Email = customer.Email;
+                    }
+                    retVal.Addresses.Add(addressDto);
+                }               
             }
+
             if (!customer.Emails.IsNullOrEmpty())
             {
                 retVal.Emails = customer.Emails;
