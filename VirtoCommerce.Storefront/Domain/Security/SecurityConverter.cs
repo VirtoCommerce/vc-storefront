@@ -67,7 +67,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 SecurityStamp = user.SecurityStamp,
                 PasswordHash = user.PasswordHash,
                 UserState = user.UserState,
-                UserType = user.UserType
+                UserType = user.UserType,
+                IsAdministrator = user.IsAdministrator
             };
 
             if (!user.Roles.IsNullOrEmpty())

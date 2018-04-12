@@ -371,17 +371,18 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         {
                             return Unauthorized();
                         }
+                        //Doesn't allow change self roles
+                        user.Roles = userUpdateInfo.Roles?.Select(x => new Model.Security.Role { Id = x });
                     }
 
                     if (user.Contact != null)
                     {
                         user.Contact.FirstName = userUpdateInfo.FirstName;
-                        user.Contact.LastName = userUpdateInfo.LastName;
-                        await _memberService.UpdateContactAsync(user.Contact);
+                        user.Contact.LastName = userUpdateInfo.LastName;                        
                     }
 
                     user.Email = userUpdateInfo.Email;
-                    user.Roles = userUpdateInfo.Roles?.Select(x=> new Model.Security.Role { Id = x });
+                  
                     await _userManager.UpdateAsync(user);
                 }
             }

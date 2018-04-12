@@ -23,9 +23,12 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public static void ExpireUser(string userId)
         {
-            if (_securityCacheRegionTokenLookup.TryRemove(userId, out var token))
+            if (!string.IsNullOrEmpty(userId))
             {
-                token.Cancel();
+                if (_securityCacheRegionTokenLookup.TryRemove(userId, out var token))
+                {
+                    token.Cancel();
+                }
             }
         }
     }

@@ -29,7 +29,11 @@ namespace VirtoCommerce.Storefront.Model.Security
         public string UserName { get; set; }
         public string NormalizedUserName { get; set; }
         public string Password { get; set; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public string PasswordHash { get; set; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public string SecurityStamp { get; set; }
         public string PhoneNumber { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
@@ -82,7 +86,9 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// The user name of an operator who has loggen in on behalf of a customer
         /// </summary>
         public string OperatorUserName { get; set; }
-      
+
+        [JsonIgnore]
+        [IgnoreDataMember]
         public IList<ExternalUserLoginInfo> ExternalLogins { get; set; }
 
         //Selected and persisted currency code

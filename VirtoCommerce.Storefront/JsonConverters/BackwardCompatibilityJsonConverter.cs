@@ -79,7 +79,7 @@ namespace VirtoCommerce.Storefront.JsonConverters
             {
                 var contactJson = JObject.FromObject(contact, serializer);
                 result.Merge(contactJson);
-                var restoreUserIdJson = JObject.FromObject(new { user.Id } , serializer);
+                var restoreUserIdJson = JObject.FromObject(new { user.Id, user.Email } , serializer);
                 result.Merge(restoreUserIdJson);
             }
             result.WriteTo(writer);
