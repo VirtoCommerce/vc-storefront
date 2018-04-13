@@ -1,4 +1,5 @@
-﻿using VirtoCommerce.Storefront.Model.Common.Specifications;
+﻿using System.Linq;
+using VirtoCommerce.Storefront.Model.Common.Specifications;
 
 namespace VirtoCommerce.Storefront.Model.Catalog
 {
@@ -9,7 +10,10 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             var result = true;
             if (product.TrackInventory && product.Inventory != null)
             {
-                result = product.Inventory.AllowPreorder == true || product.Inventory.AllowBackorder == true || product.AvailableQuantity > 0;
+                result = product.Inventory.AllowPreorder == true
+                    || product.Inventory.AllowBackorder == true
+                    || product.AvailableQuantity > 0
+                    || product.DerivativeInfos?.Any(di => di.RemainingQuantity > 0) == true;
             }
             return result;
         }

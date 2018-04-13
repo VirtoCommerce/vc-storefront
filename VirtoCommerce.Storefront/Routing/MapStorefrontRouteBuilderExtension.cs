@@ -42,7 +42,7 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("API.Lists.CreateList", "storefrontapi/lists/{listName}/{type}/create", defaults: new { controller = "ApiLists", action = "CreateList" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("API.Lists.DeleteListsByIds", "storefrontapi/lists/deletelistsbyids", defaults: new { controller = "ApiLists", action = "DeleteListsByIds" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("DELETE") }));
             routes.MapStorefrontRoute("API.Lists.MergeWithCurrentCart", "storefrontapi/lists/{listName}/{type}/mergewithcurrentcart", defaults: new { controller = "ApiLists", action = "MergeWithCurrentCart" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
-            
+
             // Catalog API
             routes.MapStorefrontRoute("API.Catalog.SearchProducts", "storefrontapi/catalog/search", defaults: new { controller = "ApiCatalog", action = "SearchProducts" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("API.Catalog.GetProductsByIds", "storefrontapi/products", defaults: new { controller = "ApiCatalog", action = "GetProductsByIds" });
@@ -53,6 +53,12 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("API.Common.GetCountries", "storefrontapi/countries", defaults: new { controller = "ApiCommon", action = "GetCountries" });
             routes.MapStorefrontRoute("API.Common.GetCountryRegions", "storefrontapi/countries/{countryCode}/regions", defaults: new { controller = "ApiCommon", action = "GetCountryRegions" });
             routes.MapStorefrontRoute("API.Common.Feedback", "storefrontapi/feedback", defaults: new { controller = "ApiCommon", action = "Feedback" });
+
+            // Derivatives API
+            routes.MapStorefrontRoute("API.Contracts.Derivative.GetByIds", "storefrontapi/contracts/derivative", defaults: new { controller = "ApiDerivativeContract", action = "GetDerivativeContractsByIds" });
+            routes.MapStorefrontRoute("API.Contracts.Derivative.GetByItemsIds", "storefrontapi/contracts/derivative/items", defaults: new { controller = "ApiDerivativeContract", action = "GetDerivativeContractItemsByIds" });
+            routes.MapStorefrontRoute("API.Contracts.Derivative.Search", "storefrontapi/contracts/derivative/search", defaults: new { controller = "ApiDerivativeContract", action = "SearchDerivativeContracts" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
+            routes.MapStorefrontRoute("API.Contracts.Derivative.SearchItems", "storefrontapi/contracts/derivative/items/search", defaults: new { controller = "ApiDerivativeContract", action = "SearchDerivativeContractItems" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
 
             // Pricing API
             routes.MapStorefrontRoute("API.Pricing.GetActualProductPrices", "storefrontapi/pricing/actualprices", defaults: new { controller = "ApiPricing", action = "GetActualProductPrices" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));

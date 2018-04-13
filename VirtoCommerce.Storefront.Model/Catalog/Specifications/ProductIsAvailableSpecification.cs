@@ -1,4 +1,5 @@
-﻿using VirtoCommerce.Storefront.Model.Common.Specifications;
+﻿using System.Linq;
+using VirtoCommerce.Storefront.Model.Common.Specifications;
 
 namespace VirtoCommerce.Storefront.Model.Catalog
 {
@@ -18,11 +19,12 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             {
                 result = _product.Inventory.AllowPreorder == true ||
                               _product.Inventory.AllowBackorder == true ||
-                              _product.AvailableQuantity >= requestedQuantity;
+                              _product.AvailableQuantity >= requestedQuantity ||
+                              _product.DerivativeInfos?.Any(di => di.RemainingQuantity >= requestedQuantity) == true;
             }
 
             return result;
         }
-        
+
     }
 }
