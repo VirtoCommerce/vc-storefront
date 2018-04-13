@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VirtoCommerce.DerivativeContractsModule.Core.Model
+namespace VirtoCommerce.Storefront.Model.Common
 {
     public class DateTimeRange
     {

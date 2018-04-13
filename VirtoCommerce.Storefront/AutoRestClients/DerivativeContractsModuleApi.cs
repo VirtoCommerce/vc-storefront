@@ -2377,13 +2377,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi.
         /// Initializes a new instance of the
         /// DerivativeContractInfoEvaluationContext class.
         /// </summary>
-        public DerivativeContractInfoEvaluationContext(string memberId = default(string), IList<string> productIds = default(IList<string>), IList<string> types = default(IList<string>), DateTimeRange startDateRange = default(DateTimeRange), DateTimeRange endDateRange = default(DateTimeRange), bool? onlyActive = default(bool?), object contextObject = default(object), string geoCity = default(string), string geoState = default(string), string geoCountry = default(string), string geoContinent = default(string), string geoZipCode = default(string), string geoConnectionType = default(string), string geoTimeZone = default(string), string geoIpRoutingType = default(string), string geoIspSecondLevel = default(string), string geoIspTopLevel = default(string), int? shopperAge = default(int?), string shopperGender = default(string), string language = default(string), IList<string> userGroups = default(IList<string>), string shopperSearchedPhraseInStore = default(string), string shopperSearchedPhraseOnInternet = default(string), string currentUrl = default(string), string referredUrl = default(string))
+        public DerivativeContractInfoEvaluationContext(string memberId = default(string), IList<string> productIds = default(IList<string>), IList<string> types = default(IList<string>), IList<DateTimeRange> startDateRanges = default(IList<DateTimeRange>), IList<DateTimeRange> endDateRanges = default(IList<DateTimeRange>), bool? onlyActive = default(bool?), object contextObject = default(object), string geoCity = default(string), string geoState = default(string), string geoCountry = default(string), string geoContinent = default(string), string geoZipCode = default(string), string geoConnectionType = default(string), string geoTimeZone = default(string), string geoIpRoutingType = default(string), string geoIspSecondLevel = default(string), string geoIspTopLevel = default(string), int? shopperAge = default(int?), string shopperGender = default(string), string language = default(string), IList<string> userGroups = default(IList<string>), string shopperSearchedPhraseInStore = default(string), string shopperSearchedPhraseOnInternet = default(string), string currentUrl = default(string), string referredUrl = default(string))
         {
             MemberId = memberId;
             ProductIds = productIds;
             Types = types;
-            StartDateRange = startDateRange;
-            EndDateRange = endDateRange;
+            StartDateRanges = startDateRanges;
+            EndDateRanges = endDateRanges;
             OnlyActive = onlyActive;
             ContextObject = contextObject;
             GeoCity = geoCity;
@@ -2429,13 +2429,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi.
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "startDateRange")]
-        public DateTimeRange StartDateRange { get; set; }
+        [JsonProperty(PropertyName = "startDateRanges")]
+        public IList<DateTimeRange> StartDateRanges { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "endDateRange")]
-        public DateTimeRange EndDateRange { get; set; }
+        [JsonProperty(PropertyName = "endDateRanges")]
+        public IList<DateTimeRange> EndDateRanges { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2574,10 +2574,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi.
         /// </summary>
         /// <param name="type">Possible values include: 'Forward', 'Futures',
         /// 'PutOption', 'CallOption'</param>
-        public DerivativeContractInfo(string productId = default(string), string type = default(string), long? contractSize = default(long?), long? purchasedQuantity = default(long?), long? remainingQuantity = default(long?))
+        public DerivativeContractInfo(string productId = default(string), string type = default(string), DateTimeRange startDateRange = default(DateTimeRange), DateTimeRange endDateRange = default(DateTimeRange), long? contractSize = default(long?), long? purchasedQuantity = default(long?), long? remainingQuantity = default(long?))
         {
             ProductId = productId;
             Type = type;
+            StartDateRange = startDateRange;
+            EndDateRange = endDateRange;
             ContractSize = contractSize;
             PurchasedQuantity = purchasedQuantity;
             RemainingQuantity = remainingQuantity;
@@ -2600,6 +2602,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi.
         /// </summary>
         [JsonProperty(PropertyName = "type")]
         public string Type { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "startDateRange")]
+        public DateTimeRange StartDateRange { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "endDateRange")]
+        public DateTimeRange EndDateRange { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2713,12 +2725,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi.
         /// Initializes a new instance of the DerivativeContractSearchCriteria
         /// class.
         /// </summary>
-        public DerivativeContractSearchCriteria(IList<string> memberIds = default(IList<string>), IList<string> types = default(IList<string>), DateTimeRange startDateRange = default(DateTimeRange), DateTimeRange endDateRange = default(DateTimeRange), bool? onlyActive = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public DerivativeContractSearchCriteria(IList<string> memberIds = default(IList<string>), IList<string> types = default(IList<string>), IList<DateTimeRange> startDateRanges = default(IList<DateTimeRange>), IList<DateTimeRange> endDateRanges = default(IList<DateTimeRange>), bool? onlyActive = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
             MemberIds = memberIds;
             Types = types;
-            StartDateRange = startDateRange;
-            EndDateRange = endDateRange;
+            StartDateRanges = startDateRanges;
+            EndDateRanges = endDateRanges;
             OnlyActive = onlyActive;
             ResponseGroup = responseGroup;
             ObjectType = objectType;
@@ -2750,13 +2762,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi.
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "startDateRange")]
-        public DateTimeRange StartDateRange { get; set; }
+        [JsonProperty(PropertyName = "startDateRanges")]
+        public IList<DateTimeRange> StartDateRanges { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "endDateRange")]
-        public DateTimeRange EndDateRange { get; set; }
+        [JsonProperty(PropertyName = "endDateRanges")]
+        public IList<DateTimeRange> EndDateRanges { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2909,15 +2921,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi.
         /// Initializes a new instance of the
         /// DerivativeContractItemSearchCriteria class.
         /// </summary>
-        public DerivativeContractItemSearchCriteria(IList<string> derivativeContractIds = default(IList<string>), IList<string> fulfillmentCenterIds = default(IList<string>), IList<string> productIds = default(IList<string>), IList<string> memberIds = default(IList<string>), IList<string> types = default(IList<string>), DateTimeRange startDateRange = default(DateTimeRange), DateTimeRange endDateRange = default(DateTimeRange), bool? onlyActive = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public DerivativeContractItemSearchCriteria(IList<string> derivativeContractIds = default(IList<string>), IList<string> fulfillmentCenterIds = default(IList<string>), IList<string> productIds = default(IList<string>), IList<string> memberIds = default(IList<string>), IList<string> types = default(IList<string>), IList<DateTimeRange> startDateRanges = default(IList<DateTimeRange>), IList<DateTimeRange> endDateRanges = default(IList<DateTimeRange>), bool? onlyActive = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
             DerivativeContractIds = derivativeContractIds;
             FulfillmentCenterIds = fulfillmentCenterIds;
             ProductIds = productIds;
             MemberIds = memberIds;
             Types = types;
-            StartDateRange = startDateRange;
-            EndDateRange = endDateRange;
+            StartDateRanges = startDateRanges;
+            EndDateRanges = endDateRanges;
             OnlyActive = onlyActive;
             ResponseGroup = responseGroup;
             ObjectType = objectType;
@@ -2964,13 +2976,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.DerivativeContractsModuleApi.
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "startDateRange")]
-        public DateTimeRange StartDateRange { get; set; }
+        [JsonProperty(PropertyName = "startDateRanges")]
+        public IList<DateTimeRange> StartDateRanges { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "endDateRange")]
-        public DateTimeRange EndDateRange { get; set; }
+        [JsonProperty(PropertyName = "endDateRanges")]
+        public IList<DateTimeRange> EndDateRanges { get; set; }
 
         /// <summary>
         /// </summary>

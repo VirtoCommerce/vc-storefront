@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
-using VirtoCommerce.DerivativeContractsModule.Core.Model;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Contracts
@@ -21,9 +20,9 @@ namespace VirtoCommerce.Storefront.Model.Contracts
 
         public IList<DerivativeContractType> Types { get; set; } = new List<DerivativeContractType>();
 
-        public DateTimeRange StartDateRange { get; set; }
+        public DateTimeRange[] StartDateRanges { get; set; }
 
-        public DateTimeRange EndDateRange { get; set; }
+        public DateTimeRange[] EndDateRanges { get; set; }
 
         public bool OnlyActive { get; set; }
 

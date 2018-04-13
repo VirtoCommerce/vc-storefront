@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using VirtoCommerce.DerivativeContractsModule.Core.Model;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Contracts;
@@ -81,6 +80,8 @@ namespace VirtoCommerce.Storefront.Domain.Derivatives
             {
                 ProductId = dto.ProductId,
                 Type = EnumUtility.SafeParse(dto.Type, DerivativeContractType.Forward),
+                StartDateTimeRange = ToDateTimeRange(dto.StartDateRange),
+                EndDateTimeRange = ToDateTimeRange(dto.EndDateRange),
                 ContractSize = dto.ContractSize.Value,
                 PurchasedQuantity = dto.PurchasedQuantity.Value,
                 RemainingQuantity = dto.RemainingQuantity.Value
@@ -94,13 +95,20 @@ namespace VirtoCommerce.Storefront.Domain.Derivatives
             {
                 Types = criteria.Types?.Select(x => x.ToString()).ToList(),
                 MemberIds = new[] { workContext.CurrentUser.ContactId },
-                StartDateRange = criteria.StartDateRange?.ToDateTimeRange(),
-                EndDateRange = criteria.EndDateRange?.ToDateTimeRange(),
                 OnlyActive = criteria.OnlyActive,
                 Sort = criteria.SortBy,
                 Skip = criteria.Start,
                 Take = criteria.PageSize
             };
+
+            if (!criteria.StartDateRanges.IsNullOrEmpty())
+            {
+                result.StartDateRanges = criteria.StartDateRanges.Select(r => r.ToDateTimeRange()).ToList();
+            }
+            if (!criteria.EndDateRanges.IsNullOrEmpty())
+            {
+                result.EndDateRanges = criteria.EndDateRanges.Select(r => r.ToDateTimeRange()).ToList();
+            }
 
             return result;
         }
@@ -114,14 +122,33 @@ namespace VirtoCommerce.Storefront.Domain.Derivatives
                 MemberIds = new[] { workContext.CurrentUser.ContactId },
                 FulfillmentCenterIds = criteria.FulfillmentCenterIds,
                 ProductIds = criteria.ProductIds,
-                StartDateRange = criteria.StartDateRange?.ToDateTimeRange(),
-                EndDateRange = criteria.EndDateRange?.ToDateTimeRange(),
                 OnlyActive = criteria.OnlyActive,
                 Sort = criteria.SortBy,
                 Skip = criteria.Start,
                 Take = criteria.PageSize
             };
 
+            if (!criteria.StartDateRanges.IsNullOrEmpty())
+            {
+                result.StartDateRanges = criteria.StartDateRanges.Select(r => r.ToDateTimeRange()).ToList();
+            }
+            if (!criteria.EndDateRanges.IsNullOrEmpty())
+            {
+                result.EndDateRanges = criteria.EndDateRanges.Select(r => r.ToDateTimeRange()).ToList();
+            }
+
+            return result;
+        }
+
+        public virtual DateTimeRange ToDateTimeRange(derivativesDto.DateTimeRange dto)
+        {
+            var result = new DateTimeRange
+            {
+                FromDate = dto.FromDate,
+                ToDate = dto.ToDate,
+                IncludeFrom = dto.IncludeFrom ?? false,
+                IncludeTo = dto.IncludeTo ?? false
+            };
             return result;
         }
 
