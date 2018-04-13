@@ -10,50 +10,55 @@ namespace VirtoCommerce.Storefront.Domain
     {
         public static Address ToAddress(this coreDto.Address addressDto)
         {
-            var retVal = new Address();
-            retVal.City = addressDto.City;
-            retVal.CountryCode = addressDto.CountryCode;
-            retVal.CountryName = addressDto.CountryName;
-            retVal.Email = addressDto.Email;
-            retVal.FirstName = addressDto.FirstName;
-            retVal.LastName = addressDto.LastName;
-            retVal.Line1 = addressDto.Line1;
-            retVal.Line2 = addressDto.Line2;
-            retVal.MiddleName = addressDto.MiddleName;
-            retVal.Name = addressDto.Name;
-            retVal.Organization = addressDto.Organization;
-            retVal.Phone = addressDto.Phone;
-            retVal.PostalCode = addressDto.PostalCode;
-            retVal.RegionId = addressDto.RegionId;
-            retVal.RegionName = addressDto.RegionName;
-            retVal.Zip = addressDto.Zip;
-           
-            retVal.Type = (AddressType)Enum.Parse(typeof(AddressType), addressDto.AddressType, true);
+            var retVal = new Address
+            {
+                Key = addressDto.Key,
+                City = addressDto.City,
+                CountryCode = addressDto.CountryCode,
+                CountryName = addressDto.CountryName,
+                Email = addressDto.Email,
+                FirstName = addressDto.FirstName,
+                LastName = addressDto.LastName,
+                Line1 = addressDto.Line1,
+                Line2 = addressDto.Line2,
+                MiddleName = addressDto.MiddleName,
+                Name = addressDto.Name,
+                Organization = addressDto.Organization,
+                Phone = addressDto.Phone,
+                PostalCode = addressDto.PostalCode,
+                RegionId = addressDto.RegionId,
+                RegionName = addressDto.RegionName,
+                Zip = addressDto.Zip,
+
+                Type = (AddressType)Enum.Parse(typeof(AddressType), addressDto.AddressType, true)
+            };
             return retVal;
         }
 
         public static coreDto.Address ToCoreAddressDto(this Address address)
         {
-            var retVal = new coreDto.Address();
+            var retVal = new coreDto.Address
+            {
+                Key = address.Key,
+                City = address.City,
+                CountryCode = address.CountryCode,
+                CountryName = address.CountryName,
+                Email = address.Email,
+                FirstName = address.FirstName,
+                LastName = address.LastName,
+                Line1 = address.Line1,
+                Line2 = address.Line2,
+                MiddleName = address.MiddleName,
+                Name = address.Name,
+                Organization = address.Organization,
+                Phone = address.Phone,
+                PostalCode = address.PostalCode,
+                RegionId = address.RegionId,
+                RegionName = address.RegionName,
+                Zip = address.Zip,
 
-            retVal.City = address.City;
-            retVal.CountryCode = address.CountryCode;
-            retVal.CountryName = address.CountryName;
-            retVal.Email = address.Email;
-            retVal.FirstName = address.FirstName;
-            retVal.LastName = address.LastName;
-            retVal.Line1 = address.Line1;
-            retVal.Line2 = address.Line2;
-            retVal.MiddleName = address.MiddleName;
-            retVal.Name = address.Name;
-            retVal.Organization = address.Organization;
-            retVal.Phone = address.Phone;
-            retVal.PostalCode = address.PostalCode;
-            retVal.RegionId = address.RegionId;
-            retVal.RegionName = address.RegionName;
-            retVal.Zip = address.Zip;
-
-            retVal.AddressType = address.Type.ToString();
+                AddressType = address.Type.ToString()
+            };
 
             return retVal;
         }
@@ -103,9 +108,5 @@ namespace VirtoCommerce.Storefront.Domain
 
             return result;
         }
-
-
-
-
     }
 }

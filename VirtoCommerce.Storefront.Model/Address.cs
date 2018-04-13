@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model
@@ -6,6 +8,7 @@ namespace VirtoCommerce.Storefront.Model
     public partial class Address : ValueObject
     {
         public AddressType Type { get; set; }
+        public string Key { get; set; }
         public string Name { get; set; }
         public string Organization { get; set; }
         public string CountryCode { get; set; }
