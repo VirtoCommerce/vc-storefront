@@ -133,7 +133,14 @@ namespace VirtoCommerce.Storefront.Domain.Security
         {
             if (user.Contact != null)
             {
-                await _memberService.UpdateContactAsync(user.Contact);
+                if (user.Contact.IsTransient())
+                {
+                    user.Contact = await _memberService.CreateContactAsync(user.Contact);
+                }
+                else
+                {
+                    await _memberService.UpdateContactAsync(user.Contact);
+                }
             }
             
             var dtoUser = user.ToUserDto();
