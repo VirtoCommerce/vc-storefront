@@ -166,7 +166,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 {
                     Properties = new Dictionary<string, object>()
                 };
-                var formProps = workContext.Form.GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
+                var formProps = workContext.Form.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
                 var formPropNames = formProps.Select(x => x.Name).ToArray();
                 foreach (var property in formProps)
                 {

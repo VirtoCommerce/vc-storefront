@@ -320,7 +320,19 @@ namespace VirtoCommerce.Storefront.Controllers
                         StoreId = WorkContext.CurrentStore.Id,
                     };
                     user.ExternalLogins.Add(new ExternalUserLoginInfo { ProviderKey = loginInfo.ProviderKey, LoginProvider = loginInfo.LoginProvider });
+                    var userRegistration = new UserRegistration
+                    {
+                        FirstName = loginInfo.Principal.FindFirstValue(_firstNameClaims, "unknown"),
+                        LastName = loginInfo.Principal.FindFirstValue(ClaimTypes.Surname),
+                        UserName = user.UserName,
+                        Email = user.Email
+                    };
+                    user.Contact = userRegistration.ToContact();
                     identityResult = await _signInManager.UserManager.CreateAsync(user);
+                    if (identityResult.Succeeded)
+                    {
+                        await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, userRegistration));
+                    }
                 }
 
                 if (!identityResult.Succeeded)
@@ -337,14 +349,7 @@ namespace VirtoCommerce.Storefront.Controllers
             if (!externalLoginResult.Succeeded)
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                var userRegistration = new UserRegistration
-                {
-                    FirstName = loginInfo.Principal.FindFirstValue(_firstNameClaims, "unknown"),
-                    LastName = loginInfo.Principal.FindFirstValue(ClaimTypes.Surname),
-                    UserName = user.UserName,
-                    Email = user.Email
-                };
-                await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, userRegistration));
+                
             }
             await _publisher.Publish(new UserLoginEvent(WorkContext, user));
 
