@@ -212,7 +212,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         //Add default role for organization member invitation
                         if (roles.IsNullOrEmpty() && !string.IsNullOrEmpty(organizationId))
                         {
-                            roles.Add(SecurityConstants.Roles.OrganizationEmployee);
+                            roles = new[] { SecurityConstants.Roles.OrganizationEmployee }.ToList();
                         }
                         user.Roles = roles;
                         result = await _userManager.CreateAsync(user);
