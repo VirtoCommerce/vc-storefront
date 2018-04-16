@@ -169,7 +169,7 @@ namespace VirtoCommerce.Storefront.Controllers
                             await _signInManager.SignInAsync(user, isPersistent: true);
                             await _publisher.Publish(new UserLoginEvent(WorkContext, user));
                         }
-                        return View("customers/confirm_invitation_done", WorkContext);
+                        return StoreFrontRedirect("~/account");
                     }
                 }
             }
@@ -180,7 +180,7 @@ namespace VirtoCommerce.Storefront.Controllers
             }
 
             WorkContext.UserRegistration = register;
-            return View("customers/confirm_invitation");
+            return View("customers/confirm_invitation", WorkContext );
         }
 
         [HttpGet]
