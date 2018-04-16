@@ -1,6 +1,8 @@
 ﻿using DotLiquid;
 using PagedList.Core;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.StaticContent;
@@ -158,43 +160,37 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 result.Article = ToLiquidArticle(workContext.CurrentBlogArticle);
             }
 
-            if (workContext.ContactUsForm != null)
+            if(workContext.Form != null)
             {
                 result.Form = new Form
                 {
-                    Properties = workContext.ContactUsForm.AsDictionary().ToDictionary(x => x.Key, x => (object)(x.Value != null ? string.Join(", ", x.Value) : string.Empty))
+                    Properties = new Dictionary<string, object>()
                 };
-            }
-
-            if (workContext.ResetPassword != null)
-            {
-                result.ResetPassword = new ResetPassword
+                var formProps = workContext.Form.GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
+                var formPropNames = formProps.Select(x => x.Name).ToArray();
+                foreach (var property in formProps)
                 {
-                    PasswordConfirmation = workContext.ResetPassword.PasswordConfirmation,
-                    Email = workContext.ResetPassword.Email,
-                    Password = workContext.ResetPassword.Password,
-                    Token = workContext.ResetPassword.Token
-                };
-            }
-            if (workContext.UserRegistration != null)
-            {
-                result.Form = new Form
-                {
-                    Email = workContext.UserRegistration.Email,
-                    Properties = workContext.UserRegistration.AsDictionary()
-                };
-                if(workContext.UserRegistration.Address != null)
-                {
-                    result.Form.Properties["Address"] = workContext.UserRegistration.Address.ToShopifyModel();
+                    var propertyValue = property.GetValue(workContext.Form);
+                    if (propertyValue != null)
+                    {
+                        result.Form.Properties[Template.NamingConvention.GetMemberName(property.Name)] = propertyValue;
+                        if (typeof(IEntity).IsAssignableFrom(property.PropertyType) || typeof(IValueObject).IsAssignableFrom(property.PropertyType))
+                        {
+                            //For it is user type need to register this type as Drop in Liquid Template
+                            Template.RegisterSafeType(property.GetType(), formPropNames);
+                            var allChildEntities = propertyValue.GetFlatObjectsListWithInterface<IEntity>();
+                            foreach (var type in allChildEntities.Select(x => x.GetType()).Distinct())
+                            {
+                                Template.RegisterSafeType(type, formPropNames);            
+                            }
+                            var allChildLiquidObjects = propertyValue.GetFlatObjectsListWithInterface<IValueObject>();
+                            foreach (var type in allChildLiquidObjects.Select(x => x.GetType()).Distinct())
+                            {
+                                Template.RegisterSafeType(type, formPropNames);
+                            }
+                        }
+                    }
                 }
-            }
-
-            if (workContext.UserLogin != null)
-            {
-                result.Form = new Form
-                {
-                    Properties = workContext.UserLogin.AsDictionary()
-                };
             }
 
             if (workContext.StorefrontNotification != null)
