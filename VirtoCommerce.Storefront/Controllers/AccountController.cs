@@ -122,7 +122,7 @@ namespace VirtoCommerce.Storefront.Controllers
                     }
                 }
             }
-            WorkContext.UserRegistration = registration;
+            WorkContext.Form = registration;
             return View("customers/register", WorkContext);
         }
 
@@ -131,7 +131,7 @@ namespace VirtoCommerce.Storefront.Controllers
         public ActionResult ConfirmInvitation(string organizationId, string email, string token)
 
         {
-            WorkContext.UserRegistration = new UserRegistrationByInvitation
+            WorkContext.Form = new UserRegistrationByInvitation
             {
                 Email = email,
                 OrganizationId = organizationId,
@@ -179,7 +179,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 ModelState.AddModelError(string.Empty, error.Description);
             }
 
-            WorkContext.UserRegistration = register;
+            WorkContext.Form = register;
             return View("customers/confirm_invitation");
         }
 
@@ -258,7 +258,7 @@ namespace VirtoCommerce.Storefront.Controllers
             }
 
             ModelState.AddModelError("form", "Login attempt failed.");
-            WorkContext.UserLogin = login;
+            WorkContext.Form = login;
             return View("customers/login", WorkContext);
 
         }
@@ -405,7 +405,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 WorkContext.ErrorMessage = "User was not found.";
                 return View("error", WorkContext);
             }
-            WorkContext.ResetPassword = new ResetPassword
+            WorkContext.Form = new ResetPassword
             {
                 Token = token,
                 Email = user.Email
