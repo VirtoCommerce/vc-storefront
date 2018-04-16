@@ -137,7 +137,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 OrganizationId = organizationId,
                 Token = token
             };
-            return View("customers/confirm_invitation");
+            return View("customers/confirm_invitation", WorkContext);
         }
 
         [HttpPost]
@@ -180,7 +180,7 @@ namespace VirtoCommerce.Storefront.Controllers
             }
 
             WorkContext.Form = register;
-            return View("customers/confirm_invitation");
+            return View("customers/confirm_invitation", WorkContext);
         }
 
         [HttpGet]
