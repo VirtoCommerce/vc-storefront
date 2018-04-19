@@ -174,7 +174,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 result = IdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors).Select(x => new IdentityError { Description = x.ErrorMessage }).ToArray());
             }
-            return Json(result);
+
+            return Json(new { result.Succeeded, Errors = result.Errors.Select(x => x.Description) });
         }
 
         // POST: storefrontapi/account/invitation
@@ -242,7 +243,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 result = IdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors).Select(x => new IdentityError { Description = x.ErrorMessage }).ToArray());
             }
-            return Json(result);
+            return Json(new { result.Succeeded, Errors = result.Errors.Select(x => x.Description) });
         }
 
         // PUT: storefrontapi/account/organization
