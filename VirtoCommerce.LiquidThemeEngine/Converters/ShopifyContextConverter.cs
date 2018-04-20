@@ -233,6 +233,19 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 }).ToArray();
             }
 
+            if(workContext.CurrentFulfillmentCenter != null)
+            {
+                result.FulfillmentCenter = workContext.CurrentFulfillmentCenter.ToShopifyModel();
+            }
+
+            if(workContext.FulfillmentCenters != null)
+            {
+                result.FulfillmentCenters = new MutablePagedList<FulfillmentCenter>((pageNumber, pageSize, sortInfos) =>
+                 {
+                     workContext.FulfillmentCenters.Slice(pageNumber, pageSize, sortInfos);
+                     return new StaticPagedList<FulfillmentCenter>(workContext.FulfillmentCenters.Select(x => x.ToShopifyModel()), workContext.FulfillmentCenters);
+                 }, workContext.FulfillmentCenters.PageNumber, workContext.FulfillmentCenters.PageSize);
+            }
             return result;
         }
     }

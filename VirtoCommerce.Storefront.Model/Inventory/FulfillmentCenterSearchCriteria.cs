@@ -1,23 +1,22 @@
 ﻿using System.Collections.Specialized;
 using VirtoCommerce.Storefront.Model.Common;
 
-namespace VirtoCommerce.Storefront.Model.Customer
+namespace VirtoCommerce.Storefront.Model.Inventory
 {
-    public class OrganizationContactsSearchCriteria : PagedSearchCriteria
+    public partial class FulfillmentCenterSearchCriteria : PagedSearchCriteria
     {
-
         public static int DefaultPageSize { get; set; } = 20;
 
-        public OrganizationContactsSearchCriteria()
+        public FulfillmentCenterSearchCriteria()
             : base(new NameValueCollection(), DefaultPageSize)
         {
         }
 
-        public OrganizationContactsSearchCriteria(NameValueCollection queryString)
+        public FulfillmentCenterSearchCriteria(NameValueCollection queryString)
             : base(queryString, DefaultPageSize)
         {
         }
-        public string OrganizationId { get; set; }
+       
         public string Sort { get; set; }
         public string SearchPhrase { get; set; }
     }

@@ -1,8 +1,8 @@
-﻿using VirtoCommerce.Storefront.Model.Common;
+﻿using DotLiquid;
 
-namespace VirtoCommerce.Storefront.Model.Inventory
+namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
-    public partial class FulfillmentCenter : Entity
+    public partial class FulfillmentCenter : Drop
     {
         public string Name { get; set; }
         public string Description { get; set; }

@@ -380,6 +380,554 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         public VirtoCommerceInventoryRESTAPIdocumentation Client { get; private set; }
 
         /// <summary>
+        /// Search fulfillment centers registered in the system
+        /// </summary>
+        /// <param name='searchCriteria'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<GenericSearchResultFulfillmentCenter>> SearchFulfillmentCentersWithHttpMessagesAsync(FulfillmentCenterSearchCriteria searchCriteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (searchCriteria == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "searchCriteria");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("searchCriteria", searchCriteria);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "SearchFulfillmentCenters", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/inventory/fulfillmentcenters/search").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(searchCriteria != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(searchCriteria, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<GenericSearchResultFulfillmentCenter>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<GenericSearchResultFulfillmentCenter>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Find fulfillment center by id
+        /// </summary>
+        /// <param name='id'>
+        /// fulfillment center id
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<FulfillmentCenter>> GetFulfillmentCenterWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (id == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "id");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("id", id);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "GetFulfillmentCenter", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/inventory/fulfillmentcenters/{id}").ToString();
+            _url = _url.Replace("{id}", System.Uri.EscapeDataString(id));
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("GET");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<FulfillmentCenter>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<FulfillmentCenter>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Update a existing fulfillment center
+        /// </summary>
+        /// <param name='center'>
+        /// fulfillment center
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> UpdateFulfillmentCenterWithHttpMessagesAsync(FulfillmentCenter center, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (center == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "center");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("center", center);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdateFulfillmentCenter", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/inventory/fulfillmentcenters").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("PUT");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(center != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(center, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 204)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Delete  fulfillment centers registered in the system
+        /// </summary>
+        /// <param name='ids'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> DeleteFulfillmentCentersWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (ids == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "ids");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("ids", ids);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "DeleteFulfillmentCenters", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/inventory/fulfillmentcenters").ToString();
+            List<string> _queryParameters = new List<string>();
+            if (ids != null)
+            {
+                if (ids.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in ids)
+                    {
+                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("DELETE");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 204)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
         /// Get inventories of products
         /// </summary>
         /// <remarks>
@@ -1019,6 +1567,86 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
     public partial interface IInventoryModule
     {
         /// <summary>
+        /// Search fulfillment centers registered in the system
+        /// </summary>
+        /// <param name='searchCriteria'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse<GenericSearchResultFulfillmentCenter>> SearchFulfillmentCentersWithHttpMessagesAsync(FulfillmentCenterSearchCriteria searchCriteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Find fulfillment center by id
+        /// </summary>
+        /// <param name='id'>
+        /// fulfillment center id
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse<FulfillmentCenter>> GetFulfillmentCenterWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Update a existing fulfillment center
+        /// </summary>
+        /// <param name='center'>
+        /// fulfillment center
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse> UpdateFulfillmentCenterWithHttpMessagesAsync(FulfillmentCenter center, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Delete  fulfillment centers registered in the system
+        /// </summary>
+        /// <param name='ids'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse> DeleteFulfillmentCentersWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
         /// Get inventories of products
         /// </summary>
         /// <remarks>
@@ -1147,6 +1775,132 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
     /// </summary>
     public static partial class InventoryModuleExtensions
     {
+            /// <summary>
+            /// Search fulfillment centers registered in the system
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='searchCriteria'>
+            /// </param>
+            public static GenericSearchResultFulfillmentCenter SearchFulfillmentCenters(this IInventoryModule operations, FulfillmentCenterSearchCriteria searchCriteria)
+            {
+                return operations.SearchFulfillmentCentersAsync(searchCriteria).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Search fulfillment centers registered in the system
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='searchCriteria'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<GenericSearchResultFulfillmentCenter> SearchFulfillmentCentersAsync(this IInventoryModule operations, FulfillmentCenterSearchCriteria searchCriteria, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.SearchFulfillmentCentersWithHttpMessagesAsync(searchCriteria, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Find fulfillment center by id
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='id'>
+            /// fulfillment center id
+            /// </param>
+            public static FulfillmentCenter GetFulfillmentCenter(this IInventoryModule operations, string id)
+            {
+                return operations.GetFulfillmentCenterAsync(id).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Find fulfillment center by id
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='id'>
+            /// fulfillment center id
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<FulfillmentCenter> GetFulfillmentCenterAsync(this IInventoryModule operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.GetFulfillmentCenterWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Update a existing fulfillment center
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='center'>
+            /// fulfillment center
+            /// </param>
+            public static void UpdateFulfillmentCenter(this IInventoryModule operations, FulfillmentCenter center)
+            {
+                operations.UpdateFulfillmentCenterAsync(center).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Update a existing fulfillment center
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='center'>
+            /// fulfillment center
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task UpdateFulfillmentCenterAsync(this IInventoryModule operations, FulfillmentCenter center, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.UpdateFulfillmentCenterWithHttpMessagesAsync(center, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
+            /// <summary>
+            /// Delete  fulfillment centers registered in the system
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='ids'>
+            /// </param>
+            public static void DeleteFulfillmentCenters(this IInventoryModule operations, IList<string> ids)
+            {
+                operations.DeleteFulfillmentCentersAsync(ids).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Delete  fulfillment centers registered in the system
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='ids'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task DeleteFulfillmentCentersAsync(this IInventoryModule operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.DeleteFulfillmentCentersWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
             /// <summary>
             /// Get inventories of products
             /// </summary>
@@ -1333,6 +2087,393 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
     using VirtoCommerce.Storefront.AutoRestClients;
     using VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi;
 
+    public partial class GeoPoint
+    {
+        /// <summary>
+        /// Initializes a new instance of the GeoPoint class.
+        /// </summary>
+        public GeoPoint()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the GeoPoint class.
+        /// </summary>
+        public GeoPoint(double? latitude = default(double?), double? longitude = default(double?))
+        {
+            Latitude = latitude;
+            Longitude = longitude;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "latitude")]
+        public double? Latitude { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "longitude")]
+        public double? Longitude { get; set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi;
+
+    public partial class SortInfo
+    {
+        /// <summary>
+        /// Initializes a new instance of the SortInfo class.
+        /// </summary>
+        public SortInfo()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the SortInfo class.
+        /// </summary>
+        /// <param name="sortDirection">Possible values include: 'Ascending',
+        /// 'Descending'</param>
+        public SortInfo(string sortColumn = default(string), string sortDirection = default(string))
+        {
+            SortColumn = sortColumn;
+            SortDirection = sortDirection;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sortColumn")]
+        public string SortColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Ascending', 'Descending'
+        /// </summary>
+        [JsonProperty(PropertyName = "sortDirection")]
+        public string SortDirection { get; set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi;
+
+    public partial class FulfillmentCenterSearchCriteria
+    {
+        /// <summary>
+        /// Initializes a new instance of the FulfillmentCenterSearchCriteria
+        /// class.
+        /// </summary>
+        public FulfillmentCenterSearchCriteria()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the FulfillmentCenterSearchCriteria
+        /// class.
+        /// </summary>
+        public FulfillmentCenterSearchCriteria(GeoPoint location = default(GeoPoint), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        {
+            Location = location;
+            ResponseGroup = responseGroup;
+            ObjectType = objectType;
+            ObjectTypes = objectTypes;
+            ObjectIds = objectIds;
+            SearchPhrase = searchPhrase;
+            LanguageCode = languageCode;
+            Sort = sort;
+            SortInfos = sortInfos;
+            Skip = skip;
+            Take = take;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "location")]
+        public GeoPoint Location { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "responseGroup")]
+        public string ResponseGroup { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectTypes")]
+        public IList<string> ObjectTypes { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectIds")]
+        public IList<string> ObjectIds { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "searchPhrase")]
+        public string SearchPhrase { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "languageCode")]
+        public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sort")]
+        public string Sort { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sortInfos")]
+        public IList<SortInfo> SortInfos { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "skip")]
+        public int? Skip { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "take")]
+        public int? Take { get; set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi;
+
+    public partial class Address
+    {
+        /// <summary>
+        /// Initializes a new instance of the Address class.
+        /// </summary>
+        public Address()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Address class.
+        /// </summary>
+        /// <param name="addressType">Possible values include: 'Billing',
+        /// 'Shipping', 'BillingAndShipping'</param>
+        public Address(string key = default(string), string addressType = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
+        {
+            Key = key;
+            AddressType = addressType;
+            Name = name;
+            Organization = organization;
+            CountryCode = countryCode;
+            CountryName = countryName;
+            City = city;
+            PostalCode = postalCode;
+            Zip = zip;
+            Line1 = line1;
+            Line2 = line2;
+            RegionId = regionId;
+            RegionName = regionName;
+            FirstName = firstName;
+            MiddleName = middleName;
+            LastName = lastName;
+            Phone = phone;
+            Email = email;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "key")]
+        public string Key { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Billing', 'Shipping',
+        /// 'BillingAndShipping'
+        /// </summary>
+        [JsonProperty(PropertyName = "addressType")]
+        public string AddressType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "organization")]
+        public string Organization { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "countryCode")]
+        public string CountryCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "countryName")]
+        public string CountryName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "city")]
+        public string City { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "postalCode")]
+        public string PostalCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "zip")]
+        public string Zip { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "line1")]
+        public string Line1 { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "line2")]
+        public string Line2 { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "regionId")]
+        public string RegionId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "regionName")]
+        public string RegionName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "firstName")]
+        public string FirstName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "middleName")]
+        public string MiddleName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "lastName")]
+        public string LastName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "phone")]
+        public string Phone { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "email")]
+        public string Email { get; set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi;
+
     public partial class FulfillmentCenter
     {
         /// <summary>
@@ -1346,21 +2487,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the FulfillmentCenter class.
         /// </summary>
-        /// <param name="countryCode">ISO 3166-1 alpha-3</param>
-        public FulfillmentCenter(string name = default(string), string description = default(string), int? maxReleasesPerPickBatch = default(int?), int? pickDelay = default(int?), string daytimePhoneNumber = default(string), string line1 = default(string), string line2 = default(string), string city = default(string), string stateProvince = default(string), string countryCode = default(string), string countryName = default(string), string postalCode = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public FulfillmentCenter(string name = default(string), string description = default(string), string geoLocation = default(string), Address address = default(Address), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             Description = description;
-            MaxReleasesPerPickBatch = maxReleasesPerPickBatch;
-            PickDelay = pickDelay;
-            DaytimePhoneNumber = daytimePhoneNumber;
-            Line1 = line1;
-            Line2 = line2;
-            City = city;
-            StateProvince = stateProvince;
-            CountryCode = countryCode;
-            CountryName = countryName;
-            PostalCode = postalCode;
+            GeoLocation = geoLocation;
+            Address = address;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
@@ -1386,54 +2518,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "maxReleasesPerPickBatch")]
-        public int? MaxReleasesPerPickBatch { get; set; }
+        [JsonProperty(PropertyName = "geoLocation")]
+        public string GeoLocation { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "pickDelay")]
-        public int? PickDelay { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "daytimePhoneNumber")]
-        public string DaytimePhoneNumber { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "line1")]
-        public string Line1 { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "line2")]
-        public string Line2 { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "city")]
-        public string City { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "stateProvince")]
-        public string StateProvince { get; set; }
-
-        /// <summary>
-        /// Gets or sets ISO 3166-1 alpha-3
-        /// </summary>
-        [JsonProperty(PropertyName = "countryCode")]
-        public string CountryCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "countryName")]
-        public string CountryName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "postalCode")]
-        public string PostalCode { get; set; }
+        [JsonProperty(PropertyName = "address")]
+        public Address Address { get; set; }
 
         /// <summary>
         /// </summary>
@@ -1482,6 +2573,65 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
     using VirtoCommerce.Storefront.AutoRestClients;
     using VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi;
 
+    public partial class GenericSearchResultFulfillmentCenter
+    {
+        /// <summary>
+        /// Initializes a new instance of the
+        /// GenericSearchResultFulfillmentCenter class.
+        /// </summary>
+        public GenericSearchResultFulfillmentCenter()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the
+        /// GenericSearchResultFulfillmentCenter class.
+        /// </summary>
+        public GenericSearchResultFulfillmentCenter(int? totalCount = default(int?), IList<FulfillmentCenter> results = default(IList<FulfillmentCenter>))
+        {
+            TotalCount = totalCount;
+            Results = results;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "totalCount")]
+        public int? TotalCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "results")]
+        public IList<FulfillmentCenter> Results { get; set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi;
+
     public partial class InventoryInfo
     {
         /// <summary>
@@ -1497,14 +2647,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
         /// </summary>
         /// <param name="status">Possible values include: 'Disabled',
         /// 'Enabled', 'Ignored'</param>
-        public InventoryInfo(System.DateTime? createdDate = default(System.DateTime?), string createdBy = default(string), System.DateTime? modifiedDate = default(System.DateTime?), string modifiedBy = default(string), FulfillmentCenter fulfillmentCenter = default(FulfillmentCenter), string fulfillmentCenterId = default(string), string productId = default(string), long? inStockQuantity = default(long?), long? reservedQuantity = default(long?), long? reorderMinQuantity = default(long?), long? preorderQuantity = default(long?), long? backorderQuantity = default(long?), bool? allowBackorder = default(bool?), bool? allowPreorder = default(bool?), long? inTransit = default(long?), System.DateTime? preorderAvailabilityDate = default(System.DateTime?), System.DateTime? backorderAvailabilityDate = default(System.DateTime?), string status = default(string))
+        public InventoryInfo(System.DateTime? createdDate = default(System.DateTime?), string createdBy = default(string), System.DateTime? modifiedDate = default(System.DateTime?), string modifiedBy = default(string), string fulfillmentCenterId = default(string), FulfillmentCenter fulfillmentCenter = default(FulfillmentCenter), string productId = default(string), long? inStockQuantity = default(long?), long? reservedQuantity = default(long?), long? reorderMinQuantity = default(long?), long? preorderQuantity = default(long?), long? backorderQuantity = default(long?), bool? allowBackorder = default(bool?), bool? allowPreorder = default(bool?), long? inTransit = default(long?), System.DateTime? preorderAvailabilityDate = default(System.DateTime?), System.DateTime? backorderAvailabilityDate = default(System.DateTime?), string status = default(string))
         {
             CreatedDate = createdDate;
             CreatedBy = createdBy;
             ModifiedDate = modifiedDate;
             ModifiedBy = modifiedBy;
-            FulfillmentCenter = fulfillmentCenter;
             FulfillmentCenterId = fulfillmentCenterId;
+            FulfillmentCenter = fulfillmentCenter;
             ProductId = productId;
             InStockQuantity = inStockQuantity;
             ReservedQuantity = reservedQuantity;
@@ -1547,13 +2697,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "fulfillmentCenter")]
-        public FulfillmentCenter FulfillmentCenter { get; set; }
+        [JsonProperty(PropertyName = "fulfillmentCenterId")]
+        public string FulfillmentCenterId { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "fulfillmentCenterId")]
-        public string FulfillmentCenterId { get; set; }
+        [JsonProperty(PropertyName = "fulfillmentCenter")]
+        public FulfillmentCenter FulfillmentCenter { get; set; }
 
         /// <summary>
         /// </summary>

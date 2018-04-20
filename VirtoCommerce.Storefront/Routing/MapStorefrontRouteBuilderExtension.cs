@@ -110,10 +110,11 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("API.SubscriptionByNumber", "storefrontapi/subscriptions/{number}", defaults: new { controller = "ApiSubscription", action = "GetCustomerSubscription" });
             routes.MapStorefrontRoute("API.CancelSubscription", "storefrontapi/subscriptions/{number}/cancel", defaults: new { controller = "ApiSubscription", action = "CancelSubscription" });
 
-
-
             // Blog API
             routes.MapStorefrontRoute("API.Blog.Search", "storefrontapi/blog/{blogName}/search", defaults: new { controller = "ApiBlog", action = "Search" });
+
+            // Inventory API
+            routes.MapStorefrontRoute("API.Inventory.Search", "storefrontapi/fulfillmentcenters/search", defaults: new { controller = "ApiInventory", action = "SearchFulfillmentCenters" });
 
             #endregion
 
@@ -195,6 +196,10 @@ namespace VirtoCommerce.Storefront.Routing
 
             // Vendor routes
             routes.MapStorefrontRoute("Vendor.GetVendor", "vendor/{vendorId}", defaults: new { controller = "Vendor", action = "VendorDetails" });
+
+            // Inventory routes
+            routes.MapStorefrontRoute("Inventory.GetFulfillmentCenter", "fulfillmentcenter/{id}", defaults: new { controller = "Inventory", action = "FulfillmentCenterDetails" });
+
 
             // Assets
             routes.MapStorefrontRoute("ThemeLocalization", "themes/localization.json", defaults: new { controller = "Asset", action = "GetThemeLocalizationJson" });

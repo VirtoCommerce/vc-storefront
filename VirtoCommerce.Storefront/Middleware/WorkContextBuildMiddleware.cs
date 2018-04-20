@@ -70,6 +70,7 @@ namespace VirtoCommerce.Storefront.Middleware
             await builder.WithUserQuotesAsync();
             await builder.WithUserSubscriptionsAsync();
             await builder.WithVendorsAsync(workContext.CurrentStore, workContext.CurrentLanguage);
+            await builder.WithFulfillmentCentersAsync();
 
             workContext.AvailableRoles = SecurityConstants.Roles.AllRoles;
             _workContextAccessor.WorkContext = workContext;

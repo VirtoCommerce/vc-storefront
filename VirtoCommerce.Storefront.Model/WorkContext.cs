@@ -7,6 +7,7 @@ using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
+using VirtoCommerce.Storefront.Model.Inventory;
 using VirtoCommerce.Storefront.Model.Order;
 using VirtoCommerce.Storefront.Model.Pricing;
 using VirtoCommerce.Storefront.Model.Quote;
@@ -221,6 +222,16 @@ namespace VirtoCommerce.Storefront.Model
         /// Gets or sets the collection of external login providers
         /// </summary>
         public IList<LoginProvider> ExternalLoginProviders { get; set; }
+
+        /// <summary>
+        /// Current fulfillment center
+        /// </summary>
+        public FulfillmentCenter CurrentFulfillmentCenter { get; set; }
+
+        /// <summary>
+        ///  All available fulfillment centers 
+        /// </summary>
+        public IMutablePagedList<FulfillmentCenter> FulfillmentCenters { get; set; }
 
         /// <summary>
         /// Gets or sets the dictionary of application settings

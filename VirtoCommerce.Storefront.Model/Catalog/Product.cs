@@ -232,12 +232,12 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// <summary>
         /// Inventory for default fulfilment center
         /// </summary>
-        public Inventory Inventory { get; set; }
+        public Inventory.Inventory Inventory { get; set; }
 
         /// <summary>
         /// Inventory of all fulfillment centers.
         /// </summary>
-        public IList<Inventory> InventoryAll { get; set; }
+        public IList<Inventory.Inventory> InventoryAll { get; set; }
 
         public virtual long AvailableQuantity
         {

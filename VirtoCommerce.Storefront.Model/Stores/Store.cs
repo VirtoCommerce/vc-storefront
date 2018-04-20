@@ -18,7 +18,7 @@ namespace VirtoCommerce.Storefront.Model.Stores
             SeoInfos = new List<SeoInfo>();
             DynamicProperties = new List<DynamicProperty>();
             Settings = new List<SettingEntry>();
-            FulfilmentCenters = new List<FulfillmentCenter>();
+            AvailFulfillmentCenterIds = new List<string>();
             TrustedGroups = new List<string>();
         }
 
@@ -99,14 +99,14 @@ namespace VirtoCommerce.Storefront.Model.Stores
         public IList<string> TrustedGroups { get; set; }
 
         /// <summary>
-        /// Primary  fullfilment center
+        /// Main (default)  fulfillment center
         /// </summary>
-        public FulfillmentCenter PrimaryFullfilmentCenter { get; set; }
+        public string DefaultFulfillmentCenterId { get; set; }
 
         /// <summary>
-        /// All fullfilment centeres
+        /// Additional fulfillment centers
         /// </summary>
-        public IList<FulfillmentCenter> FulfilmentCenters { get; set; }
+        public IList<string> AvailFulfillmentCenterIds { get; set; }
 
         public bool QuotesEnabled
         {
