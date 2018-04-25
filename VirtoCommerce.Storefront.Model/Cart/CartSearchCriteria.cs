@@ -27,7 +27,8 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
         public string Type { get; set; }
 
-        public string CustomerId { get; set; }
+        [IgnoreDataMember]
+        public User Customer { get; set; }
 
         [IgnoreDataMember]
         public Currency Currency { get; set; }

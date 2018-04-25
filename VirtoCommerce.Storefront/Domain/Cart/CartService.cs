@@ -102,7 +102,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             var cacheKey = CacheKey.With(GetType(), "SearchCartsAsync", criteria.GetHashCode().ToString());
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(CartCacheRegion.CreateCustomerChangeToken(criteria.CustomerId));
+                cacheEntry.AddExpirationToken(CartCacheRegion.CreateCustomerChangeToken(criteria.Customer?.Id));
 
                 var workContext = _workContextAccessor.WorkContext;
                 var resultDto = await _cartApi.SearchAsync(criteria.ToSearchCriteriaDto());               
@@ -111,7 +111,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                 {
                     var currency = _workContextAccessor.WorkContext.AllCurrencies.FirstOrDefault(x => x.Equals(cartDto.Currency));
                     var language = string.IsNullOrEmpty(cartDto.LanguageCode) ? Language.InvariantLanguage : new Language(cartDto.LanguageCode);
-                    var user = await _userManager.FindByIdAsync(cartDto.CustomerId);
+                    var user = await _userManager.FindByIdAsync(cartDto.CustomerId) ?? criteria.Customer;
                     var cart = cartDto.ToShoppingCart(currency, language, user);
                     result.Add(cart);
                 }              

@@ -45,7 +45,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var criteria = new CartSearchCriteria {
                     Type = request.Type,
                     StoreId = WorkContext.CurrentStore.Id,
-                    CustomerId = WorkContext.CurrentUser.Id,
+                    Customer = WorkContext.CurrentUser,
                     Currency = WorkContext.CurrentCurrency,
                     Language = WorkContext.CurrentLanguage,
                     PageSize = int.MaxValue
@@ -100,7 +100,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             //restricting query to lists belongs to other customers
             searchCriteria.StoreId = WorkContext.CurrentStore.Id;
-            searchCriteria.CustomerId = WorkContext.CurrentUser.Id;
+            searchCriteria.Customer = WorkContext.CurrentUser;
             searchCriteria.Currency = WorkContext.CurrentCurrency;
             searchCriteria.Language = WorkContext.CurrentLanguage;
 

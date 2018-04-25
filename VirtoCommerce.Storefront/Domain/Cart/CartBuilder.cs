@@ -444,7 +444,7 @@ namespace VirtoCommerce.Storefront.Domain
             return new CartSearchCriteria
             {
                 StoreId = store.Id,
-                CustomerId = user.Id,
+                Customer = user,
                 Name = cartName,
                 Currency = currency,
                 Type = type

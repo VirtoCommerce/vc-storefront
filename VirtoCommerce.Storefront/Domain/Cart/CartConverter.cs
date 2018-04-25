@@ -27,7 +27,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Name = criteria.Name,
                 Type = criteria.Type,
                 StoreId = criteria.StoreId,
-                CustomerId = criteria.CustomerId,
+                CustomerId = criteria.Customer?.Id,
                 Currency = criteria.Currency?.Code,
                 LanguageCode = criteria.Language?.CultureName,
                 Skip = criteria.Start,
@@ -409,7 +409,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 ChannelId = cartDto.ChannelId,
                 Comment = cartDto.Comment,
-                CustomerId = cartDto.CustomerId,
+                CustomerId = cartDto.CustomerId,                
                 CustomerName = cartDto.CustomerName,
                 Id = cartDto.Id,
                 Name = cartDto.Name,
@@ -418,7 +418,6 @@ namespace VirtoCommerce.Storefront.Domain
                 Status = cartDto.Status,
                 StoreId = cartDto.StoreId,
                 Type = cartDto.Type,
-
                 Customer = user
             };
 
