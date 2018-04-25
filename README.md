@@ -60,6 +60,7 @@ Setup your own private Microsoft Cloud environment and evaluate the latest versi
 
 ### Prerequisites 
 [Prerequisites for .NET Core on Windows](https://docs.microsoft.com/en-us/dotnet/core/windows-prerequisites)
+
 [Microsoft Visual C++ 2015 Redistributable](https://www.microsoft.com/en-us/download/details.aspx?id=53840) (required for SCSS engine)
 
 ### Downloading source code
