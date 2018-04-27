@@ -16,27 +16,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public Form()
         {
             PostedSuccessfully = true;
-            Properties = new Dictionary<string, string>();
+            Properties = new Dictionary<string, object>();
         }
 
-        /// <summary>
-        /// Returns the name of the author of the blog article comment.
-        /// Exclusive to form tags with the "article" parameter.
-        /// </summary>
-        public string Author { get; set; }
-
-        /// <summary>
-        /// Returns the content of the blog article comment.
-        /// Exclusive to form tags with the "article" parameter.
-        /// </summary>
-        public string Body { get; set; }
-
-        /// <summary>
-        /// Returns the email of the blog article comment's author.
-        /// Exclusive to form tags with the "article" parameter.
-        /// </summary>
-        public string Email { get; set; }
-
+   
         /// <summary>
         /// Returns an array of strings if the form was not submitted successfully.
         /// The strings returned depend on which fields of the form were left empty or contained errors.
@@ -50,12 +33,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// </summary>
         public bool? PostedSuccessfully { get; set; }
 
-        /// <summary>
-        /// Returns true if the form requires password, false otherwise
-        /// </summary>
-        public bool PasswordNeeded { get; set; }
 
-        public IDictionary<string, string> Properties { get; set; }
+        public IDictionary<string, object> Properties { get; set; }
 
         public override object BeforeMethod(string method)
         {

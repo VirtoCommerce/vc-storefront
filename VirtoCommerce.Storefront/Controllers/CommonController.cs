@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System.Threading.Tasks;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Domain;
-using VirtoCommerce.Storefront.Domain.Lists;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
@@ -33,7 +32,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// GET : /resetcache
         /// </summary>
         /// <returns></returns>
-        [Authorize(Policy = "CanResetCache")]
+        [Authorize(SecurityConstants.Permissions.CanResetCache)]
         public ActionResult ResetCache()
         {
 
@@ -53,7 +52,6 @@ namespace VirtoCommerce.Storefront.Controllers
             SubscriptionCacheRegion.ExpireRegion();
             SecurityCacheRegion.ExpireRegion();
             InventoryCacheRegion.ExpireRegion();
-            WishlistCacheRegion.ExpireRegion();
 
             return StoreFrontRedirect("~/");
         }
@@ -67,11 +65,11 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> СontactForm([FromForm]ContactForm model, string viewName = "page.contact")
+        public async Task<ActionResult> ContactForm([FromForm]ContactForm model, string viewName = "page.contact")
         {
             //TODO: Test with exist contact us form 
             await _storeApi.SendDynamicNotificationAnStoreEmailAsync(model.ToServiceModel(WorkContext));
-            WorkContext.ContactUsForm = model;
+            WorkContext.Form = model;
             if (model.Contact.ContainsKey("RedirectUrl") && model.Contact["RedirectUrl"].Any())
             {
                 return StoreFrontRedirect(model.Contact["RedirectUrl"].First());

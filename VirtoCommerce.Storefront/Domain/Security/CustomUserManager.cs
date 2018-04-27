@@ -1,205 +1,110 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
-using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
+using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Security;
-using platformSecurityDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
-using System.Threading;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
     public class CustomUserManager : AspNetUserManager<User>
     {
-        private readonly IStoreModule _storeApi;
-        private readonly IStorefrontSecurity _commerceCoreApi;
-        private readonly ISecurity _platformSecurityApi;
-
-        private readonly IMemoryCache _memoryCache;
-        public CustomUserManager(IUserStore<User> userStore, IStoreModule storeApi, IStorefrontSecurity commerceCoreApi, ISecurity platformSecurityApi, IOptions<IdentityOptions> optionsAccessor, IPasswordHasher<User> passwordHasher,
+        public CustomUserManager(IUserStore<User> userStore, IOptions<IdentityOptions> optionsAccessor, IPasswordHasher<User> passwordHasher,
                                 IEnumerable<IUserValidator<User>> userValidators, IEnumerable<IPasswordValidator<User>> passwordValidators,
-                                ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, IServiceProvider services, ILogger<UserManager<User>> logger, IMemoryCache memoryCache)
+                                ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, IServiceProvider services, ILogger<UserManager<User>> logger)
             : base(userStore, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
         {
-            _storeApi = storeApi;
-            _commerceCoreApi = commerceCoreApi;
-            _platformSecurityApi = platformSecurityApi;
-            _memoryCache = memoryCache;
-        }
-            
-        public override async Task<User> FindByIdAsync(string userId)
-        {
-            var cacheKey = CacheKey.With(GetType(), "FindByIdAsync", userId);
-            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-            {
-                var userDto = await _commerceCoreApi.GetUserByIdAsync(userId);
-                if (userDto != null)
-                {
-                    cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
-                    return userDto.ToUser();
-                }
-                return null;
-            }, cacheNullValue: false);
-        }
-
-        public override async Task<User> FindByNameAsync(string userName)
-        {
-            var cacheKey = CacheKey.With(GetType(), "FindByNameAsync", userName);
-            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-            {
-                var userDto = await _commerceCoreApi.GetUserByNameAsync(userName);
-                if (userDto != null)
-                {
-                    cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
-                    return userDto.ToUser();
-                }
-                return null;
-            }, cacheNullValue: false);
-
-        }
-      
-        public override async Task<User> FindByEmailAsync(string email)
-        {
-            var cacheKey = CacheKey.With(GetType(), "FindByEmailAsync", email);
-            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-            {
-                var userDto = await _commerceCoreApi.GetUserByEmailAsync(email);
-                if (userDto != null)
-                {
-                    cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
-                    return userDto.ToUser();
-                }
-                return null;
-            }, cacheNullValue: false);
-        }
-
-        public override async Task<User> FindByLoginAsync(string loginProvider, string providerKey)
-        {
-            var cacheKey = CacheKey.With(GetType(), "FindByLoginAsync", loginProvider, providerKey);
-            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-            {
-                var userDto = await _commerceCoreApi.GetUserByLoginAsync(loginProvider, providerKey);
-                if (userDto != null)
-                {
-                    cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
-                    return userDto.ToUser();
-                }
-                return null;
-            }, cacheNullValue: false);
-        }
-
-        public override async Task<IdentityResult> CreateAsync(User user)
-        {
-            var dtoUser = user.ToUserDto();
-            var resultDto = await _commerceCoreApi.CreateAsync(dtoUser);          
-            return resultDto.ToIdentityResult();
-        }
-
-        public override async Task<IdentityResult> CreateAsync(User user, string password)
-        {
-            user.Password = password;
-            return await CreateAsync(user);
-        }
-
-        protected override async Task<PasswordVerificationResult> VerifyPasswordAsync(IUserPasswordStore<User> store, User user, string password)
-        {
-            var result = await _commerceCoreApi.PasswordSignInAsync(user.UserName, password);
-            return result.Status.EqualsInvariant("success") ? PasswordVerificationResult.Success : PasswordVerificationResult.Failed;
-        }
-       
-        public override async Task<IdentityResult> ChangePasswordAsync(User user, string currentPassword, string newPassword)
-        {
-            var changePassword = new platformSecurityDto.ChangePasswordInfo
-            {
-                OldPassword = currentPassword,
-                NewPassword = newPassword,
-            };
-            var resultDto = await _platformSecurityApi.ChangePasswordAsync(user.UserName, changePassword);
-            return resultDto.ToIdentityResult();
-
-        }
-
-        public override async Task<IdentityResult> ResetPasswordAsync(User user, string token, string newPassword)
-        {
-            var resultDto = await _commerceCoreApi.ResetPasswordAsync(user.Id, token, newPassword);
-            return resultDto.ToIdentityResult();
-        }
-
-        public override async Task<IdentityResult> AddLoginAsync(User user, UserLoginInfo login)
-        {
-            var updateUser = await FindByIdAsync(user.Id);
-
-            if (updateUser != null)
-            {
-                updateUser.ExternalLogins.Add(new ExternalUserLoginInfo
-                {
-                    LoginProvider = login.LoginProvider,
-                    ProviderKey = login.ProviderKey,
-                    ProviderDisplayName = login.ProviderDisplayName
-                });
-            }
-
-            var resultDto = await _platformSecurityApi.UpdateAsyncAsync(updateUser.ToPlatformUserDto());
-            //Evict user from the cache
-            SecurityCacheRegion.ExpireUser(user.Id);
-
-            return resultDto.ToIdentityResult();
         }
     }
 
     //Stub for UserManager
-    public class UserStoreStub : IUserStore<User>, IUserPasswordStore<User>
+    public class UserStoreStub : IUserStore<User>, IUserEmailStore<User>, IUserPasswordStore<User>, IUserLockoutStore<User>, IUserLoginStore<User>
     {
-        public Task AddLoginAsync(User user, UserLoginInfo login, CancellationToken cancellationToken)
+        private readonly ISecurity _platformSecurityApi;
+        private readonly IMemoryCache _memoryCache;
+        private readonly IMemberService _memberService;
+        public UserStoreStub(ISecurity platformSecurityApi, IMemberService memberService, IMemoryCache memoryCache)
         {
-            throw new NotImplementedException();
+            _platformSecurityApi = platformSecurityApi;
+            _memoryCache = memoryCache;
+            _memberService = memberService;
         }
 
-        public Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken)
+        #region IUserStore<User> members
+        public async Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if(user.Contact != null)
+            {
+                user.Contact = await _memberService.CreateContactAsync(user.Contact);
+            }
+            var dtoUser = user.ToUserDto();
+            var resultDto = await _platformSecurityApi.CreateAsyncAsync(dtoUser);
+            return resultDto.ToIdentityResult();
         }
 
-        public Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
+        public async Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await _platformSecurityApi.DeleteAsyncAsync(new[] { user.UserName });
+            return IdentityResult.Success;
+        }
+        
+        public async Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)
+        {
+            var cacheKey = CacheKey.With(GetType(), "FindByIdAsync", userId);
+            var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+           {
+               var userDto = await _platformSecurityApi.GetUserByIdAsync(userId);
+               if (userDto != null)
+               {
+                   cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
+                   return userDto.ToUser();
+               }
+               return null;
+           }, cacheNullValue: false);
+
+            //Load user associated contact
+            if (result != null && result.ContactId != null)
+            {
+                result.Contact = await _memberService.GetContactByIdAsync(result.ContactId);
+            }
+            return result;
         }
 
-        public void Dispose()
+        public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-        }
+            var cacheKey = CacheKey.With(GetType(), "FindByNameAsync", normalizedUserName);
+            var result =  await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                var userDto = await _platformSecurityApi.GetUserByNameAsync(normalizedUserName);
+                if (userDto != null)
+                {
+                    cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
+                    return userDto.ToUser();
+                }
+                return null;
+            }, cacheNullValue: false);
 
-        public Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
+            //Load user associated contact
+            if (result != null && result.ContactId != null)
+            {
+                result.Contact = await _memberService.GetContactByIdAsync(result.ContactId);
+            }
+            return result;
         }
-
-        public Task<User> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }        
 
         public Task<string> GetNormalizedUserNameAsync(User user, CancellationToken cancellationToken)
         {
             return Task.FromResult(user.UserName);
-        }
-
-        public Task<string> GetPasswordHashAsync(User user, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
 
         public Task<string> GetUserIdAsync(User user, CancellationToken cancellationToken)
@@ -212,20 +117,10 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return Task.FromResult(user.UserName);
         }
 
-        public Task<bool> HasPasswordAsync(User user, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task SetNormalizedUserNameAsync(User user, string normalizedName, CancellationToken cancellationToken)
         {
-            user.UserName = normalizedName;
-            return Task.CompletedTask; 
-        }
-
-        public Task SetPasswordHashAsync(User user, string passwordHash, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
+            user.NormalizedUserName = normalizedName;
+            return Task.CompletedTask;
         }
 
         public Task SetUserNameAsync(User user, string userName, CancellationToken cancellationToken)
@@ -234,10 +129,203 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return Task.CompletedTask;
         }
 
-        public Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
+        public async Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (user.Contact != null)
+            {
+                if (user.Contact.IsTransient())
+                {
+                    user.Contact = await _memberService.CreateContactAsync(user.Contact);
+                }
+                else
+                {
+                    await _memberService.UpdateContactAsync(user.Contact);
+                }
+            }
+            
+            var dtoUser = user.ToUserDto();
+            var resultDto = await _platformSecurityApi.UpdateAsyncAsync(dtoUser);
+
+            //Evict user from the cache
+            SecurityCacheRegion.ExpireUser(user.Id);
+            return resultDto.ToIdentityResult();
         }
+
+        #endregion
+
+        #region IUserLockoutStore<User> members
+        public Task<int> GetAccessFailedCountAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.AccessFailedCount);
+        }
+        
+        public Task<bool> GetLockoutEnabledAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.LockoutEnabled);
+        }
+
+        public Task<DateTimeOffset?> GetLockoutEndDateAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult((DateTimeOffset?)user.LockoutEndDateUtc);
+        }
+        public Task<int> IncrementAccessFailedCountAsync(User user, CancellationToken cancellationToken)
+        {
+            user.AccessFailedCount++;
+            return Task.FromResult(user.AccessFailedCount);
+        }
+        
+        public Task ResetAccessFailedCountAsync(User user, CancellationToken cancellationToken)
+        {
+            user.AccessFailedCount = 0;
+            return Task.CompletedTask;
+        }
+        
+        public Task SetLockoutEnabledAsync(User user, bool enabled, CancellationToken cancellationToken)
+        {
+            user.LockoutEnabled = enabled;
+            return Task.CompletedTask;
+        }
+
+        public Task SetLockoutEndDateAsync(User user, DateTimeOffset? lockoutEnd, CancellationToken cancellationToken)
+        {
+            user.LockoutEndDateUtc = lockoutEnd?.UtcDateTime;
+            return Task.CompletedTask;
+        }
+        #endregion
+
+        #region IUserEmailStore<User> members
+
+        public async Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+        {
+            var cacheKey = CacheKey.With(GetType(), "FindByEmailAsync", normalizedEmail);
+            var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                var userDto = await _platformSecurityApi.GetUserByEmailAsync(normalizedEmail);
+                if (userDto != null)
+                {
+                    cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
+                    return userDto.ToUser();
+                }
+                return null;
+            }, cacheNullValue: false);
+
+            //Load user associated contact
+            if (result != null && result.ContactId != null)
+            {
+                result.Contact = await _memberService.GetContactByIdAsync(result.ContactId);
+            }
+
+            return result;
+        }
+
+        public Task<string> GetEmailAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.Email);
+        }
+
+        public Task<bool> GetEmailConfirmedAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.EmailConfirmed);
+        }
+
+        public Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.NormalizedEmail);
+        }
+
+        public Task SetEmailAsync(User user, string email, CancellationToken cancellationToken)
+        {
+            user.Email = email;
+            return Task.CompletedTask;
+        }
+
+        public Task SetEmailConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
+        {
+            user.EmailConfirmed = confirmed;
+            return Task.CompletedTask;
+        }
+
+        public Task SetNormalizedEmailAsync(User user, string normalizedEmail, CancellationToken cancellationToken)
+        {
+            user.NormalizedEmail = normalizedEmail;
+            return Task.CompletedTask;
+        }
+
+        #endregion
+
+        #region IUserLoginStore<User> members
+        public Task AddLoginAsync(User user, UserLoginInfo login, CancellationToken cancellationToken)
+        {
+            user.ExternalLogins.Add(new ExternalUserLoginInfo
+            {
+                LoginProvider = login.LoginProvider,
+                ProviderKey = login.ProviderKey,
+                ProviderDisplayName = login.ProviderDisplayName
+            });
+            return Task.CompletedTask;
+        }
+
+        public async Task<User> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
+        {
+            var cacheKey = CacheKey.With(GetType(), "FindByLoginAsync", loginProvider, providerKey);
+            var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                var userDto = await _platformSecurityApi.GetUserByLoginAsync(loginProvider, providerKey);
+                if (userDto != null)
+                {
+                    cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
+                    return userDto.ToUser();
+                }
+                return null;
+            }, cacheNullValue: false);
+
+
+            //Load user associated contact
+            if (result != null && result.ContactId != null)
+            {
+                result.Contact = await _memberService.GetContactByIdAsync(result.ContactId);
+            }
+            return result;
+        }
+
+        public Task<IList<UserLoginInfo>> GetLoginsAsync(User user, CancellationToken cancellationToken)
+        {
+            IList<UserLoginInfo> result = user.ExternalLogins?.Select(x => new UserLoginInfo(x.LoginProvider, x.ProviderKey, x.ProviderDisplayName)).ToList();
+            return Task.FromResult(result);
+        }
+
+        public Task RemoveLoginAsync(User user, string loginProvider, string providerKey, CancellationToken cancellationToken)
+        {
+            var existUserLogin = user.ExternalLogins?.FirstOrDefault(x => x.LoginProvider.EqualsInvariant(loginProvider) && x.ProviderKey.EqualsInvariant(providerKey));
+            if(existUserLogin != null)
+            {
+                user.ExternalLogins.Remove(existUserLogin);
+            }
+            return Task.CompletedTask;
+        }
+        #endregion
+
+        #region IUserPasswordStore<User> members
+        public Task<string> GetPasswordHashAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.PasswordHash);
+        }
+        public Task<bool> HasPasswordAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.PasswordHash != null);
+        }
+
+        public Task SetPasswordHashAsync(User user, string passwordHash, CancellationToken cancellationToken)
+        {
+            user.PasswordHash = passwordHash;
+            return Task.CompletedTask;
+        }
+        #endregion
+
+        public void Dispose()
+        {
+        }
+        
     }
 
 

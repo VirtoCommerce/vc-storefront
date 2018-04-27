@@ -3,24 +3,18 @@ using System.Runtime.Serialization;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Security;
 
-namespace VirtoCommerce.Storefront.Model.Lists
+namespace VirtoCommerce.Storefront.Model.Cart
 {
-    public class WishlistSearchCriteria : PagedSearchCriteria
+    public class CartSearchCriteria : PagedSearchCriteria
     {
-        private static int _defaultPageSize = 20;
+        public static int DefaultPageSize { get; set; } = 20;
 
-        public static int DefaultPageSize
-        {
-            get { return _defaultPageSize; }
-            set { _defaultPageSize = value; }
-        }
-
-        public WishlistSearchCriteria()
-            : base(new NameValueCollection(), _defaultPageSize)
+        public CartSearchCriteria()
+            : base(new NameValueCollection(), DefaultPageSize)
         {
         }
 
-        public WishlistSearchCriteria(NameValueCollection queryString)
+        public CartSearchCriteria(NameValueCollection queryString)
             : base(queryString, DefaultPageSize)
         {
         }

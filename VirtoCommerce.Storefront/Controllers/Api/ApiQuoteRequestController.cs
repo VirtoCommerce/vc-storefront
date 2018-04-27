@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PagedList.Core;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model;
@@ -24,6 +26,28 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             _quoteRequestBuilder = quoteRequestBuilder;
             _cartBuilder = cartBuilder;
             _catalogService = catalogService;
+        }
+
+        // GET: storefrontapi/account/quotes
+        [HttpGet]
+        public ActionResult GetCustomerQuotes(int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos)
+        {
+            if (WorkContext.CurrentUser.IsRegisteredUser)
+            {
+                var entries = WorkContext.CurrentUser?.QuoteRequests;
+                if (entries != null)
+                {
+                    entries.Slice(pageNumber, pageSize, sortInfos);
+                    var retVal = new StaticPagedList<QuoteRequest>(entries.Select(x => x), entries);
+
+                    return Json(new
+                    {
+                        Results = retVal,
+                        TotalCount = retVal.TotalItemCount
+                    });
+                }
+            }
+            return NoContent();
         }
 
         // GET: storefrontapi/quoterequests/{number}/itemscount

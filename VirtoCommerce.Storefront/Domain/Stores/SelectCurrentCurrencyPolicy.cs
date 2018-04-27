@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Stores;
 
 namespace VirtoCommerce.Storefront.Domain
@@ -20,7 +21,7 @@ namespace VirtoCommerce.Storefront.Domain
             if (!context.Request.Query.TryGetValue("currency", out currencyCode))
             {
                 //Next try get from claims
-                currencyCode = context.User.FindFirstValue(StorefrontClaims.CurrencyClaimType);
+                currencyCode = context.User.FindFirstValue(SecurityConstants.Claims.CurrencyClaimType);
             }
             //Get store default currency if currency not in the supported by stores list
             if (!string.IsNullOrEmpty(currencyCode))

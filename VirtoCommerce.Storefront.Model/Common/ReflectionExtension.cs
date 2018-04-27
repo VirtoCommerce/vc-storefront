@@ -72,7 +72,7 @@ namespace VirtoCommerce.Storefront.Model.Common
                 resultList = new List<T>();
             }
             //Ignore cycling references
-            if (!resultList.Any(x => Object.ReferenceEquals(x, obj)))
+            if (!resultList.Any(x => object.ReferenceEquals(x, obj)))
             {
                 var objectType = obj.GetType();
 
@@ -88,7 +88,7 @@ namespace VirtoCommerce.Storefront.Model.Common
                                         .Select(x => (T)x.GetValue(obj)).ToList();
 
                 //Recursive call for single properties
-                retVal.AddRange(objects.Where(x => x != null).SelectMany(x => x.GetFlatObjectsListWithInterface<T>(resultList)));
+                retVal.AddRange(objects.Where(x => x != null).SelectMany(x => x.GetFlatObjectsListWithInterface(resultList)));
 
                 //Handle collection and arrays
                 var collections = properties.Where(p => p.GetIndexParameters().Length == 0)
@@ -102,7 +102,7 @@ namespace VirtoCommerce.Storefront.Model.Common
                     {
                         if (collectionObject is T)
                         {
-                            retVal.AddRange(collectionObject.GetFlatObjectsListWithInterface<T>(resultList));
+                            retVal.AddRange(collectionObject.GetFlatObjectsListWithInterface(resultList));
                         }
                     }
                 }
@@ -110,6 +110,14 @@ namespace VirtoCommerce.Storefront.Model.Common
             return retVal.ToArray();
         }
 
+        public static IDictionary<string, object> AsDictionary(this object source, Func<string, string> nameNormalizer = null, BindingFlags bindingAttr = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
+        {
+            return source.GetType().GetProperties(bindingAttr).ToDictionary
+            (
+                propInfo => nameNormalizer != null ? nameNormalizer(propInfo.Name) : propInfo.Name,
+                propInfo => propInfo.GetValue(source, null)
+            );
 
+        }
     }
 }

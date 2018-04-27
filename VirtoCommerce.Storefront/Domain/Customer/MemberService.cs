@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
@@ -38,6 +39,11 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual async Task<Contact> GetContactByIdAsync(string contactId)
         {
+            if(contactId == null)
+            {
+                throw new ArgumentNullException(nameof(contactId));
+            }
+
             Contact result = null;
             var cacheKey = CacheKey.With(GetType(), "GetContactByIdAsync", contactId);
             var dto = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
@@ -53,32 +59,37 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (dto != null)
             {
-                result = dto.ToContact();             
+                result = dto.ToContact();
+                if (!dto.Organizations.IsNullOrEmpty())
+                {
+                    //Load contact organization
+                    result.Organization = await GetOrganizationByIdAsync(dto.Organizations.FirstOrDefault());
+                }
             }
             return result;
         }
-        
-        public virtual async Task CreateContactAsync(Contact contact)
+
+        public virtual async Task<Contact> CreateContactAsync(Contact contact)
         {
-            var contactDto = contact.ToCustomerContactDto();
-            await _customerApi.CreateContactAsync(contactDto);
+            var contactDto = contact.ToContactDto();
+            var result = await _customerApi.CreateContactAsync(contactDto);
+            return result?.ToContact();
+          }
+
+
+        public virtual async Task DeleteContactAsync(string contactId)
+        {
+            await _customerApi.DeleteContactsAsync(new[] { contactId });
+            //Invalidate cache
+            CustomerCacheRegion.ExpireMember(contactId);
         }
-        
-        public virtual async Task UpdateContactAsync(string contactId, ContactUpdateInfo contactUpdateInfo)
+
+
+        public virtual async Task UpdateContactAsync(Contact contact)
         {
-            var existContact = await GetContactByIdAsync(contactId);
-            if (existContact != null)
-            {
-                existContact.FirstName = contactUpdateInfo.FirstName;
-                existContact.LastName = contactUpdateInfo.LastName;
-                existContact.Email = contactUpdateInfo.Email;
-
-                var contactDto = existContact.ToCustomerContactDto();
-                await _customerApi.UpdateContactAsync(contactDto);
-
-                //Invalidate cache
-                CustomerCacheRegion.ExpireCustomer(existContact.Id);
-            }
+            await _customerApi.UpdateContactAsync(contact.ToContactDto());
+            //Invalidate cache
+            CustomerCacheRegion.ExpireMember(contact.Id);
         }
 
         public async Task UpdateContactAddressesAsync(string contactId, IList<Address> addresses)
@@ -89,7 +100,7 @@ namespace VirtoCommerce.Storefront.Domain
                 await _customerApi.UpdateAddessesAsync(contactId, addresses.Select(x => x.ToCustomerAddressDto()).ToList());
 
                 //Invalidate cache
-                CustomerCacheRegion.ExpireCustomer(existContact.Id);
+                CustomerCacheRegion.ExpireMember(existContact.Id);
             }
         }       
 
@@ -124,7 +135,87 @@ namespace VirtoCommerce.Storefront.Domain
             var vendors = vendorSearchResult.Vendors.Select(x => x.ToVendor(language, store));       
             return new StaticPagedList<Vendor>(vendors, pageNumber, pageSize, vendorSearchResult.TotalCount.Value);
         }
-        #endregion      
+
+        public async Task<Organization> GetOrganizationByIdAsync(string organizationId)
+        {
+            Organization result = null;
+            var cacheKey = CacheKey.With(GetType(), "GetOrganizationByIdAsync", organizationId);
+            var dto = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                var organizationDto = await _customerApi.GetOrganizationByIdAsync(organizationId);
+                if (organizationDto != null)
+                {
+                    cacheEntry.AddExpirationToken(CustomerCacheRegion.CreateChangeToken(organizationDto.Id));
+                    cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
+                }
+                return organizationDto;
+            });
+
+            if (dto != null)
+            {
+                result = dto.ToOrganization();
+
+                //Lazy load organization contacts
+                result.Contacts = new MutablePagedList<Contact>((pageNumber, pageSize, sortInfos) =>
+                {
+                    var criteria = new OrganizationContactsSearchCriteria
+                    {
+                        OrganizationId = result.Id,
+                        PageNumber = pageNumber,
+                        PageSize = pageSize                        
+                    };
+                    if (!sortInfos.IsNullOrEmpty())
+                    {
+                        criteria.Sort = SortInfo.ToString(sortInfos);
+                    }
+                    return SearchOrganizationContacts(criteria);
+                  
+                }, 1, 20);
+            }
+            return result;
+        }
+
+        public Organization GetOrganizationById(string organizationId)
+        {
+            return Task.Factory.StartNew(() => GetOrganizationByIdAsync(organizationId), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+        }
+
+        public async Task<Organization> CreateOrganizationAsync(Organization organization)
+        {
+            var orgDto = organization.ToOrganizationDto();
+            var result = await _customerApi.CreateOrganizationAsync(orgDto);
+            return result?.ToOrganization();
+        }
+
+        public async Task UpdateOrganizationAsync(Organization organization)
+        {
+            var orgDto = organization.ToOrganizationDto();
+            await _customerApi.UpdateOrganizationAsync(orgDto);
+            CustomerCacheRegion.ExpireMember(organization.Id);
+        }
+
+        public IPagedList<Contact> SearchOrganizationContacts(OrganizationContactsSearchCriteria criteria)
+        {
+            return Task.Factory.StartNew(() => SearchOrganizationContactsAsync(criteria), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+        }
+
+        public async Task<IPagedList<Contact>> SearchOrganizationContactsAsync(OrganizationContactsSearchCriteria criteria)
+        {
+            var criteriaDto = new customerDto.MembersSearchCriteria
+            {
+                MemberId = criteria.OrganizationId,
+                Skip = (criteria.PageNumber - 1) * criteria.PageSize,
+                Take = criteria.PageSize,
+                Sort = criteria.Sort,
+                SearchPhrase = criteria.SearchPhrase
+            };
+            
+            var searchResult = await _customerApi.SearchAsync(criteriaDto);
+            var contacts = _customerApi.GetContactsByIds(searchResult.Results.Select(x => x.Id).ToList()).Select(x => x.ToContact()).ToList();
+
+            return new StaticPagedList<Contact>(contacts, criteria.PageNumber, criteria.PageSize, searchResult.TotalCount.Value);
+        }
+        #endregion
     }
 }
 

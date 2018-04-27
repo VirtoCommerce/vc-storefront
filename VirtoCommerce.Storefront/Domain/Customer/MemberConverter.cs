@@ -1,85 +1,43 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
+using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Stores;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 using customerDto = VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
-    public static class CustomerConverterExtension
-    {
-        public static MemberConverter CustomerConverterInstance => new MemberConverter();
-
-       
-        public static Contact ToContact(this customerDto.Contact contactDto)
-        {
-            return CustomerConverterInstance.ToContact(contactDto);
-        }
-
-        public static customerDto.Contact ToCustomerContactDto(this Contact customer)
-        {
-            return CustomerConverterInstance.ToContactDto(customer);
-        }
-
-        public static coreDto.Contact ToCoreContactDto(this Contact customer)
-        {
-            return CustomerConverterInstance.ToCoreContactDto(customer);
-        }
-
-        public static Vendor ToVendor(this customerDto.Vendor vendorDto, Language currentLanguage, Store store)
-        {
-            return CustomerConverterInstance.ToVendor(vendorDto, currentLanguage, store);
-        }
-
-        public static Address ToAddress(this customerDto.Address addressDto)
-        {
-            return CustomerConverterInstance.ToAddress(addressDto);
-        }
-
-        public static customerDto.Address ToCustomerAddressDto(this Address address)
-        {
-            return CustomerConverterInstance.ToCustomerAddressDto(address);
-        }
-
-        public static DynamicProperty ToDynamicProperty(this customerDto.DynamicObjectProperty propertyDto)
-        {
-            return CustomerConverterInstance.ToDynamicProperty(propertyDto);
-        }
-
-        public static customerDto.DynamicObjectProperty ToCustomerDynamicPropertyDto(this DynamicProperty property)
-        {
-            return CustomerConverterInstance.ToDynamicPropertyDto(property);
-        }
-    }
-
-    public partial class MemberConverter
+    
+    public static partial class MemberConverter
     {
         private static readonly char[] _nameSeparator = { ' ' };
 
-        public virtual DynamicProperty ToDynamicProperty(customerDto.DynamicObjectProperty propertyDto)
+        public static  DynamicProperty ToDynamicProperty(this customerDto.DynamicObjectProperty propertyDto)
         {
             return propertyDto.JsonConvert<coreDto.DynamicObjectProperty>().ToDynamicProperty();
         }
 
-        public virtual customerDto.DynamicObjectProperty ToDynamicPropertyDto(DynamicProperty property)
+        public static customerDto.DynamicObjectProperty ToCustomerDynamicPropertyDto(this DynamicProperty property)
         {
             return property.ToDynamicPropertyDto().JsonConvert<customerDto.DynamicObjectProperty>();
         }
 
-        public virtual Address ToAddress(customerDto.Address addressDto)
+        public static Address ToAddress(this customerDto.Address addressDto)
         {
             return addressDto.JsonConvert<coreDto.Address>().ToAddress();
         }
 
-        public virtual customerDto.Address ToCustomerAddressDto(Address address)
+        public static customerDto.Address ToCustomerAddressDto(this Address address)
         {
             return address.ToCoreAddressDto().JsonConvert<customerDto.Address>();
         }
 
-        public virtual Vendor ToVendor(customerDto.Vendor vendorDto, Language currentLanguage, Store store)
+        public static Vendor ToVendor(this customerDto.Vendor vendorDto, Language currentLanguage, Store store)
         {
             Vendor result = null;
 
@@ -130,8 +88,45 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
+        public static Organization ToOrganization(this OrganizationRegistration orgRegistration)
+        {
+            var organization = new Organization
+            {
+                Name = orgRegistration.OrganizationName,
+            };
+            if (organization.Addresses != null)
+            {
+                organization.Addresses.Add(orgRegistration.Address);
+            }
+            return organization;
+        }
 
-        public virtual Contact ToContact(customerDto.Contact contactDto)
+     
+        public static Contact ToContact(this UserRegistration userRegistration)
+        {
+            var result = new Contact
+            {
+                Name = userRegistration.Name ?? userRegistration.UserName,
+                FullName = string.Join(" ", userRegistration.FirstName, userRegistration.LastName),
+                FirstName = userRegistration.FirstName,
+                LastName = userRegistration.LastName,
+            };
+            if (!string.IsNullOrEmpty(userRegistration.Email))
+            {
+                result.Emails.Add(userRegistration.Email);
+            }
+            if (string.IsNullOrEmpty(result.FullName) || string.IsNullOrWhiteSpace(result.FullName))
+            {
+                result.FullName = userRegistration.Email;
+            }
+            if (userRegistration.Address != null)
+            {
+                result.Addresses = new[] { userRegistration.Address };
+            }
+            return result;
+        }
+
+        public static Contact ToContact(this customerDto.Contact contactDto)
         {
             var result = new Contact
             {
@@ -143,7 +138,8 @@ namespace VirtoCommerce.Storefront.Domain
                 LastName = contactDto.LastName,
                 Emails = contactDto.Emails,
                 TimeZone = contactDto.TimeZone,
-                DefaultLanguage = contactDto.DefaultLanguage
+                DefaultLanguage = contactDto.DefaultLanguage,
+                OrganizationId = contactDto.Organizations?.FirstOrDefault()
             };
 
             if (contactDto.Addresses != null)
@@ -162,12 +158,49 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 result.DynamicProperties = contactDto.DynamicProperties.Select(ToDynamicProperty).ToList();
             }
+            if(!contactDto.SecurityAccounts.IsNullOrEmpty())
+            {
+                result.SecurityAccounts = contactDto.SecurityAccounts.Select(x => new SecurityAccount
+                {
+                    Id = x.Id,
+                    Roles = x.Roles?.Select(role => role.Name).ToList(),
+                    IsLockedOut =  x.LockoutEndDateUtc != null ? x.LockoutEndDateUtc.Value > DateTime.UtcNow : false,
+                    UserName = x.UserName,
+                });
+            }
+            return result;
+        }
+
+        public static Organization ToOrganization(this customerDto.Organization organizaionDto)
+        {
+            var result = new Organization
+            {
+                Id = organizaionDto.Id,
+                Name = organizaionDto.Name,
+                MemberType = organizaionDto.MemberType,
+                UserGroups = organizaionDto.Groups,             
+                Emails = organizaionDto.Emails
+            };
+
+            if (organizaionDto.Addresses != null)
+            {
+                result.Addresses = organizaionDto.Addresses.Select(ToAddress).ToList();
+            }
+    
+            if (organizaionDto.Emails != null)
+            {
+                result.Emails = organizaionDto.Emails;
+            }
+            if (!organizaionDto.DynamicProperties.IsNullOrEmpty())
+            {
+                result.DynamicProperties = organizaionDto.DynamicProperties.Select(ToDynamicProperty).ToList();
+            }
 
             return result;
         }
 
-        
-        public virtual customerDto.Contact ToContactDto(Contact customer)
+
+        public static customerDto.Contact ToContactDto(this Contact customer)
         {
             var retVal = new customerDto.Contact
             {
@@ -176,7 +209,7 @@ namespace VirtoCommerce.Storefront.Domain
                 FullName = customer.FullName,
                 LastName = customer.LastName,
                 MiddleName = customer.MiddleName,
-                MemberType = "Contact"
+                MemberType = "Contact",
             };
             if (!customer.UserGroups.IsNullOrEmpty())
             {
@@ -184,19 +217,66 @@ namespace VirtoCommerce.Storefront.Domain
             }
             if (!customer.Addresses.IsNullOrEmpty())
             {
-                retVal.Addresses = customer.Addresses.Select(ToCustomerAddressDto).ToList();
+                retVal.Addresses = new List<customerDto.Address>();
+                foreach(var address in customer.Addresses)
+                {
+                    var addressDto = address.ToCustomerAddressDto();
+                    if(string.IsNullOrEmpty(addressDto.FirstName))
+                    {
+                        addressDto.FirstName = customer.FirstName;
+                    }
+                    if (string.IsNullOrEmpty(addressDto.LastName))
+                    {
+                        addressDto.LastName = customer.LastName;
+                    }
+                    if (string.IsNullOrEmpty(addressDto.Email))
+                    {
+                        addressDto.Email = customer.Email;
+                    }
+                    retVal.Addresses.Add(addressDto);
+                }               
             }
+
             if (!customer.Emails.IsNullOrEmpty())
             {
                 retVal.Emails = customer.Emails;
+            }
+
+            //Support only one organization then
+            if(customer.OrganizationId != null)
+            {
+                retVal.Organizations = new List<string>() { customer.OrganizationId };
             }
            
             return retVal;
         }
 
-        public virtual coreDto.Contact ToCoreContactDto(Contact contact)
+        public static customerDto.Organization ToOrganizationDto(this Organization org)
         {
-            return contact.ToCustomerContactDto().JsonConvert<coreDto.Contact>();        
+            var retVal = new customerDto.Organization
+            {
+                Id = org.Id,
+                Name = org.Name,
+                MemberType = "Organization"
+            };
+            if (!org.UserGroups.IsNullOrEmpty())
+            {
+                retVal.Groups = org.UserGroups.ToArray();
+            }
+            if (!org.Addresses.IsNullOrEmpty())
+            {
+                retVal.Addresses = org.Addresses.Select(ToCustomerAddressDto).ToList();
+            }
+            if (!org.Emails.IsNullOrEmpty())
+            {
+                retVal.Emails = org.Emails;
+            }
+            return retVal;
+        }
+
+        public static coreDto.Contact ToCoreContactDto(this Contact contact)
+        {
+            return contact.ToContactDto().JsonConvert<coreDto.Contact>();        
         }
     }
 }

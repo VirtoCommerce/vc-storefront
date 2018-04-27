@@ -52,26 +52,5 @@ namespace VirtoCommerce.Storefront.Domain
             return builder.WithVendorsAsync(() => new MutablePagedList<Vendor>(factory, 1, VendorSearchCriteria.DefaultPageSize));
         }
 
-        public static Task WithUserContactAsync(this IWorkContextBuilder builder, Func<Contact> factory)
-        {
-            builder.WorkContext.CurrentUser.Contact = new Lazy<Contact>(() =>
-            {
-                return factory();
-            });
-            return Task.CompletedTask;
-        }
-
-        public static Task WithUserContactAsync(this IWorkContextBuilder builder)
-        {
-            if (builder.WorkContext.CurrentUser != null && builder.WorkContext.CurrentUser.ContactId != null)
-            {
-                var serviceProvider = builder.HttpContext.RequestServices;
-                var memberService = serviceProvider.GetRequiredService<IMemberService>();
-
-
-                return builder.WithUserContactAsync(() => memberService.GetContactById(builder.WorkContext.CurrentUser.ContactId));
-            }
-            return Task.CompletedTask;
-        }
     }
 }
