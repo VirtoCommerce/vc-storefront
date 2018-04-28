@@ -407,7 +407,7 @@ namespace VirtoCommerce.Storefront.Domain
                 //Get product inventory to fill InStockQuantity parameter of LineItem
                 //required for some promotions evaluation
 
-                foreach (var lineItem in Cart.Items.ToList())
+                foreach (var lineItem in Cart.Items.Where(x=>x.Product != null).ToList())
                 {
                     lineItem.InStockQuantity = (int)lineItem.Product.AvailableQuantity;
                 }
