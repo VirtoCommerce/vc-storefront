@@ -110,6 +110,8 @@ namespace VirtoCommerce.Storefront.Domain
                 FullName = string.Join(" ", userRegistration.FirstName, userRegistration.LastName),
                 FirstName = userRegistration.FirstName,
                 LastName = userRegistration.LastName,
+                Salutation = userRegistration.Salutation,
+                PhotoUrl = userRegistration.PhotoUrl
             };
             if (!string.IsNullOrEmpty(userRegistration.Email))
             {
@@ -131,6 +133,7 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new Contact
             {
                 Id = contactDto.Id,
+                Name = contactDto.Name,
                 MemberType = contactDto.MemberType,
                 UserGroups = contactDto.Groups,
                 FullName = contactDto.FullName,
@@ -139,7 +142,9 @@ namespace VirtoCommerce.Storefront.Domain
                 Emails = contactDto.Emails,
                 TimeZone = contactDto.TimeZone,
                 DefaultLanguage = contactDto.DefaultLanguage,
-                OrganizationId = contactDto.Organizations?.FirstOrDefault()
+                OrganizationId = contactDto.Organizations?.FirstOrDefault(),
+                Salutation = contactDto.Salutation,
+                PhotoUrl = contactDto.PhotoUrl
             };
 
             if (contactDto.Addresses != null)
@@ -149,7 +154,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             result.DefaultBillingAddress = result.Addresses.FirstOrDefault(a => (a.Type & AddressType.Billing) == AddressType.Billing);
             result.DefaultShippingAddress = result.Addresses.FirstOrDefault(a => (a.Type & AddressType.Shipping) == AddressType.Shipping);
-       
+           
             if (contactDto.Emails != null)
             {
                 result.Emails = contactDto.Emails;              
@@ -205,10 +210,13 @@ namespace VirtoCommerce.Storefront.Domain
             var retVal = new customerDto.Contact
             {
                 Id = customer.Id,
+                Name = customer.Name,
                 FirstName = customer.FirstName,
                 FullName = customer.FullName,
                 LastName = customer.LastName,
                 MiddleName = customer.MiddleName,
+                Salutation = customer.Salutation,
+                PhotoUrl = customer.PhotoUrl,
                 MemberType = "Contact",
             };
             if (!customer.UserGroups.IsNullOrEmpty())
