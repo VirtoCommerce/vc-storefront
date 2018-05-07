@@ -9,46 +9,10 @@ using pricingDto = VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Mod
 
 namespace VirtoCommerce.Storefront.Domain
 {
-    public static class PricingConverterExtension
+   
+    public static partial class PricingConverter
     {
-        public static PricingConverter PricingConverterInstance
-        {
-            get
-            {
-                return new PricingConverter();
-            }
-        }
-
-        public static PriceEvaluationContext ToPriceEvaluationContext(this WorkContext workContext, IEnumerable<Product> products = null)
-        {
-            return PricingConverterInstance.ToPriceEvaluationContext(workContext, products);
-        }
-
-        public static pricingDto.PriceEvaluationContext ToPriceEvaluationContextDto(this PriceEvaluationContext evalContext)
-        {
-            return PricingConverterInstance.ToPriceEvaluationContextDto(evalContext);
-        }
-
-        public static ProductPrice ToProductPrice(this pricingDto.Price priceDto, IEnumerable<Currency> availCurrencies, Language language)
-        {
-            return PricingConverterInstance.ToProductPrice(priceDto, availCurrencies, language);
-        }
-
-        public static Pricelist ToPricelist(this pricingDto.Pricelist pricelistDto, IEnumerable<Currency> availCurrencies, Language language)
-        {
-            return PricingConverterInstance.ToPricelist(pricelistDto, availCurrencies, language);
-        }
-
         public static TierPrice ToTierPrice(this pricingDto.Price priceDto, Currency currency)
-        {
-            return PricingConverterInstance.ToTierPrice(priceDto, currency);
-        }
-
-    }
-
-    public partial class PricingConverter
-    {
-        public virtual TierPrice ToTierPrice(pricingDto.Price priceDto, Currency currency)
         {
             var listPrice = new Money(priceDto.List ?? 0, currency);
 
@@ -59,7 +23,7 @@ namespace VirtoCommerce.Storefront.Domain
             };
         }
 
-        public virtual Pricelist ToPricelist(pricingDto.Pricelist pricelistDto, IEnumerable<Currency> availCurrencies, Language language)
+        public static Pricelist ToPricelist(this pricingDto.Pricelist pricelistDto, IEnumerable<Currency> availCurrencies, Language language)
         {
             var currency = availCurrencies.FirstOrDefault(x => x.Equals(pricelistDto.Currency)) ?? new Currency(language, pricelistDto.Currency);
             var result = new Pricelist(currency);
@@ -67,7 +31,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual ProductPrice ToProductPrice(pricingDto.Price priceDto, IEnumerable<Currency> availCurrencies, Language language)
+        public static ProductPrice ToProductPrice(this pricingDto.Price priceDto, IEnumerable<Currency> availCurrencies, Language language)
         {
             var currency = availCurrencies.FirstOrDefault(x => x.Equals(priceDto.Currency)) ?? new Currency(language, priceDto.Currency);
             var result = new ProductPrice(currency);
@@ -81,12 +45,12 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual pricingDto.PriceEvaluationContext ToPriceEvaluationContextDto(PriceEvaluationContext evalContext)
+        public static pricingDto.PriceEvaluationContext ToPriceEvaluationContextDto(this PriceEvaluationContext evalContext)
         {
             return evalContext.JsonConvert<pricingDto.PriceEvaluationContext>();
         }
 
-        public virtual PriceEvaluationContext ToPriceEvaluationContext(WorkContext workContext, IEnumerable<Product> products = null)
+        public static PriceEvaluationContext ToPriceEvaluationContext(this WorkContext workContext, IEnumerable<Product> products = null)
         {
             //Evaluate products prices
             var retVal = new PriceEvaluationContext

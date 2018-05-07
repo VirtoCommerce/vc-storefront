@@ -4,39 +4,21 @@ using contentDto = VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Mod
 
 namespace VirtoCommerce.Storefront.Domain
 {
-    public static class LinkListConverterExtension
-    {
-        public static LinkListConverter LinkListConverterInstance
-        {
-            get
-            {
-                return new LinkListConverter();
-            }
-        }
+   
 
+    public static partial class LinkListConverter
+    {
         public static MenuLinkList ToMenuLinkList(this contentDto.MenuLinkList menuLinkListDto)
         {
-            return LinkListConverterInstance.ToMenuLinkList(menuLinkListDto);
-        }
+            var result = new MenuLinkList
+            {
+                Id = menuLinkListDto.Id,
+                Name = menuLinkListDto.Name,
+                StoreId = menuLinkListDto.StoreId,
 
-        public static MenuLink ToMenuLink(this contentDto.MenuLink menuLinkDto)
-        {
-            return LinkListConverterInstance.ToMenuLink(menuLinkDto);
-        }
-    }
 
-    public partial class LinkListConverter
-    {
-        public virtual MenuLinkList ToMenuLinkList(contentDto.MenuLinkList menuLinkListDto)
-        {
-            var result = new MenuLinkList();
-
-            result.Id = menuLinkListDto.Id;
-            result.Name = menuLinkListDto.Name;
-            result.StoreId = menuLinkListDto.StoreId;
-           
-
-            result.Language = string.IsNullOrEmpty(menuLinkListDto.Language) ? Language.InvariantLanguage : new Language(menuLinkListDto.Language);
+                Language = string.IsNullOrEmpty(menuLinkListDto.Language) ? Language.InvariantLanguage : new Language(menuLinkListDto.Language)
+            };
 
             if (menuLinkListDto.MenuLinks != null)
             {
@@ -46,7 +28,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual MenuLink ToMenuLink(contentDto.MenuLink menuLinkDto)
+        public static MenuLink ToMenuLink(this contentDto.MenuLink menuLinkDto)
         {
             var result = new MenuLink();
             if (menuLinkDto.AssociatedObjectType != null)

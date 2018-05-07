@@ -11,144 +11,58 @@ using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.M
 using storeDto = VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
-{
-    public static class OrderConverterExtension
+{   
+
+    public static partial class OrderConverter
     {
-        public static OrderConverter OrderConverterInstance
-        {
-            get
-            {
-                return new OrderConverter();
-            }
-        }
-
-        public static CustomerOrder ToCustomerOrder(this orderDto.CustomerOrder orderDto, IEnumerable<Currency> availCurrencies, Language language)
-        {
-            return OrderConverterInstance.ToCustomerOrder(orderDto, availCurrencies, language);
-        }
-
-        public static TaxDetail ToTaxDetail(this orderDto.TaxDetail taxDetailDto, Currency currency)
-        {
-            return OrderConverterInstance.ToTaxDetail(taxDetailDto, currency);
-        }
-
-        public static Discount ToDiscount(this orderDto.Discount discountDto, IEnumerable<Currency> availCurrencies, Language language)
-        {
-            return OrderConverterInstance.ToDiscount(discountDto, availCurrencies, language);
-        }
-
-        public static PaymentMethod ToPaymentMethod(this storeDto.PaymentMethod dto, CustomerOrder order)
-        {
-            return OrderConverterInstance.ToPaymentMethod(dto, order);
-        }
-
-        public static PaymentIn ToOrderInPayment(this orderDto.PaymentIn paymentInDto, IEnumerable<Currency> availCurrencies, Language language)
-        {
-            return OrderConverterInstance.ToOrderInPayment(paymentInDto, availCurrencies, language);
-        }
-
-        public static orderDto.PaymentIn ToOrderPaymentInDto(this PaymentIn paymentIn)
-        {
-            return OrderConverterInstance.ToOrderPaymentInDto(paymentIn);
-        }
-        public static orderDto.BankCardInfo ToBankCardInfoDto(this BankCardInfo model)
-        {
-            return OrderConverterInstance.ToBankCardInfoDto(model);
-        }
-
-        public static LineItem ToOrderLineItem(this orderDto.LineItem lineItemDto, IEnumerable<Currency> availCurrencies, Language language)
-        {
-            return OrderConverterInstance.ToOrderLineItem(lineItemDto, availCurrencies, language);
-        }
-
-        public static Model.Order.Shipment ToOrderShipment(this orderDto.Shipment shipmentDto, IEnumerable<Currency> availCurrencies, Language language)
-        {
-            return OrderConverterInstance.ToOrderShipment(shipmentDto, availCurrencies, language);
-        }
-
-        public static ShipmentItem ToShipmentItem(this orderDto.ShipmentItem shipmentItemDto, IEnumerable<Currency> availCurrencies, Language language)
-        {
-            return OrderConverterInstance.ToShipmentItem(shipmentItemDto, availCurrencies, language);
-        }
-
-        public static ShipmentPackage ToShipmentPackage(this orderDto.ShipmentPackage shipmentPackageDto, IEnumerable<Currency> currencies, Language language)
-        {
-            return OrderConverterInstance.ToShipmentPackage(shipmentPackageDto, currencies, language);
-        }
-
-        public static orderDto.Address ToOrderAddressDto(this Address address)
-        {
-            return OrderConverterInstance.ToOrderAddressDto(address);
-        }
-
-        public static Address ToAddress(this orderDto.Address addressDto)
-        {
-            return OrderConverterInstance.ToAddress(addressDto);
-        }
-
-        public static DynamicProperty ToDynamicProperty(this orderDto.DynamicObjectProperty propertyDto)
-        {
-            return OrderConverterInstance.ToDynamicProperty(propertyDto);
-        }
-
-        public static orderDto.DynamicObjectProperty ToOrderDynamicPropertyDto(this DynamicProperty property)
-        {
-            return OrderConverterInstance.ToOrderDynamicPropertyDto(property);
-        }
-
         public static orderDto.CustomerOrderSearchCriteria ToSearchCriteriaDto(this OrderSearchCriteria criteria)
         {
-            return OrderConverterInstance.ToSearchCriteriaDto(criteria);
-        }
-    }
+            var result = new orderDto.CustomerOrderSearchCriteria
+            {
+                CustomerId = criteria.CustomerId,
 
-    public partial class OrderConverter
-    {
-        public virtual orderDto.CustomerOrderSearchCriteria ToSearchCriteriaDto(OrderSearchCriteria criteria)
-        {
-            var result = new orderDto.CustomerOrderSearchCriteria();
-            result.CustomerId = criteria.CustomerId;
-      
-            result.Skip = criteria.Start;
-            result.Take = criteria.PageSize;
-            result.Sort = criteria.Sort;
+                Skip = criteria.Start,
+                Take = criteria.PageSize,
+                Sort = criteria.Sort
+            };
 
             return result;
         }
 
-        public virtual DynamicProperty ToDynamicProperty(orderDto.DynamicObjectProperty propertyDto)
+        public static DynamicProperty ToDynamicProperty(this orderDto.DynamicObjectProperty propertyDto)
         {
             return propertyDto.JsonConvert<coreDto.DynamicObjectProperty>().ToDynamicProperty();
         }
 
-        public virtual orderDto.DynamicObjectProperty ToOrderDynamicPropertyDto(DynamicProperty property)
+        public static orderDto.DynamicObjectProperty ToOrderDynamicPropertyDto(this DynamicProperty property)
         {
             return property.ToDynamicPropertyDto().JsonConvert<orderDto.DynamicObjectProperty>();
         }
 
-        public virtual orderDto.Address ToOrderAddressDto(Address address)
+        public static orderDto.Address ToOrderAddressDto(this Address address)
         {
             return address.ToCoreAddressDto().JsonConvert<orderDto.Address>();
         }
 
-        public virtual Address ToAddress(orderDto.Address addressDto)
+        public static Address ToAddress(this orderDto.Address addressDto)
         {
             return addressDto.JsonConvert<coreDto.Address>().ToAddress();
         }
 
-        public virtual ShipmentPackage ToShipmentPackage(orderDto.ShipmentPackage shipmentPackageDto, IEnumerable<Currency> currencies, Language language)
+        public static ShipmentPackage ToShipmentPackage(this orderDto.ShipmentPackage shipmentPackageDto, IEnumerable<Currency> currencies, Language language)
         {
-            var result = new ShipmentPackage();
+            var result = new ShipmentPackage
+            {
+                BarCode = shipmentPackageDto.BarCode,
+                Id = shipmentPackageDto.Id,
 
-            result.BarCode = shipmentPackageDto.BarCode;
-            result.Id = shipmentPackageDto.Id;
-
-            result.Height = shipmentPackageDto.Height;
-            result.Weight = shipmentPackageDto.Weight;
-            result.Length = shipmentPackageDto.Length;
-            result.Width = shipmentPackageDto.Width;
-            result.WeightUnit = shipmentPackageDto.WeightUnit;
-            result.MeasureUnit = shipmentPackageDto.MeasureUnit;
+                Height = shipmentPackageDto.Height,
+                Weight = shipmentPackageDto.Weight,
+                Length = shipmentPackageDto.Length,
+                Width = shipmentPackageDto.Width,
+                WeightUnit = shipmentPackageDto.WeightUnit,
+                MeasureUnit = shipmentPackageDto.MeasureUnit
+            };
 
             if (shipmentPackageDto.Items != null)
             {
@@ -158,7 +72,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual ShipmentItem ToShipmentItem(orderDto.ShipmentItem shipmentItemDto, IEnumerable<Currency> availCurrencies, Language language)
+        public static ShipmentItem ToShipmentItem(this orderDto.ShipmentItem shipmentItemDto, IEnumerable<Currency> availCurrencies, Language language)
         {
             var result = new ShipmentItem();
 
@@ -175,7 +89,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual Shipment ToOrderShipment(orderDto.Shipment shipmentDto, IEnumerable<Currency> availCurrencies, Language language)
+        public static Shipment ToOrderShipment(this orderDto.Shipment shipmentDto, IEnumerable<Currency> availCurrencies, Language language)
         {
             var currency = availCurrencies.FirstOrDefault(x => x.Equals(shipmentDto.Currency)) ?? new Currency(language, shipmentDto.Currency);
             var result = new Shipment(currency)
@@ -254,36 +168,38 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual LineItem ToOrderLineItem(orderDto.LineItem lineItemDto, IEnumerable<Currency> availCurrencies, Language language)
+        public static LineItem ToOrderLineItem(this orderDto.LineItem lineItemDto, IEnumerable<Currency> availCurrencies, Language language)
         {
             var currency = availCurrencies.FirstOrDefault(x => x.Equals(lineItemDto.Currency)) ?? new Currency(language, lineItemDto.Currency);
 
-            var result = new LineItem(currency);
-            result.CancelledDate = lineItemDto.CancelledDate;
-            result.CancelReason = lineItemDto.CancelReason;
-            result.CatalogId = lineItemDto.CatalogId;
-            result.CategoryId = lineItemDto.CategoryId;
-            result.Height = lineItemDto.Height;
-            result.Id = lineItemDto.Id;
-            result.ImageUrl = lineItemDto.ImageUrl;
-            result.IsCancelled = lineItemDto.IsCancelled;
-            result.IsGift = lineItemDto.IsGift;
-            result.Length = lineItemDto.Length;
-            result.MeasureUnit = lineItemDto.MeasureUnit;
-            result.Name = lineItemDto.Name;
-            result.ProductId = lineItemDto.ProductId;
-            result.Quantity = lineItemDto.Quantity;
-            result.ReserveQuantity = lineItemDto.ReserveQuantity;
-            result.ShippingMethodCode = lineItemDto.ShippingMethodCode;
-            result.Sku = lineItemDto.Sku;
-            result.TaxType = lineItemDto.TaxType;
-            result.Weight = lineItemDto.Weight;
-            result.WeightUnit = lineItemDto.WeightUnit;
-            result.Width = lineItemDto.Width;
-            result.CreatedBy = lineItemDto.CreatedBy;
-            result.CreatedDate = lineItemDto.CreatedDate;
-            result.ModifiedDate = lineItemDto.ModifiedDate;
-            result.ModifiedBy = lineItemDto.ModifiedBy;
+            var result = new LineItem(currency)
+            {
+                CancelledDate = lineItemDto.CancelledDate,
+                CancelReason = lineItemDto.CancelReason,
+                CatalogId = lineItemDto.CatalogId,
+                CategoryId = lineItemDto.CategoryId,
+                Height = lineItemDto.Height,
+                Id = lineItemDto.Id,
+                ImageUrl = lineItemDto.ImageUrl,
+                IsCancelled = lineItemDto.IsCancelled,
+                IsGift = lineItemDto.IsGift,
+                Length = lineItemDto.Length,
+                MeasureUnit = lineItemDto.MeasureUnit,
+                Name = lineItemDto.Name,
+                ProductId = lineItemDto.ProductId,
+                Quantity = lineItemDto.Quantity,
+                ReserveQuantity = lineItemDto.ReserveQuantity,
+                ShippingMethodCode = lineItemDto.ShippingMethodCode,
+                Sku = lineItemDto.Sku,
+                TaxType = lineItemDto.TaxType,
+                Weight = lineItemDto.Weight,
+                WeightUnit = lineItemDto.WeightUnit,
+                Width = lineItemDto.Width,
+                CreatedBy = lineItemDto.CreatedBy,
+                CreatedDate = lineItemDto.CreatedDate,
+                ModifiedDate = lineItemDto.ModifiedDate,
+                ModifiedBy = lineItemDto.ModifiedBy
+            };
 
 
             result.ImageUrl = result.ImageUrl.RemoveLeadingUriScheme();
@@ -318,26 +234,27 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual PaymentIn ToOrderInPayment(orderDto.PaymentIn paymentIn, IEnumerable<Currency> availCurrencies, Language language)
+        public static PaymentIn ToOrderInPayment(this orderDto.PaymentIn paymentIn, IEnumerable<Currency> availCurrencies, Language language)
         {
             var currency = availCurrencies.FirstOrDefault(x => x.Equals(paymentIn.Currency)) ?? new Currency(language, paymentIn.Currency);
-            var retVal = new PaymentIn(currency);
-            
-            retVal.CancelledDate = paymentIn.CancelledDate;
-            retVal.CancelReason = paymentIn.CancelReason;
-            retVal.Comment = paymentIn.Comment;
-            retVal.CustomerId = paymentIn.CustomerId;
-            retVal.CustomerName = paymentIn.CustomerName;
-            retVal.GatewayCode = paymentIn.GatewayCode;
-            retVal.Id = paymentIn.Id;
-            retVal.IncomingDate = paymentIn.IncomingDate;
-            retVal.IsApproved = paymentIn.IsApproved;
-            retVal.IsCancelled = paymentIn.IsCancelled;
-            retVal.CreatedBy = paymentIn.CreatedBy;
-            retVal.CreatedDate = paymentIn.CreatedDate;
-            retVal.ModifiedDate = paymentIn.ModifiedDate;
-            retVal.ModifiedBy = paymentIn.ModifiedBy;
-            retVal.Number = paymentIn.Number;
+            var retVal = new PaymentIn(currency)
+            {
+                CancelledDate = paymentIn.CancelledDate,
+                CancelReason = paymentIn.CancelReason,
+                Comment = paymentIn.Comment,
+                CustomerId = paymentIn.CustomerId,
+                CustomerName = paymentIn.CustomerName,
+                GatewayCode = paymentIn.GatewayCode,
+                Id = paymentIn.Id,
+                IncomingDate = paymentIn.IncomingDate,
+                IsApproved = paymentIn.IsApproved,
+                IsCancelled = paymentIn.IsCancelled,
+                CreatedBy = paymentIn.CreatedBy,
+                CreatedDate = paymentIn.CreatedDate,
+                ModifiedDate = paymentIn.ModifiedDate,
+                ModifiedBy = paymentIn.ModifiedBy,
+                Number = paymentIn.Number
+            };
             retVal.IsCancelled = paymentIn.IsCancelled;
             retVal.Number = paymentIn.Number;
             retVal.OperationType = paymentIn.OperationType;
@@ -369,24 +286,26 @@ namespace VirtoCommerce.Storefront.Domain
             return retVal;
         }
 
-        public virtual orderDto.PaymentIn ToOrderPaymentInDto(PaymentIn payment)
+        public static orderDto.PaymentIn ToOrderPaymentInDto(this PaymentIn payment)
         {
-            var retVal = new orderDto.PaymentIn();
-            retVal.CancelledDate = payment.CancelledDate;
-            retVal.CancelReason = payment.CancelReason;
-            retVal.Comment = payment.Comment;
-            retVal.CustomerId = payment.CustomerId;
-            retVal.CustomerName = payment.CustomerName;
-            retVal.GatewayCode = payment.GatewayCode;
-            retVal.Id = payment.Id;
-            retVal.IncomingDate = payment.IncomingDate;
-            retVal.IsApproved = payment.IsApproved;
-            retVal.IsCancelled = payment.IsCancelled;
-            retVal.CreatedBy = payment.CreatedBy;
-            retVal.CreatedDate = payment.CreatedDate;
-            retVal.ModifiedDate = payment.ModifiedDate;
-            retVal.ModifiedBy = payment.ModifiedBy;
-            retVal.Number = payment.Number;
+            var retVal = new orderDto.PaymentIn
+            {
+                CancelledDate = payment.CancelledDate,
+                CancelReason = payment.CancelReason,
+                Comment = payment.Comment,
+                CustomerId = payment.CustomerId,
+                CustomerName = payment.CustomerName,
+                GatewayCode = payment.GatewayCode,
+                Id = payment.Id,
+                IncomingDate = payment.IncomingDate,
+                IsApproved = payment.IsApproved,
+                IsCancelled = payment.IsCancelled,
+                CreatedBy = payment.CreatedBy,
+                CreatedDate = payment.CreatedDate,
+                ModifiedDate = payment.ModifiedDate,
+                ModifiedBy = payment.ModifiedBy,
+                Number = payment.Number
+            };
             retVal.IsCancelled = payment.IsCancelled;
             retVal.Number = payment.Number;
             retVal.OperationType = payment.OperationType;
@@ -418,66 +337,70 @@ namespace VirtoCommerce.Storefront.Domain
 
             return retVal;
         }
-        public virtual orderDto.BankCardInfo ToBankCardInfoDto(BankCardInfo model)
+        public static orderDto.BankCardInfo ToBankCardInfoDto(this BankCardInfo model)
         {
             orderDto.BankCardInfo retVal = null;
             if (model != null)
             {
-                retVal = new orderDto.BankCardInfo();
-                retVal.BankCardCVV2 = model.BankCardCVV2;
-                retVal.BankCardMonth = model.BankCardMonth;
-                retVal.BankCardNumber = model.BankCardNumber;
-                retVal.BankCardType = model.BankCardType;
-                retVal.BankCardYear = model.BankCardYear;
-                retVal.CardholderName = model.CardholderName;
+                retVal = new orderDto.BankCardInfo
+                {
+                    BankCardCVV2 = model.BankCardCVV2,
+                    BankCardMonth = model.BankCardMonth,
+                    BankCardNumber = model.BankCardNumber,
+                    BankCardType = model.BankCardType,
+                    BankCardYear = model.BankCardYear,
+                    CardholderName = model.CardholderName
+                };
             }
 
             return retVal;
         }
 
-        public virtual Discount ToDiscount(orderDto.Discount discountDto, IEnumerable<Currency> availCurrencies, Language language)
+        public static Discount ToDiscount(this orderDto.Discount discountDto, IEnumerable<Currency> availCurrencies, Language language)
         {
             var currency = availCurrencies.FirstOrDefault(x => x.Equals(discountDto.Currency)) ?? new Currency(language, discountDto.Currency);
-            var result = new Discount(currency);
+            var result = new Discount(currency)
+            {
+                Coupon = discountDto.Coupon,
+                Description = discountDto.Description,
+                PromotionId = discountDto.PromotionId,
 
-            result.Coupon = discountDto.Coupon;
-            result.Description = discountDto.Description;
-            result.PromotionId = discountDto.PromotionId;
-
-            result.Amount = new Money(discountDto.DiscountAmount ?? 0, currency);
+                Amount = new Money(discountDto.DiscountAmount ?? 0, currency)
+            };
 
             return result;
         }
 
-        public virtual CustomerOrder ToCustomerOrder(orderDto.CustomerOrder order, IEnumerable<Currency> availCurrencies, Language language)
+        public static CustomerOrder ToCustomerOrder(this orderDto.CustomerOrder order, IEnumerable<Currency> availCurrencies, Language language)
         {
             var currency = availCurrencies.FirstOrDefault(x => x.Equals(order.Currency)) ?? new Currency(language, order.Currency);
 
-            var result = new CustomerOrder(currency);
+            var result = new CustomerOrder(currency)
+            {
+                CancelledDate = order.CancelledDate,
+                CancelReason = order.CancelReason,
+                ChannelId = order.ChannelId,
+                Comment = order.Comment,
+                CreatedBy = order.CreatedBy,
+                CreatedDate = order.CreatedDate,
+                CustomerId = order.CustomerId,
+                CustomerName = order.CustomerName,
+                EmployeeId = order.EmployeeId,
+                EmployeeName = order.EmployeeName,
+                Id = order.Id,
+                IsApproved = order.IsApproved,
+                IsCancelled = order.IsCancelled,
+                ModifiedBy = order.ModifiedBy,
+                ModifiedDate = order.ModifiedDate,
+                Number = order.Number,
+                OrganizationId = order.OrganizationId,
+                OrganizationName = order.OrganizationName,
+                Status = order.Status,
+                StoreId = order.StoreId,
+                StoreName = order.StoreName,
+                SubscriptionNumber = order.SubscriptionNumber
+            };
 
-            result.CancelledDate = order.CancelledDate;
-            result.CancelReason = order.CancelReason;
-            result.ChannelId = order.ChannelId;
-            result.Comment = order.Comment;
-            result.CreatedBy = order.CreatedBy;
-            result.CreatedDate = order.CreatedDate;
-            result.CustomerId = order.CustomerId;
-            result.CustomerName = order.CustomerName;
-            result.EmployeeId = order.EmployeeId;
-            result.EmployeeName = order.EmployeeName;
-            result.Id = order.Id;
-            result.IsApproved = order.IsApproved;
-            result.IsCancelled = order.IsCancelled;
-            result.ModifiedBy = order.ModifiedBy;
-            result.ModifiedDate = order.ModifiedDate;
-            result.Number = order.Number;
-            result.OrganizationId = order.OrganizationId;
-            result.OrganizationName = order.OrganizationName;
-            result.Status = order.Status;
-            result.StoreId = order.StoreId;
-            result.StoreName = order.StoreName;
-            result.SubscriptionNumber = order.SubscriptionNumber;
-           
 
             if (order.Addresses != null)
             {
@@ -544,29 +467,32 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual TaxDetail ToTaxDetail(orderDto.TaxDetail taxDetailDto, Currency currency)
+        public static TaxDetail ToTaxDetail(this orderDto.TaxDetail taxDetailDto, Currency currency)
         {
-            var result = new TaxDetail(currency);
-            result.Name = taxDetailDto.Name;
-            result.Amount = new Money(taxDetailDto.Amount ?? 0, currency);
-            result.Rate = new Money(taxDetailDto.Rate ?? 0, currency);
+            var result = new TaxDetail(currency)
+            {
+                Name = taxDetailDto.Name,
+                Amount = new Money(taxDetailDto.Amount ?? 0, currency),
+                Rate = new Money(taxDetailDto.Rate ?? 0, currency)
+            };
             return result;
         }
 
-        public virtual PaymentMethod ToPaymentMethod(storeDto.PaymentMethod paymentMethodDto, CustomerOrder order)
+        public static PaymentMethod ToPaymentMethod(this storeDto.PaymentMethod paymentMethodDto, CustomerOrder order)
         {
-            var retVal = new PaymentMethod(order.Currency);
+            var retVal = new PaymentMethod(order.Currency)
+            {
+                Code = paymentMethodDto.Code,
+                Description = paymentMethodDto.Currency,
+                IsAvailableForPartial = paymentMethodDto.IsAvailableForPartial ?? false,
+                LogoUrl = paymentMethodDto.LogoUrl,
+                Name = paymentMethodDto.Name,
+                PaymentMethodGroupType = paymentMethodDto.PaymentMethodGroupType,
+                PaymentMethodType = paymentMethodDto.PaymentMethodType,
+                TaxType = paymentMethodDto.TaxType,
 
-            retVal.Code = paymentMethodDto.Code;
-            retVal.Description = paymentMethodDto.Currency;
-            retVal.IsAvailableForPartial = paymentMethodDto.IsAvailableForPartial ?? false;
-            retVal.LogoUrl = paymentMethodDto.LogoUrl;
-            retVal.Name = paymentMethodDto.Name;
-            retVal.PaymentMethodGroupType = paymentMethodDto.PaymentMethodGroupType;
-            retVal.PaymentMethodType = paymentMethodDto.PaymentMethodType;
-            retVal.TaxType = paymentMethodDto.TaxType;
-
-            retVal.Priority = paymentMethodDto.Priority ?? 0;
+                Priority = paymentMethodDto.Priority ?? 0
+            };
 
             if (paymentMethodDto.Settings != null)
             {
@@ -586,12 +512,14 @@ namespace VirtoCommerce.Storefront.Domain
             return retVal;
         }
 
-        public virtual TaxDetail ToTaxDetail(storeDto.TaxDetail dto, Currency currency)
+        public static TaxDetail ToTaxDetail(this storeDto.TaxDetail dto, Currency currency)
         {
-            var result = new TaxDetail(currency);
-            result.Amount = new Money(dto.Amount ?? 0, currency);
-            result.Rate = new Money(dto.Rate ?? 0, currency);
-            result.Name = dto.Name;
+            var result = new TaxDetail(currency)
+            {
+                Amount = new Money(dto.Amount ?? 0, currency),
+                Rate = new Money(dto.Rate ?? 0, currency),
+                Name = dto.Name
+            };
             return result;
         }
     }

@@ -13,96 +13,21 @@ using marketingDto = VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
 namespace VirtoCommerce.Storefront.Domain
 {
-    public static class CatalogConverterExtension
+   
+    public static partial class CatalogConverter
     {
-        public static CatalogConverter CatalogConverterInstance => new CatalogConverter();
-
-        public static Product ToProduct(this catalogDto.Product productDto, Language currentLanguage, Currency currentCurrency, Store store)
-        {
-            return CatalogConverterInstance.ToProduct(productDto, currentLanguage, currentCurrency, store);
-        }
-
-        public static marketingDto.ProductPromoEntry ToProductPromoEntryDto(this Product product)
-        {
-            return CatalogConverterInstance.ToProductPromoEntryDto(product);
-        }
-
-        public static TaxLine[] ToTaxLines(this Product product)
-        {
-            return CatalogConverterInstance.ToTaxLines(product);
-        }
-
-        public static Image ToImage(this catalogDto.Image imageDto)
-        {
-            return CatalogConverterInstance.ToImage(imageDto);
-        }
-
-        public static Asset ToAsset(this catalogDto.Asset assetDto)
-        {
-            return CatalogConverterInstance.ToAsset(assetDto);
-        }
-
-        public static Category ToCategory(this catalogDto.Category categoryDto, Language currentLanguage, Store store)
-        {
-            return CatalogConverterInstance.ToCategory(categoryDto, currentLanguage, store);
-        }
-
-        public static Association ToAssociation(this catalogDto.ProductAssociation associationDto)
-        {
-            return CatalogConverterInstance.ToAssociation(associationDto);
-        }
-
-        public static catalogDto.CategorySearchCriteria ToCategorySearchCriteriaDto(this CategorySearchCriteria criteria, WorkContext workContext)
-        {
-            return CatalogConverterInstance.ToCategorySearchCriteriaDto(criteria, workContext);
-        }
-
-        public static catalogDto.ProductSearchCriteria ToProductSearchCriteriaDto(this ProductSearchCriteria criteria, WorkContext workContext)
-        {
-            return CatalogConverterInstance.ToProductSearchCriteriaDto(criteria, workContext);
-        }
-
-        public static catalogDto.NumericRange ToNumericRangeDto(this NumericRange range)
-        {
-            return CatalogConverterInstance.ToNumericRangeDto(range);
-        }
-
-        public static CatalogProperty ToProperty(this catalogDto.Property propertyDto, Language currentLanguage)
-        {
-            return CatalogConverterInstance.ToProperty(propertyDto, currentLanguage);
-        }
-
-        public static Aggregation ToAggregation(this catalogDto.Aggregation aggregationDto, string currentLanguage)
-        {
-            return CatalogConverterInstance.ToAggregation(aggregationDto, currentLanguage);
-        }
-
-        public static AggregationItem ToAggregationItem(this catalogDto.AggregationItem itemDto, string currentLanguage)
-        {
-            return CatalogConverterInstance.ToAggregationItem(itemDto, currentLanguage);
-        }
-
-        public static SeoInfo ToSeoInfo(this catalogDto.SeoInfo seoDto)
-        {
-            return CatalogConverterInstance.ToSeoInfo(seoDto);
-        }
-    }
-
-    public partial class CatalogConverter
-    {
-        private readonly MarkdownPipeline _markdownPipeline;
-
-        public CatalogConverter()
+        private static MarkdownPipeline _markdownPipeline;
+        static CatalogConverter()
         {
             _markdownPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         }
-
-        public virtual SeoInfo ToSeoInfo(catalogDto.SeoInfo seoDto)
+         
+        public static SeoInfo ToSeoInfo(this catalogDto.SeoInfo seoDto)
         {
             return seoDto.JsonConvert<coreDto.SeoInfo>().ToSeoInfo();
         }
 
-        public virtual Aggregation ToAggregation(catalogDto.Aggregation aggregationDto, string currentLanguage)
+        public static Aggregation ToAggregation(this catalogDto.Aggregation aggregationDto, string currentLanguage)
         {
             var result = new Aggregation
             {
@@ -133,7 +58,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual AggregationItem ToAggregationItem(catalogDto.AggregationItem itemDto, string currentLanguage)
+        public static AggregationItem ToAggregationItem(this catalogDto.AggregationItem itemDto, string currentLanguage)
         {
             var result = new AggregationItem
             {
@@ -160,7 +85,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual CatalogProperty ToProperty(catalogDto.Property propertyDto, Language currentLanguage)
+        public static CatalogProperty ToProperty(this catalogDto.Property propertyDto, Language currentLanguage)
         {
             var result = new CatalogProperty
             {
@@ -224,7 +149,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual catalogDto.ProductSearchCriteria ToProductSearchCriteriaDto(ProductSearchCriteria criteria, WorkContext workContext)
+        public static catalogDto.ProductSearchCriteria ToProductSearchCriteriaDto(this ProductSearchCriteria criteria, WorkContext workContext)
         {
             var result = new catalogDto.ProductSearchCriteria
             {
@@ -268,7 +193,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual catalogDto.NumericRange ToNumericRangeDto(NumericRange range)
+        public static catalogDto.NumericRange ToNumericRangeDto(this NumericRange range)
         {
             return new catalogDto.NumericRange
             {
@@ -279,7 +204,7 @@ namespace VirtoCommerce.Storefront.Domain
             };
         }
 
-        public virtual catalogDto.CategorySearchCriteria ToCategorySearchCriteriaDto(CategorySearchCriteria criteria, WorkContext workContext)
+        public static catalogDto.CategorySearchCriteria ToCategorySearchCriteriaDto(this CategorySearchCriteria criteria, WorkContext workContext)
         {
             var result = new catalogDto.CategorySearchCriteria
             {
@@ -307,7 +232,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual Association ToAssociation(catalogDto.ProductAssociation associationDto)
+        public static Association ToAssociation(this catalogDto.ProductAssociation associationDto)
         {
             Association result = null;
 
@@ -338,7 +263,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual Category ToCategory(catalogDto.Category categoryDto, Language currentLanguage, Store store)
+        public static Category ToCategory(this catalogDto.Category categoryDto, Language currentLanguage, Store store)
         {
             var result = new Category
             {
@@ -392,7 +317,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual Image ToImage(catalogDto.Image imageDto)
+        public static Image ToImage(this catalogDto.Image imageDto)
         {
             var result = new Image
             {
@@ -402,7 +327,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual Asset ToAsset(catalogDto.Asset assetDto)
+        public static Asset ToAsset(this catalogDto.Asset assetDto)
         {
             var result = new Asset
             {
@@ -417,7 +342,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual Product ToProduct(catalogDto.Product productDto, Language currentLanguage, Currency currentCurrency, Store store)
+        public static Product ToProduct(this catalogDto.Product productDto, Language currentLanguage, Currency currentCurrency, Store store)
         {
             var result = new Product(currentCurrency, currentLanguage)
             {
@@ -525,7 +450,7 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
 
-        public virtual marketingDto.ProductPromoEntry ToProductPromoEntryDto(Product product)
+        public static marketingDto.ProductPromoEntry ToProductPromoEntryDto(this Product product)
         {
             var result = new marketingDto.ProductPromoEntry
             {
@@ -548,7 +473,7 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
 
-        public virtual TaxLine[] ToTaxLines(Product product)
+        public static TaxLine[] ToTaxLines(this Product product)
         {
             var result = new List<TaxLine>
             {

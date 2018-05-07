@@ -9,133 +9,112 @@ using orderDto = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
 using subscriptionDto = VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
-{
-    public static class SubscriptionConverterExtension
+{   
+
+    public static partial class SubscriptionConverter
     {
-        public static SubscriptionConverter SubscriptionConverterInstance
+        public static subscriptionDto.PaymentPlan ToPaymentPlanDto(this PaymentPlan paymentPlan)
         {
-            get
+            var result = new subscriptionDto.PaymentPlan
             {
-                return new SubscriptionConverter();
-            }
+                Id = paymentPlan.Id,
+                Interval = paymentPlan.Interval.ToString(),
+                IntervalCount = paymentPlan.IntervalCount,
+                TrialPeriodDays = paymentPlan.TrialPeriodDays
+            };
+            return result;
+        }
+
+        public static PaymentPlan ToPaymentPlan(this subscriptionDto.PaymentPlan paymentPlanDto)
+        {
+            var result = new PaymentPlan
+            {
+                Id = paymentPlanDto.Id,
+                Interval = EnumUtility.SafeParse(paymentPlanDto.Interval, PaymentInterval.Months),
+                IntervalCount = paymentPlanDto.IntervalCount ?? 0,
+                TrialPeriodDays = paymentPlanDto.TrialPeriodDays ?? 0
+            };
+            return result;
+        }
+
+        public static subscriptionDto.SubscriptionSearchCriteria ToSearchCriteriaDto(this SubscriptionSearchCriteria criteria)
+        {
+            var result = new subscriptionDto.SubscriptionSearchCriteria
+            {
+                CustomerId = criteria.CustomerId,
+                Sort = criteria.Sort,
+                Number = criteria.Number,
+                Skip = criteria.Start,
+                Take = criteria.PageSize
+            };
+            result.Sort = criteria.Sort;
+
+            return result;
         }
 
         public static Subscription ToSubscription(this subscriptionDto.Subscription subscriptionDto, IEnumerable<Currency> availCurrencies, Language language)
         {
-            return SubscriptionConverterInstance.ToSubscription(subscriptionDto, availCurrencies, language);
-        }
-        public static PaymentPlan ToPaymentPlan(this subscriptionDto.PaymentPlan paymentPlanDto)
-        {
-            return SubscriptionConverterInstance.ToPaymentPlan(paymentPlanDto);
-        }
-        public static subscriptionDto.PaymentPlan ToPaymentPlanDto(this PaymentPlan paymentPlan)
-        {
-            return SubscriptionConverterInstance.ToPaymentPlanDto(paymentPlan);
-        }
-        public static subscriptionDto.SubscriptionSearchCriteria ToSearchCriteriaDto(this SubscriptionSearchCriteria criteria)
-        {
-            return SubscriptionConverterInstance.ToSearchCriteriaDto(criteria);
-        }
-
-    }
-
-    public class SubscriptionConverter
-    {
-        public virtual subscriptionDto.PaymentPlan ToPaymentPlanDto(PaymentPlan paymentPlan)
-        {
-            var result = new subscriptionDto.PaymentPlan();
-            result.Id = paymentPlan.Id;
-            result.Interval = paymentPlan.Interval.ToString();
-            result.IntervalCount = paymentPlan.IntervalCount;
-            result.TrialPeriodDays = paymentPlan.TrialPeriodDays;
-            return result;
-        }
-
-        public virtual PaymentPlan ToPaymentPlan(subscriptionDto.PaymentPlan paymentPlanDto)
-        {
-            var result = new PaymentPlan();
-            result.Id = paymentPlanDto.Id;
-            result.Interval = EnumUtility.SafeParse(paymentPlanDto.Interval, PaymentInterval.Months);
-            result.IntervalCount = paymentPlanDto.IntervalCount ?? 0;
-            result.TrialPeriodDays = paymentPlanDto.TrialPeriodDays ?? 0;
-            return result;
-        }
-
-        public virtual subscriptionDto.SubscriptionSearchCriteria ToSearchCriteriaDto(SubscriptionSearchCriteria criteria)
-        {
-            var result = new subscriptionDto.SubscriptionSearchCriteria();
-
-            result.CustomerId = criteria.CustomerId;          
-            result.Sort = criteria.Sort;
-            result.Number = criteria.Number;
-            result.Skip = criteria.Start;
-            result.Take = criteria.PageSize;
-            result.Sort = criteria.Sort;
-
-            return result;
-        }
-
-        public virtual Subscription ToSubscription(subscriptionDto.Subscription subscriptionDto, IEnumerable<Currency> availCurrencies, Language language)
-        {
             var currency = availCurrencies.FirstOrDefault(x => x.Equals(subscriptionDto.CustomerOrderPrototype.Currency)) ?? new Currency(language, subscriptionDto.CustomerOrderPrototype.Currency);
             var order = subscriptionDto.CustomerOrderPrototype.JsonConvert<orderDto.CustomerOrder>()
                                                                 .ToCustomerOrder(availCurrencies, language);
-            var result = new Subscription(currency);
-            result.Addresses = order.Addresses;
-            result.ChannelId = order.ChannelId;
-            result.Comment = order.Comment;
-            result.CreatedBy = order.CreatedBy;
-            result.CreatedDate = order.CreatedDate;
-            result.CustomerId = order.CustomerId;
-            result.CustomerName = order.CustomerName;
-            result.Discount = order.Discount;
-            result.DiscountAmount = order.DiscountAmount;
-            result.DiscountAmountWithTax = order.DiscountAmountWithTax;
-            result.Discounts = order.Discounts;
-            result.DiscountTotal = order.DiscountTotal;
-            result.DiscountTotalWithTax = order.DiscountTotalWithTax;
-            result.DynamicProperties = order.DynamicProperties;
-            result.EmployeeId = order.EmployeeId;
-            result.EmployeeName = order.EmployeeName;
-            result.InPayments = order.InPayments;
-            result.Items = order.Items;
-            result.ModifiedBy = order.ModifiedBy;
-            result.ModifiedDate = order.ModifiedDate;
-            result.OrganizationId = order.OrganizationId;
-            result.OrganizationName = order.OrganizationName;
-            result.Shipments = order.Shipments;
-            result.ShippingDiscountTotal = order.ShippingDiscountTotal;
-            result.ShippingDiscountTotalWithTax = order.ShippingDiscountTotalWithTax;
-            result.ShippingTaxTotal = order.ShippingTaxTotal;
-            result.ShippingTotal = order.ShippingTotal;
-            result.ShippingTotalWithTax = order.ShippingTotalWithTax;
-            result.StoreId = order.StoreId;
-            result.StoreName = order.StoreName;
-            result.SubTotal = order.SubTotal;
-            result.SubTotalDiscount = order.SubTotalDiscount;
-            result.SubTotalDiscountWithTax = order.SubTotalDiscountWithTax;
-            result.SubTotalTaxTotal = order.SubTotalTaxTotal;
-            result.SubTotalWithTax = order.SubTotalWithTax;
-            result.TaxDetails = order.TaxDetails;
-            result.TaxTotal = order.TaxTotal;
-            result.Total = order.Total;
+            var result = new Subscription(currency)
+            {
+                Addresses = order.Addresses,
+                ChannelId = order.ChannelId,
+                Comment = order.Comment,
+                CreatedBy = order.CreatedBy,
+                CreatedDate = order.CreatedDate,
+                CustomerId = order.CustomerId,
+                CustomerName = order.CustomerName,
+                Discount = order.Discount,
+                DiscountAmount = order.DiscountAmount,
+                DiscountAmountWithTax = order.DiscountAmountWithTax,
+                Discounts = order.Discounts,
+                DiscountTotal = order.DiscountTotal,
+                DiscountTotalWithTax = order.DiscountTotalWithTax,
+                DynamicProperties = order.DynamicProperties,
+                EmployeeId = order.EmployeeId,
+                EmployeeName = order.EmployeeName,
+                InPayments = order.InPayments,
+                Items = order.Items,
+                ModifiedBy = order.ModifiedBy,
+                ModifiedDate = order.ModifiedDate,
+                OrganizationId = order.OrganizationId,
+                OrganizationName = order.OrganizationName,
+                Shipments = order.Shipments,
+                ShippingDiscountTotal = order.ShippingDiscountTotal,
+                ShippingDiscountTotalWithTax = order.ShippingDiscountTotalWithTax,
+                ShippingTaxTotal = order.ShippingTaxTotal,
+                ShippingTotal = order.ShippingTotal,
+                ShippingTotalWithTax = order.ShippingTotalWithTax,
+                StoreId = order.StoreId,
+                StoreName = order.StoreName,
+                SubTotal = order.SubTotal,
+                SubTotalDiscount = order.SubTotalDiscount,
+                SubTotalDiscountWithTax = order.SubTotalDiscountWithTax,
+                SubTotalTaxTotal = order.SubTotalTaxTotal,
+                SubTotalWithTax = order.SubTotalWithTax,
+                TaxDetails = order.TaxDetails,
+                TaxTotal = order.TaxTotal,
+                Total = order.Total,
 
-            result.Id = subscriptionDto.Id;
-            result.Number = subscriptionDto.Number;
-            result.Balance = new Money(subscriptionDto.Balance ?? 0, currency);
-            result.Interval = EnumUtility.SafeParse(subscriptionDto.Interval, PaymentInterval.Months);
-            result.IntervalCount = subscriptionDto.IntervalCount ?? 1;
-            result.StartDate = subscriptionDto.StartDate;
-            result.EndDate = subscriptionDto.EndDate;
-            result.Status = subscriptionDto.SubscriptionStatus;
-            result.IsCancelled = subscriptionDto.IsCancelled;
-            result.CancelReason = subscriptionDto.CancelReason;
-            result.CancelledDate = subscriptionDto.CancelledDate;
-            result.TrialSart = subscriptionDto.TrialSart;
-            result.TrialEnd = subscriptionDto.TrialEnd;
-            result.TrialPeriodDays = subscriptionDto.TrialPeriodDays ?? 0;
-            result.CurrentPeriodStart = subscriptionDto.CurrentPeriodStart;
-            result.CurrentPeriodEnd = subscriptionDto.CurrentPeriodEnd;
+                Id = subscriptionDto.Id,
+                Number = subscriptionDto.Number,
+                Balance = new Money(subscriptionDto.Balance ?? 0, currency),
+                Interval = EnumUtility.SafeParse(subscriptionDto.Interval, PaymentInterval.Months),
+                IntervalCount = subscriptionDto.IntervalCount ?? 1,
+                StartDate = subscriptionDto.StartDate,
+                EndDate = subscriptionDto.EndDate,
+                Status = subscriptionDto.SubscriptionStatus,
+                IsCancelled = subscriptionDto.IsCancelled,
+                CancelReason = subscriptionDto.CancelReason,
+                CancelledDate = subscriptionDto.CancelledDate,
+                TrialSart = subscriptionDto.TrialSart,
+                TrialEnd = subscriptionDto.TrialEnd,
+                TrialPeriodDays = subscriptionDto.TrialPeriodDays ?? 0,
+                CurrentPeriodStart = subscriptionDto.CurrentPeriodStart,
+                CurrentPeriodEnd = subscriptionDto.CurrentPeriodEnd
+            };
 
             if (subscriptionDto.CustomerOrders != null)
             {

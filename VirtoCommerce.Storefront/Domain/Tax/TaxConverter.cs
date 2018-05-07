@@ -7,36 +7,11 @@ using VirtoCommerce.Storefront.Model.Tax;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
-{
-    public static class TaxConverterExtension
+{   
+
+    public static partial class TaxConverter
     {
-        public static TaxConverter TaxConverterInstance
-        {
-            get
-            {
-                return new TaxConverter();
-            }
-        }
-
-        public static coreDto.TaxEvaluationContext ToTaxEvaluationContextDto(this TaxEvaluationContext taxContext)
-        {
-            return TaxConverterInstance.ToTaxEvaluationContextDto(taxContext);
-        }
-
-        public static TaxEvaluationContext ToTaxEvaluationContext(this WorkContext workContext, IEnumerable<Product> products = null)
-        {
-            return TaxConverterInstance.ToTaxEvaluationContext(workContext, products);
-        }
-
         public static TaxRate ToTaxRate(this coreDto.TaxRate taxRateDto, Currency currency)
-        {
-            return TaxConverterInstance.ToTaxRate(taxRateDto, currency);
-        }
-    }
-
-    public partial class TaxConverter
-    {
-        public virtual TaxRate ToTaxRate(coreDto.TaxRate taxRateDto, Currency currency)
         {
             var result = new TaxRate(currency)
             {
@@ -59,7 +34,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual coreDto.TaxEvaluationContext ToTaxEvaluationContextDto(TaxEvaluationContext taxContext)
+        public static coreDto.TaxEvaluationContext ToTaxEvaluationContextDto(this TaxEvaluationContext taxContext)
         {
             var retVal = new coreDto.TaxEvaluationContext();
             retVal.Code = taxContext.Code;
@@ -102,7 +77,7 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
 
-        public virtual TaxEvaluationContext ToTaxEvaluationContext(WorkContext workContext, IEnumerable<Product> products = null)
+        public static TaxEvaluationContext ToTaxEvaluationContext(this WorkContext workContext, IEnumerable<Product> products = null)
         {
             var result = new TaxEvaluationContext(workContext.CurrentStore.Id);
             result.Id = workContext.CurrentStore.Id;

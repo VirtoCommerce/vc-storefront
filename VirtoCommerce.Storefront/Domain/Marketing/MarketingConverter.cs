@@ -11,75 +11,32 @@ using marketingDto = VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 namespace VirtoCommerce.Storefront.Domain
 {
 
-    public static class MarketingConverterExtension
+   
+
+    public static partial class MarketingConverter
     {
-        public static MarketingConverter MarketingConverterInstance
-        {
-            get
-            {
-                return new MarketingConverter();
-            }
-        }
-
-        public static PromotionEvaluationContext ToPromotionEvaluationContext(this WorkContext workContext, IEnumerable<Product> products = null)
-        {
-            return MarketingConverterInstance.ToPromotionEvaluationContext(workContext, products);
-        }
-
-        public static marketingDto.PromotionEvaluationContext ToPromotionEvaluationContextDto(this PromotionEvaluationContext promoEvaluationContext)
-        {
-            return MarketingConverterInstance.ToPromotionEvaluationContextDto(promoEvaluationContext);
-        }
-
-        public static Promotion ToWebModel(this marketingDto.Promotion promotionDto)
-        {
-            return MarketingConverterInstance.ToPromotion(promotionDto);
-        }       
-
-        public static PromotionReward ToPromotionReward(this marketingDto.PromotionReward rewardDto, Currency currency)
-        {
-            return MarketingConverterInstance.ToPromotionReward(rewardDto, currency);
-        }
-
-        public static DynamicContentItem ToDynamicContentItem(this marketingDto.DynamicContentItem contentItemDto)
-        {
-            return MarketingConverterInstance.ToDynamicContentItem(contentItemDto);
-        }
-
         public static DynamicProperty ToDynamicProperty(this marketingDto.DynamicObjectProperty propertyDto)
-        {
-            return MarketingConverterInstance.ToDynamicProperty(propertyDto);
-        }
-
-        public static marketingDto.DynamicObjectProperty ToMarketingDynamicPropertyDto(this DynamicProperty property)
-        {
-            return MarketingConverterInstance.ToMarketingDynamicPropertyDto(property);
-        }
-    }
-
-    public partial class MarketingConverter
-    {
-        public virtual DynamicProperty ToDynamicProperty(marketingDto.DynamicObjectProperty propertyDto)
         {
             return propertyDto.JsonConvert<coreDto.DynamicObjectProperty>().ToDynamicProperty();
         }
 
-        public virtual marketingDto.DynamicObjectProperty ToMarketingDynamicPropertyDto(DynamicProperty property)
+        public static marketingDto.DynamicObjectProperty ToMarketingDynamicPropertyDto(this DynamicProperty property)
         {
             return property.ToDynamicPropertyDto().JsonConvert<marketingDto.DynamicObjectProperty>();
         }
 
-        public virtual DynamicContentItem ToDynamicContentItem(marketingDto.DynamicContentItem contentItemDto)
+        public static DynamicContentItem ToDynamicContentItem(this marketingDto.DynamicContentItem contentItemDto)
         {
-            var result = new DynamicContentItem();
-
-            result.ContentType = contentItemDto.ContentType;
-            result.Description = contentItemDto.Description;
-            result.FolderId = contentItemDto.FolderId;
-            result.Id = contentItemDto.Id;
-            result.Name = contentItemDto.Name;
-            result.Outline = contentItemDto.Outline;
-            result.Path = contentItemDto.Path;
+            var result = new DynamicContentItem
+            {
+                ContentType = contentItemDto.ContentType,
+                Description = contentItemDto.Description,
+                FolderId = contentItemDto.FolderId,
+                Id = contentItemDto.Id,
+                Name = contentItemDto.Name,
+                Outline = contentItemDto.Outline,
+                Path = contentItemDto.Path
+            };
 
             if (contentItemDto.DynamicProperties != null)
             {
@@ -89,46 +46,48 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual PromotionReward ToPromotionReward(marketingDto.PromotionReward serviceModel, Currency currency)
+        public static PromotionReward ToPromotionReward(this marketingDto.PromotionReward rewardDto, Currency currency)
         {
-            var result = new PromotionReward();
+            var result = new PromotionReward
+            {
+                CategoryId = rewardDto.CategoryId,
+                Coupon = rewardDto.Coupon,
+                Description = rewardDto.Description,
+                IsValid = rewardDto.IsValid ?? false,
+                LineItemId = rewardDto.LineItemId,
+                MeasureUnit = rewardDto.MeasureUnit,
+                ProductId = rewardDto.ProductId,
+                PromotionId = rewardDto.PromotionId,
+                Quantity = rewardDto.Quantity ?? 0,
 
-            result.CategoryId = serviceModel.CategoryId;
-            result.Coupon = serviceModel.Coupon;
-            result.Description = serviceModel.Description;
-            result.IsValid = serviceModel.IsValid ?? false;
-            result.LineItemId = serviceModel.LineItemId;
-            result.MeasureUnit = serviceModel.MeasureUnit;
-            result.ProductId = serviceModel.ProductId;
-            result.PromotionId = serviceModel.PromotionId;
-            result.Quantity = serviceModel.Quantity ?? 0;
-            
-            result.Amount = (decimal)(serviceModel.Amount ?? 0);
-            result.AmountType = EnumUtility.SafeParse(serviceModel.AmountType, AmountType.Absolute);
-            result.CouponAmount = new Money(serviceModel.CouponAmount ?? 0, currency);
-            result.CouponMinOrderAmount = new Money(serviceModel.CouponMinOrderAmount ?? 0, currency);
-            result.Promotion = serviceModel.Promotion.ToWebModel();
-            result.RewardType = EnumUtility.SafeParse(serviceModel.RewardType, PromotionRewardType.CatalogItemAmountReward);
-            result.ShippingMethodCode = serviceModel.ShippingMethod;
+                Amount = (decimal)(rewardDto.Amount ?? 0),
+                AmountType = EnumUtility.SafeParse(rewardDto.AmountType, AmountType.Absolute),
+                CouponAmount = new Money(rewardDto.CouponAmount ?? 0, currency),
+                CouponMinOrderAmount = new Money(rewardDto.CouponMinOrderAmount ?? 0, currency),
+                Promotion = rewardDto.Promotion.ToPromotion(),
+                RewardType = EnumUtility.SafeParse(rewardDto.RewardType, PromotionRewardType.CatalogItemAmountReward),
+                ShippingMethodCode = rewardDto.ShippingMethod
+            };
 
             return result;
         }
 
       
 
-        public virtual Promotion ToPromotion(marketingDto.Promotion promotionDto)
+        public static Promotion ToPromotion(this marketingDto.Promotion promotionDto)
         {
-            var result = new Promotion();
-
-            result.Id = promotionDto.Id;      
-            result.Name = promotionDto.Name;
-            result.Description = promotionDto.Description;
-            result.Coupons = promotionDto.Coupons;   
+            var result = new Promotion
+            {
+                Id = promotionDto.Id,
+                Name = promotionDto.Name,
+                Description = promotionDto.Description,
+                Coupons = promotionDto.Coupons
+            };
 
             return result;
         }
 
-        public virtual PromotionEvaluationContext ToPromotionEvaluationContext(WorkContext workContext, IEnumerable<Product> products = null)
+        public static PromotionEvaluationContext ToPromotionEvaluationContext(this WorkContext workContext, IEnumerable<Product> products = null)
         {
             var result = new PromotionEvaluationContext(workContext.CurrentLanguage, workContext.CurrentCurrency)
             {
@@ -148,7 +107,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual marketingDto.PromotionEvaluationContext ToPromotionEvaluationContextDto(PromotionEvaluationContext promoEvalContext)
+        public static marketingDto.PromotionEvaluationContext ToPromotionEvaluationContextDto(this PromotionEvaluationContext promoEvalContext)
         {
             var result = new marketingDto.PromotionEvaluationContext();
 
