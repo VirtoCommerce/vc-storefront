@@ -28,7 +28,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
     }
 
     //Stub for UserManager
-    public class UserStoreStub : IUserStore<User>, IUserEmailStore<User>, IUserPasswordStore<User>, IUserLockoutStore<User>, IUserLoginStore<User>
+    public sealed class UserStoreStub : IUserStore<User>, IUserEmailStore<User>, IUserPasswordStore<User>, IUserLockoutStore<User>, IUserLoginStore<User>
     {
         private readonly ISecurity _platformSecurityApi;
         private readonly IMemoryCache _memoryCache;
@@ -324,8 +324,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public void Dispose()
         {
+            // Cleanup
         }
-        
+
     }
 
 

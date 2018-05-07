@@ -61,10 +61,10 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             return result;
         }
 
-        public async Task<ShoppingCart> GetByIdAsync(string id)
+        public async Task<ShoppingCart> GetByIdAsync(string cartId)
         {
             ShoppingCart result = null;
-            var cartDto = await _cartApi.GetCartByIdAsync(id);
+            var cartDto = await _cartApi.GetCartByIdAsync(cartId);
             if(cartDto != null)
             {
                 var currency = _workContextAccessor.WorkContext.AllCurrencies.FirstOrDefault(x => x.Equals(cartDto.Currency));
@@ -103,8 +103,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CartCacheRegion.CreateCustomerChangeToken(criteria.Customer?.Id));
-
-                var workContext = _workContextAccessor.WorkContext;
+             
                 var resultDto = await _cartApi.SearchAsync(criteria.ToSearchCriteriaDto());               
                 var result = new List<ShoppingCart>();
                 foreach(var cartDto in resultDto.Results)

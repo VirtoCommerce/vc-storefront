@@ -35,7 +35,7 @@ namespace VirtoCommerce.Storefront.Domain
                         Sort = sortInfos?.ToString()
                     };
                     var result = orderService.SearchOrders(orderSearchcriteria);
-                    return new StaticPagedList<CustomerOrder>(result, pageNumber, pageSize, result.Count());
+                    return new StaticPagedList<CustomerOrder>(result, pageNumber, pageSize, result.Count);
                 };
                 return builder.WithUserOrdersAsync(() => new MutablePagedList<CustomerOrder>(factory, 1, OrderSearchCriteria.DefaultPageSize));
             }

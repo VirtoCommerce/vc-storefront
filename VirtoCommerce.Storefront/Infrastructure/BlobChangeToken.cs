@@ -100,8 +100,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
         }
 
         private async Task<IEnumerable<CloudBlob>> ListBlobs()
-        {
-            var context = new OperationContext();
+        {            
             var blobItems = new List<IListBlobItem>();
             BlobContinuationToken token = null;
             var operationContext = new OperationContext();

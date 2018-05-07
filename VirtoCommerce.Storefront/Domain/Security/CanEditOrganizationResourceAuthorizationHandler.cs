@@ -17,14 +17,14 @@ namespace VirtoCommerce.Storefront.Domain.Security
             _workContextAccessor = workContextAccessor;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, CanEditOrganizationResourceAuthorizeRequirement requirement, Organization organization)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, CanEditOrganizationResourceAuthorizeRequirement requirement, Organization resource)
         {
 
             var workContext = _workContextAccessor.WorkContext;
             //Allow to do all things with self 
 
             var currentUserOrgId = workContext.CurrentUser?.Contact?.OrganizationId;
-            var result = currentUserOrgId != null && organization != null && currentUserOrgId == organization.Id;
+            var result = currentUserOrgId != null && resource != null && currentUserOrgId == resource.Id;
 
             if (result)
             {

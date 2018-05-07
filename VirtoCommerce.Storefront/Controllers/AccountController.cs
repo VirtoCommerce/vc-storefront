@@ -27,21 +27,17 @@ namespace VirtoCommerce.Storefront.Controllers
     {
         private readonly SignInManager<User> _signInManager;
         private readonly IEventPublisher _publisher;
-        private readonly IStorefrontSecurity _commerceCoreApi;
-        private readonly IStorefrontUrlBuilder _urlBuilder;
         private readonly StorefrontOptions _options;
         private readonly INotifications _platformNotificationApi;
 
         private readonly string[] _firstNameClaims = { ClaimTypes.GivenName, "urn:github:name", ClaimTypes.Name };
 
         public AccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<User> signInManager,
-            IEventPublisher publisher, IStorefrontSecurity commerceCoreApi, INotifications platformNotificationApi, IOptions<StorefrontOptions> options)
+            IEventPublisher publisher, INotifications platformNotificationApi, IOptions<StorefrontOptions> options)
             : base(workContextAccessor, urlBuilder)
         {
             _signInManager = signInManager;
             _publisher = publisher;
-            _commerceCoreApi = commerceCoreApi;
-            _urlBuilder = urlBuilder;
             _options = options.Value;
             _platformNotificationApi = platformNotificationApi;
         }
@@ -153,13 +149,10 @@ namespace VirtoCommerce.Storefront.Controllers
                 var user = await _signInManager.UserManager.FindByEmailAsync(register.Email);
                 if (user != null)
                 {
-                    if(user.UserName != register.UserName)
-                    {
-                        user.UserName = register.UserName;
-                    }
                     result = await _signInManager.UserManager.ResetPasswordAsync(user, register.Token, register.Password);
                     if (result.Succeeded)
                     {
+                        user.UserName = register.UserName;
                         user.Contact = register.ToContact();
                         user.Contact.OrganizationId = register.OrganizationId;
                         result = await _signInManager.UserManager.UpdateAsync(user);

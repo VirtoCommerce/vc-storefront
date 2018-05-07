@@ -164,7 +164,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 user.StoreId = WorkContext.CurrentStore.Id;
                
                 result = await _userManager.CreateAsync(user, registration.Password);
-                if (result.Succeeded == true)
+                if (result.Succeeded)
                 {
                     user = await _userManager.FindByNameAsync(user.UserName);
                     await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, registration));

@@ -27,14 +27,14 @@ namespace VirtoCommerce.Storefront.Infrastructure
             }
         }
 
-        public IChangeToken CreateBlobChangeToken(string key)
+        public IChangeToken CreateBlobChangeToken(string path)
         {
             if (!_options.PollForChanges || _container == null)
             {
                 return new CancellationChangeToken(new CancellationToken());
             }
 
-            return new BlobChangeToken(key, _container, _options);
+            return new BlobChangeToken(path, _container, _options);
         }
     }
 }

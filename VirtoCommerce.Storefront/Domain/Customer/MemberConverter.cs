@@ -169,7 +169,7 @@ namespace VirtoCommerce.Storefront.Domain
                 {
                     Id = x.Id,
                     Roles = x.Roles?.Select(role => role.Name).ToList(),
-                    IsLockedOut =  x.LockoutEndDateUtc != null ? x.LockoutEndDateUtc.Value > DateTime.UtcNow : false,
+                    IsLockedOut =   (x.LockoutEndDateUtc ?? DateTime.MinValue) > DateTime.UtcNow,
                     UserName = x.UserName,
                 });
             }

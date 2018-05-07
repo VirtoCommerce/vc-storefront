@@ -19,20 +19,20 @@ namespace VirtoCommerce.Storefront.Model.Security
             public const string Customer = "Customer";
             public const string Operator = "Operator";
             public const string Administrator = "Administrator";
-            public static Role OrganizationMaintainer = new Role
+            public static readonly Role OrganizationMaintainer = new Role
             {
                 Id = "org-maintainer",
                 Name = "Organization maintainer",
                 Permissions = new string[] { Permissions.CanViewUsers, Permissions.CanCreateUsers, Permissions.CanSeeOrganizationDetail, Permissions.CanDeleteUsers, Permissions.CanEditOrganization, Permissions.CanEditUsers, Permissions.CanInviteUsers }
             };
-            public static Role OrganizationEmployee = new Role
+            public static readonly Role OrganizationEmployee = new Role
             {
                 Id = "org-employee",
                 Name = "Organization employee",
                 Permissions = new string[] { Permissions.CanSeeOrganizationDetail } 
             };
 
-            public static IEnumerable<Role> AllRoles = new[] { OrganizationMaintainer, OrganizationEmployee };
+            public static readonly IEnumerable<Role> AllRoles = new[] { OrganizationMaintainer, OrganizationEmployee };
         }
 
         public static class Permissions
@@ -46,7 +46,7 @@ namespace VirtoCommerce.Storefront.Model.Security
             public const string CanDeleteUsers = "storefront:user:delete";
             public const string CanViewUsers = "storefront:user:view";
 
-            public static IEnumerable<string> AllPermissions = new [] { CanViewUsers, CanResetCache, CanSeeOrganizationDetail, CanEditOrganization, CanInviteUsers, CanEditUsers, CanDeleteUsers, CanCreateUsers };
+            public static readonly IEnumerable<string> AllPermissions = new [] { CanViewUsers, CanResetCache, CanSeeOrganizationDetail, CanEditOrganization, CanInviteUsers, CanEditUsers, CanDeleteUsers, CanCreateUsers };
         }
     }
 }
