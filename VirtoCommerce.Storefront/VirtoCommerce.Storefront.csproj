@@ -10,9 +10,9 @@
     <PackageLicenseUrl>https://virtocommerce.com/open-source-license</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/VirtoCommerce/vc-storefront-core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/VirtoCommerce/vc-storefront-core</RepositoryUrl>
-    <AssemblyVersion>3.1.0.0</AssemblyVersion>
-    <FileVersion>3.0.10.0</FileVersion>
-    <Version>3.1.0</Version>
+    <AssemblyVersion>3.1.1.0</AssemblyVersion>
+    <FileVersion>3.1.1.0</FileVersion>
+    <Version>3.1.1</Version>
     <Copyright>Copyright © 2011-2018 Virto Commerce - an enterprise Microsoft ecommerce platform ©. All rights reserved</Copyright>
     <PackageIconUrl>https://virtocommerce.com/themes/assets/logo.jpg</PackageIconUrl>
     <PackageReleaseNotes></PackageReleaseNotes>
@@ -25,10 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\%2a%2a" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="IISUrlRewrite.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -37,7 +33,6 @@
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="2.0.0-rc2-final" />
     <PackageReference Include="AspNet.Security.OAuth.StackExchange" Version="2.0.0-rc2-final" />
-    <PackageReference Include="FluentValidation" Version="7.5.2" />
     <PackageReference Include="Markdig" Version="0.13.3" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.2.0-beta1" />
     <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.5.0-beta1" />
@@ -59,7 +54,6 @@
 
   <ItemGroup>
     <Folder Include="AutoRestClients\" />
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
