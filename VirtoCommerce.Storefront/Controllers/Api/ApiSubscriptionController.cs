@@ -31,8 +31,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             searchCriteria.CustomerId = WorkContext.CurrentUser.Id;
 
             var result = await _subscriptionService.SearchSubscriptionsAsync(searchCriteria);
-        
-            return Json(result);
+
+            return Json(new { TotalCount = result.TotalItemCount, Results = result.ToArray() });
         }
 
         // GET: storefrontapi/subscriptions/{number}
