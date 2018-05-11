@@ -1,4 +1,4 @@
-﻿namespace VirtoCommerce.Storefront.Model
+namespace VirtoCommerce.Storefront.Model
 {
     /// <summary>
     /// Represents bank card information

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using System.IO;
 
 namespace VirtoCommerce.Storefront.Extensions

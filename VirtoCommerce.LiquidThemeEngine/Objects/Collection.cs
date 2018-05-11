@@ -1,4 +1,4 @@
-﻿using DotLiquid;
+using DotLiquid;
 using System.Runtime.Serialization;
 using VirtoCommerce.Storefront.Model.Common;
 

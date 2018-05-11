@@ -1,4 +1,4 @@
-﻿using DotLiquid;
+using DotLiquid;
 using PagedList.Core;
 using System;
 using System.Collections;

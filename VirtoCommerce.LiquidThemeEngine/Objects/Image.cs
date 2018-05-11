@@ -1,4 +1,4 @@
-﻿using DotLiquid;
+using DotLiquid;
 using Newtonsoft.Json;
 using System.Runtime.Serialization;
 

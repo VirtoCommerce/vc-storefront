@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using VirtoCommerce.Storefront.Model.Common;
 

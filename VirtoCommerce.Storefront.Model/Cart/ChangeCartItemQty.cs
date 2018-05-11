@@ -1,4 +1,4 @@
-﻿namespace VirtoCommerce.Storefront.Model.Cart
+namespace VirtoCommerce.Storefront.Model.Cart
 {
     public partial class ChangeCartItemQty
     {

@@ -1,4 +1,4 @@
-﻿namespace VirtoCommerce.Storefront.Model
+namespace VirtoCommerce.Storefront.Model
 {
     public partial class Country
     {

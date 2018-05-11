@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using VirtoCommerce.Storefront.Model.Common.Messages;
 
 namespace VirtoCommerce.Storefront.Model.Common.Events

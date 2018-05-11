@@ -1,4 +1,4 @@
-﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;

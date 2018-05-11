@@ -1,4 +1,4 @@
-﻿namespace VirtoCommerce.LiquidThemeEngine.Filters
+namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
     /// <summary>
     /// https://docs.shopify.com/themes/liquid-documentation/filters/html-filters

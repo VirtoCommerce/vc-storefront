@@ -1,4 +1,4 @@
-﻿using DotLiquid;
+using DotLiquid;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects

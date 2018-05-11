@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Rest;
 
 namespace VirtoCommerce.Storefront.Common

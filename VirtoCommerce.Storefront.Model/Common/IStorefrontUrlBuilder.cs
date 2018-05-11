@@ -1,4 +1,4 @@
-﻿using VirtoCommerce.Storefront.Model.Stores;
+using VirtoCommerce.Storefront.Model.Stores;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {

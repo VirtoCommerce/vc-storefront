@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model;
 
 namespace VirtoCommerce.Storefront.Routing

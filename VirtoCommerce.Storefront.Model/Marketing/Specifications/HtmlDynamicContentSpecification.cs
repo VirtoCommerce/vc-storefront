@@ -1,4 +1,4 @@
-﻿using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Specifications;
 
 namespace VirtoCommerce.Storefront.Model.Marketing

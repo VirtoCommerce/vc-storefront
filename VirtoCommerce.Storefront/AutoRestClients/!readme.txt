@@ -1,4 +1,4 @@
-﻿Install latest AutoRest v1 globally via 'npm install -g autorest@1.2.2' command
+Install latest AutoRest v1 globally via 'npm install -g autorest@1.2.2' command
  
 1. Open Tools > NuGet Package Manager > Package Manager Console
 2. Run the following commands to generate API clients:

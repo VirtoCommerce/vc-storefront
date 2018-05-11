@@ -1,4 +1,4 @@
-﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Http;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;

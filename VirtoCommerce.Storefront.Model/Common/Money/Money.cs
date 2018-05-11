@@ -1,4 +1,4 @@
-﻿/*
+/*
  * This Money class gives you the ability to work with money of multiple currencies
  * as if it were numbers.
  * It looks and behaves like a decimal.

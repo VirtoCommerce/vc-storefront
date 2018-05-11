@@ -1,4 +1,4 @@
-﻿namespace VirtoCommerce.Storefront.Model.BulkOrder
+namespace VirtoCommerce.Storefront.Model.BulkOrder
 {
     public class BulkOrderItem
     {

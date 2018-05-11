@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.FileProviders.Physical;
+using Microsoft.Extensions.FileProviders.Physical;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using System;

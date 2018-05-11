@@ -1,4 +1,4 @@
-﻿using DotLiquid;
+using DotLiquid;
 using System.Runtime.Serialization;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
@@ -23,7 +23,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public string CategoryId { get; set; }
 
         /// <summary>
-        /// Returns the calue of variant catalog ID
+        /// Returns the value of variant catalog ID
         /// </summary>
         [DataMember]
         public string CatalogId { get; set; }

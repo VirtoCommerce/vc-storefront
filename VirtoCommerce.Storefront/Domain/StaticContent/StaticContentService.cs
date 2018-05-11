@@ -1,4 +1,4 @@
-﻿using Markdig;
+using Markdig;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Primitives;
 using System;

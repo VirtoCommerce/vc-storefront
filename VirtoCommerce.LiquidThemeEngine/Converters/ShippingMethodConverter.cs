@@ -1,4 +1,4 @@
-﻿using VirtoCommerce.LiquidThemeEngine.Objects;
+using VirtoCommerce.LiquidThemeEngine.Objects;
 using VirtoCommerce.Storefront.Model.Order;
 
 namespace VirtoCommerce.LiquidThemeEngine.Converters

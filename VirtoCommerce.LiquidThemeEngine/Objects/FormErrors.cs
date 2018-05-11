@@ -1,4 +1,4 @@
-﻿using DotLiquid;
+using DotLiquid;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections;
 using System.Collections.Generic;

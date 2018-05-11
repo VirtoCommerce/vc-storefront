@@ -1,4 +1,4 @@
-﻿using VirtoCommerce.Storefront.Common;
+using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Inventory;
 using inventoryDto = VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models;

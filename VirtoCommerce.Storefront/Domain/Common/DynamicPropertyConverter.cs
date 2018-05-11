@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 using System.Linq;
 using VirtoCommerce.Storefront.Model;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;

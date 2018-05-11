@@ -1,4 +1,4 @@
-﻿namespace VirtoCommerce.Storefront.Model.StaticContent
+namespace VirtoCommerce.Storefront.Model.StaticContent
 {
     public partial class StaticContentSearchCriteria
     {

@@ -1,4 +1,4 @@
-﻿using DotLiquid;
+using DotLiquid;
 using System;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects

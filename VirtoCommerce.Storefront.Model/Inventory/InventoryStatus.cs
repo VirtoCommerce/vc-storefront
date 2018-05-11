@@ -1,4 +1,4 @@
-﻿namespace VirtoCommerce.Storefront.Model.Inventory
+namespace VirtoCommerce.Storefront.Model.Inventory
 {
     public enum InventoryStatus
     {

@@ -1,4 +1,4 @@
-﻿using DotLiquid;
+using DotLiquid;
 using DotLiquid.Exceptions;
 using DotLiquid.Util;
 using PagedList.Core;

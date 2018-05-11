@@ -1,4 +1,4 @@
-﻿namespace VirtoCommerce.LiquidThemeEngine.Objects
+namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
     public interface ILiquidContains
     {

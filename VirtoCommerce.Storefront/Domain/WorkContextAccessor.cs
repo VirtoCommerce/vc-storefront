@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using VirtoCommerce.Storefront.Model;
 
 namespace VirtoCommerce.Storefront.Domain

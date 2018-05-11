@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Text.Encodings.Web;
 using DotLiquid;
 using Microsoft.AspNetCore.Antiforgery;

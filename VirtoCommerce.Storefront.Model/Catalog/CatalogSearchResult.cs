@@ -1,4 +1,4 @@
-﻿using PagedList.Core;
+using PagedList.Core;
 
 namespace VirtoCommerce.Storefront.Model.Catalog
 {

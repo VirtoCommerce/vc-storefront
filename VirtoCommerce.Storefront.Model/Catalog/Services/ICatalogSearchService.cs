@@ -1,4 +1,4 @@
-﻿using PagedList.Core;
+using PagedList.Core;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model.Catalog;
 

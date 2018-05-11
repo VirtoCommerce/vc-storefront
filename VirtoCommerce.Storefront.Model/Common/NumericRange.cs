@@ -1,4 +1,4 @@
-﻿namespace VirtoCommerce.Storefront.Model.Common
+namespace VirtoCommerce.Storefront.Model.Common
 {
     public class NumericRange : ValueObject
     {

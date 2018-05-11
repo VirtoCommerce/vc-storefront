@@ -1,4 +1,4 @@
-﻿namespace VirtoCommerce.Storefront.Infrastructure
+namespace VirtoCommerce.Storefront.Infrastructure
 {
     public class RequireHttpsOptions
     {

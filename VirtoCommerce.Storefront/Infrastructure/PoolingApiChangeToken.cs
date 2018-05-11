@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.Threading;
 using VirtoCommerce.Storefront.AutoRestClients.CacheModuleApi;

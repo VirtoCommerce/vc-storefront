@@ -1,4 +1,4 @@
-﻿namespace VirtoCommerce.Storefront.Model.Catalog
+namespace VirtoCommerce.Storefront.Model.Catalog
 {
     public partial class Aggregation
     {

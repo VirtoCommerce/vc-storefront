@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using PagedList.Core;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,4 +1,4 @@
-﻿namespace VirtoCommerce.Storefront.Model.Common.Messages
+namespace VirtoCommerce.Storefront.Model.Common.Messages
 {
     public interface IMessage
     { }

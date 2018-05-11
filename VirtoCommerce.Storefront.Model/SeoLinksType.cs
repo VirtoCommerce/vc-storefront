@@ -1,4 +1,4 @@
-﻿namespace VirtoCommerce.Storefront.Model
+namespace VirtoCommerce.Storefront.Model
 {
     /// <summary>
     /// Determines how to generate links for products and categories.

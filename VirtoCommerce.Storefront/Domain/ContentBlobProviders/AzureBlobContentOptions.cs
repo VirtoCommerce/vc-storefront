@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace VirtoCommerce.Storefront.Domain

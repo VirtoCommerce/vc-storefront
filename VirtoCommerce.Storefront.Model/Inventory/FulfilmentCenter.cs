@@ -1,4 +1,4 @@
-﻿using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Inventory
 {

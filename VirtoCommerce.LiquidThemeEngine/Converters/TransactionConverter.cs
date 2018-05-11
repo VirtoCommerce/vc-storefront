@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 using StorefrontModel = VirtoCommerce.Storefront.Model.Order;
 

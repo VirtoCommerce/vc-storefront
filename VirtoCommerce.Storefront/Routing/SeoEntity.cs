@@ -1,4 +1,4 @@
-﻿namespace VirtoCommerce.Storefront.Routing
+namespace VirtoCommerce.Storefront.Routing
 {
     public class SeoEntity
     {

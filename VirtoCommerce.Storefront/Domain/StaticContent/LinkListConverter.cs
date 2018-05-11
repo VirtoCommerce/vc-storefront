@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using VirtoCommerce.Storefront.Model;
 using contentDto = VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models;
 

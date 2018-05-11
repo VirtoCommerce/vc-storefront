@@ -1,4 +1,4 @@
-﻿namespace VirtoCommerce.Storefront.Model.Quote
+namespace VirtoCommerce.Storefront.Model.Quote
 {
     public partial class TierPriceFormModel
     {

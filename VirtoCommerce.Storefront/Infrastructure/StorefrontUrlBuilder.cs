@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Extensions;

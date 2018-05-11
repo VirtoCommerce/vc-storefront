@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model.BulkOrder;
 using VirtoCommerce.Storefront.Model.Catalog;

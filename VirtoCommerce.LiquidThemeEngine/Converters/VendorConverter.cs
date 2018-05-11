@@ -1,4 +1,4 @@
-﻿using PagedList.Core;
+using PagedList.Core;
 using System.Linq;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 using VirtoCommerce.Storefront.Model.Common;

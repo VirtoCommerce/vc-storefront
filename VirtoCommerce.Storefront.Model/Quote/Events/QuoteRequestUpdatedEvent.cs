@@ -1,4 +1,4 @@
-﻿using VirtoCommerce.Storefront.Model.Common.Events;
+using VirtoCommerce.Storefront.Model.Common.Events;
 
 namespace VirtoCommerce.Storefront.Model.Quote.Events
 {

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 
 namespace VirtoCommerce.LiquidThemeEngine.Operators

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using VirtoCommerce.Storefront.Model.Recommendations;
 using dto = VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi.Models;
 

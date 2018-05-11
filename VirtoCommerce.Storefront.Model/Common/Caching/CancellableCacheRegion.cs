@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
+using Microsoft.Extensions.Primitives;
 using System.Threading;
 
 namespace VirtoCommerce.Storefront.Model.Common.Caching

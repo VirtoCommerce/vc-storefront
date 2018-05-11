@@ -1,4 +1,4 @@
-﻿using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain

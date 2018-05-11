@@ -1,4 +1,4 @@
-﻿using DotLiquid;
+using DotLiquid;
 using System;
 using System.Runtime.Serialization;
 

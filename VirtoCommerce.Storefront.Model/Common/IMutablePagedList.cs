@@ -1,4 +1,4 @@
-﻿using PagedList.Core;
+using PagedList.Core;
 using System.Collections.Generic;
 
 namespace VirtoCommerce.Storefront.Model.Common
