@@ -9,66 +9,56 @@ using VirtoCommerce.Storefront.Model.Security;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
-    public class UserPrincipalFactory : IUserClaimsPrincipalFactory<User>
+    public class UserPrincipalFactory : UserClaimsPrincipalFactory<User>
     {
-        private readonly IdentityOptions _options;
 
-        public UserPrincipalFactory(IOptions<IdentityOptions> optionsAccessor)
+        public UserPrincipalFactory(UserManager<User> userManager, IOptions<IdentityOptions> optionsAccessor)
+            :base(userManager, optionsAccessor)
         {
-            _options = optionsAccessor?.Value ?? new IdentityOptions();
         }
 
-        public Task<ClaimsPrincipal> CreateAsync(User user)
+        protected override async Task<ClaimsIdentity> GenerateClaimsAsync(User user)
         {
-            //Create first anonymous identity
-            var identity = new ClaimsIdentity();
-            if(user.IsRegisteredUser)
-            {
-                //https://stackoverflow.com/questions/45261732/user-identity-isauthenticated-always-false-in-net-core-custom-authentication
-                identity = new ClaimsIdentity("Registered");
-            }
-
-            identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
-            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
-
+            var result = await base.GenerateClaimsAsync(user);
+                     
             if (user.IsAdministrator)
             {
-                identity.AddClaim(new Claim(ClaimTypes.Role, SecurityConstants.Roles.Administrator));
+                result.AddClaim(new Claim(ClaimTypes.Role, SecurityConstants.Roles.Administrator));
             }
 
             if (user.SelectedCurrencyCode != null)
             {
-                identity.AddClaim(new Claim(SecurityConstants.Claims.CurrencyClaimType, user.SelectedCurrencyCode));
+                result.AddClaim(new Claim(SecurityConstants.Claims.CurrencyClaimType, user.SelectedCurrencyCode));
             }
 
             if (!string.IsNullOrEmpty(user.OperatorUserName))
             {
-                identity.AddClaim(new Claim(SecurityConstants.Claims.OperatorUserNameClaimType, user.OperatorUserName));
+                result.AddClaim(new Claim(SecurityConstants.Claims.OperatorUserNameClaimType, user.OperatorUserName));
             }
 
             if (!string.IsNullOrEmpty(user.OperatorUserId))
             {
-                identity.AddClaim(new Claim(SecurityConstants.Claims.OperatorUserIdClaimType, user.OperatorUserId));
-                identity.AddClaim(new Claim(SecurityConstants.Claims.OperatorUserNameClaimType, user.OperatorUserName));
+                result.AddClaim(new Claim(SecurityConstants.Claims.OperatorUserIdClaimType, user.OperatorUserId));
+                result.AddClaim(new Claim(SecurityConstants.Claims.OperatorUserNameClaimType, user.OperatorUserName));
             }
 
-            if(!user.Permissions.IsNullOrEmpty())
+            if (!user.Permissions.IsNullOrEmpty())
             {
-                foreach(var permission in user.Permissions)
+                foreach (var permission in user.Permissions)
                 {
-                    identity.AddClaim(new Claim(SecurityConstants.Claims.PermissionClaimType, permission));
+                    result.AddClaim(new Claim(SecurityConstants.Claims.PermissionClaimType, permission));
                 }
             }
             if (!user.Roles.IsNullOrEmpty())
             {
                 foreach (var role in user.Roles)
                 {
-                    identity.AddClaim(new Claim(ClaimTypes.Role, role.Id));
+                    result.AddClaim(new Claim(ClaimTypes.Role, role.Id));
                 }
             }
-            var principal = new ClaimsPrincipal(identity);
-
-            return Task.FromResult(principal);
+        
+            return result;
         }
+      
     }
 }

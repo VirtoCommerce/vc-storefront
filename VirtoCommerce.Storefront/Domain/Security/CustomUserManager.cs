@@ -28,7 +28,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
     }
 
     //Stub for UserManager
-    public sealed class UserStoreStub : IUserStore<User>, IUserEmailStore<User>, IUserPasswordStore<User>, IUserLockoutStore<User>, IUserLoginStore<User>
+    public sealed class UserStoreStub : IUserStore<User>, IUserEmailStore<User>, IUserPasswordStore<User>, IUserLockoutStore<User>, IUserLoginStore<User>, IUserSecurityStampStore<User>
     {
         private readonly ISecurity _platformSecurityApi;
         private readonly IMemoryCache _memoryCache;
@@ -322,11 +322,25 @@ namespace VirtoCommerce.Storefront.Domain.Security
         }
         #endregion
 
+        #region IUserSecurityStampStore<User> members
+        public Task SetSecurityStampAsync(User user, string stamp, CancellationToken cancellationToken)
+        {
+            user.SecurityStamp = stamp;
+            return Task.CompletedTask;
+        }
+
+        public Task<string> GetSecurityStampAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.SecurityStamp);
+        } 
+        #endregion
+
         public void Dispose()
         {
             // Cleanup
         }
 
+     
     }
 
 
