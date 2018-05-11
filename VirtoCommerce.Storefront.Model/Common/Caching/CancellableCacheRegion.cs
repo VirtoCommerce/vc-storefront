@@ -11,11 +11,11 @@ namespace VirtoCommerce.Storefront.Model.Common.Caching
        
         public static IChangeToken CreateChangeToken()
         {
-            if(_regionTokenSource == null)
+            if(_regionChangeToken == null)
             {
                 lock (_lock)
                 {
-                    if (_regionTokenSource == null)
+                    if (_regionChangeToken == null)
                     {
                         _regionTokenSource = new CancellationTokenSource();
                         _regionChangeToken = new CancellationChangeToken(_regionTokenSource.Token);

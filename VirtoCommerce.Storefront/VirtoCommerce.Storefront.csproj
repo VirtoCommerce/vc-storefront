@@ -10,18 +10,22 @@
     <PackageLicenseUrl>https://virtocommerce.com/open-source-license</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/VirtoCommerce/vc-storefront-core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/VirtoCommerce/vc-storefront-core</RepositoryUrl>
-    <AssemblyVersion>3.1.1.0</AssemblyVersion>
-    <FileVersion>3.1.1.0</FileVersion>
-    <Version>3.1.1</Version>
+    <AssemblyVersion>3.1.2.0</AssemblyVersion>
+    <FileVersion>3.1.2.0</FileVersion>
+    <Version>3.1.2</Version>
     <Copyright>Copyright © 2011-2018 Virto Commerce - an enterprise Microsoft ecommerce platform ©. All rights reserved</Copyright>
     <PackageIconUrl>https://virtocommerce.com/themes/assets/logo.jpg</PackageIconUrl>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <ApplicationInsightsResourceId>/subscriptions/bb0218ea-8621-40d8-811e-e3a17bc72362/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/VirtoCommerce.Storefront</ApplicationInsightsResourceId>
-    <ApplicationInsightsAnnotationResourceId>/subscriptions/bb0218ea-8621-40d8-811e-e3a17bc72362/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/VirtoCommerce.Storefront</ApplicationInsightsAnnotationResourceId>
+    <!--Remove later when Azure apps has been updated-->
+    <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Routing\StorefrontRouteExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\%2a%2a" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,16 +37,16 @@
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="2.0.0-rc2-final" />
     <PackageReference Include="AspNet.Security.OAuth.StackExchange" Version="2.0.0-rc2-final" />
-    <PackageReference Include="Markdig" Version="0.13.3" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.2.0-beta1" />
-    <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.5.0-beta1" />
-    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.5.0-beta1" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.0.0" />
-    <PackageReference Include="Microsoft.SyndicationFeed.ReaderWriter" Version="1.0.0" />
+    <PackageReference Include="Markdig" Version="0.15.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.2.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.6.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.5.1" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.0.3" />
+    <PackageReference Include="Microsoft.SyndicationFeed.ReaderWriter" Version="1.0.2" />
     <PackageReference Include="MimeTypes" Version="1.0.6" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
-    <PackageReference Include="Scrutor" Version="2.1.2" />
+    <PackageReference Include="Scrutor" Version="2.2.2" />
     <PackageReference Include="VirtoCommerce.Tools" Version="1.2.0" />
     <PackageReference Include="YamlDotNet.NetCore" Version="1.0.0" />
   </ItemGroup>
@@ -54,6 +58,7 @@
 
   <ItemGroup>
     <Folder Include="AutoRestClients\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
