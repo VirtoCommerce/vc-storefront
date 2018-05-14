@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
@@ -281,7 +281,9 @@ namespace VirtoCommerce.Storefront
             app.UseMiddleware<WorkContextBuildMiddleware>();
             app.UseMiddleware<StoreMaintenanceMiddleware>();
             app.UseMiddleware<NoLiquidThemeMiddleware>();
+            app.UseMiddleware<CreateStorefrontRolesMiddleware>();
             app.UseMiddleware<ApiErrorHandlingMiddleware>();
+            
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
 
@@ -307,9 +309,6 @@ namespace VirtoCommerce.Storefront
             {
                 routes.MapStorefrontRoutes();
             });
-
-            app.UseStorefrontRoles();
-
 
         }
     }

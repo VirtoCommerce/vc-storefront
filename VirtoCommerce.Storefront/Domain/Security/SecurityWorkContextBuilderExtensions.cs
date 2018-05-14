@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -11,7 +11,7 @@ using VirtoCommerce.Storefront.Model.Security.Specifications;
 namespace VirtoCommerce.Storefront.Domain.Security
 {
     public static class SecurityWorkContextBuilderExtensions
-    {
+    {      
         public static async Task WithCurrentUserAsync(this IWorkContextBuilder builder)
         {
             var serviceProvider = builder.HttpContext.RequestServices;
