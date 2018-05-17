@@ -25,25 +25,15 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 Caption = at.DisplayName,
             }).ToList();
 
-            var user = new User
+            var user = await signInManager.UserManager.GetUserAsync(builder.HttpContext.User);
+            //User doesn't have permissions for login to current store 
+            //need to do sign out 
+            if (user != null && !new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(builder.WorkContext.CurrentStore))
             {
-                Id = builder.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier),
-                UserName = builder.HttpContext.User.FindFirstValue(ClaimTypes.Name)
-            };
-
-            var identity = builder.HttpContext.User.Identity;
-            if (identity.IsAuthenticated && user.UserName != SecurityConstants.AnonymousUsername)
-            {
-                user = await signInManager.UserManager.FindByNameAsync(identity.Name);
-                //User has been removed from storage or current store is not allowed for signed in user
-                //need to do sign out 
-                if (user == null || !new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(builder.WorkContext.CurrentStore))
-                {
-                    await signInManager.SignOutAsync();
-                    user = null;
-                }              
+                await signInManager.SignOutAsync();
+                user = null;
             }
-
+            //Login as a new anonymous user
             if (user == null || user.IsTransient())
             {
                 user = new User
@@ -59,10 +49,6 @@ namespace VirtoCommerce.Storefront.Domain.Security
                     await signInManager.SignInAsync(user, false);
                 }
             }
-            //Restore some properties from claims
-            user.OperatorUserId = builder.HttpContext.User.FindFirstValue(SecurityConstants.Claims.OperatorUserIdClaimType);
-            user.OperatorUserName = builder.HttpContext.User.FindFirstValue(SecurityConstants.Claims.OperatorUserNameClaimType);
-            user.SelectedCurrencyCode = builder.HttpContext.User.FindFirstValue(SecurityConstants.Claims.CurrencyClaimType);
             builder.WorkContext.CurrentUser = user;
         }
 

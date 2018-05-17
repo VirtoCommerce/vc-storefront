@@ -137,7 +137,7 @@ namespace VirtoCommerce.Storefront
 
             //Identity overrides for use remote user storage
             services.AddSingleton<IUserStore<User>, UserStoreStub>();
-            services.AddSingleton<IUserClaimsPrincipalFactory<User>, UserPrincipalFactory>();
+            services.AddSingleton<IRoleStore<Role>, UserStoreStub>();
             services.AddScoped<UserManager<User>, CustomUserManager>();
 
             //Resource-based authorization that requires API permissions for some operations
@@ -197,7 +197,7 @@ namespace VirtoCommerce.Storefront
             //This line is required in order to use the old Identity V2 hashes to prevent rehashes passwords for platform users which login in the storefront
             //and it can lead to platform access denied for them. (TODO: Need to remove after platform migration to .NET Core)
             services.Configure<PasswordHasherOptions>(option => option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2);
-            services.AddIdentity<User, IdentityRole>(options =>
+            services.AddIdentity<User, Role>(options =>
             {
                 options.Password.RequiredLength = 8;
                 options.Password.RequireLowercase = true;

@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Security;
@@ -25,6 +25,15 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 Id = role.Id,
                 Name = role.Name,
                 Permissions = role?.Permissions.Select(x => new dto.Permission { Id = x, Name = x }).ToList()
+            };
+        }
+        public static Role ToRole(this dto.Role roleDto)
+        {
+            return new Role
+            {
+                Id = roleDto.Id,
+                Name = roleDto.Name,
+                Permissions = roleDto?.Permissions.Select(x => x.Id).ToList()
             };
         }
 

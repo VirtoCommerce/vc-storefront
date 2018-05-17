@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
@@ -22,10 +22,6 @@
 
   <ItemGroup>
     <Compile Remove="Routing\StorefrontRouteExtensions.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="wwwroot\%2a%2a" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,11 +50,6 @@
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="AutoRestClients\" />
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
