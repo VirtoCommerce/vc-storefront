@@ -195,6 +195,13 @@ namespace VirtoCommerce.Storefront
                 });
             }
 
+            //Add Liquid view engine
+            services.AddLiquidViewEngine(options =>
+            {
+                Configuration.GetSection("VirtoCommerce:LiquidThemeEngine").Bind(options);
+            });
+
+            // Placing this line before AddLiquidViewEngine breaks startup.
             var snapshotProvider = services.BuildServiceProvider();
 
             //This line is required in order to use the old Identity V2 hashes to prevent rehashes passwords for platform users which login in the storefront
@@ -220,13 +227,7 @@ namespace VirtoCommerce.Storefront
                 options.AccessDeniedPath = "/error/AccessDenied";
                 options.SlidingExpiration = true;
             });
-
-            //Add Liquid view engine
-            services.AddLiquidViewEngine(options =>
-            {
-                Configuration.GetSection("VirtoCommerce:LiquidThemeEngine").Bind(options);
-            });
-
+            
             services.AddMvc(options =>
             {
                 options.CacheProfiles.Add("Default", new CacheProfile()
