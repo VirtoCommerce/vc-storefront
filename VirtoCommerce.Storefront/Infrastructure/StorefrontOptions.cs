@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.AspNetCore.Identity;
 using VirtoCommerce.LiquidThemeEngine;
 
 namespace VirtoCommerce.Storefront.Infrastructure
@@ -13,9 +12,5 @@ namespace VirtoCommerce.Storefront.Infrastructure
         public RequireHttpsOptions RequireHttps { get; set; }
         public bool SendAccountConfirmation { get; set; } = false;
         public int WishlistLimit { get; set; }
-        public LockoutOptions Lockout { get; set; } = new LockoutOptions
-        {
-            DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15)
-        };
     }
 }

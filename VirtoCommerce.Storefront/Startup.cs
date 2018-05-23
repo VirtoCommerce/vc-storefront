@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Binders;
@@ -195,27 +194,12 @@ namespace VirtoCommerce.Storefront
                 });
             }
 
-            //Add Liquid view engine
-            services.AddLiquidViewEngine(options =>
-            {
-                Configuration.GetSection("VirtoCommerce:LiquidThemeEngine").Bind(options);
-            });
-
-            // Placing this line before AddLiquidViewEngine breaks startup.
-            var snapshotProvider = services.BuildServiceProvider();
-
             //This line is required in order to use the old Identity V2 hashes to prevent rehashes passwords for platform users which login in the storefront
             //and it can lead to platform access denied for them. (TODO: Need to remove after platform migration to .NET Core)
             services.Configure<PasswordHasherOptions>(option => option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2);
-            services.AddIdentity<User, IdentityRole>(options =>
-            {
-                options.Password.RequiredLength = 8;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireDigit = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Lockout = snapshotProvider.GetService<IOptions<StorefrontOptions>>().Value.Lockout;
-            }).AddDefaultTokenProviders();
+            services.Configure<IdentityOptions>(Configuration.GetSection("IdentityOptions"));
+            services.AddIdentity<User, IdentityRole>(options => { }).AddDefaultTokenProviders();
+
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -227,7 +211,14 @@ namespace VirtoCommerce.Storefront
                 options.AccessDeniedPath = "/error/AccessDenied";
                 options.SlidingExpiration = true;
             });
-            
+
+            //Add Liquid view engine
+            services.AddLiquidViewEngine(options =>
+            {
+                Configuration.GetSection("VirtoCommerce:LiquidThemeEngine").Bind(options);
+            });
+
+            var snapshotProvider = services.BuildServiceProvider();
             services.AddMvc(options =>
             {
                 options.CacheProfiles.Add("Default", new CacheProfile()
