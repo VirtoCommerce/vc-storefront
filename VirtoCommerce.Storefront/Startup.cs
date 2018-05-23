@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
@@ -197,17 +197,9 @@ namespace VirtoCommerce.Storefront
             //This line is required in order to use the old Identity V2 hashes to prevent rehashes passwords for platform users which login in the storefront
             //and it can lead to platform access denied for them. (TODO: Need to remove after platform migration to .NET Core)
             services.Configure<PasswordHasherOptions>(option => option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2);
-            services.AddIdentity<User, Role>(options =>
-            {
-                options.Password.RequiredLength = 8;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireDigit = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Lockout.MaxFailedAccessAttempts = 5;
-                options.Lockout.AllowedForNewUsers = true;
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-            }).AddDefaultTokenProviders();
+            services.Configure<IdentityOptions>(Configuration.GetSection("IdentityOptions"));
+            services.AddIdentity<User, Role>(options => { }).AddDefaultTokenProviders();
+
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -219,7 +211,7 @@ namespace VirtoCommerce.Storefront
                 options.AccessDeniedPath = "/error/AccessDenied";
                 options.SlidingExpiration = true;
             });
-            
+
             //Add Liquid view engine
             services.AddLiquidViewEngine(options =>
             {
@@ -283,7 +275,7 @@ namespace VirtoCommerce.Storefront
             app.UseMiddleware<NoLiquidThemeMiddleware>();
             app.UseMiddleware<CreateStorefrontRolesMiddleware>();
             app.UseMiddleware<ApiErrorHandlingMiddleware>();
-            
+
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
 
@@ -302,8 +294,8 @@ namespace VirtoCommerce.Storefront
             Configuration.GetSection("VirtoCommerce:RequireHttps").Bind(requireHttpsOptions);
             if (requireHttpsOptions.Enabled)
             {
-                rewriteOptions.AddRedirectToHttps(requireHttpsOptions.StatusCode,  requireHttpsOptions.Port);
-            }         
+                rewriteOptions.AddRedirectToHttps(requireHttpsOptions.StatusCode, requireHttpsOptions.Port);
+            }
             app.UseRewriter(rewriteOptions);
             app.UseMvc(routes =>
             {
