@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -25,10 +26,35 @@ namespace VirtoCommerce.Storefront.Domain.Security
             : base(userStore, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
         {
         }
+
+        public async override Task<User> GetUserAsync(ClaimsPrincipal principal)
+        {
+            //User can be anonymous and also should be signed-in 
+            var user = new User
+            {
+                Id = principal.FindFirstValue(ClaimTypes.NameIdentifier),
+                UserName = principal.FindFirstValue(ClaimTypes.Name),
+                SecurityStamp = principal.FindFirstValue("AspNet.Identity.SecurityStamp")
+            };
+            //For registered users need to load it  from storage
+            if (principal.Identity.IsAuthenticated && user.UserName != SecurityConstants.AnonymousUsername)
+            {
+                user = await FindByIdAsync(user.Id);
+            }
+            //Restore some properties from cookies
+            if (user != null)
+            {
+                user.OperatorUserId = principal.FindFirstValue(SecurityConstants.Claims.OperatorUserIdClaimType);
+                user.OperatorUserName = principal.FindFirstValue(SecurityConstants.Claims.OperatorUserNameClaimType);
+                user.SelectedCurrencyCode = principal.FindFirstValue(SecurityConstants.Claims.CurrencyClaimType);
+            }
+            return user;
+        }
     }
 
     //Stub for UserManager
-    public sealed class UserStoreStub : IUserStore<User>, IUserEmailStore<User>, IUserPasswordStore<User>, IUserLockoutStore<User>, IUserLoginStore<User>, IUserSecurityStampStore<User>
+    public sealed class UserStoreStub : IUserStore<User>, IUserEmailStore<User>, IUserPasswordStore<User>, IUserLockoutStore<User>, IUserLoginStore<User>,
+                                        IUserSecurityStampStore<User>, IUserClaimStore<User>, IRoleStore<Role>
     {
         private readonly ISecurity _platformSecurityApi;
         private readonly IMemoryCache _memoryCache;
@@ -332,7 +358,130 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public Task<string> GetSecurityStampAsync(User user, CancellationToken cancellationToken)
         {
             return Task.FromResult(user.SecurityStamp);
-        } 
+        }
+        #endregion
+        #region IUserClaimStore<User> members
+        public Task<IList<Claim>> GetClaimsAsync(User user, CancellationToken cancellationToken)
+        {
+            IList<Claim> result = new List<Claim>();
+            if (user.IsAdministrator)
+            {
+                result.Add(new Claim(ClaimTypes.Role, SecurityConstants.Roles.Administrator));
+            }
+
+            if (user.SelectedCurrencyCode != null)
+            {
+                result.Add(new Claim(SecurityConstants.Claims.CurrencyClaimType, user.SelectedCurrencyCode));
+            }
+
+            if (!string.IsNullOrEmpty(user.OperatorUserName))
+            {
+                result.Add(new Claim(SecurityConstants.Claims.OperatorUserNameClaimType, user.OperatorUserName));
+            }
+
+            if (!string.IsNullOrEmpty(user.OperatorUserId))
+            {
+                result.Add(new Claim(SecurityConstants.Claims.OperatorUserIdClaimType, user.OperatorUserId));
+                result.Add(new Claim(SecurityConstants.Claims.OperatorUserNameClaimType, user.OperatorUserName));
+            }
+
+            if (!user.Permissions.IsNullOrEmpty())
+            {
+                foreach (var permission in user.Permissions)
+                {
+                    result.Add(new Claim(SecurityConstants.Claims.PermissionClaimType, permission));
+                }
+            }
+            if (!user.Roles.IsNullOrEmpty())
+            {
+                foreach (var role in user.Roles)
+                {
+                    result.Add(new Claim(ClaimTypes.Role, role.Id));
+                }
+            }
+            return Task.FromResult(result);
+        }
+
+        public Task AddClaimsAsync(User user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task ReplaceClaimAsync(User user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task RemoveClaimsAsync(User user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<User>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
+        {
+            IList<User> result = new List<User>();
+            return Task.FromResult(result);
+        }
+        #endregion
+
+        #region IRoleStore<Role> members
+
+        public async Task<IdentityResult> CreateAsync(Role role, CancellationToken cancellationToken)
+        {
+            var result = IdentityResult.Success;
+            await _platformSecurityApi.UpdateRoleAsync(role.ToRoleDto());
+            return result;
+        }
+
+        public async Task<IdentityResult> UpdateAsync(Role role, CancellationToken cancellationToken)
+        {
+            var result = IdentityResult.Success;
+            await _platformSecurityApi.UpdateRoleAsync(role.ToRoleDto());
+            return result;
+        }
+
+        public Task<IdentityResult> DeleteAsync(Role role, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetRoleIdAsync(Role role, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(role.Id);
+        }
+
+        public Task<string> GetRoleNameAsync(Role role, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(role.Name);
+        }
+
+        public Task SetRoleNameAsync(Role role, string roleName, CancellationToken cancellationToken)
+        {
+            role.Name = roleName;
+            return Task.CompletedTask;
+        }
+
+        public Task<string> GetNormalizedRoleNameAsync(Role role, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(role.Name);
+        }
+
+        public Task SetNormalizedRoleNameAsync(Role role, string normalizedName, CancellationToken cancellationToken)
+        {
+            role.Name = normalizedName;
+            return Task.CompletedTask;
+        }
+
+        async Task<Role> IRoleStore<Role>.FindByIdAsync(string roleId, CancellationToken cancellationToken)
+        {
+            var result = (await _platformSecurityApi.GetRoleAsync(roleId))?.ToRole();
+            return result;
+        }
+
+        Task<Role> IRoleStore<Role>.FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
         public void Dispose()

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
@@ -137,7 +137,7 @@ namespace VirtoCommerce.Storefront
 
             //Identity overrides for use remote user storage
             services.AddSingleton<IUserStore<User>, UserStoreStub>();
-            services.AddSingleton<IUserClaimsPrincipalFactory<User>, UserPrincipalFactory>();
+            services.AddSingleton<IRoleStore<Role>, UserStoreStub>();
             services.AddScoped<UserManager<User>, CustomUserManager>();
 
             //Resource-based authorization that requires API permissions for some operations
@@ -198,7 +198,7 @@ namespace VirtoCommerce.Storefront
             //and it can lead to platform access denied for them. (TODO: Need to remove after platform migration to .NET Core)
             services.Configure<PasswordHasherOptions>(option => option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2);
             services.Configure<IdentityOptions>(Configuration.GetSection("IdentityOptions"));
-            services.AddIdentity<User, IdentityRole>(options => { }).AddDefaultTokenProviders();
+            services.AddIdentity<User, Role>(options => { }).AddDefaultTokenProviders();
 
 
             services.ConfigureApplicationCookie(options =>

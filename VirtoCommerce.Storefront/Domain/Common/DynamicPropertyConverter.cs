@@ -1,11 +1,12 @@
-using Newtonsoft.Json.Linq;
+﻿using System.Globalization;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 using VirtoCommerce.Storefront.Model;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
-{ 
+{
     public static class DynamicPropertyConverter
     {
         public static DynamicProperty ToDynamicProperty(this coreDto.DynamicObjectProperty propertyDto)
@@ -88,7 +89,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         private static LocalizedString ToLocalizedString(this coreDto.DynamicPropertyObjectValue dto)
         {
-            return new LocalizedString(new Language(dto.Locale), dto.Value.ToString());
+            return new LocalizedString(new Language(dto.Locale), string.Format(CultureInfo.InvariantCulture, "{0}", dto.Value));
         }
 
         private static coreDto.DynamicPropertyObjectValue ToPropertyValueDto(this DynamicPropertyDictionaryItem dictItem)
