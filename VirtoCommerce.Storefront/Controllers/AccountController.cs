@@ -400,7 +400,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ResetPassword(string token, string userId)
         {
-            if (string.IsNullOrEmpty(token) && string.IsNullOrEmpty(userId))
+            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(userId))
             {
                 WorkContext.ErrorMessage = "Error in URL format";
                 return View("error", WorkContext);
@@ -433,6 +433,13 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View("error", WorkContext);
             }
 
+            if (formModel.Password != formModel.PasswordConfirmation)
+            {
+                ModelState.AddModelError("form", "Passwords are not equal");
+                WorkContext.Form = formModel;
+                return View("customers/reset_password", WorkContext);
+            }
+
             var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
             if (user == null)
             {
@@ -454,6 +461,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 }
             }
 
+            WorkContext.Form = formModel;
             return View("customers/reset_password", WorkContext);
         }
 
