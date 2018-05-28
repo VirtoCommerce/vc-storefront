@@ -40,7 +40,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <summary>
         /// Gets or sets the value of fulfillment center id
         /// </summary>
-        public string FulfilmentCenterId { get; set; }
+        public string FulfillmentCenterId { get; set; }
 
         /// <summary>
         /// Gets or sets the delivery address

@@ -230,7 +230,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public IList<ProductPrice> Prices { get; set; }
 
         /// <summary>
-        /// Inventory for default fulfilment center
+        /// Inventory for default fulfillment center
         /// </summary>
         public Inventory.Inventory Inventory { get; set; }
 
