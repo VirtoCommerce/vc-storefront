@@ -24,7 +24,7 @@ namespace VirtoCommerce.Storefront.Domain
         
             Func<int, int, IEnumerable<SortInfo>, IPagedList<FulfillmentCenter>> factory = (pageNumber, pageSize, sortInfos) =>
             {
-                return inventoryService.SearchFulfillmentCenters(new FulfillmentCenterSearchCriteria { PageNumber = pageNumber, PageSize = pageNumber, Sort = SortInfo.ToString(sortInfos) });
+                return inventoryService.SearchFulfillmentCenters(new FulfillmentCenterSearchCriteria { PageNumber = pageNumber, PageSize = pageSize, Sort = SortInfo.ToString(sortInfos) });
                
             };
             return builder.WithFulfillmentCentersAsync(() => new MutablePagedList<FulfillmentCenter>(factory, 1, FulfillmentCenterSearchCriteria.DefaultPageSize));
