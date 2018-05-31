@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+﻿using System;
 using VirtoCommerce.LiquidThemeEngine;
 
 namespace VirtoCommerce.Storefront.Infrastructure
@@ -11,7 +10,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
         public PlatformEndpointOptions Endpoint { get; set; }
         public LiquidThemeEngineOptions LiquidThemeEngine { get; set; }
         public RequireHttpsOptions RequireHttps { get; set; }
-        public bool SendAccountConfirmation { get; set; } =  false;
+        public bool SendAccountConfirmation { get; set; } = false;
         public int WishlistLimit { get; set; }
     }
 }
