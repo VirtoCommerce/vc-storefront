@@ -54,7 +54,7 @@ namespace VirtoCommerce.Storefront.Domain
         public virtual async Task TakeCartAsync(ShoppingCart cart)
         {
             var store = _workContextAccessor.WorkContext.AllStores.FirstOrDefault(x => x.Id.EqualsInvariant(cart.StoreId));
-            if(store == null)
+            if (store == null)
             {
                 throw new StorefrontException($"{ nameof(cart.StoreId) } not found");
             }
@@ -196,7 +196,14 @@ namespace VirtoCommerce.Storefront.Domain
             await RemoveExistingShipmentAsync(shipment);
 
             shipment.Currency = Cart.Currency;
+            if (shipment.DeliveryAddress != null)
+            {
+                //Reset address key because it can equal a customer address from profile and if not do that it may cause
+                //address primary key duplication error for multiple carts with the same address 
+                shipment.DeliveryAddress.Key = null;
+            }
             Cart.Shipments.Add(shipment);
+
 
             if (!string.IsNullOrEmpty(shipment.ShipmentMethodCode))
             {
@@ -230,7 +237,12 @@ namespace VirtoCommerce.Storefront.Domain
             EnsureCartExists();
 
             await RemoveExistingPaymentAsync(payment);
-
+            if (payment.BillingAddress != null)
+            {
+                //Reset address key because it can equal a customer address from profile and if not do that it may cause
+                //address primary key duplication error for multiple carts with the same address 
+                payment.BillingAddress.Key = null;
+            }
             Cart.Payments.Add(payment);
 
             if (!string.IsNullOrEmpty(payment.PaymentGatewayCode))
@@ -357,7 +369,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             //Request available shipping rates 
             var retVal = await _cartService.GetAvailableShippingMethodsAsync(Cart);
-            
+
             //Evaluate promotions cart and apply rewards for available shipping methods
             var promoEvalContext = Cart.ToPromotionEvaluationContext();
             await _promotionEvaluator.EvaluateDiscountsAsync(promoEvalContext, retVal);
@@ -407,7 +419,7 @@ namespace VirtoCommerce.Storefront.Domain
                 //Get product inventory to fill InStockQuantity parameter of LineItem
                 //required for some promotions evaluation
 
-                foreach (var lineItem in Cart.Items.Where(x=>x.Product != null).ToList())
+                foreach (var lineItem in Cart.Items.Where(x => x.Product != null).ToList())
                 {
                     lineItem.InStockQuantity = (int)lineItem.Product.AvailableQuantity;
                 }
@@ -596,7 +608,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         protected virtual async Task PrepareCartAsync(ShoppingCart cart, Store store)
         {
-            if(cart == null)
+            if (cart == null)
             {
                 throw new ArgumentNullException(nameof(cart));
             }

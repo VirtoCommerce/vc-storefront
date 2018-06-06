@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using VirtoCommerce.Storefront.Model.Common;
 
@@ -33,6 +31,26 @@ namespace VirtoCommerce.Storefront.Model
         {
             var retVal = string.Join(" ", FirstName, LastName, Organization, Line1, City, RegionName, PostalCode, CountryName);
             return retVal;
+        }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            //Key and Name properties don't participate in equality
+            yield return Type;
+            yield return Organization;
+            yield return CountryCode;
+            yield return CountryName;
+            yield return PostalCode;
+            yield return Zip;
+            yield return Line1;
+            yield return Line2;
+            yield return RegionId;
+            yield return RegionName;
+            yield return FirstName;
+            yield return MiddleName;
+            yield return LastName;
+            yield return Phone;
+            yield return Email;
         }
     }
 }

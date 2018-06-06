@@ -5499,7 +5499,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// Initializes a new instance of the Address class.
         /// </summary>
         /// <param name="addressType">Possible values include: 'Billing',
-        /// 'Shipping', 'BillingAndShipping'</param>
+        /// 'Shipping', 'Pickup', 'BillingAndShipping'</param>
         public Address(string key = default(string), string addressType = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
         {
             Key = key;
@@ -5535,7 +5535,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'Billing', 'Shipping',
-        /// 'BillingAndShipping'
+        /// 'Pickup', 'BillingAndShipping'
         /// </summary>
         [JsonProperty(PropertyName = "addressType")]
         public string AddressType { get; set; }
@@ -6827,7 +6827,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         /// <param name="apiAccountType">Possible values include: 'Undefined',
         /// 'Hmac', 'Simple'</param>
-        public ApiAccount(string id = default(string), string name = default(string), string apiAccountType = default(string), bool? isActive = default(bool?), string appId = default(string), string secretKey = default(string))
+        public ApiAccount(string id = default(string), string name = default(string), string apiAccountType = default(string), bool? isActive = default(bool?), string appId = default(string), string secretKey = default(string), bool? forceSecretKeyChange = default(bool?))
         {
             Id = id;
             Name = name;
@@ -6835,6 +6835,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
             IsActive = isActive;
             AppId = appId;
             SecretKey = secretKey;
+            ForceSecretKeyChange = forceSecretKeyChange;
             CustomInit();
         }
 
@@ -6873,6 +6874,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "secretKey")]
         public string SecretKey { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "forceSecretKeyChange")]
+        public bool? ForceSecretKeyChange { get; set; }
 
     }
 }
@@ -7014,7 +7020,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         /// <param name="userState">Possible values include: 'PendingApproval',
         /// 'Approved', 'Rejected'</param>
-        public ApplicationUserExtended(string id = default(string), string userName = default(string), string email = default(string), string phoneNumber = default(string), bool? emailConfirmed = default(bool?), bool? phoneNumberConfirmed = default(bool?), bool? twoFactorEnabled = default(bool?), System.DateTime? lockoutEndDateUtc = default(System.DateTime?), bool? lockoutEnabled = default(bool?), int? accessFailedCount = default(int?), string storeId = default(string), string memberId = default(string), string icon = default(string), bool? isAdministrator = default(bool?), string userType = default(string), string userState = default(string), string password = default(string), string passwordHash = default(string), string securityStamp = default(string), IList<ApplicationUserLogin> logins = default(IList<ApplicationUserLogin>), IList<Role> roles = default(IList<Role>), IList<string> permissions = default(IList<string>), IList<ApiAccount> apiAccounts = default(IList<ApiAccount>), IList<OperationLog> operationsLog = default(IList<OperationLog>))
+        public ApplicationUserExtended(string id = default(string), string userName = default(string), string email = default(string), string phoneNumber = default(string), bool? emailConfirmed = default(bool?), bool? phoneNumberConfirmed = default(bool?), bool? twoFactorEnabled = default(bool?), System.DateTime? lockoutEndDateUtc = default(System.DateTime?), bool? lockoutEnabled = default(bool?), int? accessFailedCount = default(int?), string storeId = default(string), string memberId = default(string), string icon = default(string), bool? isAdministrator = default(bool?), string userType = default(string), string userState = default(string), string password = default(string), bool? forcePasswordChange = default(bool?), string passwordHash = default(string), string securityStamp = default(string), IList<ApplicationUserLogin> logins = default(IList<ApplicationUserLogin>), IList<Role> roles = default(IList<Role>), IList<string> permissions = default(IList<string>), IList<ApiAccount> apiAccounts = default(IList<ApiAccount>), IList<OperationLog> operationsLog = default(IList<OperationLog>))
         {
             Id = id;
             UserName = userName;
@@ -7033,6 +7039,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
             UserType = userType;
             UserState = userState;
             Password = password;
+            ForcePasswordChange = forcePasswordChange;
             PasswordHash = passwordHash;
             SecurityStamp = securityStamp;
             Logins = logins;
@@ -7134,6 +7141,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "password")]
         public string Password { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "forcePasswordChange")]
+        public bool? ForcePasswordChange { get; set; }
 
         /// <summary>
         /// </summary>
