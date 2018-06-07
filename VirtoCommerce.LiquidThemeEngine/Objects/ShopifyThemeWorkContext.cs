@@ -153,6 +153,13 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
 
         public MetafieldsCollection ApplicationSettings { get; set; }
 
+
+        #region GDPR consent
+        public bool CanTrack { get; set; }
+        public string ConsentCookie { get; set; }
+        #endregion
+
+
         #endregion
 
         #region ILiquidizable members

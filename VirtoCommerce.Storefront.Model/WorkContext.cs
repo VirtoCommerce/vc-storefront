@@ -36,10 +36,10 @@ namespace VirtoCommerce.Storefront.Model
         /// Current request url example: http:/host/app/store/en-us/search?page=2
         /// </summary>
         public Uri RequestUrl { get; set; }
-      
+
         public NameValueCollection QueryString { get; set; }
 
-        
+
         /// <summary>
         /// Current user
         /// </summary>

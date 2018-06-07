@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -198,18 +199,14 @@ namespace VirtoCommerce.Storefront
             //and it can lead to platform access denied for them. (TODO: Need to remove after platform migration to .NET Core)
             services.Configure<PasswordHasherOptions>(option => option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2);
             services.Configure<IdentityOptions>(Configuration.GetSection("IdentityOptions"));
+            services.Configure<CookieAuthenticationOptions>(Configuration.GetSection("CookieAuthenticationOptions"));
             services.AddIdentity<User, Role>(options => { }).AddDefaultTokenProviders();
 
-
-            services.ConfigureApplicationCookie(options =>
+            services.Configure<CookiePolicyOptions>(options =>
             {
-                // Cookie settings
-                options.Cookie.HttpOnly = true;
-                options.Cookie.Expiration = TimeSpan.FromDays(30);
-                options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
-                options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout 
-                options.AccessDeniedPath = "/error/AccessDenied";
-                options.SlidingExpiration = true;
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
             //Add Liquid view engine
@@ -243,7 +240,9 @@ namespace VirtoCommerce.Storefront
             }).AddViewOptions(options =>
             {
                 options.ViewEngines.Add(snapshotProvider.GetService<ILiquidViewEngine>());
-            });
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
 
             //Register event handlers via reflection
             services.RegisterAssembliesEventHandlers(typeof(Startup));
@@ -257,16 +256,17 @@ namespace VirtoCommerce.Storefront
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
             }
             else
             {
                 app.UseExceptionHandler("/error/500");
+                app.UseHsts();
             }
 
             app.UseResponseCaching();
 
             app.UseStaticFiles();
+            app.UseCookiePolicy();
 
             app.UseAuthentication();
 

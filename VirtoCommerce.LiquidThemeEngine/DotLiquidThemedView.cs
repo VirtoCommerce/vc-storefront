@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace VirtoCommerce.LiquidThemeEngine
 {
@@ -39,7 +40,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         #region IView members
 
         public void Render(ViewContext viewContext, TextWriter writer)
-        {           
+        {
         }
 
         public Task RenderAsync(ViewContext context)
@@ -63,7 +64,15 @@ namespace VirtoCommerce.LiquidThemeEngine
                 shopifyContext.Form.Errors = formErrors;
                 shopifyContext.Form.PostedSuccessfully = false;
             }
-            
+
+            //EU General Data Protection Regulation (GDPR) support 
+            var consentFeature = context.HttpContext.Features.Get<ITrackingConsentFeature>();
+            if (consentFeature != null)
+            {
+                shopifyContext.CanTrack = !consentFeature?.CanTrack ?? false;
+                shopifyContext.ConsentCookie = consentFeature?.CreateConsentCookie();
+            }
+
             // Copy data from the view context over to DotLiquid
             var parameters = shopifyContext.ToLiquid() as Dictionary<string, object>;
 
