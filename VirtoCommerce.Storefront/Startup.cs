@@ -199,7 +199,7 @@ namespace VirtoCommerce.Storefront
             //and it can lead to platform access denied for them. (TODO: Need to remove after platform migration to .NET Core)
             services.Configure<PasswordHasherOptions>(option => option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2);
             services.Configure<IdentityOptions>(Configuration.GetSection("IdentityOptions"));
-            services.Configure<CookieAuthenticationOptions>(Configuration.GetSection("CookieAuthenticationOptions"));
+            services.Configure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, Configuration.GetSection("CookieAuthenticationOptions"));
             services.AddIdentity<User, Role>(options => { }).AddDefaultTokenProviders();
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -207,6 +207,12 @@ namespace VirtoCommerce.Storefront
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+            // The Tempdata provider cookie is not essential. Make it essential
+            // so Tempdata is functional when tracking is disabled.
+            services.Configure<CookieTempDataProviderOptions>(options =>
+            {
+                options.Cookie.IsEssential = true;
             });
 
             //Add Liquid view engine
@@ -218,6 +224,11 @@ namespace VirtoCommerce.Storefront
             var snapshotProvider = services.BuildServiceProvider();
             services.AddMvc(options =>
             {
+                //Workaround to avoid 'Null effective policy causing exception' (on logout)
+                //https://github.com/aspnet/Mvc/issues/7809
+                //TODO: Try to remove in ASP.NET Core 2.2
+                options.AllowCombiningAuthorizeFilters = false;
+
                 options.CacheProfiles.Add("Default", new CacheProfile()
                 {
                     Duration = (int)TimeSpan.FromHours(1).TotalSeconds,
