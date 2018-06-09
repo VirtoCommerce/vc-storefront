@@ -65,6 +65,8 @@ namespace VirtoCommerce.Storefront
 
             services.Configure<StorefrontOptions>(Configuration.GetSection("VirtoCommerce"));
 
+            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+
             //The IHttpContextAccessor service is not registered by default
             //https://github.com/aspnet/Hosting/issues/793
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -224,6 +226,7 @@ namespace VirtoCommerce.Storefront
             var snapshotProvider = services.BuildServiceProvider();
             services.AddMvc(options =>
             {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 //Workaround to avoid 'Null effective policy causing exception' (on logout)
                 //https://github.com/aspnet/Mvc/issues/7809
                 //TODO: Try to remove in ASP.NET Core 2.2
@@ -280,7 +283,7 @@ namespace VirtoCommerce.Storefront
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-
+            app.UseMiddleware<AntiforgeryTokenMiddleware>();
             app.UseMiddleware<WorkContextBuildMiddleware>();
             app.UseMiddleware<StoreMaintenanceMiddleware>();
             app.UseMiddleware<NoLiquidThemeMiddleware>();
