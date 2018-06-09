@@ -9,6 +9,7 @@ using VirtoCommerce.Storefront.Model.Recommendations;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [ValidateAntiForgeryToken]
     public class ApiRecommendationsController : StorefrontControllerBase
     {
         private readonly IRecommendationProviderFactory _providerFactory;

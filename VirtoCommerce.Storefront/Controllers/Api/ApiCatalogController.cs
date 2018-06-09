@@ -7,6 +7,7 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [ValidateAntiForgeryToken]
     public class ApiCatalogController : StorefrontControllerBase
     {
         private readonly ICatalogService _catalogService;

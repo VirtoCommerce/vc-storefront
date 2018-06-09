@@ -10,6 +10,7 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [ValidateAntiForgeryToken]
     public class ApiListsController : StorefrontControllerBase
     {
         private readonly ICartService _cartService;
@@ -42,7 +43,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             var result = new List<string>();
             using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, "*", request.Type)).LockAsync())
             {
-                var criteria = new CartSearchCriteria {
+                var criteria = new CartSearchCriteria
+                {
                     Type = request.Type,
                     StoreId = WorkContext.CurrentStore.Id,
                     Customer = WorkContext.CurrentUser,
@@ -173,6 +175,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return _cartBuilder;
         }
 
-       
+
     }
 }

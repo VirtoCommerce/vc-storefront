@@ -22,6 +22,7 @@ using VirtoCommerce.Storefront.Model.Security.Events;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [ValidateAntiForgeryToken]
     public class ApiAccountController : StorefrontControllerBase
     {
         private readonly IEventPublisher _publisher;
@@ -50,7 +51,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpGet]
         [AllowAnonymous]
         public ActionResult GetCurrentUser()
-        {       
+        {
             return Json(WorkContext.CurrentUser);
         }
 
@@ -83,7 +84,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             //TODO: Authorization check
             var result = IdentityResult.Success;
             var user = await _userManager.FindByIdAsync(userId);
-            if(user != null)
+            if (user != null)
             {
                 var authorizationResult = await _authorizationService.AuthorizeAsync(User, user?.Contact?.Organization, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
                 if (!authorizationResult.Succeeded)
@@ -92,9 +93,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 }
 
                 result = await _userManager.DeleteAsync(user);
-                if(result.Succeeded)
+                if (result.Succeeded)
                 {
-                   await _publisher.Publish(new UserDeletedEvent(WorkContext, user));
+                    await _publisher.Publish(new UserDeletedEvent(WorkContext, user));
                 }
             }
             return Json(result);
@@ -102,7 +103,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/organization
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> RegisterOrganization([FromBody] OrganizationRegistration orgRegistration)
         {
             var result = IdentityResult.Success;
@@ -115,11 +115,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 organization = await _memberService.CreateOrganizationAsync(organization);
                 var contact = orgRegistration.ToContact();
                 contact.OrganizationId = organization.Id;
-              
+
                 var user = orgRegistration.ToUser();
                 user.Contact = contact;
                 user.StoreId = WorkContext.CurrentStore.Id;
-                user.Roles = new [] { SecurityConstants.Roles.OrganizationMaintainer };
+                user.Roles = new[] { SecurityConstants.Roles.OrganizationMaintainer };
 
                 result = await _userManager.CreateAsync(user, orgRegistration.Password);
                 if (result.Succeeded)
@@ -134,7 +134,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 result = IdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors).Select(x => new IdentityError { Description = x.ErrorMessage }).ToArray());
             }
-         
+
             return Json(result);
         }
 
@@ -146,7 +146,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             var result = IdentityResult.Success;
 
             TryValidateModel(registration);
-           
+
             if (ModelState.IsValid)
             {
                 //Allow to register new users only within own organization
@@ -158,17 +158,17 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
                 var contact = registration.ToContact();
                 contact.OrganizationId = registration.OrganizationId;
-               
+
                 var user = registration.ToUser();
                 user.Contact = contact;
                 user.StoreId = WorkContext.CurrentStore.Id;
-               
+
                 result = await _userManager.CreateAsync(user, registration.Password);
                 if (result.Succeeded)
                 {
                     user = await _userManager.FindByNameAsync(user.UserName);
                     await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, registration));
-                }               
+                }
             }
             else
             {
@@ -188,7 +188,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 var organizationId = WorkContext.CurrentUser?.Contact?.Organization?.Id;
                 //If it is organization invitation need to check authorization for this action
-                if(!string.IsNullOrEmpty(organizationId))
+                if (!string.IsNullOrEmpty(organizationId))
                 {
                     var authorizationResult = await _authorizationService.AuthorizeAsync(User, null, SecurityConstants.Permissions.CanInviteUsers);
                     if (!authorizationResult.Succeeded)
@@ -196,7 +196,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         return Unauthorized();
                     }
                 }
-                
+
                 foreach (var email in invitation.Emails)
                 {
                     var user = await _userManager.FindByEmailAsync(email);
@@ -249,7 +249,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPut]
         [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
         public async Task<ActionResult> UpdateOrganization([FromBody] Organization organization)
-        {   
+        {
             //Allow to register new users only within own organization
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, organization, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
@@ -257,7 +257,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 return Unauthorized();
             }
             await _memberService.UpdateOrganizationAsync(organization);
-            
+
             return Ok();
         }
 
@@ -284,14 +284,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             if (searchCriteria.OrganizationId != null)
             {
                 var contactsSearchResult = await _memberService.SearchOrganizationContactsAsync(searchCriteria);
-                var userIds = contactsSearchResult.Select(x => x.SecurityAccounts?.FirstOrDefault()).OfType<SecurityAccount>().Select(x=>x.Id);
+                var userIds = contactsSearchResult.Select(x => x.SecurityAccounts?.FirstOrDefault()).OfType<SecurityAccount>().Select(x => x.Id);
                 var users = new List<User>();
-                foreach(var userId in userIds)
+                foreach (var userId in userIds)
                 {
                     var user = await _userManager.FindByIdAsync(userId);
-                    if(user != null)
+                    if (user != null)
                     {
-                       users.Add(user);
+                        users.Add(user);
                     }
                 }
                 return Json(new { TotalCount = contactsSearchResult.TotalItemCount, Results = users });
@@ -378,11 +378,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     if (user.Contact != null)
                     {
                         user.Contact.FirstName = userUpdateInfo.FirstName;
-                        user.Contact.LastName = userUpdateInfo.LastName;                        
+                        user.Contact.LastName = userUpdateInfo.LastName;
                     }
 
                     user.Email = userUpdateInfo.Email;
-                  
+
                     await _userManager.UpdateAsync(user);
                 }
             }
@@ -401,7 +401,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             var result = await _userManager.ChangePasswordAsync(WorkContext.CurrentUser, formModel.OldPassword, formModel.NewPassword);
 
-            return Json(new {  result.Succeeded, Errors = result.Errors.Select(x => x.Description) });
+            return Json(new { result.Succeeded, Errors = result.Errors.Select(x => x.Description) });
         }
 
         // POST: storefrontapi/account/addresses

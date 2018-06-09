@@ -13,6 +13,7 @@ using orderModel = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Mode
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [ValidateAntiForgeryToken]
     public class ApiOrderController : StorefrontControllerBase
     {
         private readonly IOrderModule _orderApi;
@@ -41,7 +42,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Json(new
             {
                 Results = result.CustomerOrders.Select(x => x.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage)),
-                 result.TotalCount
+                result.TotalCount
             });
         }
 
@@ -176,7 +177,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             if (order == null || order.CustomerId != WorkContext.CurrentUser.Id)
             {
-                 throw new StorefrontException($"Order with number {{ number }} not found (or not belongs to current user)");
+                throw new StorefrontException($"Order with number {{ number }} not found (or not belongs to current user)");
             }
 
             return order;

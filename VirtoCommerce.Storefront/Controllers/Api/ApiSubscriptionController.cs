@@ -9,6 +9,7 @@ using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [ValidateAntiForgeryToken]
     public class ApiSubscriptionController : StorefrontControllerBase
     {
         private readonly ISubscriptionService _subscriptionService;
@@ -23,7 +24,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost]
         public async Task<ActionResult> SearchCustomerSubscriptions([FromBody] SubscriptionSearchCriteria searchCriteria)
         {
-            if(searchCriteria == null)
+            if (searchCriteria == null)
             {
                 searchCriteria = new SubscriptionSearchCriteria();
             }
@@ -61,7 +62,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         {
             var criteria = new SubscriptionSearchCriteria
             {
-               Number = number
+                Number = number
             };
             var retVal = (await _subscriptionService.SearchSubscriptionsAsync(criteria)).FirstOrDefault();
 
@@ -70,6 +71,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 throw new StorefrontException($"Subscription with number {{ number }} not found (or not belongs to current user)");
             }
             return retVal;
-        }      
+        }
     }
 }

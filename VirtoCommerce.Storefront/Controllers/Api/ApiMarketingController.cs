@@ -6,6 +6,7 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [ValidateAntiForgeryToken]
     public class ApiMarketingController : StorefrontControllerBase
     {
         private readonly IMarketingService _marketingService;

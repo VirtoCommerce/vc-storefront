@@ -18,7 +18,7 @@ using orderModel = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Mode
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-
+    [ValidateAntiForgeryToken]
     public class ApiCartController : StorefrontControllerBase
     {
         private readonly ICartBuilder _cartBuilder;
@@ -88,7 +88,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
 
-                var products = await _catalogService.GetProductsAsync(new[] { cartItem.ProductId }, Model.Catalog.ItemResponseGroup.Inventory | Model.Catalog.ItemResponseGroup.ItemWithPrices );
+                var products = await _catalogService.GetProductsAsync(new[] { cartItem.ProductId }, Model.Catalog.ItemResponseGroup.Inventory | Model.Catalog.ItemResponseGroup.ItemWithPrices);
                 if (products != null && products.Any())
                 {
                     await cartBuilder.AddItemAsync(products.First(), cartItem.Quantity);
@@ -254,7 +254,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
                 paymentPlan.Id = cartBuilder.Cart.Id;
-           
+
                 await _subscriptionService.UpdatePaymentPlanAsync(paymentPlan);
                 // await _cartBuilder.SaveAsync();
                 cartBuilder.Cart.PaymentPlan = paymentPlan;
@@ -305,7 +305,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             if (payment.Amount.Amount == decimal.Zero)
             {
-                return  BadRequest("Valid payment amount is required");
+                return BadRequest("Valid payment amount is required");
             }
 
             //Need lock to prevent concurrent access to same cart

@@ -21,7 +21,7 @@ namespace VirtoCommerce.Storefront.Middleware
         public Task Invoke(HttpContext context)
         {
             var tokens = _antiforgery.GetAndStoreTokens(context);
-            context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
+            context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false, IsEssential = true });
             return _next(context);
         }
 
