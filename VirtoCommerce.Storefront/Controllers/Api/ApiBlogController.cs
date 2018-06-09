@@ -8,6 +8,7 @@ using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [ValidateAntiForgeryToken]
     public class ApiBlogController : StorefrontControllerBase
     {
         public ApiBlogController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder)

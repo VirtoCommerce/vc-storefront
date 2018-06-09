@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
@@ -11,10 +12,10 @@ using VirtoCommerce.Storefront.Model.Stores;
 namespace VirtoCommerce.Storefront.Domain
 {
     public static class StoreWorkContextBuilderExtensions
-    {        
+    {
         public static Task WithStoresAsync(this IWorkContextBuilder builder, IEnumerable<Store> stores, string defaultStoreId)
         {
-            if(stores == null)
+            if (stores == null)
             {
                 throw new NoStoresException();
             }
@@ -22,6 +23,16 @@ namespace VirtoCommerce.Storefront.Domain
             builder.WorkContext.AllStores = stores.ToArray();
             builder.WorkContext.CurrentStore = builder.HttpContext.GetCurrentStore(stores, defaultStoreId);
             builder.WorkContext.CurrentLanguage = builder.HttpContext.GetCurrentLanguage(builder.WorkContext.CurrentStore);
+
+            // SEO for category, product and blogs is set inside corresponding controllers
+            // there we default SEO for requested store 
+            var seoInfo = builder.WorkContext.CurrentStore.SeoInfos?.FirstOrDefault(x => x.Language == builder.WorkContext.CurrentLanguage);
+            if (seoInfo != null && builder.WorkContext.RequestUrl != null)
+            {
+                var htmlEncoder = builder.HttpContext.RequestServices.GetRequiredService<HtmlEncoder>();
+                seoInfo.Slug = htmlEncoder.Encode(builder.WorkContext.RequestUrl.ToString());
+                builder.WorkContext.CurrentPageSeo = seoInfo;
+            }
             return Task.CompletedTask;
         }
 
@@ -36,7 +47,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 throw new NoStoresException();
             }
-        
+
             await builder.WithStoresAsync(stores, defaultStoreId);
         }
 

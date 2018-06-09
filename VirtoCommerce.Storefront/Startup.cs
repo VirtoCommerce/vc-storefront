@@ -65,6 +65,8 @@ namespace VirtoCommerce.Storefront
 
             services.Configure<StorefrontOptions>(Configuration.GetSection("VirtoCommerce"));
 
+            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+
             //The IHttpContextAccessor service is not registered by default
             //https://github.com/aspnet/Hosting/issues/793
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -224,11 +226,6 @@ namespace VirtoCommerce.Storefront
             var snapshotProvider = services.BuildServiceProvider();
             services.AddMvc(options =>
             {
-                //Workaround to avoid 'Null effective policy causing exception' (on logout)
-                //https://github.com/aspnet/Mvc/issues/7809
-                //TODO: Try to remove in ASP.NET Core 2.2
-                options.AllowCombiningAuthorizeFilters = false;
-
                 options.CacheProfiles.Add("Default", new CacheProfile()
                 {
                     Duration = (int)TimeSpan.FromHours(1).TotalSeconds,
@@ -259,6 +256,8 @@ namespace VirtoCommerce.Storefront
             services.RegisterAssembliesEventHandlers(typeof(Startup));
 
             services.AddApplicationInsightsTelemetry();
+
+            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -280,7 +279,7 @@ namespace VirtoCommerce.Storefront
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-
+            app.UseMiddleware<AntiforgeryTokenMiddleware>();
             app.UseMiddleware<WorkContextBuildMiddleware>();
             app.UseMiddleware<StoreMaintenanceMiddleware>();
             app.UseMiddleware<NoLiquidThemeMiddleware>();
@@ -308,6 +307,12 @@ namespace VirtoCommerce.Storefront
                 rewriteOptions.AddRedirectToHttps(requireHttpsOptions.StatusCode, requireHttpsOptions.Port);
             }
             app.UseRewriter(rewriteOptions);
+            //Enable browser XSS protection
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers["X-Xss-Protection"] = "1";
+                await next();
+            });
             app.UseMvc(routes =>
             {
                 routes.MapStorefrontRoutes();

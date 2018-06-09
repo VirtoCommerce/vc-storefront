@@ -10,6 +10,7 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [ValidateAntiForgeryToken]
     public class ApiPricingController : StorefrontControllerBase
     {
         private readonly IMarketingService _marketingService;
@@ -33,7 +34,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 //Evaluate products prices
                 await _pricingService.EvaluateProductPricesAsync(products, WorkContext);
-              
+
                 var retVal = products.Select(x => x.Price).ToArray();
 
                 return Json(retVal);
