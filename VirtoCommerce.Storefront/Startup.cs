@@ -226,6 +226,12 @@ namespace VirtoCommerce.Storefront
             var snapshotProvider = services.BuildServiceProvider();
             services.AddMvc(options =>
             {
+                //Workaround to avoid 'Null effective policy causing exception' (on logout)
+                //https://github.com/aspnet/Mvc/issues/7809
+                //TODO: Try to remove in ASP.NET Core 2.2
+                options.AllowCombiningAuthorizeFilters = false;
+
+
                 options.CacheProfiles.Add("Default", new CacheProfile()
                 {
                     Duration = (int)TimeSpan.FromHours(1).TotalSeconds,
