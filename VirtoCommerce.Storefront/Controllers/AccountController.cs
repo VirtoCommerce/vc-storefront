@@ -196,6 +196,11 @@ namespace VirtoCommerce.Storefront.Controllers
 
         public async Task<IActionResult> ImpersonateUser(string userId)
         {
+            if (User.Identity.Name == SecurityConstants.AnonymousUsername)
+            {
+                return StoreFrontRedirect($"~/account/login?ReturnUrl={Request.Path}");
+            }
+
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, null, CanImpersonateAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
             {
