@@ -44,7 +44,7 @@ namespace VirtoCommerce.Storefront.Model.Common
 
         public static bool FitsMask(this string fileName, string fileMask)
         {
-            var mask = new Regex("^" + Regex.Escape(fileMask).Replace("\\.", "[.]").Replace("\\*", ".*").Replace("\\?", ".") + "$", RegexOptions.IgnoreCase);
+            var mask = new Regex("^" + Regex.Escape(fileMask).Replace("\\.", "[.]").Replace("/\\*\\*/", "/").Replace("\\*", ".*").Replace("\\?", ".") + "$", RegexOptions.IgnoreCase);
             return mask.IsMatch(fileName);
         }
 
@@ -132,11 +132,11 @@ namespace VirtoCommerce.Storefront.Model.Common
             }
             var result = originalFileUrl;
             var fileName = Path.GetFileName(originalFileUrl);
-            if(!string.IsNullOrEmpty(fileName))
+            if (!string.IsNullOrEmpty(fileName))
             {
                 var newFileName = Path.GetFileNameWithoutExtension(fileName) + suffix;
                 var extension = Path.GetExtension(fileName);
-                if(!string.IsNullOrEmpty(extension))
+                if (!string.IsNullOrEmpty(extension))
                 {
                     newFileName += extension;
                 }
@@ -144,6 +144,6 @@ namespace VirtoCommerce.Storefront.Model.Common
             }
             return result;
         }
-        
+
     }
 }

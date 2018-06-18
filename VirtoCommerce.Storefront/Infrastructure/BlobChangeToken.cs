@@ -43,7 +43,15 @@ namespace VirtoCommerce.Storefront.Infrastructure
             get
             {
                 //get last modified dt
-                _lastModifiedUtc = _previousChangeTimeUtcTokenLookup.GetOrAdd(BlobName, _lastModifiedUtc);
+                KeyValuePair<string, DateTime>[] matchingTimes;
+                if (BlobName.Contains('*') && (matchingTimes = _previousChangeTimeUtcTokenLookup.Where(x => x.Key.FitsMask(BlobName)).ToArray()).Any())
+                {
+                    _lastModifiedUtc = matchingTimes.Max(x => x.Value);
+                }
+                else
+                {
+                    _lastModifiedUtc = _previousChangeTimeUtcTokenLookup.GetOrAdd(BlobName, _lastModifiedUtc);
+                }
 
                 var hasChanged = _lastModifiedUtc > _prevModifiedUtc;
                 if (hasChanged)
@@ -100,7 +108,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
         }
 
         private async Task<IEnumerable<CloudBlob>> ListBlobs()
-        {            
+        {
             var blobItems = new List<IListBlobItem>();
             BlobContinuationToken token = null;
             var operationContext = new OperationContext();
