@@ -22,7 +22,6 @@ using VirtoCommerce.Storefront.Model.Security.Events;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-    [ValidateAntiForgeryToken]
     public class ApiAccountController : StorefrontControllerBase
     {
         private readonly IEventPublisher _publisher;
@@ -79,6 +78,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // DELETE: storefrontapi/account/{userId}
         [HttpDelete]
         [Authorize(SecurityConstants.Permissions.CanDeleteUsers)]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteUser([FromRoute] string userId)
         {
             //TODO: Authorization check
@@ -103,6 +103,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/organization
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> RegisterOrganization([FromBody] OrganizationRegistration orgRegistration)
         {
             var result = IdentityResult.Success;
@@ -141,6 +142,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/account/user
         [HttpPost]
         [Authorize(SecurityConstants.Permissions.CanCreateUsers)]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> RegisterUser([FromBody] OrganizationUserRegistration registration)
         {
             var result = IdentityResult.Success;
@@ -179,6 +181,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/invitation
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateUserInvitation([FromBody] UsersInvitation invitation)
         {
             var result = IdentityResult.Success;
@@ -248,6 +251,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // PUT: storefrontapi/account/organization
         [HttpPut]
         [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> UpdateOrganization([FromBody] Organization organization)
         {
             //Allow to register new users only within own organization
@@ -272,6 +276,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/account/organization/users/search
         [HttpPost]
         [Authorize(SecurityConstants.Permissions.CanViewUsers)]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> SearchOrganizationUsersAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
         {
             searchCriteria.OrganizationId = searchCriteria.OrganizationId ?? WorkContext.CurrentUser?.Contact?.Organization?.Id;
@@ -302,6 +307,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/account/{userId}/lock
         [HttpPost]
         [Authorize(SecurityConstants.Permissions.CanEditUsers)]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> LockUser([FromRoute]string userId)
         {
             //TODO: Add authorization checks
@@ -324,6 +330,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/account/{userId}/unlock
         [HttpPost]
         [Authorize(SecurityConstants.Permissions.CanEditUsers)]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> UnlockUser([FromRoute] string userId)
         {
             //TODO: Add authorization checks
@@ -345,6 +352,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> UpdateAccount([FromBody] UserUpdateInfo userUpdateInfo)
         {
             //TODO:Check authorization
@@ -391,6 +399,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/password
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePassword([FromBody] ChangePassword formModel)
         {
             var changePassword = new ChangePasswordInfo
@@ -406,6 +415,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/addresses
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> UpdateAddresses([FromBody] IList<Address> addresses)
         {
             await _memberService.UpdateContactAddressesAsync(WorkContext.CurrentUser.ContactId, addresses);

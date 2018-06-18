@@ -7,7 +7,6 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-    [ValidateAntiForgeryToken]
     public class ApiCatalogController : StorefrontControllerBase
     {
         private readonly ICatalogService _catalogService;
@@ -19,6 +18,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // storefrontapi/catalog/search
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> SearchProducts([FromBody] ProductSearchCriteria searchCriteria)
         {
             var retVal = await _catalogService.SearchProductsAsync(searchCriteria);
@@ -44,6 +44,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // storefrontapi/categories/search
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> SearchCategories([FromBody] CategorySearchCriteria searchCriteria)
         {
             var retVal = await _catalogService.SearchCategoriesAsync(searchCriteria);

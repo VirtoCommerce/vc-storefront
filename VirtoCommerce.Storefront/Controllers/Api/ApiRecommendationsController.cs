@@ -1,15 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using VirtoCommerce.Storefront.Binders;
+using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Recommendations;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-    [ValidateAntiForgeryToken]
     public class ApiRecommendationsController : StorefrontControllerBase
     {
         private readonly IRecommendationProviderFactory _providerFactory;
@@ -20,6 +17,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> GetRecommendations([FromBody] RecommendationEvalContext evalContext)
         {
             var recommendationService = _providerFactory.GetProvider(evalContext.Provider);

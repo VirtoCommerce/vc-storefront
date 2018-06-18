@@ -18,7 +18,6 @@ using orderModel = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Mode
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-    [ValidateAntiForgeryToken]
     public class ApiCartController : StorefrontControllerBase
     {
         private readonly ICartBuilder _cartBuilder;
@@ -51,6 +50,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // PUT: storefrontapi/cart/comment
         [HttpPut]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> UpdateCartComment([FromBody] string comment)
         {
             EnsureCartExists();
@@ -79,6 +79,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/cart/items
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddItemToCart([FromBody] AddCartItem cartItem)
         {
             EnsureCartExists();
@@ -100,6 +101,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // PUT: storefrontapi/cart/items/price
         [HttpPut]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangeCartItemPrice([FromBody] ChangeCartItemPrice newPrice)
         {
             EnsureCartExists();
@@ -131,6 +133,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // PUT: storefrontapi/cart/items?lineItemId=...&quantity=...
         [HttpPut]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangeCartItem([FromBody] ChangeCartItemQty changeQty)
         {
             EnsureCartExists();
@@ -152,6 +155,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // DELETE: storefrontapi/cart/items?lineItemId=...
         [HttpDelete]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemoveCartItem(string lineItemId)
         {
             EnsureCartExists();
@@ -169,6 +173,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/cart/clear
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> ClearCart()
         {
             EnsureCartExists();
@@ -209,6 +214,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/cart/coupons/{couponCode}
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddCartCoupon(string couponCode)
         {
             EnsureCartExists();
@@ -227,6 +233,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // DELETE: storefrontapi/cart/coupons
         [HttpDelete]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemoveCartCoupon()
         {
             EnsureCartExists();
@@ -245,6 +252,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/cart/paymentPlan    
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddOrUpdateCartPaymentPlan([FromBody] PaymentPlan paymentPlan)
         {
             EnsureCartExists();
@@ -264,6 +272,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // DELETE: storefrontapi/cart/paymentPlan    
         [HttpDelete]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteCartPaymentPlan()
         {
             EnsureCartExists();
@@ -282,6 +291,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/cart/shipments    
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddOrUpdateCartShipment([FromBody] Shipment shipment)
         {
             EnsureCartExists();
@@ -299,6 +309,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/cart/payments
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddOrUpdateCartPayment([FromBody] Payment payment)
         {
             EnsureCartExists();
@@ -320,6 +331,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/cart/createorder
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateOrder([FromBody] orderModel.BankCardInfo bankCardInfo)
         {
             EnsureCartExists();

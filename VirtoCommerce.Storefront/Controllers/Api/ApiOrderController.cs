@@ -13,7 +13,6 @@ using orderModel = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Mode
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-    [ValidateAntiForgeryToken]
     public class ApiOrderController : StorefrontControllerBase
     {
         private readonly IOrderModule _orderApi;
@@ -28,6 +27,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/orders/search
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> SearchCustomerOrders([FromBody] OrderSearchCriteria criteria)
         {
             if (criteria == null)
@@ -78,6 +78,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/orders/{orderNumber}/payments/{paymentNumber}/cancel
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> CancelPayment(string orderNumber, string paymentNumber)
         {
             //Need lock to prevent concurrent access to same object
@@ -99,6 +100,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/orders/{orderNumber}/payments/{paymentNumber}/process
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> ProcessOrderPayment(string orderNumber, string paymentNumber, [FromBody] orderModel.BankCardInfo bankCardInfo)
         {
             //Need lock to prevent concurrent access to same order
@@ -117,6 +119,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/orders/{orderNumber}/payments
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddOrUpdateOrderPayment(string orderNumber, [FromBody] PaymentIn payment)
         {
             if (payment.Sum.Amount == 0)

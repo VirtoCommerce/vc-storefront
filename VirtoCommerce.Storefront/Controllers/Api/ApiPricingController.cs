@@ -10,7 +10,6 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-    [ValidateAntiForgeryToken]
     public class ApiPricingController : StorefrontControllerBase
     {
         private readonly IMarketingService _marketingService;
@@ -28,6 +27,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/pricing/actualprices
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> GetActualProductPrices([FromBody] Product[] products)
         {
             if (products != null)

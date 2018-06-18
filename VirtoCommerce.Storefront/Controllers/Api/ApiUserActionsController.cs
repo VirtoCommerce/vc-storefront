@@ -9,7 +9,6 @@ using VirtoCommerce.Storefront.Model.Recommendations;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-    [ValidateAntiForgeryToken]
     public class ApiUserActionsController : StorefrontControllerBase
     {
         private readonly IRecommendationsProvider _productRecommendationsService;
@@ -27,6 +26,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         /// <param name="userSession"></param>
         /// <returns></returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> SaveEventInfo([FromBody] UserSession userSession)
         {
             //TODO: need to replace to other special detected VC API for usage

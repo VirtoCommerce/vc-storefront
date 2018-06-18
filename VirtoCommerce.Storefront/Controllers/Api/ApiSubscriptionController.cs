@@ -9,7 +9,6 @@ using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
-    [ValidateAntiForgeryToken]
     public class ApiSubscriptionController : StorefrontControllerBase
     {
         private readonly ISubscriptionService _subscriptionService;
@@ -22,6 +21,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/subscriptions/search
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> SearchCustomerSubscriptions([FromBody] SubscriptionSearchCriteria searchCriteria)
         {
             if (searchCriteria == null)
@@ -46,6 +46,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/subscriptions/cancel
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> CancelSubscription([FromBody] SubscriptionCancelRequest cancelRequest)
         {
             var subscription = await GetSubscriptionByNumberAsync(cancelRequest.Number);
