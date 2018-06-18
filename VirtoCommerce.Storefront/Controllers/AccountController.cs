@@ -44,7 +44,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
         //GET: /account
         [HttpGet]
-        [Authorize]
+        [Authorize(OnlyRegisteredUserAuthorizationRequirement.PolicyName)]
         public ActionResult GetAccount()
         {
             //Customer should be already populated in WorkContext middle-ware
@@ -52,7 +52,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(OnlyRegisteredUserAuthorizationRequirement.PolicyName)]
         public ActionResult GetOrderDetails(string number)
         {
             var order = WorkContext.CurrentUser?.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(number));
@@ -65,7 +65,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(OnlyRegisteredUserAuthorizationRequirement.PolicyName)]
         public ActionResult GetAddresses()
         {
             return View("customers/addresses", WorkContext);
@@ -269,7 +269,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(OnlyRegisteredUserAuthorizationRequirement.PolicyName)]
         public async Task<ActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

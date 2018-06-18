@@ -146,6 +146,7 @@ namespace VirtoCommerce.Storefront
             //Resource-based authorization that requires API permissions for some operations
             services.AddSingleton<IAuthorizationHandler, CanImpersonateAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, CanReadContentItemAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, OnlyRegisteredUserAuthorizationHandler>();
             // register the AuthorizationPolicyProvider which dynamically registers authorization policies for each permission defined in the platform 
             services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
             //Storefront authorization handler for policy based on permissions 
@@ -154,11 +155,13 @@ namespace VirtoCommerce.Storefront
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(CanImpersonateAuthorizationRequirement.PolicyName,
-                                  policy => policy.Requirements.Add(new CanImpersonateAuthorizationRequirement()));
+                                policy => policy.Requirements.Add(new CanImpersonateAuthorizationRequirement()));
                 options.AddPolicy(CanReadContentItemAuthorizeRequirement.PolicyName,
                                 policy => policy.Requirements.Add(new CanReadContentItemAuthorizeRequirement()));
                 options.AddPolicy(CanEditOrganizationResourceAuthorizeRequirement.PolicyName,
-                               policy => policy.Requirements.Add(new CanEditOrganizationResourceAuthorizeRequirement()));
+                                policy => policy.Requirements.Add(new CanEditOrganizationResourceAuthorizeRequirement()));
+                options.AddPolicy(OnlyRegisteredUserAuthorizationRequirement.PolicyName,
+                                policy => policy.Requirements.Add(new OnlyRegisteredUserAuthorizationRequirement()));
             });
 
 
