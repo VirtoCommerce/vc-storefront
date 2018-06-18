@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -198,7 +199,7 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             if (User.Identity.Name == SecurityConstants.AnonymousUsername)
             {
-                return StoreFrontRedirect($"~/account/login?ReturnUrl={Request.Path}");
+                return StoreFrontRedirect($"~/account/login?ReturnUrl={HttpUtility.UrlEncode(Request.Path)}");
             }
 
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, null, CanImpersonateAuthorizationRequirement.PolicyName);
