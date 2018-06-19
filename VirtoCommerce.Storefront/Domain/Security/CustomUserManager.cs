@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -69,7 +69,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         #region IUserStore<User> members
         public async Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken)
         {
-            if(user.Contact != null)
+            if (user.Contact != null)
             {
                 user.Contact = await _memberService.CreateContactAsync(user.Contact);
             }
@@ -83,19 +83,15 @@ namespace VirtoCommerce.Storefront.Domain.Security
             await _platformSecurityApi.DeleteAsyncAsync(new[] { user.UserName });
             return IdentityResult.Success;
         }
-        
+
         public async Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
             var cacheKey = CacheKey.With(GetType(), "FindByIdAsync", userId);
             var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
            {
                var userDto = await _platformSecurityApi.GetUserByIdAsync(userId);
-               if (userDto != null)
-               {
-                   cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
-                   return userDto.ToUser();
-               }
-               return null;
+
+               return PrepareUserResult(cacheEntry, userDto);
            }, cacheNullValue: false);
 
             //Load user associated contact
@@ -109,16 +105,12 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
             var cacheKey = CacheKey.With(GetType(), "FindByNameAsync", normalizedUserName);
-            var result =  await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-            {
-                var userDto = await _platformSecurityApi.GetUserByNameAsync(normalizedUserName);
-                if (userDto != null)
-                {
-                    cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
-                    return userDto.ToUser();
-                }
-                return null;
-            }, cacheNullValue: false);
+            var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+           {
+               var userDto = await _platformSecurityApi.GetUserByNameAsync(normalizedUserName);
+
+               return PrepareUserResult(cacheEntry, userDto);
+           }, cacheNullValue: false);
 
             //Load user associated contact
             if (result != null && result.ContactId != null)
@@ -168,7 +160,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                     await _memberService.UpdateContactAsync(user.Contact);
                 }
             }
-            
+
             var dtoUser = user.ToUserDto();
             var resultDto = await _platformSecurityApi.UpdateAsyncAsync(dtoUser);
 
@@ -184,7 +176,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         {
             return Task.FromResult(user.AccessFailedCount);
         }
-        
+
         public Task<bool> GetLockoutEnabledAsync(User user, CancellationToken cancellationToken)
         {
             return Task.FromResult(user.LockoutEnabled);
@@ -199,13 +191,13 @@ namespace VirtoCommerce.Storefront.Domain.Security
             user.AccessFailedCount++;
             return Task.FromResult(user.AccessFailedCount);
         }
-        
+
         public Task ResetAccessFailedCountAsync(User user, CancellationToken cancellationToken)
         {
             user.AccessFailedCount = 0;
             return Task.CompletedTask;
         }
-        
+
         public Task SetLockoutEnabledAsync(User user, bool enabled, CancellationToken cancellationToken)
         {
             user.LockoutEnabled = enabled;
@@ -227,12 +219,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
             var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 var userDto = await _platformSecurityApi.GetUserByEmailAsync(normalizedEmail);
-                if (userDto != null)
-                {
-                    cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
-                    return userDto.ToUser();
-                }
-                return null;
+
+                return PrepareUserResult(cacheEntry, userDto);
             }, cacheNullValue: false);
 
             //Load user associated contact
@@ -297,12 +285,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
             var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 var userDto = await _platformSecurityApi.GetUserByLoginAsync(loginProvider, providerKey);
-                if (userDto != null)
-                {
-                    cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
-                    return userDto.ToUser();
-                }
-                return null;
+
+                return PrepareUserResult(cacheEntry, userDto);
             }, cacheNullValue: false);
 
 
@@ -323,7 +307,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public Task RemoveLoginAsync(User user, string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
             var existUserLogin = user.ExternalLogins?.FirstOrDefault(x => x.LoginProvider.EqualsInvariant(loginProvider) && x.ProviderKey.EqualsInvariant(providerKey));
-            if(existUserLogin != null)
+            if (existUserLogin != null)
             {
                 user.ExternalLogins.Remove(existUserLogin);
             }
@@ -489,8 +473,15 @@ namespace VirtoCommerce.Storefront.Domain.Security
             // Cleanup
         }
 
-     
+        private static User PrepareUserResult(ICacheEntry cacheEntry, AutoRestClients.PlatformModuleApi.Models.ApplicationUserExtended userDto)
+        {
+            if (userDto != null)
+            {
+                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
+                cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
+                return userDto.ToUser();
+            }
+            return null;
+        }
     }
-
-
 }
