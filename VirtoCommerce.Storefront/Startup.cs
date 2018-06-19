@@ -288,11 +288,12 @@ namespace VirtoCommerce.Storefront
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-            app.UseMiddleware<AntiforgeryTokenMiddleware>();
+            //WorkContextBuildMiddleware must  always be registered first in  the Middleware chain
             app.UseMiddleware<WorkContextBuildMiddleware>();
             app.UseMiddleware<StoreMaintenanceMiddleware>();
             app.UseMiddleware<NoLiquidThemeMiddleware>();
             app.UseMiddleware<CreateStorefrontRolesMiddleware>();
+            app.UseMiddleware<AntiforgeryTokenMiddleware>();
             app.UseMiddleware<ApiErrorHandlingMiddleware>();
 
 
