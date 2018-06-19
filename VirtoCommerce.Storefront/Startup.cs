@@ -139,8 +139,8 @@ namespace VirtoCommerce.Storefront
             }
 
             //Identity overrides for use remote user storage
-            services.AddSingleton<IUserStore<User>, UserStoreStub>();
-            services.AddSingleton<IRoleStore<Role>, UserStoreStub>();
+            services.AddScoped<IUserStore<User>, UserStoreStub>();
+            services.AddScoped<IRoleStore<Role>, UserStoreStub>();
             services.AddScoped<UserManager<User>, CustomUserManager>();
 
             //Resource-based authorization that requires API permissions for some operations
