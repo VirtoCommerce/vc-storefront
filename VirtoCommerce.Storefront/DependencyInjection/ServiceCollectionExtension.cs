@@ -1,14 +1,19 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.Rest;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.AutoRestClients.CacheModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CartModuleApi;
@@ -29,6 +34,7 @@ using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Infrastructure;
+using VirtoCommerce.Storefront.Infrastructure.Autorest;
 using VirtoCommerce.Storefront.Model.Common.Bus;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Common.Messages;
@@ -36,17 +42,28 @@ using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.DependencyInjection
 {
+
     public static class ServiceCollectionExtension
     {
         public static void AddPlatformEndpoint(this IServiceCollection services, Action<PlatformEndpointOptions> setupAction = null)
         {
-       
             ServicePointManager.UseNagleAlgorithm = false;
             services.AddSingleton<VirtoCommerceApiRequestHandler>();
+
             var httpHandlerWithCompression = new HttpClientHandler
             {
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             };
+
+            services.AddHttpClient<IStoreModule, StoreModule>();
+
+            //TODO: Switch AutoRest clients to use IHttpClientFactory with Polly transient error handling
+            //http://michaco.net/blog/IntegratingAutorestWithHttpClientFactoryAndDI
+            //TODO: Switch all Autorest API clients to access token authentication OAuth2 (resource owner password credentials  grand flow)
+            //it is required for 3.0 platform version
+            //Examples:
+            //services.AddSingleton<PasswordAccessTokenHandler>();
+            //services.AddSingleton<IStoreModule>(provider => new StoreModule(new VirtoCommerceStoreRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<Infrastructure.PasswordAccessTokenHandler>())));
 
             services.AddSingleton<IStoreModule>(provider => new StoreModule(new VirtoCommerceStoreRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
             services.AddSingleton<ICommerce>(provider => new Commerce(new VirtoCommerceCoreRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, provider.GetService<VirtoCommerceApiRequestHandler>(), httpHandlerWithCompression).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
@@ -75,7 +92,7 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             {
                 services.Configure(setupAction);
             }
-        }     
+        }
 
         public static void AddFileSystemBlobContent(this IServiceCollection services, Action<FileSystemBlobContentOptions> setupAction = null)
         {
@@ -85,7 +102,7 @@ namespace VirtoCommerce.Storefront.DependencyInjection
                 services.Configure(setupAction);
             }
         }
-   
+
         public static void AddAzureBlobContent(this IServiceCollection services, Action<AzureBlobContentOptions> setupAction = null)
         {
             services.AddSingleton<IContentBlobProvider, AzureBlobContentProvider>();
@@ -94,7 +111,7 @@ namespace VirtoCommerce.Storefront.DependencyInjection
                 services.Configure(setupAction);
             }
         }
-     
+
         public static void AddLiquidViewEngine(this IServiceCollection services, Action<LiquidThemeEngineOptions> setupAction = null)
         {
             if (services == null)
@@ -116,7 +133,8 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             //Scan for eventhandlers
             services.Scan(scan => scan
                 .FromAssemblies(typesFromAssemblyContainingMessages.Select(x => x.Assembly))
-                    .AddClasses(classes => classes.Where(x => {
+                    .AddClasses(classes => classes.Where(x =>
+                    {
                         var allInterfaces = x.GetInterfaces();
                         return
                             allInterfaces.Any(y => y.GetTypeInfo().IsGenericType && y.GetTypeInfo().GetGenericTypeDefinition() == typeof(IHandler<>)) ||

@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model;
 
-namespace VirtoCommerce.Storefront.Infrastructure
+namespace VirtoCommerce.Storefront.Infrastructure.Autorest
 {
     public class VirtoCommerceApiRequestHandler : ServiceClientCredentials
     {
