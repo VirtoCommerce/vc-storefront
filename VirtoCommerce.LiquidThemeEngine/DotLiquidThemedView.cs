@@ -88,6 +88,11 @@ namespace VirtoCommerce.LiquidThemeEngine
                 parameters.Add(Template.NamingConvention.GetMemberName(item.Key), item.Value);
             }
 
+            if (!parameters.ContainsKey("error_message") && !string.IsNullOrEmpty(_workContextAccessor.WorkContext.ErrorMessage))
+            {
+                parameters.Add("error_message", _workContextAccessor.WorkContext.ErrorMessage);
+            }
+
             var viewTemplate = _liquidThemeEngine.RenderTemplateByName(_viewName, parameters);
 
             // don't use layouts for partial views when masterViewName is not specified
