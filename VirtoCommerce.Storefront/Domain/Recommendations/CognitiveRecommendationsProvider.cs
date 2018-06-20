@@ -60,7 +60,7 @@ namespace VirtoCommerce.Storefront.Domain
                 throw new InvalidCastException(nameof(context));
             }
 
-            var cacheKey = CacheKey.With(GetType(), "GetRecommendationsAsync", context.GetHashCode().ToString());
+            var cacheKey = CacheKey.With(GetType(), "GetRecommendationsAsync", context.GetCacheKey());
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(RecommendationsCacheRegion.CreateChangeToken());

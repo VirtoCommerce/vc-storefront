@@ -36,7 +36,7 @@ namespace VirtoCommerce.Storefront.Domain
             IList<coreService.TaxRate> taxRates = new List<coreService.TaxRate>();
             if (context.StoreTaxCalculationEnabled)
             {
-                var cacheKey = CacheKey.With(GetType(), context.GetHashCode().ToString());
+                var cacheKey = CacheKey.With(GetType(), context.GetCacheKey());
 
                 taxRates = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, (cacheEntry) =>
                 {

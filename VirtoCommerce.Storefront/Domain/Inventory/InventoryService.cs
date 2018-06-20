@@ -29,12 +29,12 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual async Task EvaluateProductInventoriesAsync(IEnumerable<Product> products, WorkContext workContext)
         {
-            if(products == null)
+            if (products == null)
             {
                 throw new ArgumentNullException(nameof(products));
             }
             var productIds = products.Select(x => x.Id).ToList();
-            var cacheKey = CacheKey.With(GetType(), "EvaluateProductInventoriesAsync", productIds.GetOrderIndependentHashCode().ToString());
+            var cacheKey = CacheKey.With(GetType(), "EvaluateProductInventoriesAsync", string.Join("-", productIds.OrderBy(x => x)));
             var inventories = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
@@ -65,7 +65,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             FulfillmentCenter result = null;
             var centerDto = await _inventoryApi.GetFulfillmentCenterAsync(id);
-            if(centerDto != null)
+            if (centerDto != null)
             {
                 result = centerDto.ToFulfillmentCenter();
             }

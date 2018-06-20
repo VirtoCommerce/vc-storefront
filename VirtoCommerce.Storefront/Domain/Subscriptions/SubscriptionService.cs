@@ -25,13 +25,13 @@ namespace VirtoCommerce.Storefront.Domain
             _subscriptionApi = subscriptionApi;
             _workContextAccessor = workContextAccessor;
             _memoryCache = memoryCache;
-    }
-        public  async Task<Subscription> CancelSubscriptionAsync(SubscriptionCancelRequest request)
+        }
+        public async Task<Subscription> CancelSubscriptionAsync(SubscriptionCancelRequest request)
         {
             var workContext = _workContextAccessor.WorkContext;
             return (await _subscriptionApi.CancelSubscriptionAsync(new AutoRestClients.SubscriptionModuleApi.Models.SubscriptionCancelRequest
             {
-                CancelReason = request.CancelReason,                
+                CancelReason = request.CancelReason,
                 SubscriptionId = request.SubscriptionId
             })).ToSubscription(workContext.AllCurrencies, workContext.CurrentLanguage);
         }
@@ -48,7 +48,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         public async Task<IList<PaymentPlan>> GetPaymentPlansByIdsAsync(string[] ids)
         {
-            var cacheKey = CacheKey.With(GetType(), "GetPaymentPlansByIdsAsync", ids.GetOrderIndependentHashCode().ToString());
+            var cacheKey = CacheKey.With(GetType(), "GetPaymentPlansByIdsAsync", string.Join("-", ids.OrderBy(x => x)));
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(SubscriptionCacheRegion.CreateChangeToken());

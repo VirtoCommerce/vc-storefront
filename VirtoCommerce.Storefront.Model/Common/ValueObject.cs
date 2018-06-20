@@ -8,15 +8,18 @@ using System.Web;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
-    public abstract class ValueObject : IValueObject
+    public abstract class ValueObject : IValueObject, ICacheKey
     {
         private static readonly ConcurrentDictionary<Type, IReadOnlyCollection<PropertyInfo>> TypeProperties = new ConcurrentDictionary<Type, IReadOnlyCollection<PropertyInfo>>();
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(this, obj)) return true;
-            if (ReferenceEquals(null, obj)) return false;
-            if (GetType() != obj.GetType()) return false;
+            if (ReferenceEquals(this, obj))
+                return true;
+            if (ReferenceEquals(null, obj))
+                return false;
+            if (GetType() != obj.GetType())
+                return false;
             var other = obj as ValueObject;
             return other != null && GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
         }
@@ -44,20 +47,28 @@ namespace VirtoCommerce.Storefront.Model.Common
             return $"{{{string.Join(", ", GetProperties().Select(f => $"{f.Name}: {f.GetValue(this)}"))}}}";
         }
 
+        public virtual string GetCacheKey()
+        {
+            return string.Join("|", GetEqualityComponents().Select(x => x ?? "null").Select(x => x is ICacheKey cacheKey ? cacheKey.GetCacheKey() : x.ToString()));
+        }
+
         protected virtual IEnumerable<object> GetEqualityComponents()
         {
-            foreach(var property in GetProperties())
+            foreach (var property in GetProperties())
             {
                 var value = property.GetValue(this);
-                if(value != null)
+                if (value == null)
+                {
+                    yield return "null";
+                }
+                else
                 {
                     var valueType = value.GetType();
-
-                    if(valueType.IsAssignableFromGenericList())
+                    if (valueType.IsAssignableFromGenericList())
                     {
                         foreach (var child in ((IEnumerable)value))
                         {
-                            yield return child;
+                            yield return child ?? "null";
                         }
                     }
                     else

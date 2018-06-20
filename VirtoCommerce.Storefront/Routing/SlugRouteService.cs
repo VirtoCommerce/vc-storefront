@@ -21,7 +21,7 @@ namespace VirtoCommerce.Storefront.Routing
     public class SlugRouteService : ISlugRouteService
     {
         private readonly IMemoryCache _memoryCache;
-        private readonly  ICommerce _coreApi;
+        private readonly ICommerce _coreApi;
         private readonly ICatalogService _catalogService;
 
         public SlugRouteService(IMemoryCache memoryCache, ICommerce coreApi, ICatalogService catalogService, ICatalogModuleProducts catalogProductsApi)
@@ -107,7 +107,7 @@ namespace VirtoCommerce.Storefront.Routing
             {
                 foreach (var group in entities.GroupBy(e => e.ObjectType))
                 {
-                   await LoadObjectsAndBuildFullSeoPaths(group.Key, group.ToList(), workContext.CurrentStore, workContext.CurrentLanguage);
+                    await LoadObjectsAndBuildFullSeoPaths(group.Key, group.ToList(), workContext.CurrentStore, workContext.CurrentLanguage);
                 }
 
                 entities = entities.Where(e => !string.IsNullOrEmpty(e.SeoPath)).ToList();
@@ -209,9 +209,9 @@ namespace VirtoCommerce.Storefront.Routing
             }
         }
 
-        protected virtual async  Task<IDictionary<string, string>> GetFullSeoPathsAsync(string objectType, string[] objectIds, Store store, Language language)
+        protected virtual async Task<IDictionary<string, string>> GetFullSeoPathsAsync(string objectType, string[] objectIds, Store store, Language language)
         {
-            var cacheKey = CacheKey.With(GetType(), "GetFullSeoPaths", store.Id, objectType, objectIds.GetOrderIndependentHashCode().ToString());
+            var cacheKey = CacheKey.With(GetType(), "GetFullSeoPaths", store.Id, objectType, string.Join("-", objectIds.OrderBy(x => x)));
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 switch (objectType)
@@ -222,7 +222,7 @@ namespace VirtoCommerce.Storefront.Routing
                         return await GetProductSeoPathsAsync(objectIds, store, language);
                 }
                 return new Dictionary<string, string>();
-            });           
+            });
         }
 
         protected virtual async Task<IDictionary<string, string>> GetCategorySeoPathsAsync(string[] objectIds, Store store, Language language)

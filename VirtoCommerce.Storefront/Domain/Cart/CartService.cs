@@ -28,15 +28,15 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             _memoryCache = memoryCache;
             _workContextAccessor = workContextAccessor;
             _userManager = userManager;
-        }      
+        }
 
         public async Task DeleteCartByIdAsync(string cartId)
         {
-            if(cartId == null)
+            if (cartId == null)
             {
                 throw new ArgumentNullException(nameof(cartId));
             }
-           await _cartApi.DeleteCartsAsync(new[] { cartId });
+            await _cartApi.DeleteCartsAsync(new[] { cartId });
         }
 
         public async Task<IEnumerable<PaymentMethod>> GetAvailablePaymentMethodsAsync(ShoppingCart cart)
@@ -65,7 +65,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
         {
             ShoppingCart result = null;
             var cartDto = await _cartApi.GetCartByIdAsync(cartId);
-            if(cartDto != null)
+            if (cartDto != null)
             {
                 var currency = _workContextAccessor.WorkContext.AllCurrencies.FirstOrDefault(x => x.Equals(cartDto.Currency));
                 var language = string.IsNullOrEmpty(cartDto.LanguageCode) ? Language.InvariantLanguage : new Language(cartDto.LanguageCode);
@@ -99,25 +99,25 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             {
                 throw new ArgumentNullException(nameof(criteria));
             }
-            var cacheKey = CacheKey.With(GetType(), "SearchCartsAsync", criteria.GetHashCode().ToString());
+            var cacheKey = CacheKey.With(GetType(), "SearchCartsAsync", criteria.GetCacheKey());
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CartCacheRegion.CreateCustomerChangeToken(criteria.Customer?.Id));
-             
-                var resultDto = await _cartApi.SearchAsync(criteria.ToSearchCriteriaDto());               
+
+                var resultDto = await _cartApi.SearchAsync(criteria.ToSearchCriteriaDto());
                 var result = new List<ShoppingCart>();
-                foreach(var cartDto in resultDto.Results)
+                foreach (var cartDto in resultDto.Results)
                 {
                     var currency = _workContextAccessor.WorkContext.AllCurrencies.FirstOrDefault(x => x.Equals(cartDto.Currency));
                     var language = string.IsNullOrEmpty(cartDto.LanguageCode) ? Language.InvariantLanguage : new Language(cartDto.LanguageCode);
                     var user = await _userManager.FindByIdAsync(cartDto.CustomerId) ?? criteria.Customer;
                     var cart = cartDto.ToShoppingCart(currency, language, user);
                     result.Add(cart);
-                }              
+                }
                 return new StaticPagedList<ShoppingCart>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalCount.Value);
             });
-        }   
+        }
 
-       
+
     }
 }

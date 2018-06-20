@@ -32,19 +32,19 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual async Task EvaluateDiscountsAsync(PromotionEvaluationContext context, IEnumerable<IDiscountable> owners)
         {
-            var cacheKey = CacheKey.With(GetType(), "EvaluateDiscountsAsync", context.GetHashCode().ToString());
+            var cacheKey = CacheKey.With(GetType(), "EvaluateDiscountsAsync", context.GetCacheKey());
             var rewards = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(MarketingCacheRegion.CreateChangeToken());
                 cacheEntry.SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
 
                 var contextDto = context.ToPromotionEvaluationContextDto();
-                return await _promiotionApi.EvaluatePromotionsAsync(contextDto);               
+                return await _promiotionApi.EvaluatePromotionsAsync(contextDto);
             });
             ApplyRewards(rewards, owners);
         }
 
-       
+
         #endregion
 
         protected virtual void ApplyRewards(IList<marketingModel.PromotionReward> rewards, IEnumerable<IDiscountable> owners)

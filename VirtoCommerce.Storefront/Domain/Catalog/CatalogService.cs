@@ -176,20 +176,20 @@ namespace VirtoCommerce.Storefront.Domain
 
         protected virtual async Task<Product[]> GetProductsAsync(IList<string> ids, ItemResponseGroup responseGroup, WorkContext workContext)
         {
-            var cacheKey = CacheKey.With(GetType(), "GetProductsAsync", ids.GetOrderIndependentHashCode().ToString(), responseGroup.ToString());
+            var cacheKey = CacheKey.With(GetType(), "GetProductsAsync", string.Join("-", ids.OrderBy(x => x)), responseGroup.ToString());
             var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
                 cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
 
-                return await _productsApi.GetProductByPlentyIdsAsync(ids, ((int)responseGroup).ToString());            
+                return await _productsApi.GetProductByPlentyIdsAsync(ids, ((int)responseGroup).ToString());
             });
             return result.Select(x => x.ToProduct(workContext.CurrentLanguage, workContext.CurrentCurrency, workContext.CurrentStore)).ToArray();
         }
 
         private async Task<Category[]> InnerGetCategoriesAsync(string[] ids, WorkContext workContext, CategoryResponseGroup responseGroup = CategoryResponseGroup.Info)
         {
-            var cacheKey = CacheKey.With(GetType(), "InnerGetCategoriesAsync", ids.GetOrderIndependentHashCode().ToString(), responseGroup.ToString());
+            var cacheKey = CacheKey.With(GetType(), "InnerGetCategoriesAsync", string.Join("-", ids.OrderBy(x => x)), responseGroup.ToString());
             var categoriesDto = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
@@ -203,7 +203,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         private async Task<IPagedList<Category>> InnerSearchCategoriesAsync(CategorySearchCriteria criteria, WorkContext workContext)
         {
-            var cacheKey = CacheKey.With(GetType(), "InnerSearchCategoriesAsync", criteria.GetHashCode().ToString(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
+            var cacheKey = CacheKey.With(GetType(), "InnerSearchCategoriesAsync", criteria.GetCacheKey(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
             var searchResult = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
@@ -213,7 +213,7 @@ namespace VirtoCommerce.Storefront.Domain
                 var searchCriteria = criteria.ToCategorySearchCriteriaDto(workContext);
                 return await _searchApi.SearchCategoriesAsync(searchCriteria);
 
-            
+
             });
             var result = new PagedList<Category>(new List<Category>().AsQueryable(), 1, 1);
             if (searchResult.Items != null)
@@ -227,7 +227,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         private async Task<CatalogSearchResult> InnerSearchProductsAsync(ProductSearchCriteria criteria, WorkContext workContext)
         {
-            var cacheKey = CacheKey.With(GetType(), "InnerSearchProductsAsync", criteria.GetHashCode().ToString(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
+            var cacheKey = CacheKey.With(GetType(), "InnerSearchProductsAsync", criteria.GetCacheKey(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
@@ -376,13 +376,13 @@ namespace VirtoCommerce.Storefront.Domain
         {
             await _inventoryService.EvaluateProductInventoriesAsync(products, workContext);
         }
-         
+
         protected virtual async Task LoadProductPaymentPlanAsync(List<Product> products, WorkContext workContext)
         {
             var paymentPlans = await _subscriptionService.GetPaymentPlansByIdsAsync(products.Select(x => x.Id).ToArray());
             foreach (var product in products)
             {
-                product.PaymentPlan = paymentPlans.FirstOrDefault(x=> product.Equals(x));
+                product.PaymentPlan = paymentPlans.FirstOrDefault(x => product.Equals(x));
             }
         }
 
