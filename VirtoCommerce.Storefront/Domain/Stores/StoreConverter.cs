@@ -11,14 +11,14 @@ using storeDto = VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
-    
+
     public static partial class StoreConverter
     {
         public static SeoInfo ToSeoInfo(this storeDto.SeoInfo seoDto)
         {
             return seoDto.JsonConvert<coreDto.SeoInfo>().ToSeoInfo();
         }
-            
+
 
         public static DynamicProperty ToDynamicProperty(this storeDto.DynamicObjectProperty propertyDto)
         {
@@ -43,6 +43,10 @@ namespace VirtoCommerce.Storefront.Domain
                 DefaultFulfillmentCenterId = storeDto.MainFulfillmentCenterId,
                 AvailFulfillmentCenterIds = storeDto.AdditionalFulfillmentCenterIds ?? Array.Empty<string>()
             };
+            if (result.DefaultFulfillmentCenterId != null)
+            {
+                result.AvailFulfillmentCenterIds.Add(result.DefaultFulfillmentCenterId);
+            }
 
             if (!storeDto.SeoInfos.IsNullOrEmpty())
             {
@@ -59,7 +63,7 @@ namespace VirtoCommerce.Storefront.Domain
             result.CurrenciesCodes = storeDto.Currencies.Concat(new[] { storeDto.DefaultCurrency })
                                                    .Where(x => !string.IsNullOrEmpty(x))
                                                    .Distinct()
-                                                   .ToList();           
+                                                   .ToList();
             result.DefaultCurrencyCode = storeDto.DefaultCurrency;
 
             if (!storeDto.DynamicProperties.IsNullOrEmpty())
@@ -73,7 +77,7 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Settings = storeDto.Settings.Where(x => !x.ValueType.EqualsInvariant("SecureString")).Select(x => x.JsonConvert<platformDto.Setting>().ToSettingEntry()).ToList();
             }
 
-           
+
 
             result.TrustedGroups = storeDto.TrustedGroups;
             result.StoreState = EnumUtility.SafeParse(storeDto.StoreState, StoreStatus.Open);
