@@ -273,7 +273,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         [HttpGet]
-        [Authorize(OnlyRegisteredUserAuthorizationRequirement.PolicyName)]
+        [AllowAnonymous]
         public async Task<ActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
