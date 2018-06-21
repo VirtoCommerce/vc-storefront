@@ -196,6 +196,10 @@ namespace VirtoCommerce.Storefront.Controllers
 
         public async Task<IActionResult> ImpersonateUser(string userId)
         {
+            if (User.Identity.Name == SecurityConstants.AnonymousUsername)
+            {
+                return StoreFrontRedirect($"~/account/login?ReturnUrl={Request.Path}");
+            }
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, null, CanImpersonateAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
             {
@@ -425,7 +429,8 @@ namespace VirtoCommerce.Storefront.Controllers
             WorkContext.Form = new ResetPassword
             {
                 Token = token,
-                Email = user.Email
+                Email = user.Email,
+                UserName = user.UserName
             };
 
             return View("customers/reset_password", WorkContext);
@@ -436,7 +441,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(ResetPassword formModel)
         {
-            if (formModel.Email == null || formModel.Token == null)
+            if ((string.IsNullOrEmpty(formModel.Email) && string.IsNullOrEmpty(formModel.UserName)) || formModel.Token == null)
             {
                 WorkContext.ErrorMessage = "Not enough info for reseting password";
                 return View("error", WorkContext);
@@ -444,12 +449,21 @@ namespace VirtoCommerce.Storefront.Controllers
 
             if (formModel.Password != formModel.PasswordConfirmation)
             {
-                ModelState.AddModelError("form", "Passwords are not equal");
+                ModelState.AddModelError("form", "Passwords aren't equal");
                 WorkContext.Form = formModel;
                 return View("customers/reset_password", WorkContext);
             }
 
-            var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
+            User user = null;
+            if (!string.IsNullOrEmpty(formModel.UserName))
+            {
+                user = await _signInManager.UserManager.FindByNameAsync(formModel.UserName);
+            }
+            if (user == null && !string.IsNullOrEmpty(formModel.Email))
+            {
+                user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
+            }
+
             if (user == null)
             {
                 // Don't reveal that the user does not exist
