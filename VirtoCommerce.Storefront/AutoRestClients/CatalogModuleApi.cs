@@ -3554,6 +3554,130 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
         }
 
         /// <summary>
+        /// Bulk create links to categories and items
+        /// </summary>
+        /// <param name='creationRequest'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> BulkCreateLinksWithHttpMessagesAsync(BulkLinkCreationRequest creationRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (creationRequest == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "creationRequest");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("creationRequest", creationRequest);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "BulkCreateLinks", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/catalog/listentrylinks/bulkcreate").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(creationRequest != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(creationRequest, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 204)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
         /// Unlinks the linked categories or items from parent categories and catalogs.
         /// </summary>
         /// <param name='links'>
@@ -3873,6 +3997,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
         /// </exception>
         Task<HttpOperationResponse> CreateLinksWithHttpMessagesAsync(IList<ListEntryLink> links, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
+        /// Bulk create links to categories and items
+        /// </summary>
+        /// <param name='creationRequest'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse> BulkCreateLinksWithHttpMessagesAsync(BulkLinkCreationRequest creationRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
         /// Unlinks the linked categories or items from parent categories and
         /// catalogs.
         /// </summary>
@@ -4001,6 +4143,35 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             public static async Task CreateLinksAsync(this ICatalogModuleListEntry operations, IList<ListEntryLink> links, CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.CreateLinksWithHttpMessagesAsync(links, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
+            /// <summary>
+            /// Bulk create links to categories and items
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='creationRequest'>
+            /// </param>
+            public static void BulkCreateLinks(this ICatalogModuleListEntry operations, BulkLinkCreationRequest creationRequest)
+            {
+                operations.BulkCreateLinksAsync(creationRequest).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Bulk create links to categories and items
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='creationRequest'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task BulkCreateLinksAsync(this ICatalogModuleListEntry operations, BulkLinkCreationRequest creationRequest, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.BulkCreateLinksWithHttpMessagesAsync(creationRequest, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -10312,6 +10483,69 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
     using VirtoCommerce.Storefront.AutoRestClients;
     using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
 
+    public partial class BulkLinkCreationRequest
+    {
+        /// <summary>
+        /// Initializes a new instance of the BulkLinkCreationRequest class.
+        /// </summary>
+        public BulkLinkCreationRequest()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the BulkLinkCreationRequest class.
+        /// </summary>
+        public BulkLinkCreationRequest(SearchCriteria searchCriteria = default(SearchCriteria), string categoryId = default(string), string catalogId = default(string))
+        {
+            SearchCriteria = searchCriteria;
+            CategoryId = categoryId;
+            CatalogId = catalogId;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "searchCriteria")]
+        public SearchCriteria SearchCriteria { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "categoryId")]
+        public string CategoryId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "catalogId")]
+        public string CatalogId { get; set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
+
     /// <summary>
     /// Represent move operation detail
     /// </summary>
@@ -11736,7 +11970,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the ProductSearchCriteria class.
         /// </summary>
-        public ProductSearchCriteria(string objectType = default(string), string currency = default(string), IList<string> pricelists = default(IList<string>), NumericRange priceRange = default(NumericRange), IList<string> classTypes = default(IList<string>), bool? withHidden = default(bool?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? startDateFrom = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), IList<string> includeAggregations = default(IList<string>), IList<string> excludeAggregations = default(IList<string>), GeoDistanceFilter geoDistanceFilter = default(GeoDistanceFilter), IList<SortInfo> sortInfos = default(IList<SortInfo>), string storeId = default(string), string catalogId = default(string), string outline = default(string), IList<string> outlines = default(IList<string>), IList<string> terms = default(IList<string>), IList<string> userGroups = default(IList<string>), string responseGroup = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), int? skip = default(int?), int? take = default(int?))
+        public ProductSearchCriteria(string objectType = default(string), string currency = default(string), IList<string> pricelists = default(IList<string>), NumericRange priceRange = default(NumericRange), IList<string> classTypes = default(IList<string>), bool? withHidden = default(bool?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? startDateFrom = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), IList<string> includeAggregations = default(IList<string>), IList<string> excludeAggregations = default(IList<string>), GeoDistanceFilter geoDistanceFilter = default(GeoDistanceFilter), IList<SortInfo> sortInfos = default(IList<SortInfo>), string storeId = default(string), string catalogId = default(string), string outline = default(string), IList<string> outlines = default(IList<string>), IList<string> terms = default(IList<string>), IList<string> userGroups = default(IList<string>), bool? isFuzzySearch = default(bool?), string responseGroup = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), int? skip = default(int?), int? take = default(int?))
         {
             ObjectType = objectType;
             Currency = currency;
@@ -11757,6 +11991,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
             Outlines = outlines;
             Terms = terms;
             UserGroups = userGroups;
+            IsFuzzySearch = isFuzzySearch;
             ResponseGroup = responseGroup;
             ObjectTypes = objectTypes;
             ObjectIds = objectIds;
@@ -11867,6 +12102,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "userGroups")]
         public IList<string> UserGroups { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isFuzzySearch")]
+        public bool? IsFuzzySearch { get; set; }
 
         /// <summary>
         /// </summary>
@@ -12006,7 +12246,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the CategorySearchCriteria class.
         /// </summary>
-        public CategorySearchCriteria(string objectType = default(string), string storeId = default(string), string catalogId = default(string), string outline = default(string), IList<string> outlines = default(IList<string>), IList<string> terms = default(IList<string>), IList<string> userGroups = default(IList<string>), string responseGroup = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public CategorySearchCriteria(string objectType = default(string), string storeId = default(string), string catalogId = default(string), string outline = default(string), IList<string> outlines = default(IList<string>), IList<string> terms = default(IList<string>), IList<string> userGroups = default(IList<string>), bool? isFuzzySearch = default(bool?), string responseGroup = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
             ObjectType = objectType;
             StoreId = storeId;
@@ -12015,6 +12255,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
             Outlines = outlines;
             Terms = terms;
             UserGroups = userGroups;
+            IsFuzzySearch = isFuzzySearch;
             ResponseGroup = responseGroup;
             ObjectTypes = objectTypes;
             ObjectIds = objectIds;
@@ -12066,6 +12307,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "userGroups")]
         public IList<string> UserGroups { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isFuzzySearch")]
+        public bool? IsFuzzySearch { get; set; }
 
         /// <summary>
         /// </summary>
