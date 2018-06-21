@@ -17,7 +17,7 @@ using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.M
 
 namespace VirtoCommerce.Storefront.Domain
 {
-    
+
     public static partial class CartConverter
     {
         public static cartDto.ShoppingCartSearchCriteria ToSearchCriteriaDto(this CartSearchCriteria criteria)
@@ -90,7 +90,7 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new ShippingMethod(currency);
             result.OptionDescription = shippingRate.OptionDescription;
             result.OptionName = shippingRate.OptionName;
-       
+
             result.Price = ratePrice;
             result.DiscountAmount = rateDiscount;
 
@@ -100,11 +100,11 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Name = shippingRate.ShippingMethod.Name;
                 result.Priority = shippingRate.ShippingMethod.Priority ?? 0;
                 result.TaxType = shippingRate.ShippingMethod.TaxType;
-               
+
                 result.ShipmentMethodCode = shippingRate.ShippingMethod.Code;
                 if (shippingRate.ShippingMethod.Settings != null)
                 {
-                    result.Settings = shippingRate.ShippingMethod.Settings.Where(x=> !x.ValueType.EqualsInvariant("SecureString"))
+                    result.Settings = shippingRate.ShippingMethod.Settings.Where(x => !x.ValueType.EqualsInvariant("SecureString"))
                                                                           .Select(x => x.JsonConvert<platformDto.Setting>().ToSettingEntry()).ToList();
                 }
             }
@@ -193,11 +193,14 @@ namespace VirtoCommerce.Storefront.Domain
                 Weight = shipmentDto.Weight,
                 Width = shipmentDto.Width,
                 Length = shipmentDto.Length,
-
-
                 Currency = cart.Currency,
                 Price = new Money(shipmentDto.Price ?? 0, cart.Currency),
+                PriceWithTax = new Money(shipmentDto.PriceWithTax ?? 0, cart.Currency),
                 DiscountAmount = new Money(shipmentDto.DiscountAmount ?? 0, cart.Currency),
+                Total = new Money(shipmentDto.Total ?? 0, cart.Currency),
+                TotalWithTax = new Money(shipmentDto.TotalWithTax ?? 0, cart.Currency),
+                DiscountAmountWithTax = new Money(shipmentDto.DiscountAmountWithTax ?? 0, cart.Currency),
+                TaxTotal = new Money(shipmentDto.TaxTotal ?? 0, cart.Currency),
                 TaxPercentRate = (decimal?)shipmentDto.TaxPercentRate ?? 0m
             };
 
@@ -333,6 +336,11 @@ namespace VirtoCommerce.Storefront.Domain
 
             result.Price = new Money(paymentDto.Price ?? 0, cart.Currency);
             result.DiscountAmount = new Money(paymentDto.DiscountAmount ?? 0, cart.Currency);
+            result.PriceWithTax = new Money(paymentDto.PriceWithTax ?? 0, cart.Currency);
+            result.DiscountAmountWithTax = new Money(paymentDto.DiscountAmountWithTax ?? 0, cart.Currency);
+            result.Total = new Money(paymentDto.Total ?? 0, cart.Currency);
+            result.TotalWithTax = new Money(paymentDto.TotalWithTax ?? 0, cart.Currency);
+            result.TaxTotal = new Money(paymentDto.TaxTotal ?? 0, cart.Currency);
             result.TaxPercentRate = (decimal?)paymentDto.TaxPercentRate ?? 0m;
 
             if (paymentDto.TaxDetails != null)
@@ -409,7 +417,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 ChannelId = cartDto.ChannelId,
                 Comment = cartDto.Comment,
-                CustomerId = cartDto.CustomerId,                
+                CustomerId = cartDto.CustomerId,
                 CustomerName = cartDto.CustomerName,
                 Id = cartDto.Id,
                 Name = cartDto.Name,
@@ -466,6 +474,24 @@ namespace VirtoCommerce.Storefront.Domain
             result.DiscountAmount = new Money(cartDto.DiscountAmount ?? 0, currency);
             result.HandlingTotal = new Money(cartDto.HandlingTotal ?? 0, currency);
             result.HandlingTotalWithTax = new Money(cartDto.HandlingTotalWithTax ?? 0, currency);
+
+            result.Total = new Money(cartDto.Total ?? 0, currency);
+            result.SubTotal = new Money(cartDto.SubTotal ?? 0, currency);
+            result.SubTotalWithTax = new Money(cartDto.SubTotalWithTax ?? 0, currency);
+            result.ShippingPrice = new Money(cartDto.ShippingSubTotal ?? 0, currency);
+            result.ShippingPriceWithTax = new Money(cartDto.ShippingSubTotalWithTax ?? 0, currency);
+            result.ShippingTotal = new Money(cartDto.ShippingTotal ?? 0, currency);
+            result.ShippingTotalWithTax = new Money(cartDto.ShippingTotalWithTax ?? 0, currency);
+            result.PaymentPrice = new Money(cartDto.PaymentSubTotal ?? 0, currency);
+            result.PaymentPriceWithTax = new Money(cartDto.PaymentSubTotalWithTax ?? 0, currency);
+            result.PaymentTotal = new Money(cartDto.PaymentTotal ?? 0, currency);
+            result.PaymentTotalWithTax = new Money(cartDto.PaymentTotalWithTax ?? 0, currency);
+
+            result.DiscountTotal = new Money(cartDto.DiscountTotal ?? 0, currency);
+            result.DiscountTotalWithTax = new Money(cartDto.DiscountTotalWithTax ?? 0, currency);
+            result.TaxTotal = new Money(cartDto.TaxTotal ?? 0, currency);
+
+
             result.IsAnonymous = cartDto.IsAnonymous == true;
             result.IsRecuring = cartDto.IsRecuring == true;
             result.VolumetricWeight = (decimal)(cartDto.VolumetricWeight ?? 0);
@@ -646,7 +672,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Weight = (decimal?)lineItemDto.Weight,
                 Width = (decimal?)lineItemDto.Width,
                 Length = (decimal?)lineItemDto.Length,
-                Height = (decimal?)lineItemDto.Height
+                Height = (decimal?)lineItemDto.Height,
             };
 
 
@@ -680,6 +706,18 @@ namespace VirtoCommerce.Storefront.Domain
             result.Width = (decimal?)lineItemDto.Width;
             result.Height = (decimal?)lineItemDto.Height;
             result.Length = (decimal?)lineItemDto.Length;
+
+
+            result.DiscountAmountWithTax = new Money(lineItemDto.DiscountAmountWithTax ?? 0, currency);
+            result.DiscountTotal = new Money(lineItemDto.DiscountTotal ?? 0, currency);
+            result.DiscountTotalWithTax = new Money(lineItemDto.DiscountTotalWithTax ?? 0, currency);
+            result.ListPriceWithTax = new Money(lineItemDto.ListPriceWithTax ?? 0, currency);
+            result.SalePriceWithTax = new Money(lineItemDto.SalePriceWithTax ?? 0, currency);
+            result.PlacedPrice = new Money(lineItemDto.PlacedPrice ?? 0, currency);
+            result.PlacedPriceWithTax = new Money(lineItemDto.PlacedPriceWithTax ?? 0, currency);
+            result.ExtendedPrice = new Money(lineItemDto.ExtendedPrice ?? 0, currency);
+            result.ExtendedPriceWithTax = new Money(lineItemDto.ExtendedPriceWithTax ?? 0, currency);
+            result.TaxTotal = new Money(lineItemDto.TaxTotal ?? 0, currency);
 
             return result;
         }

@@ -18,6 +18,23 @@ namespace VirtoCommerce.Storefront.Model.Cart
             HandlingTotal = new Money(currency);
             HandlingTotalWithTax = new Money(currency);
             DiscountAmount = new Money(currency);
+            Total = new Money(currency);
+            SubTotal = new Money(currency);
+            SubTotalWithTax = new Money(currency);
+            ShippingPrice = new Money(currency);
+            ShippingPriceWithTax = new Money(currency);
+            ShippingTotal = new Money(currency);
+            ShippingTotalWithTax = new Money(currency);
+            PaymentPrice = new Money(currency);
+            PaymentPriceWithTax = new Money(currency);
+            PaymentTotal = new Money(currency);
+            PaymentTotalWithTax = new Money(currency);
+            HandlingTotal = new Money(currency);
+            HandlingTotalWithTax = new Money(currency);
+            DiscountTotal = new Money(currency);
+            DiscountTotalWithTax = new Money(currency);
+            TaxTotal = new Money(currency);
+
             Addresses = new List<Address>();
             Discounts = new List<Discount>();
             Items = new List<LineItem>();
@@ -130,38 +147,63 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
         /// <summary>
         /// Gets the value of shopping cart total cost
+        /// SubTotal + ShippingSubTotal + TaxTotal + PaymentSubTotal + FeeTotal - DiscountTotal;
         /// </summary>
-        public Money Total
-        {
-            get
-            {
-                return SubTotal + TaxTotal + ShippingPrice + PaymentPrice - DiscountTotal;
-            }
-        }
+        public Money Total { get; set; }
 
         /// <summary>
         /// Gets the value of shopping cart subtotal
+        /// Items.Sum(x => x.ListPrice * x.Quantity);
         /// </summary>
-        public Money SubTotal
-        {
-            get
-            {
-                var subtotal = Items.Sum(i => i.ListPrice.Amount * i.Quantity);
-                return new Money(subtotal, Currency);
-            }
-        }
+        public Money SubTotal { get; set; }
 
         /// <summary>
         /// Gets the value of shopping cart subtotal with taxes
+        /// Items.Sum(x => x.ListPriceWithTax * x.Quantity);
         /// </summary>
-        public Money SubTotalWithTax
-        {
-            get
-            {
-                var subtotalWithTax = Items.Sum(i => i.ListPriceWithTax.Amount * i.Quantity);
-                return new Money(subtotalWithTax, Currency);
-            }
-        }
+        public Money SubTotalWithTax { get; set; }
+
+        /// <summary>
+        /// Gets the value of sum shipping cost without discount
+        /// Shipments.Sum(x => x.Price);
+        /// </summary>
+        public Money ShippingPrice { get; set; }
+
+        /// <summary>
+        /// Shipments.Sum(x => x.PriceWithTax);
+        /// </summary>
+        public Money ShippingPriceWithTax { get; set; }
+
+        /// <summary>
+        /// Gets the value of shipping total cost
+        /// Shipments.Sum(x => x.Total)
+        /// </summary>
+        public Money ShippingTotal { get; set; }
+
+        /// <summary>
+        /// Shipments.Sum(x => x.TotalWithTax)
+        /// </summary>
+        public Money ShippingTotalWithTax { get; set; }
+
+        /// <summary>
+        /// Payments.Sum(x => x.Price)
+        /// </summary>
+        public Money PaymentPrice { get; set; }
+
+        /// <summary>
+        /// Payments.Sum(x => x.PriceWithTax)
+        /// </summary>
+        public Money PaymentPriceWithTax { get; set; }
+
+        /// <summary>
+        /// Payments.Sum(x => x.Total)
+        /// </summary>
+        public virtual Money PaymentTotal { get; set; }
+
+        /// <summary>
+        /// Payments.Sum(x => x.TotalWithTax)
+        /// </summary>
+        public virtual Money PaymentTotalWithTax { get; set; }
 
         /// <summary>
         /// Gets the value of shopping cart items total extended price (product price includes all kinds of discounts)
@@ -184,84 +226,6 @@ namespace VirtoCommerce.Storefront.Model.Cart
             }
         }
 
-        /// <summary>
-        /// Gets the value of sum shipping cost without discount
-        /// </summary>
-        public Money ShippingPrice
-        {
-            get
-            {
-                var shippingPrice = Shipments.Sum(s => s.Price.Amount);
-                return new Money(shippingPrice, Currency);
-            }
-        }
-
-        public Money ShippingPriceWithTax
-        {
-            get
-            {
-                var shippingPriceWithTax = Shipments.Sum(s => s.PriceWithTax.Amount);
-                return new Money(shippingPriceWithTax, Currency);
-            }
-        }
-
-
-        /// <summary>
-        /// Gets the value of shipping total cost
-        /// </summary>
-        public Money ShippingTotal
-        {
-            get
-            {
-                var shippingTotal = Shipments.Sum(s => s.Total.Amount);
-                return new Money(shippingTotal, Currency);
-            }
-        }
-
-        public Money ShippingTotalWithTax
-        {
-            get
-            {
-                var shippingTotalWithTax = Shipments.Sum(s => s.TotalWithTax.Amount);
-                return new Money(shippingTotalWithTax, Currency);
-            }
-        }
-
-        public Money PaymentPrice
-        {
-            get
-            {
-                var paymentPrice = Payments.Sum(s => s.Price.Amount);
-                return new Money(paymentPrice, Currency);
-            }
-        }
-
-        public Money PaymentPriceWithTax
-        {
-            get
-            {
-                var paymentPriceWithTax = Payments.Sum(s => s.PriceWithTax.Amount);
-                return new Money(paymentPriceWithTax, Currency);
-            }
-        }
-
-        public virtual Money PaymentTotal
-        {
-            get
-            {
-                var paymentTotal = Payments.Sum(s => s.Total.Amount);
-                return new Money(paymentTotal, Currency);
-            }
-        }
-
-        public virtual Money PaymentTotalWithTax
-        {
-            get
-            {
-                var paymentTotalWithTax = Payments.Sum(s => s.TotalWithTax.Amount);
-                return new Money(paymentTotalWithTax, Currency);
-            }
-        }
 
         /// <summary>
         /// Gets or sets the value of handling total cost
@@ -273,31 +237,14 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
         /// <summary>
         /// Gets the value of total discount amount
+        /// Items.Sum(x => x.DiscountTotal) + Shipments.Sum(x => x.DiscountAmount) + Payments.Sum(x => x.DiscountAmount) + DiscountAmount
         /// </summary>
-        public Money DiscountTotal
-        {
-            get
-            {
-                var itemDiscountTotal = Items.Sum(i => i.DiscountTotal.InternalAmount);
-                var shipmentDiscountTotal = Shipments.Sum(s => s.DiscountAmount.InternalAmount);
-                var paymentDiscountTotal = Payments.Sum(s => s.DiscountAmount.InternalAmount);
+        public Money DiscountTotal { get; set; }
 
-                return new Money(DiscountAmount.InternalAmount + itemDiscountTotal + shipmentDiscountTotal + paymentDiscountTotal, Currency);
-            }
-        }
-
-
-        public Money DiscountTotalWithTax
-        {
-            get
-            {
-                var itemDiscountTotalWithTax = Items.Sum(i => i.DiscountTotalWithTax.Amount);
-                var shipmentDiscountTotalWithTax = Shipments.Sum(s => s.DiscountAmountWithTax.Amount);
-                var paymentDiscountTotalWithTax = Payments.Sum(s => s.DiscountAmountWithTax.Amount);
-
-                return new Money(DiscountAmount.Amount + itemDiscountTotalWithTax + shipmentDiscountTotalWithTax + paymentDiscountTotalWithTax, Currency);
-            }
-        }
+        /// <summary>
+        /// Items.Sum(x => x.DiscountTotalWithTax) + Shipments.Sum(x => x.DiscountAmountWithTax) + Payments.Sum(x => x.DiscountAmountWithTax) + DiscountAmountWithTax
+        /// </summary>
+        public Money DiscountTotalWithTax { get; set; }
 
         /// <summary>
         /// Gets or sets the collection of shopping cart addresses
@@ -428,27 +375,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <summary>
         /// Gets or sets the value of total shipping tax amount
         /// </summary>
-        public Money TaxTotal
-        {
-            get
-            {
-                var retVal = new Money(0m, Currency);
-
-                foreach (var lineItem in Items)
-                {
-                    retVal += lineItem.TaxTotal;
-                }
-                foreach (var shipment in Shipments)
-                {
-                    retVal += shipment.TaxTotal;
-                }
-                foreach (var payment in Payments)
-                {
-                    retVal += payment.TaxTotal;
-                }
-                return retVal;
-            }
-        }
+        public Money TaxTotal { get; set; }
 
         public decimal TaxPercentRate { get; private set; }
 

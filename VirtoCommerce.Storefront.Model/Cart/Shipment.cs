@@ -19,14 +19,19 @@ namespace VirtoCommerce.Storefront.Model.Cart
         }
 
         public Shipment(Currency currency)
-            :this()
+            : this()
         {
             Currency = currency;
-        
+
             Price = new Money(currency);
+            PriceWithTax = new Money(currency);
             DiscountAmount = new Money(currency);
+            DiscountAmountWithTax = new Money(currency);
+            Total = new Money(currency);
+            TotalWithTax = new Money(currency);
+            TaxTotal = new Money(currency);
         }
-     
+
         /// <summary>
         /// Gets or sets the value of shipping method code
         /// </summary>
@@ -90,51 +95,33 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// </summary>
         public Money Price { get; set; }
 
-     
-            /// <summary>
+
+        /// <summary>
         /// Gets or sets the value of shipping price including tax
+        /// Price * TaxPercentRate
         /// </summary>
-        public Money PriceWithTax
-        {
-            get
-            {
-                return Price + Price * TaxPercentRate;
-            }
-        }
+        public Money PriceWithTax { get; set; }
 
         /// <summary>
         /// Gets the value of total shipping price without taxes
+        /// Price + Fee - DiscountAmount;
         /// </summary>
-        public Money Total
-        {
-            get
-            {
-                return Price - DiscountAmount;
-            }
-        }
+        public Money Total { get; set; }
 
         /// <summary>
         /// Gets the value of total shipping price including taxes
+        /// Total * TaxPercentRate
         /// </summary>
-        public Money TotalWithTax
-        {
-            get
-            {
-                return PriceWithTax - DiscountAmountWithTax;
-            }
-        }
+        public Money TotalWithTax { get; set; }
 
         /// <summary>
         /// Gets the value of total shipping discount amount
         /// </summary>
         public Money DiscountAmount { get; set; }
-        public Money DiscountAmountWithTax
-        {
-            get
-            {
-                return DiscountAmount + DiscountAmount * TaxPercentRate;
-            }
-        }
+        /// <summary>
+        /// DiscountAmount * TaxPercentRate
+        /// </summary>
+        public Money DiscountAmountWithTax { get; set; }
 
         /// <summary>
         /// Gets or sets the collection of shipping items
@@ -148,13 +135,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <summary>
         /// Gets or sets the value of total shipping tax amount
         /// </summary>
-        public Money TaxTotal
-        {
-            get
-            {
-                return TotalWithTax - Total;
-            }
-        }
+        public Money TaxTotal { get; set; }
 
         public decimal TaxPercentRate { get; set; }
 
@@ -169,16 +150,16 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <value>
         /// Collection of TaxDetail objects
         /// </value>
-        public IList<TaxDetail> TaxDetails { get; set; } 
+        public IList<TaxDetail> TaxDetails { get; set; }
 
         public void ApplyTaxRates(IEnumerable<TaxRate> taxRates)
         {
             TaxPercentRate = 0m;
             var shipmentTaxRate = taxRates.FirstOrDefault(x => x.Line.Id != null && x.Line.Id.EqualsInvariant(Id ?? ""));
-            if(shipmentTaxRate == null)
+            if (shipmentTaxRate == null)
             {
                 shipmentTaxRate = taxRates.FirstOrDefault(x => x.Line.Code.EqualsInvariant(ShipmentMethodCode) && x.Line.Name.EqualsInvariant(ShipmentMethodOption));
-            }          
+            }
             if (shipmentTaxRate != null && shipmentTaxRate.Rate.Amount > 0)
             {
                 var amount = Total.Amount > 0 ? Total.Amount : Price.Amount;
@@ -222,7 +203,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         #endregion
 
         public bool HasSameMethod(ShippingMethod method)
-        {           
+        {
             // Return true if the fields match:
             return (ShipmentMethodCode.EqualsInvariant(method.ShipmentMethodCode)) && (ShipmentMethodOption.EqualsInvariant(method.OptionName));
         }

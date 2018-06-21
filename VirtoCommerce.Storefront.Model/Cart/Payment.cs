@@ -14,8 +14,13 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
             Currency = currency;
             Price = new Money(currency);
+            PriceWithTax = new Money(currency);
             DiscountAmount = new Money(currency);
+            DiscountAmountWithTax = new Money(currency);
             Amount = new Money(currency);
+            Total = new Money(currency);
+            TotalWithTax = new Money(currency);
+            TaxTotal = new Money(currency);
         }
 
         /// <summary>
@@ -58,60 +63,36 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
         /// <summary>
         /// Gets or sets the value of payment service price including tax
+        /// Price * TaxPercentRate
         /// </summary>
-        public Money PriceWithTax
-        {
-            get
-            {
-                return Price + Price * TaxPercentRate;
-            }
-        }
+        public Money PriceWithTax { get; set; }
 
         /// <summary>
         /// Gets the value of total payment service price without taxes
+        /// Price - DiscountAmount;
         /// </summary>
-        public Money Total
-        {
-            get
-            {
-                return Price - DiscountAmount;
-            }
-        }
+        public Money Total { get; set; }
 
         /// <summary>
         /// Gets the value of total payment service price including taxes
+        /// Total * TaxPercentRate
         /// </summary>
-        public Money TotalWithTax
-        {
-            get
-            {
-                return PriceWithTax - DiscountAmountWithTax;
-            }
-        }
+        public Money TotalWithTax { get; set; }
 
         /// <summary>
         /// Gets the value of total payment service discount amount
         /// </summary>
         public Money DiscountAmount { get; set; }
-        public Money DiscountAmountWithTax
-        {
-            get
-            {
-                return DiscountAmount + DiscountAmount * TaxPercentRate;
-            }
-        }
+        /// <summary>
+        /// DiscountAmount * TaxPercentRate
+        /// </summary>
+        public Money DiscountAmountWithTax { get; set; }
 
         #region ITaxable Members
         /// <summary>
         /// Gets or sets the value of total payment service tax amount
         /// </summary>
-        public Money TaxTotal
-        {
-            get
-            {
-                return TotalWithTax - Total;
-            }
-        }
+        public Money TaxTotal { get; set; }
 
         public decimal TaxPercentRate { get; set; }
 
@@ -143,7 +124,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
                 {
                     TaxPercentRate = TaxRate.TaxPercentRound(paymentTaxRate.Rate.Amount / amount);
                 }
-            }            
+            }
         }
         #endregion
 
