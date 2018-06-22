@@ -53,7 +53,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             var retVal = (await _subscriptionService.CancelSubscriptionAsync(new SubscriptionCancelRequest
             {
                 CancelReason = cancelRequest.CancelReason,
-                SubscriptionId = subscription.Id
+                SubscriptionId = subscription.Id,
+                CustomerId = WorkContext.CurrentUser.Id
             }));
 
             return Json(retVal);
@@ -63,7 +64,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         {
             var criteria = new SubscriptionSearchCriteria
             {
-                Number = number
+                Number = number,
+                CustomerId = WorkContext.CurrentUser.Id
             };
             var retVal = (await _subscriptionService.SearchSubscriptionsAsync(criteria)).FirstOrDefault();
 

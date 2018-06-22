@@ -9,7 +9,7 @@ using orderDto = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
 using subscriptionDto = VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
-{   
+{
 
     public static partial class SubscriptionConverter
     {
@@ -45,7 +45,8 @@ namespace VirtoCommerce.Storefront.Domain
                 Sort = criteria.Sort,
                 Number = criteria.Number,
                 Skip = criteria.Start,
-                Take = criteria.PageSize
+                Take = criteria.PageSize,
+                ResponseGroup = ((int)criteria.ResponseGroup).ToString()
             };
             result.Sort = criteria.Sort;
 
@@ -120,12 +121,14 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 foreach (var relatedOrderDto in subscriptionDto.CustomerOrders)
                 {
-                    var relatedOrder = new CustomerOrder(currency);
-                    relatedOrder.Id = relatedOrderDto.Id;
-                    relatedOrder.Number = relatedOrderDto.Number;
-                    relatedOrder.Total = new Money(relatedOrderDto.Total ?? 0, currency);
-                    relatedOrder.CreatedDate = relatedOrderDto.CreatedDate;
-                    relatedOrder.Status = relatedOrderDto.Status;
+                    var relatedOrder = new CustomerOrder(currency)
+                    {
+                        Id = relatedOrderDto.Id,
+                        Number = relatedOrderDto.Number,
+                        Total = new Money(relatedOrderDto.Total ?? 0, currency),
+                        CreatedDate = relatedOrderDto.CreatedDate,
+                        Status = relatedOrderDto.Status
+                    };
                     result.CustomerOrders.Add(relatedOrder);
                 }
             }

@@ -29,21 +29,28 @@ namespace VirtoCommerce.Storefront.Domain
         public async Task<Subscription> CancelSubscriptionAsync(SubscriptionCancelRequest request)
         {
             var workContext = _workContextAccessor.WorkContext;
-            return (await _subscriptionApi.CancelSubscriptionAsync(new AutoRestClients.SubscriptionModuleApi.Models.SubscriptionCancelRequest
+            var result = (await _subscriptionApi.CancelSubscriptionAsync(new AutoRestClients.SubscriptionModuleApi.Models.SubscriptionCancelRequest
             {
                 CancelReason = request.CancelReason,
                 SubscriptionId = request.SubscriptionId
             })).ToSubscription(workContext.AllCurrencies, workContext.CurrentLanguage);
+
+            SubscriptionCacheRegion.ExpireCustomerSubscription(request.CustomerId);
+
+            return result;
+
         }
         public async Task DeletePlansByIdsAsync(string[] ids)
         {
             await _subscriptionApi.DeletePlansByIdsAsync(ids);
+            PaymentPlanCacheRegion.ExpireRegion();
         }
         public async Task UpdatePaymentPlanAsync(PaymentPlan plan)
         {
             var paymentPlanDto = plan.ToPaymentPlanDto();
 
             await _subscriptionApi.UpdatePaymentPlanAsync(paymentPlanDto);
+            PaymentPlanCacheRegion.ExpireRegion();
         }
 
         public async Task<IList<PaymentPlan>> GetPaymentPlansByIdsAsync(string[] ids)
@@ -51,7 +58,7 @@ namespace VirtoCommerce.Storefront.Domain
             var cacheKey = CacheKey.With(GetType(), "GetPaymentPlansByIdsAsync", string.Join("-", ids.OrderBy(x => x)));
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
-                cacheEntry.AddExpirationToken(SubscriptionCacheRegion.CreateChangeToken());
+                cacheEntry.AddExpirationToken(PaymentPlanCacheRegion.CreateChangeToken());
                 return (await _subscriptionApi.GetPaymentPlanByIdsAsync(ids)).Select(x => x.ToPaymentPlan()).ToList();
             });
         }
@@ -74,9 +81,15 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 throw new ArgumentNullException(nameof(criteria));
             }
-            var result = await _subscriptionApi.SearchSubscriptionsAsync(criteria.ToSearchCriteriaDto());
-            return new StaticPagedList<Subscription>(result.Subscriptions.Select(x => x.ToSubscription(workContext.AllCurrencies, workContext.CurrentLanguage)),
-                                                     criteria.PageNumber, criteria.PageSize, result.TotalCount.Value);
+            var cacheKey = CacheKey.With(GetType(), "InnerSearchSubscriptionsAsync", criteria.GetCacheKey());
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                cacheEntry.AddExpirationToken(SubscriptionCacheRegion.CreateCustomerSubscriptionChangeToken(criteria.CustomerId));
+                var result = await _subscriptionApi.SearchSubscriptionsAsync(criteria.ToSearchCriteriaDto());
+                return new StaticPagedList<Subscription>(result.Subscriptions.Select(x => x.ToSubscription(workContext.AllCurrencies, workContext.CurrentLanguage)),
+                                                         criteria.PageNumber, criteria.PageSize, result.TotalCount.Value);
+            });
+
         }
     }
 }

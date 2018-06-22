@@ -18,7 +18,7 @@ namespace VirtoCommerce.Storefront.Model.Subscriptions
             set { _defaultPageSize = value; }
         }
         public SubscriptionSearchCriteria()
-            :base(new NameValueCollection(), _defaultPageSize)
+            : base(new NameValueCollection(), _defaultPageSize)
         {
         }
 
@@ -29,5 +29,6 @@ namespace VirtoCommerce.Storefront.Model.Subscriptions
         public string Number { get; set; }
         public string CustomerId { get; set; }
         public string Sort { get; set; }
-    }   
+        public SubscriptionResponseGroup ResponseGroup { get; set; } = SubscriptionResponseGroup.WithOrderPrototype;
+    }
 }
