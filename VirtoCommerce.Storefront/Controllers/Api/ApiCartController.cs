@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
@@ -343,20 +344,24 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
                 var order = await _orderApi.CreateOrderFromCartAsync(cartBuilder.Cart.Id);
 
-                //Raise domain event
-                await _publisher.Publish(new OrderPlacedEvent(WorkContext, order.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage), cartBuilder.Cart));
-
-
-                orderModel.ProcessPaymentResult processingResult = null;
+                var taskList = new List<Task>
+                {
+                    //Raise domain event asynchronously
+                    _publisher.Publish(new OrderPlacedEvent(WorkContext, order.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage), cartBuilder.Cart)),
+                    //Remove the cart asynchronously
+                    cartBuilder.RemoveCartAsync()
+                };
+                //Process order asynchronously
                 var incomingPayment = order.InPayments != null ? order.InPayments.FirstOrDefault() : null;
+                Task<orderModel.ProcessPaymentResult> processPaymentTask = null;
                 if (incomingPayment != null)
                 {
-                    processingResult = await _orderApi.ProcessOrderPaymentsAsync(order.Id, incomingPayment.Id, bankCardInfo);
+                    processPaymentTask = _orderApi.ProcessOrderPaymentsAsync(order.Id, incomingPayment.Id, bankCardInfo);
+                    taskList.Add(processPaymentTask);
                 }
+                await Task.WhenAll(taskList.ToArray());
 
-                await cartBuilder.RemoveCartAsync();
-
-                return Json(new { order, orderProcessingResult = processingResult, paymentMethod = incomingPayment != null ? incomingPayment.PaymentMethod : null });
+                return Json(new { order, orderProcessingResult = processPaymentTask != null ? await processPaymentTask : null, paymentMethod = incomingPayment != null ? incomingPayment.PaymentMethod : null });
             }
         }
 
