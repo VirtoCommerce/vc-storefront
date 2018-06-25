@@ -46,7 +46,8 @@ namespace VirtoCommerce.Storefront.Domain
                 Number = criteria.Number,
                 Skip = criteria.Start,
                 Take = criteria.PageSize,
-                ResponseGroup = ((int)criteria.ResponseGroup).ToString()
+                ResponseGroup = ((int)criteria.ResponseGroup).ToString(),
+                ModifiedSinceDate = criteria.ModifiedSinceDate
             };
             result.Sort = criteria.Sort;
 

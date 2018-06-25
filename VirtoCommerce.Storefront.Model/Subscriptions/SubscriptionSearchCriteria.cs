@@ -29,6 +29,7 @@ namespace VirtoCommerce.Storefront.Model.Subscriptions
         public string Number { get; set; }
         public string CustomerId { get; set; }
         public string Sort { get; set; }
+        public DateTime? ModifiedSinceDate { get; set; }
         public SubscriptionResponseGroup ResponseGroup { get; set; } = SubscriptionResponseGroup.WithOrderPrototype;
     }
 }

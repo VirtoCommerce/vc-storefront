@@ -2965,7 +2965,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the SubscriptionSearchCriteria class.
         /// </summary>
-        public SubscriptionSearchCriteria(string storeId = default(string), string number = default(string), string keyword = default(string), string customerOrderId = default(string), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string customerId = default(string), IList<string> statuses = default(IList<string>), string outerId = default(string), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public SubscriptionSearchCriteria(string storeId = default(string), string number = default(string), string keyword = default(string), string customerOrderId = default(string), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), System.DateTime? modifiedSinceDate = default(System.DateTime?), string customerId = default(string), IList<string> statuses = default(IList<string>), string outerId = default(string), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
             StoreId = storeId;
             Number = number;
@@ -2973,6 +2973,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             CustomerOrderId = customerOrderId;
             StartDate = startDate;
             EndDate = endDate;
+            ModifiedSinceDate = modifiedSinceDate;
             CustomerId = customerId;
             Statuses = statuses;
             OuterId = outerId;
@@ -3023,6 +3024,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "endDate")]
         public System.DateTime? EndDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedSinceDate")]
+        public System.DateTime? ModifiedSinceDate { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3125,9 +3131,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// Initializes a new instance of the Address class.
         /// </summary>
         /// <param name="addressType">Possible values include: 'Billing',
-        /// 'Shipping', 'BillingAndShipping'</param>
-        public Address(string addressType = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
+        /// 'Shipping', 'Pickup', 'BillingAndShipping'</param>
+        public Address(string key = default(string), string addressType = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
         {
+            Key = key;
             AddressType = addressType;
             Name = name;
             Organization = organization;
@@ -3154,8 +3161,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         partial void CustomInit();
 
         /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "key")]
+        public string Key { get; set; }
+
+        /// <summary>
         /// Gets or sets possible values include: 'Billing', 'Shipping',
-        /// 'BillingAndShipping'
+        /// 'Pickup', 'BillingAndShipping'
         /// </summary>
         [JsonProperty(PropertyName = "addressType")]
         public string AddressType { get; set; }
@@ -6635,6 +6647,1031 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
     using VirtoCommerce.Storefront.AutoRestClients;
     using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
 
+    public partial class ConstructorInfo
+    {
+        /// <summary>
+        /// Initializes a new instance of the ConstructorInfo class.
+        /// </summary>
+        public ConstructorInfo()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ConstructorInfo class.
+        /// </summary>
+        /// <param name="memberType">Possible values include: 'Constructor',
+        /// 'Event', 'Field', 'Method', 'Property', 'TypeInfo', 'Custom',
+        /// 'NestedType', 'All'</param>
+        /// <param name="methodImplementationFlags">Possible values include:
+        /// 'CodeTypeMask', 'IL', 'Native', 'OPTIL', 'Runtime', 'ManagedMask',
+        /// 'Unmanaged', 'Managed', 'ForwardRef', 'PreserveSig',
+        /// 'InternalCall', 'Synchronized', 'NoInlining', 'AggressiveInlining',
+        /// 'NoOptimization', 'MaxMethodImplVal'</param>
+        /// <param name="attributes">Possible values include:
+        /// 'MemberAccessMask', 'PrivateScope', 'Private', 'FamANDAssem',
+        /// 'Assembly', 'Family', 'FamORAssem', 'Public', 'Static', 'Final',
+        /// 'Virtual', 'HideBySig', 'CheckAccessOnOverride',
+        /// 'VtableLayoutMask', 'ReuseSlot', 'NewSlot', 'Abstract',
+        /// 'SpecialName', 'PinvokeImpl', 'UnmanagedExport', 'RTSpecialName',
+        /// 'ReservedMask', 'HasSecurity', 'RequireSecObject'</param>
+        /// <param name="callingConvention">Possible values include:
+        /// 'Standard', 'VarArgs', 'Any', 'HasThis', 'ExplicitThis'</param>
+        public ConstructorInfo(string memberType = default(string), string methodImplementationFlags = default(string), object methodHandle = default(object), string attributes = default(string), string callingConvention = default(string), bool? isGenericMethodDefinition = default(bool?), bool? containsGenericParameters = default(bool?), bool? isGenericMethod = default(bool?), bool? isSecurityCritical = default(bool?), bool? isSecuritySafeCritical = default(bool?), bool? isSecurityTransparent = default(bool?), bool? isPublic = default(bool?), bool? isPrivate = default(bool?), bool? isFamily = default(bool?), bool? isAssembly = default(bool?), bool? isFamilyAndAssembly = default(bool?), bool? isFamilyOrAssembly = default(bool?), bool? isStatic = default(bool?), bool? isFinal = default(bool?), bool? isVirtual = default(bool?), bool? isHideBySig = default(bool?), bool? isAbstract = default(bool?), bool? isSpecialName = default(bool?), bool? isConstructor = default(bool?), string name = default(string), string declaringType = default(string), string reflectedType = default(string), IList<CustomAttributeData> customAttributes = default(IList<CustomAttributeData>), int? metadataToken = default(int?), object module = default(object))
+        {
+            MemberType = memberType;
+            MethodImplementationFlags = methodImplementationFlags;
+            MethodHandle = methodHandle;
+            Attributes = attributes;
+            CallingConvention = callingConvention;
+            IsGenericMethodDefinition = isGenericMethodDefinition;
+            ContainsGenericParameters = containsGenericParameters;
+            IsGenericMethod = isGenericMethod;
+            IsSecurityCritical = isSecurityCritical;
+            IsSecuritySafeCritical = isSecuritySafeCritical;
+            IsSecurityTransparent = isSecurityTransparent;
+            IsPublic = isPublic;
+            IsPrivate = isPrivate;
+            IsFamily = isFamily;
+            IsAssembly = isAssembly;
+            IsFamilyAndAssembly = isFamilyAndAssembly;
+            IsFamilyOrAssembly = isFamilyOrAssembly;
+            IsStatic = isStatic;
+            IsFinal = isFinal;
+            IsVirtual = isVirtual;
+            IsHideBySig = isHideBySig;
+            IsAbstract = isAbstract;
+            IsSpecialName = isSpecialName;
+            IsConstructor = isConstructor;
+            Name = name;
+            DeclaringType = declaringType;
+            ReflectedType = reflectedType;
+            CustomAttributes = customAttributes;
+            MetadataToken = metadataToken;
+            Module = module;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// Gets possible values include: 'Constructor', 'Event', 'Field',
+        /// 'Method', 'Property', 'TypeInfo', 'Custom', 'NestedType', 'All'
+        /// </summary>
+        [JsonProperty(PropertyName = "memberType")]
+        public string MemberType { get; private set; }
+
+        /// <summary>
+        /// Gets possible values include: 'CodeTypeMask', 'IL', 'Native',
+        /// 'OPTIL', 'Runtime', 'ManagedMask', 'Unmanaged', 'Managed',
+        /// 'ForwardRef', 'PreserveSig', 'InternalCall', 'Synchronized',
+        /// 'NoInlining', 'AggressiveInlining', 'NoOptimization',
+        /// 'MaxMethodImplVal'
+        /// </summary>
+        [JsonProperty(PropertyName = "methodImplementationFlags")]
+        public string MethodImplementationFlags { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "methodHandle")]
+        public object MethodHandle { get; private set; }
+
+        /// <summary>
+        /// Gets possible values include: 'MemberAccessMask', 'PrivateScope',
+        /// 'Private', 'FamANDAssem', 'Assembly', 'Family', 'FamORAssem',
+        /// 'Public', 'Static', 'Final', 'Virtual', 'HideBySig',
+        /// 'CheckAccessOnOverride', 'VtableLayoutMask', 'ReuseSlot',
+        /// 'NewSlot', 'Abstract', 'SpecialName', 'PinvokeImpl',
+        /// 'UnmanagedExport', 'RTSpecialName', 'ReservedMask', 'HasSecurity',
+        /// 'RequireSecObject'
+        /// </summary>
+        [JsonProperty(PropertyName = "attributes")]
+        public string Attributes { get; private set; }
+
+        /// <summary>
+        /// Gets possible values include: 'Standard', 'VarArgs', 'Any',
+        /// 'HasThis', 'ExplicitThis'
+        /// </summary>
+        [JsonProperty(PropertyName = "callingConvention")]
+        public string CallingConvention { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isGenericMethodDefinition")]
+        public bool? IsGenericMethodDefinition { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "containsGenericParameters")]
+        public bool? ContainsGenericParameters { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isGenericMethod")]
+        public bool? IsGenericMethod { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isSecurityCritical")]
+        public bool? IsSecurityCritical { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isSecuritySafeCritical")]
+        public bool? IsSecuritySafeCritical { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isSecurityTransparent")]
+        public bool? IsSecurityTransparent { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isPublic")]
+        public bool? IsPublic { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isPrivate")]
+        public bool? IsPrivate { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isFamily")]
+        public bool? IsFamily { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isAssembly")]
+        public bool? IsAssembly { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isFamilyAndAssembly")]
+        public bool? IsFamilyAndAssembly { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isFamilyOrAssembly")]
+        public bool? IsFamilyOrAssembly { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isStatic")]
+        public bool? IsStatic { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isFinal")]
+        public bool? IsFinal { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isVirtual")]
+        public bool? IsVirtual { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isHideBySig")]
+        public bool? IsHideBySig { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isAbstract")]
+        public bool? IsAbstract { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isSpecialName")]
+        public bool? IsSpecialName { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isConstructor")]
+        public bool? IsConstructor { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "declaringType")]
+        public string DeclaringType { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "reflectedType")]
+        public string ReflectedType { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "customAttributes")]
+        public IList<CustomAttributeData> CustomAttributes { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "metadataToken")]
+        public int? MetadataToken { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "module")]
+        public object Module { get; private set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
+
+    public partial class CustomAttributeTypedArgument
+    {
+        /// <summary>
+        /// Initializes a new instance of the CustomAttributeTypedArgument
+        /// class.
+        /// </summary>
+        public CustomAttributeTypedArgument()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the CustomAttributeTypedArgument
+        /// class.
+        /// </summary>
+        public CustomAttributeTypedArgument(string argumentType = default(string), object value = default(object))
+        {
+            ArgumentType = argumentType;
+            Value = value;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "argumentType")]
+        public string ArgumentType { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "value")]
+        public object Value { get; private set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
+
+    public partial class CustomAttributeNamedArgument
+    {
+        /// <summary>
+        /// Initializes a new instance of the CustomAttributeNamedArgument
+        /// class.
+        /// </summary>
+        public CustomAttributeNamedArgument()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the CustomAttributeNamedArgument
+        /// class.
+        /// </summary>
+        public CustomAttributeNamedArgument(MemberInfo memberInfo = default(MemberInfo), CustomAttributeTypedArgument typedValue = default(CustomAttributeTypedArgument), string memberName = default(string), bool? isField = default(bool?))
+        {
+            MemberInfo = memberInfo;
+            TypedValue = typedValue;
+            MemberName = memberName;
+            IsField = isField;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "memberInfo")]
+        public MemberInfo MemberInfo { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "typedValue")]
+        public CustomAttributeTypedArgument TypedValue { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "memberName")]
+        public string MemberName { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isField")]
+        public bool? IsField { get; private set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
+
+    public partial class CustomAttributeData
+    {
+        /// <summary>
+        /// Initializes a new instance of the CustomAttributeData class.
+        /// </summary>
+        public CustomAttributeData()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the CustomAttributeData class.
+        /// </summary>
+        public CustomAttributeData(string attributeType = default(string), ConstructorInfo constructor = default(ConstructorInfo), IList<CustomAttributeTypedArgument> constructorArguments = default(IList<CustomAttributeTypedArgument>), IList<CustomAttributeNamedArgument> namedArguments = default(IList<CustomAttributeNamedArgument>))
+        {
+            AttributeType = attributeType;
+            Constructor = constructor;
+            ConstructorArguments = constructorArguments;
+            NamedArguments = namedArguments;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "attributeType")]
+        public string AttributeType { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "constructor")]
+        public ConstructorInfo Constructor { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "constructorArguments")]
+        public IList<CustomAttributeTypedArgument> ConstructorArguments { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "namedArguments")]
+        public IList<CustomAttributeNamedArgument> NamedArguments { get; private set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
+
+    public partial class MemberInfo
+    {
+        /// <summary>
+        /// Initializes a new instance of the MemberInfo class.
+        /// </summary>
+        public MemberInfo()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the MemberInfo class.
+        /// </summary>
+        /// <param name="memberType">Possible values include: 'Constructor',
+        /// 'Event', 'Field', 'Method', 'Property', 'TypeInfo', 'Custom',
+        /// 'NestedType', 'All'</param>
+        public MemberInfo(string memberType = default(string), string name = default(string), string declaringType = default(string), string reflectedType = default(string), IList<CustomAttributeData> customAttributes = default(IList<CustomAttributeData>), int? metadataToken = default(int?), object module = default(object))
+        {
+            MemberType = memberType;
+            Name = name;
+            DeclaringType = declaringType;
+            ReflectedType = reflectedType;
+            CustomAttributes = customAttributes;
+            MetadataToken = metadataToken;
+            Module = module;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// Gets possible values include: 'Constructor', 'Event', 'Field',
+        /// 'Method', 'Property', 'TypeInfo', 'Custom', 'NestedType', 'All'
+        /// </summary>
+        [JsonProperty(PropertyName = "memberType")]
+        public string MemberType { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "declaringType")]
+        public string DeclaringType { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "reflectedType")]
+        public string ReflectedType { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "customAttributes")]
+        public IList<CustomAttributeData> CustomAttributes { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "metadataToken")]
+        public int? MetadataToken { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "module")]
+        public object Module { get; private set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
+
+    public partial class ParameterInfo
+    {
+        /// <summary>
+        /// Initializes a new instance of the ParameterInfo class.
+        /// </summary>
+        public ParameterInfo()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ParameterInfo class.
+        /// </summary>
+        /// <param name="attributes">Possible values include: 'None', 'In',
+        /// 'Out', 'Lcid', 'Retval', 'Optional', 'ReservedMask', 'HasDefault',
+        /// 'HasFieldMarshal', 'Reserved3', 'Reserved4'</param>
+        public ParameterInfo(string parameterType = default(string), string name = default(string), bool? hasDefaultValue = default(bool?), object defaultValue = default(object), object rawDefaultValue = default(object), int? position = default(int?), string attributes = default(string), MemberInfo member = default(MemberInfo), bool? isIn = default(bool?), bool? isOut = default(bool?), bool? isLcid = default(bool?), bool? isRetval = default(bool?), bool? isOptional = default(bool?), int? metadataToken = default(int?), IList<CustomAttributeData> customAttributes = default(IList<CustomAttributeData>))
+        {
+            ParameterType = parameterType;
+            Name = name;
+            HasDefaultValue = hasDefaultValue;
+            DefaultValue = defaultValue;
+            RawDefaultValue = rawDefaultValue;
+            Position = position;
+            Attributes = attributes;
+            Member = member;
+            IsIn = isIn;
+            IsOut = isOut;
+            IsLcid = isLcid;
+            IsRetval = isRetval;
+            IsOptional = isOptional;
+            MetadataToken = metadataToken;
+            CustomAttributes = customAttributes;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "parameterType")]
+        public string ParameterType { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "hasDefaultValue")]
+        public bool? HasDefaultValue { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "defaultValue")]
+        public object DefaultValue { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "rawDefaultValue")]
+        public object RawDefaultValue { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "position")]
+        public int? Position { get; private set; }
+
+        /// <summary>
+        /// Gets possible values include: 'None', 'In', 'Out', 'Lcid',
+        /// 'Retval', 'Optional', 'ReservedMask', 'HasDefault',
+        /// 'HasFieldMarshal', 'Reserved3', 'Reserved4'
+        /// </summary>
+        [JsonProperty(PropertyName = "attributes")]
+        public string Attributes { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "member")]
+        public MemberInfo Member { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isIn")]
+        public bool? IsIn { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isOut")]
+        public bool? IsOut { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isLcid")]
+        public bool? IsLcid { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isRetval")]
+        public bool? IsRetval { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isOptional")]
+        public bool? IsOptional { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "metadataToken")]
+        public int? MetadataToken { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "customAttributes")]
+        public IList<CustomAttributeData> CustomAttributes { get; private set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
+
+    public partial class MethodInfo
+    {
+        /// <summary>
+        /// Initializes a new instance of the MethodInfo class.
+        /// </summary>
+        public MethodInfo()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the MethodInfo class.
+        /// </summary>
+        /// <param name="memberType">Possible values include: 'Constructor',
+        /// 'Event', 'Field', 'Method', 'Property', 'TypeInfo', 'Custom',
+        /// 'NestedType', 'All'</param>
+        /// <param name="methodImplementationFlags">Possible values include:
+        /// 'CodeTypeMask', 'IL', 'Native', 'OPTIL', 'Runtime', 'ManagedMask',
+        /// 'Unmanaged', 'Managed', 'ForwardRef', 'PreserveSig',
+        /// 'InternalCall', 'Synchronized', 'NoInlining', 'AggressiveInlining',
+        /// 'NoOptimization', 'MaxMethodImplVal'</param>
+        /// <param name="attributes">Possible values include:
+        /// 'MemberAccessMask', 'PrivateScope', 'Private', 'FamANDAssem',
+        /// 'Assembly', 'Family', 'FamORAssem', 'Public', 'Static', 'Final',
+        /// 'Virtual', 'HideBySig', 'CheckAccessOnOverride',
+        /// 'VtableLayoutMask', 'ReuseSlot', 'NewSlot', 'Abstract',
+        /// 'SpecialName', 'PinvokeImpl', 'UnmanagedExport', 'RTSpecialName',
+        /// 'ReservedMask', 'HasSecurity', 'RequireSecObject'</param>
+        /// <param name="callingConvention">Possible values include:
+        /// 'Standard', 'VarArgs', 'Any', 'HasThis', 'ExplicitThis'</param>
+        public MethodInfo(string memberType = default(string), string returnType = default(string), ParameterInfo returnParameter = default(ParameterInfo), object returnTypeCustomAttributes = default(object), string methodImplementationFlags = default(string), object methodHandle = default(object), string attributes = default(string), string callingConvention = default(string), bool? isGenericMethodDefinition = default(bool?), bool? containsGenericParameters = default(bool?), bool? isGenericMethod = default(bool?), bool? isSecurityCritical = default(bool?), bool? isSecuritySafeCritical = default(bool?), bool? isSecurityTransparent = default(bool?), bool? isPublic = default(bool?), bool? isPrivate = default(bool?), bool? isFamily = default(bool?), bool? isAssembly = default(bool?), bool? isFamilyAndAssembly = default(bool?), bool? isFamilyOrAssembly = default(bool?), bool? isStatic = default(bool?), bool? isFinal = default(bool?), bool? isVirtual = default(bool?), bool? isHideBySig = default(bool?), bool? isAbstract = default(bool?), bool? isSpecialName = default(bool?), bool? isConstructor = default(bool?), string name = default(string), string declaringType = default(string), string reflectedType = default(string), IList<CustomAttributeData> customAttributes = default(IList<CustomAttributeData>), int? metadataToken = default(int?), object module = default(object))
+        {
+            MemberType = memberType;
+            ReturnType = returnType;
+            ReturnParameter = returnParameter;
+            ReturnTypeCustomAttributes = returnTypeCustomAttributes;
+            MethodImplementationFlags = methodImplementationFlags;
+            MethodHandle = methodHandle;
+            Attributes = attributes;
+            CallingConvention = callingConvention;
+            IsGenericMethodDefinition = isGenericMethodDefinition;
+            ContainsGenericParameters = containsGenericParameters;
+            IsGenericMethod = isGenericMethod;
+            IsSecurityCritical = isSecurityCritical;
+            IsSecuritySafeCritical = isSecuritySafeCritical;
+            IsSecurityTransparent = isSecurityTransparent;
+            IsPublic = isPublic;
+            IsPrivate = isPrivate;
+            IsFamily = isFamily;
+            IsAssembly = isAssembly;
+            IsFamilyAndAssembly = isFamilyAndAssembly;
+            IsFamilyOrAssembly = isFamilyOrAssembly;
+            IsStatic = isStatic;
+            IsFinal = isFinal;
+            IsVirtual = isVirtual;
+            IsHideBySig = isHideBySig;
+            IsAbstract = isAbstract;
+            IsSpecialName = isSpecialName;
+            IsConstructor = isConstructor;
+            Name = name;
+            DeclaringType = declaringType;
+            ReflectedType = reflectedType;
+            CustomAttributes = customAttributes;
+            MetadataToken = metadataToken;
+            Module = module;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// Gets possible values include: 'Constructor', 'Event', 'Field',
+        /// 'Method', 'Property', 'TypeInfo', 'Custom', 'NestedType', 'All'
+        /// </summary>
+        [JsonProperty(PropertyName = "memberType")]
+        public string MemberType { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "returnType")]
+        public string ReturnType { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "returnParameter")]
+        public ParameterInfo ReturnParameter { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "returnTypeCustomAttributes")]
+        public object ReturnTypeCustomAttributes { get; private set; }
+
+        /// <summary>
+        /// Gets possible values include: 'CodeTypeMask', 'IL', 'Native',
+        /// 'OPTIL', 'Runtime', 'ManagedMask', 'Unmanaged', 'Managed',
+        /// 'ForwardRef', 'PreserveSig', 'InternalCall', 'Synchronized',
+        /// 'NoInlining', 'AggressiveInlining', 'NoOptimization',
+        /// 'MaxMethodImplVal'
+        /// </summary>
+        [JsonProperty(PropertyName = "methodImplementationFlags")]
+        public string MethodImplementationFlags { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "methodHandle")]
+        public object MethodHandle { get; private set; }
+
+        /// <summary>
+        /// Gets possible values include: 'MemberAccessMask', 'PrivateScope',
+        /// 'Private', 'FamANDAssem', 'Assembly', 'Family', 'FamORAssem',
+        /// 'Public', 'Static', 'Final', 'Virtual', 'HideBySig',
+        /// 'CheckAccessOnOverride', 'VtableLayoutMask', 'ReuseSlot',
+        /// 'NewSlot', 'Abstract', 'SpecialName', 'PinvokeImpl',
+        /// 'UnmanagedExport', 'RTSpecialName', 'ReservedMask', 'HasSecurity',
+        /// 'RequireSecObject'
+        /// </summary>
+        [JsonProperty(PropertyName = "attributes")]
+        public string Attributes { get; private set; }
+
+        /// <summary>
+        /// Gets possible values include: 'Standard', 'VarArgs', 'Any',
+        /// 'HasThis', 'ExplicitThis'
+        /// </summary>
+        [JsonProperty(PropertyName = "callingConvention")]
+        public string CallingConvention { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isGenericMethodDefinition")]
+        public bool? IsGenericMethodDefinition { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "containsGenericParameters")]
+        public bool? ContainsGenericParameters { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isGenericMethod")]
+        public bool? IsGenericMethod { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isSecurityCritical")]
+        public bool? IsSecurityCritical { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isSecuritySafeCritical")]
+        public bool? IsSecuritySafeCritical { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isSecurityTransparent")]
+        public bool? IsSecurityTransparent { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isPublic")]
+        public bool? IsPublic { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isPrivate")]
+        public bool? IsPrivate { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isFamily")]
+        public bool? IsFamily { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isAssembly")]
+        public bool? IsAssembly { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isFamilyAndAssembly")]
+        public bool? IsFamilyAndAssembly { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isFamilyOrAssembly")]
+        public bool? IsFamilyOrAssembly { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isStatic")]
+        public bool? IsStatic { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isFinal")]
+        public bool? IsFinal { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isVirtual")]
+        public bool? IsVirtual { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isHideBySig")]
+        public bool? IsHideBySig { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isAbstract")]
+        public bool? IsAbstract { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isSpecialName")]
+        public bool? IsSpecialName { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isConstructor")]
+        public bool? IsConstructor { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "declaringType")]
+        public string DeclaringType { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "reflectedType")]
+        public string ReflectedType { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "customAttributes")]
+        public IList<CustomAttributeData> CustomAttributes { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "metadataToken")]
+        public int? MetadataToken { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "module")]
+        public object Module { get; private set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
+
+    public partial class FuncIEvaluationContextBoolean
+    {
+        /// <summary>
+        /// Initializes a new instance of the FuncIEvaluationContextBoolean
+        /// class.
+        /// </summary>
+        public FuncIEvaluationContextBoolean()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the FuncIEvaluationContextBoolean
+        /// class.
+        /// </summary>
+        public FuncIEvaluationContextBoolean(MethodInfo method = default(MethodInfo), object target = default(object))
+        {
+            Method = method;
+            Target = target;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "method")]
+        public MethodInfo Method { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "target")]
+        public object Target { get; private set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
+
     public partial class DynamicExpression
     {
         /// <summary>
@@ -6774,7 +7811,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the PricelistAssignment class.
         /// </summary>
-        public PricelistAssignment(string catalogId = default(string), string pricelistId = default(string), Pricelist pricelist = default(Pricelist), string name = default(string), string description = default(string), int? priority = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string conditionExpression = default(string), string predicateVisualTreeSerialized = default(string), object condition = default(object), ConditionExpressionTree dynamicExpression = default(ConditionExpressionTree), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public PricelistAssignment(string catalogId = default(string), string pricelistId = default(string), Pricelist pricelist = default(Pricelist), string name = default(string), string description = default(string), int? priority = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string conditionExpression = default(string), string predicateVisualTreeSerialized = default(string), FuncIEvaluationContextBoolean condition = default(FuncIEvaluationContextBoolean), ConditionExpressionTree dynamicExpression = default(ConditionExpressionTree), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             CatalogId = catalogId;
             PricelistId = pricelistId;
@@ -6854,7 +7891,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "condition")]
-        public object Condition { get; set; }
+        public FuncIEvaluationContextBoolean Condition { get; set; }
 
         /// <summary>
         /// </summary>
@@ -7136,6 +8173,105 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
     using VirtoCommerce.Storefront.AutoRestClients;
     using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
 
+    public partial class FulfillmentCenter
+    {
+        /// <summary>
+        /// Initializes a new instance of the FulfillmentCenter class.
+        /// </summary>
+        public FulfillmentCenter()
+        {
+          CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the FulfillmentCenter class.
+        /// </summary>
+        public FulfillmentCenter(string name = default(string), string description = default(string), string geoLocation = default(string), Address address = default(Address), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        {
+            Name = name;
+            Description = description;
+            GeoLocation = geoLocation;
+            Address = address;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "geoLocation")]
+        public string GeoLocation { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "address")]
+        public Address Address { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// Code generated by Microsoft (R) AutoRest Code Generator 1.2.2.0
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+
+namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using VirtoCommerce.Storefront;
+    using VirtoCommerce.Storefront.AutoRestClients;
+    using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
+
     public partial class InventoryInfo
     {
         /// <summary>
@@ -7151,13 +8287,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         /// <param name="status">Possible values include: 'Disabled',
         /// 'Enabled', 'Ignored'</param>
-        public InventoryInfo(System.DateTime? createdDate = default(System.DateTime?), string createdBy = default(string), System.DateTime? modifiedDate = default(System.DateTime?), string modifiedBy = default(string), string fulfillmentCenterId = default(string), string productId = default(string), long? inStockQuantity = default(long?), long? reservedQuantity = default(long?), long? reorderMinQuantity = default(long?), long? preorderQuantity = default(long?), long? backorderQuantity = default(long?), bool? allowBackorder = default(bool?), bool? allowPreorder = default(bool?), long? inTransit = default(long?), System.DateTime? preorderAvailabilityDate = default(System.DateTime?), System.DateTime? backorderAvailabilityDate = default(System.DateTime?), string status = default(string))
+        public InventoryInfo(System.DateTime? createdDate = default(System.DateTime?), string createdBy = default(string), System.DateTime? modifiedDate = default(System.DateTime?), string modifiedBy = default(string), string fulfillmentCenterId = default(string), FulfillmentCenter fulfillmentCenter = default(FulfillmentCenter), string productId = default(string), long? inStockQuantity = default(long?), long? reservedQuantity = default(long?), long? reorderMinQuantity = default(long?), long? preorderQuantity = default(long?), long? backorderQuantity = default(long?), bool? allowBackorder = default(bool?), bool? allowPreorder = default(bool?), long? inTransit = default(long?), System.DateTime? preorderAvailabilityDate = default(System.DateTime?), System.DateTime? backorderAvailabilityDate = default(System.DateTime?), string status = default(string))
         {
             CreatedDate = createdDate;
             CreatedBy = createdBy;
             ModifiedDate = modifiedDate;
             ModifiedBy = modifiedBy;
             FulfillmentCenterId = fulfillmentCenterId;
+            FulfillmentCenter = fulfillmentCenter;
             ProductId = productId;
             InStockQuantity = inStockQuantity;
             ReservedQuantity = reservedQuantity;
@@ -7202,6 +8339,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "fulfillmentCenterId")]
         public string FulfillmentCenterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "fulfillmentCenter")]
+        public FulfillmentCenter FulfillmentCenter { get; set; }
 
         /// <summary>
         /// </summary>
@@ -7669,7 +8811,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the LineItem class.
         /// </summary>
-        public LineItem(string priceId = default(string), string currency = default(string), double? price = default(double?), double? priceWithTax = default(double?), double? placedPrice = default(double?), double? placedPriceWithTax = default(double?), double? extendedPrice = default(double?), double? extendedPriceWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), double? discountTotal = default(double?), double? discountTotalWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), int? reserveQuantity = default(int?), int? quantity = default(int?), string productId = default(string), CatalogProduct product = default(CatalogProduct), string sku = default(string), string productType = default(string), string catalogId = default(string), string categoryId = default(string), string name = default(string), string comment = default(string), string imageUrl = default(string), bool? isGift = default(bool?), string shippingMethodCode = default(string), string fulfillmentLocationCode = default(string), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<Discount> discounts = default(IList<Discount>), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public LineItem(string priceId = default(string), string currency = default(string), double? price = default(double?), double? priceWithTax = default(double?), double? placedPrice = default(double?), double? placedPriceWithTax = default(double?), double? extendedPrice = default(double?), double? extendedPriceWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), double? discountTotal = default(double?), double? discountTotalWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), int? reserveQuantity = default(int?), int? quantity = default(int?), string productId = default(string), CatalogProduct product = default(CatalogProduct), string sku = default(string), string productType = default(string), string catalogId = default(string), string categoryId = default(string), string name = default(string), string comment = default(string), string imageUrl = default(string), bool? isGift = default(bool?), string shippingMethodCode = default(string), string fulfillmentLocationCode = default(string), string fulfillmentCenterId = default(string), string fulfillmentCenterName = default(string), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<Discount> discounts = default(IList<Discount>), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             PriceId = priceId;
             Currency = currency;
@@ -7702,6 +8844,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             IsGift = isGift;
             ShippingMethodCode = shippingMethodCode;
             FulfillmentLocationCode = fulfillmentLocationCode;
+            FulfillmentCenterId = fulfillmentCenterId;
+            FulfillmentCenterName = fulfillmentCenterName;
             WeightUnit = weightUnit;
             Weight = weight;
             MeasureUnit = measureUnit;
@@ -7882,6 +9026,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "fulfillmentLocationCode")]
         public string FulfillmentLocationCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "fulfillmentCenterId")]
+        public string FulfillmentCenterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "fulfillmentCenterName")]
+        public string FulfillmentCenterName { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9179,7 +10333,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// 'Months', 'Years'</param>
         /// <param name="subscriptionStatus">Possible values include: 'Active',
         /// 'Trialing', 'PastDue', 'Cancelled', 'Unpaid'</param>
-        public Subscription(string storeId = default(string), string customerId = default(string), string customerName = default(string), double? balance = default(double?), string number = default(string), string interval = default(string), int? intervalCount = default(int?), int? trialPeriodDays = default(int?), string subscriptionStatus = default(string), string customerOrderPrototypeId = default(string), CustomerOrder customerOrderPrototype = default(CustomerOrder), IList<string> customerOrdersIds = default(IList<string>), IList<CustomerOrder> customerOrders = default(IList<CustomerOrder>), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), System.DateTime? trialSart = default(System.DateTime?), System.DateTime? trialEnd = default(System.DateTime?), System.DateTime? currentPeriodStart = default(System.DateTime?), System.DateTime? currentPeriodEnd = default(System.DateTime?), string outerId = default(string), IList<OperationLog> operationsLog = default(IList<OperationLog>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Subscription(string storeId = default(string), string customerId = default(string), string customerName = default(string), double? balance = default(double?), string number = default(string), string interval = default(string), int? intervalCount = default(int?), int? trialPeriodDays = default(int?), string subscriptionStatus = default(string), string customerOrderPrototypeId = default(string), CustomerOrder customerOrderPrototype = default(CustomerOrder), IList<string> customerOrdersIds = default(IList<string>), IList<CustomerOrder> customerOrders = default(IList<CustomerOrder>), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), System.DateTime? trialSart = default(System.DateTime?), System.DateTime? trialEnd = default(System.DateTime?), System.DateTime? currentPeriodStart = default(System.DateTime?), System.DateTime? currentPeriodEnd = default(System.DateTime?), string outerId = default(string), string comment = default(string), IList<OperationLog> operationsLog = default(IList<OperationLog>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             StoreId = storeId;
             CustomerId = customerId;
@@ -9201,6 +10355,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             CurrentPeriodStart = currentPeriodStart;
             CurrentPeriodEnd = currentPeriodEnd;
             OuterId = outerId;
+            Comment = comment;
             OperationsLog = operationsLog;
             IsCancelled = isCancelled;
             CancelledDate = cancelledDate;
@@ -9321,6 +10476,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "outerId")]
         public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "comment")]
+        public string Comment { get; set; }
 
         /// <summary>
         /// </summary>
