@@ -238,7 +238,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View("customers/login", WorkContext);
             }
 
-            var loginResult = await _signInManager.PasswordSignInAsync(login.Username, login.Password, login.RememberMe, lockoutOnFailure: true);
+            var loginResult = await _signInManager.PasswordSignInAsync(login.Username?.Trim(), login.Password?.Trim(), login.RememberMe, lockoutOnFailure: true);
 
             if (loginResult.Succeeded)
             {
