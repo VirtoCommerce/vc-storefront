@@ -80,7 +80,7 @@ namespace VirtoCommerce.Storefront.Domain
             }
 
             //Evaluate products prices
-            var evalContext = workContext.ToPriceEvaluationContext(products);
+            var evalContext = workContext.ToPriceEvaluationContext(workContext.CurrentPricelists, products);
             var cacheKey = CacheKey.With(GetType(), "EvaluateProductPricesAsync", evalContext.GetCacheKey());
             var pricesResponse = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {

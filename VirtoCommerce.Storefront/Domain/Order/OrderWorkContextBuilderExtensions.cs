@@ -12,9 +12,9 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public static class OrderWorkContextBuilderExtensions
     {
-        public static Task WithUserOrdersAsync(this IWorkContextBuilder builder, Func<IMutablePagedList<CustomerOrder>> factory)
+        public static Task WithUserOrdersAsync(this IWorkContextBuilder builder, IMutablePagedList<CustomerOrder> orders)
         {
-            builder.WorkContext.CurrentUser.Orders = factory();
+            builder.WorkContext.CurrentUser.Orders = orders;
             return Task.CompletedTask;
         }
 
@@ -24,7 +24,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 var serviceProvider = builder.HttpContext.RequestServices;
                 var orderService = serviceProvider.GetRequiredService<ICustomerOrderService>();
-            
+
                 Func<int, int, IEnumerable<SortInfo>, IPagedList<CustomerOrder>> factory = (pageNumber, pageSize, sortInfos) =>
                 {
                     var orderSearchcriteria = new OrderSearchCriteria
@@ -37,7 +37,7 @@ namespace VirtoCommerce.Storefront.Domain
                     var result = orderService.SearchOrders(orderSearchcriteria);
                     return new StaticPagedList<CustomerOrder>(result, pageNumber, pageSize, result.Count);
                 };
-                return builder.WithUserOrdersAsync(() => new MutablePagedList<CustomerOrder>(factory, 1, OrderSearchCriteria.DefaultPageSize));
+                return builder.WithUserOrdersAsync(new MutablePagedList<CustomerOrder>(factory, 1, OrderSearchCriteria.DefaultPageSize));
             }
             return Task.CompletedTask;
         }

@@ -11,9 +11,9 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public static class InventoryWorkContextBuilderExtensions
     {
-        public static Task WithFulfillmentCentersAsync(this IWorkContextBuilder builder, Func<IMutablePagedList<FulfillmentCenter>> factory)
+        public static Task WithFulfillmentCentersAsync(this IWorkContextBuilder builder, IMutablePagedList<FulfillmentCenter> centers)
         {
-            builder.WorkContext.FulfillmentCenters = factory();
+            builder.WorkContext.FulfillmentCenters = centers;
             return Task.CompletedTask;
         }
 
@@ -21,13 +21,13 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var serviceProvider = builder.HttpContext.RequestServices;
             var inventoryService = serviceProvider.GetRequiredService<IInventoryService>();
-        
+
             Func<int, int, IEnumerable<SortInfo>, IPagedList<FulfillmentCenter>> factory = (pageNumber, pageSize, sortInfos) =>
             {
                 return inventoryService.SearchFulfillmentCenters(new FulfillmentCenterSearchCriteria { PageNumber = pageNumber, PageSize = pageSize, Sort = SortInfo.ToString(sortInfos) });
-               
+
             };
-            return builder.WithFulfillmentCentersAsync(() => new MutablePagedList<FulfillmentCenter>(factory, 1, FulfillmentCenterSearchCriteria.DefaultPageSize));
+            return builder.WithFulfillmentCentersAsync(new MutablePagedList<FulfillmentCenter>(factory, 1, FulfillmentCenterSearchCriteria.DefaultPageSize));
         }
     }
 }

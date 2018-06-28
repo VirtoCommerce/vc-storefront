@@ -24,7 +24,6 @@ namespace VirtoCommerce.Storefront.Model
     {
         public WorkContext()
         {
-            CurrentPricelists = new List<Pricelist>();
             ExternalLoginProviders = new List<LoginProvider>();
             ApplicationSettings = new Dictionary<string, object>();
         }
@@ -108,7 +107,7 @@ namespace VirtoCommerce.Storefront.Model
         /// <summary>
         /// List of active pricelists
         /// </summary>
-        public IList<Pricelist> CurrentPricelists { get; set; }
+        public IMutablePagedList<Pricelist> CurrentPricelists { get; set; }
 
         #region Catalog Properties
 

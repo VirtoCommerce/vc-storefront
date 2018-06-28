@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.Storefront.Common;
@@ -9,7 +10,7 @@ using pricingDto = VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Mod
 
 namespace VirtoCommerce.Storefront.Domain
 {
-   
+
     public static partial class PricingConverter
     {
         public static TierPrice ToTierPrice(this pricingDto.Price priceDto, Currency currency)
@@ -37,7 +38,7 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new ProductPrice(currency);
             result.ProductId = priceDto.ProductId;
             result.PricelistId = priceDto.PricelistId;
-           
+
             result.Currency = currency;
             result.ListPrice = new Money(priceDto.List ?? 0d, currency);
             result.SalePrice = priceDto.Sale == null ? result.ListPrice : new Money(priceDto.Sale ?? 0d, currency);
@@ -50,12 +51,18 @@ namespace VirtoCommerce.Storefront.Domain
             return evalContext.JsonConvert<pricingDto.PriceEvaluationContext>();
         }
 
-        public static PriceEvaluationContext ToPriceEvaluationContext(this WorkContext workContext, IEnumerable<Product> products = null)
+
+        public static PriceEvaluationContext ToPriceEvaluationContext(this WorkContext workContext, IEnumerable<Pricelist> pricelists, IEnumerable<Product> products = null)
         {
-            //Evaluate products prices
-            var retVal = new PriceEvaluationContext
+            if (workContext == null)
             {
-                PricelistIds = workContext.CurrentPricelists.Select(p => p.Id).ToList(),
+                throw new ArgumentNullException(nameof(workContext));
+            }
+
+            //Evaluate products prices
+            var result = new PriceEvaluationContext
+            {
+
                 CatalogId = workContext.CurrentStore.Catalog,
                 Language = workContext.CurrentLanguage.CultureName,
                 StoreId = workContext.CurrentStore.Id
@@ -63,33 +70,36 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (workContext.CurrentUser != null)
             {
-                retVal.CustomerId = workContext.CurrentUser.Id;
+                result.CustomerId = workContext.CurrentUser.Id;
                 var contact = workContext.CurrentUser?.Contact;
 
                 if (contact != null)
                 {
-                    retVal.GeoTimeZone = contact.TimeZone;
+                    result.GeoTimeZone = contact.TimeZone;
                     var address = contact.DefaultShippingAddress ?? contact.DefaultBillingAddress;
                     if (address != null)
                     {
-                        retVal.GeoCity = address.City;
-                        retVal.GeoCountry = address.CountryCode;
-                        retVal.GeoState = address.RegionName;
-                        retVal.GeoZipCode = address.PostalCode;
+                        result.GeoCity = address.City;
+                        result.GeoCountry = address.CountryCode;
+                        result.GeoState = address.RegionName;
+                        result.GeoZipCode = address.PostalCode;
                     }
                     if (contact.UserGroups != null)
                     {
-                        retVal.UserGroups = contact.UserGroups;
+                        result.UserGroups = contact.UserGroups;
                     }
                 }
             }
-
+            if (pricelists != null)
+            {
+                result.PricelistIds = pricelists.Select(p => p.Id).ToList();
+            }
             if (products != null)
             {
-                retVal.ProductIds = products.Select(p => p.Id).ToList();
+                result.ProductIds = products.Select(p => p.Id).ToList();
             }
-            return retVal;
+            return result;
         }
-      
+
     }
 }
