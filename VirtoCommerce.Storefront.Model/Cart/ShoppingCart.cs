@@ -340,7 +340,8 @@ namespace VirtoCommerce.Storefront.Model.Cart
                 {
                     var discount = reward.ToDiscountModel(ExtendedPriceTotal);
                     Discounts.Add(discount);
-                    DiscountAmount += discount.Amount;
+                    //Use rounded amount for whole cart discount
+                    DiscountAmount += discount.Amount.Amount;
                 }
             }
 
