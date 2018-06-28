@@ -19,33 +19,31 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private readonly IQuoteRequestBuilder _quoteRequestBuilder;
         private readonly ICartBuilder _cartBuilder;
         private readonly ICatalogService _catalogService;
+        private readonly IQuoteService _quoteService;
 
-        public ApiQuoteRequestController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, ICartBuilder cartBuilder, IQuoteRequestBuilder quoteRequestBuilder, ICatalogService catalogService)
+        public ApiQuoteRequestController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, ICartBuilder cartBuilder, IQuoteRequestBuilder quoteRequestBuilder, ICatalogService catalogService, IQuoteService quoteService)
             : base(workContextAccessor, urlBuilder)
         {
             _quoteRequestBuilder = quoteRequestBuilder;
             _cartBuilder = cartBuilder;
             _catalogService = catalogService;
+            _quoteService = quoteService;
         }
 
-        // GET: storefrontapi/account/quotes
-        [HttpGet]
-        public ActionResult GetCustomerQuotes(int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos)
+        // POST: storefrontapi/quoterequests/search
+        [HttpPost]
+        public ActionResult QuoteSearch([FromBody] QuoteSearchCriteria criteria)
         {
             if (WorkContext.CurrentUser.IsRegisteredUser)
             {
-                var entries = WorkContext.CurrentUser?.QuoteRequests;
-                if (entries != null)
+                //allow search only within self quotes
+                criteria.CustomerId = WorkContext.CurrentUser.Id;
+                var result = _quoteService.SearchQuotes(criteria);
+                return Json(new
                 {
-                    entries.Slice(pageNumber, pageSize, sortInfos);
-                    var retVal = new StaticPagedList<QuoteRequest>(entries.Select(x => x), entries);
-
-                    return Json(new
-                    {
-                        Results = retVal,
-                        TotalCount = retVal.TotalItemCount
-                    });
-                }
+                    Results = result,
+                    TotalCount = result.TotalItemCount
+                });
             }
             return NoContent();
         }

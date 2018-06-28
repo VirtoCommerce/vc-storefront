@@ -42,7 +42,7 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("API.Lists.CreateList", "storefrontapi/lists/{listName}/{type}/create", defaults: new { controller = "ApiLists", action = "CreateList" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("API.Lists.DeleteListsByIds", "storefrontapi/lists/deletelistsbyids", defaults: new { controller = "ApiLists", action = "DeleteListsByIds" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("DELETE") }));
             routes.MapStorefrontRoute("API.Lists.MergeWithCurrentCart", "storefrontapi/lists/{listName}/{type}/mergewithcurrentcart", defaults: new { controller = "ApiLists", action = "MergeWithCurrentCart" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
-            
+
             // Catalog API
             routes.MapStorefrontRoute("API.Catalog.SearchProducts", "storefrontapi/catalog/search", defaults: new { controller = "ApiCatalog", action = "SearchProducts" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("API.Catalog.GetProductsByIds", "storefrontapi/products", defaults: new { controller = "ApiCatalog", action = "GetProductsByIds" });
@@ -66,6 +66,7 @@ namespace VirtoCommerce.Storefront.Routing
             // User actions and events API
             routes.MapStorefrontRoute("API.UserActions.SaveEventInfo", "storefrontapi/useractions/eventinfo", new { controller = "ApiUserActions", action = "SaveEventInfo" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
 
+
             // Account API
             routes.MapStorefrontRoute("API.Account.GetCurrentUser", "storefrontapi/account", new { controller = "ApiAccount", action = "GetCurrentUser" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));
             routes.MapStorefrontRoute("API.Account.GetUserById", "storefrontapi/account/{userId}", new { controller = "ApiAccount", action = "GetUserById" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));
@@ -82,17 +83,8 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("API.Account.UnlockUser", "storefrontapi/account/{userId}/unlock", new { controller = "ApiAccount", action = "UnlockUser" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("API.Account.DeleteUser", "storefrontapi/account/{userId}", new { controller = "ApiAccount", action = "DeleteUser" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("DELETE") }));
 
-
-            // Order API
-            routes.MapStorefrontRoute("API.Orders", "storefrontapi/orders/search", new { controller = "ApiOrder", action = "SearchCustomerOrders" });
-            routes.MapStorefrontRoute("API.OrderByNumber", "storefrontapi/orders/{orderNumber}", new { controller = "ApiOrder", action = "GetCustomerOrder" });
-            routes.MapStorefrontRoute("API.Orders.GetNewPaymentData", "storefrontapi/orders/{orderNumber}/newpaymentdata", new { controller = "ApiOrder", action = "GetNewPaymentData" });
-            routes.MapStorefrontRoute("API.Orders.CancelPayment", "storefrontapi/orders/{orderNumber}/payments/{paymentNumber}/cancel", new { controller = "ApiOrder", action = "CancelPayment" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
-            routes.MapStorefrontRoute("API.Orders.ProcessPayment", "storefrontapi/orders/{orderNumber}/payments/{paymentNumber}/process", new { controller = "ApiOrder", action = "ProcessOrderPayment" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
-            routes.MapStorefrontRoute("API.Orders.AddOrUpdateOrderPayment", "storefrontapi/orders/{orderNumber}/payments", new { controller = "ApiOrder", action = "AddOrUpdateOrderPayment" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
-            routes.MapStorefrontRoute("API.Orders.GetInvoicePdf", "storefrontapi/orders/{orderNumber}/invoice", new { controller = "ApiOrder", action = "GetInvoicePdf" });
-
             // Quote requests API
+            routes.MapStorefrontRoute("API.QuoteRequest.Search", "storefrontapi/quoterequests/search", new { controller = "ApiQuoteRequest", action = "QuoteSearch" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("API.QuoteRequest.GetItemsCount", "storefrontapi/quoterequests/{number}/itemscount", defaults: new { controller = "ApiQuoteRequest", action = "GetItemsCount" });
             routes.MapStorefrontRoute("API.QuoteRequest.Get", "storefrontapi/quoterequests/{number}", defaults: new { controller = "ApiQuoteRequest", action = "Get" });
             routes.MapStorefrontRoute("API.QuoteRequest.GetCurrent", "storefrontapi/quoterequest/current", defaults: new { controller = "ApiQuoteRequest", action = "GetCurrent" });
@@ -103,7 +95,18 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("API.QuoteRequest.Reject", "storefrontapi/quoterequests/{number}/reject", defaults: new { controller = "ApiQuoteRequest", action = "Reject" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("API.QuoteRequest.CalculateTotals", "storefrontapi/quoterequests/{number}/totals", defaults: new { controller = "ApiQuoteRequest", action = "CalculateTotals" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("API.QuoteRequest.Confirm", "storefrontapi/quoterequests/{number}/confirm", defaults: new { controller = "ApiQuoteRequest", action = "Confirm" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
-            routes.MapStorefrontRoute("API.Account.quotes", "storefrontapi/account/quotes", new { controller = "ApiQuoteRequestController", action = "GetCustomerQuotes" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));
+
+
+
+            // Order API
+            routes.MapStorefrontRoute("API.Orders", "storefrontapi/orders/search", new { controller = "ApiOrder", action = "SearchCustomerOrders" });
+            routes.MapStorefrontRoute("API.OrderByNumber", "storefrontapi/orders/{orderNumber}", new { controller = "ApiOrder", action = "GetCustomerOrder" });
+            routes.MapStorefrontRoute("API.Orders.GetNewPaymentData", "storefrontapi/orders/{orderNumber}/newpaymentdata", new { controller = "ApiOrder", action = "GetNewPaymentData" });
+            routes.MapStorefrontRoute("API.Orders.CancelPayment", "storefrontapi/orders/{orderNumber}/payments/{paymentNumber}/cancel", new { controller = "ApiOrder", action = "CancelPayment" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
+            routes.MapStorefrontRoute("API.Orders.ProcessPayment", "storefrontapi/orders/{orderNumber}/payments/{paymentNumber}/process", new { controller = "ApiOrder", action = "ProcessOrderPayment" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
+            routes.MapStorefrontRoute("API.Orders.AddOrUpdateOrderPayment", "storefrontapi/orders/{orderNumber}/payments", new { controller = "ApiOrder", action = "AddOrUpdateOrderPayment" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
+            routes.MapStorefrontRoute("API.Orders.GetInvoicePdf", "storefrontapi/orders/{orderNumber}/invoice", new { controller = "ApiOrder", action = "GetInvoicePdf" });
+
 
             // Subscriptions API
             routes.MapStorefrontRoute("API.Subscriptions", "storefrontapi/subscriptions/search", defaults: new { controller = "ApiSubscription", action = "SearchCustomerSubscriptions" });
