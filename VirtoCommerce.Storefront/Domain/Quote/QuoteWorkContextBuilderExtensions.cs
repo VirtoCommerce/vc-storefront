@@ -36,9 +36,9 @@ namespace VirtoCommerce.Storefront.Domain
             return builder.WithQuotesAsync(factory);
         }
 
-        public static Task WithUserQuotesAsync(this IWorkContextBuilder builder, Func<IMutablePagedList<Model.Quote.QuoteRequest>> factory)
+        public static Task WithUserQuotesAsync(this IWorkContextBuilder builder, IMutablePagedList<Model.Quote.QuoteRequest> quotes)
         {
-            builder.WorkContext.CurrentUser.QuoteRequests = factory();
+            builder.WorkContext.CurrentUser.QuoteRequests = quotes;
             return Task.CompletedTask;
         }
 
@@ -48,7 +48,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 var serviceProvider = builder.HttpContext.RequestServices;
                 var quoteService = serviceProvider.GetRequiredService<IQuoteService>();
-              
+
                 Func<int, int, IEnumerable<SortInfo>, IPagedList<Model.Quote.QuoteRequest>> factory = (pageNumber, pageSize, sortInfos) =>
                 {
                     var quoteSearchCriteria = new Model.Quote.QuoteSearchCriteria
@@ -60,7 +60,7 @@ namespace VirtoCommerce.Storefront.Domain
                     };
                     return quoteService.SearchQuotes(quoteSearchCriteria);
                 };
-                return builder.WithUserQuotesAsync(() => new MutablePagedList<Model.Quote.QuoteRequest>(factory, 1, Model.Quote.QuoteSearchCriteria.DefaultPageSize));
+                return builder.WithUserQuotesAsync(new MutablePagedList<Model.Quote.QuoteRequest>(factory, 1, Model.Quote.QuoteSearchCriteria.DefaultPageSize));
             }
             return Task.CompletedTask;
         }

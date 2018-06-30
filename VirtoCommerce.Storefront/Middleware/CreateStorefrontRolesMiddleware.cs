@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -40,17 +40,17 @@ namespace VirtoCommerce.Storefront.Middleware
                     {
                         if (!allRolesIds.Contains(role.Id))
                         {
-                            _platformSecurityApi.UpdateRole(role.ToRoleDto());
+                            await _platformSecurityApi.UpdateRoleAsync(role.ToRoleDto());
                         }
                     }
                     return allRolesIds;
                 }, cacheNullValue: false);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _looger.LogError(ex, ex.Message);
             }
-          
+
             await _next(context);
         }
     }

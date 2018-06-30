@@ -13,6 +13,7 @@ using VirtoCommerce.Storefront.Model.LinkList.Services;
 using VirtoCommerce.Storefront.Model.Services;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Infrastructure;
+using System.Threading;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -29,6 +30,16 @@ namespace VirtoCommerce.Storefront.Domain
             _memoryCache = memoryCache;
             _apiChangesWatcher = apiChangesWatcher;
         }
+        public IList<MenuLinkList> LoadAllStoreLinkLists(Store store, Language language)
+        {
+            var cacheKey = CacheKey.With(GetType(), "LoadAllStoreLinkLists", store.Id, language.CultureName);
+            return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
+            {
+                cacheEntry.AddExpirationToken(StaticContentCacheRegion.CreateChangeToken());
+                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
+                return Task.Factory.StartNew(() => LoadAllStoreLinkListsAsync(store, language), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+            });
+        }
 
         public async Task<IList<MenuLinkList>> LoadAllStoreLinkListsAsync(Store store, Language language)
         {
@@ -44,7 +55,7 @@ namespace VirtoCommerce.Storefront.Domain
 
                 var result = new List<MenuLinkList>();
                 var listsDto = await _cmsApi.GetListsAsync(store.Id);
-                if(listsDto != null)
+                if (listsDto != null)
                 {
                     result.AddRange(listsDto.Select(x => x.ToMenuLinkList()));
                 }

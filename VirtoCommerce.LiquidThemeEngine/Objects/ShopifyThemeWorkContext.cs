@@ -50,7 +50,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// You can access a linklist by calling its handle on linklists
         /// </summary>
         public Linklists Linklists { get; set; }
-
         /// <summary>
         /// Contains a collection of all pages
         /// </summary>

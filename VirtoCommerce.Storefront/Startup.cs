@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Linq;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -265,7 +267,6 @@ namespace VirtoCommerce.Storefront
             services.RegisterAssembliesEventHandlers(typeof(Startup));
 
             services.AddApplicationInsightsTelemetry();
-
             services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
         }
 
@@ -281,6 +282,8 @@ namespace VirtoCommerce.Storefront
                 app.UseExceptionHandler("/error/500");
                 app.UseHsts();
             }
+            //Do not write telemetry to debug output 
+            TelemetryDebugWriter.IsTracingDisabled = true;
 
             app.UseResponseCaching();
 

@@ -120,13 +120,28 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
             if (workContext.CurrentLinkLists != null)
             {
-                result.Linklists = new Linklists(workContext.CurrentLinkLists.Select(x => ToLiquidLinklist(x, workContext, urlBuilder)));
+                result.Linklists = new Linklists(new MutablePagedList<Linklist>((pageNumber, pageSize, sortInfos) =>
+                {
+                    var liquidLists = workContext.CurrentLinkLists.Select(x => ToLiquidLinklist(x, workContext, urlBuilder));
+                    return new StaticPagedList<Linklist>(liquidLists, workContext.CurrentLinkLists);
+                }, workContext.CurrentLinkLists.PageNumber, workContext.CurrentLinkLists.PageSize));
             }
 
             if (workContext.Pages != null)
             {
-                result.Pages = new Pages(workContext.Pages.OfType<ContentPage>().Select(x => ToLiquidPage(x)));
-                result.Blogs = new Blogs(workContext.Blogs.Select(x => ToLiquidBlog(x, workContext.CurrentLanguage)));
+                result.Pages = new Pages(new MutablePagedList<Page>((pageNumber, pageSize, sortInfos) =>
+                {
+                    //Do not paginate data, because it already all preloaded
+                    var pages = workContext.Pages.OfType<ContentPage>().Select(x => ToLiquidPage(x));
+                    return new StaticPagedList<Page>(pages, workContext.Pages);
+                }, workContext.Pages.PageNumber, workContext.Pages.PageSize));
+
+                result.Blogs = new Blogs(new MutablePagedList<Objects.Blog>((pageNumber, pageSize, sortInfos) =>
+                {
+                    //Do not paginate data, because it already all preloaded
+                    var blogs = workContext.Blogs.Select(x => ToLiquidBlog(x, workContext.CurrentLanguage));
+                    return new StaticPagedList<Objects.Blog>(blogs, workContext.Blogs);
+                }, workContext.Blogs.PageNumber, workContext.Blogs.PageSize));
             }
 
             if (workContext.CurrentOrder != null)
@@ -160,7 +175,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 result.Article = ToLiquidArticle(workContext.CurrentBlogArticle);
             }
 
-            if(workContext.Form != null)
+            if (workContext.Form != null)
             {
                 result.Form = new Form
                 {
@@ -181,7 +196,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                             var allChildEntities = propertyValue.GetFlatObjectsListWithInterface<IEntity>();
                             foreach (var type in allChildEntities.Select(x => x.GetType()).Distinct())
                             {
-                                Template.RegisterSafeType(type, formPropNames);            
+                                Template.RegisterSafeType(type, formPropNames);
                             }
                             var allChildLiquidObjects = propertyValue.GetFlatObjectsListWithInterface<IValueObject>();
                             foreach (var type in allChildLiquidObjects.Select(x => x.GetType()).Distinct())
@@ -233,12 +248,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 }).ToArray();
             }
 
-            if(workContext.CurrentFulfillmentCenter != null)
+            if (workContext.CurrentFulfillmentCenter != null)
             {
                 result.FulfillmentCenter = workContext.CurrentFulfillmentCenter.ToShopifyModel();
             }
 
-            if(workContext.FulfillmentCenters != null)
+            if (workContext.FulfillmentCenters != null)
             {
                 result.FulfillmentCenters = new MutablePagedList<FulfillmentCenter>((pageNumber, pageSize, sortInfos) =>
                  {

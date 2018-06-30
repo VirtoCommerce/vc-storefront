@@ -2,23 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VirtoCommerce.Storefront.Model.Common.Exceptions;
-using VirtoCommerce.Storefront.Model.Common;
+using Microsoft.Extensions.DependencyInjection;
 using PagedList.Core;
 using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Model.StaticContent;
-using System.Threading;
-using Microsoft.Extensions.DependencyInjection;
+using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.LinkList.Services;
+using VirtoCommerce.Storefront.Model.StaticContent;
 using VirtoCommerce.Storefront.Model.Stores;
 
 namespace VirtoCommerce.Storefront.Domain
 {
     public static class StaticContentWorkContextBuilderExtensions
     {
-        public static Task WithMenuLinksAsync(this IWorkContextBuilder builder, Func<IMutablePagedList<MenuLinkList>> factory)
+        public static Task WithMenuLinksAsync(this IWorkContextBuilder builder, IMutablePagedList<MenuLinkList> linlitsts)
         {
-            builder.WorkContext.CurrentLinkLists = factory();
+            builder.WorkContext.CurrentLinkLists = linlitsts;
             return Task.CompletedTask;
         }
 
@@ -38,16 +36,16 @@ namespace VirtoCommerce.Storefront.Domain
 
             Func<int, int, IEnumerable<SortInfo>, IPagedList<MenuLinkList>> factory = (pageNumber, pageSize, sorInfos) =>
             {
-                var linkLists = Task.Factory.StartNew(() => linkListService.LoadAllStoreLinkListsAsync(store, language), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+                var linkLists = linkListService.LoadAllStoreLinkLists(store, language);
                 return new StaticPagedList<MenuLinkList>(linkLists, pageNumber, pageSize, linkLists.Count());
             };
 
-            return builder.WithMenuLinksAsync(() => new MutablePagedList<MenuLinkList>(factory, 1, 20));
+            return builder.WithMenuLinksAsync(new MutablePagedList<MenuLinkList>(factory, 1, 20));
         }
 
-        public static Task WithPagesAsync(this IWorkContextBuilder builder, Func<IMutablePagedList<ContentItem>> factory)
+        public static Task WithPagesAsync(this IWorkContextBuilder builder, IMutablePagedList<ContentItem> pages)
         {
-            builder.WorkContext.Pages = factory();
+            builder.WorkContext.Pages = pages;
             return Task.CompletedTask;
         }
 
@@ -62,7 +60,7 @@ namespace VirtoCommerce.Storefront.Domain
                 throw new ArgumentNullException(nameof(language));
             }
 
-            var serviceProvider = builder.HttpContext.RequestServices;          
+            var serviceProvider = builder.HttpContext.RequestServices;
             var staticContentService = serviceProvider.GetRequiredService<IStaticContentService>();
 
             // all static content items
@@ -72,12 +70,12 @@ namespace VirtoCommerce.Storefront.Domain
                 var contentItems = staticContentService.LoadStoreStaticContent(store).Where(x => x.Language.IsInvariant || x.Language == language);
                 return new StaticPagedList<ContentItem>(contentItems, pageNumber, pageSize, contentItems.Count());
             };
-            return builder.WithPagesAsync(() => new MutablePagedList<ContentItem>(factory, 1, 20));
+            return builder.WithPagesAsync(new MutablePagedList<ContentItem>(factory, 1, 20));
         }
 
-        public static Task WithBlogsAsync(this IWorkContextBuilder builder, Func<IMutablePagedList<Blog>> factory)
+        public static Task WithBlogsAsync(this IWorkContextBuilder builder, IMutablePagedList<Blog> blogs)
         {
-            builder.WorkContext.Blogs = factory();
+            builder.WorkContext.Blogs = blogs;
             return Task.CompletedTask;
         }
 
@@ -115,7 +113,7 @@ namespace VirtoCommerce.Storefront.Domain
             // Initialize blogs search criteria 
             builder.WorkContext.CurrentBlogSearchCritera = new BlogSearchCriteria(builder.WorkContext.QueryString);
 
-            return builder.WithBlogsAsync(() => new MutablePagedList<Blog>(factory, 1, 20));
+            return builder.WithBlogsAsync(new MutablePagedList<Blog>(factory, 1, 20));
         }
     }
 }
