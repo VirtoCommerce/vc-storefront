@@ -32,14 +32,9 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
         #region ICustomerService Members
-        public virtual Contact GetContactById(string contactId)
-        {
-            return Task.Factory.StartNew(() => GetContactByIdAsync(contactId), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
-        }
-
         public virtual async Task<Contact> GetContactByIdAsync(string contactId)
         {
-            if(contactId == null)
+            if (contactId == null)
             {
                 throw new ArgumentNullException(nameof(contactId));
             }
@@ -47,7 +42,7 @@ namespace VirtoCommerce.Storefront.Domain
             Contact result = null;
             var cacheKey = CacheKey.With(GetType(), "GetContactByIdAsync", contactId);
             var dto = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-            {              
+            {
                 var contactDto = await _customerApi.GetContactByIdAsync(contactId);
                 if (contactDto != null)
                 {
@@ -74,7 +69,7 @@ namespace VirtoCommerce.Storefront.Domain
             var contactDto = contact.ToContactDto();
             var result = await _customerApi.CreateContactAsync(contactDto);
             return result?.ToContact();
-          }
+        }
 
 
         public virtual async Task DeleteContactAsync(string contactId)
@@ -102,7 +97,7 @@ namespace VirtoCommerce.Storefront.Domain
                 //Invalidate cache
                 CustomerCacheRegion.ExpireMember(existContact.Id);
             }
-        }       
+        }
 
         public virtual async Task<Vendor[]> GetVendorsByIdsAsync(Store store, Language language, params string[] vendorIds)
         {
@@ -132,7 +127,7 @@ namespace VirtoCommerce.Storefront.Domain
                 criteria.Sort = SortInfo.ToString(sortInfos);
             }
             var vendorSearchResult = _customerApi.SearchVendors(criteria);
-            var vendors = vendorSearchResult.Vendors.Select(x => x.ToVendor(language, store));       
+            var vendors = vendorSearchResult.Vendors.Select(x => x.ToVendor(language, store));
             return new StaticPagedList<Vendor>(vendors, pageNumber, pageSize, vendorSearchResult.TotalCount.Value);
         }
 
@@ -162,23 +157,19 @@ namespace VirtoCommerce.Storefront.Domain
                     {
                         OrganizationId = result.Id,
                         PageNumber = pageNumber,
-                        PageSize = pageSize                        
+                        PageSize = pageSize
                     };
                     if (!sortInfos.IsNullOrEmpty())
                     {
                         criteria.Sort = SortInfo.ToString(sortInfos);
                     }
                     return SearchOrganizationContacts(criteria);
-                  
+
                 }, 1, 20);
             }
             return result;
         }
 
-        public Organization GetOrganizationById(string organizationId)
-        {
-            return Task.Factory.StartNew(() => GetOrganizationByIdAsync(organizationId), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
-        }
 
         public async Task<Organization> CreateOrganizationAsync(Organization organization)
         {
@@ -209,7 +200,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Sort = criteria.Sort,
                 SearchPhrase = criteria.SearchPhrase
             };
-            
+
             var searchResult = await _customerApi.SearchAsync(criteriaDto);
             var contacts = _customerApi.GetContactsByIds(searchResult.Results.Select(x => x.Id).ToList()).Select(x => x.ToContact()).ToList();
 

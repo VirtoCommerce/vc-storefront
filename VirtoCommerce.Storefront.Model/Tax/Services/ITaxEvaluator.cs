@@ -9,6 +9,5 @@ namespace VirtoCommerce.Storefront.Model.Tax.Services
     public interface ITaxEvaluator
     {
         Task EvaluateTaxesAsync(TaxEvaluationContext context, IEnumerable<ITaxable> owners);
-        void EvaluateTaxes(TaxEvaluationContext context, IEnumerable<ITaxable> owners);
     }
 }

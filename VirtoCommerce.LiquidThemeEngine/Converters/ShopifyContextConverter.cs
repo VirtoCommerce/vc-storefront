@@ -149,7 +149,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 result.Order = ToLiquidOrder(workContext.CurrentOrder, workContext.CurrentLanguage, urlBuilder);
             }
 
-            if (workContext.CurrentQuoteRequest != null)
+            if (workContext.CurrentQuoteRequest != null && workContext.CurrentQuoteRequest.IsValueCreated)
             {
                 result.QuoteRequest = ToLiquidQuoteRequest(workContext.CurrentQuoteRequest.Value);
             }

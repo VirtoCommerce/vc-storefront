@@ -25,12 +25,6 @@ namespace VirtoCommerce.Storefront.Domain
 
         #region ITaxEvaluator Members
 
-        public virtual void EvaluateTaxes(TaxEvaluationContext context, IEnumerable<ITaxable> owners)
-        {
-            Task.Factory.StartNew(() => EvaluateTaxesAsync(context, owners), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
-        }
-
-
         public virtual async Task EvaluateTaxesAsync(TaxEvaluationContext context, IEnumerable<ITaxable> owners)
         {
             IList<coreService.TaxRate> taxRates = new List<coreService.TaxRate>();

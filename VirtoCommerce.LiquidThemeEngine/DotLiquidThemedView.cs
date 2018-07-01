@@ -43,7 +43,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         {
         }
 
-        public Task RenderAsync(ViewContext context)
+        public async Task RenderAsync(ViewContext context)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
@@ -123,8 +123,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 }
 
             }
-            context.Writer.Write(viewTemplate);
-            return Task.FromResult(0);
+            await context.Writer.WriteAsync(viewTemplate);
         }
 
         #endregion

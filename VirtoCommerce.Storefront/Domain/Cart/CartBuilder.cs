@@ -66,12 +66,19 @@ namespace VirtoCommerce.Storefront.Domain
 
         public void LoadOrCreateNewTransientCart(string cartName, Store store, User user, Language language, Currency currency, string type = null)
         {
-            Task.Factory.StartNew(() => LoadOrCreateNewTransientCartAsync(cartName, store, user, language, currency), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+            //It is very important to have both versions for Sync and Async methods with same cache key due to performance for multithreaded requests
+            //you should avoid of call async version with TaskFactory.StartNew() out of the cache getter function
+            var cacheKey = CacheKey.With(GetType(), "LoadOrCreateNewTransientCart", store.Id, cartName, user.Id, currency.Code, type);
+            Cart = _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
+            {
+                Task.Factory.StartNew(() => LoadOrCreateNewTransientCartAsync(cartName, store, user, language, currency), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+                return Cart;
+            });
         }
 
         public virtual async Task LoadOrCreateNewTransientCartAsync(string cartName, Store store, User user, Language language, Currency currency, string type = null)
         {
-            var cacheKey = CacheKey.With(GetType(), store.Id, cartName, user.Id, currency.Code, type);
+            var cacheKey = CacheKey.With(GetType(), "LoadOrCreateNewTransientCart", store.Id, cartName, user.Id, currency.Code, type);
             var needReevaluate = false;
             Cart = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {

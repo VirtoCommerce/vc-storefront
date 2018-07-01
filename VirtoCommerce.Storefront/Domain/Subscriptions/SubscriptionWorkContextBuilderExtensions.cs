@@ -11,9 +11,9 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public static class SubscriptionWorkContextBuilderExtensions
     {
-        public static Task WithUserSubscriptionsAsync(this IWorkContextBuilder builder, Func<IMutablePagedList<Subscription>> factory)
+        public static Task WithUserSubscriptionsAsync(this IWorkContextBuilder builder, IMutablePagedList<Subscription> subscriptions)
         {
-            builder.WorkContext.CurrentUser.Subscriptions = factory();
+            builder.WorkContext.CurrentUser.Subscriptions = subscriptions;
             return Task.CompletedTask;
         }
 
@@ -23,7 +23,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 var serviceProvider = builder.HttpContext.RequestServices;
                 var subscriptionService = serviceProvider.GetRequiredService<ISubscriptionService>();
-              
+
                 Func<int, int, IEnumerable<SortInfo>, IPagedList<Subscription>> factory = (pageNumber, pageSize, sortInfos) =>
                 {
                     var subscriptionSearchCriteria = new SubscriptionSearchCriteria
@@ -35,7 +35,7 @@ namespace VirtoCommerce.Storefront.Domain
                     };
                     return subscriptionService.SearchSubscription(subscriptionSearchCriteria);
                 };
-                return builder.WithUserSubscriptionsAsync(() => new MutablePagedList<Subscription>(factory, 1, SubscriptionSearchCriteria.DefaultPageSize));
+                return builder.WithUserSubscriptionsAsync(new MutablePagedList<Subscription>(factory, 1, SubscriptionSearchCriteria.DefaultPageSize));
             }
             return Task.CompletedTask;
         }

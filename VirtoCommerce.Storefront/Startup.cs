@@ -134,9 +134,12 @@ namespace VirtoCommerce.Storefront
             }
             else
             {
+                var fileSystemBlobOptions = new FileSystemBlobContentOptions();
+                Configuration.GetSection("VirtoCommerce:FileSystemBlobStorage").Bind(fileSystemBlobOptions);
                 services.AddFileSystemBlobContent(options =>
                 {
                     options.Path = HostingEnvironment.MapPath(contentConnectionString.RootPath);
+                    options.PollForChanges = fileSystemBlobOptions.PollForChanges;
                 });
             }
 

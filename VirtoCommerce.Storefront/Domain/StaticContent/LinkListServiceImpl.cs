@@ -32,6 +32,8 @@ namespace VirtoCommerce.Storefront.Domain
         }
         public IList<MenuLinkList> LoadAllStoreLinkLists(Store store, Language language)
         {
+            //It is very important to have both versions for Sync and Async methods with same cache key due to performance for multithreaded requests
+            //you should avoid of call async version with TaskFactory.StartNew() out of the cache getter function
             var cacheKey = CacheKey.With(GetType(), "LoadAllStoreLinkLists", store.Id, language.CultureName);
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
             {
@@ -47,7 +49,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 throw new ArgumentNullException(nameof(store));
             }
-            var cacheKey = CacheKey.With(GetType(), "LoadAllStoreLinkListsAsync", store.Id, language.CultureName);
+            var cacheKey = CacheKey.With(GetType(), "LoadAllStoreLinkLists", store.Id, language.CultureName);
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(StaticContentCacheRegion.CreateChangeToken());

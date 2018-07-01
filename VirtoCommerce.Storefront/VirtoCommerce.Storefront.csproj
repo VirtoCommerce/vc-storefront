@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -17,8 +17,15 @@
     <PackageIconUrl>https://virtocommerce.com/themes/assets/logo.jpg</PackageIconUrl>
     <PackageReleaseNotes></PackageReleaseNotes>
     <!--Remove later when Azure apps has been updated-->
-    <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
+    <!--<PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>-->
   </PropertyGroup>
+
+  
+  <ItemGroup>
+    <Compile Remove="wwwroot\cms-content\**" />
+    <Content Remove="wwwroot\cms-content\**" />
+    <Content Update="wwwroot\cms-content\**" CopyToPublishDirectory="Never" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Routing\StorefrontRouteExtensions.cs" />

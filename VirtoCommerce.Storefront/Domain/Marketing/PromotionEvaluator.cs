@@ -25,10 +25,6 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
         #region IPromotionEvaluator Members
-        public virtual void EvaluateDiscounts(PromotionEvaluationContext context, IEnumerable<IDiscountable> owners)
-        {
-            Task.Factory.StartNew(() => EvaluateDiscountsAsync(context, owners), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
-        }
 
         public virtual async Task EvaluateDiscountsAsync(PromotionEvaluationContext context, IEnumerable<IDiscountable> owners)
         {

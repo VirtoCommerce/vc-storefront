@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi;
 using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
@@ -21,10 +22,12 @@ namespace VirtoCommerce.Storefront.Domain
     {
         private readonly IInventoryModule _inventoryApi;
         private readonly IMemoryCache _memoryCache;
-        public InventoryService(IInventoryModule inventoryApi, IMemoryCache memoryCache)
+        private readonly IApiChangesWatcher _apiChangesWatcher;
+        public InventoryService(IInventoryModule inventoryApi, IMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
         {
             _inventoryApi = inventoryApi;
             _memoryCache = memoryCache;
+            _apiChangesWatcher = apiChangesWatcher;
         }
 
         public virtual async Task EvaluateProductInventoriesAsync(IEnumerable<Product> products, WorkContext workContext)
@@ -56,11 +59,6 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
-        public FulfillmentCenter GetFulfillmentCenterById(string id)
-        {
-            return Task.Factory.StartNew(() => GetFulfillmentCenterByIdAsync(id), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
-        }
-
         public async Task<FulfillmentCenter> GetFulfillmentCenterByIdAsync(string id)
         {
             FulfillmentCenter result = null;
@@ -74,22 +72,50 @@ namespace VirtoCommerce.Storefront.Domain
 
         public IPagedList<FulfillmentCenter> SearchFulfillmentCenters(FulfillmentCenterSearchCriteria criteria)
         {
-            return Task.Factory.StartNew(() => SearchFulfillmentCentersAsync(criteria), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+            //It is very important to have both versions for Sync and Async methods with same cache key due to performance for multithreaded requests
+            //you should avoid of call async version with TaskFactory.StartNew() out of the cache getter function
+            var cacheKey = CacheKey.With(GetType(), "SearchFulfillmentCenters", criteria.GetCacheKey());
+            return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
+            {
+                cacheEntry.AddExpirationToken(InventoryCacheRegion.CreateChangeToken());
+                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
+
+                var criteriaDto = new inventoryDto.FulfillmentCenterSearchCriteria
+                {
+                    SearchPhrase = criteria.SearchPhrase,
+                    Skip = (criteria.PageNumber - 1) * criteria.PageSize,
+                    Take = criteria.PageSize,
+                    Sort = criteria.Sort
+                };
+
+                var searchResult = _inventoryApi.SearchFulfillmentCenters(criteriaDto);
+                var centers = searchResult.Results.Select(x => x.ToFulfillmentCenter());
+                return new StaticPagedList<FulfillmentCenter>(centers, criteria.PageNumber, criteria.PageSize, searchResult.TotalCount.Value);
+            });
+
+
         }
 
         public async Task<IPagedList<FulfillmentCenter>> SearchFulfillmentCentersAsync(FulfillmentCenterSearchCriteria criteria)
         {
-            var criteriaDto = new inventoryDto.FulfillmentCenterSearchCriteria
+            var cacheKey = CacheKey.With(GetType(), "SearchFulfillmentCenters", criteria.GetCacheKey());
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
-                SearchPhrase = criteria.SearchPhrase,
-                Skip = (criteria.PageNumber - 1) * criteria.PageSize,
-                Take = criteria.PageSize,
-                Sort = criteria.Sort
-            };
+                cacheEntry.AddExpirationToken(InventoryCacheRegion.CreateChangeToken());
+                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
 
-            var searchResult = await _inventoryApi.SearchFulfillmentCentersAsync(criteriaDto);
-            var centers = searchResult.Results.Select(x => x.ToFulfillmentCenter());
-            return new StaticPagedList<FulfillmentCenter>(centers, criteria.PageNumber, criteria.PageSize, searchResult.TotalCount.Value);
+                var criteriaDto = new inventoryDto.FulfillmentCenterSearchCriteria
+                {
+                    SearchPhrase = criteria.SearchPhrase,
+                    Skip = (criteria.PageNumber - 1) * criteria.PageSize,
+                    Take = criteria.PageSize,
+                    Sort = criteria.Sort
+                };
+
+                var searchResult = await _inventoryApi.SearchFulfillmentCentersAsync(criteriaDto);
+                var centers = searchResult.Results.Select(x => x.ToFulfillmentCenter());
+                return new StaticPagedList<FulfillmentCenter>(centers, criteria.PageNumber, criteria.PageSize, searchResult.TotalCount.Value);
+            });
         }
     }
 }
