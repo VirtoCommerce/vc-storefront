@@ -29,8 +29,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             Func<Model.Quote.QuoteRequest> factory = () =>
              {
-                 Task.Factory.StartNew(() => quoteRequestBuilder.GetOrCreateNewTransientQuoteRequestAsync(store, user, language, currency),
-                                                                                                          CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+                 quoteRequestBuilder.GetOrCreateNewTransientQuoteRequestAsync(store, user, language, currency).GetAwaiter().GetResult();
                  return quoteRequestBuilder.QuoteRequest;
              };
             return builder.WithQuotesAsync(factory);

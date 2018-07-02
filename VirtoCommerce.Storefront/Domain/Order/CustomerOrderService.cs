@@ -24,7 +24,7 @@ namespace VirtoCommerce.Storefront.Domain
         public IPagedList<CustomerOrder> SearchOrders(OrderSearchCriteria criteria)
         {
             var workContext = _workContextAccessor.WorkContext;
-            return Task.Factory.StartNew(() => InnerSearchOrdersAsync(criteria, workContext), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+            return InnerSearchOrdersAsync(criteria, workContext).GetAwaiter().GetResult();
         }
 
         public async Task<IPagedList<CustomerOrder>> SearchOrdersAsync(OrderSearchCriteria criteria)

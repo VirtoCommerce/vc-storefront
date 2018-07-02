@@ -44,23 +44,7 @@ namespace VirtoCommerce.Storefront.Domain
         #region IPricingService Members
         public IList<Pricelist> EvaluatePricesLists(PriceEvaluationContext evalContext, WorkContext workContext)
         {
-            if (evalContext == null)
-            {
-                throw new ArgumentNullException(nameof(evalContext));
-            }
-            if (workContext == null)
-            {
-                throw new ArgumentNullException(nameof(workContext));
-            }
-            //It is very important to have both versions for Sync and Async methods with same cache key due to performance for multithreaded requests
-            //you should avoid of call async version with TaskFactory.StartNew() out of the cache getter function
-            var cacheKey = CacheKey.With(GetType(), "EvaluatePricesLists", evalContext.GetCacheKey());
-            return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
-            {
-                cacheEntry.AddExpirationToken(PricingCacheRegion.CreateChangeToken());
-                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
-                return _pricingApi.EvaluatePriceLists(evalContext.ToPriceEvaluationContextDto()).Select(x => x.ToPricelist(workContext.AllCurrencies, workContext.CurrentLanguage)).ToList();
-            });
+            return EvaluatePricesListsAsync(evalContext, workContext).GetAwaiter().GetResult();
         }
 
         public virtual async Task<IList<Pricelist>> EvaluatePricesListsAsync(PriceEvaluationContext evalContext, WorkContext workContext)

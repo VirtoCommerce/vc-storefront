@@ -23,7 +23,7 @@ namespace VirtoCommerce.Storefront.Domain
         public IPagedList<QuoteRequest> SearchQuotes(QuoteSearchCriteria criteria)
         {
             var workContext = _workContextAccessor.WorkContext;
-            return Task.Factory.StartNew(() => InnerSearchQuotesAsync(criteria, workContext), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+            return InnerSearchQuotesAsync(criteria, workContext).GetAwaiter().GetResult();
         }
 
         public async Task<IPagedList<QuoteRequest>> SearchQuotesAsync(QuoteSearchCriteria criteria)

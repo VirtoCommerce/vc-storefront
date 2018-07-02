@@ -72,28 +72,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         public IPagedList<FulfillmentCenter> SearchFulfillmentCenters(FulfillmentCenterSearchCriteria criteria)
         {
-            //It is very important to have both versions for Sync and Async methods with same cache key due to performance for multithreaded requests
-            //you should avoid of call async version with TaskFactory.StartNew() out of the cache getter function
-            var cacheKey = CacheKey.With(GetType(), "SearchFulfillmentCenters", criteria.GetCacheKey());
-            return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
-            {
-                cacheEntry.AddExpirationToken(InventoryCacheRegion.CreateChangeToken());
-                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
-
-                var criteriaDto = new inventoryDto.FulfillmentCenterSearchCriteria
-                {
-                    SearchPhrase = criteria.SearchPhrase,
-                    Skip = (criteria.PageNumber - 1) * criteria.PageSize,
-                    Take = criteria.PageSize,
-                    Sort = criteria.Sort
-                };
-
-                var searchResult = _inventoryApi.SearchFulfillmentCenters(criteriaDto);
-                var centers = searchResult.Results.Select(x => x.ToFulfillmentCenter());
-                return new StaticPagedList<FulfillmentCenter>(centers, criteria.PageNumber, criteria.PageSize, searchResult.TotalCount.Value);
-            });
-
-
+            return SearchFulfillmentCentersAsync(criteria).GetAwaiter().GetResult();
         }
 
         public async Task<IPagedList<FulfillmentCenter>> SearchFulfillmentCentersAsync(FulfillmentCenterSearchCriteria criteria)

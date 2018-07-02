@@ -48,7 +48,7 @@ namespace VirtoCommerce.Storefront.Domain
         /// <returns></returns>
         public virtual Stream OpenRead(string path)
         {
-            return Task.Factory.StartNew(() => OpenReadAsync(path), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+            return OpenReadAsync(path).GetAwaiter().GetResult();
         }
 
         public async virtual Task<Stream> OpenReadAsync(string path)
@@ -69,7 +69,7 @@ namespace VirtoCommerce.Storefront.Domain
         /// <returns>blob stream</returns>
         public virtual Stream OpenWrite(string path)
         {
-            return Task.Factory.StartNew(() => OpenWriteAsync(path), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+            return OpenWriteAsync(path).GetAwaiter().GetResult();
         }
 
         public async virtual Task<Stream> OpenWriteAsync(string path)
@@ -88,7 +88,7 @@ namespace VirtoCommerce.Storefront.Domain
         /// <returns></returns>
         public virtual bool PathExists(string path)
         {
-            return Task.Factory.StartNew(() => PathExistsAsync(path), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+            return PathExistsAsync(path).GetAwaiter().GetResult();
         }
 
         public async virtual Task<bool> PathExistsAsync(string path)
@@ -99,8 +99,8 @@ namespace VirtoCommerce.Storefront.Domain
            {
                cacheEntry.AddExpirationToken(ContentBlobCacheRegion.CreateChangeToken());
 
-                // If requested path is a directory we should always return true because Azure blob storage does not support checking if directories exist
-                var result = string.IsNullOrEmpty(Path.GetExtension(path));
+               // If requested path is a directory we should always return true because Azure blob storage does not support checking if directories exist
+               var result = string.IsNullOrEmpty(Path.GetExtension(path));
                if (!result)
                {
                    var url = GetAbsoluteUrl(path);
@@ -110,8 +110,8 @@ namespace VirtoCommerce.Storefront.Domain
                    }
                    catch (Exception)
                    {
-                        //Azure blob storage client does not provide method to check blob url exist without throwing exception
-                    }
+                       //Azure blob storage client does not provide method to check blob url exist without throwing exception
+                   }
                }
                return result;
            });
@@ -127,7 +127,7 @@ namespace VirtoCommerce.Storefront.Domain
         /// <returns>Returns relative path for all found blobs  example: /folder/blob.md </returns>
         public virtual IEnumerable<string> Search(string path, string searchPattern, bool recursive)
         {
-            return Task.Factory.StartNew(() => SearchAsync(path, searchPattern, recursive), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+            return SearchAsync(path, searchPattern, recursive).GetAwaiter().GetResult();
         }
 
         public virtual async Task<IEnumerable<string>> SearchAsync(string path, string searchPattern, bool recursive)

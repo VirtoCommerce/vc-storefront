@@ -187,7 +187,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         public IPagedList<Contact> SearchOrganizationContacts(OrganizationContactsSearchCriteria criteria)
         {
-            return Task.Factory.StartNew(() => SearchOrganizationContactsAsync(criteria), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+            return SearchOrganizationContactsAsync(criteria).GetAwaiter().GetResult();
         }
 
         public async Task<IPagedList<Contact>> SearchOrganizationContactsAsync(OrganizationContactsSearchCriteria criteria)

@@ -118,60 +118,21 @@ namespace VirtoCommerce.Storefront.Domain
         public virtual Category[] GetCategories(string[] ids, CategoryResponseGroup responseGroup = CategoryResponseGroup.Info)
         {
             var workContext = _workContextAccessor.WorkContext;
-            //It is very important to have both versions for Sync and Async methods with same cache key due to performance for multithreaded requests
-            //you should avoid of call async version with TaskFactory.StartNew() out of the cache getter function
-            var cacheKey = CacheKey.With(GetType(), "GetCategories", string.Join("-", ids.OrderBy(x => x)), responseGroup.ToString());
-            var categoriesDto = _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
-            {
-                cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
-                return _categoriesApi.GetCategoriesByPlentyIds(ids.ToList(), ((int)responseGroup).ToString());
-            });
-            var result = categoriesDto.Select(x => x.ToCategory(workContext.CurrentLanguage, workContext.CurrentStore)).ToArray();
-            //Set  lazy loading for child categories 
-            SetChildCategoriesLazyLoading(result);
-            return result;
+            return GetCategoriesAsync(ids, responseGroup).GetAwaiter().GetResult();
         }
 
         public virtual async Task<Category[]> GetCategoriesAsync(string[] ids, CategoryResponseGroup responseGroup = CategoryResponseGroup.Info)
         {
             var workContext = _workContextAccessor.WorkContext;
-            var cacheKey = CacheKey.With(GetType(), "GetCategories", string.Join("-", ids.OrderBy(x => x)), responseGroup.ToString());
+            var cacheKey = CacheKey.With(GetType(), "GetCategoriesAsync", string.Join("-", ids.OrderBy(x => x)), responseGroup.ToString());
             var categoriesDto = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
-                return (await _categoriesApi.GetCategoriesByPlentyIdsAsync(ids.ToList(), ((int)responseGroup).ToString()));
+                return await _categoriesApi.GetCategoriesByPlentyIdsAsync(ids.ToList(), ((int)responseGroup).ToString());
             });
             var result = categoriesDto.Select(x => x.ToCategory(workContext.CurrentLanguage, workContext.CurrentStore)).ToArray();
             //Set  lazy loading for child categories 
             SetChildCategoriesLazyLoading(result);
-            return result;
-        }
-
-        /// <summary>
-        /// Async search categories by given criteria 
-        /// </summary>
-        /// <param name="criteria"></param>
-        /// <returns></returns>
-        public virtual async Task<IPagedList<Category>> SearchCategoriesAsync(CategorySearchCriteria criteria)
-        {
-            var workContext = _workContextAccessor.WorkContext;
-            var cacheKey = CacheKey.With(GetType(), "SearchCategories", criteria.GetCacheKey(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
-            var searchResult = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-            {
-                cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
-                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
-
-                criteria = criteria.Clone();
-                var searchCriteria = criteria.ToCategorySearchCriteriaDto(workContext);
-                return await _searchApi.SearchCategoriesAsync(searchCriteria);
-            });
-            var result = new PagedList<Category>(new List<Category>().AsQueryable(), 1, 1);
-            if (searchResult.Items != null)
-            {
-                result = new PagedList<Category>(searchResult.Items.Select(x => x.ToCategory(workContext.CurrentLanguage, workContext.CurrentStore)).AsQueryable(), criteria.PageNumber, criteria.PageSize);
-            }
-            //Set  lazy loading for child categories 
-            SetChildCategoriesLazyLoading(result.ToArray());
             return result;
         }
 
@@ -183,16 +144,28 @@ namespace VirtoCommerce.Storefront.Domain
         public virtual IPagedList<Category> SearchCategories(CategorySearchCriteria criteria)
         {
             var workContext = _workContextAccessor.WorkContext;
-            //It is very important to have both versions for Sync and Async methods with same cache key due to performance for multithreaded requests
-            var cacheKey = CacheKey.With(GetType(), "SearchCategories", criteria.GetCacheKey(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
-            var searchResult = _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
+            return SearchCategoriesAsync(criteria).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Async search categories by given criteria 
+        /// </summary>
+        /// <param name="criteria"></param>
+        /// <returns></returns>
+        public virtual async Task<IPagedList<Category>> SearchCategoriesAsync(CategorySearchCriteria criteria)
+        {
+            var workContext = _workContextAccessor.WorkContext;
+            var cacheKey = CacheKey.With(GetType(), "SearchCategoriesAsync", criteria.GetCacheKey(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
+            var searchResult = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
                 cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
 
                 criteria = criteria.Clone();
                 var searchCriteria = criteria.ToCategorySearchCriteriaDto(workContext);
-                return _searchApi.SearchCategories(searchCriteria);
+                return await _searchApi.SearchCategoriesAsync(searchCriteria);
+
+
             });
             var result = new PagedList<Category>(new List<Category>().AsQueryable(), 1, 1);
             if (searchResult.Items != null)
@@ -202,6 +175,16 @@ namespace VirtoCommerce.Storefront.Domain
             //Set  lazy loading for child categories 
             SetChildCategoriesLazyLoading(result.ToArray());
             return result;
+        }
+
+        /// <summary>
+        /// Search products by given criteria 
+        /// </summary>
+        /// <param name="criteria"></param>
+        /// <returns></returns>
+        public virtual CatalogSearchResult SearchProducts(ProductSearchCriteria criteria)
+        {
+            return SearchProductsAsync(criteria).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -218,28 +201,55 @@ namespace VirtoCommerce.Storefront.Domain
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
                 cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
 
-                return await InnerSearchProductsAsync(criteria, workContext);
-            });
-        }
+                criteria = criteria.Clone();
 
-        /// <summary>
-        /// Search products by given criteria 
-        /// </summary>
-        /// <param name="criteria"></param>
-        /// <returns></returns>
-        public virtual CatalogSearchResult SearchProducts(ProductSearchCriteria criteria)
-        {
-            var workContext = _workContextAccessor.WorkContext;
-            //It is very important to have both versions for Sync and Async methods with same cache key due to performance for multithreaded requests
-            var cacheKey = CacheKey.With(GetType(), "SearchProducts", criteria.GetCacheKey(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
-            return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
-            {
-                cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
-                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
-                return Task.Factory.StartNew(() => InnerSearchProductsAsync(criteria, workContext), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
+                var searchCriteria = criteria.ToProductSearchCriteriaDto(workContext);
+                var result = await _searchApi.SearchProductsAsync(searchCriteria);
+                var products = result.Items?.Select(x => x.ToProduct(workContext.CurrentLanguage, workContext.CurrentCurrency, workContext.CurrentStore)).ToList() ?? new List<Product>();
+
+                if (products.Any())
+                {
+                    var productsWithVariations = products.Concat(products.SelectMany(x => x.Variations)).ToList();
+                    var taskList = new List<Task>();
+
+                    if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.ItemAssociations))
+                    {
+                        taskList.Add(LoadProductAssociationsAsync(productsWithVariations));
+                    }
+
+                    if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.Inventory))
+                    {
+                        taskList.Add(LoadProductInventoriesAsync(productsWithVariations, workContext));
+                    }
+
+                    if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.ItemWithVendor))
+                    {
+                        taskList.Add(LoadProductVendorsAsync(productsWithVariations, workContext));
+                    }
+
+                    if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.ItemWithPrices))
+                    {
+                        taskList.Add(_pricingService.EvaluateProductPricesAsync(productsWithVariations, workContext));
+                    }
+
+                    await Task.WhenAll(taskList.ToArray());
+
+                    foreach (var product in productsWithVariations)
+                    {
+                        product.IsBuyable = new ProductIsBuyableSpecification().IsSatisfiedBy(product);
+                        product.IsAvailable = new ProductIsAvailableSpecification(product).IsSatisfiedBy(1);
+                        product.IsInStock = new ProductIsInStockSpecification().IsSatisfiedBy(product);
+                    }
+                }
+                return new CatalogSearchResult
+                {
+                    Products = new StaticPagedList<Product>(products, criteria.PageNumber, criteria.PageSize, (int?)result.TotalCount ?? 0),
+                    Aggregations = !result.Aggregations.IsNullOrEmpty() ? result.Aggregations.Select(x => x.ToAggregation(workContext.CurrentLanguage.CultureName)).ToArray() : new Aggregation[] { }
+                };
             });
         }
         #endregion
+
 
         protected virtual async Task<Product[]> GetProductsAsync(IList<string> ids, ItemResponseGroup responseGroup, WorkContext workContext)
         {
@@ -252,54 +262,6 @@ namespace VirtoCommerce.Storefront.Domain
                 return await _productsApi.GetProductByPlentyIdsAsync(ids, ((int)responseGroup).ToString());
             });
             return result.Select(x => x.ToProduct(workContext.CurrentLanguage, workContext.CurrentCurrency, workContext.CurrentStore)).ToArray();
-        }
-
-        private async Task<CatalogSearchResult> InnerSearchProductsAsync(ProductSearchCriteria criteria, WorkContext workContext)
-        {
-            criteria = criteria.Clone();
-            var searchCriteria = criteria.ToProductSearchCriteriaDto(workContext);
-            var result = await _searchApi.SearchProductsAsync(searchCriteria);
-            var products = result.Items?.Select(x => x.ToProduct(workContext.CurrentLanguage, workContext.CurrentCurrency, workContext.CurrentStore)).ToList() ?? new List<Product>();
-
-            if (products.Any())
-            {
-                var productsWithVariations = products.Concat(products.SelectMany(x => x.Variations)).ToList();
-                var taskList = new List<Task>();
-
-                if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.ItemAssociations))
-                {
-                    taskList.Add(LoadProductAssociationsAsync(productsWithVariations));
-                }
-
-                if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.Inventory))
-                {
-                    taskList.Add(LoadProductInventoriesAsync(productsWithVariations, workContext));
-                }
-
-                if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.ItemWithVendor))
-                {
-                    taskList.Add(LoadProductVendorsAsync(productsWithVariations, workContext));
-                }
-
-                if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.ItemWithPrices))
-                {
-                    taskList.Add(_pricingService.EvaluateProductPricesAsync(productsWithVariations, workContext));
-                }
-
-                await Task.WhenAll(taskList.ToArray());
-
-                foreach (var product in productsWithVariations)
-                {
-                    product.IsBuyable = new ProductIsBuyableSpecification().IsSatisfiedBy(product);
-                    product.IsAvailable = new ProductIsAvailableSpecification(product).IsSatisfiedBy(1);
-                    product.IsInStock = new ProductIsInStockSpecification().IsSatisfiedBy(product);
-                }
-            }
-            return new CatalogSearchResult
-            {
-                Products = new StaticPagedList<Product>(products, criteria.PageNumber, criteria.PageSize, (int?)result.TotalCount ?? 0),
-                Aggregations = !result.Aggregations.IsNullOrEmpty() ? result.Aggregations.Select(x => x.ToAggregation(workContext.CurrentLanguage.CultureName)).ToArray() : new Aggregation[] { }
-            };
         }
 
         protected virtual async Task LoadProductVendorsAsync(List<Product> products, WorkContext workContext)
@@ -332,7 +294,6 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
-
         protected virtual async Task LoadProductAssociationsAsync(IEnumerable<Product> products)
         {
             var allAssociations = products.SelectMany(x => x.Associations).ToList();
@@ -364,28 +325,27 @@ namespace VirtoCommerce.Storefront.Domain
                     if (categoryAssociation.Category != null && categoryAssociation.Category.Products == null)
                     {
                         categoryAssociation.Category.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos) =>
-                       {
-                           var criteria = new ProductSearchCriteria
-                           {
-                               PageNumber = pageNumber,
-                               PageSize = pageSize,
-                               Outline = categoryAssociation.Category.Outline,
-                               ResponseGroup = ItemResponseGroup.ItemInfo | ItemResponseGroup.ItemWithPrices | ItemResponseGroup.Inventory | ItemResponseGroup.ItemWithVendor
-                           };
+                        {
+                            var criteria = new ProductSearchCriteria
+                            {
+                                PageNumber = pageNumber,
+                                PageSize = pageSize,
+                                Outline = categoryAssociation.Category.Outline,
+                                ResponseGroup = ItemResponseGroup.ItemInfo | ItemResponseGroup.ItemWithPrices | ItemResponseGroup.Inventory | ItemResponseGroup.ItemWithVendor
+                            };
 
-                           if (!sortInfos.IsNullOrEmpty())
-                           {
-                               criteria.SortBy = SortInfo.ToString(sortInfos);
-                           }
+                            if (!sortInfos.IsNullOrEmpty())
+                            {
+                                criteria.SortBy = SortInfo.ToString(sortInfos);
+                            }
 
-                           var searchResult = SearchProducts(criteria);
-                           return searchResult.Products;
-                       }, 1, ProductSearchCriteria.DefaultPageSize);
+                            var searchResult = SearchProducts(criteria);
+                            return searchResult.Products;
+                        }, 1, ProductSearchCriteria.DefaultPageSize);
                     }
                 }
             }
         }
-
 
         protected virtual async Task LoadProductInventoriesAsync(List<Product> products, WorkContext workContext)
         {
