@@ -22,12 +22,12 @@ namespace VirtoCommerce.Storefront.Model.Common.Bus
             handlers.Add((message, token) => handler((T)message, token));
         }
 
-        public Task Publish<T>(T @event, CancellationToken cancellationToken = default(CancellationToken)) where T : class, IEvent
+        public async Task Publish<T>(T @event, CancellationToken cancellationToken = default(CancellationToken)) where T : class, IEvent
         {
-            if (!_routes.TryGetValue(@event.GetType(), out var handlers))
-                return Task.FromResult(true);
-
-            return Task.WhenAll(handlers.Select(handler => handler(@event, cancellationToken)));
+            if (_routes.TryGetValue(@event.GetType(), out var handlers))
+            {
+                await Task.WhenAll(handlers.Select(handler => handler(@event, cancellationToken)));
+            }
         }
     }
 }
