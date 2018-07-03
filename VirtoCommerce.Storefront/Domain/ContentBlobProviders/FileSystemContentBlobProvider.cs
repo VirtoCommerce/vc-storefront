@@ -1,15 +1,16 @@
-using Microsoft.Extensions.FileProviders.Physical;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using VirtoCommerce.Storefront.Model.StaticContent;
-using Microsoft.Extensions.Caching.Memory;
-using VirtoCommerce.Storefront.Model.Common.Caching;
-using VirtoCommerce.Storefront.Extensions;
 using System.Threading;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.FileProviders.Physical;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
+using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common.Caching;
+using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -27,10 +28,11 @@ namespace VirtoCommerce.Storefront.Domain
             //Create fileSystemWatcher instance only when rootFolder exist to prevent whole application crash on initialization phase. 
             if (Directory.Exists(_options.Path))
             {
-                _fileSystemWatcher = new PhysicalFilesWatcher(_options.Path, new FileSystemWatcher(_options.Path), _options.PollForChanges);
+                //It is very important to have rootPath with leading slash '\' without this any changes won't reflected
+                var rootPath = _options.Path.TrimEnd('\\') + '\\';
+                _fileSystemWatcher = new PhysicalFilesWatcher(rootPath, new FileSystemWatcher(rootPath), false);
             }
         }
-
         #region IContentBlobProvider Members
         /// <summary>
         /// Open blob for read 
@@ -40,6 +42,11 @@ namespace VirtoCommerce.Storefront.Domain
         public virtual Stream OpenRead(string path)
         {
             path = NormalizePath(path);
+            // traversing above root not permitted.
+            if (PathUtils.PathNavigatesAboveRoot(path))
+            {
+                throw new InvalidOperationException(path);
+            }
             return File.OpenRead(path);
         }
 
@@ -51,6 +58,12 @@ namespace VirtoCommerce.Storefront.Domain
         public virtual Stream OpenWrite(string path)
         {
             path = NormalizePath(path);
+            // traversing above root not permitted.
+            if (PathUtils.PathNavigatesAboveRoot(path))
+            {
+                throw new InvalidOperationException(path);
+            }
+
             var folderPath = Path.GetDirectoryName(path);
 
             if (!Directory.Exists(folderPath))
@@ -108,6 +121,11 @@ namespace VirtoCommerce.Storefront.Domain
             //TODO: Test with symbolic links
             if (_fileSystemWatcher != null)
             {
+                // Absolute paths not permitted for watcher, need to convert it to relative
+                if (Path.IsPathRooted(path))
+                {
+                    path = GetRelativePath(path).TrimStart('/');
+                }
                 return _fileSystemWatcher.CreateFileChangeToken(path);
             }
             else
@@ -133,6 +151,6 @@ namespace VirtoCommerce.Storefront.Domain
             return Path.Combine(_options.Path, path.TrimStart(Path.DirectorySeparatorChar));
         }
 
-     
+
     }
 }

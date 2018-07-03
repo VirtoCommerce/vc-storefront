@@ -139,7 +139,6 @@ namespace VirtoCommerce.Storefront
                 services.AddFileSystemBlobContent(options =>
                 {
                     options.Path = HostingEnvironment.MapPath(contentConnectionString.RootPath);
-                    options.PollForChanges = fileSystemBlobOptions.PollForChanges;
                 });
             }
 

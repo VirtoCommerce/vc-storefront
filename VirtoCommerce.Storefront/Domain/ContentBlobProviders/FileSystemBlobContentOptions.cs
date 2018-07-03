@@ -7,8 +7,7 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public class FileSystemBlobContentOptions
     {
+        //The root path 
         public string Path { get; set; }
-        //Need to be careful with enabling this setting, this can lead to serious performance issues
-        public bool PollForChanges { get; set; } = false;
     }
 }

@@ -25,10 +25,10 @@ namespace VirtoCommerce.Storefront.Domain
         private static readonly Regex _headerRegExp = new Regex(@"(?s:^---(.*?)---)");
         private static readonly string[] _extensions = { ".md", ".liquid", ".html" };
         private readonly IStorefrontUrlBuilder _urlBuilder;
-        private readonly IStaticContentItemFactory  _contentItemFactory;
+        private readonly IStaticContentItemFactory _contentItemFactory;
         private readonly IContentBlobProvider _contentBlobProvider;
         private readonly MarkdownPipeline _markdownPipeline;
-        private readonly IMemoryCache _memoryCache; 
+        private readonly IMemoryCache _memoryCache;
         private readonly string _basePath = "Pages";
 
         public StaticContentService(IMemoryCache memoryCache, IWorkContextAccessor workContextAccessor,
@@ -38,7 +38,7 @@ namespace VirtoCommerce.Storefront.Domain
             _urlBuilder = urlBuilder;
             _contentItemFactory = contentItemFactory;
             _contentBlobProvider = contentBlobProvider;
-            _memoryCache = memoryCache;        
+            _memoryCache = memoryCache;
             _markdownPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         }
 
@@ -52,7 +52,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { StaticContentCacheRegion.CreateChangeToken(), _contentBlobProvider.Watch(baseStoreContentPath + "/**/*") }));
 
-                var retVal = new List<ContentItem>();              
+                var retVal = new List<ContentItem>();
                 const string searchPattern = "*.*";
                 if (_contentBlobProvider.PathExists(baseStoreContentPath))
                 {
@@ -114,7 +114,7 @@ namespace VirtoCommerce.Storefront.Domain
                 metaHeaders = new Dictionary<string, IEnumerable<string>>();
             }
 
-            content = RemoveYamlHeader(content);        
+            content = RemoveYamlHeader(content);
 
             //Render markdown content
             if (Path.GetExtension(contentItem.StoragePath).EqualsInvariant(".md"))
@@ -131,7 +131,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (string.IsNullOrEmpty(contentItem.Permalink))
             {
-                contentItem.Permalink = ":folder/:categories/:title";           
+                contentItem.Permalink = ":folder/:categories/:title";
             }
             //Transform permalink template to url
             contentItem.Url = GetContentItemUrl(contentItem, contentItem.Permalink);
