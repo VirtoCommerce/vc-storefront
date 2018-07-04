@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -47,7 +47,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 if (!builder.HttpContext.Request.Path.Value.EndsWith(".map"))
                 {
                     //Sign-in anonymous user
-                    await signInManager.SignInAsync(user, false);
+                    await signInManager.SignInAsync(user, new AuthenticationProperties { IsPersistent = false, ExpiresUtc = DateTimeOffset.MaxValue });
                     //https://github.com/aspnet/Security/issues/1131
                     //the sign in operation doesn't change the current request user principal.
                     //That only happens on incoming requests once the cookie or bearer token (or whatever thing the type of auth requires to create an identity) is set.
