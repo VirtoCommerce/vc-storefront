@@ -57,7 +57,8 @@ namespace VirtoCommerce.Storefront.Model.Common
 
         public string CultureName
         {
-            get {
+            get
+            {
                 return _language != null ? _language.CultureName : null;
             }
             set
@@ -112,10 +113,10 @@ namespace VirtoCommerce.Storefront.Model.Common
                 try
                 {
                     var ri = new RegionInfo(ci.LCID);
-                    if (ri.ISOCurrencySymbol == isoCode)
+                    if (ri.ISOCurrencySymbol.EqualsInvariant(isoCode))
                         return ri.CurrencySymbol;
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                 }
             }
@@ -130,7 +131,7 @@ namespace VirtoCommerce.Storefront.Model.Common
         public override bool Equals(object obj)
         {
             var result = base.Equals(obj);
-            if(!result && obj is string code)
+            if (!result && obj is string code)
             {
                 result = code.EqualsInvariant(Code);
             }
