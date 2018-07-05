@@ -355,6 +355,13 @@ namespace VirtoCommerce.Storefront.Model.Common
                     numberFormat.CurrencySymbol = string.Empty;
                 }
 
+                /* Quick Fix ....
+                   All countries show no decimal now anymore...,
+                   but this should be countrie dependable
+                */
+                
+                numberFormat.CurrencyGroupSeparator = "";
+
                 result = Amount.ToString(format, numberFormat);
             }
 
