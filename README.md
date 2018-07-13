@@ -71,7 +71,7 @@ Fork your own copy of VirtoCommerce Storefront to your account on GitHub:
 If you are a member of an organization on GitHub, select the target for the fork.
 2. Clone the forked repository to local machine:
 ```
-git clone https://github.com/<<your GitHub user name>>/vc-storefront-core.git C:\vc-storefront
+git clone https://github.com/<<your GitHub user name>>/vc-storefront-core.git C:\vc-storefront-core
 ```
 3. Switch to the cloned directory:
 
