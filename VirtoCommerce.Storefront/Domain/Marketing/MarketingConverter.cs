@@ -55,6 +55,7 @@ namespace VirtoCommerce.Storefront.Domain
             if (rewardDto.MaxLimit > 0 && amountType == AmountType.Relative)
             {
                 amount = Math.Min(rewardDto.MaxLimit ?? 0, rewardDto.Amount ?? 0);
+                amountType = AmountType.Absolute;
             }
 
             var result = new PromotionReward
