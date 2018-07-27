@@ -49,15 +49,6 @@ namespace VirtoCommerce.Storefront.Domain
 
         public static PromotionReward ToPromotionReward(this marketingDto.PromotionReward rewardDto, Currency currency)
         {
-            
-            var amount = rewardDto.Amount ?? 0;
-            var amountType = EnumUtility.SafeParse(rewardDto.AmountType, AmountType.Absolute);
-            if (rewardDto.MaxLimit > 0 && amountType == AmountType.Relative)
-            {
-                amount = Math.Min(rewardDto.MaxLimit ?? 0, rewardDto.Amount ?? 0);
-                amountType = AmountType.Absolute;
-            }
-
             var result = new PromotionReward
             {
                 CategoryId = rewardDto.CategoryId,
@@ -69,9 +60,9 @@ namespace VirtoCommerce.Storefront.Domain
                 ProductId = rewardDto.ProductId,
                 PromotionId = rewardDto.PromotionId,
                 Quantity = rewardDto.Quantity ?? 0,
-
-                Amount = (decimal)(amount),
-                AmountType = amountType,
+                MaxLimit = (decimal)(rewardDto.MaxLimit ?? 0),
+                Amount = (decimal)(rewardDto.Amount ?? 0),
+                AmountType = EnumUtility.SafeParse(rewardDto.AmountType, AmountType.Absolute),
                 CouponAmount = new Money(rewardDto.CouponAmount ?? 0, currency),
                 CouponMinOrderAmount = new Money(rewardDto.CouponMinOrderAmount ?? 0, currency),
                 Promotion = rewardDto.Promotion.ToPromotion(),
@@ -81,8 +72,6 @@ namespace VirtoCommerce.Storefront.Domain
 
             return result;
         }
-
-      
 
         public static Promotion ToPromotion(this marketingDto.Promotion promotionDto)
         {
