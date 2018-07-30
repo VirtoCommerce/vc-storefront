@@ -2,16 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using DotLiquid;
 using DotLiquid.Exceptions;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using VirtoCommerce.LiquidThemeEngine.Converters;
 using VirtoCommerce.LiquidThemeEngine.Objects;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
-using Microsoft.AspNetCore.Http.Features;
 
 namespace VirtoCommerce.LiquidThemeEngine
 {
@@ -111,6 +112,8 @@ namespace VirtoCommerce.LiquidThemeEngine
                 //add special placeholder 'content_for_layout' to content it will be replaced in master page by main content
                 parameters.Add("content_for_layout", viewTemplate);
                 parameters.Add("content_for_header", headerTemplate);
+
+                parameters.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
                 try
                 {
