@@ -5,31 +5,22 @@ using Xunit;
 
 namespace VirtoCommerce.Storefront.Tests
 {
+    [Trait("Category", "Unit")]
     public class MarketingTests
     {
-        [Fact]
-        public void Can_limit_only_relative_rewards()
+        [Theory]
+        [InlineData(10, 8, 8, AmountType.Relative)]
+        [InlineData(10, 8, 10, AmountType.Absolute)]
+        public void Can_limit_only_relative_rewards(int amount, int maxLimit, decimal expected, AmountType type)
         {
             var currency = new Currency(new Language("en-US"), "USD (840)");
             var money = new Money(100m, currency);
             //Arrange
-            var relativeReward = new PromotionReward()
+            var reward = new PromotionReward()
             {
-                Amount = 10,
-                AmountType = AmountType.Relative,
-                MaxLimit = 8,
-                Promotion = new Promotion()
-                {
-                    Id = "id",
-                    Description = ""
-                }
-            };
-
-            var absoluteReward = new PromotionReward()
-            {
-                Amount = 10,
-                AmountType = AmountType.Absolute,
-                MaxLimit = 8,
+                Amount = amount,
+                AmountType = type,
+                MaxLimit = maxLimit,
                 Promotion = new Promotion()
                 {
                     Id = "id",
@@ -38,19 +29,12 @@ namespace VirtoCommerce.Storefront.Tests
             };
 
             //Act
-
-            var relativeDiscount = new Discount();
-            var absoluteDiscount = new Discount();
-
-
-            relativeDiscount = relativeReward.ToDiscountModel(money);
-            absoluteDiscount = absoluteReward.ToDiscountModel(money);
+            var discount = new Discount();
+            discount = reward.ToDiscountModel(money);
 
             //Assert
-            var expectedRelativeDiscountAmount = new Money(8m, currency);
-            var expectedAbsoluteDiscountAmount = new Money(10m, currency);
-            Assert.Equal(relativeDiscount.Amount, expectedRelativeDiscountAmount);
-            Assert.Equal(absoluteDiscount.Amount, expectedAbsoluteDiscountAmount);
+            var expectedAmount = new Money(expected, currency);
+            Assert.Equal(discount.Amount, expectedAmount);
         }
     }
 }
