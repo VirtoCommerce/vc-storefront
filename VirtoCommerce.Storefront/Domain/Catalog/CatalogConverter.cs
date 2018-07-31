@@ -13,7 +13,7 @@ using marketingDto = VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
 namespace VirtoCommerce.Storefront.Domain
 {
-   
+
     public static partial class CatalogConverter
     {
         private static MarkdownPipeline _markdownPipeline;
@@ -21,7 +21,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             _markdownPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         }
-         
+
         public static SeoInfo ToSeoInfo(this catalogDto.SeoInfo seoDto)
         {
             return seoDto.JsonConvert<coreDto.SeoInfo>().ToSeoInfo();
@@ -439,12 +439,22 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (productDto.Reviews != null)
             {
-                result.Descriptions = productDto.Reviews.Where(r => !string.IsNullOrEmpty(r.Content)).Select(r => new EditorialReview
+                var productReviews = productDto.Reviews
+                    .Where(r => !string.IsNullOrEmpty(r.Content))
+                    .Select(r => new EditorialReview
+                    {
+                        Language = new Language(r.LanguageCode),
+                        ReviewType = r.ReviewType,
+                        Value = Markdown.ToHtml(r.Content, _markdownPipeline)
+                    })
+                    .ToList();
+
+                result.Descriptions = productReviews.Where(x => x.Language.Equals(currentLanguage)).ToList();
+                if (!result.Descriptions.Any())
                 {
-                    Language = new Language(r.LanguageCode),
-                    ReviewType = r.ReviewType,
-                    Value = Markdown.ToHtml(r.Content, _markdownPipeline)
-                }).Where(x => x.Language.Equals(currentLanguage)).ToList();
+                    result.Descriptions = productReviews.Where(x => x.Language.IsInvariant).ToList();
+                }
+
                 result.Description = result.Descriptions.FindWithLanguage(currentLanguage, x => x.Value, null);
             }
 
