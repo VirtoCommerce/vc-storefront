@@ -24,6 +24,7 @@
     <PackageReference Include="LibSassHost.Native.win-x64" Version="1.1.9" />
     <PackageReference Include="LibSassHost.Native.win-x86" Version="1.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.0" />
+    <PackageReference Include="Nito.AsyncEx" Version="4.0.1" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
   </ItemGroup>
 

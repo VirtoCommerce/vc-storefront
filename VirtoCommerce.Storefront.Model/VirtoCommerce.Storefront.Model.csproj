@@ -19,6 +19,7 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="7.6.100" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.0" />
+    <PackageReference Include="Nito.AsyncEx" Version="4.0.1" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
   </ItemGroup>
 
