@@ -47,7 +47,7 @@
     <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.11" />
     <PackageReference Include="Microsoft.SyndicationFeed.ReaderWriter" Version="1.0.2" />
     <PackageReference Include="MimeTypes" Version="1.0.6" />
-    <PackageReference Include="Nito.AsyncEx" Version="4.0.1" />
+    <PackageReference Include="Nito.AsyncEx" Version="5.0.0-pre-05" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
     <PackageReference Include="Scrutor" Version="2.2.2" />
     <PackageReference Include="VirtoCommerce.Tools" Version="1.2.0" />
