@@ -1,11 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.BulkOrder;
-using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
@@ -39,7 +38,7 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             await EnsureThatCartExistsAsync();
 
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext.CurrentCart.Value)).LockAsync())
+            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 items = items.Where(i => !string.IsNullOrEmpty(i.Sku)).ToArray();
                 if (items.Length == 0)
@@ -75,7 +74,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
             await EnsureThatCartExistsAsync();
 
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext.CurrentCart.Value)).LockAsync())
+            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 var items = csv.Split(new string[] { Environment.NewLine }, StringSplitOptions.None)
                                .Select(csvRecord => GetBulkOrderItemFromCsvRecord(csvRecord)).ToArray();
@@ -111,10 +110,6 @@ namespace VirtoCommerce.Storefront.Controllers
             await _cartBuilder.TakeCartAsync(WorkContext.CurrentCart.Value);
         }
 
-        private static string GetAsyncLockCartKey(ShoppingCart cart)
-        {
-            return string.Join(":", "Cart", cart.Id, cart.Name, cart.CustomerId);
-        }
 
         private async Task<string[]> TryAddItemsToCartAsync(BulkOrderItem[] bulkOrderItems)
         {
@@ -145,7 +140,7 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             BulkOrderItem bulkOrderItem = null;
 
-            var splitted = csvRecord.Split(',',';',' ','\t');
+            var splitted = csvRecord.Split(',', ';', ' ', '\t');
             if (splitted.Length == 2)
             {
                 int quantity = 0;
