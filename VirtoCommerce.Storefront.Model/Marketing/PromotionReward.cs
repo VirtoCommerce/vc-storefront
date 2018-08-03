@@ -1,3 +1,4 @@
+using System;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Marketing
@@ -97,6 +98,12 @@ namespace VirtoCommerce.Storefront.Model.Marketing
         /// </summary>
         public string PaymentMethodCode { get; set; }
 
+        /// <summary>
+        /// Gets or sets the max limit for relative rewards
+        /// </summary>
+        public decimal MaxLimit { get; set; }
+
+
         public Discount ToDiscountModel(Money amount)
         {
             var absoluteAmount = GetAbsoluteDiscountAmount(amount.Amount);
@@ -115,6 +122,10 @@ namespace VirtoCommerce.Storefront.Model.Marketing
             if (AmountType == AmountType.Relative)
             {
                 absoluteAmount = Amount * originAmount / 100;
+                if (MaxLimit > 0)
+                {
+                    absoluteAmount = Math.Min(MaxLimit, absoluteAmount);
+                }
             }
 
             return absoluteAmount;

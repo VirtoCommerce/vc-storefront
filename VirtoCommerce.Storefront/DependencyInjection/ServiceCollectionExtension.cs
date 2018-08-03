@@ -8,9 +8,13 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using IdentityModel.Client;
+using Microsoft.ApplicationInsights.AspNetCore;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights.SnapshotCollector;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Rest;
@@ -45,6 +49,12 @@ namespace VirtoCommerce.Storefront.DependencyInjection
 
     public static class ServiceCollectionExtension
     {
+        public static void AddSnaphotTelemetry(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<SnapshotCollectorConfiguration>(configuration.GetSection(nameof(SnapshotCollectorConfiguration)));
+            services.AddSingleton<ITelemetryProcessorFactory>(sp => new SnapshotCollectorTelemetryProcessorFactory(sp));
+        }
+
         public static void AddPlatformEndpoint(this IServiceCollection services, Action<PlatformEndpointOptions> setupAction = null)
         {
             ServicePointManager.UseNagleAlgorithm = false;
@@ -210,6 +220,20 @@ namespace VirtoCommerce.Storefront.DependencyInjection
                 .GetInterfaces()
                 .Where(i => i.GetTypeInfo().IsGenericType && (i.GetGenericTypeDefinition() == typeof(IEventHandler<>)
                              || i.GetGenericTypeDefinition() == typeof(ICancellableEventHandler<>)));
+        }
+
+        private class SnapshotCollectorTelemetryProcessorFactory : ITelemetryProcessorFactory
+        {
+            private readonly IServiceProvider _serviceProvider;
+
+            public SnapshotCollectorTelemetryProcessorFactory(IServiceProvider serviceProvider) =>
+                _serviceProvider = serviceProvider;
+
+            public ITelemetryProcessor Create(ITelemetryProcessor next)
+            {
+                var snapshotConfigurationOptions = _serviceProvider.GetService<IOptions<SnapshotCollectorConfiguration>>();
+                return new SnapshotCollectorTelemetryProcessor(next, configuration: snapshotConfigurationOptions.Value);
+            }
         }
     }
 }

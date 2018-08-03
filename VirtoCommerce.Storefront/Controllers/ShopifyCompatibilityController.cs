@@ -26,14 +26,14 @@ namespace VirtoCommerce.Storefront.Controllers
             _catalogService = catalogService;
         }
 
-      
+
         // GET: /cart/change?line=...&quantity=...
         [HttpGet]
         public async Task<ActionResult> Change(int line, int quantity)
         {
             EnsureCartExists();
 
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext.CurrentCart.Value)).LockAsync())
+            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
                 await cartBuilder.ChangeItemQuantityAsync(line - 1, quantity);
@@ -47,7 +47,7 @@ namespace VirtoCommerce.Storefront.Controllers
         public async Task<ActionResult> Add(string id, int quantity)
         {
             EnsureCartExists();
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext.CurrentCart.Value)).LockAsync())
+            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
                 var product = (await _catalogService.GetProductsAsync(new[] { id }, Model.Catalog.ItemResponseGroup.ItemLarge)).FirstOrDefault();
@@ -67,7 +67,7 @@ namespace VirtoCommerce.Storefront.Controllers
             string virtualRedirectUrl = "~/cart";
 
             EnsureCartExists();
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext.CurrentCart.Value)).LockAsync())
+            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
                 await cartBuilder.ChangeItemsQuantitiesAsync(updates);
@@ -88,7 +88,7 @@ namespace VirtoCommerce.Storefront.Controllers
         public async Task<ActionResult> Clear()
         {
             EnsureCartExists();
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext.CurrentCart.Value)).LockAsync())
+            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
                 await cartBuilder.ClearAsync();
@@ -113,7 +113,7 @@ namespace VirtoCommerce.Storefront.Controllers
             LineItem lineItem = null;
 
             EnsureCartExists();
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext.CurrentCart.Value)).LockAsync())
+            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 var product = (await _catalogService.GetProductsAsync(new[] { id }, Model.Catalog.ItemResponseGroup.ItemLarge)).FirstOrDefault();
                 if (product != null)
@@ -133,13 +133,13 @@ namespace VirtoCommerce.Storefront.Controllers
         public async Task<ActionResult> ChangeJs(string id, int quantity)
         {
             EnsureCartExists();
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext.CurrentCart.Value)).LockAsync())
+            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
                 await cartBuilder.ChangeItemQuantityAsync(id, quantity);
                 await cartBuilder.SaveAsync();
                 return LiquidJson(cartBuilder.Cart.ToShopifyModel(WorkContext.CurrentLanguage, UrlBuilder));
-            }           
+            }
         }
 
         // POST: /cart/update.js
@@ -147,13 +147,13 @@ namespace VirtoCommerce.Storefront.Controllers
         public async Task<ActionResult> UpdateJs(int[] updates)
         {
             EnsureCartExists();
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext.CurrentCart.Value)).LockAsync())
+            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
                 await cartBuilder.ChangeItemsQuantitiesAsync(updates);
                 await cartBuilder.SaveAsync();
                 return LiquidJson(cartBuilder.Cart.ToShopifyModel(WorkContext.CurrentLanguage, UrlBuilder));
-            }           
+            }
         }
 
         // POST: /cart/clear.js
@@ -161,13 +161,13 @@ namespace VirtoCommerce.Storefront.Controllers
         public async Task<ActionResult> ClearJs()
         {
             EnsureCartExists();
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext.CurrentCart.Value)).LockAsync())
+            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
                 await cartBuilder.ClearAsync();
                 await cartBuilder.SaveAsync();
                 return LiquidJson(_cartBuilder.Cart.ToShopifyModel(WorkContext.CurrentLanguage, UrlBuilder));
-            }           
+            }
         }
 
         /// GET collections
@@ -205,9 +205,6 @@ namespace VirtoCommerce.Storefront.Controllers
             return _cartBuilder;
         }
 
-        private static string GetAsyncLockCartKey(ShoppingCart cart)
-        {
-            return string.Join(":", "Cart", cart.Id, cart.Name, cart.CustomerId);
-        }
+
     }
 }

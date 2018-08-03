@@ -9,7 +9,7 @@ using VirtoCommerce.Storefront.Model.Subscriptions;
 
 namespace VirtoCommerce.Storefront.Model.Cart
 {
-    public partial class ShoppingCart : Entity, IDiscountable, IValidatable, IHasLanguage, ITaxable
+    public partial class ShoppingCart : Entity, IDiscountable, IValidatable, IHasLanguage, ITaxable, ICacheKey
     {
         public ShoppingCart(Currency currency, Language language)
         {
@@ -423,6 +423,13 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
         #region IHasLanguage Members
         public Language Language { get; set; }
+        #endregion
+
+        #region ICacheKey
+        public override string GetCacheKey()
+        {
+            return string.Join(":", "Cart", Id, Name, CustomerId);
+        }
         #endregion
 
         public override string ToString()

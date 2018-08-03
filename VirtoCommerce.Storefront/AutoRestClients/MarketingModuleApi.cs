@@ -5014,7 +5014,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<GenericSearchResultPromotion>> PromotionsSearchWithHttpMessagesAsync(PromotionSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<GenericSearchResultDynamicPromotion>> PromotionsSearchWithHttpMessagesAsync(PromotionSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (criteria == null)
             {
@@ -5105,7 +5105,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<GenericSearchResultPromotion>();
+            var _result = new HttpOperationResponse<GenericSearchResultDynamicPromotion>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -5114,7 +5114,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<GenericSearchResultPromotion>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<GenericSearchResultDynamicPromotion>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -6686,7 +6686,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<GenericSearchResultPromotion>> PromotionsSearchWithHttpMessagesAsync(PromotionSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<GenericSearchResultDynamicPromotion>> PromotionsSearchWithHttpMessagesAsync(PromotionSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Evaluate promotions
         /// </summary>
@@ -6935,7 +6935,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='criteria'>
             /// criteria
             /// </param>
-            public static GenericSearchResultPromotion PromotionsSearch(this IMarketingModulePromotion operations, PromotionSearchCriteria criteria)
+            public static GenericSearchResultDynamicPromotion PromotionsSearch(this IMarketingModulePromotion operations, PromotionSearchCriteria criteria)
             {
                 return operations.PromotionsSearchAsync(criteria).GetAwaiter().GetResult();
             }
@@ -6952,7 +6952,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<GenericSearchResultPromotion> PromotionsSearchAsync(this IMarketingModulePromotion operations, PromotionSearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<GenericSearchResultDynamicPromotion> PromotionsSearchAsync(this IMarketingModulePromotion operations, PromotionSearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.PromotionsSearchWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -9015,11 +9015,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the PromotionSearchCriteria class.
         /// </summary>
-        public PromotionSearchCriteria(string keyword = default(string), bool? onlyActive = default(bool?), string store = default(string), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public PromotionSearchCriteria(string keyword = default(string), bool? onlyActive = default(bool?), string store = default(string), IList<string> storeIds = default(IList<string>), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
             Keyword = keyword;
             OnlyActive = onlyActive;
             Store = store;
+            StoreIds = storeIds;
             ResponseGroup = responseGroup;
             ObjectType = objectType;
             ObjectTypes = objectTypes;
@@ -9052,6 +9053,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "store")]
         public string Store { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "storeIds")]
+        public IList<string> StoreIds { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9124,124 +9130,38 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class PromoDynamicExpressionTree
+    public partial class DynamicPromotion
     {
         /// <summary>
-        /// Initializes a new instance of the PromoDynamicExpressionTree class.
+        /// Initializes a new instance of the DynamicPromotion class.
         /// </summary>
-        public PromoDynamicExpressionTree()
+        public DynamicPromotion()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the PromoDynamicExpressionTree class.
+        /// Initializes a new instance of the DynamicPromotion class.
         /// </summary>
-        public PromoDynamicExpressionTree(string id = default(string), IList<DynamicExpression> availableChildren = default(IList<DynamicExpression>), IList<DynamicExpression> children = default(IList<DynamicExpression>))
+        public DynamicPromotion(bool? isAllowCombiningWithSelf = default(bool?), string predicateSerialized = default(string), string predicateVisualTreeSerialized = default(string), string rewardsSerialized = default(string), string store = default(string), IList<string> storeIds = default(IList<string>), string name = default(string), bool? isActive = default(bool?), int? priority = default(int?), bool? isExclusive = default(bool?), bool? hasCoupons = default(bool?), string description = default(string), int? maxUsageCount = default(int?), int? maxUsageOnOrder = default(int?), int? maxPersonalUsageCount = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
-            Id = id;
-            AvailableChildren = availableChildren;
-            Children = children;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "availableChildren")]
-        public IList<DynamicExpression> AvailableChildren { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "children")]
-        public IList<DynamicExpression> Children { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    /// <summary>
-    /// Represent marketing promotion, define applicable rules and rewards
-    /// amount in marketing system
-    /// </summary>
-    public partial class Promotion
-    {
-        /// <summary>
-        /// Initializes a new instance of the Promotion class.
-        /// </summary>
-        public Promotion()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Promotion class.
-        /// </summary>
-        /// <param name="type">It contains the name of realizing this type
-        /// promotion.
-        /// DynamicPromotion is build in implementation allow to construct
-        /// promotion with dynamic conditions and rewards.
-        /// For complex custom scenarios user may define personal 'hard-coded'
-        /// promotion types</param>
-        /// <param name="store">Store id that is covered by this
-        /// promotion</param>
-        /// <param name="catalog">Catalog id that is covered by this
-        /// promotion</param>
-        /// <param name="maxUsageCount">Maximum promotion usage count</param>
-        /// <param name="coupons">List of coupons codes which may be used for
-        /// activate that promotion</param>
-        /// <param name="priority">Used for choosing in combination</param>
-        /// <param name="isExclusive">If a promotion with this setting is
-        /// applied, no other promotions can be applied to the order.</param>
-        /// <param name="isAllowCombiningWithSelf">If this flag is set to true,
-        /// it allow of this promotion combining with self.
-        /// Special for case when evaluate rewards for multiple coupons from
-        /// same promotion.</param>
-        /// <param name="dynamicExpression">Dynamic conditions tree determine
-        /// the applicability of this promotion and reward definition</param>
-        public Promotion(string type = default(string), string name = default(string), string store = default(string), string catalog = default(string), string description = default(string), bool? isActive = default(bool?), int? maxUsageCount = default(int?), int? maxPersonalUsageCount = default(int?), IList<string> coupons = default(IList<string>), int? priority = default(int?), bool? isExclusive = default(bool?), bool? isAllowCombiningWithSelf = default(bool?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), PromoDynamicExpressionTree dynamicExpression = default(PromoDynamicExpressionTree), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            Type = type;
-            Name = name;
+            IsAllowCombiningWithSelf = isAllowCombiningWithSelf;
+            PredicateSerialized = predicateSerialized;
+            PredicateVisualTreeSerialized = predicateVisualTreeSerialized;
+            RewardsSerialized = rewardsSerialized;
             Store = store;
-            Catalog = catalog;
-            Description = description;
+            StoreIds = storeIds;
+            Name = name;
             IsActive = isActive;
-            MaxUsageCount = maxUsageCount;
-            MaxPersonalUsageCount = maxPersonalUsageCount;
-            Coupons = coupons;
             Priority = priority;
             IsExclusive = isExclusive;
-            IsAllowCombiningWithSelf = isAllowCombiningWithSelf;
+            HasCoupons = hasCoupons;
+            Description = description;
+            MaxUsageCount = maxUsageCount;
+            MaxUsageOnOrder = maxUsageOnOrder;
+            MaxPersonalUsageCount = maxPersonalUsageCount;
             StartDate = startDate;
             EndDate = endDate;
-            DynamicExpression = dynamicExpression;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
@@ -9256,14 +9176,34 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets it contains the name of realizing this type promotion.
-        /// DynamicPromotion is build in implementation allow to construct
-        /// promotion with dynamic conditions and rewards.
-        /// For complex custom scenarios user may define personal 'hard-coded'
-        /// promotion types
         /// </summary>
-        [JsonProperty(PropertyName = "type")]
-        public string Type { get; set; }
+        [JsonProperty(PropertyName = "isAllowCombiningWithSelf")]
+        public bool? IsAllowCombiningWithSelf { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "predicateSerialized")]
+        public string PredicateSerialized { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "predicateVisualTreeSerialized")]
+        public string PredicateVisualTreeSerialized { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "rewardsSerialized")]
+        public string RewardsSerialized { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "store")]
+        public string Store { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "storeIds")]
+        public IList<string> StoreIds { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9271,16 +9211,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets store id that is covered by this promotion
         /// </summary>
-        [JsonProperty(PropertyName = "store")]
-        public string Store { get; set; }
+        [JsonProperty(PropertyName = "isActive")]
+        public bool? IsActive { get; set; }
 
         /// <summary>
-        /// Gets or sets catalog id that is covered by this promotion
         /// </summary>
-        [JsonProperty(PropertyName = "catalog")]
-        public string Catalog { get; set; }
+        [JsonProperty(PropertyName = "priority")]
+        public int? Priority { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isExclusive")]
+        public bool? IsExclusive { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "hasCoupons")]
+        public bool? HasCoupons { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9289,48 +9237,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "isActive")]
-        public bool? IsActive { get; set; }
-
-        /// <summary>
-        /// Gets or sets maximum promotion usage count
-        /// </summary>
         [JsonProperty(PropertyName = "maxUsageCount")]
         public int? MaxUsageCount { get; set; }
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "maxUsageOnOrder")]
+        public int? MaxUsageOnOrder { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "maxPersonalUsageCount")]
         public int? MaxPersonalUsageCount { get; set; }
-
-        /// <summary>
-        /// Gets or sets list of coupons codes which may be used for activate
-        /// that promotion
-        /// </summary>
-        [JsonProperty(PropertyName = "coupons")]
-        public IList<string> Coupons { get; set; }
-
-        /// <summary>
-        /// Gets or sets used for choosing in combination
-        /// </summary>
-        [JsonProperty(PropertyName = "priority")]
-        public int? Priority { get; set; }
-
-        /// <summary>
-        /// Gets or sets if a promotion with this setting is applied, no other
-        /// promotions can be applied to the order.
-        /// </summary>
-        [JsonProperty(PropertyName = "isExclusive")]
-        public bool? IsExclusive { get; set; }
-
-        /// <summary>
-        /// Gets or sets if this flag is set to true, it allow of this
-        /// promotion combining with self.
-        /// Special for case when evaluate rewards for multiple coupons from
-        /// same promotion.
-        /// </summary>
-        [JsonProperty(PropertyName = "isAllowCombiningWithSelf")]
-        public bool? IsAllowCombiningWithSelf { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9341,13 +9259,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "endDate")]
         public System.DateTime? EndDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets dynamic conditions tree determine the applicability of
-        /// this promotion and reward definition
-        /// </summary>
-        [JsonProperty(PropertyName = "dynamicExpression")]
-        public PromoDynamicExpressionTree DynamicExpression { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9789,6 +9700,158 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
+    public partial class Promotion
+    {
+        /// <summary>
+        /// Initializes a new instance of the Promotion class.
+        /// </summary>
+        public Promotion()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Promotion class.
+        /// </summary>
+        public Promotion(string store = default(string), IList<string> storeIds = default(IList<string>), string name = default(string), bool? isActive = default(bool?), int? priority = default(int?), bool? isExclusive = default(bool?), bool? hasCoupons = default(bool?), string description = default(string), int? maxUsageCount = default(int?), int? maxUsageOnOrder = default(int?), int? maxPersonalUsageCount = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        {
+            Store = store;
+            StoreIds = storeIds;
+            Name = name;
+            IsActive = isActive;
+            Priority = priority;
+            IsExclusive = isExclusive;
+            HasCoupons = hasCoupons;
+            Description = description;
+            MaxUsageCount = maxUsageCount;
+            MaxUsageOnOrder = maxUsageOnOrder;
+            MaxPersonalUsageCount = maxPersonalUsageCount;
+            StartDate = startDate;
+            EndDate = endDate;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "store")]
+        public string Store { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "storeIds")]
+        public IList<string> StoreIds { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isActive")]
+        public bool? IsActive { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "priority")]
+        public int? Priority { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isExclusive")]
+        public bool? IsExclusive { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "hasCoupons")]
+        public bool? HasCoupons { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "maxUsageCount")]
+        public int? MaxUsageCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "maxUsageOnOrder")]
+        public int? MaxUsageOnOrder { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "maxPersonalUsageCount")]
+        public int? MaxPersonalUsageCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "startDate")]
+        public System.DateTime? StartDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "endDate")]
+        public System.DateTime? EndDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public partial class PromotionReward
     {
         /// <summary>
@@ -9836,7 +9899,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// logo absolute URL</param>
         /// <param name="shippingMethod">Gets or sets the value of reward
         /// shipping method code</param>
-        public PromotionReward(bool? isValid = default(bool?), string description = default(string), double? couponAmount = default(double?), string coupon = default(string), double? couponMinOrderAmount = default(double?), string promotionId = default(string), Promotion promotion = default(Promotion), string rewardType = default(string), string amountType = default(string), double? amount = default(double?), int? quantity = default(int?), string lineItemId = default(string), string productId = default(string), string categoryId = default(string), string measureUnit = default(string), string imageUrl = default(string), string shippingMethod = default(string))
+        /// <param name="maxLimit">Gets or sets the max limit for relative
+        /// rewards</param>
+        public PromotionReward(bool? isValid = default(bool?), string description = default(string), double? couponAmount = default(double?), string coupon = default(string), double? couponMinOrderAmount = default(double?), string promotionId = default(string), Promotion promotion = default(Promotion), string rewardType = default(string), string amountType = default(string), double? amount = default(double?), int? quantity = default(int?), string lineItemId = default(string), string productId = default(string), string categoryId = default(string), string measureUnit = default(string), string imageUrl = default(string), string shippingMethod = default(string), double? maxLimit = default(double?))
         {
             IsValid = isValid;
             Description = description;
@@ -9855,6 +9920,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
             MeasureUnit = measureUnit;
             ImageUrl = imageUrl;
             ShippingMethod = shippingMethod;
+            MaxLimit = maxLimit;
             CustomInit();
         }
 
@@ -9968,6 +10034,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "shippingMethod")]
         public string ShippingMethod { get; set; }
+
+        /// <summary>
+        /// Gets or sets the max limit for relative rewards
+        /// </summary>
+        [JsonProperty(PropertyName = "maxLimit")]
+        public double? MaxLimit { get; set; }
 
     }
 }
@@ -10638,22 +10710,22 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class GenericSearchResultPromotion
+    public partial class GenericSearchResultDynamicPromotion
     {
         /// <summary>
-        /// Initializes a new instance of the GenericSearchResultPromotion
-        /// class.
+        /// Initializes a new instance of the
+        /// GenericSearchResultDynamicPromotion class.
         /// </summary>
-        public GenericSearchResultPromotion()
+        public GenericSearchResultDynamicPromotion()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the GenericSearchResultPromotion
-        /// class.
+        /// Initializes a new instance of the
+        /// GenericSearchResultDynamicPromotion class.
         /// </summary>
-        public GenericSearchResultPromotion(int? totalCount = default(int?), IList<Promotion> results = default(IList<Promotion>))
+        public GenericSearchResultDynamicPromotion(int? totalCount = default(int?), IList<DynamicPromotion> results = default(IList<DynamicPromotion>))
         {
             TotalCount = totalCount;
             Results = results;
@@ -10673,7 +10745,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "results")]
-        public IList<Promotion> Results { get; set; }
+        public IList<DynamicPromotion> Results { get; set; }
 
     }
 }

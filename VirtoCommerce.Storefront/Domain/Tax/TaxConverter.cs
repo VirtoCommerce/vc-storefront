@@ -7,7 +7,7 @@ using VirtoCommerce.Storefront.Model.Tax;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
-{   
+{
 
     public static partial class TaxConverter
     {
@@ -62,13 +62,16 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 foreach (var line in taxContext.Lines)
                 {
-                    var serviceModelLine = new coreDto.TaxLine();
-                    serviceModelLine.Code = line.Code;
-                    serviceModelLine.Name = line.Name;
-                    serviceModelLine.Quantity = line.Quantity;
-                    serviceModelLine.TaxType = line.TaxType;
-                    serviceModelLine.Amount = (double)line.Amount.Amount;
-                    serviceModelLine.Price = (double)line.Price.Amount;
+                    var serviceModelLine = new coreDto.TaxLine
+                    {
+                        Id = line.Id,
+                        Code = line.Code,
+                        Name = line.Name,
+                        Quantity = line.Quantity,
+                        TaxType = line.TaxType,
+                        Amount = (double)line.Amount.Amount,
+                        Price = (double)line.Price.Amount
+                    };
 
                     retVal.Lines.Add(serviceModelLine);
                 }
