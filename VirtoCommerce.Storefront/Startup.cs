@@ -269,6 +269,7 @@ namespace VirtoCommerce.Storefront
             services.RegisterAssembliesEventHandlers(typeof(Startup));
 
             services.AddApplicationInsightsTelemetry();
+            services.AddSnaphotTelemetry(Configuration);
             services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
         }
 
