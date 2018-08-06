@@ -268,6 +268,7 @@ namespace VirtoCommerce.Storefront
             //Register event handlers via reflection
             services.RegisterAssembliesEventHandlers(typeof(Startup));
 
+            services.AddSingleton<ITelemetryInitializer, AppInsightsInitializer>();
             services.AddApplicationInsightsTelemetry();
             services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
         }
