@@ -70,19 +70,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         public IPagedList<Subscription> SearchSubscription(SubscriptionSearchCriteria criteria)
         {
-            var workContext = _workContextAccessor.WorkContext;
-            //It is very important to have both versions for Sync and Async methods with same cache key due to performance for multithreaded requests
-            //you should avoid of call async version with TaskFactory.StartNew() out of the cache getter function
-            var cacheKey = CacheKey.With(GetType(), "SearchSubscription", criteria.GetCacheKey());
-            return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
-            {
-                //Observe all subscriptions for current user and invalidate them in cache if any changed (one limitation - this toke doesn't detect subscriptions deletions)
-                cacheEntry.AddExpirationToken(new PoolingApiSubscriptionsChangeToken(_subscriptionApi, _options.ChangesPoolingInterval));
-                cacheEntry.AddExpirationToken(SubscriptionCacheRegion.CreateCustomerSubscriptionChangeToken(criteria.CustomerId));
-                var result = _subscriptionApi.SearchSubscriptions(criteria.ToSearchCriteriaDto());
-                return new StaticPagedList<Subscription>(result.Subscriptions.Select(x => x.ToSubscription(workContext.AllCurrencies, workContext.CurrentLanguage)),
-                                                         criteria.PageNumber, criteria.PageSize, result.TotalCount.Value);
-            });
+            return SearchSubscriptionsAsync(criteria).GetAwaiter().GetResult();
         }
 
         public async Task<IPagedList<Subscription>> SearchSubscriptionsAsync(SubscriptionSearchCriteria criteria)

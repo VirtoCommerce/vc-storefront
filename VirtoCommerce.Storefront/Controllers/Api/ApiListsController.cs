@@ -28,7 +28,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpGet]
         public async Task<ActionResult> GetListByName([FromRoute]string listName, [FromRoute]string type)
         {
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listName, type)).LockAsync())
+            using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, listName, type)).LockAsync())
             {
                 var cartBuilder = await LoadOrCreateCartAsync(listName, type);
                 return Json(cartBuilder.Cart);
@@ -41,7 +41,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         public async Task<ActionResult> GetListsWithProduct([FromBody] GetCartsWithProductRequest request)
         {
             var result = new List<string>();
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, "*", request.Type)).LockAsync())
+            using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, "*", request.Type)).LockAsync())
             {
                 var criteria = new CartSearchCriteria
                 {
@@ -64,7 +64,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         public async Task<ActionResult> AddItemToList([FromBody] AddCartItem listItem)
         {
             //Need lock to prevent concurrent access to same list
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listItem.ListName, listItem.Type)).LockAsync())
+            using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, listItem.ListName, listItem.Type)).LockAsync())
             {
                 var cartBuilder = await LoadOrCreateCartAsync(listItem.ListName, listItem.Type);
 
@@ -84,7 +84,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         public async Task<ActionResult> RemoveItemFromList(string lineItemId, string listName, string type)
         {
             //Need lock to prevent concurrent access to same list
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, listName, type)).LockAsync())
+            using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, listName, type)).LockAsync())
             {
                 var cartBuilder = await LoadOrCreateCartAsync(listName, type);
                 await cartBuilder.RemoveItemAsync(lineItemId);
@@ -155,7 +155,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         public async Task<ActionResult> MergeWithCurrentCart(string listName, string type)
         {
             var currentCartName = WorkContext.CurrentCart.Value?.Name;
-            using (await AsyncLock.GetLockByKey(GetAsyncLockCartKey(WorkContext, currentCartName, string.Empty)).LockAsync())
+            using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, currentCartName, string.Empty)).LockAsync())
             {
                 //load list
                 var cartBuilder = await LoadOrCreateCartAsync(listName, type);
@@ -170,7 +170,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
         }
 
-        private static string GetAsyncLockCartKey(WorkContext context, string listName, string type)
+        private static string GetAsyncListKey(WorkContext context, string listName, string type)
         {
             return string.Join(":", listName, context.CurrentUser.Id, context.CurrentStore.Id, type);
         }

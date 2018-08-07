@@ -22,7 +22,7 @@ namespace VirtoCommerce.Storefront.Model.Common
         }
 
         public DefaultableDictionary(object defaultValue)
-            :this(new Dictionary<string, object>(), defaultValue)
+            : this(new Dictionary<string, object>(), defaultValue)
         {
         }
 
