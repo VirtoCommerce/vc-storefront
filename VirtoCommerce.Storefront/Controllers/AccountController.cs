@@ -133,34 +133,8 @@ namespace VirtoCommerce.Storefront.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmInvitation(string organizationId, string email, string token)
+        public ActionResult ConfirmInvitation(string organizationId, string email, string token)
         {
-            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
-            {
-                WorkContext.ErrorMessage = "Error in URL format";
-                return View("error", WorkContext);
-            }
-
-            var user = await _signInManager.UserManager.FindByEmailAsync(email);
-            if (user == null)
-            {
-                WorkContext.ErrorMessage = "User was not found.";
-                return View("error", WorkContext);
-            }
-
-            if (!string.IsNullOrEmpty(user.PasswordHash))
-            {
-                WorkContext.ErrorMessage = "Sorry, this invitation can be used only once.";
-                return View("error", WorkContext);
-            }
-
-            var isValidToken = await _signInManager.UserManager.VerifyUserTokenAsync(user, _signInManager.UserManager.Options.Tokens.PasswordResetTokenProvider, UserManager<User>.ResetPasswordTokenPurpose, token);
-            if (!isValidToken)
-            {
-                WorkContext.ErrorMessage = "Invitation token is invalid or expired";
-                return View("error", WorkContext);
-            }
-
             WorkContext.Form = new UserRegistrationByInvitation
             {
                 Email = email,
@@ -457,13 +431,6 @@ namespace VirtoCommerce.Storefront.Controllers
             if (user == null)
             {
                 WorkContext.ErrorMessage = "User was not found.";
-                return View("error", WorkContext);
-            }
-
-            var isValidToken = await _signInManager.UserManager.VerifyUserTokenAsync(user, _signInManager.UserManager.Options.Tokens.PasswordResetTokenProvider, UserManager<User>.ResetPasswordTokenPurpose, token);
-            if (!isValidToken)
-            {
-                WorkContext.ErrorMessage = "Reset password token is invalid or expired";
                 return View("error", WorkContext);
             }
 
