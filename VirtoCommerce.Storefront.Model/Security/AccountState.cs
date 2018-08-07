@@ -1,6 +1,6 @@
 namespace VirtoCommerce.Storefront.Model.Security
 {
-    public enum UserState
+    public enum AccountState
     {
         PendingApproval,
         Approved,

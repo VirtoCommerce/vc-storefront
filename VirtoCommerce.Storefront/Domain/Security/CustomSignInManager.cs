@@ -15,7 +15,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         }
         protected override async Task<Microsoft.AspNetCore.Identity.SignInResult> PreSignInCheck(User user)
         {
-            return await base.PreSignInCheck(user) ?? (user.UserState == UserState.Rejected ? Model.Security.SignInResult.Rejected : null);
+            return await base.PreSignInCheck(user) ?? (user.UserState == AccountState.Rejected ? Model.Security.SignInResult.Rejected : null);
         }
     }
 }
