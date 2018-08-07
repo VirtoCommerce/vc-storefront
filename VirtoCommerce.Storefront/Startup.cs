@@ -22,6 +22,7 @@ using VirtoCommerce.Storefront.Domain.Cart;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
+using VirtoCommerce.Storefront.Infrastructure.ApplicationInsights;
 using VirtoCommerce.Storefront.JsonConverters;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
@@ -268,8 +269,8 @@ namespace VirtoCommerce.Storefront
             //Register event handlers via reflection
             services.RegisterAssembliesEventHandlers(typeof(Startup));
 
-            services.AddSingleton<ITelemetryInitializer, AppInsightsInitializer>();
             services.AddApplicationInsightsTelemetry();
+            services.AddApplicationInsightsExtensions();
             services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
         }
 
