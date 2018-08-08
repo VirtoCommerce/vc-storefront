@@ -34,6 +34,11 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 await signInManager.SignOutAsync();
                 user = null;
             }
+            if (user != null && new IsUserSuspendedSpecification().IsSatisfiedBy(user))
+            {
+                await signInManager.SignOutAsync();
+                user = null;
+            }
             //Login as a new anonymous user
             if (user == null || user.IsTransient())
             {
