@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.Model.Security;
+using VirtoCommerce.Storefront.Model.Security.Specifications;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
@@ -15,7 +16,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         }
         protected override async Task<Microsoft.AspNetCore.Identity.SignInResult> PreSignInCheck(User user)
         {
-            return await base.PreSignInCheck(user) ?? (user.UserState == AccountState.Rejected ? Model.Security.SignInResult.Rejected : null);
+            return await base.PreSignInCheck(user) ?? (new IsUserSuspendedSpecification().IsSatisfiedBy(user) ? Model.Security.SignInResult.Rejected : null);
         }
     }
 }
