@@ -32,12 +32,16 @@ namespace VirtoCommerce.Storefront.Controllers
             //Because MVC does not allow to use abstract types for model binding we are getting this value from route data
             var page = RouteData.Values.GetValueOrDefault("page") as ContentItem;
 
-            if(page==null)
+            if (page == null)
+            {
                 return NotFound();
-
+            }
+            //Checking what only authorized users can read pages which marked as Authorized 
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, page, CanReadContentItemAuthorizeRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
+            {
                 return Challenge();
+            }
 
             WorkContext.CurrentPageSeo = new SeoInfo
             {
@@ -163,7 +167,7 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 return NotFound();
             }
-            
+
             var feedItems = new List<SyndicationItem>();
             foreach (var article in blog.Articles.OrderByDescending(a => a.PublishedDate))
             {
@@ -186,7 +190,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
 
             var sw = new StringWriter();
-            using (XmlWriter xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async= true, Indent = true }))
+            using (XmlWriter xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true, Indent = true }))
             {
                 var writer = new RssFeedWriter(xmlWriter);
 
