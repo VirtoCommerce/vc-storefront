@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using AutoRest.Core.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +18,6 @@ using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Security.Events;
 using VirtoCommerce.Storefront.Model.Security.Specifications;
-using SignInResult = VirtoCommerce.Storefront.Model.Security.SignInResult;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
@@ -295,7 +293,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 return StoreFrontRedirect("~/account/sendcode");
             }
 
-            if (loginResult is SignInResult signInResult && signInResult.IsRejected)
+            if (loginResult is CustomSignInResult signInResult && signInResult.IsRejected)
             {
                 ModelState.AddModelError("form", "Administrator suspended this account");
             }
