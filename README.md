@@ -5,8 +5,8 @@
 Official online shopping website based on VirtoCommerce Platform written on ASP.NET Core. The website is a client application for VC Platform and uses only public APIs while communicating.
 
 Technologies and frameworks used:
-* ASP.NET MVC Core 2.0.0 on .NET Core 2.0.0
-* ASP.NET Identity Core 2.0.0
+* ASP.NET MVC Core 2.1.0 on .NET Core 2.1.0
+* ASP.NET Identity Core 2.1.0
 * REST services clients generation with using [Microsoft AutoRest](https://github.com/Azure/autorest)
 * Liquid view engine based on [DotLiquid](https://github.com/dotliquid/dotliquid)
 * [LibSassHost](https://github.com/Taritsyn/LibSassHost) for processing **scss** stylesheets in runtime
