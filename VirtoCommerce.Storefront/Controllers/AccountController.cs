@@ -293,6 +293,11 @@ namespace VirtoCommerce.Storefront.Controllers
                 return StoreFrontRedirect("~/account/sendcode");
             }
 
+            if (loginResult is CustomSignInResult signInResult && signInResult.IsRejected)
+            {
+                ModelState.AddModelError("form", "Administrator suspended this account");
+            }
+
             ModelState.AddModelError("form", "Login attempt failed.");
             WorkContext.Form = login;
 

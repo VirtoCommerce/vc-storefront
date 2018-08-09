@@ -77,7 +77,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// </summary>
         public bool IsAdministrator { get; set; }
         public string UserType { get; set; }
-        public string UserState { get; set; }
+        public AccountState UserState { get; set; }
         /// <summary>
         /// The user ID of an operator who has loggen in on behalf of a customer
         /// </summary>
