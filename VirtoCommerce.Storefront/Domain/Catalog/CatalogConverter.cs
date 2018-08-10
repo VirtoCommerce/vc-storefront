@@ -13,9 +13,10 @@ using marketingDto = VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
 namespace VirtoCommerce.Storefront.Domain
 {
-
     public static partial class CatalogConverter
     {
+        private const string ReviewTypeFullReview = "FullReview";
+
         private static MarkdownPipeline _markdownPipeline;
         static CatalogConverter()
         {
@@ -439,23 +440,32 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (productDto.Reviews != null)
             {
-                var productReviews = productDto.Reviews
-                    .Where(r => !string.IsNullOrEmpty(r.Content))
-                    .Select(r => new EditorialReview
-                    {
-                        Language = new Language(r.LanguageCode),
-                        ReviewType = r.ReviewType,
-                        Value = Markdown.ToHtml(r.Content, _markdownPipeline)
-                    })
-                    .ToList();
+                // Reviews for currentLanguage (or Invariant language as fallback) for each ReviewType
+                result.Descriptions = productDto.Reviews
+                                        .Where(r => !string.IsNullOrEmpty(r.Content))
+                                        .Select(r => new EditorialReview
+                                        {
+                                            Language = new Language(r.LanguageCode),
+                                            ReviewType = r.ReviewType,
+                                            Value = Markdown.ToHtml(r.Content, _markdownPipeline)
+                                        })
+                                        .GroupBy(x => x.ReviewType)
+                                        .SelectMany(grouping =>
+                                        {
+                                            var retVal = grouping.Where(x => x.Language.Equals(currentLanguage)).ToList();
+                                            if (!retVal.Any())
+                                            {
+                                                retVal = grouping.Where(x => x.Language.IsInvariant).ToList();
+                                            }
+                                            return retVal;
+                                        })
+                                        .ToList();
 
-                result.Descriptions = productReviews.Where(x => x.Language.Equals(currentLanguage)).ToList();
-                if (!result.Descriptions.Any())
-                {
-                    result.Descriptions = productReviews.Where(x => x.Language.IsInvariant).ToList();
-                }
-
-                result.Description = result.Descriptions.FindWithLanguage(currentLanguage, x => x.Value, null);
+                result.Description = result.Descriptions
+                                        .Where(x => x.ReviewType == ReviewTypeFullReview)
+                                        .FindWithLanguage(currentLanguage, x => x.Value, null) ??
+                                     result.Descriptions
+                                        .FindWithLanguage(currentLanguage, x => x.Value, null);
             }
 
             return result;
