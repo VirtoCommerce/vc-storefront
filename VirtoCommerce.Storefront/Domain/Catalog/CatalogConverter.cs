@@ -13,7 +13,6 @@ using marketingDto = VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
 namespace VirtoCommerce.Storefront.Domain
 {
-   
     public static partial class CatalogConverter
     {
         private static MarkdownPipeline _markdownPipeline;
@@ -21,7 +20,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             _markdownPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         }
-         
+
         public static SeoInfo ToSeoInfo(this catalogDto.SeoInfo seoDto)
         {
             return seoDto.JsonConvert<coreDto.SeoInfo>().ToSeoInfo();
@@ -439,14 +438,27 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (productDto.Reviews != null)
             {
-                result.Descriptions = productDto.Reviews.Where(r => !string.IsNullOrEmpty(r.Content)).Select(r => new EditorialReview
+                // Reviews for currentLanguage (or Invariant language as fall-back) for each ReviewType
+                var descriptions = productDto.Reviews
+                                        .Where(r => !string.IsNullOrEmpty(r.Content))
+                                        .Select(r => new EditorialReview
+                                        {
+                                            Language = new Language(r.LanguageCode),
+                                            ReviewType = r.ReviewType,
+                                            Value = Markdown.ToHtml(r.Content, _markdownPipeline)
+                                        });
+                //Select only best matched description for current language in the each description type
+                foreach (var descriptionGroup in descriptions.GroupBy(x => x.ReviewType))
                 {
-                    Language = new Language(r.LanguageCode),
-                    ReviewType = r.ReviewType,
-                    Value = Markdown.ToHtml(r.Content, _markdownPipeline)
-                }).Where(x => x.Language.Equals(currentLanguage)).ToList();
-                result.Description = result.Descriptions.FindWithLanguage(currentLanguage, x => x.Value, null);
+                    var description = descriptionGroup.FindWithLanguage(currentLanguage);
+                    if (description != null)
+                    {
+                        result.Descriptions.Add(description);
+                    }
+                }
+                result.Description = (result.Descriptions.FirstOrDefault(x => x.ReviewType.EqualsInvariant("FullReview")) ?? result.Descriptions.FirstOrDefault())?.Value;
             }
+
 
             return result;
         }
