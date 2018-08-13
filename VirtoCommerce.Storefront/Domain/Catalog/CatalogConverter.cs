@@ -15,8 +15,6 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public static partial class CatalogConverter
     {
-        private const string ReviewTypeFullReview = "FullReview";
-
         private static MarkdownPipeline _markdownPipeline;
         static CatalogConverter()
         {
@@ -440,33 +438,27 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (productDto.Reviews != null)
             {
-                // Reviews for currentLanguage (or Invariant language as fallback) for each ReviewType
-                result.Descriptions = productDto.Reviews
+                // Reviews for currentLanguage (or Invariant language as fall-back) for each ReviewType
+                var descriptions = productDto.Reviews
                                         .Where(r => !string.IsNullOrEmpty(r.Content))
                                         .Select(r => new EditorialReview
                                         {
                                             Language = new Language(r.LanguageCode),
                                             ReviewType = r.ReviewType,
                                             Value = Markdown.ToHtml(r.Content, _markdownPipeline)
-                                        })
-                                        .GroupBy(x => x.ReviewType)
-                                        .SelectMany(grouping =>
-                                        {
-                                            var retVal = grouping.Where(x => x.Language.Equals(currentLanguage)).ToList();
-                                            if (!retVal.Any())
-                                            {
-                                                retVal = grouping.Where(x => x.Language.IsInvariant).ToList();
-                                            }
-                                            return retVal;
-                                        })
-                                        .ToList();
-
-                result.Description = result.Descriptions
-                                        .Where(x => x.ReviewType == ReviewTypeFullReview)
-                                        .FindWithLanguage(currentLanguage, x => x.Value, null) ??
-                                     result.Descriptions
-                                        .FindWithLanguage(currentLanguage, x => x.Value, null);
+                                        });
+                //Select only best matched description for current language in the each description type
+                foreach (var descriptionGroup in descriptions.GroupBy(x => x.ReviewType))
+                {
+                    var description = descriptionGroup.FindWithLanguage(currentLanguage);
+                    if (description != null)
+                    {
+                        result.Descriptions.Add(description);
+                    }
+                }
+                result.Description = (result.Descriptions.FirstOrDefault(x => x.ReviewType.EqualsInvariant("FullReview")) ?? result.Descriptions.FirstOrDefault())?.Value;
             }
+
 
             return result;
         }
