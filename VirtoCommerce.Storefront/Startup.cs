@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Newtonsoft.Json;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Binders;
@@ -225,6 +226,8 @@ namespace VirtoCommerce.Storefront
             {
                 options.Cookie.IsEssential = true;
             });
+
+            services.Replace(ServiceDescriptor.Transient<CookieAuthenticationHandler, CustomCookieAuthenticationHandler>());
 
             //Add Liquid view engine
             services.AddLiquidViewEngine(options =>
