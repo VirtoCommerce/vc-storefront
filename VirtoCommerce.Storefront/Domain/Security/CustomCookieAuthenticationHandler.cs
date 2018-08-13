@@ -65,7 +65,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         private async Task RedirectToLoginAsync(AuthenticationProperties properties)
         {
             var redirectUri = properties.RedirectUri;
-            if (redirectUri.IsNullOrEmpty())
+            if (string.IsNullOrEmpty(redirectUri))
             {
                 redirectUri = OriginalPathBase + Request.Path + Request.QueryString;
             }
