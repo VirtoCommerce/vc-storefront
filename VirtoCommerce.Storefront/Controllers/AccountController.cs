@@ -443,6 +443,41 @@ namespace VirtoCommerce.Storefront.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        public ActionResult ForgotLogin()
+        {
+            return View("customers/forgot_login", WorkContext);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ForgotLogin(ForgotPassword formModel)
+        {
+            var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
+            if (user != null)
+            {
+                var remindUserNameNotification = new RemindUserNameNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                {
+                    UserName = user.UserName,
+                    Sender = WorkContext.CurrentStore.Email,
+                    Recipient = GetUserEmail(user)
+                };
+
+                var sendingResult = await _platformNotificationApi.SendNotificationAsync(remindUserNameNotification.ToNotificationDto());
+                if (sendingResult.IsSuccess != true)
+                {
+                    ModelState.AddModelError("form", sendingResult.ErrorMessage);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("form", "User not found");
+            }
+            return View("customers/forgot_login", WorkContext);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult> ResetPassword(string token, string userId)
         {
             if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(userId))
