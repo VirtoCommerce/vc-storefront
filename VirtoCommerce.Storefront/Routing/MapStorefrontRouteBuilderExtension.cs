@@ -188,10 +188,11 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("Common.Maintenance", "maintenance", defaults: new { controller = "Common", action = "Maintenance" });
             routes.MapStorefrontRoute("Common.ResetCache", "common/resetcache", defaults: new { controller = "Common", action = "ResetCache" });
 
-            //Sitemap
+        //////Sitemap
+            /*
             routes.MapStorefrontRoute("Sitemap.GetSitemapIndex", "sitemap.xml", defaults: new { controller = "Sitemap", action = "GetSitemapIndex" });
             routes.MapStorefrontRoute("Sitemap.GetSitemap", "sitemap/{sitemapPath}", defaults: new { controller = "Sitemap", action = "GetSitemap" });
-
+            */
 
             // Category routes
             routes.MapStorefrontRoute("Category.BrowseCategory", "category/{categoryId}", defaults: new { controller = "CatalogSearch", action = "CategoryBrowsing" });
