@@ -115,8 +115,10 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("API.SubscriptionByNumber", "storefrontapi/subscriptions/{number}", defaults: new { controller = "ApiSubscription", action = "GetCustomerSubscription" });
             routes.MapStorefrontRoute("API.CancelSubscription", "storefrontapi/subscriptions/{number}/cancel", defaults: new { controller = "ApiSubscription", action = "CancelSubscription" });
 
-            // Blog API
+        ////// Blog API
+            /*
             routes.MapStorefrontRoute("API.Blog.Search", "storefrontapi/blog/{blogName}/search", defaults: new { controller = "ApiBlog", action = "Search" });
+            */
 
             // Inventory API
             routes.MapStorefrontRoute("API.Inventory.Search", "storefrontapi/fulfillmentcenters/search", defaults: new { controller = "ApiInventory", action = "SearchFulfillmentCenters" });
