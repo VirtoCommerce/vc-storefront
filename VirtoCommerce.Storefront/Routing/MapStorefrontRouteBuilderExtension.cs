@@ -67,7 +67,8 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("API.UserActions.SaveEventInfo", "storefrontapi/useractions/eventinfo", new { controller = "ApiUserActions", action = "SaveEventInfo" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
 
 
-            // Account API
+        ////// Account API
+            /*
             routes.MapStorefrontRoute("API.Account.GetCurrentUser", "storefrontapi/account", new { controller = "ApiAccount", action = "GetCurrentUser" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));
             routes.MapStorefrontRoute("API.Account.GetUserById", "storefrontapi/account/{userId}", new { controller = "ApiAccount", action = "GetUserById" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));
             routes.MapStorefrontRoute("API.Account.UpdateAccount", "storefrontapi/account", new { controller = "ApiAccount", action = "UpdateAccount" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
@@ -82,6 +83,7 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("API.Account.LockUser", "storefrontapi/account/{userId}/lock", new { controller = "ApiAccount", action = "LockUser" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("API.Account.UnlockUser", "storefrontapi/account/{userId}/unlock", new { controller = "ApiAccount", action = "UnlockUser" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
             routes.MapStorefrontRoute("API.Account.DeleteUser", "storefrontapi/account/{userId}", new { controller = "ApiAccount", action = "DeleteUser" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("DELETE") }));
+            */
 
             // Quote requests API
             routes.MapStorefrontRoute("API.QuoteRequest.Search", "storefrontapi/quoterequests/search", new { controller = "ApiQuoteRequest", action = "QuoteSearch" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
