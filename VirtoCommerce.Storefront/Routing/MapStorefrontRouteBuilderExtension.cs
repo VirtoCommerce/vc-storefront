@@ -127,7 +127,8 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapRoute("NoWorkContextErrors", "error/{errCode}", defaults: new { controller = "Error", action = "Error" });
             routes.MapStorefrontRoute("StoreMaintenance", "common/maintenance", defaults: new { controller = "Common", action = "Maintenance" });
             routes.MapStorefrontRoute("NoTheme", "common/notheme", defaults: new { controller = "Common", action = "NoTheme" });
-            // Account
+        ////// Account
+            /*
             routes.MapStorefrontRoute("Account", "account", defaults: new { controller = "Account", action = "GetAccount" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));
             routes.MapStorefrontRoute("Account.GetOrderDetails ", "account/order/{number}", defaults: new { controller = "Account", action = "GetOrderDetails" });
             routes.MapStorefrontRoute("Account.UpdateAddress", "account/addresses/{id?}", defaults: new { controller = "Account", action = "UpdateAddress" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
@@ -144,6 +145,7 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("Account.ConfirmEmail", "account/confirmemail", defaults: new { controller = "Account", action = "ConfirmEmail" });
             routes.MapStorefrontRoute("Account.ConfirmInvitation", "account/confirminvitation", defaults: new { controller = "Account", action = "ConfirmInvitation" });
             routes.MapStorefrontRoute("Account.ForgotLogin", "account/forgotlogin", defaults: new { controller = "Account", action = "ForgotLogin" });
+            */
 
             // Cart
             routes.MapStorefrontRoute("Cart.Index", "cart", defaults: new { controller = "Cart", action = "Index" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));

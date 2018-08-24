@@ -23,9 +23,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpGet("contact")]
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
+            return NotFound();
         }
     }
 }
