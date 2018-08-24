@@ -147,12 +147,14 @@ namespace VirtoCommerce.Storefront.Routing
             routes.MapStorefrontRoute("Account.ForgotLogin", "account/forgotlogin", defaults: new { controller = "Account", action = "ForgotLogin" });
             */
 
-            // Cart
+        ////// Cart
+            /*
             routes.MapStorefrontRoute("Cart.Index", "cart", defaults: new { controller = "Cart", action = "Index" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET") }));
             routes.MapStorefrontRoute("Cart.Checkout", "cart/checkout", defaults: new { controller = "Cart", action = "Checkout" });
             routes.MapStorefrontRoute("Cart.ExternalPaymentCallback", "cart/externalpaymentcallback", defaults: new { controller = "Cart", action = "ExternalPaymentCallback" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("GET", "POST") }));
             routes.MapStorefrontRoute("Cart.Thanks", "cart/thanks/{orderNumber}", defaults: new { controller = "Cart", action = "Thanks" });
             routes.MapStorefrontRoute("Cart.PaymentForm", "cart/checkout/paymentform", defaults: new { controller = "Cart", action = "PaymentForm" });
+            */
 
             // Cart (Shopify compatible)
             routes.MapStorefrontRoute("ShopifyCart.Cart", "cart", defaults: new { controller = "ShopifyCompatibility", action = "Cart" }, constraints: new RouteValueDictionary(new { httpMethod = new HttpMethodRouteConstraint("POST") }));
