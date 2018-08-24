@@ -38,7 +38,6 @@ namespace VirtoCommerce.Storefront.Routing
             return response;
         }
 
-
         protected virtual SlugRouteResponse View(SeoEntity entity)
         {
             var response = new SlugRouteResponse();
@@ -139,7 +138,6 @@ namespace VirtoCommerce.Storefront.Routing
 
             return result;
         }
-
 
         protected virtual ContentItem FindPageBySeoPath(string seoPath, WorkContext workContext)
         {
