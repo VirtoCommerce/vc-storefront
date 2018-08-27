@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using VirtoCommerce.LiquidThemeEngine;
 
 namespace VirtoCommerce.Storefront.Infrastructure
@@ -12,5 +12,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
         public RequireHttpsOptions RequireHttps { get; set; }
         public bool SendAccountConfirmation { get; set; } = false;
         public int WishlistLimit { get; set; }
+
+        public bool DisableCache { get; set; }
     }
 }

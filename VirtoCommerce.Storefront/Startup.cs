@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Newtonsoft.Json;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Binders;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Cart;
@@ -107,6 +108,9 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton(new InProcessBus());
             services.AddSingleton<IEventPublisher>(provider => provider.GetService<InProcessBus>());
             services.AddSingleton<IHandlerRegistrar>(provider => provider.GetService<InProcessBus>());
+
+            //Cache
+            //services.AddSingleton<IStorefrontMemoryCache, StorefrontMemoryCache>();  - commented as it's not working currently
 
             //Register platform API clients
             services.AddPlatformEndpoint(options =>
