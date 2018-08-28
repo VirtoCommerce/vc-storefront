@@ -2,6 +2,7 @@ using System;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.Infrastructure;
+using VirtoCommerce.Storefront.Model.Caching;
 
 namespace VirtoCommerce.Storefront.Caching
 {
@@ -51,8 +52,7 @@ namespace VirtoCommerce.Storefront.Caching
                     {
                         if (_absoluteExpiration == null)
                         {
-                            //_absoluteExpiration = TimeSpan.Parse(_settingManager.GetValue(PlatformConstants.Settings.Cache.AbsoluteExpiration.Name, (string)PlatformConstants.Settings.Cache.AbsoluteExpiration.DefaultValue));
-                            _absoluteExpiration = TimeSpan.FromHours(1);
+                            _absoluteExpiration = _settingManager.Value.CacheAbsoluteExpiration;
                         }
                     }
                 }
@@ -70,7 +70,7 @@ namespace VirtoCommerce.Storefront.Caching
                     {
                         if (_cacheEnabled == null)
                         {
-                            _cacheEnabled = Convert.ToBoolean(_settingManager.Value.DisableCache);
+                            _cacheEnabled = _settingManager.Value.CacheEnabled;
                         }
                     }
                 }

@@ -15,6 +15,7 @@ using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Infrastructure;
 using System.Threading;
 using VirtoCommerce.Storefront.Caching;
+using VirtoCommerce.Storefront.Model.Caching;
 
 namespace VirtoCommerce.Storefront.Domain
 {

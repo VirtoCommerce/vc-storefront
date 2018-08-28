@@ -13,6 +13,8 @@ namespace VirtoCommerce.Storefront.Infrastructure
         public bool SendAccountConfirmation { get; set; } = false;
         public int WishlistLimit { get; set; }
 
-        public bool DisableCache { get; set; }
+        public bool CacheEnabled { get; set; }
+
+        public TimeSpan CacheAbsoluteExpiration { get; set; }
     }
 }

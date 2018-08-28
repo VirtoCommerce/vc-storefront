@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 
