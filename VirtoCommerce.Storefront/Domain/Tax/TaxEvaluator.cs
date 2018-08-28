@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -16,8 +17,8 @@ namespace VirtoCommerce.Storefront.Domain
     public class TaxEvaluator : ITaxEvaluator
     {
         private readonly ICommerce _commerceApi;
-        private readonly IMemoryCache _memoryCache;
-        public TaxEvaluator(ICommerce commerceApi, IMemoryCache memoryCache)
+        private readonly IStorefrontMemoryCache _memoryCache;
+        public TaxEvaluator(ICommerce commerceApi, IStorefrontMemoryCache memoryCache)
         {
             _commerceApi = commerceApi;
             _memoryCache = memoryCache;

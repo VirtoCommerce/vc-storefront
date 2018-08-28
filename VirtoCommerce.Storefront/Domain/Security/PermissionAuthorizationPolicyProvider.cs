@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Security;
@@ -15,9 +16,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
     /// </summary>
     public class PermissionAuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider
     {
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly ISecurity _platformSecurityApi;
-        public PermissionAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options, ISecurity platformSecurityApi, IMemoryCache memoryCache)
+        public PermissionAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options, ISecurity platformSecurityApi, IStorefrontMemoryCache memoryCache)
             : base(options)
         {
             _memoryCache = memoryCache;

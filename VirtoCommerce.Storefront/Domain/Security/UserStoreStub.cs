@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -20,9 +21,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
         IUserSecurityStampStore<User>, IUserClaimStore<User>, IRoleStore<Role>
     {
         private readonly ISecurity _platformSecurityApi;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IMemberService _memberService;
-        public UserStoreStub(ISecurity platformSecurityApi, IMemberService memberService, IMemoryCache memoryCache)
+        public UserStoreStub(ISecurity platformSecurityApi, IMemberService memberService, IStorefrontMemoryCache memoryCache)
         {
             _platformSecurityApi = platformSecurityApi;
             _memoryCache = memoryCache;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
@@ -22,12 +23,12 @@ namespace VirtoCommerce.Storefront.Domain
     public class QuoteRequestBuilder : IQuoteRequestBuilder
     {
         private readonly IQuoteModule _quoteApi;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IEventPublisher _publisher;
 
         private QuoteRequest _quoteRequest;
 
-        public QuoteRequestBuilder(IQuoteModule quoteApi, IMemoryCache memoryCache, IEventPublisher publisher)
+        public QuoteRequestBuilder(IQuoteModule quoteApi, IStorefrontMemoryCache memoryCache, IEventPublisher publisher)
         {
             _quoteApi = quoteApi;
             _memoryCache = memoryCache;

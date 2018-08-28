@@ -110,7 +110,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IHandlerRegistrar>(provider => provider.GetService<InProcessBus>());
 
             //Cache
-            //services.AddSingleton<IStorefrontMemoryCache, StorefrontMemoryCache>();  - commented as it's not working currently
+            services.AddSingleton<IStorefrontMemoryCache, StorefrontMemoryCache>();
 
             //Register platform API clients
             services.AddPlatformEndpoint(options =>

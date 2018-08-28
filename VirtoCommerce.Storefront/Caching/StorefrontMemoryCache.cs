@@ -70,8 +70,7 @@ namespace VirtoCommerce.Storefront.Caching
                     {
                         if (_cacheEnabled == null)
                         {
-                            //_cacheEnabled = Convert.ToBoolean(_settingManager.GetValue(PlatformConstants.Settings.Cache.CacheEnabled.Name, true));
-                            _cacheEnabled = Convert.ToBoolean(_settingManager.Value);
+                            _cacheEnabled = Convert.ToBoolean(_settingManager.Value.DisableCache);
                         }
                     }
                 }

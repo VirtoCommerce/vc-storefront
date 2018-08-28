@@ -7,6 +7,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.FileProviders.Physical;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -17,11 +18,11 @@ namespace VirtoCommerce.Storefront.Domain
     public class FileSystemContentBlobProvider : IContentBlobProvider
     {
         private readonly FileSystemBlobContentOptions _options;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         // Keep links to file watchers to prevent GC to collect it
         private readonly PhysicalFilesWatcher _fileSystemWatcher;
 
-        public FileSystemContentBlobProvider(IOptions<FileSystemBlobContentOptions> options, IMemoryCache memoryCache)
+        public FileSystemContentBlobProvider(IOptions<FileSystemBlobContentOptions> options, IStorefrontMemoryCache memoryCache)
         {
             _options = options.Value;
             _memoryCache = memoryCache;

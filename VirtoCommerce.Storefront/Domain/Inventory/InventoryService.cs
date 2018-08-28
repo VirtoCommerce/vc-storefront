@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
@@ -21,9 +22,9 @@ namespace VirtoCommerce.Storefront.Domain
     public class InventoryService : IInventoryService
     {
         private readonly IInventoryModule _inventoryApi;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
-        public InventoryService(IInventoryModule inventoryApi, IMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
+        public InventoryService(IInventoryModule inventoryApi, IStorefrontMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
         {
             _inventoryApi = inventoryApi;
             _memoryCache = memoryCache;

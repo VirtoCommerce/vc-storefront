@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -14,10 +15,10 @@ namespace VirtoCommerce.Storefront.Domain
     public class MarketingService : IMarketingService
     {
         private readonly IMarketingModuleDynamicContent _dynamicContentApi;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
 
-        public MarketingService(IMarketingModuleDynamicContent dynamicContentApi, IMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
+        public MarketingService(IMarketingModuleDynamicContent dynamicContentApi, IStorefrontMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
         {
             _dynamicContentApi = dynamicContentApi;
             _memoryCache = memoryCache;
