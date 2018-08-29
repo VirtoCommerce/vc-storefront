@@ -48,13 +48,7 @@ namespace VirtoCommerce.Storefront.Caching
             {
                 if (_absoluteExpiration == null)
                 {
-                    lock (_lockObject)
-                    {
-                        if (_absoluteExpiration == null)
-                        {
-                            _absoluteExpiration = _settingManager.Value.CacheAbsoluteExpiration;
-                        }
-                    }
+                    _absoluteExpiration = _settingManager.Value.CacheAbsoluteExpiration;
                 }
                 return _absoluteExpiration.Value;
             }
@@ -66,13 +60,7 @@ namespace VirtoCommerce.Storefront.Caching
             {
                 if (_cacheEnabled == null)
                 {
-                    lock (_lockObject)
-                    {
-                        if (_cacheEnabled == null)
-                        {
-                            _cacheEnabled = _settingManager.Value.CacheEnabled;
-                        }
-                    }
+                    _cacheEnabled = _settingManager.Value.CacheEnabled;
                 }
                 return _cacheEnabled.Value;
             }
