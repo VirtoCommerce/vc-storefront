@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using VirtoCommerce.Storefront.Caching;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Cart;
@@ -77,7 +78,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var cacheKey = CacheKey.With(GetType(), "LoadOrCreateNewTransientCart", store.Id, cartName, user.Id, currency.Code, type);
             var needReevaluate = false;
-            Cart = await MemoryCacheExtensions.GetOrCreateExclusiveAsync(_memoryCache, cacheKey, async (cacheEntry) =>
+            Cart = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 needReevaluate = true;
 

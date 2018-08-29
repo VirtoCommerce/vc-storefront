@@ -13,7 +13,6 @@ namespace VirtoCommerce.Storefront.Caching
         private static TimeSpan? _absoluteExpiration;
         private static bool? _cacheEnabled;
         private bool _disposed;
-        private static object _lockObject = new object();
 
         public StorefrontMemoryCache(IMemoryCache memoryCache, IOptions<StorefrontOptions> settingManager)
         {
@@ -42,30 +41,9 @@ namespace VirtoCommerce.Storefront.Caching
             return _memoryCache.TryGetValue(key, out value);
         }
 
-        protected TimeSpan AbsoluteExpiration
-        {
-            get
-            {
-                if (_absoluteExpiration == null)
-                {
-                    _absoluteExpiration = _settingManager.Value.CacheAbsoluteExpiration;
-                }
-                return _absoluteExpiration.Value;
-            }
-        }
+        protected TimeSpan AbsoluteExpiration => _settingManager.Value.CacheAbsoluteExpiration;
 
-        protected bool CacheEnabled
-        {
-            get
-            {
-                if (_cacheEnabled == null)
-                {
-                    _cacheEnabled = _settingManager.Value.CacheEnabled;
-                }
-                return _cacheEnabled.Value;
-            }
-        }
-
+        protected bool CacheEnabled => _settingManager.Value.CacheEnabled;
 
         /// <summary>
         /// Cleans up the background collection events.
