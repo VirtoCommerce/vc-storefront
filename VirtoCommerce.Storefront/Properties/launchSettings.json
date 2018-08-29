@@ -2,10 +2,6 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
-    "iis": {
-      "applicationUrl": "http://localhost:8097",
-      "sslPort": 0
-    },
     "iisExpress": {
       "applicationUrl": "http://localhost:2082/",
       "sslPort": 0
@@ -27,11 +23,6 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:2083/"
-    },
-    "IIS": {
-      "commandName": "IIS",
-      "launchBrowser": true,
-      "launchUrl": "http://localhost:8097"
     }
   }
 }
