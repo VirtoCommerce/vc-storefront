@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.StaticContent;
@@ -28,10 +30,10 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IStaticContentItemFactory _contentItemFactory;
         private readonly IContentBlobProvider _contentBlobProvider;
         private readonly MarkdownPipeline _markdownPipeline;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly string _basePath = "Pages";
 
-        public StaticContentService(IMemoryCache memoryCache, IWorkContextAccessor workContextAccessor,
+        public StaticContentService(IStorefrontMemoryCache memoryCache, IWorkContextAccessor workContextAccessor,
                                         IStorefrontUrlBuilder urlBuilder, IStaticContentItemFactory contentItemFactory,
                                         IContentBlobProvider contentBlobProvider)
         {

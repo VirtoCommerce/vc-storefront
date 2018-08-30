@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using PagedList.Core;
 using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Customer;
@@ -21,10 +23,10 @@ namespace VirtoCommerce.Storefront.Domain
     public class MemberService : IMemberService
     {
         private readonly ICustomerModule _customerApi;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
 
-        public MemberService(ICustomerModule customerApi, IMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
+        public MemberService(ICustomerModule customerApi, IStorefrontMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
         {
             _customerApi = customerApi;
             _memoryCache = memoryCache;

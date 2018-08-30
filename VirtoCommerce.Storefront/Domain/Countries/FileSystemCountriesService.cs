@@ -8,7 +8,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 
@@ -17,8 +19,8 @@ namespace VirtoCommerce.Storefront.Domain
     public class FileSystemCountriesService: ICountriesService
     {
         private readonly FileSystemCountriesOptions _options;
-        private readonly IMemoryCache _memoryCache;
-        public FileSystemCountriesService(IMemoryCache cacheManager, IOptions<FileSystemCountriesOptions> options)
+        private readonly IStorefrontMemoryCache _memoryCache;
+        public FileSystemCountriesService(IStorefrontMemoryCache cacheManager, IOptions<FileSystemCountriesOptions> options)
         {
             _options = options.Value;
             _memoryCache = cacheManager;

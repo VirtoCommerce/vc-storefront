@@ -2,8 +2,10 @@ using Microsoft.Extensions.Caching.Memory;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 
@@ -12,9 +14,9 @@ namespace VirtoCommerce.Storefront.Domain
     public class CurrencyService : ICurrencyService
     {
         private readonly ICommerce _commerceApi;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
 
-        public CurrencyService(ICommerce commerceApi, IMemoryCache memoryCache)
+        public CurrencyService(ICommerce commerceApi, IStorefrontMemoryCache memoryCache)
         {
             _commerceApi = commerceApi;
             _memoryCache = memoryCache;

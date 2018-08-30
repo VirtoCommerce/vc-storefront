@@ -7,10 +7,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Domain.Subscriptions;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Subscriptions;
@@ -22,9 +24,9 @@ namespace VirtoCommerce.Storefront.Domain
     {
         private readonly ISubscriptionModule _subscriptionApi;
         private readonly IWorkContextAccessor _workContextAccessor;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly StorefrontOptions _options;
-        public SubscriptionService(ISubscriptionModule subscriptionApi, IWorkContextAccessor workContextAccessor, IMemoryCache memoryCache, IOptions<StorefrontOptions> options)
+        public SubscriptionService(ISubscriptionModule subscriptionApi, IWorkContextAccessor workContextAccessor, IStorefrontMemoryCache memoryCache, IOptions<StorefrontOptions> options)
         {
             _subscriptionApi = subscriptionApi;
             _workContextAccessor = workContextAccessor;

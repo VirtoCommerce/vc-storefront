@@ -5,9 +5,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Inventory.Services;
@@ -25,13 +27,13 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly ITaxEvaluator _taxEvaluator;
         private readonly IPromotionEvaluator _promotionEvaluator;
         private readonly IInventoryService _inventoryService;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
 
         public PricingService(IPricingModule pricingApi,
             ITaxEvaluator taxEvaluator,
             IPromotionEvaluator promotionEvaluator,
-            IInventoryService inventoryService, IMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
+            IInventoryService inventoryService, IStorefrontMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
         {
             _pricingApi = pricingApi;
             _taxEvaluator = taxEvaluator;

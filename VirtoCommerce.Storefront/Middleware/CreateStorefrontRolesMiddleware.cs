@@ -6,8 +6,10 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Security;
 
@@ -17,9 +19,9 @@ namespace VirtoCommerce.Storefront.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly ISecurity _platformSecurityApi;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly ILogger _looger;
-        public CreateStorefrontRolesMiddleware(RequestDelegate next, ISecurity platformSecurityApi, IMemoryCache memoryCache, ILogger<CreateStorefrontRolesMiddleware> logger)
+        public CreateStorefrontRolesMiddleware(RequestDelegate next, ISecurity platformSecurityApi, IStorefrontMemoryCache memoryCache, ILogger<CreateStorefrontRolesMiddleware> logger)
         {
             _next = next;
             _memoryCache = memoryCache;
