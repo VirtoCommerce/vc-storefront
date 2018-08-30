@@ -2,28 +2,28 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using VirtoCommerce.Storefront.Tests.Routing.Infrastructure;
 using Xunit;
 
-namespace VirtoCommerce.Storefront.Tests
+namespace VirtoCommerce.Storefront.Tests.Routing
 {
     public class RoutingTests : IClassFixture<WebApplicationFactory<Startup>>, IDisposable
     {
         public RoutingTests(WebApplicationFactory<Startup> factory)
         {
-            Client = factory.CreateClient();
+            Client = factory
+                .WithWebHostBuilder(
+                    builder => builder.ConfigureServices(
+                        services => services.AddMvc(
+                            options => options.Filters.Add<RoutingTestingActionFilter>()
+                        )
+                    )
+                ).CreateClient();
         }
 
         public HttpClient Client { get; }
-
-        [InlineData("Electronics/en-US/")]
-        [InlineData("Electronics/")]
-        [InlineData("")]
-        public async Task PrefixesTest(string url)
-        {
-            var response = await Client.GetAsync(url);
-
-            response.EnsureSuccessStatusCode();
-        }
 
         [Theory]
         [InlineData("storefrontapi/account")]
@@ -37,7 +37,6 @@ namespace VirtoCommerce.Storefront.Tests
         }
 
         [Theory]
-        [InlineData("storefrontapi/account")]
         [InlineData("storefrontapi/account/password")]
         [InlineData("storefrontapi/account/addresses")]
         [InlineData("storefrontapi/account/organization/users/search")]
