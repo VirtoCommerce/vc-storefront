@@ -10,8 +10,6 @@ namespace VirtoCommerce.Storefront.Caching
     {
         private readonly IOptions<StorefrontOptions> _settingManager;
         private readonly IMemoryCache _memoryCache;
-        private static TimeSpan? _absoluteExpiration;
-        private static bool? _cacheEnabled;
         private bool _disposed;
 
         public StorefrontMemoryCache(IMemoryCache memoryCache, IOptions<StorefrontOptions> settingManager)
