@@ -5,9 +5,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -29,12 +31,14 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IMemberService _customerService;
         private readonly ISubscriptionService _subscriptionService;
         private readonly IInventoryService _inventoryService;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
 
-        public CatalogService(IWorkContextAccessor workContextAccessor, ICatalogModuleCategories categoriesApi, ICatalogModuleProducts productsApi,
-                              ICatalogModuleSearch searchApi, IPricingService pricingService, IMemberService customerService, ISubscriptionService subscriptionService,
-                              IInventoryService inventoryService, IMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
+        public CatalogService(IWorkContextAccessor workContextAccessor, ICatalogModuleCategories categoriesApi,
+            ICatalogModuleProducts productsApi,
+            ICatalogModuleSearch searchApi, IPricingService pricingService, IMemberService customerService,
+            ISubscriptionService subscriptionService,
+            IInventoryService inventoryService, IStorefrontMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
         {
             _workContextAccessor = workContextAccessor;
             _categoriesApi = categoriesApi;

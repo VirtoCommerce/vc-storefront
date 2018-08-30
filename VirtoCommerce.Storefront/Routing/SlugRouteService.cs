@@ -5,9 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -20,11 +22,11 @@ namespace VirtoCommerce.Storefront.Routing
 {
     public class SlugRouteService : ISlugRouteService
     {
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly ICommerce _coreApi;
         private readonly ICatalogService _catalogService;
 
-        public SlugRouteService(IMemoryCache memoryCache, ICommerce coreApi, ICatalogService catalogService, ICatalogModuleProducts catalogProductsApi)
+        public SlugRouteService(IStorefrontMemoryCache memoryCache, ICommerce coreApi, ICatalogService catalogService, ICatalogModuleProducts catalogProductsApi)
         {
             _memoryCache = memoryCache;
             _coreApi = coreApi;

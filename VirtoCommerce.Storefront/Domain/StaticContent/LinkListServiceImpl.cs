@@ -14,6 +14,8 @@ using VirtoCommerce.Storefront.Model.Services;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Infrastructure;
 using System.Threading;
+using VirtoCommerce.Storefront.Caching;
+using VirtoCommerce.Storefront.Model.Caching;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -21,9 +23,9 @@ namespace VirtoCommerce.Storefront.Domain
     {
         private readonly IMenu _cmsApi;
         private readonly ICatalogService _catalogService;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
-        public MenuLinkListServiceImpl(IMenu cmsApi, ICatalogService catalogService, IMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
+        public MenuLinkListServiceImpl(IMenu cmsApi, ICatalogService catalogService, IStorefrontMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
         {
             _cmsApi = cmsApi;
             _catalogService = catalogService;

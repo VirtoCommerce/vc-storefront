@@ -21,6 +21,7 @@ using Microsoft.Extensions.WebEncoders;
 using Newtonsoft.Json;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Binders;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Cart;
@@ -31,6 +32,7 @@ using VirtoCommerce.Storefront.Infrastructure.ApplicationInsights;
 using VirtoCommerce.Storefront.JsonConverters;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Bus;
@@ -111,6 +113,9 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton(new InProcessBus());
             services.AddSingleton<IEventPublisher>(provider => provider.GetService<InProcessBus>());
             services.AddSingleton<IHandlerRegistrar>(provider => provider.GetService<InProcessBus>());
+
+            //Cache
+            services.AddSingleton<IStorefrontMemoryCache, StorefrontMemoryCache>();
 
             //Register platform API clients
             services.AddPlatformEndpoint(options =>

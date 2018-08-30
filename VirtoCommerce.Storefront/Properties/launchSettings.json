@@ -16,12 +16,13 @@
       }
     },
     "VirtoCommerce.Storefront": {
-      "commandName": "IISExpress",
+      "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
+        "ASPNETCORE_preventHostingStartup": "True",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:2082/"
+      "applicationUrl": "http://localhost:2083/"
     }
   }
 }

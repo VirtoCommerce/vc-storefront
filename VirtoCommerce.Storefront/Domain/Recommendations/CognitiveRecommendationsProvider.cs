@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Recommendations;
@@ -20,10 +22,10 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly ICatalogService _catalogService;
         private readonly IRecommendations _recommendationsApi;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
 
         public CognitiveRecommendationsProvider(IWorkContextAccessor workContextAccessor, ICatalogService catalogService, IRecommendations recommendationsApi,
-            IMemoryCache memoryCache)
+            IStorefrontMemoryCache memoryCache)
         {
             _workContextAccessor = workContextAccessor;
             _catalogService = catalogService;
