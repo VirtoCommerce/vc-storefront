@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
@@ -9,6 +10,7 @@ using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [StorefrontApiRoute("subscriptions")]
     public class ApiSubscriptionController : StorefrontControllerBase
     {
         private readonly ISubscriptionService _subscriptionService;
@@ -20,7 +22,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/subscriptions/search
-        [HttpPost]
+        [HttpPost("search")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> SearchCustomerSubscriptions([FromBody] SubscriptionSearchCriteria searchCriteria)
         {
@@ -37,7 +39,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // GET: storefrontapi/subscriptions/{number}
-        [HttpGet]
+        [HttpGet("{number}")]
         public async Task<ActionResult> GetCustomerSubscription(string number)
         {
             var retVal = await GetSubscriptionByNumberAsync(number);
@@ -45,7 +47,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/subscriptions/cancel
-        [HttpPost]
+        [HttpPost("{number}/cancel")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CancelSubscription([FromBody] SubscriptionCancelRequest cancelRequest)
         {

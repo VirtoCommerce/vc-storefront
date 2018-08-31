@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
@@ -10,6 +11,7 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [StorefrontApiRoute("lists")]
     public class ApiListsController : StorefrontControllerBase
     {
         private readonly ICartService _cartService;
@@ -25,7 +27,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // GET: storefrontapi/lists/{listName}/{type}
-        [HttpGet]
+        [HttpGet("{listName}/{type}")]
         public async Task<ActionResult> GetListByName([FromRoute]string listName, [FromRoute]string type)
         {
             using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, listName, type)).LockAsync())
@@ -36,7 +38,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/lists/getlistswithproduct
-        [HttpPost]
+        [HttpPost("getlistswithproduct")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> GetListsWithProduct([FromBody] GetCartsWithProductRequest request)
         {
@@ -59,7 +61,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/lists/items
-        [HttpPost]
+        [HttpPost("items")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddItemToList([FromBody] AddCartItem listItem)
         {
@@ -79,7 +81,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // DELETE: storefrontapi/lists/{listName}/type/items/{lineItemId}
-        [HttpDelete]
+        [HttpDelete("{listName}/{type}/items/{lineItemId}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemoveItemFromList(string lineItemId, string listName, string type)
         {
@@ -94,7 +96,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/lists/search
-        [HttpPost]
+        [HttpPost("search")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> SearchLists([FromBody] CartSearchCriteria searchCriteria)
         {
@@ -119,7 +121,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/lists/{listName}/{type}/create
-        [HttpPost]
+        [HttpPost("{listName}/{type}/create")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateList(string listName, string type)
         {
@@ -132,7 +134,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // DELETE: storefrontapi/lists/deletelistsbyids?listIds=...&listIds=...
-        [HttpDelete]
+        [HttpDelete("deletelistsbyids")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteListsByIds(string[] listIds)
         {
@@ -150,7 +152,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/lists/{listName}/{type}/mergewithcurrentcart
-        [HttpPost]
+        [HttpPost("{listName}/{type}/mergewithcurrentcart")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> MergeWithCurrentCart(string listName, string type)
         {

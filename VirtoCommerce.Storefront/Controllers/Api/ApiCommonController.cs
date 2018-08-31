@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Domain;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [StorefrontApiRoute("")]
     public class ApiCommonController : StorefrontControllerBase
     {
         private readonly IStoreModule _storeApi;
@@ -24,14 +26,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // GET: storefrontapi/countries
-        [HttpGet]
+        [HttpGet("countries")]
         public ActionResult GetCountries()
         {
             return Json(_countriesWithoutRegions);
         }
 
         // GET: storefrontapi/countries/{countryCode}/regions
-        [HttpGet]
+        [HttpGet("countries/{countryCode}/regions")]
         public ActionResult GetCountryRegions(string countryCode)
         {
             var country = WorkContext.AllCountries.FirstOrDefault(c => c.Code2.Equals(countryCode, StringComparison.InvariantCultureIgnoreCase) || c.Code3.Equals(countryCode, StringComparison.InvariantCultureIgnoreCase));
@@ -43,7 +45,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/feedback
-        [HttpPost]
+        [HttpPost("feedback")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Feedback([FromBody] ContactForm model)
         {
