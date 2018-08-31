@@ -341,7 +341,10 @@ namespace VirtoCommerce.Storefront
                 context.Response.Headers["X-Xss-Protection"] = "1";
                 await next();
             });
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapStorefrontRoutes();
+            });
         }
     }
 }
