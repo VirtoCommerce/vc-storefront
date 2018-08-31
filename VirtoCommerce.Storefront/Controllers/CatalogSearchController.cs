@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Common;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
@@ -10,6 +11,7 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
+    [StorefrontRoute]
     public class CatalogSearchController : StorefrontControllerBase
     {
         private readonly ICatalogService _searchService;
@@ -23,6 +25,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// GET search
         /// This method used for search products by given criteria 
         /// <returns></returns>
+        [HttpGet("search")]
         public ActionResult SearchProducts()
         {
             //All resulting categories, products and aggregations will be lazy evaluated when view will be rendered. (workContext.Products, workContext.Categories etc) 
@@ -37,6 +40,8 @@ namespace VirtoCommerce.Storefront.Controllers
         /// <param name="categoryId"></param>
         /// <param name="view"></param>
         /// <returns></returns>
+        [HttpGet("category/{categoryId}")]
+        [Route("search/{categoryId}")]
         public async Task<ActionResult> CategoryBrowsing(string categoryId, string view)
         {
             var category = (await _searchService.GetCategoriesAsync(new[] { categoryId }, CategoryResponseGroup.Full)).FirstOrDefault();
