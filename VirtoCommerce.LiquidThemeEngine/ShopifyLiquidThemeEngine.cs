@@ -24,6 +24,7 @@ using VirtoCommerce.LiquidThemeEngine.Filters;
 using VirtoCommerce.LiquidThemeEngine.Operators;
 using VirtoCommerce.LiquidThemeEngine.Tags;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
@@ -48,7 +49,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IStorefrontUrlBuilder _storeFrontUrlBuilder;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IContentBlobProvider _themeBlobProvider;
 
         static ShopifyLiquidThemeEngine()
@@ -74,7 +75,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             Template.RegisterTag<PaginateTag>("paginate");
         }
 
-        public ShopifyLiquidThemeEngine(IMemoryCache memoryCache, IWorkContextAccessor workContextAccessor,
+        public ShopifyLiquidThemeEngine(IStorefrontMemoryCache memoryCache, IWorkContextAccessor workContextAccessor,
                                         IHttpContextAccessor httpContextAccessor,
                                         IStorefrontUrlBuilder storeFrontUrlBuilder, IContentBlobProvider contentBlobProvder, IOptions<LiquidThemeEngineOptions> options)
         {

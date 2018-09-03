@@ -8,12 +8,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 using VirtoCommerce.Storefront.Model.StaticContent;
 using VirtoCommerce.Storefront.Infrastructure;
+using VirtoCommerce.Storefront.Model.Caching;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -22,11 +24,11 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly CloudBlobClient _cloudBlobClient;
         private readonly CloudStorageAccount _cloudStorageAccount;
         private readonly CloudBlobContainer _container;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly AzureBlobContentOptions _options;
         private readonly IBlobChangesWatcher _watcher;
 
-        public AzureBlobContentProvider(IOptions<AzureBlobContentOptions> options, IMemoryCache memoryCache, IBlobChangesWatcher watcher)
+        public AzureBlobContentProvider(IOptions<AzureBlobContentOptions> options, IStorefrontMemoryCache memoryCache, IBlobChangesWatcher watcher)
         {
             _options = options.Value;
             _memoryCache = memoryCache;

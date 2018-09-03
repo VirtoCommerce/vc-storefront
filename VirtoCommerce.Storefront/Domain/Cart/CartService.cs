@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using PagedList.Core;
 using VirtoCommerce.Storefront.AutoRestClients.CartModuleApi;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -17,12 +19,13 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 {
     public class CartService : ICartService
     {
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly ICartModule _cartApi;
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly UserManager<User> _userManager;
 
-        public CartService(ICartModule cartModule, IWorkContextAccessor workContextAccessor, IMemoryCache memoryCache, UserManager<User> userManager)
+        public CartService(ICartModule cartModule, IWorkContextAccessor workContextAccessor,
+            IStorefrontMemoryCache memoryCache, UserManager<User> userManager)
         {
             _cartApi = cartModule;
             _memoryCache = memoryCache;

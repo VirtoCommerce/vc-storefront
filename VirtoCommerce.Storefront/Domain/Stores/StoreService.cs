@@ -7,6 +7,8 @@ using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Extensions;
 using System.Collections.Generic;
+using VirtoCommerce.Storefront.Caching;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Domain
@@ -17,9 +19,9 @@ namespace VirtoCommerce.Storefront.Domain
     public class StoreService : IStoreService
     {
         private readonly IStoreModule _storeApi;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
-        public StoreService(IStoreModule storeApi, IMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
+        public StoreService(IStoreModule storeApi, IStorefrontMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
         {
             _storeApi = storeApi;
             _memoryCache = memoryCache;
