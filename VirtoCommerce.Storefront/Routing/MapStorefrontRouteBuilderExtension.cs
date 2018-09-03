@@ -10,13 +10,6 @@ namespace VirtoCommerce.Storefront.Routing
     /// </summary>
     public static class MapStorefrontRouteBuilderExtension
     {
-        public static void MapStorefrontRoutes(this IRouteBuilder routes)
-        {
-            //Register  slug route based on dynamic data
-            //It a default route and must be always on end of routes
-            routes.MapSlugRoute("{*path}", defaults: new { controller = "Home", action = "Index" });
-        }
-
         public static IRouteBuilder MapStorefrontRoute(
             this IRouteBuilder routeBuilder,
             string name,
