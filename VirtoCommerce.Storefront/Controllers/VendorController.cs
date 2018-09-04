@@ -34,7 +34,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
             if (vendor != null)
             {
-                vendor.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos) =>
+                vendor.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
                 {
                     var criteria = new ProductSearchCriteria
                     {
@@ -44,7 +44,10 @@ namespace VirtoCommerce.Storefront.Controllers
                         SortBy = SortInfo.ToString(sortInfos),
                         ResponseGroup = base.WorkContext.CurrentProductSearchCriteria.ResponseGroup
                     };
-
+                    if (@params != null)
+                    {
+                        criteria.CopyFrom(@params);
+                    }
                     var searchResult = _catalogService.SearchProducts(criteria);
                     return searchResult.Products;
                 }, 1, ProductSearchCriteria.DefaultPageSize);

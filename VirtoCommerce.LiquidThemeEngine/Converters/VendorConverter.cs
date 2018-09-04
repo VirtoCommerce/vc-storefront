@@ -26,7 +26,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.LogoUrl = vendor.LogoUrl;
             result.Name = vendor.Name;
             result.SiteUrl = vendor.SiteUrl;
-           
+
             result.Handle = vendor.SeoInfo != null ? vendor.SeoInfo.Slug : vendor.Id;
 
             var shopifyAddressModels = vendor.Addresses.Select(a => ToLiquidAddress(a));
@@ -35,9 +35,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
             if (vendor.Products != null)
             {
-                result.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos) =>
+                result.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
                 {
-                    vendor.Products.Slice(pageNumber, pageSize, sortInfos);
+                    vendor.Products.Slice(pageNumber, pageSize, sortInfos, @params);
                     return new StaticPagedList<Product>(vendor.Products.Select(x => ToLiquidProduct(x)), vendor.Products);
                 }, vendor.Products.PageNumber, vendor.Products.PageSize);
             }

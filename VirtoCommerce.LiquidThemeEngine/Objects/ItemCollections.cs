@@ -3,6 +3,7 @@ using PagedList.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using VirtoCommerce.Storefront.Model.Common;
 
@@ -175,9 +176,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
             }
         }
 
-        public void Slice(int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos)
+        public void Slice(int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos, NameValueCollection @params = null)
         {
-            _mutablePagedList.Slice(pageNumber, pageSize, sortInfos);
+            _mutablePagedList.Slice(pageNumber, pageSize, sortInfos, @params);
         }
 
         public IPagedList GetMetaData()

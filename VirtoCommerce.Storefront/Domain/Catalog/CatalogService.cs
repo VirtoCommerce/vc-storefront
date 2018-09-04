@@ -279,7 +279,7 @@ namespace VirtoCommerce.Storefront.Domain
                     product.Vendor = vendors.FirstOrDefault(v => v != null && v.Id == product.VendorId);
                     if (product.Vendor != null)
                     {
-                        product.Vendor.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos) =>
+                        product.Vendor.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
                         {
                             var criteria = new ProductSearchCriteria
                             {
@@ -289,7 +289,10 @@ namespace VirtoCommerce.Storefront.Domain
                                 ResponseGroup = workContext.CurrentProductSearchCriteria.ResponseGroup & ~ItemResponseGroup.ItemWithVendor,
                                 SortBy = SortInfo.ToString(sortInfos),
                             };
-
+                            if (@params != null)
+                            {
+                                criteria.CopyFrom(@params);
+                            }
                             var searchResult = SearchProducts(criteria);
                             return searchResult.Products;
                         }, 1, ProductSearchCriteria.DefaultPageSize);
@@ -328,7 +331,7 @@ namespace VirtoCommerce.Storefront.Domain
 
                     if (categoryAssociation.Category != null && categoryAssociation.Category.Products == null)
                     {
-                        categoryAssociation.Category.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos) =>
+                        categoryAssociation.Category.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
                         {
                             var criteria = new ProductSearchCriteria
                             {
@@ -343,6 +346,10 @@ namespace VirtoCommerce.Storefront.Domain
                                 criteria.SortBy = SortInfo.ToString(sortInfos);
                             }
 
+                            if (@params != null)
+                            {
+                                criteria.CopyFrom(@params);
+                            }
                             var searchResult = SearchProducts(criteria);
                             return searchResult.Products;
                         }, 1, ProductSearchCriteria.DefaultPageSize);
@@ -377,7 +384,7 @@ namespace VirtoCommerce.Storefront.Domain
                 }, 1, CategorySearchCriteria.DefaultPageSize);
 
                 //Lazy loading for child categories
-                category.Categories = new MutablePagedList<Category>((pageNumber, pageSize, sortInfos) =>
+                category.Categories = new MutablePagedList<Category>((pageNumber, pageSize, sortInfos, @params) =>
                 {
                     var categorySearchCriteria = new CategorySearchCriteria
                     {
@@ -388,6 +395,10 @@ namespace VirtoCommerce.Storefront.Domain
                     if (!sortInfos.IsNullOrEmpty())
                     {
                         categorySearchCriteria.SortBy = SortInfo.ToString(sortInfos);
+                    }
+                    if (@params != null)
+                    {
+                        categorySearchCriteria.CopyFrom(@params);
                     }
                     var searchResult = SearchCategories(categorySearchCriteria);
                     return searchResult;

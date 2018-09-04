@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PagedList.Core;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -48,7 +49,7 @@ namespace VirtoCommerce.Storefront.Domain
                 var serviceProvider = builder.HttpContext.RequestServices;
                 var quoteService = serviceProvider.GetRequiredService<IQuoteService>();
 
-                Func<int, int, IEnumerable<SortInfo>, IPagedList<Model.Quote.QuoteRequest>> factory = (pageNumber, pageSize, sortInfos) =>
+                Func<int, int, IEnumerable<SortInfo>, NameValueCollection, IPagedList<Model.Quote.QuoteRequest>> factory = (pageNumber, pageSize, sortInfos, @params) =>
                 {
                     var quoteSearchCriteria = new Model.Quote.QuoteSearchCriteria
                     {
@@ -57,6 +58,10 @@ namespace VirtoCommerce.Storefront.Domain
                         Sort = sortInfos?.ToString(),
                         CustomerId = builder.WorkContext.CurrentUser.Id
                     };
+                    if (@params != null)
+                    {
+                        quoteSearchCriteria.CopyFrom(@params);
+                    }
                     return quoteService.SearchQuotes(quoteSearchCriteria);
                 };
                 return builder.WithUserQuotesAsync(new MutablePagedList<Model.Quote.QuoteRequest>(factory, 1, Model.Quote.QuoteSearchCriteria.DefaultPageSize));

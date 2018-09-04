@@ -1,5 +1,6 @@
 using PagedList.Core;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
@@ -17,7 +18,7 @@ namespace VirtoCommerce.Storefront.Model.Common
         /// </summary>
         /// <param name="pageNumber"></param>
         /// <param name="pageSize"></param>
-        void Slice(int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos);
+        void Slice(int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos, NameValueCollection @params = null);
     }
 
     public interface IMutablePagedList<T> : IMutablePagedList, IPagedList<T>

@@ -2,13 +2,15 @@ using PagedList.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
     public sealed class MutablePagedList<T> : PagedListMetaData, IMutablePagedList<T>
     {
-        private readonly Func<int, int, IEnumerable<SortInfo>, IPagedList<T>> _getter;
+
+        private readonly Func<int, int, IEnumerable<SortInfo>, NameValueCollection, IPagedList<T>> _getter;
         private IPagedList<T> _pagedList;
         private readonly object _lockObject = new object();
 
@@ -20,6 +22,11 @@ namespace VirtoCommerce.Storefront.Model.Common
         }
 
         public MutablePagedList(Func<int, int, IEnumerable<SortInfo>, IPagedList<T>> getter, int pageNumber, int pageSize)
+            : this((pn, ps, sortInfos, parameters) => getter(pageNumber, pageSize, sortInfos), pageNumber, pageSize)
+        {
+        }
+
+        public MutablePagedList(Func<int, int, IEnumerable<SortInfo>, NameValueCollection, IPagedList<T>> getter, int pageNumber, int pageSize)
         {
             PageNumber = pageNumber;
             PageSize = pageSize;
@@ -29,12 +36,13 @@ namespace VirtoCommerce.Storefront.Model.Common
         #region IMutablePagedList Members
 
         public IEnumerable<SortInfo> SortInfos { get; private set; }
+        public NameValueCollection Params { get; private set; }
         /// <summary>
         /// Resize current paged data list by new PageNumber and PageSize values (it may cause reloading data from source)
         /// </summary>
         /// <param name="pageNumber"></param>
         /// <param name="pageSize"></param>
-        public void Slice(int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos)
+        public void Slice(int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos, NameValueCollection @params = null)
         {
             if (pageNumber < 1)
                 throw new ArgumentOutOfRangeException("pageNumber", pageNumber, "PageNumber cannot be below 1.");
@@ -55,6 +63,12 @@ namespace VirtoCommerce.Storefront.Model.Common
             if (SortInfos != sortInfos)
             {
                 SortInfos = sortInfos;
+                _pagedList = null;
+            }
+
+            if (Params != @params)
+            {
+                Params = @params;
                 _pagedList = null;
             }
 
@@ -129,7 +143,7 @@ namespace VirtoCommerce.Storefront.Model.Common
                 {
                     if (_pagedList == null)
                     {
-                        _pagedList = _getter(PageNumber, PageSize, SortInfos);
+                        _pagedList = _getter(PageNumber, PageSize, SortInfos, Params);
                     }
                 }
                 // set source to blank list if superset is null to prevent exceptions

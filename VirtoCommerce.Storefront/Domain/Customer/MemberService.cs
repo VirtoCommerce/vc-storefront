@@ -153,7 +153,7 @@ namespace VirtoCommerce.Storefront.Domain
                 result = dto.ToOrganization();
 
                 //Lazy load organization contacts
-                result.Contacts = new MutablePagedList<Contact>((pageNumber, pageSize, sortInfos) =>
+                result.Contacts = new MutablePagedList<Contact>((pageNumber, pageSize, sortInfos, @params) =>
                 {
                     var criteria = new OrganizationContactsSearchCriteria
                     {
@@ -164,6 +164,10 @@ namespace VirtoCommerce.Storefront.Domain
                     if (!sortInfos.IsNullOrEmpty())
                     {
                         criteria.Sort = SortInfo.ToString(sortInfos);
+                    }
+                    if (@params != null)
+                    {
+                        criteria.CopyFrom(@params);
                     }
                     return SearchOrganizationContacts(criteria);
 

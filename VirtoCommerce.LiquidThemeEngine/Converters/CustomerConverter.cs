@@ -32,18 +32,18 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
             if (user.Orders != null)
             {
-                result.Orders = new MutablePagedList<Order>((pageNumber, pageSize, sortInfos) =>
+                result.Orders = new MutablePagedList<Order>((pageNumber, pageSize, sortInfos, @params) =>
                 {
-                    user.Orders.Slice(pageNumber, pageSize, sortInfos);
+                    user.Orders.Slice(pageNumber, pageSize, sortInfos, @params);
                     return new StaticPagedList<Order>(user.Orders.Select(x => ToLiquidOrder(x, workContext.CurrentLanguage, urlBuilder)), user.Orders);
                 }, user.Orders.PageNumber, user.Orders.PageSize);
             }
 
             if (user.QuoteRequests != null)
             {
-                result.QuoteRequests = new MutablePagedList<QuoteRequest>((pageNumber, pageSize, sortInfos) =>
+                result.QuoteRequests = new MutablePagedList<QuoteRequest>((pageNumber, pageSize, sortInfos, @params) =>
                 {
-                    user.QuoteRequests.Slice(pageNumber, pageSize, sortInfos);
+                    user.QuoteRequests.Slice(pageNumber, pageSize, sortInfos, @params);
                     return new StaticPagedList<QuoteRequest>(user.QuoteRequests.Select(x => ToLiquidQuoteRequest(x)), user.QuoteRequests);
                 }, user.QuoteRequests.PageNumber, user.QuoteRequests.PageSize);
             }
@@ -81,7 +81,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                     result.Metafields = new MetaFieldNamespacesCollection(new[] { new MetafieldsCollection("dynamic_properties", workContext.CurrentLanguage, contact.DynamicProperties) });
                 }
             }
-            
+
 
             return result;
         }

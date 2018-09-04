@@ -120,7 +120,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
             if (!product.Associations.IsNullOrEmpty())
             {
-                result.RelatedProducts = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos) =>
+                result.RelatedProducts = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
                 {
                     //Need to load related products from associated  product and categories
                     var skip = (pageNumber - 1) * pageSize;

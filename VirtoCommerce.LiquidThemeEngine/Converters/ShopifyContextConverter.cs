@@ -70,27 +70,27 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
             if (workContext.Categories != null)
             {
-                result.Collections = new Collections(new MutablePagedList<Collection>((pageNumber, pageSize, sortInfos) =>
+                result.Collections = new Collections(new MutablePagedList<Collection>((pageNumber, pageSize, sortInfos, @params) =>
                 {
-                    workContext.Categories.Slice(pageNumber, pageSize, sortInfos);
+                    workContext.Categories.Slice(pageNumber, pageSize, sortInfos, @params);
                     return new StaticPagedList<Collection>(workContext.Categories.Select(x => ToLiquidCollection(x, workContext)), workContext.Categories);
                 }, 1, workContext.Categories.PageSize));
             }
 
             if (workContext.Products != null)
             {
-                result.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos) =>
+                result.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
                 {
-                    workContext.Products.Slice(pageNumber, pageSize, sortInfos);
+                    workContext.Products.Slice(pageNumber, pageSize, sortInfos, @params);
                     return new StaticPagedList<Product>(workContext.Products.Select(x => ToLiquidProduct(x)), workContext.Products);
                 }, workContext.Products.PageNumber, workContext.Products.PageSize);
             }
 
             if (workContext.Vendors != null)
             {
-                result.Vendors = new MutablePagedList<Vendor>((pageNumber, pageSize, sortInfos) =>
+                result.Vendors = new MutablePagedList<Vendor>((pageNumber, pageSize, sortInfos, @params) =>
                 {
-                    workContext.Vendors.Slice(pageNumber, pageSize, sortInfos);
+                    workContext.Vendors.Slice(pageNumber, pageSize, sortInfos, @params);
                     return new StaticPagedList<Vendor>(workContext.Vendors.Select(x => ToLiquidVendor(x)), workContext.Vendors);
                 }, workContext.Vendors.PageNumber, workContext.Vendors.PageSize);
             }
@@ -109,10 +109,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 };
                 if (workContext.StaticContentSearchResult != null && workContext.StaticContentSearchResult.Any())
                 {
-                    result.Search.Results = new MutablePagedList<Drop>((pageNumber, pageSize, sortInfos) =>
+                    result.Search.Results = new MutablePagedList<Drop>((pageNumber, pageSize, sortInfos, @params) =>
                     {
                         var pagedContentItems = new MutablePagedList<ContentItem>(workContext.StaticContentSearchResult);
-                        pagedContentItems.Slice(pageNumber, pageSize, sortInfos);
+                        pagedContentItems.Slice(pageNumber, pageSize, sortInfos, @params);
                         return new StaticPagedList<Drop>(workContext.StaticContentSearchResult.Select(x => ToLiquidPage(x)), pagedContentItems);
                     }, 1, workContext.StaticContentSearchResult.PageSize);
                 }
@@ -120,7 +120,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
             if (workContext.CurrentLinkLists != null)
             {
-                result.Linklists = new Linklists(new MutablePagedList<Linklist>((pageNumber, pageSize, sortInfos) =>
+                result.Linklists = new Linklists(new MutablePagedList<Linklist>((pageNumber, pageSize, sortInfos, @params) =>
                 {
                     var liquidLists = workContext.CurrentLinkLists.Select(x => ToLiquidLinklist(x, workContext, urlBuilder));
                     return new StaticPagedList<Linklist>(liquidLists, workContext.CurrentLinkLists);
@@ -129,14 +129,14 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
             if (workContext.Pages != null)
             {
-                result.Pages = new Pages(new MutablePagedList<Page>((pageNumber, pageSize, sortInfos) =>
+                result.Pages = new Pages(new MutablePagedList<Page>((pageNumber, pageSize, sortInfos, @params) =>
                 {
                     //Do not paginate data, because it already all preloaded
                     var pages = workContext.Pages.OfType<ContentPage>().Select(x => ToLiquidPage(x));
                     return new StaticPagedList<Page>(pages, workContext.Pages);
                 }, workContext.Pages.PageNumber, workContext.Pages.PageSize));
 
-                result.Blogs = new Blogs(new MutablePagedList<Objects.Blog>((pageNumber, pageSize, sortInfos) =>
+                result.Blogs = new Blogs(new MutablePagedList<Objects.Blog>((pageNumber, pageSize, sortInfos, @params) =>
                 {
                     //Do not paginate data, because it already all preloaded
                     var blogs = workContext.Blogs.Select(x => ToLiquidBlog(x, workContext.CurrentLanguage));
@@ -255,9 +255,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
             if (workContext.FulfillmentCenters != null)
             {
-                result.FulfillmentCenters = new MutablePagedList<FulfillmentCenter>((pageNumber, pageSize, sortInfos) =>
+                result.FulfillmentCenters = new MutablePagedList<FulfillmentCenter>((pageNumber, pageSize, sortInfos, @params) =>
                  {
-                     workContext.FulfillmentCenters.Slice(pageNumber, pageSize, sortInfos);
+                     workContext.FulfillmentCenters.Slice(pageNumber, pageSize, sortInfos, @params);
                      return new StaticPagedList<FulfillmentCenter>(workContext.FulfillmentCenters.Select(x => x.ToShopifyModel()), workContext.FulfillmentCenters);
                  }, workContext.FulfillmentCenters.PageNumber, workContext.FulfillmentCenters.PageSize);
             }

@@ -52,13 +52,17 @@ namespace VirtoCommerce.Storefront.Controllers
             var criteria = WorkContext.CurrentProductSearchCriteria.Clone();
             criteria.Outline = category.Outline; // should we simply take it from current category?
 
-            category.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos) =>
+            category.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
             {
                 criteria.PageNumber = pageNumber;
                 criteria.PageSize = pageSize;
                 if (string.IsNullOrEmpty(criteria.SortBy) && !sortInfos.IsNullOrEmpty())
                 {
                     criteria.SortBy = SortInfo.ToString(sortInfos);
+                }
+                if (@params != null)
+                {
+                    criteria.CopyFrom(@params);
                 }
                 var result = _searchService.SearchProducts(criteria);
                 //Prevent double api request for get aggregations

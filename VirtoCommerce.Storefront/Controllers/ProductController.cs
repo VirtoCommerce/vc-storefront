@@ -48,7 +48,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
                     if (category != null)
                     {
-                        category.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos) =>
+                        category.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
                         {
                             var criteria = WorkContext.CurrentProductSearchCriteria.Clone();
                             criteria.Outline = product.GetCategoryOutline();
@@ -57,6 +57,10 @@ namespace VirtoCommerce.Storefront.Controllers
                             if (string.IsNullOrEmpty(criteria.SortBy) && !sortInfos.IsNullOrEmpty())
                             {
                                 criteria.SortBy = SortInfo.ToString(sortInfos);
+                            }
+                            if (@params != null)
+                            {
+                                criteria.CopyFrom(@params);
                             }
                             return _catalogSearchService.SearchProducts(criteria).Products;
                         }, 1, ProductSearchCriteria.DefaultPageSize);
