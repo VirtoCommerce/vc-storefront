@@ -224,9 +224,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
 
-                await cartBuilder.AddCouponAsync(couponCode);
+                var isUnique = await cartBuilder.AddCouponAsync(couponCode);
                 await cartBuilder.SaveAsync();
-                return Json(cartBuilder.Cart.Coupon);
+                return Json(isUnique? cartBuilder.Cart.Coupons.Last() : null);
             }
         }
 
@@ -234,7 +234,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // DELETE: storefrontapi/cart/coupons
         [HttpDelete]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RemoveCartCoupon()
+        public async Task<ActionResult> RemoveCartCoupon(string coupon)
         {
             EnsureCartExists();
 
@@ -242,7 +242,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
-                await cartBuilder.RemoveCouponAsync();
+                await cartBuilder.RemoveCouponAsync(coupon);
                 await cartBuilder.SaveAsync();
             }
 

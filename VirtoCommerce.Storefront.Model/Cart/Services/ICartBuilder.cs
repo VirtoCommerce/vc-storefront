@@ -82,13 +82,14 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         /// </summary>
         /// <param name="couponCode"></param>
         /// <returns></returns>
-        Task AddCouponAsync(string couponCode);
+        Task<bool> AddCouponAsync(string couponCode);
 
         /// <summary>
         /// remove exist coupon from cart
         /// </summary>
+        /// <param name="couponCode"></param>
         /// <returns></returns>
-        Task RemoveCouponAsync();
+        Task RemoveCouponAsync(string couponCode);
 
         /// <summary>
         /// Clear cart remove all items and shipments and payments

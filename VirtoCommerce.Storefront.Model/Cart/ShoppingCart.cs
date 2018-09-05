@@ -41,6 +41,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
             Payments = new List<Payment>();
             Shipments = new List<Shipment>();
             TaxDetails = new List<TaxDetail>();
+            Coupons = new List<Coupon>();
             DynamicProperties = new List<DynamicProperty>();
             ValidationErrors = new List<ValidationError>();
             AvailablePaymentMethods = new List<PaymentMethod>();
@@ -92,14 +93,14 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// </summary>
         public string OrganizationId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the shopping cart coupon
-        /// </summary>
-        /// <value>
-        /// Coupon object
-        /// </value>
-        public Coupon Coupon { get; set; }
+        ///// Gets or sets the shopping cart coupon
+        ///// </summary>
+        ///// <value>
+        ///// Coupon object
+        ///// </value>
+        //public Coupon Coupon { get; set; }
 
+        /// <summary>
         /// <summary>
         /// Gets or sets the flag of shopping cart is recurring
         /// </summary>
@@ -270,6 +271,14 @@ namespace VirtoCommerce.Storefront.Model.Cart
         public int ItemsQuantity => Items.Sum(i => i.Quantity);
 
         /// <summary>
+        /// Gets or sets the collection of shopping cart coupons
+        /// </summary>
+        /// <value>
+        /// Collection of Coupon objects
+        /// </value>
+        public IList<Coupon> Coupons { get; set; }
+
+        /// <summary>
         /// Gets or sets the collection of shopping cart payments
         /// </summary>
         /// <value>
@@ -363,11 +372,11 @@ namespace VirtoCommerce.Storefront.Model.Cart
                 payment.ApplyRewards(paymentRewards);
             }
 
-            if (Coupon != null && !string.IsNullOrEmpty(Coupon.Code))
+            foreach (var coupon in Coupons)
             {
-                Coupon.AppliedSuccessfully = rewards.Any(x => x.IsValid && x.Coupon != null);
+                if (!string.IsNullOrEmpty(coupon.Code))
+                    coupon.AppliedSuccessfully = rewards.Any(x => x.IsValid && x.Coupon == coupon.Code);
             }
-
         }
         #endregion
 

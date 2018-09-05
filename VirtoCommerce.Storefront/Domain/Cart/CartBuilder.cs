@@ -168,17 +168,26 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.FromResult((object)null);
         }
 
-        public virtual Task AddCouponAsync(string couponCode)
+        public virtual Task<bool> AddCouponAsync(string couponCode)
         {
             EnsureCartExists();
-            Cart.Coupon = new Coupon { Code = couponCode };
-            return Task.FromResult((object)null);
+            if (!Cart.Coupons.Any(c => c.Code == couponCode))
+            {
+                Cart.Coupons.Add(new Coupon { Code = couponCode });
+                return Task.FromResult(true);
+            }
+            else
+            {
+                return Task.FromResult(false);
+            }
         }
 
-        public virtual Task RemoveCouponAsync()
+        public virtual Task RemoveCouponAsync(string couponCode)
         {
             EnsureCartExists();
-            Cart.Coupon = null;
+            var coupon = Cart.Coupons.FirstOrDefault(c => c.Code == couponCode);
+            if (coupon != null)
+                Cart.Coupons.Remove(coupon);
             return Task.FromResult((object)null);
         }
 
@@ -274,9 +283,9 @@ namespace VirtoCommerce.Storefront.Domain
                 await AddLineItemAsync(lineItem);
             }
 
-            if (cart.Coupon != null)
+            foreach (var coupon in cart.Coupons /*?? new List<Coupon>()*/)
             {
-                Cart.Coupon = cart.Coupon;
+                await AddCouponAsync(coupon.Code);
             }
 
             foreach (var shipment in cart.Shipments)
@@ -474,7 +483,8 @@ namespace VirtoCommerce.Storefront.Domain
                 Customer = user,
                 Type = type,
                 IsAnonymous = !user.IsRegisteredUser,
-                CustomerName = user.IsRegisteredUser ? user.UserName : SecurityConstants.AnonymousUsername
+                CustomerName = user.IsRegisteredUser ? user.UserName : SecurityConstants.AnonymousUsername,
+                Coupons = new List<Coupon>(),
             };
 
             return cart;
