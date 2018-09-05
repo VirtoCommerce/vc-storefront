@@ -283,7 +283,7 @@ namespace VirtoCommerce.Storefront.Domain
                 await AddLineItemAsync(lineItem);
             }
 
-            foreach (var coupon in cart.Coupons /*?? new List<Coupon>()*/)
+            foreach (var coupon in cart.Coupons)
             {
                 await AddCouponAsync(coupon.Code);
             }
