@@ -18,7 +18,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             //Initialize product response group.
             //TODO: Need to find possibility to set this response group in theme
-            builder.WorkContext.CurrentProductResponseGroup = EnumUtility.SafeParse(builder.WorkContext.QueryString.Get("resp_group"), ItemResponseGroup.ItemMedium | ItemResponseGroup.ItemWithPrices | ItemResponseGroup.ItemWithVendor);
+            builder.WorkContext.CurrentProductResponseGroup = EnumUtility.SafeParse(builder.WorkContext.QueryString.Get("resp_group"), ItemResponseGroup.ItemMedium | ItemResponseGroup.ItemWithPrices | ItemResponseGroup.ItemWithVendor | ItemResponseGroup.ItemAssociations);
 
             //This line make delay categories loading initialization (categories can be evaluated on view rendering time)
             builder.WorkContext.Categories = new MutablePagedList<Category>((pageNumber, pageSize, sortInfos, @params) =>
