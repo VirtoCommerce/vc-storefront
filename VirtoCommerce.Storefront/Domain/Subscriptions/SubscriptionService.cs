@@ -66,7 +66,7 @@ namespace VirtoCommerce.Storefront.Domain
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(PaymentPlanCacheRegion.CreateChangeToken());
-                return (await _subscriptionApi.GetPaymentPlanByIdsAsync(ids)).Select(x => x.ToPaymentPlan()).ToList();
+                return (await _subscriptionApi.GetPaymentPlansByPlentyIdsAsync(ids)).Select(x => x.ToPaymentPlan()).ToList();
             });
         }
 
