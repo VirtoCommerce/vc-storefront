@@ -21,6 +21,7 @@ using VirtoCommerce.Storefront.Model.Security.Specifications;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
+    [StorefrontRoute("account")]
     public class AccountController : StorefrontControllerBase
     {
         private readonly SignInManager<User> _signInManager;
@@ -51,7 +52,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("customers/account", WorkContext);
         }
 
-        [HttpGet]
+        [HttpGet("order/{number}")]
         [Authorize(OnlyRegisteredUserAuthorizationRequirement.PolicyName)]
         public ActionResult GetOrderDetails(string number)
         {
@@ -64,21 +65,21 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("customers/order", WorkContext);
         }
 
-        [HttpGet]
+        [HttpGet("addresses")]
         [Authorize(OnlyRegisteredUserAuthorizationRequirement.PolicyName)]
         public ActionResult GetAddresses()
         {
             return View("customers/addresses", WorkContext);
         }
 
-        [HttpGet]
+        [HttpGet("register")]
         [AllowAnonymous]
         public ActionResult Register()
         {
             return View("customers/register", WorkContext);
         }
 
-        [HttpPost]
+        [HttpPost("register")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register([FromForm] UserRegistration registration)
@@ -129,7 +130,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("customers/register", WorkContext);
         }
 
-        [HttpGet]
+        [HttpGet("confirminvitation")]
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmInvitation(string organizationId, string email, string token)
         {
@@ -169,7 +170,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("customers/confirm_invitation", WorkContext);
         }
 
-        [HttpPost]
+        [HttpPost("confirminvitation")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ConfirmInvitation([FromForm] UserRegistrationByInvitation register)
@@ -211,7 +212,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("customers/confirm_invitation", WorkContext);
         }
 
-        [HttpGet]
+        [HttpGet("confirmemail")]
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string token)
         {
@@ -220,6 +221,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return View(viewName);
         }
 
+        [HttpGet("impersonate/{userId}")]
         public async Task<IActionResult> ImpersonateUser(string userId)
         {
             if (User.Identity.Name == SecurityConstants.AnonymousUsername)
@@ -245,14 +247,14 @@ namespace VirtoCommerce.Storefront.Controllers
             return StoreFrontRedirect("~/");
         }
 
-        [HttpGet]
+        [HttpGet("login")]
         [AllowAnonymous]
         public ActionResult Login()
         {
             return View("customers/login");
         }
 
-        [HttpPost]
+        [HttpPost("login")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login([FromForm] Login login, string returnUrl)
@@ -304,7 +306,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("customers/login", WorkContext);
         }
 
-        [HttpGet]
+        [HttpGet("logout")]
         [AllowAnonymous]
         public async Task<ActionResult> Logout()
         {
@@ -312,7 +314,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return StoreFrontRedirect("~/");
         }
 
-        [HttpGet]
+        [HttpGet("externallogin")]
         [AllowAnonymous]
         public ActionResult ExternalLogin(string authType, string returnUrl)
         {
@@ -325,7 +327,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return Challenge(properties, authType);
         }
 
-        [HttpGet]
+        [HttpGet("externallogincallback")]
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
@@ -402,14 +404,14 @@ namespace VirtoCommerce.Storefront.Controllers
             return StoreFrontRedirect(returnUrl);
         }
 
-        [HttpGet]
+        [HttpGet("forgotpassword")]
         [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
             return View("customers/forgot_password", WorkContext);
         }
 
-        [HttpPost]
+        [HttpPost("forgotpassword")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotPassword(ForgotPassword formModel)
@@ -441,14 +443,14 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("customers/forgot_password", WorkContext);
         }
 
-        [HttpGet]
+        [HttpGet("forgotlogin")]
         [AllowAnonymous]
         public ActionResult ForgotLogin()
         {
             return View("customers/forgot_login", WorkContext);
         }
 
-        [HttpPost]
+        [HttpPost("forgotlogin")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotLogin(ForgotPassword formModel)
@@ -476,7 +478,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("customers/forgot_login", WorkContext);
         }
 
-        [HttpGet]
+        [HttpGet("resetpassword")]
         [AllowAnonymous]
         public async Task<ActionResult> ResetPassword(string token, string userId)
         {
@@ -510,7 +512,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("customers/reset_password", WorkContext);
         }
 
-        [HttpPost]
+        [HttpPost("resetpassword")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(ResetPassword formModel)
@@ -562,7 +564,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("customers/reset_password", WorkContext);
         }
 
-        [HttpPost]
+        [HttpPost("password")]
         public async Task<ActionResult> ChangePassword(ChangePassword formModel)
         {
             var result = await _signInManager.UserManager.ChangePasswordAsync(WorkContext.CurrentUser, formModel.OldPassword, formModel.NewPassword);
@@ -577,7 +579,6 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View("customers/account", WorkContext);
             }
         }
-
 
         private static string GetUserEmail(User user)
         {

@@ -1,12 +1,15 @@
 using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
+    [StorefrontRoute("error")]
     public class ErrorController : Controller
     {
+        [HttpGet("{errCode}")]
         public IActionResult Error(int? errCode)
         {
             var exceptionFeature = base.HttpContext.Features.Get<IExceptionHandlerFeature>();
@@ -21,6 +24,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return View();
         }
 
+        [HttpGet("AccessDenied")]
         public IActionResult AccessDenied()
         {          
             return View("AccessDenied");

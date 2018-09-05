@@ -1,12 +1,14 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Recommendations;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [StorefrontApiRoute("recommendations")]
     public class ApiRecommendationsController : StorefrontControllerBase
     {
         private readonly IRecommendationProviderFactory _providerFactory;

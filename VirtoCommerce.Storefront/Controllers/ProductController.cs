@@ -10,6 +10,7 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
+    [StorefrontRoute]
     public class ProductController : StorefrontControllerBase
     {
         private readonly ICatalogService _catalogSearchService;
@@ -25,6 +26,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// </summary>
         /// <param name="productId"></param>
         /// <returns></returns
+        [HttpGet("product/{productId}")]
         public async Task<ActionResult> ProductDetails(string productId)
         {
             var product = (await _catalogSearchService.GetProductsAsync(new[] { productId }, WorkContext.CurrentProductResponseGroup)).FirstOrDefault();
@@ -70,6 +72,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("product", WorkContext);
         }
 
+        [HttpGet("compare")]
         public ActionResult Compare()
         {
             return View("product-compare");

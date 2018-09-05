@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
@@ -9,6 +10,7 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
+    [StorefrontRoute("vendor")]
     public class VendorController : StorefrontControllerBase
     {
         private readonly IMemberService _customerService;
@@ -27,7 +29,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// </summary>
         /// <param name="vendorId"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("{vendorId}")]
         public async Task<ActionResult> VendorDetails(string vendorId)
         {
             var vendor = (await _customerService.GetVendorsByIdsAsync(base.WorkContext.CurrentStore, base.WorkContext.CurrentLanguage, vendorId)).FirstOrDefault();

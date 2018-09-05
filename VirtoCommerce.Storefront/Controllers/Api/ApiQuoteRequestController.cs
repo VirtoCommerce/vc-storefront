@@ -3,6 +3,7 @@ using PagedList.Core;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Catalog;
@@ -14,6 +15,7 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [StorefrontApiRoute("")]
     public class ApiQuoteRequestController : StorefrontControllerBase
     {
         private readonly IQuoteRequestBuilder _quoteRequestBuilder;
@@ -31,7 +33,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/quoterequests/search
-        [HttpPost]
+        [HttpPost("quoterequests/search")]
         public ActionResult QuoteSearch([FromBody] QuoteSearchCriteria criteria)
         {
             if (WorkContext.CurrentUser.IsRegisteredUser)
@@ -49,7 +51,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // GET: storefrontapi/quoterequests/{number}/itemscount
-        [HttpGet]
+        [HttpGet("quoterequests/{number}/itemscount")]
         public async Task<ActionResult> GetItemsCount(string number)
         {
             await _quoteRequestBuilder.LoadQuoteRequestAsync(number, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
@@ -61,7 +63,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // GET: storefrontapi/quoterequests/{number}
-        [HttpGet]
+        [HttpGet("quoterequests/{number}")]
         public async Task<ActionResult> Get(string number)
         {
             var builder = await _quoteRequestBuilder.LoadQuoteRequestAsync(number, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
@@ -75,7 +77,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // GET: storefrontapi/quoterequest/current
-        [HttpGet]
+        [HttpGet("quoterequest/current")]
         public ActionResult GetCurrent()
         {
             EnsureQuoteRequestBelongsToCurrentCustomer(WorkContext.CurrentQuoteRequest.Value);
@@ -83,7 +85,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/quoterequests/current/items
-        [HttpPost]
+        [HttpPost("quoterequests/current/items")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddItem([FromBody] AddQuoteItem addQuoteItem)
         {
@@ -104,7 +106,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // DELETE: storefrontapi/quoterequest/{number}/items/{itemId}
-        [HttpDelete]
+        [HttpDelete("quoterequests/{number}/items/{itemId}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemoveItem(string number, string itemId)
         {
@@ -119,7 +121,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/quoterequest/{number}/submit
-        [HttpPost]
+        [HttpPost("quoterequests/{number}/submit")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Submit(string number, [FromBody] QuoteRequestFormModel quoteForm)
         {
@@ -137,7 +139,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/quoterequest/{number}/reject
-        [HttpPost]
+        [HttpPost("quoterequests/{number}/reject")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Reject(string number)
         {
@@ -154,7 +156,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // PUT: storefrontapi/quoterequest/{number}/update
-        [HttpPut]
+        [HttpPut("quoterequests/{number}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Update(string number, [FromBody] QuoteRequestFormModel quoteRequest)
         {
@@ -172,7 +174,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/quoterequests/{number}/totals
-        [HttpPost]
+        [HttpPost("quoterequests/{number}/totals")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CalculateTotals(string number, [FromBody] QuoteRequestFormModel quoteRequest)
         {
@@ -188,7 +190,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/quoterequests/{number}/confirm
-        [HttpPost]
+        [HttpPost("quoterequests/{number}/confirm")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Confirm([FromRoute]string number, [FromBody] QuoteRequestFormModel quoteRequest)
         {

@@ -355,9 +355,8 @@ namespace VirtoCommerce.Storefront
             });
             app.UseMvc(routes =>
             {
-                routes.MapStorefrontRoutes();
+                routes.MapSlugRoute("{*path}", defaults: new { controller = "Home", action = "Index" });
             });
-
         }
     }
 }

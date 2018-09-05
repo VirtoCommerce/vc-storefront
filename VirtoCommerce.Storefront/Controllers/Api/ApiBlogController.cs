@@ -2,12 +2,14 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [StorefrontApiRoute("blog")]
     public class ApiBlogController : StorefrontControllerBase
     {
         public ApiBlogController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder)
@@ -16,7 +18,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/blog/{blogName}/search
-        [HttpPost]
+        [HttpPost("{blogName}/search")]
         [ValidateAntiForgeryToken]
         public ActionResult Search([FromQuery] string blogName, [FromBody] BlogSearchCriteria criteria)
         {

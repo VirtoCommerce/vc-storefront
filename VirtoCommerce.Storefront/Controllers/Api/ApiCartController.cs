@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
 using VirtoCommerce.Storefront.Domain;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
@@ -18,6 +19,7 @@ using orderModel = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Mode
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [StorefrontApiRoute("cart")]
     public class ApiCartController : StorefrontControllerBase
     {
         private readonly ICartBuilder _cartBuilder;
@@ -49,7 +51,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // PUT: storefrontapi/cart/comment
-        [HttpPut]
+        [HttpPut("comment")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> UpdateCartComment([FromBody] string comment)
         {
@@ -67,7 +69,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // GET: storefrontapi/cart/itemscount
-        [HttpGet]
+        [HttpGet("itemscount")]
         public async Task<ActionResult> GetCartItemsCount()
         {
             EnsureCartExists();
@@ -78,7 +80,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/cart/items
-        [HttpPost]
+        [HttpPost("items")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddItemToCart([FromBody] AddCartItem cartItem)
         {
@@ -100,7 +102,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // PUT: storefrontapi/cart/items/price
-        [HttpPut]
+        [HttpPut("items/price")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangeCartItemPrice([FromBody] ChangeCartItemPrice newPrice)
         {
@@ -132,7 +134,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // PUT: storefrontapi/cart/items?lineItemId=...&quantity=...
-        [HttpPut]
+        [HttpPut("items")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangeCartItem([FromBody] ChangeCartItemQty changeQty)
         {
@@ -154,7 +156,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // DELETE: storefrontapi/cart/items?lineItemId=...
-        [HttpDelete]
+        [HttpDelete("items")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemoveCartItem(string lineItemId)
         {
@@ -172,7 +174,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/cart/clear
-        [HttpPost]
+        [HttpPost("clear")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ClearCart()
         {
@@ -189,7 +191,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // GET: storefrontapi/cart/shipments/{shipmentId}/shippingmethods
-        [HttpGet]
+        [HttpGet("shipments/{shipmentId}/shippingmethods")]
         public async Task<ActionResult> GetCartShipmentAvailShippingMethods(string shipmentId)
         {
             EnsureCartExists();
@@ -201,7 +203,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // GET: storefrontapi/cart/paymentmethods
-        [HttpGet]
+        [HttpGet("paymentmethods")]
         public async Task<ActionResult> GetCartAvailPaymentMethods()
         {
             EnsureCartExists();
@@ -213,7 +215,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/cart/coupons/{couponCode}
-        [HttpPost]
+        [HttpPost("coupons/{couponCode}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddCartCoupon(string couponCode)
         {
@@ -232,7 +234,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
 
         // DELETE: storefrontapi/cart/coupons
-        [HttpDelete]
+        [HttpDelete("coupons")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemoveCartCoupon()
         {
@@ -251,7 +253,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
 
         // POST: storefrontapi/cart/paymentPlan    
-        [HttpPost]
+        [HttpPost("paymentPlan")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddOrUpdateCartPaymentPlan([FromBody] PaymentPlan paymentPlan)
         {
@@ -271,7 +273,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // DELETE: storefrontapi/cart/paymentPlan    
-        [HttpDelete]
+        [HttpDelete("paymentPlan")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteCartPaymentPlan()
         {
@@ -290,7 +292,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
 
         // POST: storefrontapi/cart/shipments    
-        [HttpPost]
+        [HttpPost("shipments")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddOrUpdateCartShipment([FromBody] Shipment shipment)
         {
@@ -308,7 +310,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/cart/payments
-        [HttpPost]
+        [HttpPost("payments")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddOrUpdateCartPayment([FromBody] Payment payment)
         {
@@ -330,7 +332,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/cart/createorder
-        [HttpPost]
+        [HttpPost("createorder")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateOrder([FromBody] orderModel.BankCardInfo bankCardInfo)
         {

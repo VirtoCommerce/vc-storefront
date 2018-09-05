@@ -1,11 +1,15 @@
 using Microsoft.AspNetCore.Routing;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Extensions;
 
 namespace VirtoCommerce.Storefront.Routing
@@ -22,9 +26,11 @@ namespace VirtoCommerce.Storefront.Routing
       
         protected override async Task OnRouteMatched(RouteContext context)
         {
-            var seoRouteService = context.HttpContext.RequestServices.GetRequiredService<ISlugRouteService>();
-            var storefrontUrlBuilder = context.HttpContext.RequestServices.GetRequiredService<IStorefrontUrlBuilder>();
-            var workContext = context.HttpContext.RequestServices.GetRequiredService<IWorkContextAccessor>().WorkContext;
+            var serviceProvider = context.HttpContext.RequestServices;
+
+            var seoRouteService = serviceProvider.GetRequiredService<ISlugRouteService>();
+            var storefrontUrlBuilder = serviceProvider.GetRequiredService<IStorefrontUrlBuilder>();
+            var workContext = serviceProvider.GetRequiredService<IWorkContextAccessor>().WorkContext;
 
             var path = context.HttpContext.Request.Path.TrimStoreAndLangSegment(workContext.CurrentStore, workContext.CurrentLanguage).ToString().TrimStart('/');
 
@@ -47,9 +53,49 @@ namespace VirtoCommerce.Storefront.Routing
                             context.RouteData.Values[kvp.Key] = kvp.Value;
                         }
                     }
+
+                    var actionDescriptor = FindMatchingActionDescriptor(context.RouteData.Values, serviceProvider);
+                    if (actionDescriptor != null)
+                    {
+                        context.Handler = httpContext =>
+                        {
+                            var actionContext = new ActionContext(httpContext, context.RouteData, actionDescriptor);
+
+                            var actionInvokerFactory = serviceProvider.GetRequiredService<IActionInvokerFactory>();
+                            var invoker = actionInvokerFactory.CreateInvoker(actionContext);
+
+                            return invoker.InvokeAsync();
+                        };
+
+                        return;
+                    }
                 }
             }
             await base.OnRouteMatched(context);
+        }
+
+        private ActionDescriptor FindMatchingActionDescriptor(IReadOnlyDictionary<string, object> routeDataValues,
+            IServiceProvider serviceProvider)
+        {
+            if (!routeDataValues.TryGetValue("controller", out var controllerNameObject))
+                return null;
+
+            if (!routeDataValues.TryGetValue("action", out var actionNameObject))
+                return null;
+
+            var controllerName = (string)controllerNameObject;
+            var actionName = (string)actionNameObject;
+
+            var actionDescriptorCollectionProvider = serviceProvider.GetRequiredService<IActionDescriptorCollectionProvider>();
+            var actions = actionDescriptorCollectionProvider.ActionDescriptors;
+
+            var controllerActions = actions.Items.OfType<ControllerActionDescriptor>();
+
+            var matchingAction = controllerActions.FirstOrDefault(action =>
+                action.ControllerName == controllerName &&
+                action.ActionName == actionName);
+
+            return matchingAction;
         }
     }
 }
