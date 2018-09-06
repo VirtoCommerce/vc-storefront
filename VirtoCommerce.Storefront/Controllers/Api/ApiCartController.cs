@@ -224,9 +224,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
 
-                var isUnique = await cartBuilder.AddCouponAsync(couponCode);
+                await cartBuilder.AddCouponAsync(couponCode);
                 await cartBuilder.SaveAsync();
-                return Json(isUnique? cartBuilder.Cart.Coupons.Last() : null);
+                return null;
             }
         }
 

@@ -168,26 +168,21 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.FromResult((object)null);
         }
 
-        public virtual Task<bool> AddCouponAsync(string couponCode)
+        public virtual Task AddCouponAsync(string couponCode)
         {
             EnsureCartExists();
             if (!Cart.Coupons.Any(c => c.Code == couponCode))
             {
                 Cart.Coupons.Add(new Coupon { Code = couponCode });
-                return Task.FromResult(true);
             }
-            else
-            {
-                return Task.FromResult(false);
-            }
+
+            return Task.FromResult((object)null);
         }
 
         public virtual Task RemoveCouponAsync(string couponCode)
         {
             EnsureCartExists();
-            var coupon = Cart.Coupons.FirstOrDefault(c => c.Code == couponCode);
-            if (coupon != null)
-                Cart.Coupons.Remove(coupon);
+            Cart.Coupons.ToList().RemoveAll(c => c.Code == couponCode);
             return Task.FromResult((object)null);
         }
 
@@ -484,7 +479,6 @@ namespace VirtoCommerce.Storefront.Domain
                 Type = type,
                 IsAnonymous = !user.IsRegisteredUser,
                 CustomerName = user.IsRegisteredUser ? user.UserName : SecurityConstants.AnonymousUsername,
-                Coupons = new List<Coupon>(),
             };
 
             return cart;

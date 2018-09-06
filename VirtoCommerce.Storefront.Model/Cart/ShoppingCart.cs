@@ -374,8 +374,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
             foreach (var coupon in Coupons)
             {
-                if (!string.IsNullOrEmpty(coupon.Code))
-                    coupon.AppliedSuccessfully = rewards.Any(x => x.IsValid && x.Coupon == coupon.Code);
+                coupon.AppliedSuccessfully = !string.IsNullOrEmpty(coupon.Code) && rewards.Any(x => x.IsValid && x.Coupon.EqualsInvariant(coupon.Code));
             }
         }
         #endregion

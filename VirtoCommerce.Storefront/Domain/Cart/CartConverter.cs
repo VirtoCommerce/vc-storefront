@@ -431,11 +431,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (cartDto.Coupons != null)
             {
-                result.Coupons = new List<Coupon>(cartDto.Coupons.Select(coupon => new Coupon
-                {
-                    Code = coupon,
-                    AppliedSuccessfully = !string.IsNullOrEmpty(coupon)
-                }));
+                result.Coupons = cartDto.Coupons?.Select(c => new Coupon { Code = c, AppliedSuccessfully = !string.IsNullOrEmpty(c) }).ToList();
             }
 
             if (cartDto.Items != null)
@@ -522,7 +518,7 @@ namespace VirtoCommerce.Storefront.Domain
                 result.LanguageCode = cart.Language.CultureName;
             }
             result.Addresses = cart.Addresses.Select(ToCartAddressDto).ToList();
-            result.Coupons = cart.Coupons != null ? cart.Coupons.Select(c => c.Code).ToList() : null;
+            result.Coupons = cart.Coupons?.Select(c => c.Code).ToList();
             result.Currency = cart.Currency.Code;
             result.Discounts = cart.Discounts.Select(ToCartDiscountDto).ToList();
             result.HandlingTotal = (double)cart.HandlingTotal.InternalAmount;
