@@ -226,7 +226,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
                 await cartBuilder.AddCouponAsync(couponCode);
                 await cartBuilder.SaveAsync();
-                return null;
+                return Ok();
             }
         }
 
