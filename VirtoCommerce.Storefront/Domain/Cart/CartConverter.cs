@@ -431,7 +431,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (cartDto.Coupons != null)
             {
-                result.Coupons = cartDto.Coupons?.Select(c => new Coupon { Code = c, AppliedSuccessfully = !string.IsNullOrEmpty(c) }).ToList();
+                result.Coupons = cartDto.Coupons.Select(c => new Coupon { Code = c, AppliedSuccessfully = !string.IsNullOrEmpty(c) }).ToList();
             }
 
             if (cartDto.Items != null)

@@ -101,7 +101,6 @@ namespace VirtoCommerce.Storefront.Model.Cart
         //public Coupon Coupon { get; set; }
 
         /// <summary>
-        /// <summary>
         /// Gets or sets the flag of shopping cart is recurring
         /// </summary>
         public bool IsRecuring { get; set; }

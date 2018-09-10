@@ -171,7 +171,7 @@ namespace VirtoCommerce.Storefront.Domain
         public virtual Task AddCouponAsync(string couponCode)
         {
             EnsureCartExists();
-            if (!Cart.Coupons.Any(c => c.Code == couponCode))
+            if (!Cart.Coupons.Any(c => c.Code.EqualsInvariant(couponCode)))
             {
                 Cart.Coupons.Add(new Coupon { Code = couponCode });
             }
@@ -182,7 +182,7 @@ namespace VirtoCommerce.Storefront.Domain
         public virtual Task RemoveCouponAsync(string couponCode)
         {
             EnsureCartExists();
-            Cart.Coupons.Remove(Cart.Coupons.FirstOrDefault(c => c.Code == couponCode));
+            Cart.Coupons.Remove(Cart.Coupons.FirstOrDefault(c => c.Code.EqualsInvariant(couponCode)));
             return Task.FromResult((object)null);
         }
 
