@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.FileProviders.Physical;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using VirtoCommerce.Storefront.Caching;
+using VirtoCommerce.Storefront.Domain.ContentBlobProviders;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
@@ -23,7 +25,7 @@ namespace VirtoCommerce.Storefront.Domain
         // Keep links to file watchers to prevent GC to collect it
         private readonly PhysicalFilesWatcher _fileSystemWatcher;
 
-        public FileSystemContentBlobProvider(IOptions<FileSystemBlobContentOptions> options, IStorefrontMemoryCache memoryCache)
+        public FileSystemContentBlobProvider(IOptions<FileSystemBlobContentOptions> options, IStorefrontMemoryCache memoryCache, IHostingEnvironment hostingEnvironment)
         {
             _options = options.Value;
             _memoryCache = memoryCache;
@@ -32,7 +34,13 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 //It is very important to have rootPath with leading slash '\' without this any changes won't reflected
                 var rootPath = _options.Path.TrimEnd('\\') + '\\';
-                _fileSystemWatcher = new PhysicalFilesWatcher(rootPath, new FileSystemWatcher(rootPath), false);
+                var improvedFileSystemWatcher = new FileSystemWatcher(rootPath);
+                if (hostingEnvironment.IsDevelopment())
+                {
+                    improvedFileSystemWatcher.Created += new FileSystemEventHandler(watcher_Created);
+                }
+
+                _fileSystemWatcher = new PhysicalFilesWatcher(rootPath, improvedFileSystemWatcher, false);
             }
         }
         #region IContentBlobProvider Members
@@ -50,6 +58,24 @@ namespace VirtoCommerce.Storefront.Domain
                 throw new InvalidOperationException(path);
             }
             return File.OpenRead(path);
+        }
+
+        static void watcher_Created(object sender, FileSystemEventArgs e)
+        {
+          
+                Console.WriteLine("Created: " + e.FullPath);
+                FileAttributes attributes = File.GetAttributes(e.FullPath);
+                if (attributes == (FileAttributes.Directory | FileAttributes.ReparsePoint))
+                {
+                    FileSystemWatcher watcher = new FileSystemWatcher();
+                    string path = JunctionPoint.GetTarget(e.FullPath);
+                    watcher.Path = path;
+
+                    watcher.Created += new FileSystemEventHandler(watcher_Created);
+                    watcher.IncludeSubdirectories = true;
+                    watcher.EnableRaisingEvents = true;
+                }
+          
         }
 
         /// <summary>
@@ -128,6 +154,8 @@ namespace VirtoCommerce.Storefront.Domain
                 {
                     path = GetRelativePath(path).TrimStart('/');
                 }
+
+
                 return _fileSystemWatcher.CreateFileChangeToken(path);
             }
             else
@@ -135,6 +163,7 @@ namespace VirtoCommerce.Storefront.Domain
                 return new CancellationChangeToken(new CancellationToken());
             }
         }
+
         #endregion
 
         protected virtual string GetRelativePath(string path)
