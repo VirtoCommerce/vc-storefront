@@ -224,17 +224,25 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
 
+                var originalCount = cartBuilder.Cart.Coupons.Count;
                 await cartBuilder.AddCouponAsync(couponCode);
+                await cartBuilder.EvaluatePromotionsAsync();
+                if (cartBuilder.Cart.Coupons.Count > originalCount
+                    && !cartBuilder.Cart.Coupons.Last().AppliedSuccessfully)
+                {
+                    cartBuilder.Cart.Coupons.Remove(cartBuilder.Cart.Coupons.Last());
+                }
                 await cartBuilder.SaveAsync();
+
                 return Ok();
             }
         }
 
 
-        // DELETE: storefrontapi/cart/coupons
+        // DELETE: storefrontapi/cart/coupons/{couponCode}
         [HttpDelete]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RemoveCartCoupon(string coupon)
+        public async Task<ActionResult> RemoveCartCoupon(string couponCode)
         {
             EnsureCartExists();
 
@@ -242,7 +250,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
-                await cartBuilder.RemoveCouponAsync(coupon);
+                await cartBuilder.RemoveCouponAsync(couponCode);
                 await cartBuilder.SaveAsync();
             }
 
