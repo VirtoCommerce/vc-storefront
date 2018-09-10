@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace VirtoCommerce.Storefront.Domain
+namespace VirtoCommerce.Storefront.Domain.ContentBlobProviders
 {
     public class FileSystemBlobContentOptions
     {

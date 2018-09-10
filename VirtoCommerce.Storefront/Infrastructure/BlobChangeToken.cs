@@ -8,6 +8,7 @@ using Microsoft.Extensions.Primitives;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using VirtoCommerce.Storefront.Domain;
+using VirtoCommerce.Storefront.Domain.ContentBlobProviders;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Infrastructure

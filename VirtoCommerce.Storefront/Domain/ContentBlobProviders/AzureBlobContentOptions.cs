@@ -1,7 +1,7 @@
 using System;
 using Microsoft.WindowsAzure.Storage.Blob;
 
-namespace VirtoCommerce.Storefront.Domain
+namespace VirtoCommerce.Storefront.Domain.ContentBlobProviders
 {
     public class AzureBlobContentOptions
     {

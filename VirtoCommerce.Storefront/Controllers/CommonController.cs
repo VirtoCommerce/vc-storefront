@@ -7,6 +7,7 @@ using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Domain;
+using VirtoCommerce.Storefront.Domain.ContentBlobProviders;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;

@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web;
 
-namespace VirtoCommerce.Storefront.Domain
+namespace VirtoCommerce.Storefront.Domain.ContentBlobProviders
 {
     /// <summary>
     /// Represent blob resources connection string which can contains complex part as Provider, basepath etc

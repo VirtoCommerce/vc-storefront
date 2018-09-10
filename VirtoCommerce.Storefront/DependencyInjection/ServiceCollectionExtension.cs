@@ -33,6 +33,7 @@ using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Domain;
+using VirtoCommerce.Storefront.Domain.ContentBlobProviders;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Infrastructure.Autorest;
 using VirtoCommerce.Storefront.Model.Common.Bus;

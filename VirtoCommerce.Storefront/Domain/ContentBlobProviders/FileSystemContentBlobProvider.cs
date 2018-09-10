@@ -8,15 +8,14 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.FileProviders.Physical;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
-using VirtoCommerce.Storefront.Caching;
-using VirtoCommerce.Storefront.Domain.ContentBlobProviders;
+using VirtoCommerce.Storefront.Domain.ContentBlobProviders.SymbolicLinks;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.StaticContent;
 
-namespace VirtoCommerce.Storefront.Domain
+namespace VirtoCommerce.Storefront.Domain.ContentBlobProviders
 {
     public class FileSystemContentBlobProvider : IContentBlobProvider
     {
@@ -37,7 +36,7 @@ namespace VirtoCommerce.Storefront.Domain
                 var improvedFileSystemWatcher = new FileSystemWatcher(rootPath);
                 if (hostingEnvironment.IsDevelopment())
                 {
-                    improvedFileSystemWatcher.Created += new FileSystemEventHandler(watcher_Created);
+                    improvedFileSystemWatcher.Created += new FileSystemEventHandler(WatcherCreated);
                 }
 
                 _fileSystemWatcher = new PhysicalFilesWatcher(rootPath, improvedFileSystemWatcher, false);
@@ -60,22 +59,20 @@ namespace VirtoCommerce.Storefront.Domain
             return File.OpenRead(path);
         }
 
-        static void watcher_Created(object sender, FileSystemEventArgs e)
+        static void WatcherCreated(object sender, FileSystemEventArgs e)
         {
-          
-                Console.WriteLine("Created: " + e.FullPath);
-                FileAttributes attributes = File.GetAttributes(e.FullPath);
-                if (attributes == (FileAttributes.Directory | FileAttributes.ReparsePoint))
-                {
-                    FileSystemWatcher watcher = new FileSystemWatcher();
-                    string path = JunctionPoint.GetTarget(e.FullPath);
-                    watcher.Path = path;
+            Console.WriteLine("Created: " + e.FullPath);
+            FileAttributes attributes = File.GetAttributes(e.FullPath);
+            if (attributes == (FileAttributes.Directory | FileAttributes.ReparsePoint))
+            {
+                FileSystemWatcher watcher = new FileSystemWatcher();
+                string path = JunctionPoint.JPInvoke.GetTarget(e.FullPath);
+                watcher.Path = path;
 
-                    watcher.Created += new FileSystemEventHandler(watcher_Created);
-                    watcher.IncludeSubdirectories = true;
-                    watcher.EnableRaisingEvents = true;
-                }
-          
+                watcher.Created += new FileSystemEventHandler(WatcherCreated);
+                watcher.IncludeSubdirectories = true;
+                watcher.EnableRaisingEvents = true;
+            }
         }
 
         /// <summary>
@@ -146,7 +143,6 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual IChangeToken Watch(string path)
         {
-            //TODO: Test with symbolic links
             if (_fileSystemWatcher != null)
             {
                 // Absolute paths not permitted for watcher, need to convert it to relative
@@ -154,14 +150,10 @@ namespace VirtoCommerce.Storefront.Domain
                 {
                     path = GetRelativePath(path).TrimStart('/');
                 }
-
-
                 return _fileSystemWatcher.CreateFileChangeToken(path);
             }
-            else
-            {
-                return new CancellationChangeToken(new CancellationToken());
-            }
+
+            return new CancellationChangeToken(new CancellationToken());
         }
 
         #endregion
