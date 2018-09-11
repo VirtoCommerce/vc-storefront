@@ -160,6 +160,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Currency = criteria.Currency?.Code ?? workContext.CurrentCurrency.Code,
                 Pricelists = workContext.CurrentPricelists.Where(p => p.Currency.Equals(workContext.CurrentCurrency)).Select(p => p.Id).ToList(),
                 PriceRange = criteria.PriceRange?.ToNumericRangeDto(),
+                UserGroups = workContext.CurrentUser?.Contact?.UserGroups ?? new List<string>(), // null value disables filtering by user groups
                 Terms = criteria.Terms.ToStrings(),
                 Sort = criteria.SortBy,
                 Skip = criteria.Start,
@@ -177,17 +178,6 @@ namespace VirtoCommerce.Storefront.Domain
                 }
 
                 result.Terms.Add(string.Concat("vendor:", criteria.VendorId));
-            }
-            // Add user groups to terms
-            var contact = workContext.CurrentUser?.Contact;
-            if (contact != null && !contact.UserGroups.IsNullOrEmpty())
-            {
-                if (result.UserGroups == null)
-                {
-                    result.UserGroups = new List<string>();
-                }
-                //search products with user_groups defined in customer
-                result.UserGroups.AddRange(contact.UserGroups);
             }
 
             return result;
@@ -213,22 +203,13 @@ namespace VirtoCommerce.Storefront.Domain
                 StoreId = workContext.CurrentStore.Id,
                 CatalogId = workContext.CurrentStore.Catalog,
                 Outline = criteria.Outline,
+                UserGroups = workContext.CurrentUser?.Contact?.UserGroups ?? new List<string>(), // null value disables filtering by user groups
                 Sort = criteria.SortBy,
                 Skip = criteria.Start,
                 Take = criteria.PageSize,
                 ResponseGroup = ((int)criteria.ResponseGroup).ToString(),
                 IsFuzzySearch = criteria.IsFuzzySearch,
             };
-            var contact = workContext.CurrentUser?.Contact;
-            if (contact != null && !contact.UserGroups.IsNullOrEmpty())
-            {
-                if (result.UserGroups == null)
-                {
-                    result.UserGroups = new List<string>();
-                }
-                //search categories with user_groups defined in customer
-                result.UserGroups.AddRange(contact.UserGroups);
-            }
 
             return result;
         }
