@@ -203,22 +203,13 @@ namespace VirtoCommerce.Storefront.Domain
                 StoreId = workContext.CurrentStore.Id,
                 CatalogId = workContext.CurrentStore.Catalog,
                 Outline = criteria.Outline,
+                UserGroups = workContext.CurrentUser?.Contact?.UserGroups ?? new List<string>(), // null value disables filtering by user groups
                 Sort = criteria.SortBy,
                 Skip = criteria.Start,
                 Take = criteria.PageSize,
                 ResponseGroup = ((int)criteria.ResponseGroup).ToString(),
                 IsFuzzySearch = criteria.IsFuzzySearch,
             };
-            var contact = workContext.CurrentUser?.Contact;
-            if (contact != null && !contact.UserGroups.IsNullOrEmpty())
-            {
-                if (result.UserGroups == null)
-                {
-                    result.UserGroups = new List<string>();
-                }
-                //search categories with user_groups defined in customer
-                result.UserGroups.AddRange(contact.UserGroups);
-            }
 
             return result;
         }
