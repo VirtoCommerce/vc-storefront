@@ -15,5 +15,12 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             return View("designer-preview");
         }
+
+        [HttpPost("designer-preview/block")]
+        public IActionResult Block(string content)
+        {
+            // TODO: data does not bind still
+            return Content("success");
+        }
     }
 }
