@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Infrastructure;
+using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
@@ -16,8 +17,8 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("designer-preview");
         }
 
-        [HttpPost("designer-preview/block")]
-        public IActionResult Block(string content)
+        [HttpPost("designer-preview/blocks")]
+        public IActionResult Blocks([FromBody]JsonPage content)
         {
             // TODO: data does not bind still
             return Content("success");
