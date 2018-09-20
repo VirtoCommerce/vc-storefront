@@ -1,3 +1,4 @@
+using System.Linq;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 using StorefrontModel = VirtoCommerce.Storefront.Model;
 
@@ -21,6 +22,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.Value = property.Value;
             result.Name = property.Name;
             result.DisplayName = property.DisplayName ?? property.Name;
+            if (property.IsMultivalue) {                
+                result.Values = property.Values.ToArray<string>();
+            }            
             return result;
         }
     }
