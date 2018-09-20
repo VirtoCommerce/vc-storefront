@@ -25,6 +25,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// Property value in current language
         /// </summary>
         public string Value { get; set; }
-
+        
+        /// <summary>
+        /// Property values in current language
+        /// </summary>
+        public string[] Values { get; set; }
     }
 }
