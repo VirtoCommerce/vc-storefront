@@ -11,7 +11,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
     {
         public static Collection ToShopifyModel(this storefrontModel.Category category, WorkContext workContext)
         {
-            var converter = new  ShopifyModelConverter();
+            var converter = new ShopifyModelConverter();
             return converter.ToLiquidCollection(category, workContext);
         }
     }
@@ -37,36 +37,36 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
             if (category.Products != null)
             {
-                result.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos) =>
+                result.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
                 {
-                    category.Products.Slice(pageNumber, pageSize, sortInfos);
+                    category.Products.Slice(pageNumber, pageSize, sortInfos, @params);
                     return new StaticPagedList<Product>(category.Products.Select(x => ToLiquidProduct(x)), category.Products);
                 }, category.Products.PageNumber, category.Products.PageSize);
             }
 
             if (category.Parents != null)
             {
-                result.Parents = new Collections(new MutablePagedList<Collection>((pageNumber, pageSize, sortInfos) =>
+                result.Parents = new Collections(new MutablePagedList<Collection>((pageNumber, pageSize, sortInfos, @params) =>
                 {
-                    category.Parents.Slice(pageNumber, pageSize, sortInfos);
+                    category.Parents.Slice(pageNumber, pageSize, sortInfos, @params);
                     return new StaticPagedList<Collection>(category.Parents.Select(x => ToLiquidCollection(x, workContext)), category.Parents);
                 }, category.Parents.PageNumber, category.Parents.PageSize));
             }
 
             if (category.Categories != null)
             {
-                result.Collections = new Collections(new MutablePagedList<Collection>((pageNumber, pageSize, sortInfos) =>
+                result.Collections = new Collections(new MutablePagedList<Collection>((pageNumber, pageSize, sortInfos, @params) =>
                  {
-                     category.Categories.Slice(pageNumber, pageSize, sortInfos);
+                     category.Categories.Slice(pageNumber, pageSize, sortInfos, @params);
                      return new StaticPagedList<Collection>(category.Categories.Select(x => ToLiquidCollection(x, workContext)), category.Categories);
                  }, category.Categories.PageNumber, category.Categories.PageSize));
             }
 
             if (workContext.Aggregations != null)
             {
-                result.Tags = new TagCollection(new MutablePagedList<Tag>((pageNumber, pageSize, sortInfos) =>
+                result.Tags = new TagCollection(new MutablePagedList<Tag>((pageNumber, pageSize, sortInfos, @params) =>
                 {
-                    workContext.Aggregations.Slice(pageNumber, pageSize, sortInfos);
+                    workContext.Aggregations.Slice(pageNumber, pageSize, sortInfos, @params);
                     var tags = workContext.Aggregations.Where(a => a.Items != null)
                                            .SelectMany(a => a.Items.Select(item => ToLiquidTag(item, a)));
                     return new StaticPagedList<Tag>(tags, workContext.Aggregations);

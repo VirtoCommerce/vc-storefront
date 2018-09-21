@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Domain;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
@@ -13,6 +14,7 @@ using orderModel = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Mode
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [StorefrontApiRoute("orders")]
     public class ApiOrderController : StorefrontControllerBase
     {
         private readonly IOrderModule _orderApi;
@@ -26,7 +28,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/orders/search
-        [HttpPost]
+        [HttpPost("search")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> SearchCustomerOrders([FromBody] OrderSearchCriteria criteria)
         {
@@ -47,7 +49,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // GET: storefrontapi/orders/{orderNumber}
-        [HttpGet]
+        [HttpGet("{orderNumber}")]
         public async Task<ActionResult> GetCustomerOrder(string orderNumber)
         {
             var retVal = await GetOrderByNumber(orderNumber);
@@ -55,7 +57,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // GET: storefrontapi/orders/{orderNumber}/newpaymentdata
-        [HttpGet]
+        [HttpGet("{orderNumber}/newpaymentdata")]
         public async Task<ActionResult> GetNewPaymentData(string orderNumber)
         {
             var order = await GetOrderByNumber(orderNumber);
@@ -77,7 +79,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/orders/{orderNumber}/payments/{paymentNumber}/cancel
-        [HttpPost]
+        [HttpPost("{orderNumber}/payments/{paymentNumber}/cancel")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CancelPayment(string orderNumber, string paymentNumber)
         {
@@ -99,7 +101,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/orders/{orderNumber}/payments/{paymentNumber}/process
-        [HttpPost]
+        [HttpPost("{orderNumber}/payments/{paymentNumber}/process")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ProcessOrderPayment(string orderNumber, string paymentNumber, [FromBody] orderModel.BankCardInfo bankCardInfo)
         {
@@ -118,7 +120,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/orders/{orderNumber}/payments
-        [HttpPost]
+        [HttpPost("{orderNumber}/payments")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddOrUpdateOrderPayment(string orderNumber, [FromBody] PaymentIn payment)
         {
@@ -158,7 +160,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // GET: storefrontapi/orders/{orderNumber}/invoice
-        [HttpGet]
+        [HttpGet("{orderNumber}/invoice")]
         public async Task<ActionResult> GetInvoicePdf(string orderNumber)
         {
             var stream = await _orderApi.GetInvoicePdfAsync(orderNumber);

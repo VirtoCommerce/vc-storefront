@@ -20,7 +20,6 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             Images = new List<Image>();
             Descriptions = new List<EditorialReview>();
             Discounts = new List<Discount>();
-            Associations = new List<Association>();
             TaxDetails = new List<TaxDetail>();
         }
 
@@ -207,7 +206,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// <summary>
         /// Related or associated products
         /// </summary>
-        public IList<Association> Associations { get; set; }
+        public IMutablePagedList<ProductAssociation> Associations { get; set; }
 
         /// <summary>
         /// Product description in current language
@@ -425,7 +424,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         #endregion
 
-  
+
 
         public override string ToString()
         {

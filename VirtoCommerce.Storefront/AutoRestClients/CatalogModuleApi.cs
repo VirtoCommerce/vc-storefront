@@ -11401,7 +11401,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
         /// Initializes a new instance of the ProductAssociationSearchResult
         /// class.
         /// </summary>
-        public ProductAssociationSearchResult(int? totalCount = default(int?), IList<Product> results = default(IList<Product>))
+        public ProductAssociationSearchResult(int? totalCount = default(int?), IList<ProductAssociation> results = default(IList<ProductAssociation>))
         {
             TotalCount = totalCount;
             Results = results;
@@ -11421,7 +11421,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "results")]
-        public IList<Product> Results { get; set; }
+        public IList<ProductAssociation> Results { get; set; }
 
     }
 }

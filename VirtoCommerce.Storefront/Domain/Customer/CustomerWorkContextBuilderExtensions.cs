@@ -33,7 +33,7 @@ namespace VirtoCommerce.Storefront.Domain
                 var vendors = customerService.SearchVendors(store, language, null, pageNumber, pageSize, sortInfos);
                 foreach (var vendor in vendors)
                 {
-                    vendor.Products = new MutablePagedList<Product>((pageNumber2, pageSize2, sortInfos2) =>
+                    vendor.Products = new MutablePagedList<Product>((pageNumber2, pageSize2, sortInfos2, @params) =>
                     {
                         var vendorProductsSearchCriteria = new ProductSearchCriteria
                         {
@@ -43,6 +43,10 @@ namespace VirtoCommerce.Storefront.Domain
                             ResponseGroup = builder.WorkContext.CurrentProductSearchCriteria.ResponseGroup & ~ItemResponseGroup.ItemWithVendor,
                             SortBy = SortInfo.ToString(sortInfos2),
                         };
+                        if (@params != null)
+                        {
+                            vendorProductsSearchCriteria.CopyFrom(@params);
+                        }
                         var searchResult = catalogService.SearchProducts(vendorProductsSearchCriteria);
                         return searchResult.Products;
                     }, 1, ProductSearchCriteria.DefaultPageSize);

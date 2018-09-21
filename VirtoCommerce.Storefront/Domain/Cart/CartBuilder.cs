@@ -5,14 +5,15 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Cart.ValidationErrors;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Marketing.Services;
@@ -22,6 +23,8 @@ using VirtoCommerce.Storefront.Model.Services;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 using VirtoCommerce.Storefront.Model.Tax.Services;
+using CacheKey = VirtoCommerce.Storefront.Model.Common.Caching.CacheKey;
+using MemoryCacheExtensions = VirtoCommerce.Storefront.Extensions.MemoryCacheExtensions;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -30,13 +33,15 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly ICartService _cartService;
         private readonly ICatalogService _catalogService;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IPromotionEvaluator _promotionEvaluator;
         private readonly ITaxEvaluator _taxEvaluator;
         private readonly ISubscriptionService _subscriptionService;
 
-        public CartBuilder(IWorkContextAccessor workContextAccessor, ICartService cartService, ICatalogService catalogSearchService,
-            IMemoryCache memoryCache, IPromotionEvaluator promotionEvaluator, ITaxEvaluator taxEvaluator, ISubscriptionService subscriptionService)
+        public CartBuilder(IWorkContextAccessor workContextAccessor, ICartService cartService,
+            ICatalogService catalogSearchService,
+            IStorefrontMemoryCache memoryCache, IPromotionEvaluator promotionEvaluator, ITaxEvaluator taxEvaluator,
+            ISubscriptionService subscriptionService)
         {
             _cartService = cartService;
             _catalogService = catalogSearchService;

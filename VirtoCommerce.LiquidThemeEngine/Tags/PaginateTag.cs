@@ -1,10 +1,12 @@
 using DotLiquid;
 using DotLiquid.Exceptions;
 using DotLiquid.Util;
+using Newtonsoft.Json;
 using PagedList.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -22,9 +24,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Tags
     public class PaginateTag : Block
     {
         private static readonly Regex _syntax = R.B(R.Q(@"({0})\s*by\s*({0}+)?"), Liquid.QuotedFragment);
-
+        private static readonly Regex _paramsSyntax = new Regex(@"({[\w\:"", ]+})");
         private string _collectionName;
         private string _paginateBy;
+        private NameValueCollection _params;
+
+
 
         public override void Initialize(string tagName, string markup, List<string> tokens)
         {
@@ -34,6 +39,17 @@ namespace VirtoCommerce.LiquidThemeEngine.Tags
             {
                 _collectionName = match.Groups[1].Value;
                 _paginateBy = match.Groups[2].Value;
+                var paramsMatch = _paramsSyntax.Match(markup);
+                if (paramsMatch.Success)
+                {
+                    var json = paramsMatch.Groups[0].Value;
+                    var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                    _params = new NameValueCollection();
+                    foreach (var pair in values)
+                    {
+                        _params.Add(pair.Key, pair.Value);
+                    }
+                }
             }
             else
             {
@@ -56,7 +72,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Tags
 
             if (mutablePagedList != null)
             {
-                mutablePagedList.Slice(pageNumber, globalPageSize > 0 ? globalPageSize : localPageSize, mutablePagedList.SortInfos);
+                mutablePagedList.Slice(pageNumber, globalPageSize > 0 ? globalPageSize : localPageSize, mutablePagedList.SortInfos, _params);
                 pagedList = mutablePagedList;
             }
             else if (collection != null)

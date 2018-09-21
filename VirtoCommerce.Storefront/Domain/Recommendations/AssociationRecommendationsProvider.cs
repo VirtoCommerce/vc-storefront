@@ -42,16 +42,10 @@ namespace VirtoCommerce.Storefront.Domain
 
         public async Task<Product[]> GetRecommendationsAsync(RecommendationEvalContext context)
         {
-            Product[] products = await _catalogService.GetProductsAsync(context.ProductIds.ToArray(), ItemResponseGroup.ItemAssociations);
-
-            //Need to load related products from associated product and categories
-            var retVal = products.SelectMany(p => p.Associations.OfType<ProductAssociation>().OrderBy(x => x.Priority))
-                                 .Select(a => a.Product).ToList();
-            retVal.AddRange(products.SelectMany(p => p.Associations.OfType<CategoryAssociation>().OrderBy(x => x.Priority))
-                                .SelectMany(a => a.Category.Products.ToArray()));
-
-            return retVal.Take(context.Take).ToArray();
-        } 
+            var products = await _catalogService.GetProductsAsync(context.ProductIds.ToArray(), ItemResponseGroup.ItemInfo);
+            var result = products.SelectMany(x => x.Associations).Take(context.Take).Select(x => x.Product).ToArray();
+            return result;
+        }
         #endregion
 
     }

@@ -1,13 +1,16 @@
 using Microsoft.Extensions.Caching.Memory;
 using PagedList.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -29,12 +32,14 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IMemberService _customerService;
         private readonly ISubscriptionService _subscriptionService;
         private readonly IInventoryService _inventoryService;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
 
-        public CatalogService(IWorkContextAccessor workContextAccessor, ICatalogModuleCategories categoriesApi, ICatalogModuleProducts productsApi,
-                              ICatalogModuleSearch searchApi, IPricingService pricingService, IMemberService customerService, ISubscriptionService subscriptionService,
-                              IInventoryService inventoryService, IMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
+        public CatalogService(IWorkContextAccessor workContextAccessor, ICatalogModuleCategories categoriesApi,
+            ICatalogModuleProducts productsApi,
+            ICatalogModuleSearch searchApi, IPricingService pricingService, IMemberService customerService,
+            ISubscriptionService subscriptionService,
+            IInventoryService inventoryService, IStorefrontMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
         {
             _workContextAccessor = workContextAccessor;
             _categoriesApi = categoriesApi;
@@ -72,18 +77,19 @@ namespace VirtoCommerce.Storefront.Domain
 
                 var allProducts = result.Concat(result.SelectMany(p => p.Variations)).ToList();
 
+
                 if (!allProducts.IsNullOrEmpty())
                 {
                     var taskList = new List<Task>();
 
-                    if (responseGroup.HasFlag(ItemResponseGroup.ItemAssociations))
-                    {
-                        taskList.Add(LoadProductAssociationsAsync(allProducts));
-                    }
-
                     if (responseGroup.HasFlag(ItemResponseGroup.Inventory))
                     {
                         taskList.Add(LoadProductInventoriesAsync(allProducts, workContext));
+                    }
+
+                    if (responseGroup.HasFlag(ItemResponseGroup.ItemAssociations))
+                    {
+                        taskList.Add(LoadProductsAssociationsAsync(allProducts, workContext));
                     }
 
                     if (responseGroup.HasFlag(ItemResponseGroup.ItemWithPrices))
@@ -132,7 +138,7 @@ namespace VirtoCommerce.Storefront.Domain
             });
             var result = categoriesDto.Select(x => x.ToCategory(workContext.CurrentLanguage, workContext.CurrentStore)).ToArray();
             //Set  lazy loading for child categories 
-            SetChildCategoriesLazyLoading(result);
+            EstablishLazyDependenciesForCategories(result);
             return result;
         }
 
@@ -173,7 +179,7 @@ namespace VirtoCommerce.Storefront.Domain
                 result = new PagedList<Category>(searchResult.Items.Select(x => x.ToCategory(workContext.CurrentLanguage, workContext.CurrentStore)).AsQueryable(), criteria.PageNumber, criteria.PageSize);
             }
             //Set  lazy loading for child categories 
-            SetChildCategoriesLazyLoading(result.ToArray());
+            EstablishLazyDependenciesForCategories(result.ToArray());
             return result;
         }
 
@@ -212,14 +218,14 @@ namespace VirtoCommerce.Storefront.Domain
                     var productsWithVariations = products.Concat(products.SelectMany(x => x.Variations)).ToList();
                     var taskList = new List<Task>();
 
-                    if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.ItemAssociations))
-                    {
-                        taskList.Add(LoadProductAssociationsAsync(productsWithVariations));
-                    }
-
                     if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.Inventory))
                     {
                         taskList.Add(LoadProductInventoriesAsync(productsWithVariations, workContext));
+                    }
+
+                    if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.ItemAssociations))
+                    {
+                        taskList.Add(LoadProductsAssociationsAsync(productsWithVariations, workContext));
                     }
 
                     if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.ItemWithVendor))
@@ -275,7 +281,7 @@ namespace VirtoCommerce.Storefront.Domain
                     product.Vendor = vendors.FirstOrDefault(v => v != null && v.Id == product.VendorId);
                     if (product.Vendor != null)
                     {
-                        product.Vendor.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos) =>
+                        product.Vendor.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
                         {
                             var criteria = new ProductSearchCriteria
                             {
@@ -285,60 +291,10 @@ namespace VirtoCommerce.Storefront.Domain
                                 ResponseGroup = workContext.CurrentProductSearchCriteria.ResponseGroup & ~ItemResponseGroup.ItemWithVendor,
                                 SortBy = SortInfo.ToString(sortInfos),
                             };
-
-                            var searchResult = SearchProducts(criteria);
-                            return searchResult.Products;
-                        }, 1, ProductSearchCriteria.DefaultPageSize);
-                    }
-                }
-            }
-        }
-
-        protected virtual async Task LoadProductAssociationsAsync(IEnumerable<Product> products)
-        {
-            var allAssociations = products.SelectMany(x => x.Associations).ToList();
-
-            var allProductAssociations = allAssociations.OfType<ProductAssociation>().ToList();
-            var allCategoriesAssociations = allAssociations.OfType<CategoryAssociation>().ToList();
-
-            if (allProductAssociations.Any())
-            {
-                var productsIds = allProductAssociations.Select(x => x.ProductId).ToArray();
-
-                var allAssociatedProducts = await GetProductsAsync(allProductAssociations.Select(x => x.ProductId).ToArray(), ItemResponseGroup.ItemInfo | ItemResponseGroup.ItemWithPrices | ItemResponseGroup.Seo | ItemResponseGroup.Outlines);
-
-                foreach (var productAssociation in allProductAssociations)
-                {
-                    productAssociation.Product = allAssociatedProducts.FirstOrDefault(x => x.Id == productAssociation.ProductId);
-                }
-            }
-
-            if (allCategoriesAssociations.Any())
-            {
-                var categoriesIds = allCategoriesAssociations.Select(x => x.CategoryId).ToArray();
-                var allAssociatedCategories = await GetCategoriesAsync(categoriesIds, CategoryResponseGroup.Info | CategoryResponseGroup.WithSeo | CategoryResponseGroup.WithOutlines | CategoryResponseGroup.WithImages);
-
-                foreach (var categoryAssociation in allCategoriesAssociations)
-                {
-                    categoryAssociation.Category = allAssociatedCategories.FirstOrDefault(x => x.Id == categoryAssociation.CategoryId);
-
-                    if (categoryAssociation.Category != null && categoryAssociation.Category.Products == null)
-                    {
-                        categoryAssociation.Category.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos) =>
-                        {
-                            var criteria = new ProductSearchCriteria
+                            if (@params != null)
                             {
-                                PageNumber = pageNumber,
-                                PageSize = pageSize,
-                                Outline = categoryAssociation.Category.Outline,
-                                ResponseGroup = ItemResponseGroup.ItemInfo | ItemResponseGroup.ItemWithPrices | ItemResponseGroup.Inventory | ItemResponseGroup.ItemWithVendor
-                            };
-
-                            if (!sortInfos.IsNullOrEmpty())
-                            {
-                                criteria.SortBy = SortInfo.ToString(sortInfos);
+                                criteria.CopyFrom(@params);
                             }
-
                             var searchResult = SearchProducts(criteria);
                             return searchResult.Products;
                         }, 1, ProductSearchCriteria.DefaultPageSize);
@@ -361,8 +317,62 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
-        protected virtual void SetChildCategoriesLazyLoading(Category[] categories)
+        protected virtual Task LoadProductsAssociationsAsync(IEnumerable<Product> products, WorkContext workContext)
         {
+            if (products == null)
+            {
+                throw new ArgumentNullException(nameof(products));
+            }
+
+            foreach (var product in products)
+            {
+                //Associations 
+                product.Associations = new MutablePagedList<ProductAssociation>((pageNumber, pageSize, sortInfos, @params) =>
+                {
+                    var criteria = new ProductAssociationSearchCriteria
+                    {
+                        PageNumber = pageNumber,
+                        PageSize = pageSize,
+                        ProductId = product.Id,
+                        ResponseGroup = ItemResponseGroup.ItemInfo | ItemResponseGroup.ItemWithPrices | ItemResponseGroup.Inventory | ItemResponseGroup.ItemWithVendor
+                    };
+                    if (!sortInfos.IsNullOrEmpty())
+                    {
+                        criteria.Sort = SortInfo.ToString(sortInfos);
+                    }
+                    if (@params != null)
+                    {
+                        criteria.CopyFrom(@params);
+                    }
+                    var cacheKey = CacheKey.With(GetType(), "SearchProductAssociations", criteria.GetCacheKey());
+                    var searchResult = _memoryCache.GetOrCreateExclusive(cacheKey, cacheEntry =>
+                       {
+                           cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
+                           cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
+                           return _productsApi.SearchProductAssociations(criteria.ToProductAssociationSearchCriteriaDto());
+                       });
+                    //Load products for resulting associations (do not handle categories link TODO:)
+                    var associatedProducts = GetProductsAsync(searchResult.Results.Select(x => x.AssociatedObjectId).ToArray(), criteria.ResponseGroup).GetAwaiter().GetResult();
+                    var result = new List<ProductAssociation>();
+                    foreach (var associationDto in searchResult.Results)
+                    {
+                        var productAssociation = associationDto.ToProductAssociation();
+                        productAssociation.Product = associatedProducts.FirstOrDefault(x => x.Id.EqualsInvariant(productAssociation.ProductId));
+                        result.Add(productAssociation);
+                    }
+                    return new StaticPagedList<ProductAssociation>(result, pageNumber, pageSize, searchResult.TotalCount ?? 0);
+                }, 1, ProductSearchCriteria.DefaultPageSize);
+            }
+            return Task.CompletedTask;
+        }
+
+        protected virtual void EstablishLazyDependenciesForCategories(IEnumerable<Category> categories)
+        {
+            if (categories == null)
+            {
+                throw new ArgumentNullException(nameof(categories));
+            }
+
             foreach (var category in categories)
             {
                 //Lazy loading for parents categories
@@ -373,7 +383,7 @@ namespace VirtoCommerce.Storefront.Domain
                 }, 1, CategorySearchCriteria.DefaultPageSize);
 
                 //Lazy loading for child categories
-                category.Categories = new MutablePagedList<Category>((pageNumber, pageSize, sortInfos) =>
+                category.Categories = new MutablePagedList<Category>((pageNumber, pageSize, sortInfos, @params) =>
                 {
                     var categorySearchCriteria = new CategorySearchCriteria
                     {
@@ -384,6 +394,10 @@ namespace VirtoCommerce.Storefront.Domain
                     if (!sortInfos.IsNullOrEmpty())
                     {
                         categorySearchCriteria.SortBy = SortInfo.ToString(sortInfos);
+                    }
+                    if (@params != null)
+                    {
+                        categorySearchCriteria.CopyFrom(@params);
                     }
                     var searchResult = SearchCategories(categorySearchCriteria);
                     return searchResult;

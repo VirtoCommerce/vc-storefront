@@ -5,7 +5,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi;
+using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Marketing.Services;
@@ -16,9 +18,9 @@ namespace VirtoCommerce.Storefront.Domain
     public class PromotionEvaluator : IPromotionEvaluator
     {
         private readonly IMarketingModulePromotion _promiotionApi;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IStorefrontMemoryCache _memoryCache;
 
-        public PromotionEvaluator(IMarketingModulePromotion promiotionApi, IMemoryCache memoryCache)
+        public PromotionEvaluator(IMarketingModulePromotion promiotionApi, IStorefrontMemoryCache memoryCache)
         {
             _promiotionApi = promiotionApi;
             _memoryCache = memoryCache;

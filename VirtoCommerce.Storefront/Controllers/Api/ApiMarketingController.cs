@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [StorefrontApiRoute("marketing")]
     public class ApiMarketingController : StorefrontControllerBase
     {
         private readonly IMarketingService _marketingService;
@@ -16,7 +18,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // GET: storefrontapi/marketing/dynamiccontent/{placeName}
-        [HttpGet]
+        [HttpGet("dynamiccontent/{placeName}")]
         public async Task<ActionResult> GetDynamicContent(string placeName)
         {
             var htmlContent = await _marketingService.GetDynamicContentHtmlAsync(WorkContext.CurrentStore.Id, placeName);

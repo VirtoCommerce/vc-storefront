@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.BulkOrder;
 using VirtoCommerce.Storefront.Model.Cart.Services;
@@ -13,6 +14,7 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
+    [StorefrontRoute("bulkorder")]
     public class BulkOrderController : StorefrontControllerBase
     {
         private readonly ICartBuilder _cartBuilder;
@@ -33,7 +35,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // POST: /bulkorder/addfielditems
-        [HttpPost]
+        [HttpPost("addfielditems")]
         public async Task<ActionResult> AddFieldItems(BulkOrderItem[] items)
         {
             await EnsureThatCartExistsAsync();
@@ -64,7 +66,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // POST: /bulkorder/addcsvitems
-        [HttpPost]
+        [HttpPost("addcsvitems")]
         public async Task<ActionResult> AddCsvItems(string csv)
         {
             if (string.IsNullOrEmpty(csv))

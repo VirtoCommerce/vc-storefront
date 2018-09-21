@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Order.Services;
@@ -10,10 +11,12 @@ using orderModel = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Mode
 
 namespace VirtoCommerce.Storefront.Controllers
 {
+    [StorefrontRoute("cart")]
     public class CartController : StorefrontControllerBase
     {
         private readonly IOrderModule _orderApi;
         private readonly ICustomerOrderService _orderService;
+
         public CartController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IOrderModule orderApi, ICustomerOrderService orderService)
             : base(workContextAccessor, urlBuilder)
         {
@@ -28,22 +31,24 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("cart", WorkContext);
         }
 
-
         // GET: /cart/checkout
-        [HttpGet]
+        [HttpGet("checkout")]
         public ActionResult Checkout()
         {
             WorkContext.Layout = "checkout_layout";
             return View("checkout", WorkContext);
         }
 
-
         // GET: /cart/checkout/paymentform?orderNumber=...
-        [HttpGet]
+        [HttpGet("checkout/paymentform")]
         public async Task<ActionResult> PaymentForm(string orderNumber)
         {
             var order = await _orderService.GetOrderByNumberAsync(orderNumber);
-          
+            if (order == null)
+            {
+                return NotFound("Order with number " + orderNumber + " not found.");
+            }
+
             var incomingPayment = order.InPayments?.FirstOrDefault(x => x.PaymentMethodType.EqualsInvariant("PreparedForm"));
             if (incomingPayment == null)
             {
@@ -57,6 +62,8 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // GET/POST: /cart/externalpaymentcallback
+        [HttpGet("externalpaymentcallback")]
+        [HttpPost("externalpaymentcallback")]
         public async Task<ActionResult> ExternalPaymentCallback()
         {
             var callback = new orderModel.PaymentCallbackParameters
@@ -96,7 +103,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // GET: /cart/thanks/{orderNumber}
-        [HttpGet]
+        [HttpGet("thanks/{orderNumber}")]
         public async Task<ActionResult> Thanks(string orderNumber)
         {
             var order = await _orderService.GetOrderByNumberAsync(orderNumber);

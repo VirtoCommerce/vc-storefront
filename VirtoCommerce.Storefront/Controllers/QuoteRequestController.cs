@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
@@ -7,6 +8,7 @@ using VirtoCommerce.Storefront.Model.Quote.Services;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
+    [StorefrontRoute]
     public class QuoteRequestController : StorefrontControllerBase
     {
         private readonly IQuoteRequestBuilder _quoteRequestBuilder;
@@ -22,7 +24,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// </summary>
         /// <returns></returns>
         // GET: quoterequest
-        [HttpGet]
+        [HttpGet("quoterequest")]
         public ActionResult CurrentQuoteRequest()
         {
             return View("quote-request", WorkContext);
@@ -34,7 +36,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// <param name="number"></param>
         /// <returns></returns>
         // GET: /quoterequest/{number}
-        [HttpGet]
+        [HttpGet("quoterequest/{number}")]
         public async Task<ActionResult> QuoteRequestByNumber(string number)
         {
             var builder = await _quoteRequestBuilder.LoadQuoteRequestAsync(number, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
@@ -52,7 +54,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// </summary>
         /// <returns></returns>
         // GET: /account/quoterequests
-        [HttpGet]
+        [HttpGet("account/quoterequests")]
         public ActionResult QuoteRequests()
         {
             //All customer quote requests filled in WorkContext.Customer.QuoteRequests

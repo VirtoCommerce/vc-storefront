@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.LiquidThemeEngine.Converters;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
@@ -14,6 +15,7 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
+    [StorefrontRoute]
     public class ShopifyCompatibilityController : StorefrontControllerBase
     {
         private readonly ICartBuilder _cartBuilder;
@@ -28,7 +30,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
 
         // GET: /cart/change?line=...&quantity=...
-        [HttpGet]
+        [HttpGet("cart/change")]
         public async Task<ActionResult> Change(int line, int quantity)
         {
             EnsureCartExists();
@@ -43,7 +45,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // POST: /cart/add
-        [HttpPost]
+        [HttpPost("cart/add")]
         public async Task<ActionResult> Add(string id, int quantity)
         {
             EnsureCartExists();
@@ -61,7 +63,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // POST: /cart?updates=...&update=...
-        [HttpPost]
+        [HttpPost("cart")]
         public async Task<ActionResult> Cart(int[] updates, string checkout)
         {
             string virtualRedirectUrl = "~/cart";
@@ -84,7 +86,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // GET: /cart/clear
-        [HttpGet]
+        [HttpGet("cart/clear")]
         public async Task<ActionResult> Clear()
         {
             EnsureCartExists();
@@ -98,7 +100,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // GET: /cart.js
-        [HttpGet]
+        [HttpGet("cart.js")]
         public async Task<ActionResult> CartJs()
         {
             EnsureCartExists();
@@ -107,7 +109,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // POST: /cart/add.js
-        [HttpPost]
+        [HttpPost("cart/add.js")]
         public async Task<ActionResult> AddJs(string id, int quantity = 1)
         {
             LineItem lineItem = null;
@@ -129,7 +131,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // POST: /cart/change.js
-        [HttpPost]
+        [HttpPost("cart/change.js")]
         public async Task<ActionResult> ChangeJs(string id, int quantity)
         {
             EnsureCartExists();
@@ -143,7 +145,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // POST: /cart/update.js
-        [HttpPost]
+        [HttpPost("cart/update.js")]
         public async Task<ActionResult> UpdateJs(int[] updates)
         {
             EnsureCartExists();
@@ -157,7 +159,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // POST: /cart/clear.js
-        [HttpPost]
+        [HttpPost("cart/clear.js")]
         public async Task<ActionResult> ClearJs()
         {
             EnsureCartExists();
@@ -175,6 +177,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// <returns></returns>
         /// TODO:
         //[OutputCache(CacheProfile = "CatalogSearchCachingProfile")]
+        [HttpGet("collections")]
         public ActionResult Collections()
         {
             return View("list-collections", WorkContext);

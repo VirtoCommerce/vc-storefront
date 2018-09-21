@@ -8,6 +8,7 @@ using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Security;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -16,6 +17,7 @@ using VirtoCommerce.Storefront.Models;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
+    [StorefrontRoute]
     public class CommonController : StorefrontControllerBase
     {
         private readonly IStoreModule _storeApi;
@@ -32,6 +34,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// GET : /resetcache
         /// </summary>
         /// <returns></returns>
+        [HttpGet("common/resetcache")]
         [Authorize(SecurityConstants.Permissions.CanResetCache)]
         public ActionResult ResetCache()
         {
@@ -62,7 +65,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// <param name="model"></param>
         /// <param name="viewName"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("contact/{viewName?}")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ContactForm([FromForm]ContactForm model, string viewName = "page.contact")
@@ -85,6 +88,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// <param name="returnUrl"></param>
         /// <returns></returns>
         //[OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
+        [HttpGet("common/setcurrency/{currency}")]
         public async Task<ActionResult> SetCurrency(string currency, string returnUrl = "")
         {
             WorkContext.CurrentUser.SelectedCurrencyCode = currency;            
@@ -98,7 +102,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // GET: common/getcountries/json
-        [HttpGet]
+        [HttpGet("common/getcountries/json")]
         public ActionResult GetCountries()
         {
             return Json(WorkContext.AllCountries.Select(c => new Country { Name = c.Name, Code2 = c.Code2, Code3 = c.Code3, RegionType = c.RegionType })
@@ -106,7 +110,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // GET: common/getregions/{countryCode}/json
-        [HttpGet]
+        [HttpGet("common/getregions/{countryCode}/json")]
         public ActionResult GetRegions(string countryCode)
         {
             Country country = null;
@@ -131,7 +135,8 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // GET: common/maintenance
-        [HttpGet]
+        [HttpGet("common/maintenance")]
+        [Route("maintenance")]
         public ActionResult Maintenance()
         {
             return View("Maintenance");
@@ -144,7 +149,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // GET: common/notheme
-        [HttpGet]
+        [HttpGet("common/notheme")]
         public ActionResult NoTheme()
         {
             object viewModel;

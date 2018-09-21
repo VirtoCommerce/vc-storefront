@@ -233,36 +233,6 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static Association ToAssociation(this catalogDto.ProductAssociation associationDto)
-        {
-            Association result = null;
-
-            if (associationDto.AssociatedObjectType.EqualsInvariant("product"))
-            {
-                result = new ProductAssociation
-                {
-                    ProductId = associationDto.AssociatedObjectId
-                };
-
-            }
-            else if (associationDto.AssociatedObjectType.EqualsInvariant("category"))
-            {
-                result = new CategoryAssociation
-                {
-                    CategoryId = associationDto.AssociatedObjectId
-                };
-            }
-
-            if (result != null)
-            {
-                result.Type = associationDto.Type;
-                result.Priority = associationDto.Priority ?? 0;
-                result.Image = new Image { Url = associationDto.AssociatedObjectImg };
-                result.Quantity = associationDto.Quantity;
-            }
-
-            return result;
-        }
 
         public static Category ToCategory(this catalogDto.Category categoryDto, Language currentLanguage, Store store)
         {
@@ -409,11 +379,6 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Variations = productDto.Variations.Select(v => ToProduct(v, currentLanguage, currentCurrency, store)).ToList();
             }
 
-            if (!productDto.Associations.IsNullOrEmpty())
-            {
-                result.Associations.AddRange(productDto.Associations.Select(ToAssociation).Where(x => x != null));
-            }
-
             if (!productDto.SeoInfos.IsNullOrEmpty())
             {
                 var seoInfoDto = productDto.SeoInfos.Select(x => x.JsonConvert<coreDto.SeoInfo>())
@@ -486,6 +451,31 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
+        public static catalogDto.ProductAssociationSearchCriteria ToProductAssociationSearchCriteriaDto(this ProductAssociationSearchCriteria criteria)
+        {
+            var result = new catalogDto.ProductAssociationSearchCriteria
+            {
+                Group = criteria.Group,
+                ObjectIds = new string[] { criteria.ProductId },
+                ResponseGroup = criteria.ResponseGroup.ToString(),
+                Skip = criteria.Start,
+                Take = criteria.PageSize
+            };
+            return result;
+        }
+
+        public static ProductAssociation ToProductAssociation(this catalogDto.ProductAssociation associationDto)
+        {
+            var result = new ProductAssociation
+            {
+                Type = associationDto.Type,
+                ProductId = associationDto.AssociatedObjectId,
+                Priority = associationDto.Priority ?? 0,
+                Quantity = associationDto.Quantity,
+                Tags = associationDto.Tags
+            };
+            return result;
+        }
 
         public static TaxLine[] ToTaxLines(this Product product)
         {
