@@ -161,6 +161,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 result.Page = ToLiquidPage(workContext.CurrentPage);
             }
 
+            if (workContext.CurrentJsonPage != null)
+            {
+                result.JsonPage = ToLiquidCmsPage(workContext.CurrentJsonPage);
+            }
+
             if (workContext.CurrentBlog != null)
             {
                 result.Blog = ToLiquidBlog(workContext.CurrentBlog, workContext.CurrentLanguage);

@@ -4,24 +4,44 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Infrastructure;
+using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
     [StorefrontRoute]
-    public class DesignerPreviewController : Controller
+    public class DesignerPreviewController : StorefrontControllerBase
     {
+        public DesignerPreviewController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder) :
+            base(workContextAccessor, urlBuilder)
+        {
+        }
+
         [HttpGet("designer-preview")]
         public IActionResult Index()
         {
-            return View("designer-preview");
+            return View("json-preview");
         }
 
-        [HttpPost("designer-preview/blocks")]
-        public IActionResult Blocks([FromBody]JsonPage content)
+        [HttpPost("designer-preview/block")]
+        public IActionResult Block([FromBody]IDictionary<string, object> block)
         {
-            // TODO: data does not bind still
-            return Content("success");
+            var content = new JsonPage
+            {
+                Blocks = new List<IDictionary<string, object>> { block }
+            };
+            WorkContext.CurrentJsonPage = content;
+            var viewName = "json-page";
+
+            return PartialView(viewName, WorkContext);
         }
+
+        //[HttpPost("designer-preview/blocks")]
+        //public IActionResult Blocks([FromBody]JsonPage content)
+        //{
+        //    WorkContext.CurrentJsonPage = content;
+        //    return PartialView("json-page", WorkContext);
+        //}
     }
 }

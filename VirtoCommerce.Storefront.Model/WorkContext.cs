@@ -151,6 +151,7 @@ namespace VirtoCommerce.Storefront.Model
 
         #region Static Content Properties
         public ContentPage CurrentPage { get; set; }
+        public JsonPage CurrentJsonPage { get; set; }
 
         public StaticContentSearchCriteria CurrentStaticSearchCriteria { get; set; }
 

@@ -69,6 +69,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public Vendor Vendor { get; set; }
 
         public Page Page { get; set; }
+        public JsonPage JsonPage { get; set; }
 
         public Blog Blog { get; set; }
 
