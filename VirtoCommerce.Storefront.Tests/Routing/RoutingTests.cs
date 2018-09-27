@@ -397,11 +397,7 @@ namespace VirtoCommerce.Storefront.Tests.Routing
 
                 case CustomHttpMethod.PostForm:
                     var actualData = (IEnumerable<KeyValuePair<string, string>>)objectToPost ?? EmptyFormData;
-                    var request = new HttpRequestMessage(HttpMethod.Post, url)
-                    {
-                        Content = new FormUrlEncodedContent(actualData)
-                    };
-                    return await Client.SendAsync(request);
+                    return await Client.PostAsync(url, new FormUrlEncodedContent(actualData));
 
                 case CustomHttpMethod.Get:
                     return await Client.GetAsync(url);
