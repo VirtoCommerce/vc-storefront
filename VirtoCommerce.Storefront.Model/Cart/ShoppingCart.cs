@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.Storefront.Model.Cart.Services;
@@ -269,6 +270,18 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// </summary>
         public int ItemsQuantity => Items.Sum(i => i.Quantity);
 
+
+        /// <summary>
+        /// Left for backward compatibility with old themes
+        /// </summary>
+        public Coupon Coupon
+        {
+            get
+            {
+                return Coupons.FirstOrDefault();
+            }
+        }
+
         /// <summary>
         /// Gets or sets the collection of shopping cart coupons
         /// </summary>
@@ -329,7 +342,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         #endregion
 
         #region IDiscountable Members
-        public IList<Discount> Discounts { get; }
+        public IList<Discount> Discounts { get; private set; }
 
         public Currency Currency { get; }
 
@@ -445,6 +458,74 @@ namespace VirtoCommerce.Storefront.Model.Cart
             var customer = Customer != null ? Customer.ToString() : "undefined";
 
             return $"Cart #{cartId}-{Name} {customer}";
+        }
+
+        public override object Clone()
+        {
+            var result = base.Clone() as ShoppingCart;
+
+            result.HandlingTotal = HandlingTotal?.Clone() as Money;
+            result.HandlingTotalWithTax = HandlingTotalWithTax?.Clone() as Money;
+            result.DiscountAmount = DiscountAmount?.Clone() as Money;
+            result.Total = Total?.Clone() as Money;
+            result.SubTotal = SubTotal?.Clone() as Money;
+            result.SubTotalWithTax = SubTotalWithTax?.Clone() as Money;
+            result.ShippingPrice = ShippingPrice?.Clone() as Money;
+            result.ShippingPriceWithTax = ShippingPriceWithTax?.Clone() as Money;
+            result.ShippingTotal = ShippingTotal?.Clone() as Money;
+            result.ShippingTotalWithTax = ShippingTotalWithTax?.Clone() as Money;
+            result.PaymentPrice = PaymentPrice?.Clone() as Money;
+            result.PaymentPriceWithTax = PaymentPriceWithTax?.Clone() as Money;
+            result.PaymentTotal = PaymentTotal?.Clone() as Money;
+            result.PaymentTotalWithTax = PaymentTotalWithTax?.Clone() as Money;
+            result.HandlingTotal = HandlingTotal?.Clone() as Money;
+            result.HandlingTotalWithTax = HandlingTotalWithTax?.Clone() as Money;
+            result.DiscountTotal = DiscountTotal?.Clone() as Money;
+            result.DiscountTotalWithTax = DiscountTotalWithTax?.Clone() as Money;
+            result.TaxTotal = TaxTotal?.Clone() as Money;
+
+            if (Discounts != null)
+            {
+                result.Discounts = new List<Discount>(Discounts.Select(x => x.Clone() as Discount));
+            }
+            if (TaxDetails != null)
+            {
+                result.TaxDetails = new List<TaxDetail>(TaxDetails.Select(x => x.Clone() as TaxDetail));
+            }
+            if (DynamicProperties != null)
+            {
+                result.DynamicProperties = new List<DynamicProperty>(DynamicProperties.Select(x => x.Clone() as DynamicProperty));
+            }
+            if (ValidationErrors != null)
+            {
+                result.ValidationErrors = new List<ValidationError>(ValidationErrors.Select(x => x.Clone() as ValidationError));
+            }
+            if (Addresses != null)
+            {
+                result.Addresses = new List<Address>(Addresses.Select(x => x.Clone() as Address));
+            }
+            if (Items != null)
+            {
+                result.Items = new List<LineItem>(Items.Select(x => x.Clone() as LineItem));
+            }
+            if (Payments != null)
+            {
+                result.Payments = new List<Payment>(Payments.Select(x => x.Clone() as Payment));
+            }
+            if (Shipments != null)
+            {
+                result.Shipments = new List<Shipment>(Shipments.Select(x => x.Clone() as Shipment));
+            }
+            if (Coupons != null)
+            {
+                result.Coupons = new List<Coupon>(Coupons.Select(x => x.Clone() as Coupon));
+            }
+            if (AvailablePaymentMethods != null)
+            {
+                result.AvailablePaymentMethods = new List<PaymentMethod>(AvailablePaymentMethods.Select(x => x.Clone() as PaymentMethod));
+            }
+
+            return result;
         }
     }
 }

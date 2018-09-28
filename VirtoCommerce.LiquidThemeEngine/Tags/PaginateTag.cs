@@ -21,6 +21,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Tags
     /// Splitting products, blog articles, and search results across multiple pages is a necessary component of theme design as you are limited to 50 results per page in any for loop.
     /// The paginate tag works in conjunction with the for tag to split content into numerous pages.It must wrap a for tag block that loops through an array, as shown in the example below:
     /// </summary>
+    /// <example>
+    /// {% paginate collection.products by 5 params {"ResponseGroup":"ItemLarge"} %}
+    /// ....
+    /// {% endpaginate %}
+    /// </example>
     public class PaginateTag : Block
     {
         private static readonly Regex _syntax = R.B(R.Q(@"({0})\s*by\s*({0}+)?"), Liquid.QuotedFragment);

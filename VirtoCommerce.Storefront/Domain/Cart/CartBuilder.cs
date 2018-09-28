@@ -184,10 +184,17 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.FromResult((object)null);
         }
 
-        public virtual Task RemoveCouponAsync(string couponCode)
+        public virtual Task RemoveCouponAsync(string couponCode = null)
         {
             EnsureCartExists();
-            Cart.Coupons.Remove(Cart.Coupons.FirstOrDefault(c => c.Code.EqualsInvariant(couponCode)));
+            if (string.IsNullOrEmpty(couponCode))
+            {
+                Cart.Coupons.Clear();
+            }
+            else
+            {
+                Cart.Coupons.Remove(Cart.Coupons.FirstOrDefault(c => c.Code.EqualsInvariant(couponCode)));
+            }
             return Task.FromResult((object)null);
         }
 

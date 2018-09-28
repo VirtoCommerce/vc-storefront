@@ -8,7 +8,7 @@ using System.Web;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
-    public abstract class ValueObject : IValueObject, ICacheKey
+    public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
     {
         private static readonly ConcurrentDictionary<Type, IReadOnlyCollection<PropertyInfo>> TypeProperties = new ConcurrentDictionary<Type, IReadOnlyCollection<PropertyInfo>>();
 
@@ -89,5 +89,12 @@ namespace VirtoCommerce.Storefront.Model.Common
                     .OrderBy(p => p.Name)
                     .ToList());
         }
+
+        #region ICloneable members
+        public virtual object Clone()
+        {
+            return MemberwiseClone();
+        }
+        #endregion
     }
 }
