@@ -118,7 +118,7 @@ namespace VirtoCommerce.Storefront.Model.Marketing
 
         private decimal GetAbsoluteDiscountAmount(decimal originAmount)
         {
-            decimal absoluteAmount = Amount;
+            var absoluteAmount = Amount;
             if (AmountType == AmountType.Relative)
             {
                 absoluteAmount = Amount * originAmount / 100;

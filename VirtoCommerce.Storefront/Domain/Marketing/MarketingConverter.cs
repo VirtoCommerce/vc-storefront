@@ -114,7 +114,7 @@ namespace VirtoCommerce.Storefront.Domain
                 result.CartPromoEntries = promoEvalContext.Cart.Items.Select(x => x.ToProductPromoEntryDto()).ToList();
 
                 result.CartTotal = (double)promoEvalContext.Cart.SubTotal.Amount;
-                result.Coupon = promoEvalContext.Cart.Coupon != null ? promoEvalContext.Cart.Coupon.Code : null;
+                result.Coupons = promoEvalContext.Cart.Coupons?.Select(c => c.Code).ToList();
                 result.Currency = promoEvalContext.Cart.Currency.Code;
                 result.CustomerId = promoEvalContext.Cart.Customer.Id;                
                 result.UserGroups = promoEvalContext.Cart.Customer?.Contact?.UserGroups;

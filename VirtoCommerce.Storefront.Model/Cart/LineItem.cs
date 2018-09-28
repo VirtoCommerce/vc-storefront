@@ -10,7 +10,7 @@ using VirtoCommerce.Storefront.Model.Subscriptions;
 
 namespace VirtoCommerce.Storefront.Model.Cart
 {
-    public partial class LineItem : Entity, IDiscountable, IValidatable, ITaxable
+    public partial class LineItem : Entity, IDiscountable, IValidatable, ITaxable, ICloneable
     {
         public LineItem(Currency currency, Language language)
         {
@@ -332,5 +332,45 @@ namespace VirtoCommerce.Storefront.Model.Cart
         {
             return string.Format("cart lineItem #{0} {1} qty: {2}", Id ?? "undef", Name ?? "undef", Quantity);
         }
+        #region ICloneable members
+
+        public override object Clone()
+        {
+            var result = base.Clone() as LineItem;
+
+            result.ListPrice = ListPrice?.Clone() as Money;
+            result.SalePrice = SalePrice?.Clone() as Money;
+            result.DiscountAmount = DiscountAmount?.Clone() as Money;
+            result.DiscountAmountWithTax = DiscountAmountWithTax?.Clone() as Money;
+            result.DiscountTotal = DiscountTotal?.Clone() as Money;
+            result.DiscountTotalWithTax = DiscountTotalWithTax?.Clone() as Money;
+            result.ListPriceWithTax = ListPriceWithTax?.Clone() as Money;
+            result.SalePriceWithTax = SalePriceWithTax?.Clone() as Money;
+            result.PlacedPrice = PlacedPrice?.Clone() as Money;
+            result.PlacedPriceWithTax = PlacedPriceWithTax?.Clone() as Money;
+            result.ExtendedPrice = ExtendedPrice?.Clone() as Money;
+            result.ExtendedPriceWithTax = ExtendedPriceWithTax?.Clone() as Money;
+            result.TaxTotal = TaxTotal?.Clone() as Money;
+
+            if (Discounts != null)
+            {
+                result.Discounts = new List<Discount>(Discounts.Select(x => x.Clone() as Discount));
+            }
+            if (TaxDetails != null)
+            {
+                result.TaxDetails = new List<TaxDetail>(TaxDetails.Select(x => x.Clone() as TaxDetail));
+            }
+            if (DynamicProperties != null)
+            {
+                result.DynamicProperties = new List<DynamicProperty>(DynamicProperties.Select(x => x.Clone() as DynamicProperty));
+            }
+            if (ValidationErrors != null)
+            {
+                result.ValidationErrors = new List<ValidationError>(ValidationErrors.Select(x => x.Clone() as ValidationError));
+            }
+
+            return result;
+        }
+        #endregion
     }
 }

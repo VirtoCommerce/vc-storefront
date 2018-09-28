@@ -11,6 +11,7 @@ using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
+using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Order.Events;
 using VirtoCommerce.Storefront.Model.Services;
 using VirtoCommerce.Storefront.Model.Subscriptions;
@@ -27,7 +28,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private readonly ICatalogService _catalogService;
         private readonly IEventPublisher _publisher;
         private readonly ISubscriptionService _subscriptionService;
-
         public ApiCartController(IWorkContextAccessor workContextAccessor, ICatalogService catalogService, ICartBuilder cartBuilder,
                                  IOrderModule orderApi, IStorefrontUrlBuilder urlBuilder,
                                  IEventPublisher publisher, ISubscriptionService subscriptionService)
@@ -227,8 +227,27 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var cartBuilder = await LoadOrCreateCartAsync();
 
                 await cartBuilder.AddCouponAsync(couponCode);
+
                 await cartBuilder.SaveAsync();
-                return Json(cartBuilder.Cart.Coupon);
+
+                return Ok();
+            }
+        }
+
+        // POST: storefrontapi/cart/coupons/validate
+        [HttpPost("coupons/validate")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ValidateCoupon([FromBody]Coupon coupon)
+        {
+            EnsureCartExists();
+
+            //Need lock to prevent concurrent access to same cart
+            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
+            {
+                await _cartBuilder.TakeCartAsync(WorkContext.CurrentCart.Value.Clone() as ShoppingCart);
+                _cartBuilder.Cart.Coupons = new[] { coupon };
+                await _cartBuilder.EvaluatePromotionsAsync();
+                return Ok(coupon);
             }
         }
 
@@ -236,7 +255,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // DELETE: storefrontapi/cart/coupons
         [HttpDelete("coupons")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RemoveCartCoupon()
+        public async Task<ActionResult> RemoveCartCoupon([FromQuery]string couponCode = null)
         {
             EnsureCartExists();
 
@@ -244,7 +263,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
-                await cartBuilder.RemoveCouponAsync();
+                await cartBuilder.RemoveCouponAsync(couponCode);
                 await cartBuilder.SaveAsync();
             }
 

@@ -87,8 +87,9 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         /// <summary>
         /// remove exist coupon from cart
         /// </summary>
+        /// <param name="couponCode"></param>
         /// <returns></returns>
-        Task RemoveCouponAsync();
+        Task RemoveCouponAsync(string couponCode = null);
 
         /// <summary>
         /// Clear cart remove all items and shipments and payments
