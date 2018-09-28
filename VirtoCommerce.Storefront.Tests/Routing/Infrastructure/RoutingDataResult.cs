@@ -19,18 +19,11 @@ namespace VirtoCommerce.Storefront.Tests.Routing.Infrastructure
         /// <param name="controllerMethodName">Fully-qualified name of controller method that would be used
         /// to process request.</param>
         /// <param name="arguments">A name-value dictionary containing arguments passed with the request.</param>
-        public RoutingDataResult(string requestPath, string controllerTypeName, string controllerMethodName, IDictionary<string, object> arguments)
+        public RoutingDataResult(string controllerTypeName, string controllerMethodName)
         {
-            RequestPath = requestPath;
             ControllerTypeName = controllerTypeName;
             ControllerMethodName = controllerMethodName;
-            Arguments = arguments;
         }
-
-        /// <summary>
-        /// Path that was requested by client.
-        /// </summary>
-        public string RequestPath { get; }
 
         /// <summary>
         /// Full type name of controller that would process the request.
@@ -41,10 +34,5 @@ namespace VirtoCommerce.Storefront.Tests.Routing.Infrastructure
         /// Fully-qualified name of controller method that would be used to process request.
         /// </summary>
         public string ControllerMethodName { get; }
-
-        /// <summary>
-        /// A name-value dictionary containing arguments passed with the request.
-        /// </summary>
-        public IDictionary<string, object> Arguments { get; }
     }
 }

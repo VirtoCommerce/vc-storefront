@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Common;
@@ -21,7 +23,7 @@ namespace VirtoCommerce.Storefront.Tests.Routing
     public class RoutingTests : IClassFixture<WebApplicationFactory<Startup>>, IDisposable
     {
         /// <summary>
-        /// HTTP methods merged with POST body type. Added to simplify contents of TestData in RoutingData.
+        /// HTTP methods merged with POST body type. Added to simplify contents of test data in RoutingData.
         /// </summary>
         public enum CustomHttpMethod
         {
@@ -31,6 +33,35 @@ namespace VirtoCommerce.Storefront.Tests.Routing
             Put,
             Delete
         }
+
+        private static readonly Currency TestCurrency = new Currency(new Language("en-US"), "XPT");
+        private static readonly Money EmptyMoney = new Money(0.0m, TestCurrency);
+
+        private static readonly Payment EmptyPayment = new Payment(TestCurrency)
+        {
+            Amount = EmptyMoney,
+            DiscountAmount = EmptyMoney,
+            DiscountAmountWithTax = EmptyMoney,
+            Price = EmptyMoney,
+            PriceWithTax = EmptyMoney,
+            TaxTotal = EmptyMoney,
+            Total = EmptyMoney,
+            TotalWithTax = EmptyMoney
+        };
+
+        private static readonly Shipment EmptyShipment = new Shipment()
+        {
+            Currency = TestCurrency,
+            DiscountAmount = EmptyMoney,
+            DiscountAmountWithTax = EmptyMoney,
+            Price = EmptyMoney,
+            TaxTotal = EmptyMoney,
+            TotalWithTax = EmptyMoney,
+            Total = EmptyMoney,
+            PriceWithTax = EmptyMoney
+        };
+
+        private static readonly Dictionary<string, string> EmptyFormData = new Dictionary<string, string>();
 
         public static readonly IReadOnlyCollection<object[]> RoutingData;
 
@@ -52,11 +83,12 @@ namespace VirtoCommerce.Storefront.Tests.Routing
             AddApiRequestRoute(routingData, "ApiCart", "AddCartCoupon", CustomHttpMethod.PostJson, "storefrontapi/cart/coupons/TESTCOUPON");
 
             AddApiRequestRoute(routingData, "ApiCart", "RemoveCartCoupon", CustomHttpMethod.Delete, "storefrontapi/cart/coupons");
-            AddApiRequestRoute(routingData, "ApiCart", "AddOrUpdateCartShipment", CustomHttpMethod.PostJson, "storefrontapi/cart/shipments", new Shipment());
+            AddApiRequestRoute(routingData, "ApiCart", "AddOrUpdateCartShipment", CustomHttpMethod.PostJson, "storefrontapi/cart/shipments", EmptyShipment);
+            AddApiRequestRoute(routingData, "ApiCart", "AddOrUpdateCartPayment", CustomHttpMethod.PostJson, "storefrontapi/cart/payments", EmptyPayment);
             AddApiRequestRoute(routingData, "ApiCart", "CreateOrder", CustomHttpMethod.PostJson, "storefrontapi/cart/createorder");
             AddApiRequestRoute(routingData, "ApiCart", "AddOrUpdateCartPaymentPlan", CustomHttpMethod.PostJson, "storefrontapi/cart/paymentPlan");
-            AddApiRequestRoute(routingData, "ApiCart", "DeleteCartPaymentPlan", CustomHttpMethod.Delete, "storefrontapi/cart/paymentPlan");
 
+            AddApiRequestRoute(routingData, "ApiCart", "DeleteCartPaymentPlan", CustomHttpMethod.Delete, "storefrontapi/cart/paymentPlan");
             AddApiRequestRoute(routingData, "ApiCart", "UpdateCartComment", CustomHttpMethod.Put, "storefrontapi/cart/comment");
 
             // API lists
@@ -154,24 +186,27 @@ namespace VirtoCommerce.Storefront.Tests.Routing
             AddRegularRequestRoute(routingData, "Account", "GetOrderDetails", CustomHttpMethod.Get, "account/order/{number}");
             AddRegularRequestRoute(routingData, "Account", "GetAddresses", CustomHttpMethod.Get, "account/addresses");
             AddRegularRequestRoute(routingData, "Account", "Register", CustomHttpMethod.Get, "account/register");
-            AddRegularRequestRoute(routingData, "Account", "Login", CustomHttpMethod.Get, "account/login");
+            AddRegularRequestRoute(routingData, "Account", "Register", CustomHttpMethod.PostForm, "account/register");
 
-            AddRegularRequestRoute(routingData, "Account", "Login", CustomHttpMethod.PostForm, "account/login", new Login());
+            AddRegularRequestRoute(routingData, "Account", "Login", CustomHttpMethod.Get, "account/login");
+            AddRegularRequestRoute(routingData, "Account", "Login", CustomHttpMethod.PostForm, "account/login");
             AddRegularRequestRoute(routingData, "Account", "Logout", CustomHttpMethod.Get, "account/logout");
             AddRegularRequestRoute(routingData, "Account", "ForgotPassword", CustomHttpMethod.Get, "account/forgotpassword");
-            AddRegularRequestRoute(routingData, "Account", "ForgotPassword", CustomHttpMethod.PostForm, "account/forgotpassword", new ForgotPassword());
-            AddRegularRequestRoute(routingData, "Account", "ResetPassword", CustomHttpMethod.Get, "account/resetpassword");
+            AddRegularRequestRoute(routingData, "Account", "ForgotPassword", CustomHttpMethod.PostForm, "account/forgotpassword");
 
-            AddRegularRequestRoute(routingData, "Account", "ResetPassword", CustomHttpMethod.PostForm, "account/resetpassword", new ResetPassword());
-            AddRegularRequestRoute(routingData, "Account", "ChangePassword", CustomHttpMethod.PostForm, "account/password", new ChangePassword());
+            AddRegularRequestRoute(routingData, "Account", "ResetPassword", CustomHttpMethod.Get, "account/resetpassword");
+            AddRegularRequestRoute(routingData, "Account", "ResetPassword", CustomHttpMethod.PostForm, "account/resetpassword");
+            AddRegularRequestRoute(routingData, "Account", "ChangePassword", CustomHttpMethod.PostForm, "account/password");
             AddRegularRequestRoute(routingData, "Account", "ExternalLogin", CustomHttpMethod.Get, "account/externallogin");
             AddRegularRequestRoute(routingData, "Account", "ExternalLoginCallback", CustomHttpMethod.Get, "account/externallogincallback");
-            AddRegularRequestRoute(routingData, "Account", "ImpersonateUser", CustomHttpMethod.Get, "account/impersonate/111");
 
+            AddRegularRequestRoute(routingData, "Account", "ImpersonateUser", CustomHttpMethod.Get, "account/impersonate/111");
             AddRegularRequestRoute(routingData, "Account", "ConfirmEmail", CustomHttpMethod.Get, "account/confirmemail");
             AddRegularRequestRoute(routingData, "Account", "ConfirmInvitation", CustomHttpMethod.Get, "account/confirminvitation");
+            AddRegularRequestRoute(routingData, "Account", "ConfirmInvitation", CustomHttpMethod.PostForm, "account/confirminvitation");
             AddRegularRequestRoute(routingData, "Account", "ForgotLogin", CustomHttpMethod.Get, "account/forgotlogin");
-            AddRegularRequestRoute(routingData, "Account", "ForgotLogin", CustomHttpMethod.PostForm, "account/forgotlogin", new ForgotPassword());
+
+            AddRegularRequestRoute(routingData, "Account", "ForgotLogin", CustomHttpMethod.PostForm, "account/forgotlogin");
 
             // Cart
             AddRegularRequestRoute(routingData, "Cart", "Index", CustomHttpMethod.Get, "cart");
@@ -213,11 +248,13 @@ namespace VirtoCommerce.Storefront.Tests.Routing
 
             // Common
             AddRegularRequestRoute(routingData, "Common", "SetCurrency", CustomHttpMethod.Get, "common/setcurrency/USD");
-            AddRegularRequestRoute(routingData, "Common", "ContactForm", CustomHttpMethod.PostForm, "contact/page.contact", new ContactForm());
+            AddRegularRequestRoute(routingData, "Common", "GetCountries", CustomHttpMethod.Get, "common/getcountries/json");
+            AddRegularRequestRoute(routingData, "Common", "GetRegions", CustomHttpMethod.Get, "common/getregions/us/json");
+            AddRegularRequestRoute(routingData, "Common", "ContactForm", CustomHttpMethod.PostForm, "contact/page.contact", EmptyFormData);
             AddRegularRequestRoute(routingData, "Common", "Maintenance", CustomHttpMethod.Get, "maintenance");
+
             AddRegularRequestRoute(routingData, "Common", "Maintenance", CustomHttpMethod.Get, "common/maintenance");
             AddRegularRequestRoute(routingData, "Common", "ResetCache", CustomHttpMethod.Get, "common/resetcache");
-
             AddRegularRequestRoute(routingData, "Common", "NoTheme", CustomHttpMethod.Get, "common/notheme");
 
             // Sitemap
@@ -349,10 +386,18 @@ namespace VirtoCommerce.Storefront.Tests.Routing
             switch (method)
             {
                 case CustomHttpMethod.PostJson:
-                    return await Client.PostAsJsonAsync(url, objectToPost);
+                    var jsonFormatter = new JsonMediaTypeFormatter
+                    {
+                        SerializerSettings = new JsonSerializerSettings
+                        {
+                            ContractResolver = new CamelCasePropertyNamesContractResolver()
+                        }
+                    };
+                    return await Client.PostAsync(url, objectToPost, jsonFormatter);
 
                 case CustomHttpMethod.PostForm:
-                    return await Client.PostAsync(url, new FormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string, string>>()));
+                    var actualData = (IEnumerable<KeyValuePair<string, string>>)objectToPost ?? EmptyFormData;
+                    return await Client.PostAsync(url, new FormUrlEncodedContent(actualData));
 
                 case CustomHttpMethod.Get:
                     return await Client.GetAsync(url);

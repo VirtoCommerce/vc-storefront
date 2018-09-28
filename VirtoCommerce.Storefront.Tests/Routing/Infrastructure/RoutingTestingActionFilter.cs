@@ -13,11 +13,9 @@ namespace VirtoCommerce.Storefront.Tests.Routing.Infrastructure
         /// <inheritdoc />
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            var requestPath = context.HttpContext.Request.Path;
             var controllerTypeName = context.Controller.GetType().FullName;
             var methodName = context.ActionDescriptor.DisplayName;
-            var arguments = context.ActionArguments;
-            var routingDataResult = new RoutingDataResult(requestPath, controllerTypeName, methodName, arguments);
+            var routingDataResult = new RoutingDataResult(controllerTypeName, methodName);
 
             context.Result = new JsonResult(routingDataResult);
         }
