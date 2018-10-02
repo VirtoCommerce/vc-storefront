@@ -107,18 +107,20 @@ namespace VirtoCommerce.Storefront.Model.Marketing
         public Discount ToDiscountModel(Money amount)
         {
             var absoluteAmount = GetAbsoluteDiscountAmount(amount.Amount);
-            var discount = new Discount(amount.Currency);
-            discount.Amount = new Money(absoluteAmount, amount.Currency);
-            discount.Description = Promotion.Description;
-            discount.Coupon = Coupon;
-            discount.PromotionId = Promotion.Id;
+            var discount = new Discount(amount.Currency)
+            {
+                Amount = new Money(absoluteAmount, amount.Currency),
+                Description = Promotion.Description,
+                Coupon = Coupon,
+                PromotionId = Promotion.Id
+            };
 
             return discount;
         }
 
         private decimal GetAbsoluteDiscountAmount(decimal originAmount)
         {
-            decimal absoluteAmount = Amount;
+            var absoluteAmount = Amount;
             if (AmountType == AmountType.Relative)
             {
                 absoluteAmount = Amount * originAmount / 100;
@@ -126,6 +128,11 @@ namespace VirtoCommerce.Storefront.Model.Marketing
                 {
                     absoluteAmount = Math.Min(MaxLimit, absoluteAmount);
                 }
+            }
+            else
+            {
+                //Do not allow to create discount greater than origin amount
+                absoluteAmount = Math.Min(originAmount, absoluteAmount);
             }
 
             return absoluteAmount;

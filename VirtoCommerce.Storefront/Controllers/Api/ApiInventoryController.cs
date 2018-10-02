@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Inventory;
@@ -8,6 +9,7 @@ using VirtoCommerce.Storefront.Model.Inventory.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [StorefrontApiRoute("")]
     public class ApiInventoryController : StorefrontControllerBase
     {
         private readonly IInventoryService _inventoryService;
@@ -19,7 +21,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/fulfillmentcenters/search
-        [HttpPost]
+        [HttpPost("fulfillmentcenters/search")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> SearchFulfillmentCenters([FromBody] FulfillmentCenterSearchCriteria criteria)
         {

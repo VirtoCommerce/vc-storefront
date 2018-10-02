@@ -160,6 +160,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Currency = criteria.Currency?.Code ?? workContext.CurrentCurrency.Code,
                 Pricelists = workContext.CurrentPricelists.Where(p => p.Currency.Equals(workContext.CurrentCurrency)).Select(p => p.Id).ToList(),
                 PriceRange = criteria.PriceRange?.ToNumericRangeDto(),
+                UserGroups = workContext.CurrentUser?.Contact?.UserGroups ?? new List<string>(), // null value disables filtering by user groups
                 Terms = criteria.Terms.ToStrings(),
                 Sort = criteria.SortBy,
                 Skip = criteria.Start,
@@ -177,17 +178,6 @@ namespace VirtoCommerce.Storefront.Domain
                 }
 
                 result.Terms.Add(string.Concat("vendor:", criteria.VendorId));
-            }
-            // Add user groups to terms
-            var contact = workContext.CurrentUser?.Contact;
-            if (contact != null && !contact.UserGroups.IsNullOrEmpty())
-            {
-                if (result.UserGroups == null)
-                {
-                    result.UserGroups = new List<string>();
-                }
-                //search products with user_groups defined in customer
-                result.UserGroups.AddRange(contact.UserGroups);
             }
 
             return result;
@@ -213,56 +203,17 @@ namespace VirtoCommerce.Storefront.Domain
                 StoreId = workContext.CurrentStore.Id,
                 CatalogId = workContext.CurrentStore.Catalog,
                 Outline = criteria.Outline,
+                UserGroups = workContext.CurrentUser?.Contact?.UserGroups ?? new List<string>(), // null value disables filtering by user groups
                 Sort = criteria.SortBy,
                 Skip = criteria.Start,
                 Take = criteria.PageSize,
                 ResponseGroup = ((int)criteria.ResponseGroup).ToString(),
                 IsFuzzySearch = criteria.IsFuzzySearch,
             };
-            var contact = workContext.CurrentUser?.Contact;
-            if (contact != null && !contact.UserGroups.IsNullOrEmpty())
-            {
-                if (result.UserGroups == null)
-                {
-                    result.UserGroups = new List<string>();
-                }
-                //search categories with user_groups defined in customer
-                result.UserGroups.AddRange(contact.UserGroups);
-            }
 
             return result;
         }
 
-        public static Association ToAssociation(this catalogDto.ProductAssociation associationDto)
-        {
-            Association result = null;
-
-            if (associationDto.AssociatedObjectType.EqualsInvariant("product"))
-            {
-                result = new ProductAssociation
-                {
-                    ProductId = associationDto.AssociatedObjectId
-                };
-
-            }
-            else if (associationDto.AssociatedObjectType.EqualsInvariant("category"))
-            {
-                result = new CategoryAssociation
-                {
-                    CategoryId = associationDto.AssociatedObjectId
-                };
-            }
-
-            if (result != null)
-            {
-                result.Type = associationDto.Type;
-                result.Priority = associationDto.Priority ?? 0;
-                result.Image = new Image { Url = associationDto.AssociatedObjectImg };
-                result.Quantity = associationDto.Quantity;
-            }
-
-            return result;
-        }
 
         public static Category ToCategory(this catalogDto.Category categoryDto, Language currentLanguage, Store store)
         {
@@ -409,11 +360,6 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Variations = productDto.Variations.Select(v => ToProduct(v, currentLanguage, currentCurrency, store)).ToList();
             }
 
-            if (!productDto.Associations.IsNullOrEmpty())
-            {
-                result.Associations.AddRange(productDto.Associations.Select(ToAssociation).Where(x => x != null));
-            }
-
             if (!productDto.SeoInfos.IsNullOrEmpty())
             {
                 var seoInfoDto = productDto.SeoInfos.Select(x => x.JsonConvert<coreDto.SeoInfo>())
@@ -486,6 +432,31 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
+        public static catalogDto.ProductAssociationSearchCriteria ToProductAssociationSearchCriteriaDto(this ProductAssociationSearchCriteria criteria)
+        {
+            var result = new catalogDto.ProductAssociationSearchCriteria
+            {
+                Group = criteria.Group,
+                ObjectIds = new string[] { criteria.ProductId },
+                ResponseGroup = criteria.ResponseGroup.ToString(),
+                Skip = criteria.Start,
+                Take = criteria.PageSize
+            };
+            return result;
+        }
+
+        public static ProductAssociation ToProductAssociation(this catalogDto.ProductAssociation associationDto)
+        {
+            var result = new ProductAssociation
+            {
+                Type = associationDto.Type,
+                ProductId = associationDto.AssociatedObjectId,
+                Priority = associationDto.Priority ?? 0,
+                Quantity = associationDto.Quantity,
+                Tags = associationDto.Tags
+            };
+            return result;
+        }
 
         public static TaxLine[] ToTaxLines(this Product product)
         {

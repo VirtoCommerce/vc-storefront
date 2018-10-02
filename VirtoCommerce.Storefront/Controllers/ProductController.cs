@@ -10,6 +10,7 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
+    [StorefrontRoute]
     public class ProductController : StorefrontControllerBase
     {
         private readonly ICatalogService _catalogSearchService;
@@ -25,6 +26,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// </summary>
         /// <param name="productId"></param>
         /// <returns></returns
+        [HttpGet("product/{productId}")]
         public async Task<ActionResult> ProductDetails(string productId)
         {
             var product = (await _catalogSearchService.GetProductsAsync(new[] { productId }, WorkContext.CurrentProductResponseGroup)).FirstOrDefault();
@@ -48,7 +50,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
                     if (category != null)
                     {
-                        category.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos) =>
+                        category.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
                         {
                             var criteria = WorkContext.CurrentProductSearchCriteria.Clone();
                             criteria.Outline = product.GetCategoryOutline();
@@ -58,6 +60,10 @@ namespace VirtoCommerce.Storefront.Controllers
                             {
                                 criteria.SortBy = SortInfo.ToString(sortInfos);
                             }
+                            if (@params != null)
+                            {
+                                criteria.CopyFrom(@params);
+                            }
                             return _catalogSearchService.SearchProducts(criteria).Products;
                         }, 1, ProductSearchCriteria.DefaultPageSize);
                     }
@@ -66,6 +72,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("product", WorkContext);
         }
 
+        [HttpGet("compare")]
         public ActionResult Compare()
         {
             return View("product-compare");

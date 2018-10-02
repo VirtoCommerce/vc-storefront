@@ -6,13 +6,8 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 {
     public partial class CategorySearchCriteria : PagedSearchCriteria
     {
-        private static int _defaultPageSize = 20;
 
-        public static int DefaultPageSize
-        {
-            get { return _defaultPageSize; }
-            set { _defaultPageSize = value; }
-        }
+        public static int DefaultPageSize { get; set; } = 20;
 
         //For JSON deserialization 
         public CategorySearchCriteria()
@@ -58,14 +53,14 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             };
             return retVal;
         }
-      
+
 
         private void Parse(NameValueCollection queryString)
         {
             Keyword = queryString.Get("q");
             SortBy = queryString.Get("sort_by");
             ResponseGroup = EnumUtility.SafeParse<CategoryResponseGroup>(queryString.Get("resp_group"), CategoryResponseGroup.Small);
-        }      
+        }
 
         public override string ToString()
         {

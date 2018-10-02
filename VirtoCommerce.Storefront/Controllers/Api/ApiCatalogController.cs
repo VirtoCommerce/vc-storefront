@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
@@ -7,6 +8,7 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [StorefrontApiRoute("")]
     public class ApiCatalogController : StorefrontControllerBase
     {
         private readonly ICatalogService _catalogService;
@@ -17,7 +19,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // storefrontapi/catalog/search
-        [HttpPost]
+        [HttpPost("catalog/search")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> SearchProducts([FromBody] ProductSearchCriteria searchCriteria)
         {
@@ -35,7 +37,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // storefrontapi/products?productIds=...&respGroup=...
-        [HttpGet]
+        [HttpGet("products")]
         public async Task<ActionResult> GetProductsByIds(string[] productIds, ItemResponseGroup respGroup = ItemResponseGroup.ItemLarge)
         {
             var retVal = await _catalogService.GetProductsAsync(productIds, respGroup);
@@ -43,7 +45,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // storefrontapi/categories/search
-        [HttpPost]
+        [HttpPost("categories/search")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> SearchCategories([FromBody] CategorySearchCriteria searchCriteria)
         {
@@ -60,12 +62,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // GET: storefrontapi/categories
-        [HttpGet]
+        [HttpGet("categories")]
         public async Task<ActionResult> GetCategoriesByIds(string[] categoryIds, CategoryResponseGroup respGroup = CategoryResponseGroup.Full)
         {
             var retVal = await _catalogService.GetCategoriesAsync(categoryIds, respGroup);
             return Json(retVal);
         }
-
     }
 }

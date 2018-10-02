@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,7 @@ namespace VirtoCommerce.Storefront.Domain
                 var serviceProvider = builder.HttpContext.RequestServices;
                 var orderService = serviceProvider.GetRequiredService<ICustomerOrderService>();
 
-                Func<int, int, IEnumerable<SortInfo>, IPagedList<CustomerOrder>> factory = (pageNumber, pageSize, sortInfos) =>
+                Func<int, int, IEnumerable<SortInfo>, NameValueCollection, IPagedList<CustomerOrder>> factory = (pageNumber, pageSize, sortInfos, @params) =>
                 {
                     var orderSearchcriteria = new OrderSearchCriteria
                     {
@@ -34,6 +35,10 @@ namespace VirtoCommerce.Storefront.Domain
                         PageSize = pageSize,
                         Sort = sortInfos?.ToString()
                     };
+                    if (@params != null)
+                    {
+                        orderSearchcriteria.CopyFrom(@params);
+                    }
                     var result = orderService.SearchOrders(orderSearchcriteria);
                     return new StaticPagedList<CustomerOrder>(result, pageNumber, pageSize, result.Count);
                 };

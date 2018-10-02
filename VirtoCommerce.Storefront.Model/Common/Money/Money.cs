@@ -33,7 +33,7 @@ using System.Globalization;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
-    public class Money : IComparable<Money>, IEquatable<Money>, IComparable, IConvertible<Money>
+    public class Money : IComparable<Money>, IEquatable<Money>, IComparable, IConvertible<Money>, ICloneable
     {
         #region Constructors
 
@@ -148,8 +148,10 @@ namespace VirtoCommerce.Storefront.Model.Common
 
         public static bool operator ==(Money first, Money second)
         {
-            if (ReferenceEquals(first, second)) return true;
-            if (ReferenceEquals(first, null) || ReferenceEquals(second, null)) return false;
+            if (ReferenceEquals(first, second))
+                return true;
+            if (ReferenceEquals(first, null) || ReferenceEquals(second, null))
+                return false;
             return first.Equals(second);
         }
 
@@ -397,7 +399,15 @@ namespace VirtoCommerce.Storefront.Model.Common
 
             return new Money(InternalAmount * Currency.ExchangeRate / toCurrency.ExchangeRate, toCurrency);
         }
-
         #endregion
+
+        #region ICloneable members
+        public object Clone()
+        {
+            var result = MemberwiseClone() as Money;
+            return result;
+        }
+        #endregion
+
     }
 }

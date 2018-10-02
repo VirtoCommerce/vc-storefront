@@ -10,15 +10,11 @@ namespace VirtoCommerce.Storefront.Model.Subscriptions
 {
     public partial class SubscriptionSearchCriteria : PagedSearchCriteria
     {
-        private static int _defaultPageSize = 20;
 
-        public static int DefaultPageSize
-        {
-            get { return _defaultPageSize; }
-            set { _defaultPageSize = value; }
-        }
+        public static int DefaultPageSize { get; set; } = 20;
+
         public SubscriptionSearchCriteria()
-            : base(new NameValueCollection(), _defaultPageSize)
+            : base(new NameValueCollection(), DefaultPageSize)
         {
         }
 

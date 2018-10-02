@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using PagedList.Core;
@@ -24,7 +25,7 @@ namespace VirtoCommerce.Storefront.Domain
                 var serviceProvider = builder.HttpContext.RequestServices;
                 var subscriptionService = serviceProvider.GetRequiredService<ISubscriptionService>();
 
-                Func<int, int, IEnumerable<SortInfo>, IPagedList<Subscription>> factory = (pageNumber, pageSize, sortInfos) =>
+                Func<int, int, IEnumerable<SortInfo>, NameValueCollection, IPagedList<Subscription>> factory = (pageNumber, pageSize, sortInfos, @params) =>
                 {
                     var subscriptionSearchCriteria = new SubscriptionSearchCriteria
                     {
@@ -33,6 +34,10 @@ namespace VirtoCommerce.Storefront.Domain
                         Sort = sortInfos?.ToString(),
                         CustomerId = builder.WorkContext.CurrentUser.Id
                     };
+                    if (@params != null)
+                    {
+                        subscriptionSearchCriteria.CopyFrom(@params);
+                    }
                     return subscriptionService.SearchSubscription(subscriptionSearchCriteria);
                 };
                 return builder.WithUserSubscriptionsAsync(new MutablePagedList<Subscription>(factory, 1, SubscriptionSearchCriteria.DefaultPageSize));

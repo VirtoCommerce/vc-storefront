@@ -11,12 +11,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using VirtoCommerce.Storefront.Domain.Security;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
+    [StorefrontRoute]
     public class StaticContentController : StorefrontControllerBase
     {
         private readonly IAuthorizationService _authorizationService;
@@ -69,6 +71,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // GET: /pages/{page}
+        [HttpGet("pages/{*page}")]
         public async Task<ActionResult> GetContentPageByName(string page)
         {
             var contentPage = WorkContext.Pages
@@ -91,6 +94,12 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // GET: /blogs/{blog}, /blog, /blog/category/category, /blogs/{blog}/category/{category}, /blogs/{blog}/tag/{tag}, /blog/tag/{tag}
+        [HttpGet("blogs/{blog}/category/{category}")]
+        [Route("blog")]
+        [Route("blog/category/{category}")]
+        [Route("blog/tag/{tag}")]
+        [Route("blogs/{blog}")]
+        [Route("blogs/{blog}/tag/{tag}")]
         public async Task<ActionResult> GetBlog(string blog = null, string category = null, string tag = null)
         {
             var context = WorkContext;
@@ -121,7 +130,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return NotFound();
         }
 
-        [HttpPost]
+        [HttpPost("content/search")]
         public ActionResult Search(StaticContentSearchCriteria request)
         {
             if (request == null)
@@ -154,7 +163,10 @@ namespace VirtoCommerce.Storefront.Controllers
         /// </summary>
         /// <param name="blogName"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("blogs/{blogname}/rss")]
+        [Route("blogs/{blogname}/feed")]
+        [Route("blog/rss")]
+        [Route("blog/feed")]
         public async Task<ActionResult> BlogRssFeed(string blogName)
         {
             Blog blog = WorkContext.Blogs.FirstOrDefault();

@@ -32,13 +32,22 @@ namespace VirtoCommerce.Storefront.Model.Marketing
         #region IConvertible<Discount> Members
         public Discount ConvertTo(Currency currency)
         {
-            var retVal = new Discount(currency);
-            retVal.PromotionId = PromotionId;
-            retVal.Description = Description;
-            retVal.Coupon = Coupon;
-            retVal.Amount = Amount.ConvertTo(currency);
+            var retVal = new Discount(currency)
+            {
+                PromotionId = PromotionId,
+                Description = Description,
+                Coupon = Coupon,
+                Amount = Amount.ConvertTo(currency)
+            };
             return retVal;
         }
         #endregion
+
+        public override object Clone()
+        {
+            var result = base.Clone() as Discount;
+            result.Amount = Amount?.Clone() as Money;
+            return result;
+        }
     }
 }

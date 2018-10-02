@@ -4,11 +4,13 @@ using System.IO;
 using System.Threading.Tasks;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
+    [StorefrontRoute]
     public class SitemapController : StorefrontControllerBase
     {
         private readonly ISitemapsModuleApiOperations _siteMapApi;
@@ -26,7 +28,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// Return generated sitemap index sitemap.xml
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("sitemap.xml")]
         public async Task<ActionResult> GetSitemapIndex()
         {
             var stream = await TryGetSitemapStream("sitemap.xml");
@@ -42,7 +44,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// Return generated sitemap by file
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("sitemap/{sitemapPath}")]
         public async Task<ActionResult> GetSitemap(string sitemapPath)
         {
             var stream = await TryGetSitemapStream("sitemap/" + sitemapPath);

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
@@ -10,6 +11,7 @@ using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
+    [StorefrontApiRoute("pricing")]
     public class ApiPricingController : StorefrontControllerBase
     {
         private readonly IMarketingService _marketingService;
@@ -26,7 +28,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/pricing/actualprices
-        [HttpPost]
+        [HttpPost("actualprices")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> GetActualProductPrices([FromBody] Product[] products)
         {

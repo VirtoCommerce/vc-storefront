@@ -1,11 +1,13 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Inventory.Services;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
+    [StorefrontRoute]
     public class InventoryController : StorefrontControllerBase
     {
         private readonly IInventoryService _inventoryService;
@@ -22,7 +24,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("fulfillmentcenter/{id}")]
         public async Task<ActionResult> FulfillmentCenterDetails(string id)
         {
             var center = await _inventoryService.GetFulfillmentCenterByIdAsync(id);
