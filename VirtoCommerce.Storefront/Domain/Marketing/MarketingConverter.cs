@@ -12,7 +12,7 @@ using marketingDto = VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 namespace VirtoCommerce.Storefront.Domain
 {
 
-   
+
 
     public static partial class MarketingConverter
     {
@@ -116,14 +116,14 @@ namespace VirtoCommerce.Storefront.Domain
                 result.CartTotal = (double)promoEvalContext.Cart.SubTotal.Amount;
                 result.Coupons = promoEvalContext.Cart.Coupons?.Select(c => c.Code).ToList();
                 result.Currency = promoEvalContext.Cart.Currency.Code;
-                result.CustomerId = promoEvalContext.Cart.Customer.Id;                
+                result.CustomerId = promoEvalContext.Cart.CustomerId;
                 result.UserGroups = promoEvalContext.Cart.Customer?.Contact?.UserGroups;
-                result.IsRegisteredUser = promoEvalContext.Cart.Customer.IsRegisteredUser;
+                result.IsRegisteredUser = promoEvalContext.Cart.Customer?.IsRegisteredUser;
                 result.Language = promoEvalContext.Cart.Language.CultureName;
                 //Set cart line items as default promo items
                 result.PromoEntries = result.CartPromoEntries;
 
-                if(!promoEvalContext.Cart.Shipments.IsNullOrEmpty())
+                if (!promoEvalContext.Cart.Shipments.IsNullOrEmpty())
                 {
                     var shipment = promoEvalContext.Cart.Shipments.First();
                     result.ShipmentMethodCode = shipment.ShipmentMethodCode;
@@ -135,19 +135,19 @@ namespace VirtoCommerce.Storefront.Domain
                     var payment = promoEvalContext.Cart.Payments.First();
                     result.PaymentMethodCode = payment.PaymentGatewayCode;
                     result.PaymentMethodPrice = (double)payment.Price.Amount;
-                }              
+                }
             }
 
             if (!promoEvalContext.Products.IsNullOrEmpty())
             {
-                result.PromoEntries = promoEvalContext.Products.Select(x=>x.ToProductPromoEntryDto()).ToList();
+                result.PromoEntries = promoEvalContext.Products.Select(x => x.ToProductPromoEntryDto()).ToList();
             }
 
-            if(promoEvalContext.Product != null)
+            if (promoEvalContext.Product != null)
             {
                 result.PromoEntry = promoEvalContext.Product.ToProductPromoEntryDto();
             }
-            
+
             result.UserGroups = promoEvalContext?.User?.Contact?.UserGroups;
 
             result.CustomerId = promoEvalContext.User.Id;
@@ -157,7 +157,7 @@ namespace VirtoCommerce.Storefront.Domain
             result.Currency = promoEvalContext.Currency != null ? promoEvalContext.Currency.Code : null;
             result.Language = promoEvalContext.Language != null ? promoEvalContext.Language.CultureName : null;
             result.StoreId = promoEvalContext.StoreId;
-            
+
             return result;
         }
     }
