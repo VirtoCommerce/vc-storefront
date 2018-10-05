@@ -119,6 +119,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.Width = product.Width;
             result.Length = product.Length;
             result.Outline = product.Outline;
+            result.AvailableQuantity = product.AvailableQuantity;
 
             if (product.Associations != null)
             {
@@ -166,7 +167,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 Height = product.Height,
                 MeasureUnit = product.MeasureUnit,
                 Width = product.Width,
-                Length = product.Length
+                Length = product.Length,
+                AvailableQuantity = product.AvailableQuantity
             };
 
 
