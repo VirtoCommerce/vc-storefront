@@ -28,11 +28,35 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
             foreach (var block in source.Blocks)
             {
-                var collection = new MetafieldsCollection(string.Empty, block);
+                var collection = ProcessBlockRecursively(block);
                 result.Blocks.Add(collection);
             }
 
             return result;
+        }
+
+        private MetafieldsCollection ProcessBlockRecursively(IDictionary<string, object> block)
+        {
+            var result = new Dictionary<string, object>();
+            foreach (var key in block.Keys)
+            {
+                if (block[key] is Newtonsoft.Json.Linq.JArray)
+                {
+                        var array = (Newtonsoft.Json.Linq.JArray)block[key];
+                        var resultArray = new List<IDictionary<string, object>>();
+                        foreach (Newtonsoft.Json.Linq.JObject item in array)
+                        {
+                            var listItem = item.ToObject<Dictionary<string, object>>();
+                            resultArray.Add(ProcessBlockRecursively(listItem));
+                        }
+                        result.Add(key, resultArray);
+                }
+                else
+                {
+                    result.Add(key, block[key]);
+                }
+            }
+            return new MetafieldsCollection(string.Empty, result);
         }
     }
 }
