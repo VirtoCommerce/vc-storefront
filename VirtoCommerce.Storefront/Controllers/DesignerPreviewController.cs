@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -25,14 +26,14 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         [HttpPost("designer-preview/block")]
-        public IActionResult Block([FromBody]IDictionary<string, object> block)
+        public IActionResult Block([FromBody]JObject block)
         {
             var content = new JsonPage
             {
-                Blocks = new List<IDictionary<string, object>> { block }
+                Blocks = new List<JObject> { block }
             };
             WorkContext.CurrentJsonPage = content;
-            var viewName = "json-page";
+            var viewName = "json-blocks";
 
             return PartialView(viewName, WorkContext);
         }

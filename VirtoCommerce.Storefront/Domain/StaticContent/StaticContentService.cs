@@ -25,7 +25,7 @@ namespace VirtoCommerce.Storefront.Domain
     public class StaticContentService : IStaticContentService
     {
         private static readonly Regex _headerRegExp = new Regex(@"(?s:^---(.*?)---)");
-        private static readonly string[] _extensions = { ".md", ".liquid", ".html" };
+        private static readonly string[] _extensions = { ".md", ".liquid", ".html", ".json" };
         private readonly IStorefrontUrlBuilder _urlBuilder;
         private readonly IStaticContentItemFactory _contentItemFactory;
         private readonly IContentBlobProvider _contentBlobProvider;

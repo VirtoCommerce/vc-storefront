@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json.Linq;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 using StorefrontModel = VirtoCommerce.Storefront.Model.StaticContent;
 
@@ -35,25 +36,26 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             return result;
         }
 
-        private MetafieldsCollection ProcessBlockRecursively(IDictionary<string, object> block)
+        private MetafieldsCollection ProcessBlockRecursively(JObject block)
         {
             var result = new Dictionary<string, object>();
-            foreach (var key in block.Keys)
+            foreach (var keyValue in block)
             {
-                if (block[key] is Newtonsoft.Json.Linq.JArray)
+                var key = keyValue.Key;
+                var value = keyValue.Value;
+                if (value is JArray)
                 {
-                        var array = (Newtonsoft.Json.Linq.JArray)block[key];
+                        var array = (JArray)value;
                         var resultArray = new List<IDictionary<string, object>>();
-                        foreach (Newtonsoft.Json.Linq.JObject item in array)
+                        foreach (JObject item in array)
                         {
-                            var listItem = item.ToObject<Dictionary<string, object>>();
-                            resultArray.Add(ProcessBlockRecursively(listItem));
+                            resultArray.Add(ProcessBlockRecursively(item));
                         }
                         result.Add(key, resultArray);
                 }
                 else
                 {
-                    result.Add(key, block[key]);
+                    result.Add(key, value.ToString());
                 }
             }
             return new MetafieldsCollection(string.Empty, result);

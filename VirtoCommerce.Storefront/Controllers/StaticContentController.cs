@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.SyndicationFeed;
 using Microsoft.SyndicationFeed.Rss;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -87,6 +88,14 @@ namespace VirtoCommerce.Storefront.Controllers
                     return Challenge();
 
                 SetCurrentPage(contentPage);
+                if (contentPage.FileName.EndsWith(".json"))
+                {
+                    WorkContext.CurrentJsonPage = new JsonPage
+                    {
+                        Blocks = JArray.Parse(contentPage.Content).Cast<JObject>().ToList()
+                    };
+                    return View("json-page", WorkContext);
+                }
                 return View(contentPage.Template, WorkContext);
             }
 
