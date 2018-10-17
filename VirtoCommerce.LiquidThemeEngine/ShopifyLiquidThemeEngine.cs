@@ -112,7 +112,16 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// </summary>
         public string CurrentThemeName => !string.IsNullOrEmpty(WorkContext.CurrentStore.ThemeName) ? WorkContext.CurrentStore.ThemeName : "default";
 
-        public string CurrentThemeSettingPath => Path.Combine(CurrentThemePath, "config", "settings_data.json");
+        private string SettingsDataFile
+        {
+            get
+            {
+                var isPreview = _httpContextAccessor.HttpContext.Request.Query["mode"] == "preview";
+                return isPreview ? "draft_settings_data.json" : "settings_data.json";
+            }
+        }
+
+        public string CurrentThemeSettingPath => Path.Combine(CurrentThemePath, "config", SettingsDataFile);
         public string CurrentThemeLocalePath => Path.Combine(CurrentThemePath, "locales");
         /// <summary>
         /// Current theme base path
