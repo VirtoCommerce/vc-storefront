@@ -116,8 +116,8 @@ namespace VirtoCommerce.LiquidThemeEngine
         {
             get
             {
-                var isPreview = _httpContextAccessor.HttpContext.Request.Query["mode"] == "preview";
-                return isPreview ? "draft_settings_data.json" : "settings_data.json";
+                var prefix = _httpContextAccessor.HttpContext.Request.Query["preview_mode"];
+                return prefix.IsNullOrEmpty() ? "settings_data.json" : $"drafts\\{prefix}_settings_data.json";
             }
         }
 
