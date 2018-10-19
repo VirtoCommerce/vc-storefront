@@ -1,14 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
     /// <summary>
-    /// Represent dictionary  returning a default value if the key does not exist 
+    /// Represent dictionary  returning a default value if the key does not exist
     /// </summary>
     public class DefaultableDictionary : IDictionary
     {

@@ -1,9 +1,7 @@
 using DotLiquid;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
-using PagedList;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -63,7 +61,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public string DefaultLanguage { get; set; }
 
         /// <summary>
-        /// Returns true if the email associated with an order is also tied to a Customer Account. 
+        /// Returns true if the email associated with an order is also tied to a Customer Account.
         /// Returns false if it is not. Helpful in email templates. In the theme, that will always be true.
         /// </summary>
         public bool HasAccount { get; set; }

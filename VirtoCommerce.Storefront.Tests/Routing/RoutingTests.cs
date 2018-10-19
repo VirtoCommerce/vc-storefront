@@ -14,7 +14,6 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Recommendations;
-using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Tests.Routing.Infrastructure;
 using Xunit;
 

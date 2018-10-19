@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
-using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
@@ -24,7 +22,6 @@ using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 using VirtoCommerce.Storefront.Model.Tax.Services;
 using CacheKey = VirtoCommerce.Storefront.Model.Common.Caching.CacheKey;
-using MemoryCacheExtensions = VirtoCommerce.Storefront.Extensions.MemoryCacheExtensions;
 
 namespace VirtoCommerce.Storefront.Domain
 {

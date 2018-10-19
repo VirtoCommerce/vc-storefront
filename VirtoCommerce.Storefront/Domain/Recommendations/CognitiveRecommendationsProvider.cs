@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi;
-using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;

@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
@@ -14,7 +12,7 @@ namespace VirtoCommerce.Storefront.Model.Common
         {
             _cachedRegionInfos = CultureInfo.GetCultures(CultureTypes.AllCultures)
                                             .Where(c => !c.IsNeutralCulture && c.LCID != 127)
-                .Select(x => 
+                .Select(x =>
                 {
                     try
                     {

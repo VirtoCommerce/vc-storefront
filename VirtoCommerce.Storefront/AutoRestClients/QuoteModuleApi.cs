@@ -6,17 +6,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
-    using Models;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Net;
     using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class VirtoCommerceQuoteRESTAPIdocumentation : ServiceClient<VirtoCommerceQuoteRESTAPIdocumentation>, IVirtoCommerceQuoteRESTAPIdocumentation
     {
@@ -284,18 +276,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
 {
     using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Models;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     /// <summary>
     /// </summary>
@@ -340,16 +321,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
     using Microsoft.Rest.Serialization;
     using Models;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     /// <summary>
     /// QuoteModule operations.
@@ -1377,18 +1353,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
 {
     using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Models;
-    using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Net;
-    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     /// <summary>
     /// QuoteModule operations.
@@ -1557,18 +1525,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Models;
-    using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Net;
-    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
     using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     /// <summary>
@@ -1828,19 +1788,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class SortInfo
     {
@@ -1888,19 +1836,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class QuoteRequestSearchCriteria
     {
@@ -2041,19 +1978,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class QuoteRequestTotals
     {
@@ -2149,19 +2074,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class ShipmentMethod
     {
@@ -2230,19 +2143,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class Address
     {
@@ -2375,19 +2276,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class CatalogLanguage
     {
@@ -2450,19 +2339,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class PropertyValue
     {
@@ -2584,19 +2461,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class CategoryLink
     {
@@ -2659,19 +2524,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class SeoInfo
     {
@@ -2800,19 +2653,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class Image
     {
@@ -2929,19 +2771,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class OutlineItem
     {
@@ -2998,19 +2829,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class Outline
     {
@@ -3049,19 +2869,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class Category
     {
@@ -3250,19 +3059,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class PropertyAttribute
     {
@@ -3349,19 +3146,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class PropertyDictionaryValue
     {
@@ -3430,19 +3215,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class PropertyDisplayName
     {
@@ -3487,19 +3260,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class PropertyValidationRule
     {
@@ -3574,19 +3335,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class Property
     {
@@ -3754,19 +3504,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class Catalog
     {
@@ -3841,19 +3580,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class Asset
     {
@@ -3976,19 +3704,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class EditorialReview
     {
@@ -4075,19 +3791,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class Entity
     {
@@ -4126,19 +3830,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class ProductAssociation
     {
@@ -4213,19 +3906,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class DynamicExpression
     {
@@ -4276,19 +3958,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class ConditionExpressionTree
     {
@@ -4339,19 +4010,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class PricelistAssignment
     {
@@ -4486,19 +4145,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class Pricelist
     {
@@ -4591,19 +4239,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class Price
     {
@@ -4714,19 +4350,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class InventoryInfo
     {
@@ -4865,19 +4489,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class CatalogProduct
     {
@@ -5234,19 +4847,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class TierPrice
     {
@@ -5291,19 +4892,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class QuoteItem
     {
@@ -5459,19 +5049,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class QuoteAttachment
     {
@@ -5558,19 +5136,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class TaxDetail
     {
@@ -5621,19 +5187,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class DynamicPropertyObjectValue
     {
@@ -5678,19 +5232,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class DynamicPropertyName
     {
@@ -5735,19 +5277,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class DynamicObjectProperty
     {
@@ -5888,19 +5419,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class OperationLog
     {
@@ -5991,19 +5510,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     /// <summary>
     /// Request for quotation (RFQ) is a standard business process whose
@@ -6335,19 +5843,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 
     public partial class QuoteRequestSearchResult
     {

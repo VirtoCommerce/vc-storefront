@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Marketing;
 
@@ -14,8 +11,8 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public ProductPrice(Currency currency)
         {
             Currency = currency;
-            ListPrice = new Money(currency);        
-            SalePrice = new Money(currency);       
+            ListPrice = new Money(currency);
+            SalePrice = new Money(currency);
             DiscountAmount = new Money(currency);
             TierPrices = new List<TierPrice>();
             Discounts = new List<Discount>();
@@ -34,9 +31,9 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// Product id
         public string ProductId { get; set; }
 
-      
+
         public Money DiscountAmount { get; set; }
-      
+
         public Money DiscountAmountWithTax
         {
             get
@@ -46,7 +43,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         }
 
         /// <summary>
-        /// Relative benefit. 30% 
+        /// Relative benefit. 30%
         /// </summary>
         public decimal DiscountPercent
         {
@@ -65,7 +62,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// </summary>
         public Money ListPrice { get; set; }
         /// <summary>
-        /// Original product price (old price) including tax 
+        /// Original product price (old price) including tax
         /// </summary>
         public Money ListPriceWithTax
         {
@@ -81,7 +78,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public Money SalePrice { get; set; }
 
         /// <summary>
-        /// Sale product price (new price) including tax 
+        /// Sale product price (new price) including tax
         /// </summary>
         public Money SalePriceWithTax
         {
@@ -121,10 +118,10 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public int? MinQuantity { get; set; }
 
         /// <summary>
-        /// Tier prices 
+        /// Tier prices
         /// </summary>
         public IList<TierPrice> TierPrices { get; set; }
-                
+
         /// <summary>
         /// Return tire price for passed quantity
         /// </summary>
@@ -177,7 +174,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
                 {
                     TaxPercentRate = TaxRate.TaxPercentRound(taxRate.Rate.Amount / amount);
                 }
-            }         
+            }
             foreach(var tierPrice in TierPrices)
             {
                 tierPrice.ApplyTaxRates(taxRates);
@@ -198,7 +195,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             retVal.SalePrice = SalePrice.ConvertTo(currency);
             retVal.DiscountAmount = DiscountAmount.ConvertTo(currency);
             retVal.ProductId = ProductId;
-           
+
             return retVal;
         }
         #endregion
@@ -221,7 +218,6 @@ namespace VirtoCommerce.Storefront.Model.Catalog
                     yield return tierPrice;
                 }
             }
-
         }
     }
 }

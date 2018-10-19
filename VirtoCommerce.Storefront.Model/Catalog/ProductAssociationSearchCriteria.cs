@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Specialized;
 using VirtoCommerce.Storefront.Model.Common;
 
@@ -23,6 +22,5 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         public ItemResponseGroup ResponseGroup { get; set; } = ItemResponseGroup.ItemInfo;
         public string Group { get; set; }
-
     }
 }

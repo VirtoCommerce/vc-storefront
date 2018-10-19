@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
-using System;
 using System.Linq;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -20,7 +19,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         }
 
         #region IViewEngine members
-                     
+
         public ViewEngineResult FindView(ActionContext context, string viewName, bool isMainPage)
         {
             return InnerGetView(viewName, isMainPage);

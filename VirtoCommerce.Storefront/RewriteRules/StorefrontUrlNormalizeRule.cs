@@ -1,9 +1,6 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text.RegularExpressions;
 using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Extensions;
 
 namespace VirtoCommerce.Storefront.Middleware

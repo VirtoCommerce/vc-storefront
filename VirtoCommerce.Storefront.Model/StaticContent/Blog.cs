@@ -1,4 +1,3 @@
-using System;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.StaticContent

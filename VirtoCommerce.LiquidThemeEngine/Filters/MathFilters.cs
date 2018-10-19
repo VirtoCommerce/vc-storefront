@@ -1,13 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using DotLiquid;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
@@ -48,6 +40,5 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }
             return input;
         }
-  
     }
 }

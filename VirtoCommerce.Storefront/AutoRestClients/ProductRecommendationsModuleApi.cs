@@ -6,17 +6,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleA
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
-    using Models;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Net;
     using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi;
 
     public partial class VirtoCommerceProductRecommendationsRESTAPIdocumentation : ServiceClient<VirtoCommerceProductRecommendationsRESTAPIdocumentation>, IVirtoCommerceProductRecommendationsRESTAPIdocumentation
     {
@@ -284,18 +276,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleA
 namespace VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi
 {
     using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Models;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi;
 
     /// <summary>
     /// </summary>
@@ -340,16 +321,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleA
     using Microsoft.Rest.Serialization;
     using Models;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi;
 
     /// <summary>
     /// Recommendations operations.
@@ -941,18 +917,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleA
 namespace VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi
 {
     using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Models;
-    using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Net;
-    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi;
 
     /// <summary>
     /// Recommendations operations.
@@ -1036,18 +1004,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleA
 
 namespace VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Models;
-    using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Net;
-    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
     using VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi;
 
     /// <summary>
@@ -1164,19 +1124,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleA
 
 namespace VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi;
 
     public partial class RecommendationEvalContext
     {
@@ -1251,19 +1200,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleA
 
 namespace VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi;
 
     public partial class UsageEvent
     {
@@ -1355,19 +1292,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleA
 
 namespace VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi.Models
 {
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using VirtoCommerce.Storefront;
-    using VirtoCommerce.Storefront.AutoRestClients;
-    using VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi;
 
     public partial class ExportPushNotification
     {

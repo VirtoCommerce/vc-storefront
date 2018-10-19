@@ -2,7 +2,6 @@ using PagedList.Core;
 using System.Linq;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Security;
 using StorefrontModel = VirtoCommerce.Storefront.Model;
 

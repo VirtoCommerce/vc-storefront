@@ -1,4 +1,3 @@
-using System;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Marketing
@@ -8,10 +7,12 @@ namespace VirtoCommerce.Storefront.Model.Marketing
         public Discount()
         {
         }
+
         public Discount(Currency currency)
         {
             Amount = new Money(currency);
         }
+
         /// <summary>
         /// Gets or sets the value of promotion id
         /// </summary>

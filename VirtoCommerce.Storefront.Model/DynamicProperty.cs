@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model
@@ -32,6 +29,4 @@ namespace VirtoCommerce.Storefront.Model
         //All possible dictionary values
         public IList<DynamicPropertyDictionaryItem> DictionaryItems { get; set; } = new List<DynamicPropertyDictionaryItem>();
     }
-
-  
 }

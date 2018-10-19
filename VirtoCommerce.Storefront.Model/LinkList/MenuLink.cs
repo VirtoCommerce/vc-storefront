@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model
@@ -34,6 +32,5 @@ namespace VirtoCommerce.Storefront.Model
         /// Associated object type
         /// </summary>
         public string AssociatedObjectType { get; set; }
-
     }
 }

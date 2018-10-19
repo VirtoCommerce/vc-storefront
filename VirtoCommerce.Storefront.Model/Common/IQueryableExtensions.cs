@@ -1,10 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Collections;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
@@ -26,7 +23,6 @@ namespace VirtoCommerce.Storefront.Model.Common
         {
             return ApplyOrder<T>(source, property, "ThenByDescending");
         }
-
 
         public static IOrderedQueryable<T> OrderBySortInfos<T>(this IQueryable<T> source, SortInfo[] sortInfos)
         {
@@ -102,6 +98,5 @@ namespace VirtoCommerce.Storefront.Model.Common
                     .Invoke(null, new object[] { source, lambda });
             return (IOrderedQueryable<T>)result;
         }
-
     }
 }

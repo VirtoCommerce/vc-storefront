@@ -1,7 +1,6 @@
 using PagedList.Core;
 using System;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 using VirtoCommerce.Storefront.Model;

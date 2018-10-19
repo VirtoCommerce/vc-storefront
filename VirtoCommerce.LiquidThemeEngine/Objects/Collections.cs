@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -14,11 +12,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         }
 
         #region Public Methods and Operators
+        
         public override object BeforeMethod(string method)
         {
             return this.FirstOrDefault(x => x.Handle.Equals(method, StringComparison.OrdinalIgnoreCase));
         }
+
         #endregion
-        
     }
 }

@@ -1,9 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model
@@ -25,7 +21,7 @@ namespace VirtoCommerce.Storefront.Model
             {
                 culture = CultureInfo.GetCultureInfo(cultureName);
             }
-          
+
             CultureName = culture.Name;
             ThreeLeterLanguageName = culture.ThreeLetterISOLanguageName;
             TwoLetterLanguageName = culture.TwoLetterISOLanguageName;
@@ -59,7 +55,7 @@ namespace VirtoCommerce.Storefront.Model
         public string CultureName { get; private set; }
         public string NativeName { get; private set; }
         /// <summary>
-        ///  Gets the ISO 639-2 three-letter code for the language 
+        ///  Gets the ISO 639-2 three-letter code for the language
         /// </summary>
         public string ThreeLeterLanguageName { get; private set; }
         /// <summary>
@@ -79,6 +75,5 @@ namespace VirtoCommerce.Storefront.Model
         {
             yield return CultureName;
         }
-
     }
 }

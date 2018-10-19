@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DotLiquid;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
@@ -25,6 +20,5 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// Property value in current language
         /// </summary>
         public string Value { get; set; }
-
     }
 }

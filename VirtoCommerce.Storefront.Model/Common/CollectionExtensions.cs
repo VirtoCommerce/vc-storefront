@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
@@ -21,8 +19,8 @@ namespace VirtoCommerce.Storefront.Model.Common
         /// <exception cref="System.ArgumentNullException">An <see cref="System.ArgumentNullException"/> is thrown if <paramref name="collection"/> or <paramref name="items"/> is <see langword="null"/>.</exception>
 		public static ICollection<T> AddRange<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
-            if (collection == null) throw new System.ArgumentNullException("collection");
-            if (items == null) throw new System.ArgumentNullException("items");
+            if (collection == null) throw new ArgumentNullException("collection");
+            if (items == null) throw new ArgumentNullException("items");
 
             foreach (var each in items)
             {
@@ -113,8 +111,5 @@ namespace VirtoCommerce.Storefront.Model.Common
                 action(EntryState.Deleted, removedItem, removedItem);
             }
         }
-
-
-
     }
 }

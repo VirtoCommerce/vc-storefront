@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using DotLiquid;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 
@@ -109,13 +108,13 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                     {
                         var containsMethod = typeof(string).GetMethods().Where(x => x.Name == "Contains").First();
                         expr = Expression.Call(left, containsMethod, right);
-                    } 
+                    }
                     else
                     {
                         var containsMethod = typeof(Enumerable).GetMethods().Where(x => x.Name == "Contains" && x.GetParameters().Count() == 2).First().MakeGenericMethod(new Type[] { objValue.GetType() });
                         expr = Expression.Call(containsMethod, left, right);
-                    }                 
-                
+                    }
+
                     //where(x=> x.Tags.Contains(y))
                     binaryOp = Expression.Equal(expr, Expression.Constant(true));
                 }

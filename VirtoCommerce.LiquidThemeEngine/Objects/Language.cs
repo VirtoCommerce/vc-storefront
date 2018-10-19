@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DotLiquid;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
@@ -19,7 +13,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public string CultureName { get; set; }
         public string NativeName { get; set; }
         /// <summary>
-        ///  Gets the ISO 639-2 three-letter code for the language 
+        ///  Gets the ISO 639-2 three-letter code for the language
         /// </summary>
         public string ThreeLeterLanguageName { get; set; }
         /// <summary>
@@ -34,7 +28,5 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         ///  Gets the three-letter code defined in ISO 3166 for the country/region.
         /// </summary>
         public string ThreeLetterRegionName { get; set; }
-
-
     }
 }

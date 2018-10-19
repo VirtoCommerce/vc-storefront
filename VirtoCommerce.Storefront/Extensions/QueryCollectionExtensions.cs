@@ -1,10 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 
 namespace VirtoCommerce.Storefront.Extensions
 {

@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using PagedList.Core;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Infrastructure;

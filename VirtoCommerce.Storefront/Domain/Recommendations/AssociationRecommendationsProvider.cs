@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
-using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Recommendations;
 using VirtoCommerce.Storefront.Model.Services;
 

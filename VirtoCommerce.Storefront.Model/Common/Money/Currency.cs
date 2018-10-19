@@ -2,12 +2,11 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Runtime.Serialization;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
     /// <summary>
-    /// Represent currency information in storefront. Contains some extra informations as exchnage rate, symbol, formating. 
+    /// Represent currency information in storefront. Contains some extra informations as exchnage rate, symbol, formating.
     /// </summary>
     public class Currency : ValueObject
     {
@@ -143,6 +142,5 @@ namespace VirtoCommerce.Storefront.Model.Common
             yield return Code;
             yield return CultureName;
         }
-
     }
 }

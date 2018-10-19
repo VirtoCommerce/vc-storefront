@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DotLiquid;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
     /// <summary>
-    /// Filter used for localization 
+    /// Filter used for localization
     /// </summary>
     public class TranslationFilter
     {
@@ -52,11 +50,5 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }
             return retVal;
         }
-
-
     }
-
-
-
-
 }

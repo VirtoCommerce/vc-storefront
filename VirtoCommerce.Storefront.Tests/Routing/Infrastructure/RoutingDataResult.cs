@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-
 namespace VirtoCommerce.Storefront.Tests.Routing.Infrastructure
 {
     /// <summary>
     /// Result of request processing produced by <see cref="RoutingTestingActionFilter"/>.
-    /// It contains some data that may be useful to test action routing - 
+    /// It contains some data that may be useful to test action routing -
     /// i.e. requested path, type of controller that should process that request,
     /// name of method that should handle that request, and arguments that were passed
     /// with that request.

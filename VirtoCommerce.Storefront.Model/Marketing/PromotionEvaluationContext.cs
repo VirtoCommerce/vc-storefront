@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Security;
-using VirtoCommerce.Storefront.Model.Stores;
 
 namespace VirtoCommerce.Storefront.Model.Marketing
 {
@@ -16,10 +15,10 @@ namespace VirtoCommerce.Storefront.Model.Marketing
             Language = language;
             Currency = currency;
         }
-            
+
         public string StoreId { get; set; }
         public Language Language { get; set; }
-        public Currency Currency { get; set; } 
+        public Currency Currency { get; set; }
         public User User { get; set; }
         public Cart.ShoppingCart Cart { get; set; }
         public IList<Product> Products { get; set; } = new List<Product>();
@@ -81,7 +80,7 @@ namespace VirtoCommerce.Storefront.Model.Marketing
             {
                 foreach (var product in Products)
                 {
-                    yield return product;                   
+                    yield return product;
                 }
             }
         }

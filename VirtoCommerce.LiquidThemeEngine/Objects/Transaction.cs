@@ -1,15 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using DotLiquid;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
     /// <summary>
-    /// Represent order transaction 
+    /// Represent order transaction
     /// https://help.shopify.com/themes/liquid/objects/transaction
     /// </summary>
     [DataContract]
@@ -72,6 +68,5 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public string PaymentDetails { get; set; }
         [DataMember]
         public string CreditCardNumber { get; set; }
-
     }
 }

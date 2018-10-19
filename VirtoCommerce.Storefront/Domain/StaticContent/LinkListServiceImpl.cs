@@ -13,8 +13,6 @@ using VirtoCommerce.Storefront.Model.LinkList.Services;
 using VirtoCommerce.Storefront.Model.Services;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Infrastructure;
-using System.Threading;
-using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Model.Caching;
 
 namespace VirtoCommerce.Storefront.Domain

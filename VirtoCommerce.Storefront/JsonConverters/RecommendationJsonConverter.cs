@@ -2,8 +2,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
-using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Recommendations;
 
 namespace VirtoCommerce.Storefront.Binders

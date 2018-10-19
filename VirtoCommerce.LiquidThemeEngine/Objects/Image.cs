@@ -1,5 +1,4 @@
 using DotLiquid;
-using Newtonsoft.Json;
 using System.Runtime.Serialization;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
