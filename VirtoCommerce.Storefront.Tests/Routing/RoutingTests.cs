@@ -177,9 +177,12 @@ namespace VirtoCommerce.Storefront.Tests.Routing
             AddApiRequestRoute(routingData, "ApiInventory", "SearchFulfillmentCenters", CustomHttpMethod.PostJson, "storefrontapi/fulfillmentcenters/search");
 
             //Errors
-            AddRegularRequestRoute(routingData, "Error", "AccessDenied", CustomHttpMethod.Get, "error/AccessDenied");
-            AddRegularRequestRoute(routingData, "Error", "Error", CustomHttpMethod.Get, "error/500");
-            AddRegularRequestRoute(routingData, "Error", "Error", CustomHttpMethod.Get, "error/404");
+            AddErrorRequestRoutes(routingData, "AccessDenied", "error/AccessDenied");
+            AddErrorRequestRoutes(routingData, "Error", "error/500");
+            AddErrorRequestRoutes(routingData, "Error", "error/404");
+            AddErrorRequestRoutes(routingData, "Error", "error/403");
+            AddErrorRequestRoutes(routingData, "Error", "error/401");
+            AddErrorRequestRoutes(routingData, "Error", "error/400");
 
             // Account
             AddRegularRequestRoute(routingData, "Account", "GetAccount", CustomHttpMethod.Get, "account");
@@ -367,6 +370,15 @@ namespace VirtoCommerce.Storefront.Tests.Routing
             yield return $"en-US/{baseUrl}";
             yield return $"Electronics/{baseUrl}";
             yield return $"Electronics/en-US/{baseUrl}";
+        }
+
+        protected static void AddErrorRequestRoutes(ICollection<object[]> routingData, string expectedActionName, string baseUrl)
+        {
+            var allHttpMethods = Enum.GetValues(typeof(CustomHttpMethod)).Cast<CustomHttpMethod>();
+            foreach (var httpMethod in allHttpMethods)
+            {
+                AddRegularRequestRoute(routingData, "Error", expectedActionName, httpMethod, baseUrl);
+            }
         }
 
         private async Task PerformTestingRouting(CustomHttpMethod method, string url, string expectedControllerMethodName, object objectToPost)
