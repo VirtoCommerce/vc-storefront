@@ -8,12 +8,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
     public class CommerceFilters
     {
         #region Static Fields
+
         private static readonly Lazy<CultureInfo[]> _cultures = new Lazy<CultureInfo[]>(
             CreateCultures,
             LazyThreadSafetyMode.ExecutionAndPublication);
+
         #endregion
 
         #region Public Properties
+
         public static CultureInfo[] Cultures
         {
             get
@@ -21,9 +24,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 return _cultures.Value;
             }
         }
+
         #endregion
 
         #region Public Methods and Operators
+
         /// <summary>
         ///     Return the three letter ISO currency code for the current thread.
         /// </summary>
@@ -37,7 +42,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         {
             return new RegionInfo(cultureName).ISOCurrencySymbol;
         }
-
 
         /// <summary>
         ///     Return the object which represents the place and language which matches the currency code which
@@ -87,14 +91,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return String.Format(EffectiveCulture(currencyCode), "{0:c}", amount);
         }
 
-
         #endregion
 
         #region Methods
+
         private static CultureInfo[] CreateCultures()
         {
             return CultureInfo.GetCultures(CultureTypes.SpecificCultures);
         }
+
         #endregion
     }
 }
