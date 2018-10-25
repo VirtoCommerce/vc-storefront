@@ -50,7 +50,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         /// <param name="product"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        Task AddItemAsync(Product product, int quantity);
+        Task<bool> AddItemAsync(Product product, int quantity);
 
         /// <summary>
         /// Change cart item qty by product index

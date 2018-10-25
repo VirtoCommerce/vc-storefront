@@ -111,7 +111,7 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.CompletedTask;
         }
 
-        public virtual async Task AddItemAsync(Product product, int quantity)
+        public virtual async Task<bool> AddItemAsync(Product product, int quantity)
         {
             EnsureCartExists();
 
@@ -122,6 +122,7 @@ namespace VirtoCommerce.Storefront.Domain
                 lineItem.Product = product;
                 await AddLineItemAsync(lineItem);
             }
+            return isProductAvailable;
         }
 
         public virtual async Task ChangeItemQuantityAsync(string id, int quantity)
