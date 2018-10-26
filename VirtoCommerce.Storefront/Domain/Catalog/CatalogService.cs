@@ -15,6 +15,7 @@ using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Customer.Services;
+using VirtoCommerce.Storefront.Model.CustomerReviews;
 using VirtoCommerce.Storefront.Model.Inventory.Services;
 using VirtoCommerce.Storefront.Model.Pricing.Services;
 using VirtoCommerce.Storefront.Model.Services;
@@ -32,13 +33,14 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IMemberService _customerService;
         private readonly ISubscriptionService _subscriptionService;
         private readonly IInventoryService _inventoryService;
+        private readonly ICustomerReviewService _customerReviewService;
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
 
         public CatalogService(IWorkContextAccessor workContextAccessor, ICatalogModuleCategories categoriesApi,
             ICatalogModuleProducts productsApi,
             ICatalogModuleSearch searchApi, IPricingService pricingService, IMemberService customerService,
-            ISubscriptionService subscriptionService,
+            ISubscriptionService subscriptionService, ICustomerReviewService customerReviewService,
             IInventoryService inventoryService, IStorefrontMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
         {
             _workContextAccessor = workContextAccessor;
@@ -48,6 +50,7 @@ namespace VirtoCommerce.Storefront.Domain
             _categoriesApi = categoriesApi;
             _pricingService = pricingService;
             _inventoryService = inventoryService;
+            _customerReviewService = customerReviewService;
             _customerService = customerService;
             _subscriptionService = subscriptionService;
             _memoryCache = memoryCache;
@@ -106,6 +109,8 @@ namespace VirtoCommerce.Storefront.Domain
                     {
                         taskList.Add(LoadProductPaymentPlanAsync(allProducts, workContext));
                     }
+
+                    taskList.Add(LoadProductCustomerReviewsAsync(allProducts, workContext));
 
                     await Task.WhenAll(taskList.ToArray());
 
@@ -362,6 +367,31 @@ namespace VirtoCommerce.Storefront.Domain
                     }
                     return new StaticPagedList<ProductAssociation>(result, pageNumber, pageSize, searchResult.TotalCount ?? 0);
                 }, 1, ProductSearchCriteria.DefaultPageSize);
+            }
+            return Task.CompletedTask;
+        }
+
+        protected virtual Task LoadProductCustomerReviewsAsync(List<Product> products, WorkContext workContext)
+        {
+            if (products == null)
+            {
+                throw new ArgumentNullException(nameof(products));
+            }
+
+            foreach (var product in products)
+            {
+                //Lazy loading for customer reviews
+                product.CustomerReviews = new MutablePagedList<Model.CustomerReviews.CustomerReview>((pageNumber, pageSize, sortInfos) =>
+                {
+                    var criteria = new CustomerReviewSearchCriteria
+                    {
+                        ProductIds = new[] { product.Id },
+                        PageNumber = pageNumber,
+                        PageSize = pageSize,
+                        Sort = SortInfo.ToString(sortInfos),
+                    };
+                    return _customerReviewService.SearchReviews(criteria);
+                }, 1, CustomerReviewSearchCriteria.DefaultPageSize);
             }
             return Task.CompletedTask;
         }

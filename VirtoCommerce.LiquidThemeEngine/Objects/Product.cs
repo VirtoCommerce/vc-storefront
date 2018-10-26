@@ -100,6 +100,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// </summary>
         public Descriptions Descriptions { get; set; }
 
+        [DataMember]
+        public CustomerReview[] CustomerReviews { get; set; }
+
         /// <summary>
         /// The main product image 
         /// </summary>
