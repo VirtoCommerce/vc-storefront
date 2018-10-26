@@ -1,6 +1,8 @@
 using Markdig;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -108,7 +110,24 @@ namespace VirtoCommerce.Storefront.Domain
 
             try
             {
-                metaHeaders = ReadYamlHeader(content);
+                if (contentPath.EndsWith(".json"))
+                {
+                    var page = JsonConvert.DeserializeObject<JArray>(content);
+                    var settings = page.FirstOrDefault(x =>
+                    {
+                        return (x as JObject).GetValue("type").Value<string>() == "settings";
+                    });
+                    metaHeaders = new Dictionary<string, IEnumerable<string>>();
+                    var items = settings.AsJEnumerable();
+                    foreach (JProperty item in items)
+                    {
+                        metaHeaders.Add(item.Name, new List<string> { item.Value.Value<string>() });
+                    }
+                }
+                else
+                {
+                    metaHeaders = ReadYamlHeader(content);
+                }
             }
             catch (Exception ex)
             {
