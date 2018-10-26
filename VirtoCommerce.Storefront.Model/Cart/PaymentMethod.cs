@@ -5,9 +5,9 @@ using VirtoCommerce.Storefront.Model.Marketing;
 
 namespace VirtoCommerce.Storefront.Model
 {
-    public partial class PaymentMethod : ITaxable, IDiscountable
+    public partial class PaymentMethod : ValueObject, ITaxable, IDiscountable
     {
-      
+
         public PaymentMethod(Currency currency)
         {
             Currency = currency;
@@ -188,6 +188,22 @@ namespace VirtoCommerce.Storefront.Model
             }
         }
         #endregion
+
+        public override object Clone()
+        {
+            var result = base.Clone() as PaymentMethod;
+            result.Price = Price?.Clone() as Money;
+            result.DiscountAmount = DiscountAmount?.Clone() as Money;
+            if (Discounts != null)
+            {
+                result.Discounts = new List<Discount>(Discounts.Select(x => x.Clone() as Discount));
+            }
+            if (TaxDetails != null)
+            {
+                result.TaxDetails = new List<TaxDetail>(TaxDetails.Select(x => x.Clone() as TaxDetail));
+            }
+            return result;
+        }
 
     }
 }

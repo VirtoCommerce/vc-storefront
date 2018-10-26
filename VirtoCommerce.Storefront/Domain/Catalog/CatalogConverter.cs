@@ -417,6 +417,7 @@ namespace VirtoCommerce.Storefront.Domain
                 CatalogId = product.CatalogId,
                 CategoryId = product.CategoryId,
                 Outline = product.Outline,
+                Code = product.Sku,
                 ProductId = product.Id,
                 Quantity = 1,
                 InStockQuantity = product.Inventory != null && product.Inventory.InStockQuantity.HasValue ? (int)product.Inventory.InStockQuantity.Value : 0,

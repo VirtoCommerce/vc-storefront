@@ -151,5 +151,31 @@ namespace VirtoCommerce.Storefront.Model.Cart
             }
         }
         #endregion
+
+        public override object Clone()
+        {
+            var result = base.Clone() as Payment;
+
+            result.Currency = result.Currency?.Clone() as Currency;
+            result.Price = result.Price?.Clone() as Money;
+            result.PriceWithTax = result.PriceWithTax?.Clone() as Money;
+            result.DiscountAmount = result.DiscountAmount?.Clone() as Money;
+            result.DiscountAmountWithTax = result.DiscountAmountWithTax?.Clone() as Money;
+            result.Amount = result.Amount?.Clone() as Money;
+            result.Total = result.Total?.Clone() as Money;
+            result.TotalWithTax = result.TotalWithTax?.Clone() as Money;
+            result.TaxTotal = result.TaxTotal?.Clone() as Money;
+
+            if (Discounts != null)
+            {
+                result.Discounts = new List<Discount>(Discounts.Select(x => x.Clone() as Discount));
+            }
+            if (TaxDetails != null)
+            {
+                result.TaxDetails = new List<TaxDetail>(TaxDetails.Select(x => x.Clone() as TaxDetail));
+            }
+
+            return result;
+        }
     }
 }

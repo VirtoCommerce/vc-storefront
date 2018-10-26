@@ -111,7 +111,7 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.CompletedTask;
         }
 
-        public virtual async Task AddItemAsync(Product product, int quantity)
+        public virtual async Task<bool> AddItemAsync(Product product, int quantity)
         {
             EnsureCartExists();
 
@@ -122,6 +122,7 @@ namespace VirtoCommerce.Storefront.Domain
                 lineItem.Product = product;
                 await AddLineItemAsync(lineItem);
             }
+            return isProductAvailable;
         }
 
         public virtual async Task ChangeItemQuantityAsync(string id, int quantity)
@@ -176,14 +177,25 @@ namespace VirtoCommerce.Storefront.Domain
         public virtual Task AddCouponAsync(string couponCode)
         {
             EnsureCartExists();
-            Cart.Coupon = new Coupon { Code = couponCode };
+            if (!Cart.Coupons.Any(c => c.Code.EqualsInvariant(couponCode)))
+            {
+                Cart.Coupons.Add(new Coupon { Code = couponCode });
+            }
+
             return Task.FromResult((object)null);
         }
 
-        public virtual Task RemoveCouponAsync()
+        public virtual Task RemoveCouponAsync(string couponCode = null)
         {
             EnsureCartExists();
-            Cart.Coupon = null;
+            if (string.IsNullOrEmpty(couponCode))
+            {
+                Cart.Coupons.Clear();
+            }
+            else
+            {
+                Cart.Coupons.Remove(Cart.Coupons.FirstOrDefault(c => c.Code.EqualsInvariant(couponCode)));
+            }
             return Task.FromResult((object)null);
         }
 
@@ -279,9 +291,9 @@ namespace VirtoCommerce.Storefront.Domain
                 await AddLineItemAsync(lineItem);
             }
 
-            if (cart.Coupon != null)
+            foreach (var coupon in cart.Coupons)
             {
-                Cart.Coupon = cart.Coupon;
+                await AddCouponAsync(coupon.Code);
             }
 
             foreach (var shipment in cart.Shipments)
@@ -479,7 +491,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Customer = user,
                 Type = type,
                 IsAnonymous = !user.IsRegisteredUser,
-                CustomerName = user.IsRegisteredUser ? user.UserName : SecurityConstants.AnonymousUsername
+                CustomerName = user.IsRegisteredUser ? user.UserName : SecurityConstants.AnonymousUsername,
             };
 
             return cart;

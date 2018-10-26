@@ -42,12 +42,16 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// </summary>
         [DataMember]
         public bool Buyable { get; set; }
-  
+
         /// <summary>
         ///  Returns true if a product is instock
         /// </summary>
         [DataMember]
         public bool InStock { get; set; }
+
+        [DataMember]
+        public long AvailableQuantity { get; set; }
+
         /// <summary>
         /// Returns the variant's barcode.
         /// </summary>
@@ -110,7 +114,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         {
             get
             {
-                if (this.Options == null) return null;
+                if (this.Options == null)
+                    return null;
                 return this.Options.Length >= 1 ? this.Options[0] : null;
             }
         }
@@ -123,7 +128,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         {
             get
             {
-                if (this.Options == null) return null;
+                if (this.Options == null)
+                    return null;
                 return this.Options.Length >= 2 ? this.Options[1] : null;
             }
         }
@@ -136,7 +142,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         {
             get
             {
-                if (this.Options == null) return null;
+                if (this.Options == null)
+                    return null;
                 return this.Options.Length >= 3 ? this.Options[2] : null;
             }
         }
@@ -194,7 +201,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// </summary>
         [DataMember]
         public string WeightInUnit { get; set; }
-        
+
         /// <summary>
         /// Package type
         /// </summary>

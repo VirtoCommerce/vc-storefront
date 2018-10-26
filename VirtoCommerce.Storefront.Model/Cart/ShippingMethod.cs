@@ -5,7 +5,7 @@ using VirtoCommerce.Storefront.Model.Marketing;
 
 namespace VirtoCommerce.Storefront.Model
 {
-    public partial class ShippingMethod : ITaxable, IDiscountable
+    public partial class ShippingMethod : ValueObject, ITaxable, IDiscountable
     {
         public ShippingMethod()
         {
@@ -179,37 +179,22 @@ namespace VirtoCommerce.Storefront.Model
         }
         #endregion
 
-        public override string ToString()
+
+        protected override IEnumerable<object> GetEqualityComponents()
         {
-            return string.Join(":", ShipmentMethodCode, OptionName);
+            yield return ShipmentMethodCode;
+            yield return OptionName;
         }
 
-        public override bool Equals(object obj)
+
+        public override object Clone()
         {
-            // If parameter is null return false.
-            if (obj == null)
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            // If parameter cannot be cast to ModuleIdentity return false.
-            ShippingMethod other = obj as ShippingMethod;
-            if (other == null)
-            {
-                return false;
-            }
-            // Return true if the fields match:
-            return (ShipmentMethodCode.EqualsInvariant(other.ShipmentMethodCode)) && (OptionName.EqualsInvariant(other.OptionName));
+            var result = base.Clone() as ShippingMethod;
+            result.Price = Price?.Clone() as Money;
+            result.DiscountAmount = DiscountAmount?.Clone() as Money;
+            return result;
         }
 
-        public override int GetHashCode()
-        {
-            return ToString().GetHashCode();
-        }
+
     }
 }

@@ -207,5 +207,38 @@ namespace VirtoCommerce.Storefront.Model.Cart
             // Return true if the fields match:
             return (ShipmentMethodCode.EqualsInvariant(method.ShipmentMethodCode)) && (ShipmentMethodOption.EqualsInvariant(method.OptionName));
         }
+
+        public override object Clone()
+        {
+            var result = base.Clone() as Shipment;
+
+            result.Price = Price?.Clone() as Money;
+            result.PriceWithTax = PriceWithTax?.Clone() as Money;
+            result.DiscountAmount = DiscountAmount?.Clone() as Money;
+            result.DiscountAmountWithTax = DiscountAmountWithTax?.Clone() as Money;
+            result.Total = Total?.Clone() as Money;
+            result.TotalWithTax = TotalWithTax?.Clone() as Money;
+            result.TaxTotal = TaxTotal?.Clone() as Money;
+
+
+            if (Discounts != null)
+            {
+                result.Discounts = new List<Discount>(Discounts.Select(x => x.Clone() as Discount));
+            }
+            if (TaxDetails != null)
+            {
+                result.TaxDetails = new List<TaxDetail>(TaxDetails.Select(x => x.Clone() as TaxDetail));
+            }
+            if (Items != null)
+            {
+                result.Items = new List<CartShipmentItem>(Items.Select(x => x.Clone() as CartShipmentItem));
+            }
+            if (ValidationErrors != null)
+            {
+                result.ValidationErrors = new List<ValidationError>(ValidationErrors.Select(x => x.Clone() as ValidationError));
+            }
+
+            return result;
+        }
     }
 }

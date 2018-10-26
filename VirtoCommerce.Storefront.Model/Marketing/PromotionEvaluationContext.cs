@@ -36,7 +36,6 @@ namespace VirtoCommerce.Storefront.Model.Marketing
             if (Cart != null)
             {
                 yield return Cart.Total;
-                yield return Cart.Coupon;
                 yield return Cart.Currency;
                 yield return Cart.Language;
 
@@ -66,6 +65,14 @@ namespace VirtoCommerce.Storefront.Model.Marketing
                     {
                         yield return shipment.PaymentGatewayCode;
                         yield return shipment.Price;
+
+                    }
+                }
+                if (!Cart.Coupons.IsNullOrEmpty())
+                {
+                    foreach (var coupon in Cart.Coupons)
+                    {
+                        yield return coupon;
 
                     }
                 }

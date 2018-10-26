@@ -50,7 +50,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         /// <param name="product"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        Task AddItemAsync(Product product, int quantity);
+        Task<bool> AddItemAsync(Product product, int quantity);
 
         /// <summary>
         /// Change cart item qty by product index
@@ -87,8 +87,9 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         /// <summary>
         /// remove exist coupon from cart
         /// </summary>
+        /// <param name="couponCode"></param>
         /// <returns></returns>
-        Task RemoveCouponAsync();
+        Task RemoveCouponAsync(string couponCode = null);
 
         /// <summary>
         /// Clear cart remove all items and shipments and payments
