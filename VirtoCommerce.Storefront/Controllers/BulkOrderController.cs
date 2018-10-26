@@ -120,7 +120,7 @@ namespace VirtoCommerce.Storefront.Controllers
             var productSearchResult = await _catalogService.SearchProductsAsync(new ProductSearchCriteria
             {
                 PageSize = skus.Count(),
-                ResponseGroup = ItemResponseGroup.Variations | ItemResponseGroup.ItemWithPrices | ItemResponseGroup.Inventory,
+                ResponseGroup = ItemResponseGroup.Variations | ItemResponseGroup.ItemWithPrices | ItemResponseGroup.Inventory | ItemResponseGroup.ItemProperties,
                 Terms = new[] { new Term { Name = "code", Value = string.Join(",", skus) } }
             });
             //Because product stores in index all codes of it variations and the catalog  search returns only main product we need to this concat with variations
