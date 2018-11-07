@@ -300,5 +300,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public string Outline { get; set; }
 
 
+        /// <summary>
+        /// Association type Related, Associations, Up-Sales etc.
+        /// </summary>
+        public string AssociationType { get; set; }
+
+        /// <summary>
+        /// Association quantity
+        /// </summary>
+        public int? AssociationQuantity { get; set; }
+
     }
 }

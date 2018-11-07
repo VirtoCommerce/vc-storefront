@@ -9,6 +9,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 {
     public static class ProductStaticConverter
     {
+        public static Product ToShopifyModel(this storefrontModel.ProductAssociation productAssociation)
+        {
+            var converter = new ShopifyModelConverter();
+            return converter.ToLiquidProduct(productAssociation);
+        }
         public static Product ToShopifyModel(this storefrontModel.Product product)
         {
             var converter = new ShopifyModelConverter();
@@ -24,6 +29,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
     public partial class ShopifyModelConverter
     {
+        public virtual Product ToLiquidProduct(storefrontModel.ProductAssociation productAssociation)
+        {
+            var result = productAssociation.Product.ToShopifyModel();
+            result.Tags = productAssociation.Tags?.ToArray();
+            result.AssociationType = productAssociation.Type;
+            result.AssociationQuantity = productAssociation.Quantity;
+            return result;
+        }
+
         public virtual Product ToLiquidProduct(storefrontModel.Product product)
         {
             var result = new Product
@@ -126,7 +140,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 result.RelatedProducts = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
                 {
                     product.Associations.Slice(pageNumber, pageSize, sortInfos, @params);
-                    return new StaticPagedList<Product>(product.Associations.Where(x => x.Product != null).Select(x => x.Product.ToShopifyModel()), product.Associations);
+                    return new StaticPagedList<Product>(product.Associations.Where(x => x.Product != null).Select(x => x.ToShopifyModel()), product.Associations);
                 }, product.Associations.PageNumber, product.Associations.PageSize);
             }
 

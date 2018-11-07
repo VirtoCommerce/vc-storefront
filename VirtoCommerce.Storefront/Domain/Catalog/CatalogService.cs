@@ -351,7 +351,7 @@ namespace VirtoCommerce.Storefront.Domain
                            cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
                            return _productsApi.SearchProductAssociations(criteria.ToProductAssociationSearchCriteriaDto());
                        });
-                    //Load products for resulting associations (do not handle categories link TODO:)
+                    //Load products for resulting associations
                     var associatedProducts = GetProductsAsync(searchResult.Results.Select(x => x.AssociatedObjectId).ToArray(), criteria.ResponseGroup).GetAwaiter().GetResult();
                     var result = new List<ProductAssociation>();
                     foreach (var associationDto in searchResult.Results)
