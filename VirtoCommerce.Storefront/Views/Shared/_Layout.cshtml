@@ -19,12 +19,12 @@
     @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
 <body>
-   
+
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2017 - VirtoCommerce.Storefront</p>
+            <p>&copy; @DateTime.Now.Year - VirtoCommerce.Storefront</p>
         </footer>
     </div>
 
