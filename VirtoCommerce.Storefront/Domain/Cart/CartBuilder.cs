@@ -222,7 +222,7 @@ namespace VirtoCommerce.Storefront.Domain
             Cart.Shipments.Add(shipment);
 
 
-            if (!string.IsNullOrEmpty(shipment.ShipmentMethodCode))
+            if (!string.IsNullOrEmpty(shipment.ShipmentMethodCode) && !Cart.IsTransient())
             {
                 var availableShippingMethods = await GetAvailableShippingMethodsAsync();
                 var shippingMethod = availableShippingMethods.FirstOrDefault(sm => shipment.ShipmentMethodCode.EqualsInvariant(sm.ShipmentMethodCode) && shipment.ShipmentMethodOption.EqualsInvariant(sm.OptionName));
@@ -262,7 +262,7 @@ namespace VirtoCommerce.Storefront.Domain
             }
             Cart.Payments.Add(payment);
 
-            if (!string.IsNullOrEmpty(payment.PaymentGatewayCode))
+            if (!string.IsNullOrEmpty(payment.PaymentGatewayCode) && !Cart.IsTransient())
             {
                 var availablePaymentMethods = await GetAvailablePaymentMethodsAsync();
                 var paymentMethod = availablePaymentMethods.FirstOrDefault(pm => string.Equals(pm.Code, payment.PaymentGatewayCode, StringComparison.InvariantCultureIgnoreCase));
@@ -385,38 +385,40 @@ namespace VirtoCommerce.Storefront.Domain
             var workContext = _workContextAccessor.WorkContext;
 
             //Request available shipping rates 
-            var retVal = await _cartService.GetAvailableShippingMethodsAsync(Cart);
+            var result = await _cartService.GetAvailableShippingMethodsAsync(Cart);
+            if (!result.IsNullOrEmpty())
+            {
+                //Evaluate promotions cart and apply rewards for available shipping methods
+                var promoEvalContext = Cart.ToPromotionEvaluationContext();
+                await _promotionEvaluator.EvaluateDiscountsAsync(promoEvalContext, result);
 
-            //Evaluate promotions cart and apply rewards for available shipping methods
-            var promoEvalContext = Cart.ToPromotionEvaluationContext();
-            await _promotionEvaluator.EvaluateDiscountsAsync(promoEvalContext, retVal);
-
-            //Evaluate taxes for available shipping rates
-            var taxEvalContext = Cart.ToTaxEvalContext(workContext.CurrentStore);
-            taxEvalContext.Lines.Clear();
-            taxEvalContext.Lines.AddRange(retVal.SelectMany(x => x.ToTaxLines()));
-            await _taxEvaluator.EvaluateTaxesAsync(taxEvalContext, retVal);
-
-            return retVal;
+                //Evaluate taxes for available shipping rates
+                var taxEvalContext = Cart.ToTaxEvalContext(workContext.CurrentStore);
+                taxEvalContext.Lines.Clear();
+                taxEvalContext.Lines.AddRange(result.SelectMany(x => x.ToTaxLines()));
+                await _taxEvaluator.EvaluateTaxesAsync(taxEvalContext, result);
+            }
+            return result;
         }
 
         public virtual async Task<IEnumerable<PaymentMethod>> GetAvailablePaymentMethodsAsync()
         {
             EnsureCartExists();
-            var retVal = await _cartService.GetAvailablePaymentMethodsAsync(Cart);
+            var result = await _cartService.GetAvailablePaymentMethodsAsync(Cart);
+            if (!result.IsNullOrEmpty())
+            {
+                //Evaluate promotions cart and apply rewards for available shipping methods
+                var promoEvalContext = Cart.ToPromotionEvaluationContext();
+                await _promotionEvaluator.EvaluateDiscountsAsync(promoEvalContext, result);
 
-            //Evaluate promotions cart and apply rewards for available shipping methods
-            var promoEvalContext = Cart.ToPromotionEvaluationContext();
-            await _promotionEvaluator.EvaluateDiscountsAsync(promoEvalContext, retVal);
-
-            //Evaluate taxes for available payments 
-            var workContext = _workContextAccessor.WorkContext;
-            var taxEvalContext = Cart.ToTaxEvalContext(workContext.CurrentStore);
-            taxEvalContext.Lines.Clear();
-            taxEvalContext.Lines.AddRange(retVal.SelectMany(x => x.ToTaxLines()));
-            await _taxEvaluator.EvaluateTaxesAsync(taxEvalContext, retVal);
-
-            return retVal;
+                //Evaluate taxes for available payments 
+                var workContext = _workContextAccessor.WorkContext;
+                var taxEvalContext = Cart.ToTaxEvalContext(workContext.CurrentStore);
+                taxEvalContext.Lines.Clear();
+                taxEvalContext.Lines.AddRange(result.SelectMany(x => x.ToTaxLines()));
+                await _taxEvaluator.EvaluateTaxesAsync(taxEvalContext, result);
+            }
+            return result;
         }
 
         public async Task ValidateAsync()

@@ -48,8 +48,12 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             {
                 throw new ArgumentNullException(nameof(cart));
             }
-            var payments = await _cartApi.GetAvailablePaymentMethodsAsync(cart.Id);
-            var result = payments.Select(x => x.ToPaymentMethod(cart)).OrderBy(x => x.Priority).ToList();
+            var result = Enumerable.Empty<PaymentMethod>();
+            if (!cart.IsTransient())
+            {
+                var payments = await _cartApi.GetAvailablePaymentMethodsAsync(cart.Id);
+                result = payments.Select(x => x.ToPaymentMethod(cart)).OrderBy(x => x.Priority).ToList();
+            }
             return result;
         }
 
@@ -59,8 +63,12 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             {
                 throw new ArgumentNullException(nameof(cart));
             }
-            var shippingRates = await _cartApi.GetAvailableShippingRatesAsync(cart.Id);
-            var result = shippingRates.Select(x => x.ToShippingMethod(cart.Currency, _workContextAccessor.WorkContext.AllCurrencies)).OrderBy(x => x.Priority).ToList();
+            var result = Enumerable.Empty<ShippingMethod>();
+            if (!cart.IsTransient())
+            {
+                var shippingRates = await _cartApi.GetAvailableShippingRatesAsync(cart.Id);
+                result = shippingRates.Select(x => x.ToShippingMethod(cart.Currency, _workContextAccessor.WorkContext.AllCurrencies)).OrderBy(x => x.Priority).ToList();
+            }
             return result;
         }
 
