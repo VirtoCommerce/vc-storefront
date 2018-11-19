@@ -52,7 +52,7 @@ namespace VirtoCommerce.Storefront.Controllers
                     {
                         category.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
                         {
-                            var criteria = WorkContext.CurrentProductSearchCriteria.Clone();
+                            var criteria = WorkContext.CurrentProductSearchCriteria.Clone() as ProductSearchCriteria;
                             criteria.Outline = product.GetCategoryOutline();
                             criteria.PageNumber = pageNumber;
                             criteria.PageSize = pageSize;

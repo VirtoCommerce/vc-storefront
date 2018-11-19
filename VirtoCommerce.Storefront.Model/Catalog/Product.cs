@@ -349,7 +349,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         {
             get
             {
-                return Price != null ? Price.TaxTotal : null;
+                return Price?.TaxTotal;
             }
         }
 

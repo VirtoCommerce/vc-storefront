@@ -54,7 +54,7 @@ namespace VirtoCommerce.Storefront.Controllers
             WorkContext.CurrentPageSeo = category.SeoInfo.JsonClone();
             WorkContext.CurrentPageSeo.Slug = category.Url;
 
-            var criteria = WorkContext.CurrentProductSearchCriteria.Clone();
+            var criteria = WorkContext.CurrentProductSearchCriteria.Clone() as ProductSearchCriteria;
             criteria.Outline = category.Outline; // should we simply take it from current category?
 
             category.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
