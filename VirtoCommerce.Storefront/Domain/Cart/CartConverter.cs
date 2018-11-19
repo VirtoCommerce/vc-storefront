@@ -544,7 +544,8 @@ namespace VirtoCommerce.Storefront.Domain
                 Currency = cart.Currency,
                 Type = "Cart",
                 Customer = cart.Customer,
-                StoreTaxCalculationEnabled = store.TaxCalculationEnabled
+                StoreTaxCalculationEnabled = store.TaxCalculationEnabled,
+                FixedTaxRate = store.FixedTaxRate
             };
 
             foreach (var lineItem in cart.Items)

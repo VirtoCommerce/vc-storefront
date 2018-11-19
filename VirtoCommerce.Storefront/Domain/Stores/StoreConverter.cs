@@ -77,7 +77,14 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Settings = storeDto.Settings.Where(x => !x.ValueType.EqualsInvariant("SecureString")).Select(x => x.JsonConvert<platformDto.Setting>().ToSettingEntry()).ToList();
             }
 
-
+            if (!storeDto.TaxProviders.IsNullOrEmpty())
+            {
+                var fixedTaxProvider = storeDto.TaxProviders.FirstOrDefault(x => x.IsActive.GetValueOrDefault(false) && x.Code == "FixedRate");
+                if (fixedTaxProvider != null && !fixedTaxProvider.Settings.IsNullOrEmpty())
+                {
+                    result.FixedTaxRate = fixedTaxProvider.Settings.Select(x => x.JsonConvert<platformDto.Setting>().ToSettingEntry()).GetSettingValue("VirtoCommerce.Core.FixedTaxRateProvider.Rate", 0.00m);
+                }
+            }
 
             result.TrustedGroups = storeDto.TrustedGroups;
             result.StoreState = EnumUtility.SafeParse(storeDto.StoreState, StoreStatus.Open);

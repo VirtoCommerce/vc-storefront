@@ -18,7 +18,7 @@ namespace VirtoCommerce.Storefront.Model.Tax
 
         public string Code { get; set; }
 
-         public string Type { get; set; }
+        public string Type { get; set; }
 
         public User Customer { get; set; }
 
@@ -29,6 +29,7 @@ namespace VirtoCommerce.Storefront.Model.Tax
         public IList<TaxLine> Lines { get; set; }
 
         public bool StoreTaxCalculationEnabled { get; set; }
+        public decimal FixedTaxRate { get; set; }
 
         protected override IEnumerable<object> GetEqualityComponents()
         {

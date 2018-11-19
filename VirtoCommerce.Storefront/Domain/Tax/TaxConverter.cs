@@ -20,15 +20,17 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (taxRateDto.Line != null)
             {
-                result.Line = new TaxLine(currency);
-                result.Line.Code = taxRateDto.Line.Code;
-                result.Line.Id = taxRateDto.Line.Id;
-                result.Line.Name = taxRateDto.Line.Name;
-                result.Line.Quantity = taxRateDto.Line.Quantity ?? 1;
-                result.Line.TaxType = taxRateDto.Line.TaxType;
+                result.Line = new TaxLine(currency)
+                {
+                    Code = taxRateDto.Line.Code,
+                    Id = taxRateDto.Line.Id,
+                    Name = taxRateDto.Line.Name,
+                    Quantity = taxRateDto.Line.Quantity ?? 1,
+                    TaxType = taxRateDto.Line.TaxType,
 
-                result.Line.Amount = new Money(taxRateDto.Line.Amount.Value, currency);
-                result.Line.Price = new Money(taxRateDto.Line.Price.Value, currency);
+                    Amount = new Money(taxRateDto.Line.Amount.Value, currency),
+                    Price = new Money(taxRateDto.Line.Price.Value, currency)
+                };
             }
 
             return result;
@@ -60,25 +62,25 @@ namespace VirtoCommerce.Storefront.Domain
             retVal.Lines = new List<coreDto.TaxLine>();
             if (!taxContext.Lines.IsNullOrEmpty())
             {
-                foreach (var line in taxContext.Lines)
-                {
-                    var serviceModelLine = new coreDto.TaxLine
-                    {
-                        Id = line.Id,
-                        Code = line.Code,
-                        Name = line.Name,
-                        Quantity = line.Quantity,
-                        TaxType = line.TaxType,
-                        Amount = (double)line.Amount.Amount,
-                        Price = (double)line.Price.Amount
-                    };
+                retVal.Lines = taxContext.Lines.Select(x => x.ToTaxLineDto()).ToList();
 
-                    retVal.Lines.Add(serviceModelLine);
-                }
             }
             return retVal;
         }
+        public static coreDto.TaxLine ToTaxLineDto(this TaxLine taxLine)
+        {
+            return new coreDto.TaxLine
+            {
+                Id = taxLine.Id,
+                Code = taxLine.Code,
+                Name = taxLine.Name,
+                Quantity = taxLine.Quantity,
+                TaxType = taxLine.TaxType,
+                Amount = (double)taxLine.Amount.Amount,
+                Price = (double)taxLine.Price.Amount
+            };
 
+        }
 
         public static TaxEvaluationContext ToTaxEvaluationContext(this WorkContext workContext, IEnumerable<Product> products = null)
         {
@@ -89,6 +91,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             result.Customer = workContext.CurrentUser;
             result.StoreTaxCalculationEnabled = workContext.CurrentStore.TaxCalculationEnabled;
+            result.FixedTaxRate = workContext.CurrentStore.FixedTaxRate;
 
             result.Address = workContext.CurrentUser?.Contact?.DefaultBillingAddress;
 

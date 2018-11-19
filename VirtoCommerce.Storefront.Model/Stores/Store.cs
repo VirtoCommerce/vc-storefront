@@ -132,6 +132,8 @@ namespace VirtoCommerce.Storefront.Model.Stores
             }
         }
 
+        public decimal FixedTaxRate { get; set; }
+
         #region IHasSettings Members
 
         public IList<SettingEntry> Settings { get; set; }
