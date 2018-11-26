@@ -17,8 +17,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="7.6.100" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.0" />
+    <PackageReference Include="FluentValidation" Version="8.0.100" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.6" />
     <PackageReference Include="Nito.AsyncEx" Version="5.0.0-pre-05" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
   </ItemGroup>

@@ -91,7 +91,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpGet("common/setcurrency/{currency}")]
         public async Task<ActionResult> SetCurrency(string currency, string returnUrl = "")
         {
-            WorkContext.CurrentUser.SelectedCurrencyCode = currency;            
+            WorkContext.CurrentUser.SelectedCurrencyCode = currency;
             await _signInManager.RefreshSignInAsync(WorkContext.CurrentUser);
             //home page  and prevent open redirection attack
             if (string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
@@ -152,8 +152,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpGet("common/notheme")]
         public ActionResult NoTheme()
         {
-            object viewModel;
-            if(!HttpContext.Items.TryGetValue(NoLiquidThemeMiddleware.NoThemeModelKey, out viewModel))
+            if (!HttpContext.Items.TryGetValue(NoLiquidThemeMiddleware.NoThemeModelKey, out var viewModel))
             {
                 viewModel = new NoThemeViewModel();
             }

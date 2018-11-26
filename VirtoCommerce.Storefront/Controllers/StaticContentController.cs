@@ -85,8 +85,9 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 var authorizationResult = await _authorizationService.AuthorizeAsync(User, contentPage, "CanReadContentItem");
                 if (!authorizationResult.Succeeded)
+                {
                     return Challenge();
-
+                }
                 SetCurrentPage(contentPage);
                 if (contentPage.FileName.EndsWith(".json"))
                 {
@@ -124,7 +125,9 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 var authorizationResult = await _authorizationService.AuthorizeAsync(User, context.CurrentBlog, "CanReadContentItem");
                 if (!authorizationResult.Succeeded)
+                {
                     return Challenge();
+                }
 
                 context.CurrentPageSeo = new SeoInfo
                 {
@@ -142,12 +145,8 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpPost("content/search")]
         public ActionResult Search(StaticContentSearchCriteria request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
+            WorkContext.CurrentStaticSearchCriteria = request ?? throw new ArgumentNullException(nameof(request));
 
-            WorkContext.CurrentStaticSearchCriteria = request;
             WorkContext.Layout = request.Layout;
 
             if (!string.IsNullOrEmpty(request.Keyword))
@@ -178,7 +177,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [Route("blog/feed")]
         public async Task<ActionResult> BlogRssFeed(string blogName)
         {
-            Blog blog = WorkContext.Blogs.FirstOrDefault();
+            var blog = WorkContext.Blogs.FirstOrDefault();
             if (!string.IsNullOrEmpty(blogName))
             {
                 WorkContext.CurrentBlog = WorkContext.Blogs.FirstOrDefault(x => x.Name.EqualsInvariant(blogName));
@@ -211,7 +210,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
 
             var sw = new StringWriter();
-            using (XmlWriter xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true, Indent = true }))
+            using (var xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true, Indent = true }))
             {
                 var writer = new RssFeedWriter(xmlWriter);
 

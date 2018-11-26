@@ -23,7 +23,7 @@ namespace VirtoCommerce.Storefront.Routing
             : base(target, template, defaults, null, null, inlineConstraintResolver)
         {
         }
-      
+
         protected override async Task OnRouteMatched(RouteContext context)
         {
             var serviceProvider = context.HttpContext.RequestServices;
@@ -78,10 +78,14 @@ namespace VirtoCommerce.Storefront.Routing
             IServiceProvider serviceProvider)
         {
             if (!routeDataValues.TryGetValue("controller", out var controllerNameObject))
+            {
                 return null;
+            }
 
             if (!routeDataValues.TryGetValue("action", out var actionNameObject))
+            {
                 return null;
+            }
 
             var controllerName = (string)controllerNameObject;
             var actionName = (string)actionNameObject;

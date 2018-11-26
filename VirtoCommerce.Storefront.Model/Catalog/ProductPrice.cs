@@ -14,8 +14,8 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public ProductPrice(Currency currency)
         {
             Currency = currency;
-            ListPrice = new Money(currency);        
-            SalePrice = new Money(currency);       
+            ListPrice = new Money(currency);
+            SalePrice = new Money(currency);
             DiscountAmount = new Money(currency);
             TierPrices = new List<TierPrice>();
             Discounts = new List<Discount>();
@@ -34,9 +34,9 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// Product id
         public string ProductId { get; set; }
 
-      
+
         public Money DiscountAmount { get; set; }
-      
+
         public Money DiscountAmountWithTax
         {
             get
@@ -124,7 +124,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// Tier prices 
         /// </summary>
         public IList<TierPrice> TierPrices { get; set; }
-                
+
         /// <summary>
         /// Return tire price for passed quantity
         /// </summary>
@@ -133,7 +133,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public TierPrice GetTierPrice(int quantity)
         {
             var retVal = TierPrices.OrderBy(x => x.Quantity).LastOrDefault(x => x.Quantity <= quantity);
-            if(retVal == null)
+            if (retVal == null)
             {
                 retVal = new TierPrice(SalePrice, 1);
             }
@@ -177,8 +177,8 @@ namespace VirtoCommerce.Storefront.Model.Catalog
                 {
                     TaxPercentRate = TaxRate.TaxPercentRound(taxRate.Rate.Amount / amount);
                 }
-            }         
-            foreach(var tierPrice in TierPrices)
+            }
+            foreach (var tierPrice in TierPrices)
             {
                 tierPrice.ApplyTaxRates(taxRates);
             }
@@ -193,12 +193,14 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// <returns></returns>
         public ProductPrice ConvertTo(Currency currency)
         {
-            var retVal = new ProductPrice(currency);
-            retVal.ListPrice = ListPrice.ConvertTo(currency);
-            retVal.SalePrice = SalePrice.ConvertTo(currency);
-            retVal.DiscountAmount = DiscountAmount.ConvertTo(currency);
-            retVal.ProductId = ProductId;
-           
+            var retVal = new ProductPrice(currency)
+            {
+                ListPrice = ListPrice.ConvertTo(currency),
+                SalePrice = SalePrice.ConvertTo(currency),
+                DiscountAmount = DiscountAmount.ConvertTo(currency),
+                ProductId = ProductId
+            };
+
             return retVal;
         }
         #endregion
@@ -216,7 +218,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
             if (TierPrices != null)
             {
-                foreach(var tierPrice in TierPrices)
+                foreach (var tierPrice in TierPrices)
                 {
                     yield return tierPrice;
                 }

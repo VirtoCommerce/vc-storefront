@@ -50,22 +50,9 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         public bool IsFuzzySearch { get; set; }
 
-        public ProductSearchCriteria Clone()
+        public override object Clone()
         {
-            var result = new ProductSearchCriteria(Language, Currency)
-            {
-                Outline = Outline,
-                VendorId = VendorId,
-                Currency = Currency,
-                Language = Language,
-                Keyword = Keyword,
-                SortBy = SortBy,
-                PageNumber = PageNumber,
-                PageSize = PageSize,
-                ResponseGroup = ResponseGroup,
-                IsFuzzySearch = IsFuzzySearch,
-            };
-
+            var result = base.Clone() as ProductSearchCriteria;
             if (Terms != null)
             {
                 result.Terms = Terms.Select(x => new Term { Name = x.Name, Value = x.Value }).ToArray();
@@ -89,7 +76,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
                 .SelectMany(a => a[1].Split(',').Select(v => new Term { Name = a[0], Value = v }))
                 .ToArray();
         }
-        
+
         public override string ToString()
         {
             var result = new List<string>

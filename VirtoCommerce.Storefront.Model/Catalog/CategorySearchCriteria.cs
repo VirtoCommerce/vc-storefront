@@ -39,21 +39,6 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         public bool IsFuzzySearch { get; set; }
 
-        public CategorySearchCriteria Clone()
-        {
-            var retVal = new CategorySearchCriteria(Language)
-            {
-                Outline = Outline,
-                Keyword = Keyword,
-                SortBy = SortBy,
-                PageNumber = PageNumber,
-                PageSize = PageSize,
-                ResponseGroup = ResponseGroup,
-                IsFuzzySearch = IsFuzzySearch,
-            };
-            return retVal;
-        }
-
 
         private void Parse(NameValueCollection queryString)
         {
@@ -64,9 +49,11 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         public override string ToString()
         {
-            var retVal = new List<string>();
-            retVal.Add(string.Format("page={0}", PageNumber));
-            retVal.Add(string.Format("page_size={0}", PageSize));
+            var retVal = new List<string>
+            {
+                string.Format("page={0}", PageNumber),
+                string.Format("page_size={0}", PageSize)
+            };
             if (Keyword != null)
             {
                 retVal.Add(string.Format("q={0}", Keyword));

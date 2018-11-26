@@ -167,7 +167,7 @@ namespace VirtoCommerce.Storefront.Domain
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
                 cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
 
-                criteria = criteria.Clone();
+                criteria = criteria.Clone() as CategorySearchCriteria;
                 var searchCriteria = criteria.ToCategorySearchCriteriaDto(workContext);
                 return await _searchApi.SearchCategoriesAsync(searchCriteria);
 
@@ -207,7 +207,7 @@ namespace VirtoCommerce.Storefront.Domain
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
                 cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
 
-                criteria = criteria.Clone();
+                criteria = criteria.Clone() as ProductSearchCriteria;
 
                 var searchCriteria = criteria.ToProductSearchCriteriaDto(workContext);
                 var result = await _searchApi.SearchProductsAsync(searchCriteria);

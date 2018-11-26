@@ -74,7 +74,7 @@ namespace VirtoCommerce.Storefront.Domain
             //This line make delay products loading initialization (products can be evaluated on view rendering time)
             builder.WorkContext.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
             {
-                var criteria = builder.WorkContext.CurrentProductSearchCriteria.Clone();
+                var criteria = builder.WorkContext.CurrentProductSearchCriteria.Clone() as ProductSearchCriteria;
                 criteria.PageNumber = pageNumber;
                 criteria.PageSize = pageSize;
                 if (string.IsNullOrEmpty(criteria.SortBy) && !sortInfos.IsNullOrEmpty())
@@ -96,7 +96,7 @@ namespace VirtoCommerce.Storefront.Domain
             //This line make delay aggregation loading initialization (aggregation can be evaluated on view rendering time)
             builder.WorkContext.Aggregations = new MutablePagedList<Aggregation>((pageNumber, pageSize, sortInfos, @params) =>
             {
-                var criteria = builder.WorkContext.CurrentProductSearchCriteria.Clone();
+                var criteria = builder.WorkContext.CurrentProductSearchCriteria.Clone() as ProductSearchCriteria;
                 criteria.PageNumber = pageNumber;
                 criteria.PageSize = pageSize;
                 if (string.IsNullOrEmpty(criteria.SortBy) && !sortInfos.IsNullOrEmpty())
