@@ -25,7 +25,12 @@ namespace VirtoCommerce.Storefront.Domain
 
             Func<int, int, IEnumerable<SortInfo>, IPagedList<Pricelist>> factory = (pageNumber, pageSize, sortInfos) =>
             {
-                var pricelists = pricingService.EvaluatePricesLists(builder.WorkContext.ToPriceEvaluationContext(null), builder.WorkContext);
+                IList<Pricelist> pricelists = new List<Pricelist>();
+                //Do not evaluate price lists for anonymous user
+                if (builder.WorkContext.CurrentUser.IsRegisteredUser)
+                {
+                    pricelists = pricingService.EvaluatePricesLists(builder.WorkContext.ToPriceEvaluationContext(null), builder.WorkContext);
+                }
                 return new StaticPagedList<Pricelist>(pricelists, pageNumber, pageSize, pricelists.Count);
             };
             return builder.WithPricelistsAsync(new MutablePagedList<Pricelist>(factory, 1, int.MaxValue));
