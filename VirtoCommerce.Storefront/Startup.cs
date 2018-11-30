@@ -27,6 +27,7 @@ using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Cart;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Filters;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Infrastructure.ApplicationInsights;
 using VirtoCommerce.Storefront.JsonConverters;
@@ -75,8 +76,6 @@ namespace VirtoCommerce.Storefront
 
             services.Configure<StorefrontOptions>(Configuration.GetSection("VirtoCommerce"));
 
-            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
-
             //The IHttpContextAccessor service is not registered by default
             //https://github.com/aspnet/Hosting/issues/793
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -108,6 +107,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IBlobChangesWatcher, BlobChangesWatcher>();
             services.AddTransient<ICartBuilder, CartBuilder>();
             services.AddTransient<ICartService, CartService>();
+            services.AddTransient<AngularAntiforgeryCookieResultFilter>();
 
             //Register events framework dependencies
             services.AddSingleton(new InProcessBus());
@@ -245,6 +245,7 @@ namespace VirtoCommerce.Storefront
             });
 
             var snapshotProvider = services.BuildServiceProvider();
+            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
             services.AddMvc(options =>
             {
                 //Workaround to avoid 'Null effective policy causing exception' (on logout)
@@ -258,6 +259,8 @@ namespace VirtoCommerce.Storefront
                     Duration = (int)TimeSpan.FromHours(1).TotalSeconds,
                     VaryByHeader = "host"
                 });
+
+                options.Filters.AddService(typeof(AngularAntiforgeryCookieResultFilter));
             }).AddJsonOptions(options =>
             {
                 options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
@@ -284,7 +287,7 @@ namespace VirtoCommerce.Storefront
 
             services.AddApplicationInsightsTelemetry();
             services.AddApplicationInsightsExtensions(Configuration);
-            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+
 
             //https://github.com/aspnet/HttpAbstractions/issues/315
             //Changing the default html encoding options, to not encode non-Latin characters
@@ -323,7 +326,6 @@ namespace VirtoCommerce.Storefront
             app.UseMiddleware<StoreMaintenanceMiddleware>();
             app.UseMiddleware<NoLiquidThemeMiddleware>();
             app.UseMiddleware<CreateStorefrontRolesMiddleware>();
-            app.UseMiddleware<AntiforgeryTokenMiddleware>();
             app.UseMiddleware<ApiErrorHandlingMiddleware>();
 
 
