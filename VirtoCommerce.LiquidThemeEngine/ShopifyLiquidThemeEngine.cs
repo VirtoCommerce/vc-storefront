@@ -131,7 +131,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         {
             get
             {
-                IEnumerable<string> retVal = Enumerable.Empty<string>();
+                var retVal = Enumerable.Empty<string>();
                 if (WorkContext.CurrentStore != null)
                 {
                     retVal = _options.TemplatesDiscoveryFolders.Select(x => Path.Combine(CurrentThemePath, x));
@@ -187,7 +187,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 try
                 {
                     //handle scss resources
-                    CompilationResult result = SassCompiler.Compile(content);
+                    var result = SassCompiler.Compile(content);
                     content = result.CompiledContent;
 
                     retVal = new MemoryStream(Encoding.UTF8.GetBytes(content));
@@ -230,7 +230,9 @@ namespace VirtoCommerce.LiquidThemeEngine
         public string ResolveTemplatePath(string templateName)
         {
             if (WorkContext.CurrentStore == null)
+            {
                 return null;
+            }
 
             var liquidTemplateFileName = string.Format(_liquidTemplateFormat, templateName);
             var curentThemeDiscoveryPaths = _options.TemplatesDiscoveryFolders.Select(x => Path.Combine(CurrentThemePath, x, liquidTemplateFileName));
@@ -248,8 +250,9 @@ namespace VirtoCommerce.LiquidThemeEngine
         public string RenderTemplateByName(string templateName, Dictionary<string, object> parameters)
         {
             if (string.IsNullOrEmpty(templateName))
+            {
                 throw new ArgumentNullException(nameof(templateName));
-
+            }
             var templateContent = ReadTemplateByName(templateName);
             var retVal = RenderTemplate(templateContent, parameters);
             return retVal;
@@ -324,8 +327,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                    if (currentPreset is JValue)
                    {
                        var currentPresetName = ((JValue)currentPreset).Value.ToString();
-                       var presets = resultSettings.GetValue("presets") as JObject;
-                       if (presets == null || !presets.Children().Any())
+                       if (!(resultSettings.GetValue("presets") is JObject presets) || !presets.Children().Any())
                        {
                            throw new StorefrontException("Setting presets not defined");
                        }
