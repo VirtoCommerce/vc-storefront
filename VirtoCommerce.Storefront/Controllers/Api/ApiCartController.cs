@@ -53,7 +53,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // PUT: storefrontapi/cart/comment
         [HttpPut("comment")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UpdateCartComment([FromBody] string comment)
+        public async Task<ActionResult> UpdateCartComment([FromBody] UpdateCartCommentRequest commentRequest)
         {
             EnsureCartExists();
 
@@ -61,7 +61,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
 
-                await cartBuilder.UpdateCartComment(comment);
+                await cartBuilder.UpdateCartComment(commentRequest.Comment);
                 await cartBuilder.SaveAsync();
             }
 
