@@ -60,8 +60,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
+                var comment = commentRequest?.Comment;
 
-                await cartBuilder.UpdateCartComment(commentRequest.Comment);
+                await cartBuilder.UpdateCartComment(comment);
                 await cartBuilder.SaveAsync();
             }
 
