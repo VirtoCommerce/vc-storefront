@@ -67,7 +67,6 @@ namespace VirtoCommerce.Storefront.Controllers
 
             var contentPage = page as ContentPage;
             SetCurrentPage(contentPage);
-
             return View(contentPage.Template, WorkContext);
         }
 
@@ -112,6 +111,7 @@ namespace VirtoCommerce.Storefront.Controllers
                         };
                         setValue("title", x=> WorkContext.CurrentPageSeo.Title = x);
                         setValue("description", x => WorkContext.CurrentPageSeo.MetaDescription = x);
+                        setValue("layout", x => model.Layout = x);
                     }
                     WorkContext.CurrentJsonPage = model;
                     return View("json-page", WorkContext);
