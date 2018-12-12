@@ -161,8 +161,8 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var result = new CartShipmentItem
             {
+                Id = shipmentItemDto.Id,
                 Quantity = shipmentItemDto.Quantity ?? 0,
-
                 LineItem = cart.Items.FirstOrDefault(x => x.Id == shipmentItemDto.LineItemId)
             };
 
@@ -173,7 +173,9 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var result = new cartDto.ShipmentItem
             {
+                Id = shipmentItem.Id,
                 Quantity = shipmentItem.Quantity,
+                LineItemId = shipmentItem.LineItem.Id,
                 LineItem = shipmentItem.LineItem.ToLineItemDto()
             };
 
