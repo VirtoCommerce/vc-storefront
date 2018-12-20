@@ -103,6 +103,26 @@ namespace VirtoCommerce.Storefront.Model.Marketing
         /// </summary>
         public decimal MaxLimit { get; set; }
 
+        /// <summary>
+        /// Gets or sets ConditionalProductId in
+        /// For N items of entry ProductId  in every Y items of entry
+        /// ConditionalProductId get %X off
+        /// </summary>
+        public string ConditionalProductId { get; set; }
+
+        /// <summary>
+        /// Gets or sets N quantity in
+        /// For N items of entry ProductId  in every Y items of entry
+        /// ConditionalProductId get %X off
+        /// </summary>
+        public int? ForNthQuantity { get; set; }
+
+        /// <summary>
+        /// Gets or sets Y quantity in
+        /// For N items of entry ProductId  in every Y items of entry
+        /// ConditionalProductId get %X off
+        /// </summary>
+        public int? InEveryNthQuantity { get; set; }
 
         public Discount ToDiscountModel(Money amount)
         {
