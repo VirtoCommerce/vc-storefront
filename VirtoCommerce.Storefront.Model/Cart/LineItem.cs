@@ -319,47 +319,12 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
             foreach (var reward in lineItemRewards)
             {
-                var discount = reward.ToDiscountModel(ListPrice - DiscountAmount);
-                if (reward.Quantity > 0)
-                {
-                    //If we have condition like For "N in every Y …"
-                    if (reward.InEveryNthQuantity.HasValue || reward.ForNthQuantity.HasValue)
-                    {
-                        if (string.IsNullOrEmpty(reward.ConditionalProductId))
-                        {
-                            ApplyNinEveryYReward(reward, discount);
-                        }
-                        //TODO: Handling of reward.ConditionalProductId
-                    }
-                    else
-                    {
-                        discount.Amount = discount.Amount * Math.Min(reward.Quantity, Quantity) / Quantity;
-                    }
-                }
                 if (reward.IsValid)
                 {
+                    var discount = reward.ToDiscountModel(ListPrice - DiscountAmount, Quantity);
                     Discounts.Add(discount);
                     DiscountAmount += discount.Amount;
                 }
-            }
-        }
-
-        private void ApplyNinEveryYReward(PromotionReward reward, Discount discount)
-        {
-            if (reward.ForNthQuantity > 0 && reward.InEveryNthQuantity > 0)
-            {
-                var appliedItemsQuantity = reward.ForNthQuantity.Value * Math.Min(reward.Quantity, Quantity) / reward.InEveryNthQuantity.Value;
-                var totalDiscount = discount.Amount.Amount * Math.Min(appliedItemsQuantity, Quantity);
-                if (reward.MaxLimit < totalDiscount)
-                {
-                    totalDiscount = reward.MaxLimit;
-                }
-                discount.Amount = new Money(totalDiscount, Currency).Allocate(Quantity).FirstOrDefault();
-            }
-            // If parameters are not valid - make 0 discount
-            else
-            {
-                discount.Amount = new Money(0m, Currency);
             }
         }
         #endregion
