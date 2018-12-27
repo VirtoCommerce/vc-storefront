@@ -43,15 +43,26 @@ namespace VirtoCommerce.Storefront.Tests.Reward
                 // No reward - reward type not set
                 yield return new object[] { 100.0m, 3, 0m, new[] { new PromotionReward { Amount = 50.0m, AmountType = AmountType.Relative, Quantity = 2, IsValid = true, Promotion = samplePromotion } } };
 
-
                 // For 2 in every 3 items of total 10 items with price $100 get %50 off limit 4 items not to exceed $150
+
+                // Quantity variantions
+                // For 2 in every 3 items of total 0 items with price $100 get %50 off  =  no discount
+                yield return new object[] { 100.0m, 0, 0m, new[] { new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 3, Amount = 50, AmountType = AmountType.Relative, RewardType = PromotionRewardType.CatalogItemAmountReward, IsValid = true, Promotion = samplePromotion } } };
+                // For 2 in every 3 items of total 1 items with price $100 get %50 off  =  no discount
+                yield return new object[] { 100.0m, 1, 0m, new[] { new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 3, Amount = 50, AmountType = AmountType.Relative, RewardType = PromotionRewardType.CatalogItemAmountReward, IsValid = true, Promotion = samplePromotion } } };
+                // For 2 in every 3 items of total 2 items with price $100 get %50 off  =  no discount
+                yield return new object[] { 100.0m, 2, 0m, new[] { new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 3, Amount = 50, AmountType = AmountType.Relative, RewardType = PromotionRewardType.CatalogItemAmountReward, IsValid = true, Promotion = samplePromotion } } };
+                // For 2 in every 3 items of total 3 items with price $100 get %50 off  =  $33.34 no discount (2 discounted = $100)
+                yield return new object[] { 100.0m, 3, 33.34m, new[] { new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 3, Amount = 50, AmountType = AmountType.Relative, RewardType = PromotionRewardType.CatalogItemAmountReward, IsValid = true, Promotion = samplePromotion } } };
+                // For 2 in every 3 items of total 4 items with price $100 get %50 off  =  $25 no discount (2 discounted = $100)
+                yield return new object[] { 100.0m, 4, 25m, new[] { new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 3, Amount = 50, AmountType = AmountType.Relative, RewardType = PromotionRewardType.CatalogItemAmountReward, IsValid = true, Promotion = samplePromotion } } };
 
                 // Money limit
                 // Not exceeded, discounted quantity set to 2  =  $10 discount on one item (2 items discounted  = $100 total)
                 yield return new object[] { 100.0m, 10, 10.0m, new[] { new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 3, MaxLimit = 150, Quantity = 2, Amount = 50, AmountType = AmountType.Relative, RewardType = PromotionRewardType.CatalogItemAmountReward, IsValid = true, Promotion = samplePromotion } } };
                 // $150 limit reached, discounted quantity set to 6  =  $15 discount on one item (4 items discounted, but $150 limit = $150 total discount)
                 yield return new object[] { 100.0m, 10, 15.0m, new[] { new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 3, MaxLimit = 150, Quantity = 6, Amount = 50, AmountType = AmountType.Relative, RewardType = PromotionRewardType.CatalogItemAmountReward, IsValid = true, Promotion = samplePromotion } } };
-                // Limit not set, discounted quantity set to 10  =  no discount (it is current behavior, probably expected)
+                // Limit not set, discounted quantity set to 10  =  $30 discount on one item (6 of 10 items discounted  =  $300)
                 yield return new object[] { 100.0m, 10, 30.0m, new[] { new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 3, Quantity = 10, Amount = 50, AmountType = AmountType.Relative, RewardType = PromotionRewardType.CatalogItemAmountReward, IsValid = true, Promotion = samplePromotion } } };
 
                 // Item limit

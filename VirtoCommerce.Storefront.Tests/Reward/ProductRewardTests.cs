@@ -106,8 +106,8 @@ namespace VirtoCommerce.Storefront.Tests.Reward
                         new PromotionReward { ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
                     }
                 };
-                // Existing ProductId specified and Non Existing ConditionalProductId - expected 0
-                yield return new object[] { 0,
+                // Existing ProductId specified and Non Existing ConditionalProductId - expected 1
+                yield return new object[] { 1,
                     new[]
                     {
                         new PromotionReward { ProductId = ExistingProductId, ConditionalProductId = NonExistingProduct, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
@@ -120,8 +120,8 @@ namespace VirtoCommerce.Storefront.Tests.Reward
                         new PromotionReward { ProductId = NonExistingProduct, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
                     }
                 };
-                // No ProductId specified and Existing ConditionalProductId - expected 0
-                yield return new object[] { 0,
+                // No ProductId specified and Existing ConditionalProductId - expected 1
+                yield return new object[] { 1,
                     new[]
                     {
                         new PromotionReward { ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
@@ -136,81 +136,6 @@ namespace VirtoCommerce.Storefront.Tests.Reward
                         new PromotionReward { ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
                         new PromotionReward { ProductId = NonExistingProduct, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
                    }
-                };
-
-                // For N in every Y… conditions
-                // Without ConditionalProductId
-                // Existing ProductId specified and For = 1 and inEvery in [1, 2, 0, null] - expected 1
-                yield return new object[] { 1,
-                    new[]
-                    {
-                        new PromotionReward { ForNthQuantity = 1, InEveryNthQuantity = 1, ProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 1, InEveryNthQuantity = 2, ProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 1, InEveryNthQuantity = 0, ProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 1, InEveryNthQuantity = null, ProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                    }
-                };
-                // Existing ProductId specified and For in [1, 2, 0, null] and inEvery = 1 - expected 1
-                yield return new object[] { 1,
-                    new[]
-                    {
-                        new PromotionReward { ForNthQuantity = 1, InEveryNthQuantity = 1, ProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 1, ProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 0, InEveryNthQuantity = 1, ProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = null, InEveryNthQuantity = 1, ProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                    }
-                };
-                // Existing ProductId specified and For in [2, 0, null] and inEvery [2, 0, null] - expected 0 (null, null)
-                yield return new object[] { 1,
-                    new[]
-                    {
-                        new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 2, ProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 0, ProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = null, ProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 0, InEveryNthQuantity = 2, ProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 0, InEveryNthQuantity = 0, ProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 0, InEveryNthQuantity = null, ProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = null, InEveryNthQuantity = 2, ProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = null, InEveryNthQuantity = 0, ProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = null, InEveryNthQuantity = null, ProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                    }
-                };
-
-                // With ConditionalProductId
-                // Existing ProductId specified and existing ConditionalProductId and For = 1 and inEvery in [1, 2, 0, null] - expected 1
-                yield return new object[] { 1,
-                    new[]
-                    {
-                        new PromotionReward { ForNthQuantity = 1, InEveryNthQuantity = 1, ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 1, InEveryNthQuantity = 2, ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 1, InEveryNthQuantity = 0, ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 1, InEveryNthQuantity = null, ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                    }
-                };
-                // Existing ProductId specified and existing ConditionalProductId and For in [1, 2, 0, null] and inEvery = 1 - expected 1
-                yield return new object[] { 1,
-                    new[]
-                    {
-                        new PromotionReward { ForNthQuantity = 1, InEveryNthQuantity = 1, ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 1, ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 0, InEveryNthQuantity = 1, ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = null, InEveryNthQuantity = 1, ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                    }
-                };
-                // Existing ProductId specified and existing ConditionalProductId and For in [2, 0, null] and inEvery [2, 0, null] - expected 0 (null, null)
-                yield return new object[] { 1,
-                    new[]
-                    {
-                        new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 2, ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 0, ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = null, ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 0, InEveryNthQuantity = 2, ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 0, InEveryNthQuantity = 0, ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = 0, InEveryNthQuantity = null, ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = null, InEveryNthQuantity = 2, ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = null, InEveryNthQuantity = 0, ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                        new PromotionReward { ForNthQuantity = null, InEveryNthQuantity = null, ProductId = ExistingProductId, ConditionalProductId = ExistingProductId, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true },
-                    }
                 };
             }
         }

@@ -389,9 +389,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         public void ApplyRewards(IEnumerable<PromotionReward> rewards)
         {
-            var productRewards = rewards.Where(r => r.RewardType == PromotionRewardType.CatalogItemAmountReward && (r.ProductId.IsNullOrEmpty() || r.ProductId.EqualsInvariant(Id))
-                && ((!r.ForNthQuantity.HasValue && !r.InEveryNthQuantity.HasValue) || (r.InEveryNthQuantity == 1 && r.ForNthQuantity == 1))
-                && (r.ConditionalProductId.IsNullOrEmpty() || (r.ConditionalProductId.EqualsInvariant(Id) && (r.ProductId?.EqualsInvariant(Id) ?? false))));
+            var productRewards = rewards.Where(r => r.RewardType == PromotionRewardType.CatalogItemAmountReward && (r.ProductId.IsNullOrEmpty() || r.ProductId.EqualsInvariant(Id)));
             if (productRewards == null)
             {
                 return;
