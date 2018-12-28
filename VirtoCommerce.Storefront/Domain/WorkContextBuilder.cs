@@ -21,7 +21,10 @@ namespace VirtoCommerce.Storefront.Domain
             var qs = WorkContext.QueryString = HttpContext.Request.Query.ToNameValueCollection(htmlEncoder);
             var qsPageSize = qs["count"].ToNullableInt() ?? qs["page_size"].ToNullableInt();
             WorkContext.PageNumber = qs["page"].ToNullableInt();
-            WorkContext.PageSize = qsPageSize <= options.PageSizeMaxValue ? qsPageSize : options.PageSizeMaxValue;
+            if (qsPageSize.HasValue && qsPageSize > options.PageSizeMaxValue)
+            {
+                WorkContext.PageSize = options.PageSizeMaxValue;
+            }
         }
 
         public HttpContext HttpContext { get; }
