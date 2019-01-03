@@ -1,5 +1,4 @@
 using System.Globalization;
-using DotLiquid;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -22,23 +21,25 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public string Lower { get; set; }
         public string Upper { get; set; }
 
-        public override string ToString()
-        {
-            var filters = (Context["collection_sidebar_filters"] ?? string.Empty).ToString();
+        // TODO:
+        //public override string ToString()
+        //{
+        //    var filters = (Context["collection_sidebar_filters"] ?? string.Empty).ToString();
 
-            if (filters == "groups")
-            {
-                // eliminate count for now, since it problematic to make it work in some templates, especially when determine active tag
-                return Id;
-            }
+        //    if (filters == "groups")
+        //    {
+        //        // eliminate count for now, since it problematic to make it work in some templates, especially when determine active tag
+        //        return Id;
+        //    }
 
-            if (filters == "facets")
-            {
-                return string.Format(CultureInfo.InvariantCulture, "{0}_{1} ({2})", GroupName, Label, Count);
-            }
+        //    if (filters == "facets")
+        //    {
+        //        return string.Format(CultureInfo.InvariantCulture, "{0}_{1} ({2})", GroupName, Label, Count);
+        //    }
 
-            return Id;
-        }
+        //    return Id;
+        //}
+
 
         public override bool Equals(object obj)
         {

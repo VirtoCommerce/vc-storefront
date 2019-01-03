@@ -59,6 +59,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
 
         public int Priority { get; set; }
 
-        public MetafieldsCollection MetaInfo { get; set; }
+        public IDictionary<string, IDictionary<string, object>> MetaInfo { get; set; }
     }
 }

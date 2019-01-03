@@ -1,6 +1,7 @@
 using DotLiquid;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using VirtoCommerce.Storefront.Model;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -69,7 +70,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// Gets line item custom information
         /// </summary>
         [DataMember]
-        public MetafieldsCollection Properties { get; set; }
+        public IDictionary<string, object> Properties { get; set; }
 
         /// <summary>
         /// Gets line item quantity

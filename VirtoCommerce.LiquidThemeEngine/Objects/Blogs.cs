@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -12,21 +9,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         {
         }
 
-        public override object BeforeMethod(string method)
+        protected override string GetKey(Blog blog)
         {
-            var retVal = base.BeforeMethod(method);
-            if (!method.IsNullOrEmpty())
-            {
-                retVal = this.SingleOrDefault(x => x.Handle.Equals(method, StringComparison.OrdinalIgnoreCase));
-            }
-            return retVal;
+            return blog.Handle;
         }
 
-        #region ItemCollection Members
-        public override bool Contains(object value)
-        {
-            return false;
-        }
-        #endregion
     }
 }

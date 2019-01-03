@@ -1,5 +1,6 @@
 using PagedList.Core;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 using VirtoCommerce.Storefront.Model.Common;
@@ -106,6 +107,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
             foreach (var image in result.Images)
             {
+                if (result.PrimaryImage == null)
+                {
+                    result.PrimaryImage = image;
+                }
                 image.ProductId = product.Id;
                 image.AttachedToVariant = false;
             }
@@ -118,7 +123,13 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             if (product.Properties != null)
             {
                 result.Properties = product.Properties.Select(x => x.ToShopifyModel()).ToList();
-                result.Metafields = new MetaFieldNamespacesCollection(new[] { new MetafieldsCollection("properties", product.Properties) });
+                if (product.Properties != null)
+                {
+                    result.Metafields = new Dictionary<string, IDictionary<string, object>>
+                    {
+                        ["properties"] = product.Properties.ToDictionary(prop => prop.Name, prop => (object)prop.Values)
+                    };
+                }
             }
 
             result.SelectedVariant = result.Variants.First();

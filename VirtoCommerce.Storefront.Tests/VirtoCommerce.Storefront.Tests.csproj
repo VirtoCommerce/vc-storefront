@@ -13,6 +13,7 @@
     <PackageReference Include="MSTest.TestAdapter" Version="1.3.2" />
     <PackageReference Include="MSTest.TestFramework" Version="1.3.2" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
+    <PackageReference Include="Scriban" Version="2.0.0-alpha-002" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.console" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
@@ -25,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\scriban\src\Scriban\Scriban.csproj" />
     <ProjectReference Include="..\VirtoCommerce.Storefront.Model\VirtoCommerce.Storefront.Model.csproj" />
     <ProjectReference Include="..\VirtoCommerce.Storefront\VirtoCommerce.Storefront.csproj" />
   </ItemGroup>

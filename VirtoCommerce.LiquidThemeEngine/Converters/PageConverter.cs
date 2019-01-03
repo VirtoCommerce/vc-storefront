@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 using StorefrontModel = VirtoCommerce.Storefront.Model;
 
@@ -28,13 +29,17 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 Handle = contentItem.Url,
                 Content = contentItem.Content,
                 Layout = contentItem.Layout,
-                MetaInfo = new MetafieldsCollection("meta_fields", new Dictionary<string, object>())
             };
-            foreach (var metaInfoProp in contentItem.MetaInfo)
+            if (contentItem.MetaInfo != null)
             {
-                result.MetaInfo.Add(metaInfoProp.Key, metaInfoProp.Value);
+                result.MetaInfo = new Dictionary<string, IDictionary<string, object>>
+                {
+                    ["meta_fields"] = contentItem.MetaInfo.ToDictionary(prop => prop.Key, prop =>
+                    {
+                        return (object)prop.Value;
+                    })
+                };
             }
-            
             if (contentItem.PublishedDate.HasValue)
             {
                 result.PublishedAt = contentItem.PublishedDate.Value;

@@ -1,3 +1,4 @@
+using System.Linq;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 using VirtoCommerce.Storefront.Model.Common;
 using StorefrontModel = VirtoCommerce.Storefront.Model;
@@ -33,7 +34,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.Title = lineItem.Name;
             result.Type = lineItem.ProductType;
             result.Url = lineItem.ImageUrl;
-            
+
             result.Fulfillment = null; // TODO
             result.Grams = lineItem.Weight ?? 0m;
             result.Image = new Image
@@ -50,8 +51,14 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.Title = lineItem.Name;
             result.VariantId = lineItem.ProductId;
 
-            result.Properties = new MetafieldsCollection("properties", language, lineItem.DynamicProperties);
 
+            if (lineItem.DynamicProperties != null)
+            {
+                result.Properties = lineItem.DynamicProperties.ToDictionary(prop => prop.Name, prop =>
+                {
+                    return (object)prop.Values.GetLocalizedStringsForLanguage(language).Select(x => x.Value).ToArray();
+                });
+            }
             return result;
         }
 
@@ -79,13 +86,13 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.Price = lineItem.PlacedPrice.Amount * 100;
             result.PriceWithTax = lineItem.PlacedPriceWithTax.Amount * 100;
             result.Title = lineItem.Name;
-            result.Type = lineItem.ObjectType; 
+            result.Type = lineItem.ObjectType;
             result.Url = urlBuilder.ToAppAbsolute("/product/" + lineItem.ProductId);
             result.Product = new Product
             {
                 Id = result.ProductId,
                 Url = result.Url
-            };       
+            };
 
             return result;
         }

@@ -6,9 +6,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using DotLiquid;
-using DotLiquid.Exceptions;
-using DotLiquid.FileSystems;
+using System.Threading.Tasks;
 using DotLiquid.ViewEngine.Exceptions;
 using LibSassHost;
 using Microsoft.AspNetCore.Http;
@@ -18,11 +16,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Scriban;
+using Scriban.Parsing;
+using Scriban.Runtime;
 using VirtoCommerce.LiquidThemeEngine.Converters;
-using VirtoCommerce.LiquidThemeEngine.Extensions;
 using VirtoCommerce.LiquidThemeEngine.Filters;
-using VirtoCommerce.LiquidThemeEngine.Operators;
-using VirtoCommerce.LiquidThemeEngine.Tags;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
@@ -41,38 +39,25 @@ namespace VirtoCommerce.LiquidThemeEngine
     /// snippets - snippets - partial views
     /// templates - view templates
     /// </summary>
-    public class ShopifyLiquidThemeEngine : IFileSystem, ILiquidThemeEngine
+    public class ShopifyLiquidThemeEngine : ILiquidThemeEngine, ITemplateLoader
     {
         private readonly LiquidThemeEngineOptions _options;
         private static readonly Regex _isLiquid = new Regex("[{}|]", RegexOptions.Compiled);
         private const string _liquidTemplateFormat = "{0}.liquid";
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IStorefrontUrlBuilder _storeFrontUrlBuilder;
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IContentBlobProvider _themeBlobProvider;
 
         static ShopifyLiquidThemeEngine()
         {
-            Liquid.UseRubyDateFormat = true;
-            // Register custom tags (Only need to do this once)
-            Template.RegisterFilter(typeof(CommonFilters));
-            Template.RegisterFilter(typeof(CommerceFilters));
-            Template.RegisterFilter(typeof(TranslationFilter));
-            Template.RegisterFilter(typeof(UrlFilters));
-            Template.RegisterFilter(typeof(DateFilters));
-            Template.RegisterFilter(typeof(MoneyFilters));
-            Template.RegisterFilter(typeof(HtmlFilters));
-            Template.RegisterFilter(typeof(StringFilters));
-            Template.RegisterFilter(typeof(ArrayFilters));
-            Template.RegisterFilter(typeof(MathFilters));
 
-            Condition.Operators["contains"] = CommonOperators.ContainsMethod;
+            //Condition.Operators["contains"] = CommonOperators.ContainsMethod;
 
-            Template.RegisterTag<AntiforgeryTag>("anti_forgery");
-            Template.RegisterTag<LayoutTag>("layout");
-            Template.RegisterTag<FormTag>("form");
-            Template.RegisterTag<PaginateTag>("paginate");
+            //Template.RegisterTag<AntiforgeryTag>("anti_forgery");
+            //Template.RegisterTag<LayoutTag>("layout");
+            //Template.RegisterTag<FormTag>("form");
+            //Template.RegisterTag<PaginateTag>("paginate");
         }
 
         public ShopifyLiquidThemeEngine(IStorefrontMemoryCache memoryCache, IWorkContextAccessor workContextAccessor,
@@ -81,7 +66,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         {
             _workContextAccessor = workContextAccessor;
             _httpContextAccessor = httpContextAccessor;
-            _storeFrontUrlBuilder = storeFrontUrlBuilder;
+            UrlBuilder = storeFrontUrlBuilder;
             _options = options.Value;
             _memoryCache = memoryCache;
             _themeBlobProvider = contentBlobProvder;
@@ -100,7 +85,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <summary>
         /// Store url builder
         /// </summary>
-        public IStorefrontUrlBuilder UrlBuilder => _storeFrontUrlBuilder;
+        public IStorefrontUrlBuilder UrlBuilder { get; }
 
         /// <summary>
         /// Default master view name
@@ -120,10 +105,22 @@ namespace VirtoCommerce.LiquidThemeEngine
         private string CurrentThemePath => Path.Combine("Themes", WorkContext.CurrentStore.Id, CurrentThemeName);
 
         #region IFileSystem members
-        public string ReadTemplateFile(Context context, string templateName)
+        public string GetPath(TemplateContext context, SourceSpan callerSpan, string templateName)
         {
-            return ReadTemplateByName(templateName);
+            return ResolveTemplatePath(templateName);
         }
+
+        public string Load(TemplateContext context, SourceSpan callerSpan, string templatePath)
+        {
+            var content = ReadTemplateByPath(templatePath);
+            return content;
+        }
+
+        public ValueTask<string> LoadAsync(TemplateContext context, SourceSpan callerSpan, string templatePath)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region ILiquidThemeEngine Members
@@ -168,14 +165,11 @@ namespace VirtoCommerce.LiquidThemeEngine
             if (retVal != null && filePath.EndsWith(".liquid"))
             {
                 var shopifyContext = WorkContext.ToShopifyModel(UrlBuilder);
-                var parameters = shopifyContext.ToLiquid() as Dictionary<string, object>;
-                var settings = GetSettings("''");
-                parameters.Add("settings", settings);
-
+                shopifyContext.Settings = GetSettings("''");
                 var templateContent = retVal.ReadToString();
                 retVal.Dispose();
 
-                var template = RenderTemplate(templateContent, parameters);
+                var template = RenderTemplate(templateContent, filePath, shopifyContext);
                 retVal = new MemoryStream(Encoding.UTF8.GetBytes(template));
             }
 
@@ -247,14 +241,14 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <param name="templateName"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public string RenderTemplateByName(string templateName, Dictionary<string, object> parameters)
+        public string RenderTemplateByName(string templateName, object context)
         {
             if (string.IsNullOrEmpty(templateName))
             {
                 throw new ArgumentNullException(nameof(templateName));
             }
             var templateContent = ReadTemplateByName(templateName);
-            var retVal = RenderTemplate(templateContent, parameters);
+            var retVal = RenderTemplate(templateContent, templateName, context);
             return retVal;
         }
 
@@ -264,8 +258,13 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <param name="templateContent"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public string RenderTemplate(string templateContent, Dictionary<string, object> parameters)
+        public string RenderTemplate(string templateContent, string templatePath, object context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             if (string.IsNullOrEmpty(templateContent))
             {
                 return templateContent;
@@ -276,32 +275,49 @@ namespace VirtoCommerce.LiquidThemeEngine
             {
                 return templateContent;
             }
+            var scriptObject = new ScriptObject();
+            scriptObject.Import(context);
 
-            if (parameters == null)
+            scriptObject.Import(typeof(CommonFilters));
+            scriptObject.Import(typeof(CommerceFilters));
+            scriptObject.Import(typeof(TranslationFilter));
+            scriptObject.Import(typeof(UrlFilters));
+            scriptObject.Import(typeof(MoneyFilters));
+            scriptObject.Import(typeof(HtmlFilters));
+            scriptObject.Import(typeof(StringFilters));
+            scriptObject.Import(typeof(ArrayFilters));
+            scriptObject.Import(typeof(MathFilters));
+            scriptObject.Import(typeof(StandardFilters));
+
+            var templateContext = new TemplateContext()
             {
-                parameters = new Dictionary<string, object>();
-            }
-
-            Template.FileSystem = this;
-            //TODO:       
-            var renderParams = new RenderParameters
-            {
-                LocalVariables = Hash.FromDictionary(parameters),
-                RethrowErrors = _options.RethrowLiquidRenderErrors
-            };
-
-            var parsedTemplate = Template.Parse(templateContent);
-
-            var retVal = parsedTemplate.RenderWithTracing(renderParams);
-
-            //Copy key values which were generated in rendering to out parameters
-            if (parsedTemplate.Registers != null)
-            {
-                foreach (var registerPair in parsedTemplate.Registers)
+                TemplateLoader = this,
+                EnableRelaxedMemberAccess = true,
+                NewLine = Environment.NewLine,
+                TemplateLoaderLexerOptions = new LexerOptions
                 {
-                    parameters[registerPair.Key] = registerPair.Value;
+                    Mode = ScriptMode.Liquid
                 }
+            };
+            //TODO: Handle _options.RethrowLiquidRenderErrors
+            templateContext.PushGlobal(scriptObject);
+
+            var parsedTemplate = Template.ParseLiquid(templateContent, templatePath);
+            if (parsedTemplate.HasErrors)
+            {
+                throw new InvalidOperationException(string.Join("\n", parsedTemplate.Messages));
             }
+            var retVal = parsedTemplate.Render(templateContext);
+
+            //TODO:
+            ////Copy key values which were generated in rendering to out parameters
+            //if (parsedTemplate.Registers != null)
+            //{
+            //    foreach (var registerPair in parsedTemplate.Registers)
+            //    {
+            //        parameters[registerPair.Key] = registerPair.Value;
+            //    }
+            //}
 
             return retVal;
         }
@@ -311,13 +327,13 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// </summary>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public IDictionary GetSettings(string defaultValue = null)
+        public IDictionary<string, object> GetSettings(string defaultValue = null)
         {
             var cacheKey = CacheKey.With(GetType(), "GetSettings", CurrentThemeSettingPath, defaultValue);
             return _memoryCache.GetOrCreate(cacheKey, (cacheItem) =>
            {
                cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeSettingPath) }));
-               var retVal = new DefaultableDictionary(defaultValue);
+               var retVal = new Dictionary<string, object>().WithDefaultValue(defaultValue);
                //Load all data from current theme config
                var resultSettings = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
                if (resultSettings != null)
@@ -344,8 +360,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                        resultSettings = (JObject)currentPreset;
                    }
 
-                   var dict = resultSettings.ToObject<Dictionary<string, object>>().ToDictionary(x => x.Key, x => x.Value);
-                   retVal = new DefaultableDictionary(dict, defaultValue);
+                   retVal = resultSettings.ToObject<Dictionary<string, object>>().ToDictionary(x => x.Key, x => x.Value).WithDefaultValue(defaultValue);
                }
 
                return retVal;
@@ -447,7 +462,17 @@ namespace VirtoCommerce.LiquidThemeEngine
             var templatePath = ResolveTemplatePath(templateName);
             if (string.IsNullOrEmpty(templatePath))
             {
-                throw new FileSystemException($"The template '{templateName}' was not found. The following locations were searched:<br/>{string.Join("<br/>", DiscoveryPaths)}");
+                throw new FileNotFoundException($"The template '{templateName}' was not found. The following locations were searched:<br/>{string.Join("<br/>", DiscoveryPaths)}");
+            }
+
+            return ReadTemplateByPath(templatePath);
+        }
+
+        private string ReadTemplateByPath(string templatePath)
+        {
+            if (string.IsNullOrEmpty(templatePath))
+            {
+                throw new ArgumentNullException(nameof(templatePath));
             }
 
             var cacheKey = CacheKey.With(GetType(), "ReadTemplateByName", templatePath);
@@ -460,5 +485,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 }
             });
         }
+
+
     }
 }

@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using DotLiquid;
-using DotLiquid.Exceptions;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
@@ -75,55 +73,50 @@ namespace VirtoCommerce.LiquidThemeEngine
             }
 
             // Copy data from the view context over to DotLiquid
-            var parameters = shopifyContext.ToLiquid() as Dictionary<string, object>;
+            //var parameters = shopifyContext.ToLiquid() as Dictionary<string, object>;
 
             //Add settings to context
-            parameters.Add("settings", _liquidThemeEngine.GetSettings());
+            shopifyContext.Settings = _liquidThemeEngine.GetSettings();
 
-            foreach (var item in context.ViewData)
-            {
-                parameters.Add(Template.NamingConvention.GetMemberName(item.Key), item.Value);
-            }
-            foreach (var item in context.TempData)
-            {
-                parameters.Add(Template.NamingConvention.GetMemberName(item.Key), item.Value);
-            }
+            //TODO:
+            //foreach (var item in context.ViewData)
+            //{
+            //    //parameters.Add(Template.NamingConvention.GetMemberName(item.Key), item.Value);
+            //    parameters.Add(item.Key, item.Value);
+            //}
+            //foreach (var item in context.TempData)
+            //{
+            //    //parameters.Add(Template.NamingConvention.GetMemberName(item.Key), item.Value);
+            //    parameters.Add(item.Key, item.Value);
+            //}
+            //if (!parameters.ContainsKey("error_message") && !string.IsNullOrEmpty(_workContextAccessor.WorkContext.ErrorMessage))
+            //{
+            //    parameters.Add("error_message", _workContextAccessor.WorkContext.ErrorMessage);
+            //}
 
-            if (!parameters.ContainsKey("error_message") && !string.IsNullOrEmpty(_workContextAccessor.WorkContext.ErrorMessage))
-            {
-                parameters.Add("error_message", _workContextAccessor.WorkContext.ErrorMessage);
-            }
-
-            var viewTemplate = _liquidThemeEngine.RenderTemplateByName(_viewName, parameters);
+            var viewTemplate = _liquidThemeEngine.RenderTemplateByName(_viewName, shopifyContext);
 
             // don't use layouts for partial views when masterViewName is not specified
             if (_isMainPage)
             {
                 var masterViewName = "theme";
-                if (parameters.TryGetValue("layout", out object layoutFromTemplate))
-                {
-                    if (layoutFromTemplate != null && !string.IsNullOrEmpty(layoutFromTemplate.ToString()))
-                    {
-                        masterViewName = layoutFromTemplate.ToString();
-                    }
-                }
-                var headerTemplate = _liquidThemeEngine.RenderTemplateByName("content_header", parameters);
+                //if (parameters.TryGetValue("layout", out object layoutFromTemplate))
+                //{
+                //    if (layoutFromTemplate != null && !string.IsNullOrEmpty(layoutFromTemplate.ToString()))
+                //    {
+                //        masterViewName = layoutFromTemplate.ToString();
+                //    }
+                //}
+                var headerTemplate = _liquidThemeEngine.RenderTemplateByName("content_header", shopifyContext);
 
                 //add special placeholder 'content_for_layout' to content it will be replaced in master page by main content
-                parameters.Add("content_for_layout", viewTemplate);
-                parameters.Add("content_for_header", headerTemplate);
+                shopifyContext.ContentForLayout = viewTemplate;
+                shopifyContext.ContentForHeader = headerTemplate;
+                shopifyContext.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-                parameters.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+                viewTemplate = _liquidThemeEngine.RenderTemplateByName(masterViewName, shopifyContext);
 
-                try
-                {
-                    viewTemplate = _liquidThemeEngine.RenderTemplateByName(masterViewName, parameters);
-                }
-                catch (FileSystemException ex)
-                {
-                    var message = ex.Message.Replace("<br/>", "\r\n");
-                    throw new InvalidOperationException(message);
-                }
+
 
             }
             await context.Writer.WriteAsync(viewTemplate);

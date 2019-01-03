@@ -26,10 +26,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.Performed = true;
             result.Terms = workContext.CurrentProductSearchCriteria.Keyword;
 
-            result.Results = new MutablePagedList<dotLiquid.Drop>((pageNumber, pageSize, sortInfos, @params) =>
+            result.Results = new MutablePagedList<Drop>((pageNumber, pageSize, sortInfos, @params) =>
             {
                 products.Slice(pageNumber, pageSize, sortInfos, @params);
-                return new StaticPagedList<dotLiquid.Drop>(products.Select(x => x.ToShopifyModel()), products);
+                return new StaticPagedList<Drop>(products.Select(x => x.ToShopifyModel()), products);
             }, 1, products.PageSize);
 
             if (workContext.Aggregations != null)

@@ -136,7 +136,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         [DataMember]
         public Image[] Images { get; set; }
 
-        public MetaFieldNamespacesCollection Metafields { get; set; }
+        [DataMember]
+        public Image PrimaryImage { get; set; }
+
+
+        public IDictionary<string, IDictionary<string, object>> Metafields { get; set; }
 
         /// <summary>
         /// Returns an array of the product's options. (Color Size Material)

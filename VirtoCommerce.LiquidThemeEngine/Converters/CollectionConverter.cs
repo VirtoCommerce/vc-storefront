@@ -1,4 +1,5 @@
 using PagedList.Core;
+using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 using VirtoCommerce.Storefront.Model;
@@ -81,7 +82,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
             if (!category.Properties.IsNullOrEmpty())
             {
-                result.Metafields = new MetaFieldNamespacesCollection(new[] { new MetafieldsCollection("properties", category.Properties) });
+                result.Metafields = new Dictionary<string, IDictionary<string, object>>
+                {
+                    ["properties"] = category.Properties.ToDictionary(prop => prop.Name, prop => (object)prop.Values)
+                };
             }
 
             return result;

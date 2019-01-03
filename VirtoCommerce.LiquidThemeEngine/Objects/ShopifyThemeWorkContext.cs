@@ -1,6 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using DotLiquid;
+using Scriban;
+using Scriban.Runtime;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
@@ -8,7 +11,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// <summary>
     /// https://docs.shopify.com/themes/liquid-documentation/objects
     /// </summary>
-    public partial class ShopifyThemeWorkContext : ILiquidizable
+    public partial class ShopifyThemeWorkContext
     {
         #region Aliases for shopify theme compliance
         /// <summary>
@@ -148,8 +151,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
 
         public IList<LoginProvider> ExternalLoginProviders { get; set; }
 
-        public MetafieldsCollection ApplicationSettings { get; set; }
-
+        public IDictionary<string, object> ApplicationSettings { get; set; }
+        //theme settings
+        public IDictionary<string, object> Settings { get; set; }
+        public string ContentForLayout { get; set; }
+        public string ContentForHeader { get; set; }
+        public string Version { get; set; }
 
         #region GDPR consent
         public bool CanTrack { get; set; }
@@ -159,19 +166,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
 
         #endregion
 
-        #region ILiquidizable members
 
-        public object ToLiquid()
-        {
-            var retVal = new Dictionary<string, object>();
-            foreach (var propertyInfo in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
-            {
-                retVal.Add(propertyInfo.Name.Decamelize(), propertyInfo.GetValue(this));
-            }
-
-            return retVal;
-        }
-
-        #endregion
     }
 }

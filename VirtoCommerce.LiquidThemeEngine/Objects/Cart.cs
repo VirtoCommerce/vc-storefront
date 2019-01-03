@@ -13,11 +13,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     [DataContract]
     public partial class Cart : Drop
     {
-        /// <summary>
-        /// Gets an additional shopping cart information
-        /// </summary>
-        public MetaFieldNamespacesCollection Attributes { get; set; }
-
+   
         /// <summary>
         /// Gets collection of shopping cart line items
         /// </summary>

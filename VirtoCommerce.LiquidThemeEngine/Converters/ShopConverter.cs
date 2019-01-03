@@ -1,4 +1,5 @@
 using PagedList.Core;
+using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 using VirtoCommerce.Storefront.Model.Common;
@@ -41,11 +42,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.Catalog = store.Catalog;
             result.Status = store.StoreState.ToString();
 
-            result.Metafields = new MetaFieldNamespacesCollection(new[]
+
+            result.Metafields = new Dictionary<string, IDictionary<string, object>>
             {
-                new MetafieldsCollection("dynamic_properties", workContext.CurrentLanguage, store.DynamicProperties),
-                new MetafieldsCollection("settings", store.Settings)
-            });
+                ["dynamic_properties"] = store.DynamicProperties.ToDictionary(prop => prop.Name, prop =>
+                {
+                    return (object)prop.Values.GetLocalizedStringsForLanguage(workContext.CurrentLanguage).Select(x => x.Value).ToArray();
+                }),
+                ["settings"] = store.Settings.ToDictionary(setting => setting.Name, setting => (object)setting.Value)
+            };
 
             if (workContext.Categories != null)
             {

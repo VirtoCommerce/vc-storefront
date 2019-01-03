@@ -11,16 +11,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         {
         }
 
-        public override object BeforeMethod(string method)
+        protected override string GetKey(Page page)
         {
-            return this.SingleOrDefault(x => x.Handle.Equals(method, StringComparison.OrdinalIgnoreCase));
+            return page.Handle;
         }
 
-        #region ItemCollection Members
-        public override bool Contains(object value)
-        {
-            return false;
-        }
-        #endregion
     }
 }

@@ -1,15 +1,14 @@
-using DotLiquid;
-using PagedList.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using PagedList.Core;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
-    public abstract class ItemCollection<T> : Drop, ICollection, ILiquidContains, IEnumerable<T>, IMutablePagedList
+    public abstract class ItemCollection<T> : IDictionary, ICollection, ILiquidContains, IEnumerable<T>, IMutablePagedList
         where T : class
     {
         private readonly IMutablePagedList<T> _mutablePagedList;
@@ -32,6 +31,82 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
                 return _mutablePagedList.Count;
             }
         }
+
+        protected abstract string GetKey(T obj);
+
+        public IPagedList GetMetaData()
+        {
+            return _mutablePagedList.GetMetaData();
+        }
+
+        #region IDictionary members
+
+        public bool IsReadOnly => true;
+
+        public bool IsFixedSize => false;
+
+        ICollection IDictionary.Keys => _mutablePagedList.Select(x => GetKey(x)).ToList();
+
+        ICollection IDictionary.Values => _mutablePagedList.ToList();
+
+
+        public object this[object key]
+        {
+            get
+            {
+                object result = null;
+                if (key is T other)
+                {
+                    result = _mutablePagedList.FirstOrDefault(x => x.Equals(other));
+                }
+                if (key is string stringKey)
+                {
+                    result = _mutablePagedList.FirstOrDefault(x => GetKey(x).EqualsInvariant(stringKey));
+                }
+                return result;
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public virtual bool Contains(object value)
+        {
+            var result = false;
+            if (value is T other)
+            {
+                result = _mutablePagedList.Any(x => x.Equals(other));
+            }
+            if (value is string key)
+            {
+                result = _mutablePagedList.Any(x => GetKey(x).EqualsInvariant(key));
+            }
+            return result;
+        }
+
+        IDictionaryEnumerator IDictionary.GetEnumerator()
+        {
+            var dict = _mutablePagedList.ToDictionary(x => GetKey(x), x => (object)x);
+            return dict.GetEnumerator();
+        }
+
+        public void Add(object key, object value)
+        {
+            throw new NotImplementedException();
+        }
+        public void Remove(object key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+
         #region ICollection members
         public object SyncRoot
         {
@@ -75,17 +150,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         }
         #endregion
 
-        #region ILiquidContains Members
-        public virtual bool Contains(object value)
-        {
-            var other = value as T;
-            if (other != null)
-            {
-                return _mutablePagedList.Any(x => x.Equals(other));
-            }
-            return false;
-        }
-        #endregion
+
 
         #region IMutablePagedList Members
         public IEnumerable<SortInfo> SortInfos
@@ -176,15 +241,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
             }
         }
 
+
+
         public void Slice(int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos, NameValueCollection @params = null)
         {
             _mutablePagedList.Slice(pageNumber, pageSize, sortInfos, @params);
         }
 
-        public IPagedList GetMetaData()
-        {
-            return _mutablePagedList.GetMetaData();
-        }
+
+
         #endregion
     }
 }

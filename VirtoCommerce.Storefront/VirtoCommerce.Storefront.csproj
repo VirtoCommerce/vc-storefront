@@ -53,12 +53,14 @@
     </PackageReference>
     <PackageReference Include="Nito.AsyncEx" Version="5.0.0-pre-05" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
+    <PackageReference Include="Scriban" Version="2.0.0-alpha-002" />
     <PackageReference Include="Scrutor" Version="3.0.2" />
     <PackageReference Include="VirtoCommerce.Tools" Version="1.2.0" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\scriban\src\Scriban\Scriban.csproj" />
     <ProjectReference Include="..\VirtoCommerce.LiquidThemeEngine\VirtoCommerce.LiquidThemeEngine.csproj" />
     <ProjectReference Include="..\VirtoCommerce.Storefront.Model\VirtoCommerce.Storefront.Model.csproj" />
   </ItemGroup>

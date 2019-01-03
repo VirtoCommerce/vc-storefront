@@ -110,7 +110,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// <summary>
         /// Access in liquid template customer.metafields.dynamic_properties['propertyName']
         /// </summary>
-        public MetaFieldNamespacesCollection Metafields { get; set; }
+        public IDictionary<string, IDictionary<string, object>> Metafields { get; set; }
 
         /// <summary>
         /// Returns an array of all orders placed by the customer.

@@ -7,17 +7,19 @@ using System.Threading.Tasks;
 using DotLiquid;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Scriban;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
     public class CommonFilters
     {
         #region Public Methods and Operators
+
         public static object Default(object input, object value)
         {
             return input ?? value;
         }
- 
+
         public static string Json(object input)
         {
             if (input == null)
@@ -25,28 +27,28 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 return null;
             }
 
-            var contents = Hash.FromAnonymousObject(new { input });
             var serializedString = JsonConvert.SerializeObject(
-                contents["input"],
-                new JsonSerializerSettings()
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                    ContractResolver = new RubyContractResolver(),
-                });
+               input,
+               new JsonSerializerSettings()
+               {
+                   ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                   //TODO:
+                   //ContractResolver = new RubyContractResolver(),
+               });
 
             return serializedString;
         }
 
-        public static string Render(Context context, string input)
+        public static string Render(TemplateContext context, string input)
         {
             if (input == null)
             {
                 return null;
             }
-            var themeEngine = (ShopifyLiquidThemeEngine)Template.FileSystem;
-            var renderParams = context.Environments[0].ToDictionary(x => x.Key, x => x.Value);
-            var result = themeEngine.RenderTemplate(input.ToString(), renderParams);
+            var themeEngine = (ShopifyLiquidThemeEngine)context.TemplateLoader;
+            var result = themeEngine.RenderTemplate(input, null, context.CurrentGlobal);
             return result;
+
         }
 
         #endregion

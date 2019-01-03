@@ -6,37 +6,43 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
     public class TagCollection : ItemCollection<Tag>
     {
+        private readonly IEnumerable<Tag> _tags;
         public TagCollection(IEnumerable<Tag> tags)
             : base(tags)
         {
+            _tags = tags;
         }
 
         public IEnumerable<string> Groups
         {
             get
             {
-                var retVal = this.GroupBy(t => t.GroupLabel).Select(g => g.Key);
+                var retVal = _tags.GroupBy(t => t.GroupLabel).Select(g => g.Key);
                 return retVal;
             }
         }
 
-        public override bool Contains(object value)
+        protected override string GetKey(Tag obj)
         {
-            var tag = value as Tag;
-            var str = value as string;
-            var retVal = false;
-
-            if (tag != null)
-            {
-                retVal = this.Any(x => x.Equals(tag));
-            }
-
-            if (str != null)
-            {
-                retVal = this.Any(x => string.Equals(x.Value, str, StringComparison.OrdinalIgnoreCase));
-            }
-
-            return retVal;
+            return obj.Value;
         }
+        //public override bool Contains(object value)
+        //{
+        //    var tag = value as Tag;
+        //    var str = value as string;
+        //    var retVal = false;
+
+        //    if (tag != null)
+        //    {
+        //        retVal = this.Any(x => x.Equals(tag));
+        //    }
+
+        //    if (str != null)
+        //    {
+        //        retVal = this.Any(x => string.Equals(x.Value, str, StringComparison.OrdinalIgnoreCase));
+        //    }
+
+        //    return retVal;
+        //}
     }
 }

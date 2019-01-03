@@ -11,9 +11,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         {
         }
 
-        public override object BeforeMethod(string method)
+        protected override string GetKey(Description obj)
         {
-            return this.SingleOrDefault(x => x.Type.Equals(method, StringComparison.OrdinalIgnoreCase));
+            return obj.Type;
         }
+
     }
 }

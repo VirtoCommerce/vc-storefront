@@ -187,7 +187,7 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             return new JsonResult(obj, new JsonSerializerSettings
             {
-                ContractResolver = new LiquidThemeEngine.Filters.RubyContractResolver(),
+                //ContractResolver = new LiquidThemeEngine.Filters.RubyContractResolver(),
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             });
         }

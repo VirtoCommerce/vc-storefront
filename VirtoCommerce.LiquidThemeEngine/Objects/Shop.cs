@@ -1,4 +1,5 @@
 using DotLiquid;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using VirtoCommerce.Storefront.Model.Common;
 
@@ -25,7 +26,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         [DataMember]
         public string Currency { get; set; }
 
-        
+
         public IMutablePagedList<Collection> Collections { get; set; }
 
         /// <summary>
@@ -102,7 +103,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// <summary>
         /// Shop metafields
         /// </summary>
-        public MetaFieldNamespacesCollection Metafields { get; set; }
+        public IDictionary<string, IDictionary<string, object>> Metafields { get; set; }
 
         public bool CustomerAccountsEnabled { get; set; }
 

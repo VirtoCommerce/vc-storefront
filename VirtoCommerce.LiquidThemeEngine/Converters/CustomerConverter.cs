@@ -1,4 +1,5 @@
 using PagedList.Core;
+using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 using VirtoCommerce.Storefront.Model.Common;
@@ -78,7 +79,14 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
                 if (contact.DynamicProperties != null)
                 {
-                    result.Metafields = new MetaFieldNamespacesCollection(new[] { new MetafieldsCollection("dynamic_properties", workContext.CurrentLanguage, contact.DynamicProperties) });
+                    result.Metafields = new Dictionary<string, IDictionary<string, object>>
+                    {
+                        ["dynamic_properties"] = contact.DynamicProperties.ToDictionary(prop => prop.Name, prop =>
+                        {
+                            return (object)prop.Values.GetLocalizedStringsForLanguage(workContext.CurrentLanguage).Select(x => x.Value).ToArray();
+                        })
+                    };
+
                 }
             }
 

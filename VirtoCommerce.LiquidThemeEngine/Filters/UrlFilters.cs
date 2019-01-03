@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using DotLiquid;
+using Scriban;
 using VirtoCommerce.LiquidThemeEngine.Extensions;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
@@ -23,18 +24,18 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string CustomerLoginLink(string input)
+        public static string CustomerLoginLink(TemplateContext context, string input)
         {
-            return BuildHtmlLink("customer_login_link", "~/account/login", input);
+            return BuildHtmlLink(context, "customer_login_link", "~/account/login", input);
         }
-        public static string CustomerRegisterLink(string input)
+        public static string CustomerRegisterLink(TemplateContext context, string input)
         {
-            return BuildHtmlLink("customer_register_link", "~/account/register", input);
+            return BuildHtmlLink(context, "customer_register_link", "~/account/register", input);
         }
 
-        public static string CustomerLogoutLink(string input)
+        public static string CustomerLogoutLink(TemplateContext context, string input)
         {
-            return BuildHtmlLink("customer_logout_link", "~/account/logout", input);
+            return BuildHtmlLink(context, "customer_logout_link", "~/account/logout", input);
         }
 
         public static string EditCustomerAddressLink(string input, string id)
@@ -60,7 +61,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 return null;
 
             var retVal = input.ToString();
-       
+
             if (input is shopifyModel.Product product)
             {
                 retVal = product.FeaturedImage?.Src;
@@ -77,7 +78,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             {
                 retVal = collection.Image?.Src;
             }
-            if(input is shopifyModel.LineItem lineItem)
+            if (input is shopifyModel.LineItem lineItem)
             {
                 retVal = lineItem.Image?.Src;
             }
@@ -114,9 +115,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <param name="input"></param>
         /// <param name="tag"></param>
         /// <returns></returns>
-        public static string LinkToTag(Context context, object input, object tag)
+        public static string LinkToTag(TemplateContext context, object input, object tag)
         {
-            return BuildTagLink(TagAction.Replace, tag, input);
+            return BuildTagLink(context, TagAction.Replace, tag, input);
         }
 
         /// <summary>
@@ -126,9 +127,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <param name="input"></param>
         /// <param name="tag"></param>
         /// <returns></returns>
-        public static string LinkToAddTag(Context context, object input, object tag)
+        public static string LinkToAddTag(TemplateContext context, object input, object tag)
         {
-            return BuildTagLink(TagAction.Add, tag, input);
+            return BuildTagLink(context, TagAction.Add, tag, input);
         }
 
         /// <summary>
@@ -138,9 +139,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <param name="input"></param>
         /// <param name="tag"></param>
         /// <returns></returns>
-        public static string LinkToRemoveTag(Context context, object input, object tag)
+        public static string LinkToRemoveTag(TemplateContext context, object input, object tag)
         {
-            return BuildTagLink(TagAction.Remove, tag, input);
+            return BuildTagLink(context, TagAction.Remove, tag, input);
         }
 
         /// <summary>
@@ -149,12 +150,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string AssetUrl(string input)
+        public static string AssetUrl(TemplateContext context, string input)
         {
             string retVal = null;
             if (input != null)
             {
-                var themeAdaptor = (ShopifyLiquidThemeEngine)Template.FileSystem;
+                var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
                 retVal = themeAdaptor.GetAssetAbsoluteUrl(input);
             }
             return retVal;
@@ -166,12 +167,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string StaticAssetUrl(string input)
+        public static string StaticAssetUrl(TemplateContext context, string input)
         {
             string retVal = null;
             if (input != null)
             {
-                var themeAdaptor = (ShopifyLiquidThemeEngine)Template.FileSystem;
+                var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
                 retVal = themeAdaptor.GetAssetAbsoluteUrl("static/" + input.TrimStart('/'));
             }
             return retVal;
@@ -182,9 +183,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string FileUrl(string input)
+        public static string FileUrl(TemplateContext context, string input)
         {
-            return AssetUrl(input);
+            return AssetUrl(context, input);
         }
 
         /// <summary>
@@ -194,9 +195,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <param name="storeId"></param>
         /// <param name="languageCode"></param>
         /// <returns></returns>
-        public static string StoreAbsoluteUrl(string input, string storeId = null, string languageCode = null)
+        public static string StoreAbsoluteUrl(TemplateContext context, string input, string storeId = null, string languageCode = null)
         {
-            var themeAdaptor = (ShopifyLiquidThemeEngine)Template.FileSystem;
+            var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
             Store store = null;
             if (!string.IsNullOrEmpty(storeId))
             {
@@ -204,7 +205,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }
             store = store ?? themeAdaptor.WorkContext.CurrentStore;
 
-            var retVal = AbsoluteUrl(input, storeId, languageCode);
+            var retVal = AbsoluteUrl(context, input, storeId, languageCode);
 
             var isHttps = themeAdaptor.WorkContext.RequestUrl.Scheme == Uri.UriSchemeHttps;
             //If store has defined url need redirect to it
@@ -219,11 +220,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return retVal;
         }
 
-        public static string FullUrl(string input, string storeId = null, string languageCode = null)
+        public static string FullUrl(TemplateContext context, string input, string storeId = null, string languageCode = null)
         {
-            var absoluteUrl = AbsoluteUrl(input, storeId, languageCode);
+            var absoluteUrl = AbsoluteUrl(context, input, storeId, languageCode);
 
-            var themeEngine = (ShopifyLiquidThemeEngine)Template.FileSystem;
+            var themeEngine = (ShopifyLiquidThemeEngine)context.TemplateLoader;
             var workContext = themeEngine.WorkContext;
 
             var fullUrl = new Uri(workContext.RequestUrl, absoluteUrl);
@@ -238,12 +239,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <param name="storeId"></param>
         /// <param name="languageCode"></param>
         /// <returns></returns>
-        public static string AbsoluteUrl(string input, string storeId = null, string languageCode = null)
+        public static string AbsoluteUrl(TemplateContext context, string input, string storeId = null, string languageCode = null)
         {
             if (input == null)
                 return string.Empty;
 
-            var themeAdaptor = (ShopifyLiquidThemeEngine)Template.FileSystem;
+            var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
             Store store = null;
             storefrontModel.Language language = null;
             if (!string.IsNullOrEmpty(storeId))
@@ -267,9 +268,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return ImgUrl(input, type);
         }
 
-        public static string Within(string input, object collection)
+        public static string Within(TemplateContext context, string input, object collection)
         {
-            return BuildAbsoluteUrl(input);
+            return BuildAbsoluteUrl(context, input);
         }
 
         /// <summary>
@@ -277,15 +278,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string AppendVersion(string input)
+        public static string AppendVersion(TemplateContext context, string input)
         {
             if (input == null)
                 return string.Empty;
 
-            var themeEngine = (ShopifyLiquidThemeEngine)Template.FileSystem;
-            var basePath = themeEngine.GetAssetAbsoluteUrl("");
+            var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
+            var basePath = themeAdaptor.GetAssetAbsoluteUrl("");
             var relativePath = input.StartsWith(basePath) ? input.Remove(0, basePath.Length) : input;
-            var hash = themeEngine.GetAssetHash(relativePath);
+            var hash = themeAdaptor.GetAssetHash(relativePath);
             return input.Contains('?') ? $"{input}&v={hash}" : $"{input}?v={hash}";
         }
 
@@ -300,9 +301,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return result;
         }
 
-        private static string BuildHtmlLink(string id, string virtualUrl, string title)
+        private static string BuildHtmlLink(TemplateContext context, string id, string virtualUrl, string title)
         {
-            var href = BuildAbsoluteUrl(virtualUrl);
+            var href = BuildAbsoluteUrl(context, virtualUrl);
 
             var result = string.Format(CultureInfo.InvariantCulture, "<a href=\"{0}\" id=\"{1}\">{2}</a>",
                 HttpUtility.HtmlAttributeEncode(href),
@@ -319,7 +320,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             Replace
         }
 
-        private static string BuildTagLink(TagAction action, object tagObject, object input)
+        private static string BuildTagLink(TemplateContext context, TagAction action, object tagObject, object input)
         {
             var href = string.Empty;
             var title = string.Empty;
@@ -328,14 +329,14 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             if (tagObject == null)
             {
                 title = "Remove all tags";
-                href = GetCurrentUrlWithTags(TagAction.Replace, null, null);
+                href = GetCurrentUrlWithTags(context, TagAction.Replace, null, null);
             }
             else
             {
                 var tag = tagObject as shopifyModel.Tag;
                 if (tag != null)
                 {
-                    href = GetCurrentUrlWithTags(action, tag.GroupName, tag.Value);
+                    href = GetCurrentUrlWithTags(context, action, tag.GroupName, tag.Value);
                     title = BuildTagActionTitle(action, label);
 
                     if (tag.Count > 0)
@@ -368,10 +369,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }
         }
 
-        private static string GetCurrentUrlWithTags(TagAction action, string groupName, string value)
+        private static string GetCurrentUrlWithTags(TemplateContext context, TagAction action, string groupName, string value)
         {
-            var themeEngine = (ShopifyLiquidThemeEngine)Template.FileSystem;
-            var workContext = themeEngine.WorkContext;
+            var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
+            var workContext = themeAdaptor.WorkContext;
 
             var terms = workContext.CurrentProductSearchCriteria.Terms
                 .Select(t => new Term { Name = t.Name, Value = t.Value })
@@ -404,9 +405,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         }
 
 
-        private static string BuildAbsoluteUrl(string virtualUrl)
+        private static string BuildAbsoluteUrl(TemplateContext context, string virtualUrl)
         {
-            var themeEngine = (ShopifyLiquidThemeEngine)Template.FileSystem;
+            var themeEngine = (ShopifyLiquidThemeEngine)context.TemplateLoader;
             var workContext = themeEngine.WorkContext;
             var result = themeEngine.UrlBuilder.ToAppAbsolute(virtualUrl, workContext.CurrentStore, workContext.CurrentLanguage);
             return result;
