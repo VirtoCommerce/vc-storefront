@@ -30,7 +30,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return money == null ? null : money.FormattedAmountWithoutPoint;
         }
 
-
+        public static string MoneyWithCurrency(TemplateContext context, object input, string currencyCode = null)
+        {
+            return Money(context, input, currencyCode);
+        }
+        public static string MoneyWithoutCurrency(TemplateContext context, object input, string currencyCode = null)
+        {
+            var money = GetMoney(context, input, currencyCode);
+            return money == null ? null : money.FormattedAmountWithoutCurrency;
+        }
         private static Money GetMoney(TemplateContext context, object input, string currencyCode = null)
         {
             if (input == null)

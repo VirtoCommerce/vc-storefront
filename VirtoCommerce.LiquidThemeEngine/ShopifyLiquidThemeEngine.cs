@@ -275,6 +275,27 @@ namespace VirtoCommerce.LiquidThemeEngine
             {
                 return templateContent;
             }
+
+            //TODO: Handle _options.RethrowLiquidRenderErrors
+            var cacheKey = CacheKey.With(GetType(), "ParseTemplate", templatePath ?? templateContent);
+            var parsedTemplate = _memoryCache.GetOrCreate(cacheKey, (cacheItem) =>
+            {
+                if (!string.IsNullOrEmpty(templatePath))
+                {
+                    cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(templatePath) }));
+                }
+                else
+                {
+                    cacheItem.AddExpirationToken(ThemeEngineCacheRegion.CreateChangeToken());
+                }
+                return Template.ParseLiquid(templateContent, templatePath);
+            });
+
+            if (parsedTemplate.HasErrors)
+            {
+                throw new InvalidOperationException(string.Join("\n", parsedTemplate.Messages));
+            }
+
             var scriptObject = new ScriptObject();
             scriptObject.Import(context);
 
@@ -299,15 +320,9 @@ namespace VirtoCommerce.LiquidThemeEngine
                     Mode = ScriptMode.Liquid
                 }
             };
-            //TODO: Handle _options.RethrowLiquidRenderErrors
             templateContext.PushGlobal(scriptObject);
 
-            var parsedTemplate = Template.ParseLiquid(templateContent, templatePath);
-            if (parsedTemplate.HasErrors)
-            {
-                throw new InvalidOperationException(string.Join("\n", parsedTemplate.Messages));
-            }
-            var retVal = parsedTemplate.Render(templateContext);
+            var result = parsedTemplate.Render(templateContext);
 
             //TODO:
             ////Copy key values which were generated in rendering to out parameters
@@ -319,7 +334,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             //    }
             //}
 
-            return retVal;
+            return result;
         }
 
         /// <summary>

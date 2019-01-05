@@ -22,9 +22,9 @@ namespace VirtoCommerce.Storefront.Tests.Scriban
         }
 
         [Fact]
-        public void Pipe_Arguments_Mismatch_Errors2()
+        public void Function_With_Context_And_Params_Throw_Overflow_Exception()
         {
-            var parsedTemplate = Template.ParseLiquid("{{ 'some resource key' | t }}");
+            var parsedTemplate = Template.ParseLiquid("{{ '{0}{1}' | t: '1', '1'  }}");
             Assert.False(parsedTemplate.HasErrors);
 
             var scriptObject = new ScriptObject();
@@ -32,7 +32,8 @@ namespace VirtoCommerce.Storefront.Tests.Scriban
             var context = new TemplateContext();
             context.PushGlobal(scriptObject);
 
-            parsedTemplate.Render(context);
+            var result = parsedTemplate.Render(context);
+            Assert.Equal("11", result);
         }
 
 
@@ -60,9 +61,9 @@ namespace VirtoCommerce.Storefront.Tests.Scriban
 
     public class MyFunctions
     {
-        public static string T(TemplateContext context, object input, params object[] variables)
+        public static string T(object input, params object[] variables)
         {
-            return input.ToString();
+            return string.Format(input.ToString(), variables);
         }
 
         public static string A(TemplateContext context, object input, string currencyCode = null)
