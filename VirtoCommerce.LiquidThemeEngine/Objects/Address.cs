@@ -1,4 +1,3 @@
-using DotLiquid;
 using System.Runtime.Serialization;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects

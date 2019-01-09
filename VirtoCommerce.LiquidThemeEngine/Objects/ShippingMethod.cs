@@ -1,5 +1,5 @@
-using DotLiquid;
 using System.Runtime.Serialization;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -10,7 +10,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// https://docs.shopify.com/themes/liquid-documentation/objects/shipping_method
     /// </remarks>
     [DataContract]
-    public partial class ShippingMethod : Drop
+    public partial class ShippingMethod : ValueObject, IDictionaryKey
     {
         /// <summary>
         /// Returns the handle of the shipping method.
@@ -45,5 +45,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// </summary>
         [DataMember]
         public string TaxType { get; set; }
+
+        public string Key => Handle;
     }
 }

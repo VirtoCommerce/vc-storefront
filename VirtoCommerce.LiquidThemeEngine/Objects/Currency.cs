@@ -1,18 +1,18 @@
-using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DotLiquid;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
-    public class Currency : Drop
+    public class Currency : ValueObject
     {
         public string CurrencyCode { get; set; }
         public string Code { get; set; }
         public string Symbol { get; set; }
         public string EnglishName { get; set; }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Code;
+        }
     }
 }

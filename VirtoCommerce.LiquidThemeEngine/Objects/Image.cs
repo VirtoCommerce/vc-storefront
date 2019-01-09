@@ -1,6 +1,5 @@
-using DotLiquid;
-using Newtonsoft.Json;
 using System.Runtime.Serialization;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -11,7 +10,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// https://docs.shopify.com/themes/liquid-documentation/objects/product#product-image
     /// </remarks>
     [DataContract]
-    public partial class Image : Drop
+    public partial class Image : ValueObject
     {
         /// <summary>
         /// Returns the alt tag of the image

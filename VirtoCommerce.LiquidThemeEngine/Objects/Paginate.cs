@@ -1,6 +1,6 @@
-using DotLiquid;
-using PagedList.Core;
 using System.Collections.Generic;
+using PagedList.Core;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -8,10 +8,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// https://docs.shopify.com/themes/liquid-documentation/objects/paginate
     /// The paginate tag's navigation is built using the attributes of the paginate object. You can also use the default_pagination filter for a quicker alternative.
     /// </summary>
-    public partial class Paginate : Drop
+    public partial class Paginate : ValueObject
     {
         private readonly IPagedList _pagedList;
-    
+
         public Paginate(IPagedList pagedList)
         {
             _pagedList = pagedList;
@@ -60,7 +60,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// <summary>
         /// Returns the part variable for the Next link in the pagination navigation.
         /// </summary>
-        public Part Next {
+        public Part Next
+        {
             get
             {
                 Part retVal = null;

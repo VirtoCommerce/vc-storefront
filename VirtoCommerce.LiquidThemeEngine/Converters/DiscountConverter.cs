@@ -19,7 +19,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             {
                 Amount = discount.Amount.Amount * 100,
                 Code = discount.PromotionId,
-                Id = discount.PromotionId,
                 Savings = -discount.Amount.Amount * 100
             };
 

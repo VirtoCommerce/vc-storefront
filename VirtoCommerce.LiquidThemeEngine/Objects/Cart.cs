@@ -1,6 +1,6 @@
-using DotLiquid;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -11,9 +11,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// https://docs.shopify.com/themes/liquid-documentation/objects/cart
     /// </remarks>
     [DataContract]
-    public partial class Cart : Drop
+    public partial class Cart : Entity
     {
-   
+
         /// <summary>
         /// Gets collection of shopping cart line items
         /// </summary>

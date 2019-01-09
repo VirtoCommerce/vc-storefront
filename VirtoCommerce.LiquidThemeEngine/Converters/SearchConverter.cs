@@ -26,15 +26,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.Performed = true;
             result.Terms = workContext.CurrentProductSearchCriteria.Keyword;
 
-            result.Results = new MutablePagedList<Drop>((pageNumber, pageSize, sortInfos, @params) =>
+            result.Results = new MutablePagedList<object>((pageNumber, pageSize, sortInfos, @params) =>
             {
                 products.Slice(pageNumber, pageSize, sortInfos, @params);
-                return new StaticPagedList<Drop>(products.Select(x => x.ToShopifyModel()), products);
+                return new StaticPagedList<Product>(products.Select(x => x.ToShopifyModel()), products);
             }, 1, products.PageSize);
 
             if (workContext.Aggregations != null)
             {
-                result.AllTags = new TagCollection(new MutablePagedList<Tag>((pageNumber, pageSize, sortInfos, @params) =>
+                result.AllTags = new MutablePagedList<Tag>((pageNumber, pageSize, sortInfos, @params) =>
                 {
                     workContext.Aggregations.Slice(pageNumber, pageSize, sortInfos, @params);
                     var tags = workContext.Aggregations
@@ -42,7 +42,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                         .SelectMany(a => a.Items.Select(item => item.ToShopifyModel(a)));
                     return new StaticPagedList<Tag>(tags, workContext.Aggregations);
 
-                }, workContext.Aggregations.PageNumber, workContext.Aggregations.PageSize));
+                }, workContext.Aggregations.PageNumber, workContext.Aggregations.PageSize);
+                result.AllTagsGroups = new MutablePagedList<string>((pageNumber, pageSize, sortInfos, @params) =>
+                {
+                    var tagGroups = result.AllTags.GroupBy(t => t.GroupLabel).Select(g => g.Key).ToArray();
+                    return new StaticPagedList<string>(tagGroups, result.AllTags);
+                }, workContext.Aggregations.PageNumber, workContext.Aggregations.PageSize);
             }
 
             return result;

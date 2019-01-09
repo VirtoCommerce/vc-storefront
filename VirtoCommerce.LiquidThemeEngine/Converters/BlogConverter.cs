@@ -20,14 +20,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
     {
         public virtual Blog ToLiquidBlog(StorefrontModel.Blog blog, Storefront.Model.Language language)
         {
-            var retVal = new Blog();
-
-            retVal.Title = blog.Title;
-            retVal.Url = blog.Url;
+            var result = new Blog
+            {
+                Title = blog.Title,
+                Url = blog.Url
+            };
 
             if (blog.Articles != null)
             {
-                retVal.Articles = new MutablePagedList<Article>((pageNumber, pageSize, sortInfos) =>
+                result.Articles = new MutablePagedList<Article>((pageNumber, pageSize, sortInfos) =>
                 {
                     //var articlesForLanguage = blog.Articles.Where(x => x.Language == language || x.Language.IsInvariant).GroupBy(x => x.Name).Select(x => x.OrderByDescending(y => y.Language).FirstOrDefault());
                     // ordering generating exception
@@ -36,10 +37,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 }, blog.Articles.PageNumber, blog.Articles.PageSize);
             }
 
-            retVal.Handle = blog.Name.Replace(" ", "-").ToLower();
-            retVal.Categories = blog.Categories;
+            result.Handle = blog.Name.Replace(" ", "-").ToLower();
+            result.Categories = blog.Categories;
 
-            return retVal;
+            return result;
         }
     }
 }

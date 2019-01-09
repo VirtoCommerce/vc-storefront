@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using DotLiquid;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
     [DataContract]
-    public partial class Vendor : Drop
+    public partial class Vendor : Entity, IDictionaryKey
     {
         /// <summary>
         /// Returns the handle of a vendor.
@@ -15,8 +14,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         [DataMember]
         public string Handle { get; set; }
 
-        [DataMember]
-        public string Id { get; set; }
 
         [DataMember]
         public string Name { get; set; }
@@ -41,6 +38,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
 
         [DataMember]
         public IMutablePagedList<Product> Products { get; set; }
+
+        public string Key => Handle;
 
         public override string ToString()
         {

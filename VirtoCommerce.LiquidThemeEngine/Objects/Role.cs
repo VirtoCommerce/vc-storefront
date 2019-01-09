@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using DotLiquid;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
-    public class Role : Drop
+    public class Role : Entity
     {
-        public string Id { get; set; }
         public string Name { get; set; }
     }
 

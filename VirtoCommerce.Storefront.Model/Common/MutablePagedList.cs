@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
-    public sealed class MutablePagedList<T> : PagedListMetaData, IMutablePagedList<T>
+    public sealed class MutablePagedList<T> : PagedListMetaData, IMutablePagedList<T>, IDictionary
     {
 
         private readonly Func<int, int, IEnumerable<SortInfo>, NameValueCollection, IPagedList<T>> _getter;
@@ -32,6 +32,7 @@ namespace VirtoCommerce.Storefront.Model.Common
             PageSize = pageSize;
             _getter = getter;
         }
+
 
         #region IMutablePagedList Members
 
@@ -133,6 +134,116 @@ namespace VirtoCommerce.Storefront.Model.Common
             return new PagedListMetaData(this);
         }
 
+        #endregion
+
+        #region IDictionary members
+
+        void ICollection.CopyTo(Array array, int index)
+        {
+            ((ICollection)_pagedList).CopyTo(array, index);
+        }
+
+        bool ICollection.IsSynchronized
+        {
+            get { return ((ICollection)_pagedList).IsSynchronized; }
+        }
+
+        object ICollection.SyncRoot
+        {
+            get { return ((ICollection)_pagedList).SyncRoot; }
+        }
+
+
+        public bool IsReadOnly => true;
+
+        public bool IsFixedSize => false;
+
+        ICollection IDictionary.Keys
+        {
+            get
+            {
+                TryReloadPagedData();
+                return _pagedList.OfType<IDictionaryKey>().Select(x => x.Key).ToList();
+            }
+        }
+
+        ICollection IDictionary.Values
+        {
+            get
+            {
+                TryReloadPagedData();
+                return _pagedList.OfType<IDictionaryKey>().Where(x => !string.IsNullOrEmpty(x.Key)).ToList();
+            }
+        }
+
+
+        public object this[object key]
+        {
+            get
+            {
+                TryReloadPagedData();
+                object result = null;
+                if (key is T other)
+                {
+                    result = _pagedList.FirstOrDefault(x => x.Equals(other));
+                }
+                if (key is string stringKey)
+                {
+                    if (stringKey == "size")
+                    {
+                        result = Count;
+                    }
+                    else
+                    {
+                        result = _pagedList.OfType<IDictionaryKey>().Where(x => !string.IsNullOrEmpty(x.Key)).FirstOrDefault(x => x.Key.EqualsInvariant(stringKey));
+                    }
+                }
+                return result;
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        bool IDictionary.Contains(object value)
+        {
+            TryReloadPagedData();
+            var result = false;
+            if (value is T other)
+            {
+                result = _pagedList.Any(x => x.Equals(other));
+            }
+            if (typeof(IDictionaryKey).IsAssignableFrom(typeof(T)) && value is string key)
+            {
+                result = _pagedList.OfType<IDictionaryKey>().Where(x => !string.IsNullOrEmpty(x.Key)).Any(x => x.Key.EqualsInvariant(key));
+            }
+            if (!result && value is string strValue)
+            {
+                result = strValue == "size";
+            }
+            return result;
+        }
+
+        IDictionaryEnumerator IDictionary.GetEnumerator()
+        {
+            TryReloadPagedData();
+            var dict = _pagedList.OfType<IDictionaryKey>().Where(x => !string.IsNullOrEmpty(x.Key)).ToDictionary(x => x.Key, x => (object)x);
+            return dict.GetEnumerator();
+        }
+
+        public void Add(object key, object value)
+        {
+            throw new NotImplementedException();
+        }
+        public void Remove(object key)
+        {
+            throw new NotImplementedException();
+        }
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
         private void TryReloadPagedData()

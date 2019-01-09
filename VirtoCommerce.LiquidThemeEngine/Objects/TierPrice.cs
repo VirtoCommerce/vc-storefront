@@ -1,8 +1,8 @@
-using DotLiquid;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
-    public partial class TierPrice : Drop
+    public partial class TierPrice : ValueObject
     {
         public decimal Price { get; set; }
 

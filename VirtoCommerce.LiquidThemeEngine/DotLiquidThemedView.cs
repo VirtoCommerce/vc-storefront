@@ -51,14 +51,15 @@ namespace VirtoCommerce.LiquidThemeEngine
             //Set current template
             shopifyContext.Template = _viewName;
 
-            var formErrors = new FormErrors(context.ViewData.ModelState);
+            var formErrors = FormErrors.FromModelState(context.ViewData.ModelState);
+
             if (shopifyContext.Form == null)
             {
                 //Set single Form object with errors for shopify compilance
                 shopifyContext.Form = new Form();
             }
             shopifyContext.Form.PostedSuccessfully = !string.Equals(context.HttpContext.Request.Method, "GET", StringComparison.InvariantCultureIgnoreCase);
-            if (formErrors.Any())
+            if (formErrors.Messages.Any())
             {
                 shopifyContext.Form.Errors = formErrors;
                 shopifyContext.Form.PostedSuccessfully = false;
@@ -77,7 +78,6 @@ namespace VirtoCommerce.LiquidThemeEngine
 
             //Add settings to context
             shopifyContext.Settings = _liquidThemeEngine.GetSettings();
-
             //TODO:
             //foreach (var item in context.ViewData)
             //{
@@ -89,24 +89,19 @@ namespace VirtoCommerce.LiquidThemeEngine
             //    //parameters.Add(Template.NamingConvention.GetMemberName(item.Key), item.Value);
             //    parameters.Add(item.Key, item.Value);
             //}
-            //if (!parameters.ContainsKey("error_message") && !string.IsNullOrEmpty(_workContextAccessor.WorkContext.ErrorMessage))
-            //{
-            //    parameters.Add("error_message", _workContextAccessor.WorkContext.ErrorMessage);
-            //}
+
+            if (!string.IsNullOrEmpty(_workContextAccessor.WorkContext.ErrorMessage))
+            {
+                shopifyContext.ErrorMessage = _workContextAccessor.WorkContext.ErrorMessage;
+            }
 
             var viewTemplate = _liquidThemeEngine.RenderTemplateByName(_viewName, shopifyContext);
 
             // don't use layouts for partial views when masterViewName is not specified
             if (_isMainPage)
             {
-                var masterViewName = "theme";
-                //if (parameters.TryGetValue("layout", out object layoutFromTemplate))
-                //{
-                //    if (layoutFromTemplate != null && !string.IsNullOrEmpty(layoutFromTemplate.ToString()))
-                //    {
-                //        masterViewName = layoutFromTemplate.ToString();
-                //    }
-                //}
+                var masterViewName = shopifyContext.Layout ?? "theme";
+
                 var headerTemplate = _liquidThemeEngine.RenderTemplateByName("content_header", shopifyContext);
 
                 //add special placeholder 'content_for_layout' to content it will be replaced in master page by main content
@@ -115,9 +110,6 @@ namespace VirtoCommerce.LiquidThemeEngine
                 shopifyContext.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
                 viewTemplate = _liquidThemeEngine.RenderTemplateByName(masterViewName, shopifyContext);
-
-
-
             }
             await context.Writer.WriteAsync(viewTemplate);
         }

@@ -1,6 +1,6 @@
-using DotLiquid;
 using System;
 using System.Runtime.Serialization;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -11,7 +11,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// https://docs.shopify.com/themes/liquid-documentation/objects/order
     /// </remarks>
     [DataContract]
-    public partial class Order : Drop
+    public partial class Order : Entity
     {
         /// <summary>
         /// Returns the billing address of the order.

@@ -1,17 +1,12 @@
-using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DotLiquid;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
     /// <summary>
     /// Represent language for specified culture
     /// </summary>
-    public partial class Language : Drop
+    public partial class Language : ValueObject
     {
         /// <summary>
         /// culture name format (e.g. en-US)
@@ -34,6 +29,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         ///  Gets the three-letter code defined in ISO 3166 for the country/region.
         /// </summary>
         public string ThreeLetterRegionName { get; set; }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return CultureName;
+        }
 
 
     }

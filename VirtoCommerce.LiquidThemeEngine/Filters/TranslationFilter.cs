@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DotLiquid;
 using Scriban;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
@@ -13,23 +14,42 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
     /// </summary>
     public class TranslationFilter
     {
+        private static string[] _countSuffixes = new[] { ".zero", ".one", ".two" };
+
+
         #region Public Methods and Operators
         public static string T(TemplateContext context, string key, params object[] variables)
         {
-            var retVal = key;
+            var result = key;
             //TODO: find out more elegant way to access localization resources
             var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
             var localization = themeAdaptor.ReadLocalization();
 
             if (localization != null)
             {
-                retVal = (localization.SelectToken(key) ?? key).ToString();
+                result = (localization.SelectToken(key) ?? key).ToString();
+                if (!variables.IsNullOrEmpty())
+                {
+                    result = string.Format(result, variables);
+                }
             }
-            return retVal;
+
+            return result;
         }
         #endregion
 
+        private static string TryTransformKey(string input, Dictionary<string, object> variables)
+        {
+            var retVal = input;
 
+            object countValue;
+            if (variables.TryGetValue("count", out countValue) && countValue != null)
+            {
+                var count = Convert.ToUInt16(countValue);
+                retVal += count < 2 ? _countSuffixes[count] : ".other";
+            }
+            return retVal;
+        }
     }
 
 

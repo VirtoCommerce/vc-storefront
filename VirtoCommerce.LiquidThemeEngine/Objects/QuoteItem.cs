@@ -1,10 +1,10 @@
-using DotLiquid;
 using System;
 using System.Collections.Generic;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
-    public partial class QuoteItem : Drop
+    public partial class QuoteItem : Entity
     {
         public Currency Currency { get; set; }
 
@@ -40,8 +40,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public string CreatedBy { get; set; }
 
         public string ModifiedBy { get; set; }
-
-        public string Id { get; set; }
 
     }
 }

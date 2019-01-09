@@ -1,5 +1,5 @@
-using DotLiquid;
 using System.Runtime.Serialization;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -10,11 +10,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// https://docs.shopify.com/themes/liquid-documentation/objects/variant
     /// </remarks>
     [DataContract]
-    public partial class Variant : Drop
+    public partial class Variant : Entity
     {
-        public Variant()
-        {
-        }
 
         /// <summary>
         /// Returns the value of variant category ID
@@ -66,12 +63,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public decimal CompareAtPrice { get; set; }
         [DataMember]
         public decimal CompareAtPriceWithTax { get; set; }
-
-        /// <summary>
-        /// Returns the variant's unique id.
-        /// </summary>
-        [DataMember]
-        public string Id { get; set; }
 
         /// <summary>
         /// Returns the image object associated to the variant.

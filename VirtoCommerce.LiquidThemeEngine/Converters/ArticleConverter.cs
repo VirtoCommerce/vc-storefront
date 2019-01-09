@@ -17,27 +17,29 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
     public partial class ShopifyModelConverter
     {
-       public virtual Article ToLiquidArticle(StorefrontModel.BlogArticle article)
+        public virtual Article ToLiquidArticle(StorefrontModel.BlogArticle article)
         {
-            var retVal = new Article();
-
-            retVal.Author = article.Author;
-            retVal.Category = article.Category;
-            retVal.Content = article.Content;
-            retVal.Description = article.Description;
-            retVal.Excerpt = article.Excerpt;
-            retVal.ImageUrl = article.ImageUrl;
-            retVal.IsSticked = article.IsSticked;
-            retVal.IsTrending = article.IsTrending;
-            retVal.Priority = article.Priority;
-            retVal.Title = article.Title;
-            retVal.Type = article.Type;
-            retVal.Url = article.Url;
-            retVal.Handle = article.Url;
-            retVal.CreatedAt = article.CreatedDate;
-            retVal.PublishedAt = article.PublishedDate ?? article.CreatedDate;
-            retVal.Tags = article.Tags != null ? article.Tags.OrderBy(t => t).Select(t => t.Handelize()).ToArray() : null;
-            retVal.Comments = new MutablePagedList<Comment>(new List<Comment>());
+            var retVal = new Article
+            {
+                Author = article.Author,
+                Category = article.Category,
+                Content = article.Content,
+                Description = article.Description,
+                Excerpt = article.Excerpt,
+                ImageUrl = article.ImageUrl,
+                IsSticked = article.IsSticked,
+                IsTrending = article.IsTrending,
+                Priority = article.Priority,
+                Title = article.Title,
+                Type = article.Type,
+                Url = article.Url,
+                Handle = article.Url,
+                Id = article.Url,
+                CreatedAt = article.CreatedDate,
+                PublishedAt = article.PublishedDate ?? article.CreatedDate,
+                Tags = article.Tags != null ? article.Tags.OrderBy(t => t).Select(t => t.Handelize()).ToArray() : null,
+                Comments = new MutablePagedList<Comment>(new List<Comment>())
+            };
             if (article.Category != null)
             {
                 retVal.Category = article.Category.Handelize();

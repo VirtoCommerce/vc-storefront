@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using DotLiquid;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -13,13 +9,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// https://help.shopify.com/themes/liquid/objects/transaction
     /// </summary>
     [DataContract]
-    public partial class Transaction : Drop
+    public partial class Transaction : Entity
     {
-        /// <summary>
-        /// Returns a unique numeric identifier for the transaction.
-        /// </summary>
-        [DataMember]
-        public string Id { get; set; }
         /// <summary>
         /// Returns the amount of the transaction. Use one of the money filters to return the value in a monetary format.
         /// </summary>

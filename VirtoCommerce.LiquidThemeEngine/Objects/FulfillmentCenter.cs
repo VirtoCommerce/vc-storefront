@@ -1,8 +1,8 @@
-using DotLiquid;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
-    public partial class FulfillmentCenter : Drop
+    public partial class FulfillmentCenter : ValueObject
     {
         public string Name { get; set; }
         public string Description { get; set; }

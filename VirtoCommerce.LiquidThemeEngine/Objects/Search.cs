@@ -1,4 +1,3 @@
-using DotLiquid;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
@@ -6,7 +5,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// <summary>
     /// https://docs.shopify.com/themes/liquid/objects/search
     /// </summary>
-    public partial class Search : Drop
+    public partial class Search : ValueObject
     {
         /// <summary>
         /// Returns  true  if an HTML form with the attribute  action="/search"  was submitted successfully. This allows you to show content based on whether a search was performed or not.
@@ -15,7 +14,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// <summary>
         /// Returns an array of matching search result items. The items in the array can be a(n): product, article, page
         /// </summary>
-        public IMutablePagedList<Drop> Results { get; set; }
+        public IMutablePagedList<object> Results { get; set; }
 
         /// <summary>
         /// Returns the number of results found.
@@ -29,9 +28,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
 
         public string SearchIn { get; set; }
 
+
         /// <summary>
         /// Returns a list of all tags in a search result.
         /// </summary>
-        public TagCollection AllTags { get; set; }
+        public IMutablePagedList<Tag> AllTags { get; set; }
+        public IMutablePagedList<string> AllTagsGroups { get; set; }
     }
 }

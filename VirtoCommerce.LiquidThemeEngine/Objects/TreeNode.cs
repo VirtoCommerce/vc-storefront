@@ -1,10 +1,10 @@
-using DotLiquid;
 using System.Collections.Generic;
 using System.Linq;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
-    public partial class TreeNode : Drop
+    public partial class TreeNode : ValueObject
     {
         public string Path { get; set; }
 

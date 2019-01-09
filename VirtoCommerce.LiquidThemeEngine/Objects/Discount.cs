@@ -1,5 +1,5 @@
-using DotLiquid;
 using System.Runtime.Serialization;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -11,7 +11,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// https://docs.shopify.com/themes/liquid-documentation/objects/discount
     /// </remarks>
     [DataContract]
-    public partial class Discount : Drop
+    public partial class Discount : ValueObject
     {
         /// <summary>
         /// Returns the amount of the discount. Use one of the money filters to return
@@ -26,11 +26,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         [DataMember]
         public string Code { get; set; }
 
-        /// <summary>
-        /// Returns the id of the discount.
-        /// </summary>
-        [DataMember]
-        public string Id { get; set; }
 
         /// <summary>
         /// Returns the amount of the discount's savings. The negative opposite of amount.

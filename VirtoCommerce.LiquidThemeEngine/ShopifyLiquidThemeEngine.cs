@@ -309,6 +309,11 @@ namespace VirtoCommerce.LiquidThemeEngine
             scriptObject.Import(typeof(ArrayFilters));
             scriptObject.Import(typeof(MathFilters));
             scriptObject.Import(typeof(StandardFilters));
+            //TODO: blank isn't same as was in previous version now it is only represents a null check, need to find out solution or replace in themes == blank check to to .empty? == false expression
+            scriptObject.SetValue("blank", EmptyScriptObject.Default, true);
+            //Store special layout setter action in the context, it is allows to set the WorkContext.Layout property from template during rendering in the CommonFilters.Layout function
+            Action<string> layoutSetter = (layout) => ((Objects.ShopifyThemeWorkContext)context).Layout = layout;
+            scriptObject.Add("layout_setter", layoutSetter);
 
             var templateContext = new TemplateContext()
             {

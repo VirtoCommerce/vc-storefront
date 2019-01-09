@@ -1,4 +1,4 @@
-using DotLiquid;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -8,7 +8,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// <remarks>
     /// https://docs.shopify.com/themes/liquid-documentation/objects/link
     /// </remarks>
-    public partial class Link : Drop
+    public partial class Link : ValueObject
     {
         /// <summary>
         /// Returns true if the link is active, or false if the link is inactive

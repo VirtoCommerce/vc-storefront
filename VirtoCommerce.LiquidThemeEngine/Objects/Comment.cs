@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DotLiquid;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
-    public partial class Comment : Drop
+    public partial class Comment : Entity
     {
         #region Public Properties
         public string Author { get; set; }
@@ -15,8 +10,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public string Content { get; set; }
 
         public string Email { get; set; }
-
-        public string Id { get; set; }
 
         public string Status { get; set; }
 

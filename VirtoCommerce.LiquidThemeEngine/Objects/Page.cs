@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DotLiquid;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
     /// <summary>
     /// https://docs.shopify.com/themes/liquid-documentation/objects/page
     /// </summary>
-    public partial class Page : Drop
+    public partial class Page : Entity, IDictionaryKey
     {
         /// <summary>
         /// Returns the author of a page.
@@ -27,11 +28,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// Layout name for this page
         /// </summary>
         public string Layout { get; set; }
-
-        /// <summary>
-        /// Returns the id of the page.
-        /// </summary>
-        public string Id { get; set; }
 
         /// <summary>
         /// Returns the timestamp of when the page was created. Use the date filter to format the timestamp.
@@ -60,5 +56,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public int Priority { get; set; }
 
         public IDictionary<string, IDictionary<string, object>> MetaInfo { get; set; }
+
+        #region IDictionaryKey
+        public string Key => Handle;
+        #endregion
     }
 }

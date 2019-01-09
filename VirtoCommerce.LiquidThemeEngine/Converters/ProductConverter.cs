@@ -87,11 +87,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.Content = product.Description;
             result.Description = result.Content;
 
-            result.Descriptions = new Descriptions(product.Descriptions.Select(d => new Description
+            result.Descriptions = product.Descriptions.ToDictionary(x => x.ReviewType, x => new Description
             {
-                Content = d.Value,
-                Type = d.ReviewType
-            }));
+                Content = x.Value,
+                Type = x.ReviewType
+            });
 
             result.FeaturedImage = product.PrimaryImage?.ToShopifyModel();
 

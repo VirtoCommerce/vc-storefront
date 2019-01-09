@@ -1,5 +1,6 @@
 using DotLiquid;
 using System.Collections.Generic;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -9,17 +10,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// <remarks>
     /// https://docs.shopify.com/themes/liquid-documentation/objects/linklist
     /// </remarks>
-    public partial class Linklist : Drop
+    public partial class Linklist : Entity, IDictionaryKey
     {
         /// <summary>
         /// Returns the handle of the linklist
         /// </summary>
         public string Handle { get; set; }
-
-        /// <summary>
-        /// Returns the id of the linklist
-        /// </summary>
-        public string Id { get; set; }
 
         /// <summary>
         /// Returns a collection of links in the linklist
@@ -30,5 +26,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// Returns the title of the linklist
         /// </summary>
         public string Title { get; set; }
+
+        public string Key => Handle;
     }
 }

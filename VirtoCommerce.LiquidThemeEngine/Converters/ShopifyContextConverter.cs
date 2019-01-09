@@ -58,9 +58,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
             if (workContext.CurrentProductSearchCriteria != null && workContext.CurrentProductSearchCriteria.Terms.Any())
             {
-                result.CurrentTags =
-                    new TagCollection(
-                        workContext.CurrentProductSearchCriteria.Terms.Select(t => ToLiquidTag(t)).ToList());
+                var tags = workContext.CurrentProductSearchCriteria.Terms.Select(t => ToLiquidTag(t));
+                result.CurrentTags = new TagCollection(new MutablePagedList<Tag>(tags));
             }
 
             if (workContext.CurrentCategory != null)
@@ -70,11 +69,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
             if (workContext.Categories != null)
             {
-                result.Collections = new Collections(new MutablePagedList<Collection>((pageNumber, pageSize, sortInfos, @params) =>
+                result.Collections = new MutablePagedList<Collection>((pageNumber, pageSize, sortInfos, @params) =>
                 {
                     workContext.Categories.Slice(pageNumber, pageSize, sortInfos, @params);
                     return new StaticPagedList<Collection>(workContext.Categories.Select(x => ToLiquidCollection(x, workContext)), workContext.Categories);
-                }, 1, workContext.Categories.PageSize));
+                }, 1, workContext.Categories.PageSize);
             }
 
             if (workContext.Products != null)
@@ -109,39 +108,41 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 };
                 if (workContext.StaticContentSearchResult != null && workContext.StaticContentSearchResult.Any())
                 {
-                    result.Search.Results = new MutablePagedList<Drop>((pageNumber, pageSize, sortInfos, @params) =>
+                    result.Search.Results = new MutablePagedList<object>((pageNumber, pageSize, sortInfos, @params) =>
                     {
                         var pagedContentItems = new MutablePagedList<ContentItem>(workContext.StaticContentSearchResult);
                         pagedContentItems.Slice(pageNumber, pageSize, sortInfos, @params);
-                        return new StaticPagedList<Drop>(workContext.StaticContentSearchResult.Select(x => ToLiquidPage(x)), pagedContentItems);
+                        return new StaticPagedList<Page>(workContext.StaticContentSearchResult.Select(x => ToLiquidPage(x)), pagedContentItems);
                     }, 1, workContext.StaticContentSearchResult.PageSize);
                 }
             }
 
             if (workContext.CurrentLinkLists != null)
             {
-                result.Linklists = new Linklists(new MutablePagedList<Linklist>((pageNumber, pageSize, sortInfos, @params) =>
+                result.Linklists = new MutablePagedList<Linklist>((pageNumber, pageSize, sortInfos, @params) =>
                 {
                     var liquidLists = workContext.CurrentLinkLists.Select(x => ToLiquidLinklist(x, workContext, urlBuilder));
                     return new StaticPagedList<Linklist>(liquidLists, workContext.CurrentLinkLists);
-                }, workContext.CurrentLinkLists.PageNumber, workContext.CurrentLinkLists.PageSize));
+                }, workContext.CurrentLinkLists.PageNumber, workContext.CurrentLinkLists.PageSize);
             }
+
+
 
             if (workContext.Pages != null)
             {
-                result.Pages = new Pages(new MutablePagedList<Page>((pageNumber, pageSize, sortInfos, @params) =>
+                result.Pages = new MutablePagedList<Page>((pageNumber, pageSize, sortInfos, @params) =>
                 {
                     //Do not paginate data, because it already all preloaded
                     var pages = workContext.Pages.OfType<ContentPage>().Select(x => ToLiquidPage(x));
                     return new StaticPagedList<Page>(pages, workContext.Pages);
-                }, workContext.Pages.PageNumber, workContext.Pages.PageSize));
+                }, workContext.Pages.PageNumber, workContext.Pages.PageSize);
 
-                result.Blogs = new Blogs(new MutablePagedList<Objects.Blog>((pageNumber, pageSize, sortInfos, @params) =>
+                result.Blogs = new MutablePagedList<Objects.Blog>((pageNumber, pageSize, sortInfos, @params) =>
                 {
                     //Do not paginate data, because it already all preloaded
                     var blogs = workContext.Blogs.Select(x => ToLiquidBlog(x, workContext.CurrentLanguage));
                     return new StaticPagedList<Objects.Blog>(blogs, workContext.Blogs);
-                }, workContext.Blogs.PageNumber, workContext.Blogs.PageSize));
+                }, workContext.Blogs.PageNumber, workContext.Blogs.PageSize);
             }
 
             if (workContext.CurrentOrder != null)
@@ -181,31 +182,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 {
                     Properties = new Dictionary<string, object>()
                 };
-                //var formProps = workContext.Form.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                //var formPropNames = formProps.Select(x => x.Name).ToArray();
-                //foreach (var property in formProps)
-                //{
-                //    var propertyValue = property.GetValue(workContext.Form);
-                //    if (propertyValue != null)
-                //    {
-                //        //result.Form.Properties[Template.NamingConvention.GetMemberName(property.Name)] = propertyValue;
-                //        if (typeof(IEntity).IsAssignableFrom(property.PropertyType) || typeof(IValueObject).IsAssignableFrom(property.PropertyType))
-                //        {
-                //            //For it is user type need to register this type as Drop in Liquid Template
-                //            Template.RegisterSafeType(property.GetType(), formPropNames);
-                //            var allChildEntities = propertyValue.GetFlatObjectsListWithInterface<IEntity>();
-                //            foreach (var type in allChildEntities.Select(x => x.GetType()).Distinct())
-                //            {
-                //                Template.RegisterSafeType(type, formPropNames);
-                //            }
-                //            var allChildLiquidObjects = propertyValue.GetFlatObjectsListWithInterface<IValueObject>();
-                //            foreach (var type in allChildLiquidObjects.Select(x => x.GetType()).Distinct())
-                //            {
-                //                Template.RegisterSafeType(type, formPropNames);
-                //            }
-                //        }
-                //    }
-                //}
+
             }
 
             if (workContext.StorefrontNotification != null)

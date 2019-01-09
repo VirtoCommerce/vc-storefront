@@ -1,7 +1,6 @@
-using DotLiquid;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -12,7 +11,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// https://docs.shopify.com/themes/liquid-documentation/objects/line_item
     /// </remarks>
     [DataContract]
-    public partial class LineItem : Drop
+    public partial class LineItem : Entity
     {
         /// <summary>
         /// Gets line item fulfillment info
@@ -25,12 +24,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// </summary>
         [DataMember]
         public decimal Grams { get; set; }
-
-        /// <summary>
-        /// Gets line item id
-        /// </summary>
-        [DataMember]
-        public string Id { get; set; }
 
         /// <summary>
         /// Gets line item image

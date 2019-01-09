@@ -1,6 +1,6 @@
-using DotLiquid;
 using System;
 using System.Runtime.Serialization;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -11,7 +11,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// https://docs.shopify.com/themes/liquid-documentation/objects/tax_line
     /// </remarks>
     [DataContract]
-    public partial class TaxLine : Drop
+    public partial class TaxLine : ValueObject
     {
         /// <summary>
         /// Returns the title of the tax.

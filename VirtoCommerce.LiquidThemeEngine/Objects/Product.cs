@@ -1,4 +1,3 @@
-using DotLiquid;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using VirtoCommerce.Storefront.Model.Common;
@@ -12,7 +11,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// https://docs.shopify.com/themes/liquid-documentation/objects/product
     /// </remarks>
     [DataContract]
-    public partial class Product : Drop
+    public partial class Product : Entity
     {
         public Product()
         {
@@ -101,7 +100,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// <summary>
         /// Gets or sets the collection of product descriptions: FullReview, QuickReview, etc.
         /// </summary>
-        public Descriptions Descriptions { get; set; }
+        public IDictionary<string, Description> Descriptions { get; set; }
 
         /// <summary>
         /// The main product image 
@@ -123,12 +122,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// </summary>
         [DataMember]
         public string Handle { get; set; }
-
-        /// <summary>
-        /// Returns the id of the product.
-        /// </summary>
-        [DataMember]
-        public string Id { get; set; }
 
         /// <summary>
         /// Returns an array of the product's images. Use the product_img_url filter to link to the product image.

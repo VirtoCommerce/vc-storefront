@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
-using DotLiquid;
-using System;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -11,15 +9,16 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// <remarks>
     /// https://docs.shopify.com/themes/liquid-documentation/objects/form
     /// </remarks>
-    public partial class Form : Drop
+    public partial class Form : ValueObject
     {
         public Form()
         {
             PostedSuccessfully = true;
             Properties = new Dictionary<string, object>();
+            Errors = new FormErrors();
         }
 
-   
+
         /// <summary>
         /// Returns an array of strings if the form was not submitted successfully.
         /// The strings returned depend on which fields of the form were left empty or contained errors.
@@ -33,13 +32,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// </summary>
         public bool? PostedSuccessfully { get; set; }
 
-
         public IDictionary<string, object> Properties { get; set; }
 
-        public override object BeforeMethod(string method)
-        {
-            var val = Properties.Where(x => x.Key.Equals(method, StringComparison.OrdinalIgnoreCase)).Select(x => x.Value).SingleOrDefault();
-            return val;
-        }
+
     }
 }

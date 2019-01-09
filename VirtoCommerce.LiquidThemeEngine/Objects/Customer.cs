@@ -1,9 +1,6 @@
-using DotLiquid;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
-using PagedList;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -14,7 +11,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// https://docs.shopify.com/themes/liquid-documentation/objects/customer
     /// </remarks>
     [DataContract]
-    public partial class Customer : Drop
+    public partial class Customer : Entity
     {
         /// <summary>
         /// Return customer username

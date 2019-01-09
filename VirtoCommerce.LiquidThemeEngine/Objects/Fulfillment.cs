@@ -1,4 +1,4 @@
-using DotLiquid;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
@@ -8,7 +8,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// <remarks>
     /// https://docs.shopify.com/themes/liquid-documentation/objects/fulfillment
     /// </remarks>
-    public partial class Fulfillment : Drop
+    public partial class Fulfillment : ValueObject
     {
         /// <summary>
         /// Returns the name of the fulfillment service.

@@ -1,8 +1,8 @@
-using DotLiquid;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
-    public partial class QuoteRequestTotals : Drop
+    public partial class QuoteRequestTotals : ValueObject
     {
         public decimal OriginalSubTotalExlTax { get; set; }
 

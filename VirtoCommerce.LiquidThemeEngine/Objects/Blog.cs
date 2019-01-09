@@ -7,7 +7,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// <summary>
     /// https://docs.shopify.com/themes/liquid-documentation/objects/blog
     /// </summary>
-    public partial class Blog : Drop
+    public partial class Blog : Entity, IDictionaryKey
     {
         public Blog()
         {
@@ -42,8 +42,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
 
         public string Handle { get; set; }
 
-        public string Id { get; set; }
-
         public bool Moderated { get; set; }
 
         /// <summary>
@@ -60,5 +58,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// Gets or sets the list of categories of the blog
         /// </summary>
         public IList<string> Categories { get; set; }
+
+        #region IDictionaryKey
+        public string Key => Handle;
+        #endregion
     }
 }

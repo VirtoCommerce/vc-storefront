@@ -1,4 +1,3 @@
-using DotLiquid;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using VirtoCommerce.Storefront.Model.Common;
@@ -12,14 +11,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// https://docs.shopify.com/themes/liquid-documentation/objects/shop
     /// </remarks>
     [DataContract]
-    public partial class Shop : Drop
+    public partial class Shop : Entity
     {
-        /// <summary>
-        /// Shop id
-        /// </summary>
-        [DataMember]
-        public string Id { get; set; }
-
         /// <summary>
         /// Returns the shop's currency in three-letter format (ex: USD).
         /// </summary>

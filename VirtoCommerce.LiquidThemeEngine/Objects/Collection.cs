@@ -1,4 +1,3 @@
-using DotLiquid;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using VirtoCommerce.Storefront.Model.Common;
@@ -12,7 +11,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
     /// https://docs.shopify.com/themes/liquid-documentation/objects/collection
     /// </remarks>
     [DataContract]
-    public partial class Collection : Drop
+    public partial class Collection : Entity, IDictionaryKey
     {
         /// <summary>
         /// Returns collection total products count
@@ -20,10 +19,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         [DataMember]
         public int AllProductsCount { get { return Products.GetTotalCount(); } }
 
+
         /// <summary>
         /// Returns all tags of all products in a collection.
         /// </summary>
-        public TagCollection AllTags { get { return Tags; } }
+        public TagCollection Tags { get; set; }
+        /// <summary>
+        /// Returns all tags of all products in a collection.
+        /// </summary>
+        public TagCollection AllTags => Tags;
 
         /// <summary>
         /// Returns a list of all product types in a collection.
@@ -78,12 +82,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public string Handle { get; set; }
 
         /// <summary>
-        /// Returns the id of the collection.
-        /// </summary>
-        [DataMember]
-        public string Id { get; set; }
-
-        /// <summary>
         /// Returns the collection image. Use the img_url filter to link it to the image file
         /// on the Shopify CDN. Check for the presence of the image first.
         /// </summary>
@@ -112,7 +110,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// <summary>
         /// Returns paged collection of all parents collections
         /// </summary>
-        public Collections Parents { get; set; }
+        public IMutablePagedList<Collection> Parents { get; set; }
 
         /// <summary>
         /// Returns paged collection of products
@@ -124,11 +122,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// </summary>
         [DataMember]
         public int ProductsCount { get { return Products.GetTotalCount(); } }
-
-        /// <summary>
-        /// Returns all tags of all products in a collection.
-        /// </summary>
-        public TagCollection Tags { get; set; }
 
         /// <summary>
         /// Returns the name of the custom collection template assigned to the collection,
@@ -157,6 +150,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// <summary>
         /// Child collections
         /// </summary>
-        public Collections Collections { get; set; }
+        public IMutablePagedList<Collection> Collections { get; set; }
+
+        #region IDictionaryKey
+        public string Key => Handle;
+        #endregion
+
     }
 }

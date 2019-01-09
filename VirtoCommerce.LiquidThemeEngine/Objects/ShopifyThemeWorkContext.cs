@@ -1,9 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using DotLiquid;
-using Scriban;
-using Scriban.Runtime;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
@@ -49,12 +44,14 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// <summary>
         /// Contains a collection of all of the links in your shop.
         /// You can access a linklist by calling its handle on linklists
+        /// e.g linklists['main-menu']
         /// </summary>
-        public Linklists Linklists { get; set; }
+        public IMutablePagedList<Linklist> Linklists { get; set; }
+
         /// <summary>
         /// Contains a collection of all pages
         /// </summary>
-        public Pages Pages { get; set; }
+        public IMutablePagedList<Page> Pages { get; set; }
 
         /// <summary>
         /// Contains blog search options
@@ -63,7 +60,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// <summary>
         /// Contains collection of all blogs
         /// </summary>
-        public Blogs Blogs { get; set; }
+        public IMutablePagedList<Blog> Blogs { get; set; }
 
         public Product Product { get; set; }
 
@@ -95,7 +92,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// </summary>
         public Collection Collection { get; set; }
 
-        public Collections Collections { get; set; }
+        public IMutablePagedList<Collection> Collections { get; set; }
 
         public IMutablePagedList<Product> Products { get; set; }
 
@@ -104,6 +101,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public int PageSize { get; set; }
 
         public TagCollection CurrentTags { get; set; }
+        public string[] CurrentTagsGroups { get; set; }
 
         public string PoweredByLink { get; set; }
 
@@ -162,6 +160,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public bool CanTrack { get; set; }
         public string ConsentCookie { get; set; }
         #endregion
+
+        public string ErrorMessage { get; set; }
 
 
         #endregion

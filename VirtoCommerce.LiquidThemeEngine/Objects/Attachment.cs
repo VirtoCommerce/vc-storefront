@@ -1,9 +1,9 @@
-using DotLiquid;
 using System;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
-    public partial class Attachment : Drop
+    public partial class Attachment : Entity
     {
         public string Name { get; set; }
 
@@ -21,6 +21,5 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
 
         public string ModifiedBy { get; set; }
 
-        public string Id { get; set; }
     }
 }

@@ -1,12 +1,11 @@
-using DotLiquid;
 using System;
 using System.Collections.Generic;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
-    public partial class QuoteRequest : Drop
+    public partial class QuoteRequest : Entity
     {
-        public string Id { get; set; }
 
         public string Number { get; set; }
 

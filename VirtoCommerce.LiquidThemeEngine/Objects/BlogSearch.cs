@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using DotLiquid;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
     [DataContract]
-    public partial class BlogSearch : Drop
+    public partial class BlogSearch : ValueObject
     {
         [DataMember]
         public string Category { get; set; }

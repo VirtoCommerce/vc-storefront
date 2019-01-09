@@ -1,8 +1,8 @@
-using System.Globalization;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Objects
 {
-    public partial class Tag : Drop
+    public partial class Tag : Entity, IDictionaryKey
     {
         public Tag(string groupName, string value)
         {
@@ -17,39 +17,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public string Label { get; set; }
         public int Count { get; set; }
         public string Value { get; set; }
-        public string Id { get; set; }
         public string Lower { get; set; }
         public string Upper { get; set; }
 
-        // TODO:
-        //public override string ToString()
-        //{
-        //    var filters = (Context["collection_sidebar_filters"] ?? string.Empty).ToString();
-
-        //    if (filters == "groups")
-        //    {
-        //        // eliminate count for now, since it problematic to make it work in some templates, especially when determine active tag
-        //        return Id;
-        //    }
-
-        //    if (filters == "facets")
-        //    {
-        //        return string.Format(CultureInfo.InvariantCulture, "{0}_{1} ({2})", GroupName, Label, Count);
-        //    }
-
-        //    return Id;
-        //}
-
-
-        public override bool Equals(object obj)
-        {
-            var tag = obj as Tag;
-            return tag != null && Id.Equals(tag.Id);
-        }
-
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
+        public string Key => Id;
     }
 }

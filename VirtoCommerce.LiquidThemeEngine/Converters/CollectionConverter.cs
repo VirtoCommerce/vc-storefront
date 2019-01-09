@@ -22,15 +22,16 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
         public virtual Collection ToLiquidCollection(storefrontModel.Category category, WorkContext workContext)
         {
-            var result = new Collection();
-
-            result.Id = category.Id;
-            result.Description = null;
-            result.Handle = category.SeoInfo != null ? category.SeoInfo.Slug : category.Id;
-            result.Title = category.Name;
-            result.Url = category.Url;
-            result.DefaultSortBy = "manual";
-            result.Images = category.Images.Select(x => x.ToShopifyModel()).ToArray();
+            var result = new Collection
+            {
+                Id = category.Id,
+                Description = null,
+                Handle = category.SeoInfo != null ? category.SeoInfo.Slug : category.Id,
+                Title = category.Name,
+                Url = category.Url,
+                DefaultSortBy = "manual",
+                Images = category.Images.Select(x => x.ToShopifyModel()).ToArray()
+            };
             if (category.PrimaryImage != null)
             {
                 result.Image = ToLiquidImage(category.PrimaryImage);
@@ -47,20 +48,20 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
 
             if (category.Parents != null)
             {
-                result.Parents = new Collections(new MutablePagedList<Collection>((pageNumber, pageSize, sortInfos, @params) =>
+                result.Parents = new MutablePagedList<Collection>((pageNumber, pageSize, sortInfos, @params) =>
                 {
                     category.Parents.Slice(pageNumber, pageSize, sortInfos, @params);
                     return new StaticPagedList<Collection>(category.Parents.Select(x => ToLiquidCollection(x, workContext)), category.Parents);
-                }, category.Parents.PageNumber, category.Parents.PageSize));
+                }, category.Parents.PageNumber, category.Parents.PageSize);
             }
 
             if (category.Categories != null)
             {
-                result.Collections = new Collections(new MutablePagedList<Collection>((pageNumber, pageSize, sortInfos, @params) =>
+                result.Collections = new MutablePagedList<Collection>((pageNumber, pageSize, sortInfos, @params) =>
                  {
                      category.Categories.Slice(pageNumber, pageSize, sortInfos, @params);
                      return new StaticPagedList<Collection>(category.Categories.Select(x => ToLiquidCollection(x, workContext)), category.Categories);
-                 }, category.Categories.PageNumber, category.Categories.PageSize));
+                 }, category.Categories.PageNumber, category.Categories.PageSize);
             }
 
             if (workContext.Aggregations != null)
