@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Inventory;
 
 namespace VirtoCommerce.Storefront.Model.Stores
 {
@@ -16,7 +14,6 @@ namespace VirtoCommerce.Storefront.Model.Stores
             Languages = new List<Language>();
             CurrenciesCodes = new List<string>();
             SeoInfos = new List<SeoInfo>();
-            DynamicProperties = new List<DynamicProperty>();
             Settings = new List<SettingEntry>();
             AvailFulfillmentCenterIds = new List<string>();
             TrustedGroups = new List<string>();
@@ -47,6 +44,7 @@ namespace VirtoCommerce.Storefront.Model.Stores
 
         public string Region { get; set; }
 
+        public string Status => StoreState.ToString();
         /// <summary>
         /// Default Language culture name  of store ( example en-US )
         /// </summary>
@@ -85,8 +83,6 @@ namespace VirtoCommerce.Storefront.Model.Stores
         /// Store theme name
         /// </summary>
         public string ThemeName { get; set; }
-
-        public IList<DynamicProperty> DynamicProperties { get; set; }
 
         /// <summary>
         /// All store seo informations for all languages
@@ -133,6 +129,9 @@ namespace VirtoCommerce.Storefront.Model.Stores
         }
 
         public decimal FixedTaxRate { get; set; }
+
+
+        public IMutablePagedList<DynamicProperty> DynamicProperties { get; set; }
 
         #region IHasSettings Members
 

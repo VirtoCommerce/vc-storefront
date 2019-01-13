@@ -1,10 +1,15 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Scriban;
 using Scriban.Parsing;
 using Scriban.Runtime;
+using VirtoCommerce.LiquidThemeEngine.Scriban;
+using VirtoCommerce.Storefront.Model.Catalog;
+using VirtoCommerce.Storefront.Model.Common;
 using Xunit;
 
 namespace VirtoCommerce.Storefront.Tests.Scriban
@@ -82,11 +87,32 @@ namespace VirtoCommerce.Storefront.Tests.Scriban
         }
 
         [Fact]
+        public void IndexAccess_For_List()
+        {
+            var parsedTemplate = Template.ParseLiquid("{{ products.size > 0 }} {{ products['headphones'].id }} {{ product = products['headphones'] }} {{ products[product.id].id }}");
+            Assert.False(parsedTemplate.HasErrors);
+
+            var scriptObject = new ScriptObject();
+            scriptObject.Import(new TestContext { Products = new MutablePagedList<Product>(new List<Product> { new Product { Id = "headphones" } }) });
+            var context = new TemplateContext();
+            context.PushGlobal(scriptObject);
+
+            var result = parsedTemplate.Render(context);
+            Assert.Equal("true headphones headphones", result);
+        }
+
+        [Fact]
         public void ParsingError()
         {
             var parsedTemplate = Template.ParseLiquid(File.ReadAllText(@"C:\Projects\VirtoCommerce\vc-storefront-core\VirtoCommerce.Storefront.Tests\Scriban\test.liquid"));
             Assert.False(parsedTemplate.HasErrors);
         }
+    }
+
+
+    public class TestContext
+    {
+        public IMutablePagedList<Product> Products { get; set; }
     }
     public class Tag
     {

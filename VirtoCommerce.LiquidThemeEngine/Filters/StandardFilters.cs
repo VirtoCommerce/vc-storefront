@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.XPath;
 using Scriban;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
@@ -656,6 +657,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             else if (s is int)
             {
                 return s;
+            }
+            else if (s is Money money)
+            {
+                return money.Amount;
             }
             else if (s is string)
             {

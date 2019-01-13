@@ -36,9 +36,13 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (aggregationDto.Items != null)
             {
-                result.Items = aggregationDto.Items
-                    .Select(i => i.ToAggregationItem(currentLanguage))
-                    .ToArray();
+                result.Items = aggregationDto.Items.Select(i => i.ToAggregationItem(currentLanguage))
+                                             .ToArray();
+                foreach (var aggregationItem in result.Items)
+                {
+                    aggregationItem.GroupLabel = result.Label;
+                    aggregationItem.GroupType = result.AggregationType;
+                }
             }
 
             if (aggregationDto.Labels != null)
@@ -333,15 +337,15 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (productDto.Properties != null)
             {
-                result.Properties = productDto.Properties
+                result.Properties = new MutablePagedList<CatalogProperty>(productDto.Properties
                     .Where(x => string.Equals(x.Type, "Product", StringComparison.InvariantCultureIgnoreCase))
                     .Select(p => ToProperty(p, currentLanguage))
-                    .ToList();
+                    .ToList());
 
-                result.VariationProperties = productDto.Properties
+                result.VariationProperties = new MutablePagedList<CatalogProperty>(productDto.Properties
                     .Where(x => string.Equals(x.Type, "Variation", StringComparison.InvariantCultureIgnoreCase))
                     .Select(p => ToProperty(p, currentLanguage))
-                    .ToList();
+                    .ToList());
             }
 
             if (productDto.Images != null)
@@ -394,14 +398,16 @@ namespace VirtoCommerce.Storefront.Domain
                                             Value = Markdown.ToHtml(r.Content, _markdownPipeline)
                                         });
                 //Select only best matched description for current language in the each description type
+                var tmpDescriptionList = new List<EditorialReview>();
                 foreach (var descriptionGroup in descriptions.GroupBy(x => x.ReviewType))
                 {
                     var description = descriptionGroup.FindWithLanguage(currentLanguage);
                     if (description != null)
                     {
-                        result.Descriptions.Add(description);
+                        tmpDescriptionList.Add(description);
                     }
                 }
+                result.Descriptions = tmpDescriptionList;
                 result.Description = (result.Descriptions.FirstOrDefault(x => x.ReviewType.EqualsInvariant("FullReview")) ?? result.Descriptions.FirstOrDefault())?.Value;
             }
 

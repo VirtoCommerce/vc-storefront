@@ -30,8 +30,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
             return Json(new
             {
-                Products = retVal.Products,
-                Aggregations = retVal.Aggregations,
+                retVal.Products,
+                retVal.Aggregations,
                 MetaData = retVal.Products.GetMetaData()
             });
         }

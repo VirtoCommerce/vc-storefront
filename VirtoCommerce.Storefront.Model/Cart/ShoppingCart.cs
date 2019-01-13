@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Cart.ValidationErrors;
 using VirtoCommerce.Storefront.Model.Common;
@@ -110,6 +111,8 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// Gets or sets the value of shopping cart text comment
         /// </summary>
         public string Comment { get; set; }
+        [JsonIgnore]
+        public string Note => Comment;
 
         /// <summary>
         /// Gets or sets the value of volumetric weight

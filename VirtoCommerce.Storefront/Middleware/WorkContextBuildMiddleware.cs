@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.Domain;
@@ -76,6 +77,13 @@ namespace VirtoCommerce.Storefront.Middleware
             await builder.WithVendorsAsync(workContext.CurrentStore, workContext.CurrentLanguage);
             await builder.WithFulfillmentCentersAsync();
 
+            //EU General Data Protection Regulation (GDPR) support 
+            var consentFeature = context.Features.Get<ITrackingConsentFeature>();
+            if (consentFeature != null)
+            {
+                workContext.CanTrack = !consentFeature?.CanTrack ?? false;
+                workContext.ConsentCookie = consentFeature?.CreateConsentCookie();
+            }
             workContext.AvailableRoles = SecurityConstants.Roles.AllRoles;
             _workContextAccessor.WorkContext = workContext;
 

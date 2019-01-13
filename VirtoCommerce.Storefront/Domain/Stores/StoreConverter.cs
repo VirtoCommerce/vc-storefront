@@ -39,7 +39,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Region = storeDto.Region,
                 SecureUrl = storeDto.SecureUrl,
                 TimeZone = storeDto.TimeZone,
-                Url = storeDto.Url,
+                Url = storeDto.Url ?? "~/",
                 DefaultFulfillmentCenterId = storeDto.MainFulfillmentCenterId,
                 AvailFulfillmentCenterIds = storeDto.AdditionalFulfillmentCenterIds ?? Array.Empty<string>()
             };
@@ -68,7 +68,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (!storeDto.DynamicProperties.IsNullOrEmpty())
             {
-                result.DynamicProperties = storeDto.DynamicProperties.Select(ToDynamicProperty).ToList();
+                result.DynamicProperties = new MutablePagedList<DynamicProperty>(storeDto.DynamicProperties.Select(ToDynamicProperty).ToList());
                 result.ThemeName = result.DynamicProperties.GetDynamicPropertyValue("DefaultThemeName");
             }
 

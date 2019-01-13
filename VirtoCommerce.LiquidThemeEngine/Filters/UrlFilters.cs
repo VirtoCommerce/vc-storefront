@@ -5,8 +5,10 @@ using System.Web;
 using DotLiquid;
 using Scriban;
 using VirtoCommerce.LiquidThemeEngine.Extensions;
+using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Order;
 using VirtoCommerce.Storefront.Model.Stores;
 using shopifyModel = VirtoCommerce.LiquidThemeEngine.Objects;
 using storefrontModel = VirtoCommerce.Storefront.Model;
@@ -62,25 +64,21 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
             var retVal = input.ToString();
 
-            if (input is shopifyModel.Product product)
+            if (input is Product product)
             {
-                retVal = product.FeaturedImage?.Src;
+                retVal = product.PrimaryImage?.Url;
             }
-            if (input is shopifyModel.Image image)
+            if (input is Image image)
             {
-                retVal = image.Src;
+                retVal = image.Url;
             }
-            if (input is shopifyModel.Variant variant)
+            if (input is Category collection)
             {
-                retVal = variant.FeaturedImage?.Src;
+                retVal = collection.PrimaryImage?.Url;
             }
-            if (input is shopifyModel.Collection collection)
+            if (input is LineItem lineItem)
             {
-                retVal = collection.Image?.Src;
-            }
-            if (input is shopifyModel.LineItem lineItem)
-            {
-                retVal = lineItem.Image?.Src;
+                retVal = lineItem.ImageUrl;
             }
 
             if (!string.IsNullOrEmpty(retVal))
@@ -333,15 +331,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }
             else
             {
-                var tag = tagObject as shopifyModel.Tag;
-                if (tag != null)
+                var aggregationItem = tagObject as AggregationItem;
+                if (aggregationItem != null)
                 {
-                    href = GetCurrentUrlWithTags(context, action, tag.GroupName, tag.Value);
+                    href = GetCurrentUrlWithTags(context, action, aggregationItem.GroupLabel, aggregationItem.Value.ToString());
                     title = BuildTagActionTitle(action, label);
 
-                    if (tag.Count > 0)
+                    if (aggregationItem.Count > 0)
                     {
-                        label = $"{label} ({tag.Count})";
+                        label = $"{label} ({aggregationItem.Count})";
                     }
                 }
                 else

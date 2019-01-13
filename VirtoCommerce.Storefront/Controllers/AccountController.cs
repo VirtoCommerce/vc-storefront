@@ -126,7 +126,6 @@ namespace VirtoCommerce.Storefront.Controllers
                 }
             }
 
-            WorkContext.Form = registration;
             return View("customers/register", WorkContext);
         }
 
@@ -159,13 +158,6 @@ namespace VirtoCommerce.Storefront.Controllers
                 WorkContext.ErrorMessage = "Invitation token is invalid or expired";
                 return View("error", WorkContext);
             }
-
-            WorkContext.Form = new UserRegistrationByInvitation
-            {
-                Email = email,
-                OrganizationId = organizationId,
-                Token = token
-            };
 
             return View("customers/confirm_invitation", WorkContext);
         }
@@ -208,7 +200,6 @@ namespace VirtoCommerce.Storefront.Controllers
                 ModelState.AddModelError(string.Empty, error.Description);
             }
 
-            WorkContext.Form = register;
             return View("customers/confirm_invitation", WorkContext);
         }
 
@@ -301,7 +292,6 @@ namespace VirtoCommerce.Storefront.Controllers
             }
 
             ModelState.AddModelError("form", "Login attempt failed.");
-            WorkContext.Form = login;
 
             return View("customers/login", WorkContext);
         }
@@ -502,13 +492,6 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View("error", WorkContext);
             }
 
-            WorkContext.Form = new ResetPassword
-            {
-                Token = token,
-                Email = user.Email,
-                UserName = user.UserName
-            };
-
             return View("customers/reset_password", WorkContext);
         }
 
@@ -526,7 +509,7 @@ namespace VirtoCommerce.Storefront.Controllers
             if (formModel.Password != formModel.PasswordConfirmation)
             {
                 ModelState.AddModelError("form", "Passwords aren't equal");
-                WorkContext.Form = formModel;
+
                 return View("customers/reset_password", WorkContext);
             }
 
@@ -560,7 +543,6 @@ namespace VirtoCommerce.Storefront.Controllers
                 }
             }
 
-            WorkContext.Form = formModel;
             return View("customers/reset_password", WorkContext);
         }
 

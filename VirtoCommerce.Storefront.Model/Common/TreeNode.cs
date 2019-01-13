@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using VirtoCommerce.Storefront.Model.Common;
 
-namespace VirtoCommerce.LiquidThemeEngine.Objects
+namespace VirtoCommerce.Storefront.Model.Common
 {
     public partial class TreeNode : ValueObject
     {

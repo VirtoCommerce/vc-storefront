@@ -92,7 +92,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         //Selected and persisted currency code
         public string SelectedCurrencyCode { get; set; }
 
-        public string ContactId { get; set; }        
+        public string ContactId { get; set; }
         /// <summary>
         /// Member associated with user 
         /// </summary>
@@ -138,5 +138,17 @@ namespace VirtoCommerce.Storefront.Model.Security
         [JsonIgnore]
         [IgnoreDataMember]
         public IMutablePagedList<Subscription> Subscriptions { get; set; }
+
+        public IList<DynamicProperty> DynamicProperties => Contact?.DynamicProperties;
+
+        public string FirstName => Contact?.FirstName;
+        public string LastName => Contact?.LastName;
+        public string MiddleName => Contact?.MiddleName;
+        public string Name => Contact?.FullName;
+        public string TimeZone => Contact?.TimeZone;
+        public Address DefaultAddress => Contact?.DefaultAddress;
+        public Address DefaultBillingAddress => Contact?.DefaultBillingAddress;
+        public Address DefaultShippingAddress => Contact?.DefaultShippingAddress;
+        public IList<Address> Addresses => Contact?.Addresses;
     }
 }

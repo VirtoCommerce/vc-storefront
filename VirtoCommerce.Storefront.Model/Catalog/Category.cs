@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Catalog
 {
-    public partial class Category : Entity, IHasProperties
+    public partial class Category : Entity, IHasProperties, IAccessibleByIndexKey
     {
         public Category()
         {
@@ -15,12 +16,13 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         //All parents categories
         public IMutablePagedList<Category> Parents { get; set; }
-        public string ParentId { get; set; }      
+        public string ParentId { get; set; }
 
         public string Code { get; set; }
 
         public string TaxType { get; set; }
-
+        public string DefaultSortBy { get; set; } = "manual";
+        public string Title => Name;
         public string Name { get; set; }
 
         /// <summary>
@@ -38,10 +40,14 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         public SeoInfo SeoInfo { get; set; }
 
+        [JsonIgnore]
+        public int AllProductsCount { get { return Products.GetTotalCount(); } }
+
         /// <summary>
         /// Category main image
         /// </summary>
         public Image PrimaryImage { get; set; }
+        public Image Image => PrimaryImage;
 
         public IList<Image> Images { get; set; }
 
@@ -51,9 +57,14 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// Child categories
         /// </summary>
         public IMutablePagedList<Category> Categories { get; set; }
+        [JsonIgnore]
+        public IMutablePagedList<Category> Collections => Categories;
 
         #region IHasProperties Members
         public IList<CatalogProperty> Properties { get; set; }
         #endregion
+
+        public string Handle => SeoInfo?.Slug ?? Id;
+        public string IndexKey => Handle;
     }
 }

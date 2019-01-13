@@ -7,12 +7,12 @@ using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine
 {
-    public class DotLiquidThemedViewEngine : ILiquidViewEngine
+    public class LiquidThemedViewEngine : ILiquidViewEngine
     {
         private readonly ILiquidThemeEngine _themeEngine;
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IStorefrontUrlBuilder _urlBuilder;
-        public DotLiquidThemedViewEngine(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, ILiquidThemeEngine themeEngine)
+        public LiquidThemedViewEngine(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, ILiquidThemeEngine themeEngine)
         {
             _themeEngine = themeEngine;
             _workContextAccessor = workContextAccessor;
@@ -42,7 +42,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 var path = _themeEngine.ResolveTemplatePath(view);
                 if (!string.IsNullOrEmpty(path))
                 {
-                    return ViewEngineResult.Found(view, new DotLiquidThemedView(_workContextAccessor, _urlBuilder, _themeEngine, view, path, isMainPage));
+                    return ViewEngineResult.Found(view, new LiquidThemedView(_workContextAccessor, _urlBuilder, _themeEngine, view, path, isMainPage));
                 }
                 searchedLocations = _themeEngine.DiscoveryPaths.ToArray();
             }

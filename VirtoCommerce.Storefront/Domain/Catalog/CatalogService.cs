@@ -215,7 +215,7 @@ namespace VirtoCommerce.Storefront.Domain
 
                 if (products.Any())
                 {
-                    var productsWithVariations = products.Concat(products.SelectMany(x => x.Variations)).ToList();
+                    var productsWithVariations = products.Concat(products.Where(x => !x.Variations.IsNullOrEmpty()).SelectMany(x => x.Variations)).ToList();
                     var taskList = new List<Task>();
 
                     if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.Inventory))

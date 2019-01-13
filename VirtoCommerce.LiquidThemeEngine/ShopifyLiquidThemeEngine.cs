@@ -19,8 +19,10 @@ using Newtonsoft.Json.Linq;
 using Scriban;
 using Scriban.Parsing;
 using Scriban.Runtime;
+using Scriban.Syntax;
 using VirtoCommerce.LiquidThemeEngine.Converters;
 using VirtoCommerce.LiquidThemeEngine.Filters;
+using VirtoCommerce.LiquidThemeEngine.Scriban;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
@@ -164,12 +166,12 @@ namespace VirtoCommerce.LiquidThemeEngine
 
             if (retVal != null && filePath.EndsWith(".liquid"))
             {
-                var shopifyContext = WorkContext.ToShopifyModel(UrlBuilder);
-                shopifyContext.Settings = GetSettings("''");
+                var context = WorkContext.Clone() as WorkContext;
+                context.Settings = GetSettings("''");
                 var templateContent = retVal.ReadToString();
                 retVal.Dispose();
 
-                var template = RenderTemplate(templateContent, filePath, shopifyContext);
+                var template = RenderTemplate(templateContent, filePath, context);
                 retVal = new MemoryStream(Encoding.UTF8.GetBytes(template));
             }
 
@@ -312,7 +314,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             //TODO: blank isn't same as was in previous version now it is only represents a null check, need to find out solution or replace in themes == blank check to to .empty? == false expression
             scriptObject.SetValue("blank", EmptyScriptObject.Default, true);
             //Store special layout setter action in the context, it is allows to set the WorkContext.Layout property from template during rendering in the CommonFilters.Layout function
-            Action<string> layoutSetter = (layout) => ((Objects.ShopifyThemeWorkContext)context).Layout = layout;
+            Action<string> layoutSetter = (layout) => ((WorkContext)context).Layout = layout;
             scriptObject.Add("layout_setter", layoutSetter);
 
             var templateContext = new TemplateContext()
@@ -329,15 +331,6 @@ namespace VirtoCommerce.LiquidThemeEngine
 
             var result = parsedTemplate.Render(templateContext);
 
-            //TODO:
-            ////Copy key values which were generated in rendering to out parameters
-            //if (parsedTemplate.Registers != null)
-            //{
-            //    foreach (var registerPair in parsedTemplate.Registers)
-            //    {
-            //        parameters[registerPair.Key] = registerPair.Value;
-            //    }
-            //}
 
             return result;
         }

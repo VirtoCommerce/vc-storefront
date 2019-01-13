@@ -20,6 +20,20 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
     public class CommonFilters
     {
+        private static readonly string[] _poweredLinks = {
+                                             "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">.NET ecommerce platform</a> by Virto",
+                                             "<a href=\"http://virtocommerce.com/shopping-cart\" rel=\"nofollow\" target=\"_blank\">Shopping Cart</a> by Virto",
+                                             "<a href=\"http://virtocommerce.com/shopping-cart\" rel=\"nofollow\" target=\"_blank\">.NET Shopping Cart</a> by Virto",
+                                             "<a href=\"http://virtocommerce.com/shopping-cart\" rel=\"nofollow\" target=\"_blank\">ASP.NET Shopping Cart</a> by Virto",
+                                             "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">.NET ecommerce</a> by Virto",
+                                             "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">.NET ecommerce framework</a> by Virto",
+                                             "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">ASP.NET ecommerce</a> by Virto Commerce",
+                                             "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">ASP.NET ecommerce platform</a> by Virto",
+                                             "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">ASP.NET ecommerce framework</a> by Virto",
+                                             "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">Enterprise ecommerce</a> by Virto",
+                                             "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">Enterprise ecommerce platform</a> by Virto",
+                                         };
+
         public static object Default(object input, object value)
         {
             return input ?? value;
@@ -42,6 +56,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                });
 
             return serializedString;
+        }
+
+        public static string PoweredBy(string signature)
+        {
+            var hashCode = (uint)signature.GetHashCode();
+            return _poweredLinks[hashCode % _poweredLinks.Length];
         }
 
         public static string Render(TemplateContext context, string input)
@@ -83,8 +103,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             Paginate result = null;
             var collection = source as ICollection;
             var pagedList = source as IPagedList;
-            Uri.TryCreate(context.GetValue(new ScriptVariableGlobal("request_url")) as string, UriKind.RelativeOrAbsolute, out var requestUrl);
-            var pageNumber = (int)context.GetValue(new ScriptVariableGlobal("current_page"));
+            var requestUrl = context.GetValue(new ScriptVariableGlobal("request_url")) as Uri;
+            var pageNumber = (int)(context.GetValue(new ScriptVariableGlobal("page_number")) ?? 1);
             var @params = new NameValueCollection();
             if (!string.IsNullOrEmpty(filterJson))
             {

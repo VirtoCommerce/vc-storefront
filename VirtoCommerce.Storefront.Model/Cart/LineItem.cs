@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Cart.ValidationErrors;
 using VirtoCommerce.Storefront.Model.Catalog;
@@ -31,7 +32,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
             TaxTotal = new Money(currency);
             Discounts = new List<Discount>();
             TaxDetails = new List<TaxDetail>();
-            DynamicProperties = new List<DynamicProperty>();
+            DynamicProperties = new MutablePagedList<DynamicProperty>(Enumerable.Empty<DynamicProperty>());
             ValidationErrors = new List<ValidationError>();
             IsValid = true;
         }
@@ -75,6 +76,8 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// Gets or sets the value of line item name
         /// </summary>
         public string Name { get; set; }
+        [JsonIgnore]
+        public string Title => Name;
 
         /// <summary>
         /// Gets or sets the value of line item quantity
@@ -250,7 +253,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// Dynamic properties collections
         /// </summary>
         /// <value>Dynamic properties collections</value>
-        public IList<DynamicProperty> DynamicProperties { get; set; }
+        public IMutablePagedList<DynamicProperty> DynamicProperties { get; set; }
 
         #region IValidatable Members
         public bool IsValid { get; set; }
@@ -362,7 +365,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
             }
             if (DynamicProperties != null)
             {
-                result.DynamicProperties = new List<DynamicProperty>(DynamicProperties.Select(x => x.Clone() as DynamicProperty));
+                result.DynamicProperties = new MutablePagedList<DynamicProperty>(DynamicProperties.Select(x => x.Clone() as DynamicProperty));
             }
             if (ValidationErrors != null)
             {
