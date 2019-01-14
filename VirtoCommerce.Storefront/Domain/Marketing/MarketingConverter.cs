@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.Storefront.Common;
@@ -67,7 +66,10 @@ namespace VirtoCommerce.Storefront.Domain
                 CouponMinOrderAmount = new Money(rewardDto.CouponMinOrderAmount ?? 0, currency),
                 Promotion = rewardDto.Promotion.ToPromotion(),
                 RewardType = EnumUtility.SafeParse(rewardDto.RewardType, PromotionRewardType.CatalogItemAmountReward),
-                ShippingMethodCode = rewardDto.ShippingMethod
+                ShippingMethodCode = rewardDto.ShippingMethod,
+                ConditionalProductId = rewardDto.ConditionalProductId,
+                ForNthQuantity = rewardDto.ForNthQuantity,
+                InEveryNthQuantity = rewardDto.InEveryNthQuantity,
             };
 
             return result;

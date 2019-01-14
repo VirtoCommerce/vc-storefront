@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Marketing
@@ -103,13 +104,39 @@ namespace VirtoCommerce.Storefront.Model.Marketing
         /// </summary>
         public decimal MaxLimit { get; set; }
 
+        /// <summary>
+        /// Gets or sets ConditionalProductId in
+        /// For N items of entry ProductId  in every Y items of entry
+        /// ConditionalProductId get %X off
+        /// </summary>
+        public string ConditionalProductId { get; set; }
 
-        public Discount ToDiscountModel(Money amount)
+        /// <summary>
+        /// Gets or sets N quantity in
+        /// For N items of entry ProductId  in every Y items of entry
+        /// ConditionalProductId get %X off
+        /// </summary>
+        public int? ForNthQuantity { get; set; }
+
+        /// <summary>
+        /// Gets or sets Y quantity in
+        /// For N items of entry ProductId  in every Y items of entry
+        /// ConditionalProductId get %X off
+        /// </summary>
+        public int? InEveryNthQuantity { get; set; }
+
+        /// <summary>
+        /// Get per item reward discount for given item price and quantity.
+        /// </summary>
+        /// <param name="price">Price per item.</param>
+        /// <param name="quantity">Total item quantity.</param>
+        /// <returns>Absolute reward discount per item.</returns>
+        public Discount ToDiscountModel(Money price, int quantity = 1)
         {
-            var absoluteAmount = GetAbsoluteDiscountAmount(amount.Amount);
-            var discount = new Discount(amount.Currency)
+            var discountPerItem = GetDiscountPerItem(price, quantity);
+            var discount = new Discount(price.Currency)
             {
-                Amount = new Money(absoluteAmount, amount.Currency),
+                Amount = discountPerItem,
                 Description = Promotion.Description,
                 Coupon = Coupon,
                 PromotionId = Promotion.Id
@@ -118,24 +145,41 @@ namespace VirtoCommerce.Storefront.Model.Marketing
             return discount;
         }
 
-        private decimal GetAbsoluteDiscountAmount(decimal originAmount)
+        // Similar to vc-module-core/AmountBasedReward.GetRewardAmount 
+        private Money GetDiscountPerItem(Money price, int quantity)
         {
-            var absoluteAmount = Amount;
-            if (AmountType == AmountType.Relative)
+            var decimalPrice = price.Amount;
+            if (decimalPrice < 0)
             {
-                absoluteAmount = Amount * originAmount / 100;
-                if (MaxLimit > 0)
-                {
-                    absoluteAmount = Math.Min(MaxLimit, absoluteAmount);
-                }
+                throw new ArgumentNullException($"The {nameof(decimalPrice)} cannot be negative");
             }
-            else
+            if (quantity < 0)
             {
-                //Do not allow to create discount greater than origin amount
-                absoluteAmount = Math.Min(originAmount, absoluteAmount);
+                throw new ArgumentNullException($"The {nameof(quantity)} cannot be negative");
             }
 
-            return absoluteAmount;
+            var workQuantity = quantity = Math.Max(1, quantity);
+            if (ForNthQuantity > 0 && InEveryNthQuantity > 0)
+            {
+                workQuantity = workQuantity / (InEveryNthQuantity ?? 1) * (ForNthQuantity ?? 1);
+            }
+            if (Quantity > 0)
+            {
+                workQuantity = Math.Min(Quantity, workQuantity);
+            }
+            var result = Amount * workQuantity;
+            if (AmountType == AmountType.Relative)
+            {
+                result = decimalPrice * Amount * 0.01m * workQuantity;
+            }
+            var totalCost = decimalPrice * quantity;
+            //use total cost as MaxLimit if it explicitly not set
+            var workMaxLimit = MaxLimit > 0 ? MaxLimit : totalCost;
+            //Do not allow maxLimit be greater that total cost (to prevent reward amount be greater that price)
+            workMaxLimit = Math.Min(workMaxLimit, totalCost);
+            result = Math.Min(workMaxLimit, result);
+
+            return new Money(result, price.Currency).Allocate(quantity).FirstOrDefault();
         }
     }
 }
