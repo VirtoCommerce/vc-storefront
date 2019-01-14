@@ -6,6 +6,7 @@ using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models;
 using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
+using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Marketing;
@@ -18,12 +19,14 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IMarketingModuleDynamicContent _dynamicContentApi;
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
+        private readonly IWorkContextAccessor _workContextAccessor;
 
-        public MarketingService(IMarketingModuleDynamicContent dynamicContentApi, IStorefrontMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
+        public MarketingService(IMarketingModuleDynamicContent dynamicContentApi, IStorefrontMemoryCache memoryCache, IApiChangesWatcher changesWatcher, IWorkContextAccessor workContextAccessor)
         {
             _dynamicContentApi = dynamicContentApi;
             _memoryCache = memoryCache;
             _apiChangesWatcher = changesWatcher;
+            _workContextAccessor = workContextAccessor;
         }
 
         public virtual async Task<string> GetDynamicContentHtmlAsync(string storeId, string placeholderName)
@@ -34,7 +37,8 @@ namespace VirtoCommerce.Storefront.Domain
             var evaluationContext = new DynamicContentEvaluationContext
             {
                 StoreId = storeId,
-                PlaceName = placeholderName
+                PlaceName = placeholderName,
+                UserGroups = _workContextAccessor.WorkContext.CurrentUser?.Contact?.UserGroups
             };
 
             var cacheKey = CacheKey.With(GetType(), "GetDynamicContentHtmlAsync", storeId, placeholderName);
