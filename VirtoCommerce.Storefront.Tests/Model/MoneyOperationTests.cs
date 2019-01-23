@@ -4,6 +4,7 @@ using StorefrontLanguage = VirtoCommerce.Storefront.Model.Language;
 
 namespace VirtoCommerce.Storefront.Tests.Model
 {
+    [Trait("Category", "CI")]
     public class MoneyOperationTests
     {
         private static readonly StorefrontLanguage TestLanguage = new StorefrontLanguage("en-US");
