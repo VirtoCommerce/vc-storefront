@@ -211,13 +211,18 @@ namespace VirtoCommerce.LiquidThemeEngine
         {
             var cacheKey = CacheKey.With(GetType(), "GetAssetHash", filePath);
             return _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
-           {
+            {
                cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(filePath) }));
 
                using (var stream = GetAssetStream(filePath))
                {
-                   var hashAlgorithm = CryptoConfig.AllowOnlyFipsAlgorithms ? (SHA256)new SHA256CryptoServiceProvider() : new SHA256Managed();
-                   return WebEncoders.Base64UrlEncode(hashAlgorithm.ComputeHash(stream));
+                    string result = null;
+                    if (stream != null)
+                    {
+                        var hashAlgorithm = CryptoConfig.AllowOnlyFipsAlgorithms ? (SHA256)new SHA256CryptoServiceProvider() : new SHA256Managed();
+                        result = WebEncoders.Base64UrlEncode(hashAlgorithm.ComputeHash(stream));
+                    }
+                    return result;
                }
            });
         }

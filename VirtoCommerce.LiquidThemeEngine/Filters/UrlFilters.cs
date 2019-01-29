@@ -285,8 +285,13 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             var themeEngine = (ShopifyLiquidThemeEngine)Template.FileSystem;
             var basePath = themeEngine.GetAssetAbsoluteUrl("");
             var relativePath = input.StartsWith(basePath) ? input.Remove(0, basePath.Length) : input;
+            var result = input;
             var hash = themeEngine.GetAssetHash(relativePath);
-            return input.Contains('?') ? $"{input}&v={hash}" : $"{input}?v={hash}";
+            if (!string.IsNullOrEmpty(hash))
+            {
+                result = input.Contains('?') ? $"{input}&v={hash}" : $"{input}?v={hash}";
+            }
+            return result;
         }
 
         private static string BuildOnClickLink(string title, string onclickFormat, params object[] onclickArgs)
