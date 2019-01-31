@@ -9,9 +9,8 @@ namespace VirtoCommerce.Storefront.Model.Security
         public string Role { get; set; }
 
         [FromForm(Name = "customer[budget]")]
-        [Required]
         [Range(typeof(decimal), "0", "79228162514264337593543950335")]
-        public decimal Budget { get; set; }
+        public decimal? Budget { get; set; }
 
         [Required]
         public string OrganizationId { get; set; }
