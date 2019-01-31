@@ -6,7 +6,7 @@ namespace VirtoCommerce.Storefront.Model.Customer
     /// Represent customer information structure 
     /// </summary>
     public partial class Contact : Member
-    {  
+    {
         public string FullName { get; set; }
         /// <summary>
         /// Returns the first name of the customer.
@@ -16,6 +16,23 @@ namespace VirtoCommerce.Storefront.Model.Customer
         /// Returns the last name of the customer.
         /// </summary>
         public string LastName { get; set; }
+
+        public decimal? Budget
+        {
+            get
+            {
+                if (decimal.TryParse(Salutation, out decimal result))
+                {
+                    return result;
+                }
+
+                return null;
+            }
+            set
+            {
+                Salutation = value.ToString();
+            }
+        }
 
         public string MiddleName { get; set; }
 
@@ -45,7 +62,7 @@ namespace VirtoCommerce.Storefront.Model.Customer
         /// <summary>
         /// All contact security accounts
         /// </summary>
-        public IEnumerable<SecurityAccount> SecurityAccounts { get; set; }   
+        public IEnumerable<SecurityAccount> SecurityAccounts { get; set; }
 
     }
 }

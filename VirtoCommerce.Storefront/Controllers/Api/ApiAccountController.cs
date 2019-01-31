@@ -161,6 +161,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 }
 
                 var contact = registration.ToContact();
+                contact.Budget = registration.Budget;
                 contact.OrganizationId = registration.OrganizationId;
 
                 var user = registration.ToUser();
@@ -357,6 +358,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> UpdateAccount([FromBody] UserUpdateInfo userUpdateInfo)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(IdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors).Select(x => new IdentityError { Description = x.ErrorMessage }).ToArray()));
+            }
+
             //TODO:Check authorization
             if (string.IsNullOrEmpty(userUpdateInfo.Id))
             {
@@ -368,6 +374,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             if (!string.IsNullOrEmpty(userUpdateInfo.Id))
             {
                 var user = await _userManager.FindByIdAsync(userUpdateInfo.Id);
+
                 if (user != null)
                 {
                     if (!isSelfEditing)
@@ -387,6 +394,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
                     if (user.Contact != null)
                     {
+                        user.Contact.Budget = userUpdateInfo.Budget;
                         user.Contact.FirstName = userUpdateInfo.FirstName;
                         user.Contact.LastName = userUpdateInfo.LastName;
                     }
