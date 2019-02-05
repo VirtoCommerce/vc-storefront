@@ -21,7 +21,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
 
         public IChangeToken CreateChangeToken()
         {
-            return new PoolingApiChangeToken(_cacheApi, _options.ChangesPoolingInterval);
+            return new PollingApiChangeToken(_cacheApi, _options.ChangesPollingInterval);
         }
     }
 }

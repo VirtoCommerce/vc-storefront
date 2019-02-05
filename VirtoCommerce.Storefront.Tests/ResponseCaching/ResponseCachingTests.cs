@@ -15,6 +15,7 @@ using Language = VirtoCommerce.Storefront.Model.Language;
 
 namespace VirtoCommerce.Storefront.Tests.OutputCache
 {
+    [Trait("Category", "CI")]
     public class ResponseCachingTests : IClassFixture<WebApplicationFactory<Startup>>, IDisposable
     {
         private readonly WebApplicationFactory<Startup> _factory;

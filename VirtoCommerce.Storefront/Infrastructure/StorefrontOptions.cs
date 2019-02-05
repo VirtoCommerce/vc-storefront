@@ -6,7 +6,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
     public class StorefrontOptions
     {
         public string DefaultStore { get; set; }
-        public TimeSpan ChangesPoolingInterval { get; set; } = TimeSpan.FromMinutes(1);
+        public TimeSpan ChangesPollingInterval { get; set; } = TimeSpan.FromMinutes(1);
         public PlatformEndpointOptions Endpoint { get; set; }
         public LiquidThemeEngineOptions LiquidThemeEngine { get; set; }
         public RequireHttpsOptions RequireHttps { get; set; }

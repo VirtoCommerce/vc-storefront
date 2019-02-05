@@ -9,7 +9,7 @@ namespace VirtoCommerce.Storefront.Extensions
     public static class MemoryCacheExtensions
     {
         private static ConcurrentDictionary<string, object> _lockLookup = new ConcurrentDictionary<string, object>();
-        public static async Task<TItem> GetOrCreateExclusiveAsync<TItem>(this IMemoryCache cache, string key, Func<ICacheEntry, Task<TItem>> factory, bool cacheNullValue = true)
+        public static async Task<TItem> GetOrCreateExclusiveAsync<TItem>(this IMemoryCache cache, string key, Func<MemoryCacheEntryOptions, Task<TItem>> factory, bool cacheNullValue = true)
         {
             if (!cache.TryGetValue(key, out object result))
             {
@@ -17,15 +17,14 @@ namespace VirtoCommerce.Storefront.Extensions
                 {
                     if (!cache.TryGetValue(key, out result))
                     {
-                        var entry = cache.CreateEntry(key);
-                        result = await factory(entry);
-                        if (result != null || cacheNullValue)
+                        if (!cache.TryGetValue(key, out result))
                         {
-                            entry.SetValue(result);
-                            // need to manually call dispose instead of having a using
-                            // in case the factory passed in throws, in which case we
-                            // do not want to add the entry to the cache
-                            entry.Dispose();
+                            var options = new MemoryCacheEntryOptions();
+                            result = await factory(options);
+                            if (result != null || cacheNullValue)
+                            {
+                                cache.Set(key, result, options);
+                            }
                         }
                     }
                 }
@@ -33,7 +32,7 @@ namespace VirtoCommerce.Storefront.Extensions
             return (TItem)result;
         }
 
-        public static TItem GetOrCreateExclusive<TItem>(this IMemoryCache cache, string key, Func<ICacheEntry, TItem> factory, bool cacheNullValue = true)
+        public static TItem GetOrCreateExclusive<TItem>(this IMemoryCache cache, string key, Func<MemoryCacheEntryOptions, TItem> factory, bool cacheNullValue = true)
         {
             if (!cache.TryGetValue(key, out object result))
             {
@@ -41,15 +40,11 @@ namespace VirtoCommerce.Storefront.Extensions
                 {
                     if (!cache.TryGetValue(key, out result))
                     {
-                        var entry = cache.CreateEntry(key);
-                        result = factory(entry);
+                        var options = new MemoryCacheEntryOptions();
+                        result = factory(options);
                         if (result != null || cacheNullValue)
                         {
-                            entry.SetValue(result);
-                            // need to manually call dispose instead of having a using
-                            // in case the factory passed in throws, in which case we
-                            // do not want to add the entry to the cache
-                            entry.Dispose();
+                            cache.Set(key, result, options);
                         }
                     }
                 }
