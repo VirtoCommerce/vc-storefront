@@ -17,14 +17,11 @@ namespace VirtoCommerce.Storefront.Extensions
                 {
                     if (!cache.TryGetValue(key, out result))
                     {
-                        if (!cache.TryGetValue(key, out result))
+                        var options = new MemoryCacheEntryOptions();
+                        result = await factory(options);
+                        if (result != null || cacheNullValue)
                         {
-                            var options = new MemoryCacheEntryOptions();
-                            result = await factory(options);
-                            if (result != null || cacheNullValue)
-                            {
-                                cache.Set(key, result, options);
-                            }
+                            cache.Set(key, result, options);
                         }
                     }
                 }
