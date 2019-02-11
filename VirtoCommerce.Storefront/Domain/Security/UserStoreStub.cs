@@ -6,9 +6,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -24,11 +26,13 @@ namespace VirtoCommerce.Storefront.Domain.Security
         private readonly ISecurity _platformSecurityApi;
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IMemberService _memberService;
-        public UserStoreStub(ISecurity platformSecurityApi, IMemberService memberService, IStorefrontMemoryCache memoryCache)
+        private readonly StorefrontOptions _options;
+        public UserStoreStub(ISecurity platformSecurityApi, IMemberService memberService, IStorefrontMemoryCache memoryCache, IOptions<StorefrontOptions> options)
         {
             _platformSecurityApi = platformSecurityApi;
             _memoryCache = memoryCache;
             _memberService = memberService;
+            _options = options.Value;
         }
 
         #region IUserStore<User> members
@@ -46,6 +50,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public async Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
         {
             await _platformSecurityApi.DeleteAsyncAsync(new[] { user.UserName });
+            //Evict user from the cache
+            SecurityCacheRegion.ExpireUser(user.Id);
             return IdentityResult.Success;
         }
 
@@ -410,6 +416,44 @@ namespace VirtoCommerce.Storefront.Domain.Security
         }
         #endregion
 
+        #region IUserPhoneNumberStore<User> members
+        public Task SetPhoneNumberAsync(User user, string phoneNumber, CancellationToken cancellationToken)
+        {
+            user.PhoneNumber = phoneNumber;
+            return Task.CompletedTask;
+        }
+
+        public Task<string> GetPhoneNumberAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.PhoneNumber);
+        }
+
+        public Task<bool> GetPhoneNumberConfirmedAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.PhoneNumberConfirmed);
+        }
+
+        public Task SetPhoneNumberConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
+        {
+            user.PhoneNumberConfirmed = confirmed;
+            return Task.CompletedTask;
+        }
+
+        #endregion
+
+        #region IUserTwoFactorStore<User> members
+        public Task SetTwoFactorEnabledAsync(User user, bool enabled, CancellationToken cancellationToken)
+        {
+            user.TwoFactorEnabled = enabled;
+            return Task.CompletedTask;
+        }
+
+        public Task<bool> GetTwoFactorEnabledAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.TwoFactorEnabled);
+        }
+        #endregion
+
         #region IRoleStore<Role> members
 
         public async Task<IdentityResult> CreateAsync(Role role, CancellationToken cancellationToken)
@@ -475,13 +519,14 @@ namespace VirtoCommerce.Storefront.Domain.Security
             // Cleanup
         }
 
-        private static User PrepareUserResult(ICacheEntry cacheEntry, AutoRestClients.PlatformModuleApi.Models.ApplicationUserExtended userDto)
+        private User PrepareUserResult(MemoryCacheEntryOptions options, AutoRestClients.PlatformModuleApi.Models.ApplicationUserExtended userDto)
         {
             if (userDto != null)
             {
-                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
-                cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
-                return userDto.ToUser();
+                var user = userDto.ToUser();
+                options.AddExpirationToken(PollingApiUserChangeToken.CreateChangeToken(user, _platformSecurityApi, _options.ChangesPollingInterval));
+                options.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
+                return user;
             }
             return null;
         }

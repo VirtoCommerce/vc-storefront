@@ -212,6 +212,10 @@ namespace VirtoCommerce.LiquidThemeEngine
 
                using (var stream = GetAssetStream(filePath))
                {
+                   if (stream == null)
+                   {
+                       throw new StorefrontException($"Theme resource for path '{filePath}' not found");
+                   }
                    var hashAlgorithm = CryptoConfig.AllowOnlyFipsAlgorithms ? (SHA256)new SHA256CryptoServiceProvider() : new SHA256Managed();
                    return WebEncoders.Base64UrlEncode(hashAlgorithm.ComputeHash(stream));
                }

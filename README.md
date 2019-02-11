@@ -2,6 +2,11 @@
 [![Build status](http://ci.virtocommerce.com/buildStatus/icon?job=vc-2-org/vc-storefront-core/master)](http://ci.virtocommerce.com/job/vc-2-org/job/vc-storefront-core/job/master/) [![Quality Gate](https://sonar.virtocommerce.com/api/badges/gate?key=vc-storefront-core%3Amaster&blinking=true)](https://sonar.virtocommerce.com/dashboard?id=vc-storefront-core%3Amaster) [![Lines of code](https://sonar.virtocommerce.com/api/badges/measure?key=vc-storefront-core%3Amaster&metric=ncloc)](https://sonar.virtocommerce.com/api/badges/measure?key=vc-storefront-core%3Amaster&metric=ncloc)&emsp;
 [![Documentation](https://img.shields.io/badge/docs-read-brightgreen.svg)](https://virtocommerce.com/docs/vc2devguide/working-with-storefront)&nbsp;[![Ask question at https://stackoverflow.com/questions/tagged/virtocommerce](https://img.shields.io/badge/stackoverflow-ask%20question-orange.svg)](https://stackoverflow.com/questions/tagged/virtocommerce) [![Join the chat at https://gitter.im/VirtoCommerce/vc-community](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/VirtoCommerce/vc-community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Contributors](https://img.shields.io/github/contributors/VirtoCommerce/vc-storefront-core.svg)](https://github.com/VirtoCommerce/vc-storefront-core/graphs/contributors)
 
+### Continuous Integration Supported by Browserstack
+Cross-browser compatibility of the storefront is generously provided by [Browserstack](https://www.browserstack.com/).
+
+[![Browserstack](https://images.techhive.com/images/article/2014/12/browserstack-logo-100538202-medium.idge.png)](http://browserstack.com/)
+
 Official online shopping website based on VirtoCommerce Platform written on ASP.NET Core. The website is a client application for VC Platform and uses only public APIs while communicating.
 
 Technologies and frameworks used:
