@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using VirtoCommerce.LiquidThemeEngine.Objects;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
-    public class ArrayFilters
+    public partial class ArrayFilters
     {
         public static object Tree(object input, string propName, string titlePropName, string delimiter, string sortByPropName)
         {

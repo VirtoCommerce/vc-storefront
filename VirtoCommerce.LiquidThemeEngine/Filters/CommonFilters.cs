@@ -18,7 +18,7 @@ using System.Text.Encodings.Web;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
-    public class CommonFilters
+    public partial class CommonFilters
     {
         private static readonly string[] _poweredLinks = {
                                              "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">.NET ecommerce platform</a> by Virto",

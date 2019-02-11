@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
-    public class CommerceFilters
+    public partial class CommerceFilters
     {
         #region Static Fields
         private static readonly Lazy<CultureInfo[]> _cultures = new Lazy<CultureInfo[]>(
@@ -90,7 +87,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return String.Format(EffectiveCulture(currencyCode), "{0:c}", amount);
         }
 
-   
+
         #endregion
 
         #region Methods

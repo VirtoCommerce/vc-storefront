@@ -15,7 +15,7 @@ using VirtoCommerce.Storefront.Model.Common;
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
     //TODO: Left only unique filters don't presents in Scriban
-    public static class StandardFilters
+    public static partial class StandardFilters
     {
         /// <summary>
         /// Return the size of an array or of an string

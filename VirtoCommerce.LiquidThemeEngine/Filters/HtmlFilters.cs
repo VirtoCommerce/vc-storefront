@@ -3,7 +3,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
     /// <summary>
     /// https://docs.shopify.com/themes/liquid-documentation/filters/html-filters
     /// </summary>
-    public class HtmlFilters
+    public partial class HtmlFilters
     {
         /// <summary>
         /// Generates a script tag.

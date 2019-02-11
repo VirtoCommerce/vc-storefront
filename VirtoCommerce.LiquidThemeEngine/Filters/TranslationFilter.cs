@@ -1,9 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DotLiquid;
 using Scriban;
 using VirtoCommerce.Storefront.Model.Common;
 
@@ -12,7 +8,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
     /// <summary>
     /// Filter used for localization 
     /// </summary>
-    public class TranslationFilter
+    public partial class TranslationFilter
     {
         private static string[] _countSuffixes = new[] { ".zero", ".one", ".two" };
 

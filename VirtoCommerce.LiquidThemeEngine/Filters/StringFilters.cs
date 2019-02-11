@@ -1,7 +1,5 @@
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
-using Newtonsoft.Json.Serialization;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
@@ -10,7 +8,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
     /// String filters are used to manipulate outputs and variables of the string type.
     /// https://docs.shopify.com/themes/liquid-documentation/filters/string-filters
     /// </summary>
-    public class StringFilters
+    public partial class StringFilters
     {
 
         /// <summary>

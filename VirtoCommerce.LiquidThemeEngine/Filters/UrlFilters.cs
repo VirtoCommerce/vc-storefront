@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Web;
-using DotLiquid;
 using Scriban;
 using VirtoCommerce.LiquidThemeEngine.Extensions;
 using VirtoCommerce.Storefront.Model;
@@ -10,7 +9,6 @@ using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Order;
 using VirtoCommerce.Storefront.Model.Stores;
-using shopifyModel = VirtoCommerce.LiquidThemeEngine.Objects;
 using storefrontModel = VirtoCommerce.Storefront.Model;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
@@ -18,7 +16,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
     /// <summary>
     /// https://docs.shopify.com/themes/liquid-documentation/filters/url-filters
     /// </summary>
-    public class UrlFilters
+    public partial class UrlFilters
     {
         /// <summary>
         /// Generates a link to the customer login page.

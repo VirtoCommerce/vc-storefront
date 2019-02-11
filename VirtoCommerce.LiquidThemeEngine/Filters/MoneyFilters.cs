@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using DotLiquid;
 using Scriban;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
@@ -10,7 +9,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
     /// <summary>
     /// https://docs.shopify.com/themes/liquid-documentation/filters/money-filters
     /// </summary>
-    public class MoneyFilters
+    public partial class MoneyFilters
     {
         /// <summary>
         /// Formats the price based on the shop's HTML without currency setting.
