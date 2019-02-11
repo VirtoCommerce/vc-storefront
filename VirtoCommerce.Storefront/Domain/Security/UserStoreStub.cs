@@ -416,44 +416,6 @@ namespace VirtoCommerce.Storefront.Domain.Security
         }
         #endregion
 
-        #region IUserPhoneNumberStore<User> members
-        public Task SetPhoneNumberAsync(User user, string phoneNumber, CancellationToken cancellationToken)
-        {
-            user.PhoneNumber = phoneNumber;
-            return Task.CompletedTask;
-        }
-
-        public Task<string> GetPhoneNumberAsync(User user, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(user.PhoneNumber);
-        }
-
-        public Task<bool> GetPhoneNumberConfirmedAsync(User user, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(user.PhoneNumberConfirmed);
-        }
-
-        public Task SetPhoneNumberConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
-        {
-            user.PhoneNumberConfirmed = confirmed;
-            return Task.CompletedTask;
-        }
-
-        #endregion
-
-        #region IUserTwoFactorStore<User> members
-        public Task SetTwoFactorEnabledAsync(User user, bool enabled, CancellationToken cancellationToken)
-        {
-            user.TwoFactorEnabled = enabled;
-            return Task.CompletedTask;
-        }
-
-        public Task<bool> GetTwoFactorEnabledAsync(User user, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(user.TwoFactorEnabled);
-        }
-        #endregion
-
         #region IRoleStore<Role> members
 
         public async Task<IdentityResult> CreateAsync(Role role, CancellationToken cancellationToken)

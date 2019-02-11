@@ -26,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\scriban\src\Scriban\Scriban.csproj" />
     <ProjectReference Include="..\VirtoCommerce.Storefront.Model\VirtoCommerce.Storefront.Model.csproj" />
     <ProjectReference Include="..\VirtoCommerce.Storefront\VirtoCommerce.Storefront.csproj" />
   </ItemGroup>
