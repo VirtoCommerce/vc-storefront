@@ -1,7 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <!--Need to include TargetLatestRuntimePatch, otherwise get following error about ASP NET Core restored version-->
+    <!--https://stackoverflow.com/questions/51642172/the-project-was-restored-using-microsoft-netcore-app-version-2-1-0-but-with-cur-->
+    <!--https://docs.microsoft.com/en-us/dotnet/core/deploying/runtime-patch-selection-->
+    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
     <Description>The storefront implementation of the Virto Commerce platform.</Description>
     <Copyright>Copyright © 2011-2019 Virto Commerce - an enterprise Microsoft ecommerce platform ©. All rights reserved</Copyright>
     <PackageLicenseUrl>https://virtocommerce.com/open-source-license</PackageLicenseUrl>
@@ -18,7 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="8.0.100" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.6" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.1" />
     <PackageReference Include="Nito.AsyncEx" Version="5.0.0-pre-05" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
   </ItemGroup>
