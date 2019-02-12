@@ -16,6 +16,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return string.Format("<script type=\"text/javascript\" src=\"{0}\"></script>", input);
         }
 
+        public static string ScriptTagAsync(string input)
+        {
+            return string.Format("<script async type=\"text/javascript\" src=\"{0}\"></script>", input);
+        }
+
         /// <summary>
         /// Generates a stylesheet tag.
         /// {{ 'shop.css' | asset_url | stylesheet_tag }}
