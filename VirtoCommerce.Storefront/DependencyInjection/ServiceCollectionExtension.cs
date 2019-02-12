@@ -45,7 +45,7 @@ namespace VirtoCommerce.Storefront.DependencyInjection
 
     public static class ServiceCollectionExtension
     {
-        public static void AddPlatformEndpoint(this IServiceCollection services, Action<PlatformEndpointOptions> setupAction = null)
+        public static void AddApiClient(this IServiceCollection services, Action<PlatformEndpointOptions> setupAction = null)
         {
             ServicePointManager.UseNagleAlgorithm = false;
             services.AddSingleton<VirtoCommerceApiRequestHandler>();

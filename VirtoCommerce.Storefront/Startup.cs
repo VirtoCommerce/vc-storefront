@@ -118,7 +118,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IStorefrontMemoryCache, StorefrontMemoryCache>();
 
             //Register platform API clients
-            services.AddPlatformEndpoint(options =>
+            services.AddApiClient(options =>
             {
                 Configuration.GetSection("VirtoCommerce:Endpoint").Bind(options);
             });
