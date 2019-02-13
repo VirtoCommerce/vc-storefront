@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -140,7 +139,7 @@ namespace VirtoCommerce.Storefront
                     options.Container = contentConnectionString.RootPath;
                     options.ConnectionString = contentConnectionString.ConnectionString;
                     options.PollForChanges = azureBlobOptions.PollForChanges;
-                    options.ChangesPoolingInterval = azureBlobOptions.ChangesPoolingInterval;
+                    options.ChangesPollingInterval = azureBlobOptions.ChangesPollingInterval;
                 });
             }
             else
