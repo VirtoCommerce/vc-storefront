@@ -16,12 +16,13 @@ namespace VirtoCommerce.Storefront.Domain
             HttpContext = httpContext;
 
             var htmlEncoder = httpContext.RequestServices.GetRequiredService<HtmlEncoder>();
-            var qs = WorkContext.QueryString = HttpContext.Request.Query.ToNameValueCollection(htmlEncoder);
+            var qs = HttpContext.Request.Query.ToNameValueCollection(htmlEncoder);
 
             WorkContext = new WorkContext
             {
                 RequestUrl = HttpContext.Request.GetUri(),
-                PageNumber = qs["page"].ToNullableInt()
+                QueryString = qs,
+                PageNumber = qs["page"].ToNullableInt(),
             };
 
             var pageSize = qs["count"].ToNullableInt() ?? qs["page_size"].ToNullableInt();
