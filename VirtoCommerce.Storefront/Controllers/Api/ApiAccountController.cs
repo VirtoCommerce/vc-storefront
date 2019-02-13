@@ -51,6 +51,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // GET: storefrontapi/account
         [HttpGet]
         [AllowAnonymous]
+        [ProducesResponseType(typeof(User), 200)]
         public ActionResult GetCurrentUser()
         {
             return Json(WorkContext.CurrentUser);
@@ -63,6 +64,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         /// <returns></returns>
         [HttpGet("{userId}")]
         [Authorize(SecurityConstants.Permissions.CanViewUsers)]
+        [ProducesResponseType(typeof(User), 200)]
         public async Task<ActionResult> GetUserById(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -81,6 +83,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpDelete("{userId}")]
         [Authorize(SecurityConstants.Permissions.CanDeleteUsers)]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(typeof(IdentityResult), 200)]
         public async Task<ActionResult> DeleteUser([FromRoute] string userId)
         {
             //TODO: Authorization check
@@ -106,6 +109,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/account/organization
         [HttpPost("organization")]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(typeof(IdentityResult), 200)]
         public async Task<ActionResult> RegisterOrganization([FromBody] OrganizationRegistration orgRegistration)
         {
             var result = IdentityResult.Success;
@@ -145,6 +149,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost("user")]
         [Authorize(SecurityConstants.Permissions.CanCreateUsers)]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(typeof(IdentityResult), 200)]
         public async Task<ActionResult> RegisterUser([FromBody] OrganizationUserRegistration registration)
         {
             var result = IdentityResult.Success;
@@ -184,6 +189,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/account/invitation
         [HttpPost("invitation")]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(typeof(IdentityResult), 200)]
         public async Task<ActionResult> CreateUserInvitation([FromBody] UsersInvitation invitation)
         {
             var result = IdentityResult.Success;
@@ -254,6 +260,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPut("organization")]
         [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(200)]
         public async Task<ActionResult> UpdateOrganization([FromBody] Organization organization)
         {
             //Allow to register new users only within own organization
@@ -269,6 +276,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // GET: storefrontapi/account/organization/current
         [HttpGet("organization/current")]
+        [ProducesResponseType(typeof(Organization), 200)]
         public ActionResult GetCustomerOrganization()
         {
             var result = WorkContext.CurrentUser?.Contact?.Organization;
@@ -279,6 +287,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost("organization/users/search")]
         [Authorize(SecurityConstants.Permissions.CanViewUsers)]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(typeof(OrganizationUsersSearchResult), 200)]
         public async Task<ActionResult> SearchOrganizationUsersAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
         {
             searchCriteria.OrganizationId = searchCriteria.OrganizationId ?? WorkContext.CurrentUser?.Contact?.Organization?.Id;
@@ -301,7 +310,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         users.Add(user);
                     }
                 }
-                return Json(new { TotalCount = contactsSearchResult.TotalItemCount, Results = users });
+                return Json(new OrganizationUsersSearchResult { TotalCount = contactsSearchResult.TotalItemCount, Results = users });
             }
             return Ok();
         }
@@ -310,6 +319,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost("{userId}/lock")]
         [Authorize(SecurityConstants.Permissions.CanEditUsers)]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(typeof(IdentityResult), 200)]
         public async Task<ActionResult> LockUser([FromRoute]string userId)
         {
             //TODO: Add authorization checks
@@ -333,6 +343,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost("{userId}/unlock")]
         [Authorize(SecurityConstants.Permissions.CanEditUsers)]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(typeof(IdentityResult), 200)]
         public async Task<ActionResult> UnlockUser([FromRoute] string userId)
         {
             //TODO: Add authorization checks
@@ -355,6 +366,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/account
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(200)]
         public async Task<ActionResult> UpdateAccount([FromBody] UserUpdateInfo userUpdateInfo)
         {
             //TODO:Check authorization
@@ -402,6 +414,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/account/password
         [HttpPost("password")]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(typeof(PasswordChangeResult), 200)]
         public async Task<ActionResult> ChangePassword([FromBody] ChangePassword formModel)
         {
             var changePassword = new ChangePasswordInfo
@@ -412,12 +425,13 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             var result = await _userManager.ChangePasswordAsync(WorkContext.CurrentUser, formModel.OldPassword, formModel.NewPassword);
 
-            return Json(new { result.Succeeded, Errors = result.Errors.Select(x => x.Description) });
+            return Json(new PasswordChangeResult { Succeeded = result.Succeeded, Errors = result.Errors.Select(x => x.Description) });
         }
 
         // POST: storefrontapi/account/addresses
         [HttpPost("addresses")]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(200)]
         public async Task<ActionResult> UpdateAddresses([FromBody] IList<Address> addresses)
         {
             await _memberService.UpdateContactAddressesAsync(WorkContext.CurrentUser.ContactId, addresses);
