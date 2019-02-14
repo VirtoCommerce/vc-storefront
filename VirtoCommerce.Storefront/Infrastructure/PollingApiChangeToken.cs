@@ -1,6 +1,6 @@
-using Microsoft.Extensions.Primitives;
 using System;
 using System.Threading;
+using Microsoft.Extensions.Primitives;
 using VirtoCommerce.Storefront.AutoRestClients.CacheModuleApi;
 using VirtoCommerce.Storefront.Model.Common;
 
@@ -15,9 +15,9 @@ namespace VirtoCommerce.Storefront.Infrastructure
         private readonly TimeSpan _pollingInterval;
         private static object _lock = new object();
 
-        public PollingApiChangeToken(ICacheModule cacheApi, TimeSpan poolingInterval)
+        public PollingApiChangeToken(ICacheModule cacheApi, TimeSpan pollingInterval)
         {
-            _pollingInterval = poolingInterval;
+            _pollingInterval = pollingInterval;
             _cacheApi = cacheApi;
             _previousChangeTimeUtc = _previousChangeTimeUtcStatic;
         }

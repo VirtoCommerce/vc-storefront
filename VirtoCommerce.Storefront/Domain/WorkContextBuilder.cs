@@ -14,18 +14,23 @@ namespace VirtoCommerce.Storefront.Domain
         public WorkContextBuilder(HttpContext httpContext, StorefrontOptions options)
         {
             HttpContext = httpContext;
-            WorkContext = new WorkContext();
 
-            WorkContext.RequestUrl = HttpContext.Request.GetUri();
             var htmlEncoder = httpContext.RequestServices.GetRequiredService<HtmlEncoder>();
-            var qs = WorkContext.QueryString = HttpContext.Request.Query.ToNameValueCollection(htmlEncoder);
-            WorkContext.PageNumber = qs["page"].ToNullableInt();
+            var qs = HttpContext.Request.Query.ToNameValueCollection(htmlEncoder);
 
-            var qsPageSize = qs["count"].ToNullableInt() ?? qs["page_size"].ToNullableInt();
-            if (qsPageSize.HasValue && qsPageSize.Value > options.PageSizeMaxValue)
+            WorkContext = new WorkContext
             {
-                WorkContext.PageSize = options.PageSizeMaxValue;
+                RequestUrl = HttpContext.Request.GetUri(),
+                QueryString = qs,
+                PageNumber = qs["page"].ToNullableInt(),
+            };
+
+            var pageSize = qs["count"].ToNullableInt() ?? qs["page_size"].ToNullableInt();
+            if (pageSize != null && pageSize.Value > options.PageSizeMaxValue)
+            {
+                pageSize = options.PageSizeMaxValue;
             }
+            WorkContext.PageSize = pageSize;
         }
 
         public HttpContext HttpContext { get; }
