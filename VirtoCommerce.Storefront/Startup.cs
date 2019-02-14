@@ -94,6 +94,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IPricingService, PricingService>();
             services.AddSingleton<ITaxEvaluator, TaxEvaluator>();
             services.AddSingleton<IPromotionEvaluator, PromotionEvaluator>();
+            services.AddSingleton<IDynamicContentEvaluator, DynamicContentEvaluator>();
             services.AddSingleton<IMarketingService, MarketingService>();
             services.AddSingleton<IStaticContentService, StaticContentService>();
             services.AddSingleton<IMenuLinkListService, MenuLinkListServiceImpl>();
