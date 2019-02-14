@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -20,7 +20,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/blog/{blogName}/search
         [HttpPost("{blogName}/search")]
         [ValidateAntiForgeryToken]
-        public ActionResult Search([FromQuery] string blogName, [FromBody] BlogSearchCriteria criteria)
+        public ActionResult<List<BlogArticle>> Search([FromQuery] string blogName, [FromBody] BlogSearchCriteria criteria)
         {
             var articles = new List<BlogArticle>();
 
@@ -44,7 +44,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 articles = query.OrderByDescending(a => a.CreatedDate).Skip((criteria.PageNumber - 1) * criteria.PageSize).Take(criteria.PageSize).ToList();
             }
 
-            return Json(articles);
+            return articles;
         }
     }
 }

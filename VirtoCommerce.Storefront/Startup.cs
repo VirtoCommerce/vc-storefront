@@ -263,6 +263,7 @@ namespace VirtoCommerce.Storefront
 
                 options.Filters.AddService(typeof(AngularAntiforgeryCookieResultFilter));
 
+                // To include only Api controllers to swagger document
                 options.Conventions.Add(new ApiExplorerApiControllersConvention());
             }).AddJsonOptions(options =>
             {
@@ -309,6 +310,8 @@ namespace VirtoCommerce.Storefront
                 c.DescribeAllEnumsAsStrings();
                 c.IgnoreObsoleteProperties();
                 c.IgnoreObsoleteActions();
+                // To include 401 response type to actions that requires Authorization
+                c.OperationFilter<AuthResponsesOperationFilter>();
                 // To avoid errors with repeating type names
                 c.CustomSchemaIds(x => x.FullName);
             });
