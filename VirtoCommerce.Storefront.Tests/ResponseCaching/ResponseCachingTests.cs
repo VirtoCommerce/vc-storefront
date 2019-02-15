@@ -11,9 +11,11 @@ using Moq;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Model.Stores;
 using Xunit;
+using Language = VirtoCommerce.Storefront.Model.Language;
 
 namespace VirtoCommerce.Storefront.Tests.OutputCache
 {
+    [Trait("Category", "CI")]
     public class ResponseCachingTests : IClassFixture<WebApplicationFactory<Startup>>, IDisposable
     {
         private readonly WebApplicationFactory<Startup> _factory;
@@ -30,7 +32,7 @@ namespace VirtoCommerce.Storefront.Tests.OutputCache
                         mockEngine.Setup(x => x.ResolveTemplatePath(It.IsIn(new[] { "index" }))).Returns("path");
                         services.AddSingleton(mockEngine.Object);
                         var mockStoreService = new Mock<IStoreService>();
-                        mockStoreService.Setup(x => x.GetAllStoresAsync()).ReturnsAsync(new Store[] { new Store { Id = "Electronics", DefaultLanguage = new Model.Language("en-US") } });
+                        mockStoreService.Setup(x => x.GetAllStoresAsync()).ReturnsAsync(new Store[] { new Store { Id = "Electronics", DefaultLanguage = new Language("en-US") } });
                         services.AddSingleton(mockStoreService.Object);
 
                     })

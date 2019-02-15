@@ -82,7 +82,7 @@ namespace VirtoCommerce.Storefront.Domain
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 //Observe all subscriptions for current user and invalidate them in cache if any changed (one limitation - this toke doesn't detect subscriptions deletions)
-                cacheEntry.AddExpirationToken(new PoolingApiSubscriptionsChangeToken(_subscriptionApi, _options.ChangesPoolingInterval));
+                cacheEntry.AddExpirationToken(new PollingApiSubscriptionsChangeToken(_subscriptionApi, _options.ChangesPollingInterval));
                 cacheEntry.AddExpirationToken(SubscriptionCacheRegion.CreateCustomerSubscriptionChangeToken(criteria.CustomerId));
                 var result = await _subscriptionApi.SearchSubscriptionsAsync(criteria.ToSearchCriteriaDto());
                 return new StaticPagedList<Subscription>(result.Subscriptions.Select(x => x.ToSubscription(workContext.AllCurrencies, workContext.CurrentLanguage)),

@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Primitives;
 using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
 using VirtoCommerce.Storefront.Model.Common;
@@ -10,22 +8,22 @@ using VirtoCommerce.Storefront.Model.Subscriptions;
 
 namespace VirtoCommerce.Storefront.Domain.Subscriptions
 {
-    public class PoolingApiSubscriptionsChangeToken : IChangeToken
+    public class PollingApiSubscriptionsChangeToken : IChangeToken
     {
         private readonly ISubscriptionModule _subscriptionApi;
         private static DateTime _previousChangeTimeUtcStatic;
         private static DateTime _lastCheckedTimeUtcStatic;
         private DateTime _previousChangeTimeUtc;
-        private readonly TimeSpan _poolingInterval;
+        private readonly TimeSpan _pollingInterval;
         private static readonly object _lock = new object();
 
-        static PoolingApiSubscriptionsChangeToken()
+        static PollingApiSubscriptionsChangeToken()
         {
             _previousChangeTimeUtcStatic = _lastCheckedTimeUtcStatic = DateTime.UtcNow;
         }
-        public PoolingApiSubscriptionsChangeToken(ISubscriptionModule subscriptionApi, TimeSpan poolingInterval)
+        public PollingApiSubscriptionsChangeToken(ISubscriptionModule subscriptionApi, TimeSpan pollingInterval)
         {
-            _poolingInterval = poolingInterval;
+            _pollingInterval = pollingInterval;
             _subscriptionApi = subscriptionApi;
             _previousChangeTimeUtc = _previousChangeTimeUtcStatic;
         }
@@ -40,7 +38,7 @@ namespace VirtoCommerce.Storefront.Domain.Subscriptions
             get
             {
                 var currentTime = DateTime.UtcNow;
-                if (currentTime - _lastCheckedTimeUtcStatic < _poolingInterval)
+                if (currentTime - _lastCheckedTimeUtcStatic < _pollingInterval)
                 {
                     return false;
                 }

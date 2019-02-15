@@ -1,23 +1,23 @@
-using Microsoft.Extensions.Primitives;
 using System;
 using System.Threading;
+using Microsoft.Extensions.Primitives;
 using VirtoCommerce.Storefront.AutoRestClients.CacheModuleApi;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Infrastructure
 {
-    public class PoolingApiChangeToken : IChangeToken
+    public class PollingApiChangeToken : IChangeToken
     {
         private readonly ICacheModule _cacheApi;
         private static DateTime _previousChangeTimeUtcStatic;
         private static DateTime _lastCheckedTimeUtcStatic;
         private DateTime _previousChangeTimeUtc;
-        private readonly TimeSpan _poolingInterval;
+        private readonly TimeSpan _pollingInterval;
         private static object _lock = new object();
 
-        public PoolingApiChangeToken(ICacheModule cacheApi, TimeSpan poolingInterval)
+        public PollingApiChangeToken(ICacheModule cacheApi, TimeSpan pollingInterval)
         {
-            _poolingInterval = poolingInterval;
+            _pollingInterval = pollingInterval;
             _cacheApi = cacheApi;
             _previousChangeTimeUtc = _previousChangeTimeUtcStatic;
         }
@@ -31,15 +31,15 @@ namespace VirtoCommerce.Storefront.Infrastructure
         /// Always false.
         /// </summary>
         public bool ActiveChangeCallbacks => false;
-       
+
         public bool HasChanged
         {
             get
             {
-                var hasChanged = _previousChangeTimeUtc < _previousChangeTimeUtcStatic;            
+                var hasChanged = _previousChangeTimeUtc < _previousChangeTimeUtcStatic;
 
                 var currentTime = DateTime.UtcNow;
-                if (currentTime - _lastCheckedTimeUtcStatic < _poolingInterval)
+                if (currentTime - _lastCheckedTimeUtcStatic < _pollingInterval)
                 {
                     return hasChanged;
                 }
@@ -57,13 +57,14 @@ namespace VirtoCommerce.Storefront.Infrastructure
                             hasChanged = true;
                         }
                         _lastCheckedTimeUtcStatic = currentTime;
-                    }                 
+                    }
                 }
                 finally
                 {
-                    if (lockTaken) Monitor.Exit(_lock);
+                    if (lockTaken)
+                        Monitor.Exit(_lock);
                 }
-             
+
                 return hasChanged;
             }
         }

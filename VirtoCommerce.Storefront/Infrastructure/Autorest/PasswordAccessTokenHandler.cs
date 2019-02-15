@@ -118,9 +118,8 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
             {
                 try
                 {
-                    //TODO: Replace to IHttpClientFactory in the new IdentityModel version                    
-                    var client = new TokenClient(_options.Url + "connect/token");
-                    var response = await client.RequestResourceOwnerPasswordAsync(_options.UserName, _options.Password);
+                    var client = _clientFactory.CreateClient();
+                    var response = await client.RequestPasswordTokenAsync(new PasswordTokenRequest { Address = _options.Url + "connect/token", UserName = _options.UserName, Password = _options.Password });
 
                     if (!response.IsError)
                     {

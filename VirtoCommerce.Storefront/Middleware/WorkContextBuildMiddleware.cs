@@ -48,7 +48,7 @@ namespace VirtoCommerce.Storefront.Middleware
                 return;
             }
 
-            var builder = new WorkContextBuilder(context);
+            var builder = new WorkContextBuilder(context, _options);
             var workContext = builder.WorkContext;
 
             workContext.ApplicationSettings = _applicationSettings;
