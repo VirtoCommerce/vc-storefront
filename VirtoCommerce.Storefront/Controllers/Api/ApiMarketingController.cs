@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -19,11 +19,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // GET: storefrontapi/marketing/dynamiccontent/{placeName}
         [HttpGet("dynamiccontent/{placeName}")]
-        public async Task<ActionResult> GetDynamicContent(string placeName)
+        public async Task<ActionResult<string>> GetDynamicContent(string placeName)
         {
             var htmlContent = await _marketingService.GetDynamicContentHtmlAsync(WorkContext.CurrentStore.Id, placeName);
 
-            return Json(htmlContent);
+            return htmlContent;
         }
     }
 }

@@ -280,7 +280,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost("organization/users/search")]
         [Authorize(SecurityConstants.Permissions.CanViewUsers)]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<OrganizationUsersSearchResult>> SearchOrganizationUsersAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
+        public async Task<ActionResult<GenericSearchResult<User>>> SearchOrganizationUsersAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
         {
             searchCriteria.OrganizationId = searchCriteria.OrganizationId ?? WorkContext.CurrentUser?.Contact?.Organization?.Id;
             //Allow to register new users only within own organization
@@ -302,7 +302,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         users.Add(user);
                     }
                 }
-                return new OrganizationUsersSearchResult { TotalCount = contactsSearchResult.TotalItemCount, Results = users };
+                return new GenericSearchResult<User>
+                {
+                    TotalCount = contactsSearchResult.TotalItemCount,
+                    Results = users
+                };
             }
             return Ok();
         }

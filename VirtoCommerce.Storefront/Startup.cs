@@ -312,6 +312,8 @@ namespace VirtoCommerce.Storefront
                 c.IgnoreObsoleteActions();
                 // To include 401 response type to actions that requires Authorization
                 c.OperationFilter<AuthResponsesOperationFilter>();
+                c.OperationFilter<OptionalParametersFilter>();
+                c.OperationFilter<FileResponseTypeFilter>();
                 // To avoid errors with repeating type names
                 c.CustomSchemaIds(x => x.FullName);
             });
