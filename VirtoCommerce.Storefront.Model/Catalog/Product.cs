@@ -19,7 +19,6 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             Assets = new List<Asset>();
             Variations = new List<Product>();
             Images = new List<Image>();
-            Descriptions = new List<EditorialReview>();
             Discounts = new List<Discount>();
             TaxDetails = new List<TaxDetail>();
         }
@@ -228,7 +227,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// <summary>
         /// Product editorial reviews
         /// </summary>
-        public IList<EditorialReview> Descriptions { get; set; }
+        public IMutablePagedList<EditorialReview> Descriptions { get; set; }
 
         /// <summary>
         /// Current product price

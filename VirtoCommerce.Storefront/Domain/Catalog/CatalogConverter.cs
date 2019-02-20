@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Markdig;
+using PagedList.Core;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
@@ -407,7 +408,7 @@ namespace VirtoCommerce.Storefront.Domain
                         tmpDescriptionList.Add(description);
                     }
                 }
-                result.Descriptions = tmpDescriptionList;
+                result.Descriptions = new MutablePagedList<EditorialReview>(tmpDescriptionList);
                 result.Description = (result.Descriptions.FirstOrDefault(x => x.ReviewType.EqualsInvariant("FullReview")) ?? result.Descriptions.FirstOrDefault())?.Value;
             }
 
