@@ -74,7 +74,9 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (!storeDto.Settings.IsNullOrEmpty())
             {
-                result.Settings = storeDto.Settings.Where(x => !x.ValueType.EqualsInvariant("SecureString")).Select(x => x.JsonConvert<platformDto.Setting>().ToSettingEntry()).ToList();
+                result.Settings = new MutablePagedList<SettingEntry>(storeDto.Settings.Where(x => !x.ValueType.EqualsInvariant("SecureString"))
+                                                                                      .Select(x => x.JsonConvert<platformDto.Setting>()
+                                                                                      .ToSettingEntry()));
             }
 
             if (!storeDto.TaxProviders.IsNullOrEmpty())

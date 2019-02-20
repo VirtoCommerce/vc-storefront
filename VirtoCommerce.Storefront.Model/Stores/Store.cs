@@ -14,7 +14,6 @@ namespace VirtoCommerce.Storefront.Model.Stores
             Languages = new List<Language>();
             CurrenciesCodes = new List<string>();
             SeoInfos = new List<SeoInfo>();
-            Settings = new List<SettingEntry>();
             AvailFulfillmentCenterIds = new List<string>();
             TrustedGroups = new List<string>();
         }
@@ -135,7 +134,7 @@ namespace VirtoCommerce.Storefront.Model.Stores
 
         #region IHasSettings Members
 
-        public IList<SettingEntry> Settings { get; set; }
+        public IMutablePagedList<SettingEntry> Settings { get; set; }
 
         #endregion
 
