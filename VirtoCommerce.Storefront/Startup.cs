@@ -314,8 +314,17 @@ namespace VirtoCommerce.Storefront
                 c.OperationFilter<AuthResponsesOperationFilter>();
                 c.OperationFilter<OptionalParametersFilter>();
                 c.OperationFilter<FileResponseTypeFilter>();
+                // Workaround of problem with int default value for enum parameter: https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/868
+                c.ParameterFilter<EnumDefaultValueParameterFilter>();
+
                 // To avoid errors with repeating type names
-                c.CustomSchemaIds(x => x.FullName);
+                // Also need to replace some symbols for RFC3986-compliance: https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/752
+                c.CustomSchemaIds((type) => type.ToString()
+                    .Replace("[", "_")
+                    .Replace("]", "_")
+                    .Replace(",", "-")
+                    .Replace("`", "_")
+                );
             });
         }
 
