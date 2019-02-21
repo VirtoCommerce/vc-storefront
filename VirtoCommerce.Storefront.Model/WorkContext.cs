@@ -164,10 +164,9 @@ namespace VirtoCommerce.Storefront.Model
         public IMutablePagedList<Product> Products { get; set; }
 
         /// <summary>
-        /// Represent bucket, aggregated data based on a search query resulted by current search criteria CurrentCatalogSearchCriteria (example  color 33, gr
+        /// Represent the current product search result
         /// </summary>
-        public IMutablePagedList<Aggregation> Aggregations { get; set; }
-
+        public CatalogSearchResult ProductSearchResult { get; set; } = new CatalogSearchResult();
         /// <summary>
         /// Current search product search criterias
         /// </summary>
