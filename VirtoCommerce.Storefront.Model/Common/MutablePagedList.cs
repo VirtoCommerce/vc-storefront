@@ -9,16 +9,21 @@ namespace VirtoCommerce.Storefront.Model.Common
 {
     public sealed class MutablePagedList<T> : PagedListMetaData, IMutablePagedList<T>, IList, IDictionary
     {
-        private static MutablePagedList<T> _empty = new MutablePagedList<T>(Enumerable.Empty<T>());
+        private static readonly MutablePagedList<T> _empty = new MutablePagedList<T>(Enumerable.Empty<T>());
         private readonly Func<int, int, IEnumerable<SortInfo>, NameValueCollection, IPagedList<T>> _getter;
         private IPagedList<T> _pagedList;
         private readonly object _lockObject = new object();
 
-        public MutablePagedList(IEnumerable<T> superSet)
-            : this((newPageNumber, newPageSize, sortInfos) => new PagedList<T>(superSet.AsQueryable(), newPageNumber, newPageSize), 1, Math.Max(superSet.Count(), 1))
+        public MutablePagedList(IEnumerable<T> superSet, int pageNumber, int pageSize, int totalCount)
+          : this((newPageNumber, newPageSize, sortInfos) => new PagedList<T>(superSet.AsQueryable(), newPageNumber, newPageSize), 1, Math.Max(totalCount, 1))
         {
-            TotalItemCount = superSet.Count();
+            TotalItemCount = totalCount;
             PageCount = 1;
+        }
+
+        public MutablePagedList(IEnumerable<T> superSet)
+            : this(superSet, 1, 1, superSet.Count())
+        {
         }
 
         public MutablePagedList(Func<int, int, IEnumerable<SortInfo>, IPagedList<T>> getter, int pageNumber, int pageSize)
