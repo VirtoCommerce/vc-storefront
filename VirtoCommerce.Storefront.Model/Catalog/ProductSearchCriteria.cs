@@ -60,6 +60,23 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
             return result;
         }
+        public override IEnumerable<KeyValuePair<string, string>> GetKeyValues()
+        {
+            if (!string.IsNullOrEmpty(Keyword))
+            {
+                yield return new KeyValuePair<string, string>("keyword", Keyword);
+            }
+            if (!string.IsNullOrEmpty(SortBy))
+            {
+                yield return new KeyValuePair<string, string>("sort_by", SortBy);
+            }
+            if (!Terms.IsNullOrEmpty())
+            {
+                var termsString = string.Join(";", Terms.ToStrings());
+                yield return new KeyValuePair<string, string>("terms", termsString);
+            }
+
+        }
 
         private void Parse(NameValueCollection queryString)
         {
@@ -67,7 +84,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
             SortBy = queryString.Get("sort_by");
 
-            ResponseGroup = EnumUtility.SafeParse(queryString.Get("resp_group"), ItemResponseGroup.ItemSmall | ItemResponseGroup.ItemWithPrices | ItemResponseGroup.Inventory | ItemResponseGroup.ItemWithDiscounts | ItemResponseGroup.ItemWithVendor | ItemResponseGroup.ItemProperties);
+            ResponseGroup = EnumUtility.SafeParse(queryString.Get("resp_group"), ItemResponseGroup.Default);
             // terms=name1:value1,value2,value3;name2:value1,value2,value3
             Terms = (queryString.GetValues("terms") ?? new string[0])
                 .SelectMany(s => s.Split(';'))
