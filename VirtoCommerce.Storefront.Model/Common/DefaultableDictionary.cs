@@ -97,14 +97,12 @@ namespace VirtoCommerce.Storefront.Model.Common
         {
             get
             {
-                try
+                TValue result;
+                if (!_dictionary.TryGetValue(key, out result))
                 {
-                    return _dictionary[key];
+                    result = _defaultValue;
                 }
-                catch (KeyNotFoundException)
-                {
-                    return _defaultValue;
-                }
+                return result;
             }
 
             set { _dictionary[key] = value; }

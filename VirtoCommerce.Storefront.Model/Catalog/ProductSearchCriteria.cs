@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -86,12 +87,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
             ResponseGroup = EnumUtility.SafeParse(queryString.Get("resp_group"), ItemResponseGroup.Default);
             // terms=name1:value1,value2,value3;name2:value1,value2,value3
-            Terms = (queryString.GetValues("terms") ?? new string[0])
-                .SelectMany(s => s.Split(';'))
-                .Select(s => s.Split(':'))
-                .Where(a => a.Length == 2)
-                .SelectMany(a => a[1].Split(',').Select(v => new Term { Name = a[0], Value = v }))
-                .ToArray();
+            Terms = (queryString.GetValues("terms") ?? Array.Empty<string>()).SelectMany(x => x.ToTerms()).ToList();
         }
 
         public override string ToString()
