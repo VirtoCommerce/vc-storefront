@@ -210,7 +210,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         public string GetAssetHash(string filePath)
         {
             var cacheKey = CacheKey.With(GetType(), "GetAssetHash", filePath);
-            return _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
+            return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
            {
                cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(filePath) }));
 
@@ -318,7 +318,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         public IDictionary GetSettings(string defaultValue = null)
         {
             var cacheKey = CacheKey.With(GetType(), "GetSettings", CurrentThemeSettingPath, defaultValue);
-            return _memoryCache.GetOrCreate(cacheKey, (cacheItem) =>
+            return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheItem) =>
            {
                cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeSettingPath) }));
                var retVal = new DefaultableDictionary(defaultValue);
@@ -364,7 +364,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         public JObject ReadLocalization()
         {
             var cacheKey = CacheKey.With(GetType(), "ReadLocalization", CurrentThemeLocalePath, WorkContext.CurrentLanguage.CultureName);
-            return _memoryCache.GetOrCreate(cacheKey, (cacheItem) =>
+            return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheItem) =>
             {
                 cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeLocalePath + "/*") }));
                 return InnerReadLocalization(_themeBlobProvider, CurrentThemeLocalePath, WorkContext.CurrentLanguage) ?? new JObject();
@@ -455,7 +455,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             }
 
             var cacheKey = CacheKey.With(GetType(), "ReadTemplateByName", templatePath);
-            return _memoryCache.GetOrCreate(cacheKey, (cacheItem) =>
+            return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheItem) =>
             {
                 cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(templatePath) }));
                 using (var stream = _themeBlobProvider.OpenRead(templatePath))

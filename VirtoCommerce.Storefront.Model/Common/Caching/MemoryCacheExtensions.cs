@@ -2,9 +2,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
-using VirtoCommerce.Storefront.Model.Common;
 
-namespace VirtoCommerce.Storefront.Extensions
+namespace VirtoCommerce.Storefront.Model.Common.Caching
 {
     public static class MemoryCacheExtensions
     {
