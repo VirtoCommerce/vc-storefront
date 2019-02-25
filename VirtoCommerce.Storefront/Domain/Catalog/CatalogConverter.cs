@@ -273,7 +273,10 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var result = new Image
             {
-                Url = imageDto.Url.RemoveLeadingUriScheme()
+                Url = imageDto.Url.RemoveLeadingUriScheme(),
+                SortOrder = imageDto.SortOrder,
+                Group = imageDto.Group,
+                LanguageCode = imageDto.LanguageCode
             };
 
             return result;
