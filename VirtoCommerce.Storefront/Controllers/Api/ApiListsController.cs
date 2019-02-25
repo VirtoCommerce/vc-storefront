@@ -28,19 +28,19 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // GET: storefrontapi/lists/{listName}/{type}
         [HttpGet("{listName}/{type}")]
-        public async Task<ActionResult> GetListByName([FromRoute]string listName, [FromRoute]string type)
+        public async Task<ActionResult<ShoppingCart>> GetListByName([FromRoute]string listName, [FromRoute]string type)
         {
             using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, listName, type)).LockAsync())
             {
                 var cartBuilder = await LoadOrCreateCartAsync(listName, type);
-                return Json(cartBuilder.Cart);
+                return cartBuilder.Cart;
             }
         }
 
         // POST: storefrontapi/lists/getlistswithproduct
         [HttpPost("getlistswithproduct")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> GetListsWithProduct([FromBody] GetCartsWithProductRequest request)
+        public async Task<ActionResult<List<string>>> GetListsWithProduct([FromBody] GetCartsWithProductRequest request)
         {
             var result = new List<string>();
             using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, "*", request.Type)).LockAsync())
@@ -57,13 +57,13 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var carts = await _cartService.SearchCartsAsync(criteria);
                 result.AddRange(carts.Where(c => c.Items.Any(i => i.ProductId == request.ProductId)).Select(x => x.Name));
             }
-            return Json(result);
+            return result;
         }
 
         // POST: storefrontapi/lists/items
         [HttpPost("items")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddItemToList([FromBody] AddCartItem listItem)
+        public async Task<ActionResult<ShoppingCartItems>> AddItemToList([FromBody] AddCartItem listItem)
         {
             //Need lock to prevent concurrent access to same list
             using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, listItem.ListName, listItem.Type)).LockAsync())
@@ -76,14 +76,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     await cartBuilder.AddItemAsync(products.First(), 1);
                     await cartBuilder.SaveAsync();
                 }
-                return Json(new { ItemsCount = cartBuilder.Cart.ItemsQuantity });
+                return new ShoppingCartItems { ItemsCount = cartBuilder.Cart.ItemsQuantity };
             }
         }
 
         // DELETE: storefrontapi/lists/{listName}/type/items/{lineItemId}
         [HttpDelete("{listName}/{type}/items/{lineItemId}")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RemoveItemFromList(string lineItemId, string listName, string type)
+        public async Task<ActionResult<ShoppingCartItems>> RemoveItemFromList(string lineItemId, string listName, string type)
         {
             //Need lock to prevent concurrent access to same list
             using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, listName, type)).LockAsync())
@@ -91,14 +91,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var cartBuilder = await LoadOrCreateCartAsync(listName, type);
                 await cartBuilder.RemoveItemAsync(lineItemId);
                 await cartBuilder.SaveAsync();
-                return Json(new { ItemsCount = cartBuilder.Cart.ItemsQuantity });
+                return new ShoppingCartItems { ItemsCount = cartBuilder.Cart.ItemsQuantity };
             }
         }
 
         // POST: storefrontapi/lists/search
         [HttpPost("search")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SearchLists([FromBody] CartSearchCriteria searchCriteria)
+        public async Task<ActionResult<GenericSearchResult<ShoppingCart>>> SearchLists([FromBody] CartSearchCriteria searchCriteria)
         {
             if (searchCriteria == null)
             {
@@ -113,24 +113,24 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             var cartPagedList = await _cartService.SearchCartsAsync(searchCriteria);
 
-            return Json(new
+            return new GenericSearchResult<ShoppingCart>
             {
-                Results = cartPagedList,
+                Results = cartPagedList.ToArray(),
                 TotalCount = cartPagedList.TotalItemCount
-            });
+            };
         }
 
         // POST: storefrontapi/lists/{listName}/{type}/create
         [HttpPost("{listName}/{type}/create")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateList(string listName, string type)
+        public async Task<ActionResult<ShoppingCart>> CreateList(string listName, string type)
         {
             var cartBuilder = await LoadOrCreateCartAsync(listName, type);
             if (cartBuilder.Cart.IsTransient())
             {
                 await cartBuilder.SaveAsync();
             }
-            return Json(cartBuilder.Cart);
+            return cartBuilder.Cart;
         }
 
         // DELETE: storefrontapi/lists/deletelistsbyids?listIds=...&listIds=...

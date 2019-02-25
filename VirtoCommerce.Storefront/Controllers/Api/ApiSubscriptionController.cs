@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -24,32 +24,37 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/subscriptions/search
         [HttpPost("search")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SearchCustomerSubscriptions([FromBody] SubscriptionSearchCriteria searchCriteria)
+        public async Task<ActionResult<GenericSearchResult<Subscription>>> SearchCustomerSubscriptions([FromBody] SubscriptionSearchCriteria searchCriteria)
         {
             if (searchCriteria == null)
             {
                 searchCriteria = new SubscriptionSearchCriteria();
             }
+
             //Does not allow to see a other subscriptions
             searchCriteria.CustomerId = WorkContext.CurrentUser.Id;
 
             var result = await _subscriptionService.SearchSubscriptionsAsync(searchCriteria);
 
-            return Json(new { TotalCount = result.TotalItemCount, Results = result.ToArray() });
+            return new GenericSearchResult<Subscription>
+            {
+                TotalCount = result.TotalItemCount,
+                Results = result.ToArray()
+            };
         }
 
         // GET: storefrontapi/subscriptions/{number}
         [HttpGet("{number}")]
-        public async Task<ActionResult> GetCustomerSubscription(string number)
+        public async Task<ActionResult<Subscription>> GetCustomerSubscription(string number)
         {
             var retVal = await GetSubscriptionByNumberAsync(number);
-            return Json(retVal);
+            return retVal;
         }
 
         // POST: storefrontapi/subscriptions/cancel
         [HttpPost("{number}/cancel")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CancelSubscription([FromBody] SubscriptionCancelRequest cancelRequest)
+        public async Task<ActionResult<Subscription>> CancelSubscription([FromBody] SubscriptionCancelRequest cancelRequest)
         {
             var subscription = await GetSubscriptionByNumberAsync(cancelRequest.Number);
             var retVal = (await _subscriptionService.CancelSubscriptionAsync(new SubscriptionCancelRequest
@@ -59,7 +64,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 CustomerId = WorkContext.CurrentUser.Id
             }));
 
-            return Json(retVal);
+            return retVal;
         }
 
         private async Task<Subscription> GetSubscriptionByNumberAsync(string number)

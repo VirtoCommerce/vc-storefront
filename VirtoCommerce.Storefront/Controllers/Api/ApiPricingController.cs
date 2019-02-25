@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
@@ -30,7 +30,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/pricing/actualprices
         [HttpPost("actualprices")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> GetActualProductPrices([FromBody] Product[] products)
+        public async Task<ActionResult<ProductPrice[]>> GetActualProductPrices([FromBody] Product[] products)
         {
             if (products != null)
             {
@@ -39,7 +39,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
                 var retVal = products.Select(x => x.Price).ToArray();
 
-                return Json(retVal);
+                return retVal;
             }
             return Ok();
         }
