@@ -1,11 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Infrastructure;
+using VirtoCommerce.Storefront.Infrastructure.Swagger;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
@@ -30,7 +31,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/orders/search
         [HttpPost("search")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SearchCustomerOrders([FromBody] OrderSearchCriteria criteria)
+        public async Task<ActionResult<GenericSearchResult<CustomerOrder>>> SearchCustomerOrders([FromBody] OrderSearchCriteria criteria)
         {
             if (criteria == null)
             {
@@ -41,24 +42,24 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             var result = await _orderApi.SearchAsync(criteria.ToSearchCriteriaDto());
 
-            return Json(new
+            return new GenericSearchResult<CustomerOrder>
             {
-                Results = result.CustomerOrders.Select(x => x.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage)),
-                result.TotalCount
-            });
+                Results = result.CustomerOrders.Select(x => x.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage)).ToArray(),
+                TotalCount = result.TotalCount ?? default(int),
+            };
         }
 
         // GET: storefrontapi/orders/{orderNumber}
         [HttpGet("{orderNumber}")]
-        public async Task<ActionResult> GetCustomerOrder(string orderNumber)
+        public async Task<ActionResult<CustomerOrder>> GetCustomerOrder(string orderNumber)
         {
             var retVal = await GetOrderByNumber(orderNumber);
-            return Json(retVal);
+            return retVal;
         }
 
         // GET: storefrontapi/orders/{orderNumber}/newpaymentdata
         [HttpGet("{orderNumber}/newpaymentdata")]
-        public async Task<ActionResult> GetNewPaymentData(string orderNumber)
+        public async Task<ActionResult<NewPaymentData>> GetNewPaymentData(string orderNumber)
         {
             var order = await GetOrderByNumber(orderNumber);
 
@@ -70,12 +71,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             var paymentDto = await _orderApi.GetNewPaymentAsync(order.Id);
             var payment = paymentDto.ToOrderInPayment(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
 
-            return Json(new
+            return new NewPaymentData
             {
                 Payment = payment,
                 PaymentMethods = paymentMethods,
                 Order = order
-            });
+            };
         }
 
         // POST: storefrontapi/orders/{orderNumber}/payments/{paymentNumber}/cancel
@@ -103,7 +104,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/orders/{orderNumber}/payments/{paymentNumber}/process
         [HttpPost("{orderNumber}/payments/{paymentNumber}/process")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ProcessOrderPayment(string orderNumber, string paymentNumber, [FromBody] orderModel.BankCardInfo bankCardInfo)
+        public async Task<ActionResult<ProcessOrderPaymentResult>> ProcessOrderPayment(string orderNumber, string paymentNumber, [FromBody][SwaggerOptional] orderModel.BankCardInfo bankCardInfo)
         {
             //Need lock to prevent concurrent access to same order
             using (await AsyncLock.GetLockByKey(GetAsyncLockKey(orderNumber, WorkContext)).LockAsync())
@@ -115,14 +116,18 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     throw new StorefrontException("payment " + paymentNumber + " not found");
                 }
                 var processingResult = await _orderApi.ProcessOrderPaymentsAsync(orderDto.Id, paymentDto.Id, bankCardInfo);
-                return Json(new { orderProcessingResult = processingResult, paymentMethod = paymentDto.PaymentMethod });
+                return new ProcessOrderPaymentResult
+                {
+                    OrderProcessingResult = processingResult,
+                    PaymentMethod = paymentDto.PaymentMethod
+                };
             }
         }
 
         // POST: storefrontapi/orders/{orderNumber}/payments
         [HttpPost("{orderNumber}/payments")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddOrUpdateOrderPayment(string orderNumber, [FromBody] PaymentIn payment)
+        public async Task<ActionResult<orderModel.PaymentIn>> AddOrUpdateOrderPayment(string orderNumber, [FromBody] PaymentIn payment)
         {
             if (payment.Sum.Amount == 0)
             {
@@ -139,7 +144,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     paymentDto.CustomerId = WorkContext.CurrentUser.Id;
                     paymentDto.CustomerName = WorkContext.CurrentUser.UserName;
                     paymentDto.Status = "New";
-                    orderDto.InPayments.Add((orderModel.PaymentIn)paymentDto);
+                    orderDto.InPayments.Add(paymentDto);
                 }
                 else
                 {
@@ -154,13 +159,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     //Because we don't know the new payment id we need to get latest payment with same gateway code
                     paymentDto = orderDto.InPayments.Where(x => x.GatewayCode.EqualsInvariant(payment.GatewayCode)).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
                 }
-                return Json(paymentDto);
+                return paymentDto;
             }
 
         }
 
         // GET: storefrontapi/orders/{orderNumber}/invoice
         [HttpGet("{orderNumber}/invoice")]
+        [SwaggerFileResponse]
         public async Task<ActionResult> GetInvoicePdf(string orderNumber)
         {
             var stream = await _orderApi.GetInvoicePdfAsync(orderNumber);

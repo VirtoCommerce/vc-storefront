@@ -23,12 +23,16 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/fulfillmentcenters/search
         [HttpPost("fulfillmentcenters/search")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SearchFulfillmentCenters([FromBody] FulfillmentCenterSearchCriteria criteria)
+        public async Task<ActionResult<GenericSearchResult<FulfillmentCenter>>> SearchFulfillmentCenters([FromBody] FulfillmentCenterSearchCriteria criteria)
         {
             if (criteria != null)
             {
                 var result = await _inventoryService.SearchFulfillmentCentersAsync(criteria);
-                return Json(new { TotalCount = result.TotalItemCount, Results = result.ToArray() });
+                return new GenericSearchResult<FulfillmentCenter>
+                {
+                    TotalCount = result.TotalItemCount,
+                    Results = result.ToArray()
+                };
             }
             return Ok();
         }

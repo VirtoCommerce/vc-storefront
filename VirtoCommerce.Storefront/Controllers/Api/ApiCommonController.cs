@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Infrastructure;
@@ -27,19 +27,19 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // GET: storefrontapi/countries
         [HttpGet("countries")]
-        public ActionResult GetCountries()
+        public ActionResult<Country[]> GetCountries()
         {
-            return Json(_countriesWithoutRegions);
+            return _countriesWithoutRegions;
         }
 
         // GET: storefrontapi/countries/{countryCode}/regions
         [HttpGet("countries/{countryCode}/regions")]
-        public ActionResult GetCountryRegions(string countryCode)
+        public ActionResult<CountryRegion[]> GetCountryRegions(string countryCode)
         {
             var country = WorkContext.AllCountries.FirstOrDefault(c => c.Code2.Equals(countryCode, StringComparison.InvariantCultureIgnoreCase) || c.Code3.Equals(countryCode, StringComparison.InvariantCultureIgnoreCase));
             if (country != null)
             {
-                return Json(country.Regions);
+                return country.Regions;
             }
             return Ok();
         }

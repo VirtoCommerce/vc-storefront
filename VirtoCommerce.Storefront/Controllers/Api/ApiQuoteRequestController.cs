@@ -1,8 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
-using PagedList.Core;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart.Services;
@@ -34,37 +32,41 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/quoterequests/search
         [HttpPost("quoterequests/search")]
-        public ActionResult QuoteSearch([FromBody] QuoteSearchCriteria criteria)
+        public ActionResult<GenericSearchResult<QuoteRequest>> QuoteSearch([FromBody] QuoteSearchCriteria criteria)
         {
             if (WorkContext.CurrentUser.IsRegisteredUser)
             {
                 //allow search only within self quotes
                 criteria.CustomerId = WorkContext.CurrentUser.Id;
                 var result = _quoteService.SearchQuotes(criteria);
-                return Json(new
+                return new GenericSearchResult<QuoteRequest>
                 {
-                    Results = result,
+                    Results = result.ToArray(),
                     TotalCount = result.TotalItemCount
-                });
+                };
             }
             return NoContent();
         }
 
         // GET: storefrontapi/quoterequests/{number}/itemscount
         [HttpGet("quoterequests/{number}/itemscount")]
-        public async Task<ActionResult> GetItemsCount(string number)
+        public async Task<ActionResult<QuoteItemsCount>> GetItemsCount(string number)
         {
             await _quoteRequestBuilder.LoadQuoteRequestAsync(number, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
 
             var quoteRequest = _quoteRequestBuilder.QuoteRequest;
             EnsureQuoteRequestBelongsToCurrentCustomer(quoteRequest);
 
-            return Json(new { Id = quoteRequest.Id, ItemsCount = quoteRequest.ItemsCount });
+            return new QuoteItemsCount
+            {
+                Id = quoteRequest.Id,
+                ItemsCount = quoteRequest.ItemsCount
+            };
         }
 
         // GET: storefrontapi/quoterequests/{number}
         [HttpGet("quoterequests/{number}")]
-        public async Task<ActionResult> Get(string number)
+        public async Task<ActionResult<QuoteRequest>> Get(string number)
         {
             var builder = await _quoteRequestBuilder.LoadQuoteRequestAsync(number, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
             var quoteRequest = builder.QuoteRequest;
@@ -73,15 +75,15 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             quoteRequest.Customer = WorkContext.CurrentUser;
 
-            return Json(quoteRequest);
+            return quoteRequest;
         }
 
         // GET: storefrontapi/quoterequest/current
         [HttpGet("quoterequest/current")]
-        public ActionResult GetCurrent()
+        public ActionResult<QuoteRequest> GetCurrent()
         {
             EnsureQuoteRequestBelongsToCurrentCustomer(WorkContext.CurrentQuoteRequest.Value);
-            return Json(WorkContext.CurrentQuoteRequest.Value);
+            return WorkContext.CurrentQuoteRequest.Value;
         }
 
         // POST: storefrontapi/quoterequests/current/items
@@ -176,7 +178,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/quoterequests/{number}/totals
         [HttpPost("quoterequests/{number}/totals")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CalculateTotals(string number, [FromBody] QuoteRequestFormModel quoteRequest)
+        public async Task<ActionResult<QuoteRequestTotals>> CalculateTotals(string number, [FromBody] QuoteRequestFormModel quoteRequest)
         {
             await _quoteRequestBuilder.LoadQuoteRequestAsync(number, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
 
@@ -186,7 +188,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             _quoteRequestBuilder.Update(quoteRequest);
             await _quoteRequestBuilder.CalculateTotalsAsync();
 
-            return Json(_quoteRequestBuilder.QuoteRequest.Totals);
+            return _quoteRequestBuilder.QuoteRequest.Totals;
         }
 
         // POST: storefrontapi/quoterequests/{number}/confirm
