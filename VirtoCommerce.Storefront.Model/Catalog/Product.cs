@@ -209,7 +209,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// </summary>
         public IList<Product> Variations { get; set; }
         [JsonIgnore]
-        public IList<Product> Variants => Variations;
+        public IEnumerable<Product> Variants => new[] { this }.Concat(Variations ?? Array.Empty<Product>());
 
         /// <summary>
         /// Related or associated products
