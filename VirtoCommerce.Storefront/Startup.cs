@@ -246,7 +246,10 @@ namespace VirtoCommerce.Storefront
             });
 
             var snapshotProvider = services.BuildServiceProvider();
-            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+            services.AddAntiforgery(options => {
+                options.HeaderName = "X-XSRF-TOKEN";
+                options.SuppressXFrameOptionsHeader = true;
+            });
             services.AddMvc(options =>
             {
                 //Workaround to avoid 'Null effective policy causing exception' (on logout)

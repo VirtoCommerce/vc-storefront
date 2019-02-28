@@ -16,6 +16,7 @@
     <Copyright>Copyright © 2011-2019 Virto Commerce - an enterprise Microsoft ecommerce platform ©. All rights reserved</Copyright>
     <PackageIconUrl>https://virtocommerce.com/themes/assets/logo.jpg</PackageIconUrl>
     <PackageReleaseNotes></PackageReleaseNotes>
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
     <!--Remove later when Azure apps has been updated-->
     <!--<PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>-->
   </PropertyGroup>
@@ -28,7 +29,8 @@
   <ItemGroup>
     <Compile Remove="wwwroot\cms-content\**" />
     <Content Remove="wwwroot\cms-content\**" />
-    <Content Update="wwwroot\cms-content\**" CopyToPublishDirectory="Never" />
+    <EmbeddedResource Remove="wwwroot\cms-content\**" />
+    <None Remove="wwwroot\cms-content\**" />
   </ItemGroup>
 
   <ItemGroup>

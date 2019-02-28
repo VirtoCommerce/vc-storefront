@@ -22,6 +22,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpGet("designer-preview")]
         public IActionResult Index()
         {
+            Response.Headers.Add("Content-Security-Policy", "frame-src http://localhost:4200/ http://dev-cms-vm.westeurope.cloudapp.azure.com;");
             WorkContext.Layout = Request.Query["layout"].ToString();
             return View("json-preview", WorkContext);
         }
