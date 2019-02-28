@@ -92,7 +92,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         //Selected and persisted currency code
         public string SelectedCurrencyCode { get; set; }
 
-        public string ContactId { get; set; }        
+        public string ContactId { get; set; }
         /// <summary>
         /// Member associated with user 
         /// </summary>

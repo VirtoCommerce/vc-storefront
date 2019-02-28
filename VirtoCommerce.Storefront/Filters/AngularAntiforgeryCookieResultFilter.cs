@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -24,8 +21,13 @@ namespace VirtoCommerce.Storefront.Filters
 
         public override void OnResultExecuting(ResultExecutingContext context)
         {
-            //Do not include XSRF-TOKEN in each request, since it can leads to stop working the output cache middleware
-            if (context.Result is ViewResult)
+
+            var statusCodeReExecuteFeature = context.HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
+            //Reissue antiforgery cookies for follow cases:
+            //- when is requested only an ASP.NET View. Since set cookies for each requests such Assets or file resources can leads to stop working the output cache middleware for that controllers
+            //- when there are no errors or inner status codes ReExecute occurs (404, 500 etc) (IStatusCodeReExecuteFeature is presents). Since this can leads for reissue an antiforgery cookies .AspNetCore.Antiforgery without AspNetCore.Identity.Application
+            //that can leads for 400 errors for antiforgery validation due to different User and passed antiforgery tokens from cookies and request headers or form field
+            if (context.Result is ViewResult viewResult && statusCodeReExecuteFeature == null)
             {
                 var tokens = antiforgery.GetAndStoreTokens(context.HttpContext);
                 context.HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false, IsEssential = true });
