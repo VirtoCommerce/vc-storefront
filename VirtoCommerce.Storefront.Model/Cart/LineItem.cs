@@ -22,7 +22,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
             DiscountAmount = new Money(currency);
             DiscountAmountWithTax = new Money(currency);
             DiscountTotal = new Money(currency);
-            DiscountTotalWithTax = new Money();
+            DiscountTotalWithTax = new Money(currency);
             ListPriceWithTax = new Money(currency);
             SalePriceWithTax = new Money(currency);
             PlacedPrice = new Money(currency);
