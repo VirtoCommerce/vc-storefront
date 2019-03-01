@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace VirtoCommerce.Storefront.Model.Customer
 {
@@ -6,7 +7,7 @@ namespace VirtoCommerce.Storefront.Model.Customer
     /// Represent customer information structure 
     /// </summary>
     public partial class Contact : Member
-    {  
+    {
         public string FullName { get; set; }
         /// <summary>
         /// Returns the first name of the customer.
@@ -31,6 +32,8 @@ namespace VirtoCommerce.Storefront.Model.Customer
 
         public string OrganizationId { get; set; }
         public Organization Organization { get; set; }
+        //TODO: It needs to be rework to support only a multiple  organizations for a customer by design.
+        public IList<string> OrganizationsIds { get; set; } = new List<string>();
 
         /// <summary>
         /// Returns true if the customer accepts marketing, returns false if the customer does not.
@@ -45,7 +48,7 @@ namespace VirtoCommerce.Storefront.Model.Customer
         /// <summary>
         /// All contact security accounts
         /// </summary>
-        public IEnumerable<SecurityAccount> SecurityAccounts { get; set; }   
+        public IEnumerable<SecurityAccount> SecurityAccounts { get; set; }
 
     }
 }

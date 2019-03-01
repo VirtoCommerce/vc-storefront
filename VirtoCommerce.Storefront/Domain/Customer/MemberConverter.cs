@@ -143,6 +143,7 @@ namespace VirtoCommerce.Storefront.Domain
                 TimeZone = contactDto.TimeZone,
                 DefaultLanguage = contactDto.DefaultLanguage,
                 OrganizationId = contactDto.Organizations?.FirstOrDefault(),
+                OrganizationsIds = contactDto.Organizations,
                 Salutation = contactDto.Salutation,
                 PhotoUrl = contactDto.PhotoUrl
             };
@@ -249,11 +250,14 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 retVal.Emails = customer.Emails;
             }
-
-            //Support only one organization then
+            //TODO: It needs to be rework to support only a multiple  organizations for a customer by design.
             if (customer.OrganizationId != null)
             {
                 retVal.Organizations = new List<string>() { customer.OrganizationId };
+            }
+            if (customer.OrganizationsIds != null)
+            {
+                retVal.Organizations = customer.OrganizationsIds.Concat(retVal.Organizations ?? Array.Empty<string>()).Distinct().ToArray();
             }
 
             return retVal;

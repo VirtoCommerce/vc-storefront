@@ -24,11 +24,12 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Handlers
         /// <summary>
         /// Merge an anonymous cart into a shopping cart belonging to a registered customer
         /// </summary>
-        /// <param name="userLoginEvent"></param>
         public virtual async Task Handle(UserLoginEvent @event)
         {
             if (@event == null)
+            {
                 return;
+            }
 
             var workContext = @event.WorkContext;
             var prevUser = @event.WorkContext.CurrentUser;

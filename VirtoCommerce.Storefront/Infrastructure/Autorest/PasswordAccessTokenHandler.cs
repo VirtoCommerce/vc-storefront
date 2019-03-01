@@ -51,8 +51,6 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// <summary>
         /// Initializes a new instance of the <see cref="AccessTokenDelegatingHandler"/> class.
         /// </summary>
-        /// <param name="client">The client.</param>
-        /// <param name="scope">The scope.</param>
         public PasswordAccessTokenHandler(IOptions<PlatformEndpointOptions> options, IHttpClientFactory clientFactory)
         {
             _options = options.Value;

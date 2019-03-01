@@ -22,7 +22,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // GET: storefrontapi/marketing/dynamiccontent/{placeName}
         [HttpGet("dynamiccontent/{placeName}")]
-        public async Task<ActionResult> GetDynamicContent(string placeName)
+        public async Task<ActionResult<string>> GetDynamicContent(string placeName)
         {
             string htmlContent = null;
 
@@ -42,7 +42,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     }
                 }
             }
-            return Json(htmlContent);
+            return htmlContent;
         }
     }
 }
