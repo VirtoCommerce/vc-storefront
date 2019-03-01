@@ -8,14 +8,22 @@ namespace VirtoCommerce.Storefront.Caching
 {
     public class StorefrontMemoryCache : IStorefrontMemoryCache
     {
-        private readonly IOptions<StorefrontOptions> _settingManager;
+        private readonly StorefrontOptions _storefrontOptions;
         private readonly IMemoryCache _memoryCache;
         private bool _disposed;
 
-        public StorefrontMemoryCache(IMemoryCache memoryCache, IOptions<StorefrontOptions> settingManager)
+        public StorefrontMemoryCache(IMemoryCache memoryCache, IOptions<StorefrontOptions> storefrontOptions)
         {
             _memoryCache = memoryCache;
-            _settingManager = settingManager;
+            _storefrontOptions = storefrontOptions.Value;
+        }
+
+        public MemoryCacheEntryOptions GetDefaultCacheEntryOptions()
+        {
+            return new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = CacheEnabled ? AbsoluteExpiration : TimeSpan.FromTicks(1)
+            };
         }
 
         public ICacheEntry CreateEntry(object key)
@@ -23,8 +31,8 @@ namespace VirtoCommerce.Storefront.Caching
             var result = _memoryCache.CreateEntry(key);
             if (result != null)
             {
-                var absoluteExpiration = CacheEnabled ? AbsoluteExpiration : TimeSpan.FromTicks(1);
-                result.SetAbsoluteExpiration(absoluteExpiration);
+                var options = GetDefaultCacheEntryOptions();
+                result.SetOptions(options);
             }
             return result;
         }
@@ -39,9 +47,9 @@ namespace VirtoCommerce.Storefront.Caching
             return _memoryCache.TryGetValue(key, out value);
         }
 
-        protected TimeSpan AbsoluteExpiration => _settingManager.Value.CacheAbsoluteExpiration;
+        protected TimeSpan AbsoluteExpiration => _storefrontOptions.CacheAbsoluteExpiration;
 
-        protected bool CacheEnabled => _settingManager.Value.CacheEnabled;
+        protected bool CacheEnabled => _storefrontOptions.CacheEnabled;
 
         /// <summary>
         /// Cleans up the background collection events.
