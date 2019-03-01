@@ -9,7 +9,7 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public class CartCacheRegion : CancellableCacheRegion<CartCacheRegion>
     {
-        private static readonly ConcurrentDictionary<ShoppingCart, CancellationTokenSource> _cartRegionTokenLookup = new ConcurrentDictionary<ShoppingCart, CancellationTokenSource>();
+        private static readonly ConcurrentDictionary<string, CancellationTokenSource> _cartRegionTokenLookup = new ConcurrentDictionary<string, CancellationTokenSource>();
         private static readonly ConcurrentDictionary<string, CancellationTokenSource> _cartSearchRegionLookup = new ConcurrentDictionary<string, CancellationTokenSource>();
 
         public static IChangeToken CreateCustomerChangeToken(string customerId)
@@ -23,14 +23,14 @@ namespace VirtoCommerce.Storefront.Domain
             return new CompositeChangeToken(new[] { CreateChangeToken(), new CancellationChangeToken(cancellationTokenSource.Token) });
         }
 
-   
+
         public static IChangeToken CreateChangeToken(ShoppingCart cart)
         {
             if (cart == null)
             {
                 throw new ArgumentNullException(nameof(cart));
             }
-            var cancellationTokenSource = _cartRegionTokenLookup.GetOrAdd(cart, new CancellationTokenSource());
+            var cancellationTokenSource = _cartRegionTokenLookup.GetOrAdd(cart.GetCacheKey(), new CancellationTokenSource());
             return new CompositeChangeToken(new[] { CreateChangeToken(), new CancellationChangeToken(cancellationTokenSource.Token) });
         }
 
@@ -38,7 +38,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             if (cart != null)
             {
-                if (_cartRegionTokenLookup.TryRemove(cart, out CancellationTokenSource token))
+                if (_cartRegionTokenLookup.TryRemove(cart.GetCacheKey(), out var token))
                 {
                     token.Cancel();
                     token.Dispose();
@@ -49,7 +49,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         public static void ExpireCustomerCarts(string customerId)
         {
-            if (_cartSearchRegionLookup.TryRemove(customerId, out CancellationTokenSource token))
+            if (_cartSearchRegionLookup.TryRemove(customerId, out var token))
             {
                 token.Cancel();
                 token.Dispose();

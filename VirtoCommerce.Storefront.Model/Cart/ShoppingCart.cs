@@ -448,7 +448,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         #region ICacheKey
         public override string GetCacheKey()
         {
-            return string.Join(":", "Cart", Id, Name, CustomerId);
+            return string.Join(":", "Cart", Id, Name, CustomerId, StoreId, Currency?.Code, Type);
         }
         #endregion
 
