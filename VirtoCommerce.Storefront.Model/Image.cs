@@ -1,8 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model
@@ -25,6 +21,10 @@ namespace VirtoCommerce.Storefront.Model
         /// Image alt text
         /// </summary>
         public string Alt { get; set; }
+
+        public int? SortOrder { get; set; }
+        public string Group { get; set; }
+        public string LanguageCode { get; set; }
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
