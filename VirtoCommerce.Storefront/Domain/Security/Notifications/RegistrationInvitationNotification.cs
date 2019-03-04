@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common.Notifications;
 
 namespace VirtoCommerce.Storefront.Domain.Security.Notifications
 {
     public class RegistrationInvitationNotification : EmailNotificationBase
     {
         public RegistrationInvitationNotification(string storeId, Language language)
-            :base(storeId, language)
+            : base(storeId, language)
         {
         }
 
