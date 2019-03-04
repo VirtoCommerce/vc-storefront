@@ -1,9 +1,8 @@
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
+using Newtonsoft.Json;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Order;
@@ -48,6 +47,9 @@ namespace VirtoCommerce.Storefront.Model.Security
         public string DefaultLanguage { get; set; }
 
         public bool TwoFactorEnabled { get; set; }
+
+        public string TwoFactorAuthenticatorKey { get; set; }
+
         public bool IsLockedOut
         {
             get

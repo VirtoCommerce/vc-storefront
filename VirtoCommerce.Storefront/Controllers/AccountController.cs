@@ -281,7 +281,6 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 var user = await _signInManager.UserManager.FindByNameAsync(login.Username);
 
-                //Check that current user can sing in to current store
                 if (new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore))
                 {
                     await _publisher.Publish(new UserLoginEvent(WorkContext, user));
@@ -293,14 +292,73 @@ namespace VirtoCommerce.Storefront.Controllers
                 }
             }
 
+            if (loginResult.RequiresTwoFactor)
+            {
+                var user = await _signInManager.UserManager.FindByNameAsync(login.Username);
+
+                if (user == null)
+                {
+                    WorkContext.ErrorMessage = $"Operation failed";
+                    return View("error", WorkContext);
+                }
+
+                var selectedProvider = _options.TwoFactorAuthenticationNotificationGateway;
+
+                var userManager = _signInManager.UserManager;
+                var code = await userManager.GenerateTwoFactorTokenAsync(user, selectedProvider);
+
+                if (string.IsNullOrWhiteSpace(code))
+                {
+                    WorkContext.ErrorMessage = $"Operation failed";
+                    return View("error", WorkContext);
+                }
+
+                NotificationBase twoFactorNotification = null;
+                var veryfyCodeViewModel = new VerifyCodeViewModel() { Provider = selectedProvider, ReturnUrl = returnUrl, RememberMe = login.RememberMe, Username = login.Username };
+
+                if (veryfyCodeViewModel.Provider.EqualsInvariant("Phone"))
+                {
+                    var phoneNumber = await userManager.GetPhoneNumberAsync(user);
+
+                    if (string.IsNullOrEmpty(phoneNumber))
+                    {
+                        // Do not tell we have this user without phone
+                        WorkContext.ErrorMessage = $"Operation failed";
+                        return View("error", WorkContext);
+                    }
+
+                    twoFactorNotification = new TwoFactorSmsNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                    {
+                        Token = code,
+                        Recipient = phoneNumber,
+                    };
+
+                }
+                else // "Email"
+                {
+                    twoFactorNotification = new TwoFactorEmailNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                    {
+                        Token = code,
+                        Sender = WorkContext.CurrentStore.Email,
+                        Recipient = GetUserEmail(user)
+                    };
+                }
+
+
+                var sendingResult = await SendNotification(twoFactorNotification);
+
+                if (sendingResult.IsSuccess != true)
+                {
+                    ModelState.AddModelError("form", sendingResult.ErrorMessage);
+                }
+
+                WorkContext.Form = veryfyCodeViewModel;
+                return View("customers/verify_code", WorkContext);
+            }
+
             if (loginResult.IsLockedOut)
             {
                 return View("lockedout", WorkContext);
-            }
-
-            if (loginResult.RequiresTwoFactor)
-            {
-                return StoreFrontRedirect("~/account/sendcode");
             }
 
             if (loginResult is CustomSignInResult signInResult && signInResult.IsRejected)
@@ -312,6 +370,40 @@ namespace VirtoCommerce.Storefront.Controllers
             WorkContext.Form = login;
 
             return View("customers/login", WorkContext);
+        }
+
+        [HttpPost("verifycode")]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> VerifyCode(VerifyCodeViewModel model)
+        {
+            TryValidateModel(model);
+            if (!ModelState.IsValid)
+            {
+                return View("customers/verify_code", WorkContext);
+            }
+
+            // The following code protects for brute force attacks against the two factor codes.
+            // If a user enters incorrect codes for a specified amount of time then the user account
+            // will be locked out for a specified amount of time.
+            var result = await _signInManager.TwoFactorSignInAsync(model.Provider, model.Code, model.RememberMe ?? false, model.RememberBrowser ?? false);
+
+            if (result.Succeeded)
+            {
+                var user = await _signInManager.UserManager.FindByNameAsync(model.Username);
+                await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                return StoreFrontRedirect(model.ReturnUrl);
+            }
+
+            if (result.IsLockedOut)
+            {
+                return View("lockedout", WorkContext);
+            }
+
+            ModelState.AddModelError("form", "Invalid code.");
+            WorkContext.Form = model;
+
+            return View("customers/verify_code", WorkContext);
         }
 
         [HttpGet("logout")]
@@ -506,6 +598,12 @@ namespace VirtoCommerce.Storefront.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotLogin(ForgotPassword formModel)
         {
+            TryValidateModel(formModel);
+            if (!ModelState.IsValid)
+            {
+                return View("customers/forgot_login", WorkContext);
+            }
+
             var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
             if (user != null)
             {
@@ -516,7 +614,8 @@ namespace VirtoCommerce.Storefront.Controllers
                     Recipient = GetUserEmail(user)
                 };
 
-                var sendingResult = await _platformNotificationApi.SendNotificationAsync(remindUserNameNotification.ToNotificationDto());
+                var sendingResult = await SendNotification(remindUserNameNotification);
+
                 if (sendingResult.IsSuccess != true)
                 {
                     ModelState.AddModelError("form", sendingResult.ErrorMessage);
@@ -526,6 +625,7 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 ModelState.AddModelError("form", "User not found");
             }
+
             return View("customers/forgot_login", WorkContext);
         }
 
@@ -680,6 +780,72 @@ namespace VirtoCommerce.Storefront.Controllers
                 ModelState.AddModelError("form", result.Errors.FirstOrDefault()?.Description);
                 return View("customers/account", WorkContext);
             }
+        }
+
+        [HttpGet("phonenumber")]
+        public async Task<ActionResult> UpdatePhoneNumber()
+        {
+            var phoneNumber = await _signInManager.UserManager.GetPhoneNumberAsync(WorkContext.CurrentUser);
+            WorkContext.Form = new UpdatePhoneNumberModel { PhoneNumber = phoneNumber };
+
+            return View("customers/phone_number", WorkContext);
+        }
+
+        [HttpPost("phonenumber")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdatePhoneNumber([FromForm]UpdatePhoneNumberModel formModel)
+        {
+            TryValidateModel(formModel);
+            if (!ModelState.IsValid)
+            {
+                return View("customers/phone_number", WorkContext);
+            }
+            // Generate the token and send it
+            var code = await _signInManager.UserManager.GenerateChangePhoneNumberTokenAsync(WorkContext.CurrentUser, formModel.PhoneNumber);
+
+            var changePhoneNumberSmsNotification = new ChangePhoneNumberSmsNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+            {
+                Token = code,
+                Recipient = formModel.PhoneNumber,
+            };
+
+            var sendingResult = await SendNotification(changePhoneNumberSmsNotification);
+
+            if (sendingResult.IsSuccess != true)
+            {
+                ModelState.AddModelError("form", sendingResult.ErrorMessage);
+                WorkContext.Form = formModel;
+                return View("customers/phone_number", WorkContext);
+            }
+
+            WorkContext.Form = new VerifyPhoneNumberModel { PhoneNumber = formModel.PhoneNumber };
+
+            return View("customers/verify_phone_number", WorkContext);
+        }
+
+        [HttpPost("phonenumber/verify")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> VerifyPhoneNumber([FromForm]VerifyPhoneNumberModel formModel)
+        {
+            TryValidateModel(formModel);
+            if (!ModelState.IsValid)
+            {
+                return View("customers/verify_phone_number", WorkContext);
+            }
+
+            var result = await _signInManager.UserManager.ChangePhoneNumberAsync(WorkContext.CurrentUser, formModel.PhoneNumber, formModel.Code);
+
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(WorkContext.CurrentUser, isPersistent: false);
+                return StoreFrontRedirect("~/account");
+            }
+
+            // If we got this far, something failed
+            ModelState.AddModelError("form", "Failed to verify phone number");
+            WorkContext.Form = formModel;
+
+            return View("customers/verify_phone_number", WorkContext);
         }
 
         private static string GetUserEmail(User user)

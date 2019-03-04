@@ -430,5 +430,27 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             return Ok();
         }
+
+        // DELETE: storefrontapi/account/phonenumber
+        [HttpDelete("phonenumber")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult<RemovePhoneNumberResult>> RemovePhoneNumber()
+        {
+            var result = await _signInManager.UserManager.SetPhoneNumberAsync(WorkContext.CurrentUser, null);
+            await _signInManager.SignInAsync(WorkContext.CurrentUser, isPersistent: false);
+
+            return new RemovePhoneNumberResult { Succeeded = result.Succeeded, Errors = result.Errors.Select(x => x.Description) };
+        }
+
+        // POST: storefrontapi/account/twofactorauthentification
+        [HttpPost("twofactorauthentification")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult<ChangeTwoFactorAuthenticationResult>> EnableTwoFactorAuthentication([FromBody] EnableTwoFactorAuthenticationModel model)
+        {
+            var result = await _signInManager.UserManager.SetTwoFactorEnabledAsync(WorkContext.CurrentUser, model.Enabled);
+            await _signInManager.SignInAsync(WorkContext.CurrentUser, isPersistent: false);
+
+            return new ChangeTwoFactorAuthenticationResult { Succeeded = result.Succeeded, Errors = result.Errors.Select(x => x.Description) };
+        }
     }
 }

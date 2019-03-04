@@ -1,8 +1,7 @@
-using PagedList.Core;
 using System.Linq;
+using PagedList.Core;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Security;
 using StorefrontModel = VirtoCommerce.Storefront.Model;
 
@@ -27,7 +26,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 Email = user.Email,
                 OperatorUserId = user.OperatorUserId,
                 OperatorUserName = user.OperatorUserName,
-                UserName = user.UserName
+                UserName = user.UserName,
+                PhoneNumber = user.PhoneNumber,
+                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+                TwoFactorEnabled = user.TwoFactorEnabled,
             };
 
             if (user.Orders != null)
