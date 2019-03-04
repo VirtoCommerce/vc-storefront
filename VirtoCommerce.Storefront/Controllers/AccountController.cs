@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Common;
 using VirtoCommerce.Storefront.Domain.Security;
@@ -15,6 +16,7 @@ using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Events;
+using VirtoCommerce.Storefront.Model.Common.Notifications;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Security.Events;
 using VirtoCommerce.Storefront.Model.Security.Specifications;
@@ -32,8 +34,14 @@ namespace VirtoCommerce.Storefront.Controllers
 
         private readonly string[] _firstNameClaims = { ClaimTypes.GivenName, "urn:github:name", ClaimTypes.Name };
 
-        public AccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, SignInManager<User> signInManager,
-            IEventPublisher publisher, INotifications platformNotificationApi, IAuthorizationService authorizationService, IOptions<StorefrontOptions> options)
+        public AccountController(
+            IWorkContextAccessor workContextAccessor,
+            IStorefrontUrlBuilder urlBuilder,
+            SignInManager<User> signInManager,
+            IEventPublisher publisher,
+            INotifications platformNotificationApi,
+            IAuthorizationService authorizationService,
+            IOptions<StorefrontOptions> options)
             : base(workContextAccessor, urlBuilder)
         {
             _signInManager = signInManager;
@@ -416,30 +424,73 @@ namespace VirtoCommerce.Storefront.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotPassword(ForgotPassword formModel)
         {
+            TryValidateModel(formModel);
+            if (!ModelState.IsValid)
+            {
+                return View("customers/forgot_password", WorkContext);
+            }
+
             var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
-            if (user != null)
+
+            if (user == null)
+            {
+                user = await _signInManager.UserManager.FindByNameAsync(formModel.Email);
+            }
+
+            if (user == null)
+            {
+                ModelState.AddModelError("form", "Operation failed");
+                return View("customers/forgot_password", WorkContext);
+            }
+
+            var successViewName = "customers/forgot_password";
+            NotificationBase resetPasswordNotification = null;
+
+            if (_options.ResetPasswordNotificationGateway.EqualsInvariant("Phone"))
+            {
+                successViewName = "customers/forgot_password_code";
+                var phoneNumber = await _signInManager.UserManager.GetPhoneNumberAsync(user);
+
+                if (string.IsNullOrEmpty(phoneNumber))
+                {
+                    ModelState.AddModelError("form", "Operation failed");
+                    return View("customers/forgot_password", WorkContext);
+                }
+
+                var token = await _signInManager.UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultPhoneProvider, "ResetPassword");
+
+                resetPasswordNotification = new ResetPasswordSmsNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                {
+                    Token = token,
+                    Recipient = phoneNumber,
+                };
+
+                //This required for populate hidden fields on the form
+                WorkContext.Form = new ResetPasswordByCodeModel
+                {
+                    Email = user.Email
+                };
+            }
+            else // "Email"
             {
                 var token = await _signInManager.UserManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { UserId = user.Id, Token = token }, protocol: Request.Scheme);
 
-                var resetPasswordEmailNotification = new ResetPasswordEmailNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                resetPasswordNotification = new ResetPasswordEmailNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
                 {
                     Url = callbackUrl,
                     Sender = WorkContext.CurrentStore.Email,
                     Recipient = GetUserEmail(user)
                 };
-
-                var sendingResult = await _platformNotificationApi.SendNotificationAsync(resetPasswordEmailNotification.ToNotificationDto());
-                if (sendingResult.IsSuccess != true)
-                {
-                    ModelState.AddModelError("form", sendingResult.ErrorMessage);
-                }
             }
-            else
+
+            var sendingResult = await SendNotification(resetPasswordNotification);
+            if (sendingResult.IsSuccess == true)
             {
-                ModelState.AddModelError("form", "User not found");
+                return View(successViewName, WorkContext);
             }
 
+            ModelState.AddModelError("form", sendingResult.ErrorMessage);
             return View("customers/forgot_password", WorkContext);
         }
 
@@ -478,6 +529,52 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("customers/forgot_login", WorkContext);
         }
 
+        [HttpPost("forgotpasswordbycode")]
+        [AllowAnonymous]
+        public async Task<ActionResult> ResetPasswordByCode(ResetPasswordByCodeModel formModel)
+        {
+            TryValidateModel(formModel);
+            //Reassign the passed form to the current context to allow user post it again as hidden fields in the form
+            WorkContext.Form = formModel;
+
+            if (!ModelState.IsValid)
+            {
+                return View("customers/forgot_password_code", WorkContext);
+            }
+
+            if (!_options.ResetPasswordNotificationGateway.EqualsInvariant("Phone"))
+            {
+                ModelState.AddModelError("form", "Reset password by code is turned off.");
+                return View("customers/forgot_password_code", WorkContext);
+            }
+
+            var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError("form", "Operation failed");
+                return View("customers/forgot_password_code", WorkContext);
+            }
+
+            var isValidToken = await _signInManager.UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultPhoneProvider, "ResetPassword", formModel.Code);
+
+            if (!isValidToken)
+            {
+                ModelState.AddModelError("form", "Reset password token is invalid or expired");
+                return View("customers/forgot_password_code", WorkContext);
+            }
+
+            var token = await _signInManager.UserManager.GeneratePasswordResetTokenAsync(user);
+
+            WorkContext.Form = new ResetPassword
+            {
+                Token = token,
+                Email = user.Email,
+                UserName = user.UserName
+            };
+
+            return View("customers/reset_password", WorkContext);
+        }
+
         [HttpGet("resetpassword")]
         [AllowAnonymous]
         public async Task<ActionResult> ResetPassword(string token, string userId)
@@ -496,6 +593,7 @@ namespace VirtoCommerce.Storefront.Controllers
             }
 
             var isValidToken = await _signInManager.UserManager.VerifyUserTokenAsync(user, _signInManager.UserManager.Options.Tokens.PasswordResetTokenProvider, UserManager<User>.ResetPasswordTokenPurpose, token);
+
             if (!isValidToken)
             {
                 WorkContext.ErrorMessage = "Reset password token is invalid or expired";
@@ -508,7 +606,6 @@ namespace VirtoCommerce.Storefront.Controllers
                 Email = user.Email,
                 UserName = user.UserName
             };
-
             return View("customers/reset_password", WorkContext);
         }
 
@@ -517,24 +614,32 @@ namespace VirtoCommerce.Storefront.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(ResetPassword formModel)
         {
-            if ((string.IsNullOrEmpty(formModel.Email) && string.IsNullOrEmpty(formModel.UserName)) || formModel.Token == null)
+            TryValidateModel(formModel);
+            //Need reassign the passed form to the current context to allow for user post it again with initial data such as Token and Email
+            WorkContext.Form = formModel;
+
+            if (string.IsNullOrEmpty(formModel.Email) && string.IsNullOrEmpty(formModel.UserName))
             {
-                WorkContext.ErrorMessage = "Not enough info for reseting password";
-                return View("error", WorkContext);
+                ModelState.AddModelError("form", "Not enough info for reseting password");
             }
 
             if (formModel.Password != formModel.PasswordConfirmation)
             {
                 ModelState.AddModelError("form", "Passwords aren't equal");
-                WorkContext.Form = formModel;
+            }
+
+            if (!ModelState.IsValid)
+            {
                 return View("customers/reset_password", WorkContext);
             }
 
             User user = null;
+
             if (!string.IsNullOrEmpty(formModel.UserName))
             {
                 user = await _signInManager.UserManager.FindByNameAsync(formModel.UserName);
             }
+
             if (user == null && !string.IsNullOrEmpty(formModel.Email))
             {
                 user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
@@ -552,15 +657,12 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 return View("customers/reset_password_confirmation", WorkContext);
             }
-            else
+
+            foreach (var error in result.Errors)
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
+                ModelState.AddModelError(string.Empty, error.Description);
             }
 
-            WorkContext.Form = formModel;
             return View("customers/reset_password", WorkContext);
         }
 
@@ -592,6 +694,24 @@ namespace VirtoCommerce.Storefront.Controllers
                 }
             }
             return email;
+        }
+
+
+        private async Task<SendNotificationResult> SendNotification(NotificationBase notification)
+        {
+            var result = new SendNotificationResult();
+
+            try
+            {
+                result = await _platformNotificationApi.SendNotificationAsync(notification.ToNotificationDto());
+            }
+            catch
+            {
+                result.IsSuccess = false;
+                result.ErrorMessage = "Error occured while sending notification";
+            }
+
+            return result;
         }
     }
 }

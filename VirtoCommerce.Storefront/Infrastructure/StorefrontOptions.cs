@@ -18,5 +18,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
         public TimeSpan CacheAbsoluteExpiration { get; set; }
 
         public int PageSizeMaxValue { get; set; } = 100;
+
+        public string ResetPasswordNotificationGateway { get; set; } = "Email";
     }
 }
