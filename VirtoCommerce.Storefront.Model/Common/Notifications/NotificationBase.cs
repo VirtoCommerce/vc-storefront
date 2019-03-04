@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 
-namespace VirtoCommerce.Storefront.Model.Common
+namespace VirtoCommerce.Storefront.Model.Common.Notifications
 {
-    public abstract class EmailNotificationBase : ValueObject
+    public abstract class NotificationBase : ValueObject
     {
-        public EmailNotificationBase(string storeId, Language language)
+        protected NotificationBase(string storeId, Language language)
         {
             Type = GetType().Name;
             StoreId = storeId;
@@ -15,11 +15,9 @@ namespace VirtoCommerce.Storefront.Model.Common
         public string StoreId { get; set; }
         public Language Language { get; set; }
         public string Recipient { get; set; }
-        public string Sender { get; set; }
 
         public virtual IEnumerable<KeyValuePair<string, string>> GetNotificationParameters()
         {
-            yield return new KeyValuePair<string, string>(nameof(Sender), Sender);
             yield return new KeyValuePair<string, string>(nameof(Recipient), Recipient);
         }
     }
