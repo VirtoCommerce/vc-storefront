@@ -17,7 +17,7 @@ namespace VirtoCommerce.Storefront.JsonConverters
         }
 
 
-        public override bool CanWrite { get { return false; } }
+        public override bool CanWrite { get { return true; } }
         public override bool CanRead { get { return true; } }
 
         public override bool CanConvert(Type objectType)
@@ -44,7 +44,13 @@ namespace VirtoCommerce.Storefront.JsonConverters
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            var money = value as Money;
+
+            if (money != null)
+            {
+                var result = JObject.FromObject(new { money.Amount, money.FormattedAmount, money.FormattedAmountWithoutPointAndCurrency, money.FormattedAmountWithoutPoint, money.FormattedAmountWithoutCurrency, money.Currency }, serializer);
+                result.WriteTo(writer);
+            }
         }
     }
 }
