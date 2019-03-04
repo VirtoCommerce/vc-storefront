@@ -449,8 +449,8 @@ namespace VirtoCommerce.Storefront.Controllers
             if (_options.ResetPasswordNotificationGateway.EqualsInvariant("Phone"))
             {
                 successViewName = "customers/forgot_password_code";
-
                 var phoneNumber = await _signInManager.UserManager.GetPhoneNumberAsync(user);
+
                 if (string.IsNullOrEmpty(phoneNumber))
                 {
                     ModelState.AddModelError("form", "Operation failed");
