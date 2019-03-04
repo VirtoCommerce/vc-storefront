@@ -21,6 +21,5 @@ namespace VirtoCommerce.Storefront.Infrastructure
 
         public string ResetPasswordNotificationGateway { get; set; } = "Email";
         public string TwoFactorAuthenticationNotificationGateway { get; set; } = "Phone";
-
     }
 }

@@ -19,6 +19,7 @@ namespace VirtoCommerce.Storefront.Domain.Security.Notifications
             {
                 yield return kvp;
             }
+
             yield return new KeyValuePair<string, string>(nameof(Token), Token);
         }
     }
