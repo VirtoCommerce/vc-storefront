@@ -19,21 +19,20 @@ namespace VirtoCommerce.Storefront.Model
         private Form(IDictionary<string, object> dict)
         {
             _dict = dict;
-            PostedSuccessfully = true;
             Errors = new List<string>();
+            PostedSuccessfully = true;
         }
 
         public static Form FromObject(object obj)
         {
             var dict = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase).WithDefaultValue(null);
             var formProps = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            var formPropNames = formProps.Select(x => x.Name).ToArray();
             foreach (var property in formProps)
             {
                 var propertyValue = property.GetValue(obj);
                 if (propertyValue != null)
                 {
-                    dict[property.Name] = propertyValue;
+                    dict[property.Name.PascalToKebabCase()] = propertyValue;
                 }
             }
             return new Form(dict);
@@ -43,14 +42,14 @@ namespace VirtoCommerce.Storefront.Model
         /// Returns an array of strings if the form was not submitted successfully.
         /// The strings returned depend on which fields of the form were left empty or contained errors.
         /// </summary>
-        public IList<string> Errors { get; set; }
+        public IList<string> Errors { get { return _dict["errors"] as IList<string>; } set { _dict["errors"] = value; } }
 
         /// <summary>
         /// Returns true if the form was submitted successfully, or false if the form contained errors.
         /// All forms but the address form set that property.
         /// The address form is always submitted successfully.
         /// </summary>
-        public bool? PostedSuccessfully { get; set; }
+        public bool? PostedSuccessfully { get { return _dict["posted_successfully"] as bool?; } set { _dict["posted_successfully"] = value; } }
 
         public void Add(string key, object value)
         {
