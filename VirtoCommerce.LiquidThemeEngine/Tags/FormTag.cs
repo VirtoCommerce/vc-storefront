@@ -40,12 +40,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Tags
             _formsMap["reset_customer_password"] = "~/account/resetpassword";
             // Generates a form for adding product to customer wishlist (temporary without actual URL)
             _formsMap["confirm_invitation"] = "~/account/confirminvitation";
-            // Generates a form for verifying send code for two factor authentication
-            _formsMap["verify_code"] = "~/account/verifycode";
-            // Generates a form for adding/updating phone number
-            _formsMap["phone_number"] = "~/account/phonenumber";
-            // Generates a form for verifying sent code on phone change
-            _formsMap["verify_phone_number"] = "~/account/phonenumber/verify";
             // Generates a form for sending code on reset password
             _formsMap["forgot_password_code"] = "~/account/forgotpasswordbycode";
             // Generates a form for adding product to customer wishlist (temporary without actual URL)

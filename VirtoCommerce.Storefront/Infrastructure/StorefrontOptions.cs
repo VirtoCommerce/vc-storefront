@@ -20,6 +20,5 @@ namespace VirtoCommerce.Storefront.Infrastructure
         public int PageSizeMaxValue { get; set; } = 100;
 
         public string ResetPasswordNotificationGateway { get; set; } = "Email";
-        public string TwoFactorAuthenticationNotificationGateway { get; set; } = "Phone";
     }
 }
