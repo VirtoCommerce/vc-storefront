@@ -326,6 +326,9 @@ namespace VirtoCommerce.Storefront
                     .Replace("`", "_")
                 );
             });
+
+            services.AddResponseCompression();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -344,6 +347,8 @@ namespace VirtoCommerce.Storefront
             TelemetryDebugWriter.IsTracingDisabled = true;
 
             app.UseResponseCaching();
+
+            app.UseResponseCompression();
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
