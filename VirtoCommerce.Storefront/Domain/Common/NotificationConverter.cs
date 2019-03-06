@@ -1,12 +1,12 @@
 using System.Linq;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
-using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common.Notifications;
 
 namespace VirtoCommerce.Storefront.Domain.Common
 {
-    public static class EmailNotificationConverter
+    public static class NotificationConverter
     {
-        public static TestNotificationRequest ToNotificationDto(this EmailNotificationBase notification)
+        public static TestNotificationRequest ToNotificationDto(this NotificationBase notification)
         {
             var result = new TestNotificationRequest
             {
