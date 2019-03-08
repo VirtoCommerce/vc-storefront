@@ -71,7 +71,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 return null;
             }
             var themeEngine = (ShopifyLiquidThemeEngine)context.TemplateLoader;
-            var result = themeEngine.RenderTemplate(input, null, context.CurrentGlobal);
+            var result = themeEngine.RenderTemplateAsync(input, null, context.CurrentGlobal).GetAwaiter().GetResult();
             return result;
 
         }

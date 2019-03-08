@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi;
-using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Caching;
-using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Marketing.Services;
@@ -18,11 +18,12 @@ namespace VirtoCommerce.Storefront.Domain
     {
         private readonly IMarketingModulePromotion _promiotionApi;
         private readonly IStorefrontMemoryCache _memoryCache;
-
-        public PromotionEvaluator(IMarketingModulePromotion promiotionApi, IStorefrontMemoryCache memoryCache)
+        private readonly StorefrontOptions _storefrontOptions;
+        public PromotionEvaluator(IMarketingModulePromotion promiotionApi, IStorefrontMemoryCache memoryCache, IOptions<StorefrontOptions> storefrontOptions)
         {
             _promiotionApi = promiotionApi;
             _memoryCache = memoryCache;
+            _storefrontOptions = storefrontOptions.Value;
         }
 
         #region IPromotionEvaluator Members
@@ -32,7 +33,8 @@ namespace VirtoCommerce.Storefront.Domain
             var rewards = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(MarketingCacheRegion.CreateChangeToken());
-                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
+                //Workaround: Use lifetime for promotions from ChangesPollingInterval setting to be able manage this value
+                cacheEntry.SetAbsoluteExpiration(_storefrontOptions.ChangesPollingInterval);
 
                 var contextDto = context.ToPromotionEvaluationContextDto();
                 return await _promiotionApi.EvaluatePromotionsAsync(contextDto);

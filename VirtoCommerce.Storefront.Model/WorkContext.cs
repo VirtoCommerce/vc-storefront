@@ -270,8 +270,7 @@ namespace VirtoCommerce.Storefront.Model
         /// Settings defined in theme
         /// </summary>
         public IDictionary<string, object> Settings { get; set; }
-        public string ContentForLayout { get; set; }
-        public string ContentForHeader { get; set; }
+
         public string Version { get; set; }
 
         #region GDPR consent

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using VirtoCommerce.LiquidThemeEngine.Objects;
+using VirtoCommerce.LiquidThemeEngine.Scriban;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 
@@ -50,6 +51,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             var workContext = _workContextAccessor.WorkContext;
             //Set current template
             workContext.Template = _viewName;
+            workContext.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
             var formErrors = context.ViewData.ModelState.Where(x => x.Value.Errors.Any())
                                                         .SelectMany(x => x.Value.Errors.Select(y => y.ErrorMessage)).ToList();
@@ -65,45 +67,31 @@ namespace VirtoCommerce.LiquidThemeEngine
                 workContext.Form.PostedSuccessfully = false;
             }
 
-            // Copy data from the view context over to DotLiquid
-            //var parameters = shopifyContext.ToLiquid() as Dictionary<string, object>;
-
             //Add settings to context
             workContext.Settings = _liquidThemeEngine.GetSettings();
-            //TODO:
-            //foreach (var item in context.ViewData)
-            //{
-            //    //parameters.Add(Template.NamingConvention.GetMemberName(item.Key), item.Value);
-            //    parameters.Add(item.Key, item.Value);
-            //}
-            //foreach (var item in context.TempData)
-            //{
-            //    //parameters.Add(Template.NamingConvention.GetMemberName(item.Key), item.Value);
-            //    parameters.Add(item.Key, item.Value);
-            //}
 
             if (!string.IsNullOrEmpty(_workContextAccessor.WorkContext.ErrorMessage))
             {
                 workContext.ErrorMessage = _workContextAccessor.WorkContext.ErrorMessage;
             }
+            var scriptObject = workContext.ToScriptObject();
 
-            var viewTemplate = _liquidThemeEngine.RenderTemplateByName(_viewName, workContext);
+            var result = await _liquidThemeEngine.RenderTemplateByNameAsync(_viewName, scriptObject);
 
             // don't use layouts for partial views when masterViewName is not specified
             if (_isMainPage)
             {
                 var masterViewName = workContext.Layout ?? "theme";
 
-                var headerTemplate = _liquidThemeEngine.RenderTemplateByName("content_header", workContext);
+                var headerTemplate = await _liquidThemeEngine.RenderTemplateByNameAsync("content_header", scriptObject);
 
                 //add special placeholder 'content_for_layout' to content it will be replaced in master page by main content
-                workContext.ContentForLayout = viewTemplate;
-                workContext.ContentForHeader = headerTemplate;
-                workContext.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                scriptObject.Add("content_for_layout", result);
+                scriptObject.Add("content_for_header", headerTemplate);
 
-                viewTemplate = _liquidThemeEngine.RenderTemplateByName(masterViewName, workContext);
+                result = await _liquidThemeEngine.RenderTemplateByNameAsync(masterViewName, scriptObject);
             }
-            await context.Writer.WriteAsync(viewTemplate);
+            await context.Writer.WriteAsync(result);
         }
 
         #endregion

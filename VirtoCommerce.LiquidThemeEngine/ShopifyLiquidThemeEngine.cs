@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,8 +18,6 @@ using Newtonsoft.Json.Linq;
 using Scriban;
 using Scriban.Parsing;
 using Scriban.Runtime;
-using Scriban.Syntax;
-using VirtoCommerce.LiquidThemeEngine.Converters;
 using VirtoCommerce.LiquidThemeEngine.Filters;
 using VirtoCommerce.LiquidThemeEngine.Scriban;
 using VirtoCommerce.Storefront.Model;
@@ -50,17 +47,6 @@ namespace VirtoCommerce.LiquidThemeEngine
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IContentBlobProvider _themeBlobProvider;
-
-        static ShopifyLiquidThemeEngine()
-        {
-
-            //Condition.Operators["contains"] = CommonOperators.ContainsMethod;
-
-            //Template.RegisterTag<AntiforgeryTag>("anti_forgery");
-            //Template.RegisterTag<LayoutTag>("layout");
-            //Template.RegisterTag<FormTag>("form");
-            //Template.RegisterTag<PaginateTag>("paginate");
-        }
 
         public ShopifyLiquidThemeEngine(IStorefrontMemoryCache memoryCache, IWorkContextAccessor workContextAccessor,
                                         IHttpContextAccessor httpContextAccessor,
@@ -120,7 +106,7 @@ namespace VirtoCommerce.LiquidThemeEngine
 
         public ValueTask<string> LoadAsync(TemplateContext context, SourceSpan callerSpan, string templatePath)
         {
-            throw new NotImplementedException();
+            return new ValueTask<string>(Load(context, callerSpan, templatePath));
         }
 
         #endregion
@@ -144,12 +130,13 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public Stream GetAssetStream(string filePath)
+        public async Task<Stream> GetAssetStreamAsync(string filePath)
         {
             Stream retVal = null;
             var filePathWithoutExtension = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
             //file.ext => file.ext || file || file.liquid || file.ext.liquid        
             var searchPatterns = new[] { filePath, filePathWithoutExtension, string.Format(_liquidTemplateFormat, filePathWithoutExtension), string.Format(_liquidTemplateFormat, filePath) };
+
 
             string currentThemeFilePath = null;
             //try to search in current store theme 
@@ -171,7 +158,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 var templateContent = retVal.ReadToString();
                 retVal.Dispose();
 
-                var template = RenderTemplate(templateContent, filePath, context);
+                var template = await RenderTemplateAsync(templateContent, filePath, context.ToScriptObject());
                 retVal = new MemoryStream(Encoding.UTF8.GetBytes(template));
             }
 
@@ -207,19 +194,19 @@ namespace VirtoCommerce.LiquidThemeEngine
         {
             var cacheKey = CacheKey.With(GetType(), "GetAssetHash", filePath);
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
-           {
-               cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(filePath) }));
+            {
+                cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(filePath) }));
 
-               using (var stream = GetAssetStream(filePath))
-               {
-                   if (stream == null)
-                   {
-                       throw new StorefrontException($"Theme resource for path '{filePath}' not found");
-                   }
-                   var hashAlgorithm = CryptoConfig.AllowOnlyFipsAlgorithms ? (SHA256)new SHA256CryptoServiceProvider() : new SHA256Managed();
-                   return WebEncoders.Base64UrlEncode(hashAlgorithm.ComputeHash(stream));
-               }
-           });
+                using (var stream = GetAssetStreamAsync(filePath).GetAwaiter().GetResult())
+                {
+                    if (stream == null)
+                    {
+                        throw new StorefrontException($"Theme resource for path '{filePath}' not found");
+                    }
+                    var hashAlgorithm = CryptoConfig.AllowOnlyFipsAlgorithms ? (SHA256)new SHA256CryptoServiceProvider() : new SHA256Managed();
+                    return WebEncoders.Base64UrlEncode(hashAlgorithm.ComputeHash(stream));
+                }
+            });
         }
 
         /// <summary>
@@ -247,14 +234,14 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <param name="templateName"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public string RenderTemplateByName(string templateName, object context)
+        public async Task<string> RenderTemplateByNameAsync(string templateName, object context)
         {
             if (string.IsNullOrEmpty(templateName))
             {
                 throw new ArgumentNullException(nameof(templateName));
             }
             var templateContent = ReadTemplateByName(templateName);
-            var retVal = RenderTemplate(templateContent, templateName, context);
+            var retVal = await RenderTemplateAsync(templateContent, templateName, context);
             return retVal;
         }
 
@@ -264,11 +251,16 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <param name="templateContent"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public string RenderTemplate(string templateContent, string templatePath, object context)
+        public async Task<string> RenderTemplateAsync(string templateContent, string templatePath, object context)
         {
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
+            }
+
+            if (!(context is IScriptObject scriptObject))
+            {
+                throw new StorefrontException($"{ nameof(context) } must implement IScriptObject");
             }
 
             if (string.IsNullOrEmpty(templateContent))
@@ -303,24 +295,6 @@ namespace VirtoCommerce.LiquidThemeEngine
                 throw new InvalidOperationException(string.Join("\n", parsedTemplate.Messages));
             }
 
-            var scriptObject = new ScriptObject();
-            scriptObject.Import(context);
-
-            scriptObject.Import(typeof(CommonFilters));
-            scriptObject.Import(typeof(CommerceFilters));
-            scriptObject.Import(typeof(TranslationFilter));
-            scriptObject.Import(typeof(UrlFilters));
-            scriptObject.Import(typeof(MoneyFilters));
-            scriptObject.Import(typeof(HtmlFilters));
-            scriptObject.Import(typeof(StringFilters));
-            scriptObject.Import(typeof(ArrayFilters));
-            scriptObject.Import(typeof(MathFilters));
-            scriptObject.Import(typeof(StandardFilters));
-            //TODO: blank isn't same as was in previous version now it is only represents a null check, need to find out solution or replace in themes == blank check to to .empty? == false expression
-            scriptObject.SetValue("blank", EmptyScriptObject.Default, true);
-            //Store special layout setter action in the context, it is allows to set the WorkContext.Layout property from template during rendering in the CommonFilters.Layout function
-            Action<string> layoutSetter = (layout) => ((WorkContext)context).Layout = layout;
-            scriptObject.Add("layout_setter", layoutSetter);
 
             var templateContext = new TemplateContext()
             {
@@ -334,7 +308,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             };
             templateContext.PushGlobal(scriptObject);
 
-            var result = parsedTemplate.Render(templateContext);
+            var result = await parsedTemplate.RenderAsync(templateContext);
 
 
             return result;
@@ -349,40 +323,40 @@ namespace VirtoCommerce.LiquidThemeEngine
         {
             var cacheKey = CacheKey.With(GetType(), "GetSettings", CurrentThemeSettingPath, defaultValue);
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheItem) =>
-           {
-               cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeSettingPath) }));
-               var retVal = new Dictionary<string, object>().WithDefaultValue(defaultValue);
-               //Load all data from current theme config
-               var resultSettings = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
-               if (resultSettings != null)
-               {
-                   //Get actual preset from merged config
-                   var currentPreset = resultSettings.GetValue("current");
-                   if (currentPreset is JValue)
-                   {
-                       var currentPresetName = ((JValue)currentPreset).Value.ToString();
-                       if (!(resultSettings.GetValue("presets") is JObject presets) || !presets.Children().Any())
-                       {
-                           throw new StorefrontException("Setting presets not defined");
-                       }
+            {
+                cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeSettingPath) }));
+                var retVal = new Dictionary<string, object>().WithDefaultValue(defaultValue);
+                //Load all data from current theme config
+                var resultSettings = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
+                if (resultSettings != null)
+                {
+                    //Get actual preset from merged config
+                    var currentPreset = resultSettings.GetValue("current");
+                    if (currentPreset is JValue)
+                    {
+                        var currentPresetName = ((JValue)currentPreset).Value.ToString();
+                        if (!(resultSettings.GetValue("presets") is JObject presets) || !presets.Children().Any())
+                        {
+                            throw new StorefrontException("Setting presets not defined");
+                        }
 
-                       IList<JProperty> allPresets = presets.Children().Cast<JProperty>().ToList();
-                       resultSettings = allPresets.FirstOrDefault(p => p.Name == currentPresetName).Value as JObject;
-                       if (resultSettings == null)
-                       {
-                           throw new StorefrontException($"Setting preset with name '{currentPresetName}' not found");
-                       }
-                   }
-                   if (currentPreset is JObject)
-                   {
-                       resultSettings = (JObject)currentPreset;
-                   }
+                        IList<JProperty> allPresets = presets.Children().Cast<JProperty>().ToList();
+                        resultSettings = allPresets.FirstOrDefault(p => p.Name == currentPresetName).Value as JObject;
+                        if (resultSettings == null)
+                        {
+                            throw new StorefrontException($"Setting preset with name '{currentPresetName}' not found");
+                        }
+                    }
+                    if (currentPreset is JObject)
+                    {
+                        resultSettings = (JObject)currentPreset;
+                    }
 
-                   retVal = resultSettings.ToObject<Dictionary<string, object>>().ToDictionary(x => x.Key, x => x.Value).WithDefaultValue(defaultValue);
-               }
+                    retVal = resultSettings.ToObject<Dictionary<string, object>>().ToDictionary(x => x.Key, x => x.Value).WithDefaultValue(defaultValue);
+                }
 
-               return retVal;
-           });
+                return retVal;
+            });
         }
 
 

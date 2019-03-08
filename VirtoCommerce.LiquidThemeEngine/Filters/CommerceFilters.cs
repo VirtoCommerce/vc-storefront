@@ -28,7 +28,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         ///     Return the three letter ISO currency code for the current thread.
         /// </summary>
         /// <returns>current currency code in String</returns>
-        public static String CurrentCurrencyCode()
+        public static string CurrentCurrencyCode()
         {
             return new RegionInfo(Thread.CurrentThread.CurrentCulture.Name).ISOCurrencySymbol;
         }
@@ -84,7 +84,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns>Formatted currency in String</returns>
         public static string FormatCurrency(decimal amount, string currencyCode)
         {
-            return String.Format(EffectiveCulture(currencyCode), "{0:c}", amount);
+            return string.Format(EffectiveCulture(currencyCode), "{0:c}", amount);
         }
 
 

@@ -18,6 +18,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
     /// </summary>
     public partial class UrlFilters
     {
+        public static string SizeImageLink(string input, string size)
+        {
+            if (input != null)
+            {
+                input.AddSuffixToFileUrl(size);
+            }
+            return input;
+        }
+
         /// <summary>
         /// Generates a link to the customer login page.
         /// {{ 'Log in' | customer_login_link }}
@@ -58,7 +67,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string ImgUrl(object input, string type = null)
         {
             if (input == null)
+            {
                 return null;
+            }
 
             var retVal = input.ToString();
 
@@ -207,11 +218,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             //If store has defined url need redirect to it
             if (isHttps)
             {
-                retVal = String.IsNullOrEmpty(store.SecureUrl) ? retVal : store.SecureUrl;
+                retVal = string.IsNullOrEmpty(store.SecureUrl) ? retVal : store.SecureUrl;
             }
             else
             {
-                retVal = String.IsNullOrEmpty(store.Url) ? retVal : store.Url;
+                retVal = string.IsNullOrEmpty(store.Url) ? retVal : store.Url;
             }
             return retVal;
         }
@@ -238,7 +249,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string AbsoluteUrl(TemplateContext context, string input, string storeId = null, string languageCode = null)
         {
             if (input == null)
+            {
                 return string.Empty;
+            }
 
             var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
             Store store = null;
@@ -277,7 +290,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string AppendVersion(TemplateContext context, string input)
         {
             if (input == null)
+            {
                 return string.Empty;
+            }
 
             var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
             var basePath = themeAdaptor.GetAssetAbsoluteUrl("");
@@ -329,8 +344,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }
             else
             {
-                var aggregationItem = tagObject as AggregationItem;
-                if (aggregationItem != null)
+                if (tagObject is AggregationItem aggregationItem)
                 {
                     href = GetCurrentUrlWithTags(context, action, aggregationItem.GroupLabel, aggregationItem.Value.ToString());
                     title = BuildTagActionTitle(action, label);
