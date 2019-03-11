@@ -1,6 +1,6 @@
-using PagedList.Core;
 using System;
 using System.Linq;
+using PagedList.Core;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 using VirtoCommerce.Storefront.Model.Common;
 using storefrontModel = VirtoCommerce.Storefront.Model.Catalog;
@@ -91,6 +91,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 Content = d.Value,
                 Type = d.ReviewType
             }));
+
+            if (product.CustomerReviews != null)
+            {
+                result.CustomerReviews = product.CustomerReviews.Select(x => x.ToShopifyModel()).ToArray();
+            }
 
             result.FeaturedImage = product.PrimaryImage?.ToShopifyModel();
 

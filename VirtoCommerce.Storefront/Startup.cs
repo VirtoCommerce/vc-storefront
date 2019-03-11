@@ -25,6 +25,7 @@ using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Cart;
+using VirtoCommerce.Storefront.Domain.CustomerReview;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Filters;
@@ -40,6 +41,7 @@ using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Bus;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer.Services;
+using VirtoCommerce.Storefront.Model.CustomerReviews;
 using VirtoCommerce.Storefront.Model.Inventory.Services;
 using VirtoCommerce.Storefront.Model.LinkList.Services;
 using VirtoCommerce.Storefront.Model.Marketing.Services;
@@ -88,6 +90,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<ICurrencyService, CurrencyService>();
             services.AddSingleton<ISlugRouteService, SlugRouteService>();
             services.AddSingleton<IMemberService, MemberService>();
+            services.AddSingleton<ICustomerReviewService, CustomerReviewService>();
             services.AddSingleton<ICustomerOrderService, CustomerOrderService>();
             services.AddSingleton<IQuoteService, QuoteService>();
             services.AddSingleton<ISubscriptionService, SubscriptionService>();
@@ -103,7 +106,9 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IApiChangesWatcher, ApiChangesWatcher>();
             services.AddSingleton<AssociationRecommendationsProvider>();
             services.AddSingleton<CognitiveRecommendationsProvider>();
-            services.AddSingleton<IRecommendationProviderFactory, RecommendationProviderFactory>(provider => new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(), provider.GetService<CognitiveRecommendationsProvider>()));
+            services.AddSingleton<IRecommendationProviderFactory, RecommendationProviderFactory>(provider =>
+                new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(),
+                    provider.GetService<CognitiveRecommendationsProvider>()));
             services.AddTransient<IQuoteRequestBuilder, QuoteRequestBuilder>();
             services.AddSingleton<IBlobChangesWatcher, BlobChangesWatcher>();
             services.AddTransient<ICartBuilder, CartBuilder>();
@@ -130,7 +135,8 @@ namespace VirtoCommerce.Storefront
                 options.FilePath = HostingEnvironment.MapPath("~/countries.json");
             });
 
-            var contentConnectionString = BlobConnectionString.Parse(Configuration.GetConnectionString("ContentConnectionString"));
+            var contentConnectionString =
+                BlobConnectionString.Parse(Configuration.GetConnectionString("ContentConnectionString"));
             if (contentConnectionString.Provider.EqualsInvariant("AzureBlobStorage"))
             {
                 var azureBlobOptions = new AzureBlobContentOptions();
@@ -172,13 +178,13 @@ namespace VirtoCommerce.Storefront
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(CanImpersonateAuthorizationRequirement.PolicyName,
-                                policy => policy.Requirements.Add(new CanImpersonateAuthorizationRequirement()));
+                    policy => policy.Requirements.Add(new CanImpersonateAuthorizationRequirement()));
                 options.AddPolicy(CanReadContentItemAuthorizeRequirement.PolicyName,
-                                policy => policy.Requirements.Add(new CanReadContentItemAuthorizeRequirement()));
+                    policy => policy.Requirements.Add(new CanReadContentItemAuthorizeRequirement()));
                 options.AddPolicy(CanEditOrganizationResourceAuthorizeRequirement.PolicyName,
-                                policy => policy.Requirements.Add(new CanEditOrganizationResourceAuthorizeRequirement()));
+                    policy => policy.Requirements.Add(new CanEditOrganizationResourceAuthorizeRequirement()));
                 options.AddPolicy(OnlyRegisteredUserAuthorizationRequirement.PolicyName,
-                                policy => policy.Requirements.Add(new OnlyRegisteredUserAuthorizationRequirement()));
+                    policy => policy.Requirements.Add(new OnlyRegisteredUserAuthorizationRequirement()));
             });
 
 
@@ -187,27 +193,21 @@ namespace VirtoCommerce.Storefront
             var facebookSection = Configuration.GetSection("Authentication:Facebook");
             if (facebookSection.GetChildren().Any())
             {
-                auth.AddFacebook(facebookOptions =>
-                {
-                    facebookSection.Bind(facebookOptions);
-                });
+                auth.AddFacebook(facebookOptions => { facebookSection.Bind(facebookOptions); });
             }
+
             var googleSection = Configuration.GetSection("Authentication:Google");
             if (googleSection.GetChildren().Any())
             {
-                auth.AddGoogle(googleOptions =>
-                {
-                    googleSection.Bind(googleOptions);
-                });
+                auth.AddGoogle(googleOptions => { googleSection.Bind(googleOptions); });
             }
+
             var githubSection = Configuration.GetSection("Authentication:Github");
             if (githubSection.GetChildren().Any())
             {
-                auth.AddGitHub(GitHubAuthenticationOptions =>
-                {
-                    githubSection.Bind(GitHubAuthenticationOptions);
-                });
+                auth.AddGitHub(GitHubAuthenticationOptions => { githubSection.Bind(GitHubAuthenticationOptions); });
             }
+
             var stackexchangeSection = Configuration.GetSection("Authentication:Stackexchange");
             if (stackexchangeSection.GetChildren().Any())
             {
@@ -219,9 +219,11 @@ namespace VirtoCommerce.Storefront
 
             //This line is required in order to use the old Identity V2 hashes to prevent rehashes passwords for platform users which login in the storefront
             //and it can lead to platform access denied for them. (TODO: Need to remove after platform migration to .NET Core)
-            services.Configure<PasswordHasherOptions>(option => option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2);
+            services.Configure<PasswordHasherOptions>(option =>
+                option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2);
             services.Configure<IdentityOptions>(Configuration.GetSection("IdentityOptions"));
-            services.Configure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, Configuration.GetSection("CookieAuthenticationOptions"));
+            services.Configure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme,
+                Configuration.GetSection("CookieAuthenticationOptions"));
             services.AddIdentity<User, Role>(options => { }).AddDefaultTokenProviders();
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -232,12 +234,10 @@ namespace VirtoCommerce.Storefront
             });
             // The Tempdata provider cookie is not essential. Make it essential
             // so Tempdata is functional when tracking is disabled.
-            services.Configure<CookieTempDataProviderOptions>(options =>
-            {
-                options.Cookie.IsEssential = true;
-            });
+            services.Configure<CookieTempDataProviderOptions>(options => { options.Cookie.IsEssential = true; });
 
-            services.Replace(ServiceDescriptor.Transient<CookieAuthenticationHandler, CustomCookieAuthenticationHandler>());
+            services.Replace(
+                ServiceDescriptor.Transient<CookieAuthenticationHandler, CustomCookieAuthenticationHandler>());
 
             //Add Liquid view engine
             services.AddLiquidViewEngine(options =>
@@ -248,42 +248,48 @@ namespace VirtoCommerce.Storefront
             var snapshotProvider = services.BuildServiceProvider();
             services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
             services.AddMvc(options =>
-            {
-                //Workaround to avoid 'Null effective policy causing exception' (on logout)
-                //https://github.com/aspnet/Mvc/issues/7809
-                //TODO: Try to remove in ASP.NET Core 2.2
-                options.AllowCombiningAuthorizeFilters = false;
-
-
-                options.CacheProfiles.Add("Default", new CacheProfile()
                 {
-                    Duration = (int)TimeSpan.FromHours(1).TotalSeconds,
-                    VaryByHeader = "host"
-                });
+                    //Workaround to avoid 'Null effective policy causing exception' (on logout)
+                    //https://github.com/aspnet/Mvc/issues/7809
+                    //TODO: Try to remove in ASP.NET Core 2.2
+                    options.AllowCombiningAuthorizeFilters = false;
 
-                options.Filters.AddService(typeof(AngularAntiforgeryCookieResultFilter));
 
-                // To include only Api controllers to swagger document
-                options.Conventions.Add(new ApiExplorerApiControllersConvention());
-            }).AddJsonOptions(options =>
-            {
-                options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
-                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                options.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
-                options.SerializerSettings.Converters.Add(new CartTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
-                options.SerializerSettings.Converters.Add(new MoneyJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
-                options.SerializerSettings.Converters.Add(new CurrencyJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
-                options.SerializerSettings.Converters.Add(new OrderTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
-                options.SerializerSettings.Converters.Add(new RecommendationJsonConverter(snapshotProvider.GetService<IRecommendationProviderFactory>()));
-                //Converter for providing back compatibility with old themes was used CustomerInfo type which has contained user and contact data in the single type.
-                //May be removed when all themes will fixed to new User type with nested Contact property.
-                options.SerializerSettings.Converters.Add(new UserBackwardCompatibilityJsonConverter(options.SerializerSettings));
-            }).AddViewOptions(options =>
-            {
-                options.ViewEngines.Add(snapshotProvider.GetService<ILiquidViewEngine>());
-            })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                    options.CacheProfiles.Add("Default", new CacheProfile()
+                    {
+                        Duration = (int)TimeSpan.FromHours(1).TotalSeconds,
+                        VaryByHeader = "host"
+                    });
+
+                    options.Filters.AddService(typeof(AngularAntiforgeryCookieResultFilter));
+
+                    // To include only Api controllers to swagger document
+                    options.Conventions.Add(new ApiExplorerApiControllersConvention());
+                }).AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
+                    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
+                    options.SerializerSettings.Converters.Add(
+                        new CartTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
+                    options.SerializerSettings.Converters.Add(
+                        new MoneyJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
+                    options.SerializerSettings.Converters.Add(
+                        new CurrencyJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
+                    options.SerializerSettings.Converters.Add(
+                        new OrderTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
+                    options.SerializerSettings.Converters.Add(
+                        new RecommendationJsonConverter(snapshotProvider.GetService<IRecommendationProviderFactory>()));
+                    //Converter for providing back compatibility with old themes was used CustomerInfo type which has contained user and contact data in the single type.
+                    //May be removed when all themes will fixed to new User type with nested Contact property.
+                    options.SerializerSettings.Converters.Add(
+                        new UserBackwardCompatibilityJsonConverter(options.SerializerSettings));
+                }).AddViewOptions(options =>
+                {
+                    options.ViewEngines.Add(snapshotProvider.GetService<ILiquidViewEngine>());
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
 
             //Register event handlers via reflection
@@ -295,7 +301,8 @@ namespace VirtoCommerce.Storefront
 
             //https://github.com/aspnet/HttpAbstractions/issues/315
             //Changing the default html encoding options, to not encode non-Latin characters
-            services.Configure<WebEncoderOptions>(options => options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All));
+            services.Configure<WebEncoderOptions>(options =>
+                options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All));
 
             services.Configure<HstsOptions>(options =>
             {
@@ -328,7 +335,6 @@ namespace VirtoCommerce.Storefront
             });
 
             services.AddResponseCompression();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -343,6 +349,7 @@ namespace VirtoCommerce.Storefront
                 app.UseExceptionHandler("/error/500");
                 app.UseHsts();
             }
+
             //Do not write telemetry to debug output 
             TelemetryDebugWriter.IsTracingDisabled = true;
 
@@ -376,6 +383,7 @@ namespace VirtoCommerce.Storefront
                     rewriteOptions.AddIISUrlRewrite(iisUrlRewriteStreamReader);
                 }
             }
+
             rewriteOptions.Add(new StorefrontUrlNormalizeRule());
 
             var requireHttpsOptions = new RequireHttpsOptions();
@@ -384,6 +392,7 @@ namespace VirtoCommerce.Storefront
             {
                 rewriteOptions.AddRedirectToHttps(requireHttpsOptions.StatusCode, requireHttpsOptions.Port);
             }
+
             app.UseRewriter(rewriteOptions);
             //Enable browser XSS protection
             app.Use(async (context, next) =>

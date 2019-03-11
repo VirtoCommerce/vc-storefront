@@ -76,8 +76,9 @@ namespace VirtoCommerce.LiquidThemeEngine
         }
 
         public ShopifyLiquidThemeEngine(IStorefrontMemoryCache memoryCache, IWorkContextAccessor workContextAccessor,
-                                        IHttpContextAccessor httpContextAccessor,
-                                        IStorefrontUrlBuilder storeFrontUrlBuilder, IContentBlobProvider contentBlobProvder, IOptions<LiquidThemeEngineOptions> options)
+            IHttpContextAccessor httpContextAccessor,
+            IStorefrontUrlBuilder storeFrontUrlBuilder, IContentBlobProvider contentBlobProvder,
+            IOptions<LiquidThemeEngineOptions> options)
         {
             _workContextAccessor = workContextAccessor;
             _httpContextAccessor = httpContextAccessor;
@@ -110,23 +111,29 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <summary>
         /// Current theme name
         /// </summary>
-        public string CurrentThemeName => !string.IsNullOrEmpty(WorkContext.CurrentStore.ThemeName) ? WorkContext.CurrentStore.ThemeName : "default";
+        public string CurrentThemeName => !string.IsNullOrEmpty(WorkContext.CurrentStore.ThemeName)
+            ? WorkContext.CurrentStore.ThemeName
+            : "default";
 
         public string CurrentThemeSettingPath => Path.Combine(CurrentThemePath, "config", "settings_data.json");
         public string CurrentThemeLocalePath => Path.Combine(CurrentThemePath, "locales");
+
         /// <summary>
         /// Current theme base path
         /// </summary>
         private string CurrentThemePath => Path.Combine("Themes", WorkContext.CurrentStore.Id, CurrentThemeName);
 
         #region IFileSystem members
+
         public string ReadTemplateFile(Context context, string templateName)
         {
             return ReadTemplateByName(templateName);
         }
+
         #endregion
 
         #region ILiquidThemeEngine Members
+
         public IEnumerable<string> DiscoveryPaths
         {
             get
@@ -136,6 +143,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 {
                     retVal = _options.TemplatesDiscoveryFolders.Select(x => Path.Combine(CurrentThemePath, x));
                 }
+
                 return retVal;
             }
         }
@@ -148,15 +156,22 @@ namespace VirtoCommerce.LiquidThemeEngine
         public Stream GetAssetStream(string filePath)
         {
             Stream retVal = null;
-            var filePathWithoutExtension = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
+            var filePathWithoutExtension =
+                Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
             //file.ext => file.ext || file || file.liquid || file.ext.liquid        
-            var searchPatterns = new[] { filePath, filePathWithoutExtension, string.Format(_liquidTemplateFormat, filePathWithoutExtension), string.Format(_liquidTemplateFormat, filePath) };
+            var searchPatterns = new[]
+            {
+                filePath, filePathWithoutExtension, string.Format(_liquidTemplateFormat, filePathWithoutExtension),
+                string.Format(_liquidTemplateFormat, filePath)
+            };
 
             string currentThemeFilePath = null;
             //try to search in current store theme 
             if (_themeBlobProvider.PathExists(Path.Combine(CurrentThemePath, "assets")))
             {
-                currentThemeFilePath = searchPatterns.SelectMany(x => _themeBlobProvider.Search(Path.Combine(CurrentThemePath, "assets"), x, true)).FirstOrDefault();
+                currentThemeFilePath = searchPatterns
+                    .SelectMany(x => _themeBlobProvider.Search(Path.Combine(CurrentThemePath, "assets"), x, true))
+                    .FirstOrDefault();
             }
 
             if (currentThemeFilePath != null)
@@ -179,7 +194,8 @@ namespace VirtoCommerce.LiquidThemeEngine
                 retVal = new MemoryStream(Encoding.UTF8.GetBytes(template));
             }
 
-            if (retVal != null && (filePath.Contains(".scss.") && filePath.EndsWith(".liquid") || filePath.EndsWith(".scss")))
+            if (retVal != null && (filePath.Contains(".scss.") && filePath.EndsWith(".liquid") ||
+                                   filePath.EndsWith(".scss")))
             {
                 var content = retVal.ReadToString();
                 retVal.Dispose();
@@ -211,19 +227,23 @@ namespace VirtoCommerce.LiquidThemeEngine
         {
             var cacheKey = CacheKey.With(GetType(), "GetAssetHash", filePath);
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
-           {
-               cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(filePath) }));
+            {
+                cacheEntry.AddExpirationToken(new CompositeChangeToken(new[]
+                    {ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(filePath)}));
 
-               using (var stream = GetAssetStream(filePath))
-               {
-                   if (stream == null)
-                   {
-                       throw new StorefrontException($"Theme resource for path '{filePath}' not found");
-                   }
-                   var hashAlgorithm = CryptoConfig.AllowOnlyFipsAlgorithms ? (SHA256)new SHA256CryptoServiceProvider() : new SHA256Managed();
-                   return WebEncoders.Base64UrlEncode(hashAlgorithm.ComputeHash(stream));
-               }
-           });
+                using (var stream = GetAssetStream(filePath))
+                {
+                    if (stream == null)
+                    {
+                        throw new StorefrontException($"Theme resource for path '{filePath}' not found");
+                    }
+
+                    var hashAlgorithm = CryptoConfig.AllowOnlyFipsAlgorithms
+                        ? (SHA256)new SHA256CryptoServiceProvider()
+                        : new SHA256Managed();
+                    return WebEncoders.Base64UrlEncode(hashAlgorithm.ComputeHash(stream));
+                }
+            });
         }
 
         /// <summary>
@@ -239,7 +259,9 @@ namespace VirtoCommerce.LiquidThemeEngine
             }
 
             var liquidTemplateFileName = string.Format(_liquidTemplateFormat, templateName);
-            var curentThemeDiscoveryPaths = _options.TemplatesDiscoveryFolders.Select(x => Path.Combine(CurrentThemePath, x, liquidTemplateFileName));
+            var curentThemeDiscoveryPaths =
+                _options.TemplatesDiscoveryFolders.Select(
+                    x => Path.Combine(CurrentThemePath, x, liquidTemplateFileName));
 
             //Try to find template in current theme folder
             return curentThemeDiscoveryPaths.FirstOrDefault(x => _themeBlobProvider.PathExists(x));
@@ -257,6 +279,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             {
                 throw new ArgumentNullException(nameof(templateName));
             }
+
             var templateContent = ReadTemplateByName(templateName);
             var retVal = RenderTemplate(templateContent, parameters);
             return retVal;
@@ -319,41 +342,44 @@ namespace VirtoCommerce.LiquidThemeEngine
         {
             var cacheKey = CacheKey.With(GetType(), "GetSettings", CurrentThemeSettingPath, defaultValue);
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheItem) =>
-           {
-               cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeSettingPath) }));
-               var retVal = new DefaultableDictionary(defaultValue);
-               //Load all data from current theme config
-               var resultSettings = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
-               if (resultSettings != null)
-               {
-                   //Get actual preset from merged config
-                   var currentPreset = resultSettings.GetValue("current");
-                   if (currentPreset is JValue)
-                   {
-                       var currentPresetName = ((JValue)currentPreset).Value.ToString();
-                       if (!(resultSettings.GetValue("presets") is JObject presets) || !presets.Children().Any())
-                       {
-                           throw new StorefrontException("Setting presets not defined");
-                       }
+            {
+                cacheItem.AddExpirationToken(new CompositeChangeToken(new[]
+                    {ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeSettingPath)}));
+                var retVal = new DefaultableDictionary(defaultValue);
+                //Load all data from current theme config
+                var resultSettings = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
+                if (resultSettings != null)
+                {
+                    //Get actual preset from merged config
+                    var currentPreset = resultSettings.GetValue("current");
+                    if (currentPreset is JValue)
+                    {
+                        var currentPresetName = ((JValue)currentPreset).Value.ToString();
+                        if (!(resultSettings.GetValue("presets") is JObject presets) || !presets.Children().Any())
+                        {
+                            throw new StorefrontException("Setting presets not defined");
+                        }
 
-                       IList<JProperty> allPresets = presets.Children().Cast<JProperty>().ToList();
-                       resultSettings = allPresets.FirstOrDefault(p => p.Name == currentPresetName).Value as JObject;
-                       if (resultSettings == null)
-                       {
-                           throw new StorefrontException($"Setting preset with name '{currentPresetName}' not found");
-                       }
-                   }
-                   if (currentPreset is JObject)
-                   {
-                       resultSettings = (JObject)currentPreset;
-                   }
+                        IList<JProperty> allPresets = presets.Children().Cast<JProperty>().ToList();
+                        resultSettings = allPresets.FirstOrDefault(p => p.Name == currentPresetName).Value as JObject;
+                        if (resultSettings == null)
+                        {
+                            throw new StorefrontException($"Setting preset with name '{currentPresetName}' not found");
+                        }
+                    }
 
-                   var dict = resultSettings.ToObject<Dictionary<string, object>>().ToDictionary(x => x.Key, x => x.Value);
-                   retVal = new DefaultableDictionary(dict, defaultValue);
-               }
+                    if (currentPreset is JObject)
+                    {
+                        resultSettings = (JObject)currentPreset;
+                    }
 
-               return retVal;
-           });
+                    var dict = resultSettings.ToObject<Dictionary<string, object>>()
+                        .ToDictionary(x => x.Key, x => x.Value);
+                    retVal = new DefaultableDictionary(dict, defaultValue);
+                }
+
+                return retVal;
+            });
         }
 
 
@@ -363,11 +389,16 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <returns></returns>
         public JObject ReadLocalization()
         {
-            var cacheKey = CacheKey.With(GetType(), "ReadLocalization", CurrentThemeLocalePath, WorkContext.CurrentLanguage.CultureName);
+            var cacheKey = CacheKey.With(GetType(), "ReadLocalization", CurrentThemeLocalePath,
+                WorkContext.CurrentLanguage.CultureName);
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheItem) =>
             {
-                cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeLocalePath + "/*") }));
-                return InnerReadLocalization(_themeBlobProvider, CurrentThemeLocalePath, WorkContext.CurrentLanguage) ?? new JObject();
+                cacheItem.AddExpirationToken(new CompositeChangeToken(new[]
+                {
+                    ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeLocalePath + "/*")
+                }));
+                return InnerReadLocalization(_themeBlobProvider, CurrentThemeLocalePath, WorkContext.CurrentLanguage) ??
+                       new JObject();
             });
         }
 
@@ -378,12 +409,15 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <returns></returns>
         public string GetAssetAbsoluteUrl(string assetName)
         {
-            return UrlBuilder.ToAppAbsolute(_options.ThemesAssetsRelativeUrl.TrimEnd('/') + "/" + assetName.TrimStart('/'), WorkContext.CurrentStore, WorkContext.CurrentLanguage);
+            return UrlBuilder.ToAppAbsolute(
+                _options.ThemesAssetsRelativeUrl.TrimEnd('/') + "/" + assetName.TrimStart('/'),
+                WorkContext.CurrentStore, WorkContext.CurrentLanguage);
         }
 
         #endregion
 
-        private static JObject InnerReadLocalization(IContentBlobProvider themeBlobProvider, string localePath, Language language)
+        private static JObject InnerReadLocalization(IContentBlobProvider themeBlobProvider, string localePath,
+            Language language)
         {
             JObject retVal = null;
 
@@ -402,6 +436,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                         {
                             localeJson = JsonConvert.DeserializeObject<dynamic>(stream.ReadToString());
                         }
+
                         break;
                     }
                 }
@@ -424,6 +459,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                     retVal.Merge(localeJson, new JsonMergeSettings { MergeArrayHandling = MergeArrayHandling.Merge });
                 }
             }
+
             return retVal;
         }
 
@@ -443,6 +479,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                     retVal = JsonConvert.DeserializeObject<JObject>(stream.ReadToString());
                 }
             }
+
             return retVal;
         }
 
@@ -451,13 +488,15 @@ namespace VirtoCommerce.LiquidThemeEngine
             var templatePath = ResolveTemplatePath(templateName);
             if (string.IsNullOrEmpty(templatePath))
             {
-                throw new FileSystemException($"The template '{templateName}' was not found. The following locations were searched:<br/>{string.Join("<br/>", DiscoveryPaths)}");
+                throw new FileSystemException(
+                    $"The template '{templateName}' was not found. The following locations were searched:<br/>{string.Join("<br/>", DiscoveryPaths)}");
             }
 
             var cacheKey = CacheKey.With(GetType(), "ReadTemplateByName", templatePath);
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheItem) =>
             {
-                cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(templatePath) }));
+                cacheItem.AddExpirationToken(new CompositeChangeToken(new[]
+                    {ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(templatePath)}));
                 using (var stream = _themeBlobProvider.OpenRead(templatePath))
                 {
                     return stream.ReadToString();
