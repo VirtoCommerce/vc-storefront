@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.CustomerReviews;
 using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Subscriptions;
 
@@ -212,6 +213,12 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// Product description in current language
         /// </summary>
         public string Description { get; set; }
+
+
+        /// <summary>
+        /// List of customer reviews
+        /// </summary>
+        public MutablePagedList<CustomerReview> CustomerReviews { get; set; }
 
         /// <summary>
         /// Product editorial reviews
