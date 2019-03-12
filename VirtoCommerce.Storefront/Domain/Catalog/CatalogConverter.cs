@@ -41,8 +41,7 @@ namespace VirtoCommerce.Storefront.Domain
                                              .ToArray();
                 foreach (var aggregationItem in result.Items)
                 {
-                    aggregationItem.GroupLabel = result.Label;
-                    aggregationItem.GroupType = result.AggregationType;
+                    aggregationItem.Group = result;
                 }
             }
 

@@ -9,11 +9,11 @@ namespace VirtoCommerce.LiquidThemeEngine
     {
         IEnumerable<string> DiscoveryPaths { get; }
         string ResolveTemplatePath(string templateName);
-        Task<string> RenderTemplateByNameAsync(string templateName, object context);
-        Task<string> RenderTemplateAsync(string templateContent, string templatePath, object context);
+        ValueTask<string> RenderTemplateByNameAsync(string templateName, object context);
+        ValueTask<string> RenderTemplateAsync(string templateContent, string templatePath, object context);
         IDictionary<string, object> GetSettings(string defaultValue = null);
         JObject ReadLocalization();
-        Task<Stream> GetAssetStreamAsync(string fileName);
+        ValueTask<Stream> GetAssetStreamAsync(string fileName);
         string GetAssetHash(string fileName);
         string GetAssetAbsoluteUrl(string assetName);
     }

@@ -140,7 +140,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public async Task<Stream> GetAssetStreamAsync(string filePath)
+        public async ValueTask<Stream> GetAssetStreamAsync(string filePath)
         {
             Stream retVal = null;
             var filePathWithoutExtension = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
@@ -254,7 +254,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <param name="templateName"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public async Task<string> RenderTemplateByNameAsync(string templateName, object context)
+        public async ValueTask<string> RenderTemplateByNameAsync(string templateName, object context)
         {
             if (string.IsNullOrEmpty(templateName))
             {
@@ -271,7 +271,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <param name="templateContent"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public async Task<string> RenderTemplateAsync(string templateContent, string templatePath, object context)
+        public ValueTask<string> RenderTemplateAsync(string templateContent, string templatePath, object context)
         {
             if (context == null)
             {
@@ -285,13 +285,13 @@ namespace VirtoCommerce.LiquidThemeEngine
 
             if (string.IsNullOrEmpty(templateContent))
             {
-                return templateContent;
+                return new ValueTask<string>(templateContent);
             }
 
             var isLiquidTemplate = _isLiquid.Match(templateContent);
             if (!isLiquidTemplate.Success)
             {
-                return templateContent;
+                return new ValueTask<string>(templateContent);
             }
 
             //TODO: Handle _options.RethrowLiquidRenderErrors
@@ -328,10 +328,8 @@ namespace VirtoCommerce.LiquidThemeEngine
             };
             templateContext.PushGlobal(scriptObject);
 
-            var result = await parsedTemplate.RenderAsync(templateContext);
-
-
-            return result;
+            var result = parsedTemplate.Render(templateContext);
+            return new ValueTask<string>(result);
         }
 
         /// <summary>
@@ -348,7 +346,6 @@ namespace VirtoCommerce.LiquidThemeEngine
                 var retVal = new Dictionary<string, object>().WithDefaultValue(defaultValue);
                 //Load all data from current theme config
                 var resultSettings = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
-                //TODO: settings inheritance
                 if (resultSettings == null && BaseThemeSettingPath != null)
                 {
                     resultSettings = InnerGetAllSettings(_themeBlobProvider, BaseThemeSettingPath);
