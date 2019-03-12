@@ -15,6 +15,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public string CatalogId { get; set; }
 
         //All parents categories
+        [JsonIgnore]
         public IMutablePagedList<Category> Parents { get; set; }
         public string ParentId { get; set; }
 
@@ -50,7 +51,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public Image Image => PrimaryImage;
 
         public IList<Image> Images { get; set; }
-
+        [JsonIgnore]
         public IMutablePagedList<Product> Products { get; set; }
 
         /// <summary>
@@ -59,6 +60,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public IMutablePagedList<Category> Categories { get; set; }
         [JsonIgnore]
         public IMutablePagedList<Category> Collections => Categories;
+
 
         #region IHasProperties Members
         public IList<CatalogProperty> Properties { get; set; }

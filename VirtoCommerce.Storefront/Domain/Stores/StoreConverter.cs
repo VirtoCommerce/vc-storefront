@@ -39,7 +39,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Region = storeDto.Region,
                 SecureUrl = storeDto.SecureUrl,
                 TimeZone = storeDto.TimeZone,
-                Url = storeDto.Url ?? "~/",
+                Url = storeDto.Url,
                 DefaultFulfillmentCenterId = storeDto.MainFulfillmentCenterId,
                 AvailFulfillmentCenterIds = storeDto.AdditionalFulfillmentCenterIds ?? Array.Empty<string>()
             };

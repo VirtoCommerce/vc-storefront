@@ -88,9 +88,15 @@ namespace VirtoCommerce.LiquidThemeEngine
         public string CurrentThemeSettingPath => Path.Combine(CurrentThemePath, "config", "settings_data.json");
         public string CurrentThemeLocalePath => Path.Combine(CurrentThemePath, "locales");
         /// <summary>
-        /// Current theme base path
+        /// The path for current theme 
         /// </summary>
         private string CurrentThemePath => Path.Combine("Themes", WorkContext.CurrentStore.Id, CurrentThemeName);
+
+        //Relative path to the discovery of theme resources that weren't found by the current path.
+        private string BaseThemePath => !string.IsNullOrEmpty(_options.BaseThemeName) ? Path.Combine("Themes", _options.BaseThemeName, "default") : null;
+        private string BaseThemeSettingPath => BaseThemePath != null ? Path.Combine(BaseThemePath, "config", "settings_data.json") : null;
+        public string BaseThemeLocalePath => BaseThemePath != null ? Path.Combine(BaseThemePath, "locales") : null;
+
 
         #region IFileSystem members
         public string GetPath(TemplateContext context, SourceSpan callerSpan, string templateName)
@@ -120,6 +126,10 @@ namespace VirtoCommerce.LiquidThemeEngine
                 if (WorkContext.CurrentStore != null)
                 {
                     retVal = _options.TemplatesDiscoveryFolders.Select(x => Path.Combine(CurrentThemePath, x));
+                    if (BaseThemePath != null)
+                    {
+                        retVal = retVal.Concat(_options.TemplatesDiscoveryFolders.Select(x => Path.Combine(BaseThemePath, x)));
+                    }
                 }
                 return retVal;
             }
@@ -143,6 +153,11 @@ namespace VirtoCommerce.LiquidThemeEngine
             if (_themeBlobProvider.PathExists(Path.Combine(CurrentThemePath, "assets")))
             {
                 currentThemeFilePath = searchPatterns.SelectMany(x => _themeBlobProvider.Search(Path.Combine(CurrentThemePath, "assets"), x, true)).FirstOrDefault();
+            }
+            //If not found by current theme path try find them by base path if it is defined
+            if (currentThemeFilePath == null)
+            {
+                currentThemeFilePath = searchPatterns.SelectMany(x => _themeBlobProvider.Search(Path.Combine(BaseThemePath, "assets"), x, true)).FirstOrDefault();
             }
 
             if (currentThemeFilePath != null)
@@ -222,10 +237,15 @@ namespace VirtoCommerce.LiquidThemeEngine
             }
 
             var liquidTemplateFileName = string.Format(_liquidTemplateFormat, templateName);
+            //If not found by current theme path try find them by base path if it is defined
             var curentThemeDiscoveryPaths = _options.TemplatesDiscoveryFolders.Select(x => Path.Combine(CurrentThemePath, x, liquidTemplateFileName));
-
+            if (BaseThemePath != null)
+            {
+                curentThemeDiscoveryPaths = curentThemeDiscoveryPaths.Concat(_options.TemplatesDiscoveryFolders.Select(x => Path.Combine(BaseThemePath, x, liquidTemplateFileName)));
+            }
             //Try to find template in current theme folder
             return curentThemeDiscoveryPaths.FirstOrDefault(x => _themeBlobProvider.PathExists(x));
+
         }
 
         /// <summary>
@@ -328,6 +348,11 @@ namespace VirtoCommerce.LiquidThemeEngine
                 var retVal = new Dictionary<string, object>().WithDefaultValue(defaultValue);
                 //Load all data from current theme config
                 var resultSettings = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
+                //TODO: settings inheritance
+                if (resultSettings == null && BaseThemeSettingPath != null)
+                {
+                    resultSettings = InnerGetAllSettings(_themeBlobProvider, BaseThemeSettingPath);
+                }
                 if (resultSettings != null)
                 {
                     //Get actual preset from merged config
@@ -369,8 +394,17 @@ namespace VirtoCommerce.LiquidThemeEngine
             var cacheKey = CacheKey.With(GetType(), "ReadLocalization", CurrentThemeLocalePath, WorkContext.CurrentLanguage.CultureName);
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheItem) =>
             {
+                var result = new JObject();
                 cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeLocalePath + "/*") }));
-                return InnerReadLocalization(_themeBlobProvider, CurrentThemeLocalePath, WorkContext.CurrentLanguage) ?? new JObject();
+                //Try to load localization resources from base theme path and merge them with resources for local theme
+                if (BaseThemeLocalePath != null)
+                {
+                    cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(BaseThemeLocalePath + "/*") }));
+                    result = InnerReadLocalization(_themeBlobProvider, BaseThemeLocalePath, WorkContext.CurrentLanguage);
+                }
+                result.Merge(InnerReadLocalization(_themeBlobProvider, CurrentThemeLocalePath, WorkContext.CurrentLanguage) ?? new JObject(), new JsonMergeSettings { MergeArrayHandling = MergeArrayHandling.Merge });
+                return result;
+
             });
         }
 
