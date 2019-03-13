@@ -11,7 +11,7 @@ namespace VirtoCommerce.Storefront.Model.Common
     /// </summary>
     public class Currency : ValueObject
     {
-        private static IDictionary<string, string> _isoIsoCurrencySymbolDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase).WithDefaultValue(null);
+        private static IDictionary<string, string> _isoCurrencySymbolDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase).WithDefaultValue(null);
         static Currency()
         {
             foreach (var ci in CultureInfo.GetCultures(CultureTypes.SpecificCultures))
@@ -19,7 +19,7 @@ namespace VirtoCommerce.Storefront.Model.Common
                 try
                 {
                     var ri = new RegionInfo(ci.LCID);
-                    _isoIsoCurrencySymbolDict[ri.ISOCurrencySymbol] = ri.CurrencySymbol;
+                    _isoCurrencySymbolDict[ri.ISOCurrencySymbol] = ri.CurrencySymbol;
                 }
                 catch (Exception)
                 {
@@ -111,7 +111,7 @@ namespace VirtoCommerce.Storefront.Model.Common
 
                     if (_code != null)
                     {
-                        Symbol = _isoIsoCurrencySymbolDict[_code] ?? "N/A";
+                        Symbol = _isoCurrencySymbolDict[_code] ?? "N/A";
                         NumberFormat.CurrencySymbol = Symbol;
                     }
                 }
