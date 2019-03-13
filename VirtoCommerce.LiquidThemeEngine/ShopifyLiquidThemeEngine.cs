@@ -98,7 +98,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         public string BaseThemeLocalePath => BaseThemePath != null ? Path.Combine(BaseThemePath, "locales") : null;
 
 
-        #region IFileSystem members
+        #region ITemplateLoader members
         public string GetPath(TemplateContext context, SourceSpan callerSpan, string templateName)
         {
             return ResolveTemplatePath(templateName);
@@ -140,7 +140,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public async ValueTask<Stream> GetAssetStreamAsync(string filePath)
+        public async Task<Stream> GetAssetStreamAsync(string filePath)
         {
             Stream retVal = null;
             var filePathWithoutExtension = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
@@ -260,8 +260,14 @@ namespace VirtoCommerce.LiquidThemeEngine
             {
                 throw new ArgumentNullException(nameof(templateName));
             }
-            var templateContent = ReadTemplateByName(templateName);
-            var retVal = await RenderTemplateAsync(templateContent, templateName, context);
+
+            var templatePath = ResolveTemplatePath(templateName);
+            if (string.IsNullOrEmpty(templatePath))
+            {
+                throw new FileNotFoundException($"The template '{templateName}' was not found. The following locations were searched:<br/>{string.Join("<br/>", DiscoveryPaths)}");
+            }
+            var templateContent = ReadTemplateByPath(templatePath);
+            var retVal = await RenderTemplateAsync(templateContent, templatePath, context);
             return retVal;
         }
 
@@ -480,16 +486,6 @@ namespace VirtoCommerce.LiquidThemeEngine
             return retVal;
         }
 
-        private string ReadTemplateByName(string templateName)
-        {
-            var templatePath = ResolveTemplatePath(templateName);
-            if (string.IsNullOrEmpty(templatePath))
-            {
-                throw new FileNotFoundException($"The template '{templateName}' was not found. The following locations were searched:<br/>{string.Join("<br/>", DiscoveryPaths)}");
-            }
-
-            return ReadTemplateByPath(templatePath);
-        }
 
         private string ReadTemplateByPath(string templatePath)
         {
