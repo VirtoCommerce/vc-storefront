@@ -107,6 +107,11 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// </summary>
         public string MasterViewName => _options.DefaultLayout;
 
+        /// <summary>
+        /// Current theme name
+        /// </summary>
+        public string CurrentThemeName => !string.IsNullOrEmpty(WorkContext.CurrentStore.ThemeName) ? WorkContext.CurrentStore.ThemeName : "default";
+
         public string CurrentThemeSettingPath => Path.Combine(CurrentThemePath, "config", "settings_data.json");
         public string CurrentThemeLocalePath => Path.Combine(CurrentThemePath, "locales");
 
@@ -119,13 +124,13 @@ namespace VirtoCommerce.LiquidThemeEngine
             {
                 var baseThemePath = "Themes";
                 var paths = new[] {
-                    Path.Combine(baseThemePath, WorkContext.CurrentStore.Id, WorkContext.CurrentStore.ThemeName),
+                    Path.Combine(baseThemePath, WorkContext.CurrentStore.Id, CurrentThemeName),
                     Path.Combine(baseThemePath, WorkContext.CurrentStore.Id, "default"),
                     Path.Combine(baseThemePath, WorkContext.CurrentStore.Id),
                     Path.Combine(baseThemePath)
                 };
 
-                return paths.FirstOrDefault(x => !string.IsNullOrEmpty(ResolveTemplatePath("index", x)));
+                return paths.Distinct().FirstOrDefault(x => !string.IsNullOrEmpty(ResolveTemplatePath("index", x)));
             }
         }
 
