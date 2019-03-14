@@ -117,8 +117,6 @@ namespace VirtoCommerce.LiquidThemeEngine
         {
             get
             {
-                var result = string.Empty;
-
                 var baseThemePath = "Themes";
                 var paths = new[] {
                     Path.Combine(baseThemePath, WorkContext.CurrentStore.Id, WorkContext.CurrentStore.ThemeName),
@@ -127,15 +125,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                     Path.Combine(baseThemePath)
                 };
 
-                foreach (var path in paths)
-                {
-                    if (!string.IsNullOrEmpty(ResolveTemplatePath("index", path)))
-                    {
-                        result = path;
-                        break;
-                    }
-                }
-                return result;
+                return paths.FirstOrDefault(x => !string.IsNullOrEmpty(ResolveTemplatePath("index", x)));
             }
         }
 
