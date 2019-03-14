@@ -107,17 +107,37 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// </summary>
         public string MasterViewName => _options.DefaultLayout;
 
-        /// <summary>
-        /// Current theme name
-        /// </summary>
-        public string CurrentThemeName => !string.IsNullOrEmpty(WorkContext.CurrentStore.ThemeName) ? WorkContext.CurrentStore.ThemeName : "default";
-
         public string CurrentThemeSettingPath => Path.Combine(CurrentThemePath, "config", "settings_data.json");
         public string CurrentThemeLocalePath => Path.Combine(CurrentThemePath, "locales");
+
         /// <summary>
         /// Current theme base path
         /// </summary>
-        private string CurrentThemePath => Path.Combine("Themes", WorkContext.CurrentStore.Id, CurrentThemeName);
+        private string CurrentThemePath
+        {
+            get
+            {
+                var result = string.Empty;
+
+                var baseThemePath = "Themes";
+                var paths = new[] {
+                    Path.Combine(baseThemePath, WorkContext.CurrentStore.Id, WorkContext.CurrentStore.ThemeName),
+                    Path.Combine(baseThemePath, WorkContext.CurrentStore.Id, "default"),
+                    Path.Combine(baseThemePath, WorkContext.CurrentStore.Id),
+                    Path.Combine(baseThemePath)
+                };
+
+                foreach (var path in paths)
+                {
+                    if (!string.IsNullOrEmpty(ResolveTemplatePath("index", path)))
+                    {
+                        result = path;
+                        break;
+                    }
+                }
+                return result;
+            }
+        }
 
         #region IFileSystem members
         public string ReadTemplateFile(Context context, string templateName)
@@ -230,8 +250,9 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// resolve  template path by it name
         /// </summary>
         /// <param name="templateName"></param>
+        /// <param name="themePath"></param>
         /// <returns></returns>
-        public string ResolveTemplatePath(string templateName)
+        private string ResolveTemplatePath(string templateName, string themePath)
         {
             if (WorkContext.CurrentStore == null)
             {
@@ -239,10 +260,20 @@ namespace VirtoCommerce.LiquidThemeEngine
             }
 
             var liquidTemplateFileName = string.Format(_liquidTemplateFormat, templateName);
-            var curentThemeDiscoveryPaths = _options.TemplatesDiscoveryFolders.Select(x => Path.Combine(CurrentThemePath, x, liquidTemplateFileName));
+            var curentThemeDiscoveryPaths = _options.TemplatesDiscoveryFolders.Select(x => Path.Combine(themePath, x, liquidTemplateFileName));
 
             //Try to find template in current theme folder
             return curentThemeDiscoveryPaths.FirstOrDefault(x => _themeBlobProvider.PathExists(x));
+        }
+
+        /// <summary>
+        /// resolve  template path by it name
+        /// </summary>
+        /// <param name="templateName"></param>
+        /// <returns></returns>
+        public string ResolveTemplatePath(string templateName)
+        {
+            return ResolveTemplatePath(templateName, CurrentThemePath);
         }
 
         /// <summary>
