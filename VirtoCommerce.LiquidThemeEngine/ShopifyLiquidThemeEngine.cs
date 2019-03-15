@@ -304,7 +304,6 @@ namespace VirtoCommerce.LiquidThemeEngine
             var cacheKey = CacheKey.With(GetType(), "ParseTemplate", templatePath ?? templateContent);
             var parsedTemplate = _memoryCache.GetOrCreate(cacheKey, (cacheItem) =>
             {
-                templatePath = ResolveTemplatePath(templatePath);
                 if (!string.IsNullOrEmpty(templatePath))
                 {
                     cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(templatePath) }));
