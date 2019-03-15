@@ -115,6 +115,10 @@ namespace VirtoCommerce.LiquidThemeEngine
         public string CurrentThemeSettingPath => Path.Combine(CurrentThemePath, "config", "settings_data.json");
         public string CurrentThemeLocalePath => Path.Combine(CurrentThemePath, "locales");
 
+        private Dictionary<string, string> _themePathCache = new Dictionary<string, string>();
+
+        private readonly object _themePathLock = new object();
+
         /// <summary>
         /// Current theme base path
         /// </summary>
@@ -122,16 +126,31 @@ namespace VirtoCommerce.LiquidThemeEngine
         {
             get
             {
-                var baseThemePath = "Themes";
-                var paths = new[] {
-                    Path.Combine(baseThemePath, WorkContext.CurrentStore.Id, CurrentThemeName),
-                    Path.Combine(baseThemePath, WorkContext.CurrentStore.Id, "default"),
-                    Path.Combine(baseThemePath, WorkContext.CurrentStore.Id),
-                    Path.Combine(baseThemePath)
-                };
-
-                return paths.Distinct().FirstOrDefault(x => !string.IsNullOrEmpty(ResolveTemplatePath("index", x)));
+                if (!_themePathCache.ContainsKey(WorkContext.CurrentStore.Id))
+                {
+                    lock (_themePathLock)
+                    {
+                        if (!_themePathCache.ContainsKey(WorkContext.CurrentStore.Id))
+                        {
+                            _themePathCache.Add(WorkContext.CurrentStore.Id, FindThemePath(WorkContext.CurrentStore.Id));
+                        }
+                    }
+                }
+                return _themePathCache[WorkContext.CurrentStore.Id];
             }
+        }
+
+        private string FindThemePath(string storeId)
+        {
+            var baseThemePath = "Themes";
+            var paths = new[] {
+                Path.Combine(baseThemePath, storeId, CurrentThemeName),
+                Path.Combine(baseThemePath, storeId, "default"),
+                Path.Combine(baseThemePath, storeId),
+                Path.Combine(baseThemePath)
+            };
+
+            return paths.Distinct().FirstOrDefault(x => !string.IsNullOrEmpty(ResolveTemplatePath("index", x))) ?? string.Empty;
         }
 
         #region IFileSystem members
