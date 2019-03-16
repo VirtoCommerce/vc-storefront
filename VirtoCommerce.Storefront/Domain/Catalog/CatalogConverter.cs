@@ -233,7 +233,7 @@ namespace VirtoCommerce.Storefront.Domain
                 SeoPath = categoryDto.Outlines.GetSeoPath(store, currentLanguage, null)
             };
 
-            result.Url = "~/" + (result.SeoPath ?? "category/" + categoryDto.Id);
+            result.Url = "/" + (result.SeoPath ?? "category/" + categoryDto.Id);
 
             if (!categoryDto.SeoInfos.IsNullOrEmpty())
             {
@@ -337,7 +337,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Outline = productDto.Outlines.GetOutlinePath(store.Catalog),
                 SeoPath = productDto.Outlines.GetSeoPath(store, currentLanguage, null),
             };
-            result.Url = "~/" + (result.SeoPath ?? "product/" + result.Id);
+            result.Url = "/" + (result.SeoPath ?? "product/" + result.Id);
 
             if (productDto.Properties != null)
             {
