@@ -278,6 +278,11 @@ namespace VirtoCommerce.Storefront.Model
         public string ConsentCookie { get; set; }
         #endregion
 
+        /// <summary>
+        /// Checks if the current hosting environment name is Microsoft.AspNetCore.Hosting.EnvironmentName.Development.
+        /// </summary>
+        public bool IsDevelopment { get; set; }
+
         #region IDisposable Implementation
 
         public void Dispose()

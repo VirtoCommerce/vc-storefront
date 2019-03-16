@@ -52,6 +52,7 @@ namespace VirtoCommerce.Storefront.Middleware
             var builder = new WorkContextBuilder(context, _options);
             var workContext = builder.WorkContext;
 
+            workContext.IsDevelopment = _hostingEnvironment.IsDevelopment();
             workContext.ApplicationSettings = _applicationSettings;
             //The important to preserve the order of initialization
             await builder.WithCountriesAsync();
