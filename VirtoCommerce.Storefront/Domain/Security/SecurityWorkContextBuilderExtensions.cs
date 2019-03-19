@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Security.Specifications;
 
@@ -39,8 +39,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 await signInManager.SignOutAsync();
                 user = null;
             }
-            //Login as a new anonymous user
-            if (user == null || user.IsTransient())
+            // Login as a new anonymous user, if it is allowed for the store
+            if ((user == null || user.IsTransient()) && builder.WorkContext.CurrentStore.Settings.GetSettingValue("Stores.AllowAnonymousUsers", true))
             {
                 user = new User
                 {

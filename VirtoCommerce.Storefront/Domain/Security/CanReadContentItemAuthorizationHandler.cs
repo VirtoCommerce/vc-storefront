@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using VirtoCommerce.Storefront.Model;
@@ -26,7 +23,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             var workContext = _workContextAccessor.WorkContext;
             if (resource.Authorize)
             {
-                if (workContext.CurrentUser.IsRegisteredUser)
+                if (workContext.CurrentUser?.IsRegisteredUser == true)
                 {
                     context.Succeed(requirement);
                 }

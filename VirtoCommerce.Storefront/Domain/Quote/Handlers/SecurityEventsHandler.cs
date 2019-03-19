@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model.Common.Events;
@@ -29,10 +27,10 @@ namespace VirtoCommerce.Storefront.Domain.Quote.Handlers
 
             var workContext = @event.WorkContext;
             var prevUser = @event.WorkContext.CurrentUser;
-            var prevUserCart = @event.WorkContext.CurrentCart.Value;
+            var prevUserCart = @event.WorkContext.CurrentCart?.Value;
 
             //If previous user was anonymous and it has not empty cart need merge anonymous cart to personal
-            if (workContext.CurrentStore.QuotesEnabled && !prevUser.IsRegisteredUser
+            if (workContext.CurrentStore.QuotesEnabled && prevUser?.IsRegisteredUser != true && prevUserCart != null
                  && workContext.CurrentQuoteRequest != null && workContext.CurrentQuoteRequest.Value.Items.Any())
             {
                 await _quoteBuilder.GetOrCreateNewTransientQuoteRequestAsync(workContext.CurrentStore, @event.User, workContext.CurrentLanguage, workContext.CurrentCurrency);

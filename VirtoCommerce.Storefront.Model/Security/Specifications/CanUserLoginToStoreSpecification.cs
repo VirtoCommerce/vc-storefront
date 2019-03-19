@@ -21,10 +21,17 @@ namespace VirtoCommerce.Storefront.Model.Security.Specifications
             }
             //Allow to login to store for administrators or for users not assigned to store
             var result = _user.IsAdministrator || _user.StoreId.IsNullOrEmpty();
-            if(!result)
-            {   
-                result = store.TrustedGroups.Concat(new[] { store.Id } ).Contains(_user.StoreId);
+            if (!result)
+            {
+                result = store.TrustedGroups.Concat(new[] { store.Id }).Contains(_user.StoreId);
             }
+
+            // Check if it is anonymous user and it is allowed for the store
+            if (result && !_user.IsRegisteredUser)
+            {
+                result = store.Settings.GetSettingValue("Stores.AllowAnonymousUsers", true);
+            }
+
             return result;
         }
 

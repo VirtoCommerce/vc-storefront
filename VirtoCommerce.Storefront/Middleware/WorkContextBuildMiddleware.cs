@@ -59,22 +59,26 @@ namespace VirtoCommerce.Storefront.Middleware
             await builder.WithCurrentUserAsync();
             await builder.WithCurrenciesAsync(workContext.CurrentLanguage, workContext.CurrentStore);
 
-            await builder.WithCatalogsAsync();
-            await builder.WithDefaultShoppingCartAsync("default", workContext.CurrentStore, workContext.CurrentUser, workContext.CurrentCurrency, workContext.CurrentLanguage);
-            await builder.WithMenuLinksAsync(workContext.CurrentStore, workContext.CurrentLanguage);
-            await builder.WithPagesAsync(workContext.CurrentStore, workContext.CurrentLanguage);
-            await builder.WithBlogsAsync(workContext.CurrentStore, workContext.CurrentLanguage);
-            await builder.WithPricelistsAsync();
-
-            if (workContext.CurrentStore.QuotesEnabled)
+            // workContext.CurrentUser could be null for anonymous user request if it is disabled for the store
+            if (workContext.CurrentUser != null)
             {
-                await builder.WithQuotesAsync(workContext.CurrentStore, workContext.CurrentUser, workContext.CurrentCurrency, workContext.CurrentLanguage);
-                await builder.WithUserQuotesAsync();
+                await builder.WithCatalogsAsync();
+                await builder.WithDefaultShoppingCartAsync("default", workContext.CurrentStore, workContext.CurrentUser, workContext.CurrentCurrency, workContext.CurrentLanguage);
+                await builder.WithMenuLinksAsync(workContext.CurrentStore, workContext.CurrentLanguage);
+                await builder.WithPagesAsync(workContext.CurrentStore, workContext.CurrentLanguage);
+                await builder.WithBlogsAsync(workContext.CurrentStore, workContext.CurrentLanguage);
+                await builder.WithPricelistsAsync();
+
+                if (workContext.CurrentStore.QuotesEnabled)
+                {
+                    await builder.WithQuotesAsync(workContext.CurrentStore, workContext.CurrentUser, workContext.CurrentCurrency, workContext.CurrentLanguage);
+                    await builder.WithUserQuotesAsync();
+                }
+                await builder.WithUserOrdersAsync();
+                await builder.WithUserSubscriptionsAsync();
+                await builder.WithVendorsAsync(workContext.CurrentStore, workContext.CurrentLanguage);
+                await builder.WithFulfillmentCentersAsync();
             }
-            await builder.WithUserOrdersAsync();
-            await builder.WithUserSubscriptionsAsync();
-            await builder.WithVendorsAsync(workContext.CurrentStore, workContext.CurrentLanguage);
-            await builder.WithFulfillmentCentersAsync();
 
             workContext.AvailableRoles = SecurityConstants.Roles.AllRoles;
             _workContextAccessor.WorkContext = workContext;
