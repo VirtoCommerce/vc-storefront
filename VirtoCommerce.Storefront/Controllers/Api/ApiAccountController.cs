@@ -456,10 +456,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 return new ChangeTwoFactorAuthenticationResult { Succeeded = false, VerificationUrl = url };
             }
                              
-            var result = await _signInManager.UserManager.SetTwoFactorEnabledAsync(WorkContext.CurrentUser, model.Enabled);
+            var result = await _signInManager.UserManager.SetTwoFactorEnabledAsync(WorkContext.CurrentUser, !model.Enabled);
             await _signInManager.SignInAsync(WorkContext.CurrentUser, isPersistent: false);
 
             return new ChangeTwoFactorAuthenticationResult { Succeeded = result.Succeeded, Errors = result.Errors.Select(x => x.Description) };
+            
 
         }
 
@@ -483,5 +484,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return new UpdatePhoneNumberResult { Succeeded = result.Succeeded };
             
         }
+
     }
 }
