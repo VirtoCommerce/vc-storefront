@@ -469,7 +469,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<UpdatePhoneNumberResult>> UpdatePhoneNumber([FromBody] UpdatePhoneNumberModel model)
         {
-            var pattern = @"^\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$";            
+            var pattern = "^[+]?[0-9]?[(]?[0-9]{0,3}[)]?[0-9]{0,7}$";            
             var regexResult = Regex.IsMatch(model.PhoneNumber,pattern);
 
             if (!regexResult)
