@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http.Description;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Events;
+using VirtoCommerce.Storefront.Model.Common.SearchResults;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Security;
@@ -280,7 +282,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost("organization/users/search")]
         [Authorize(SecurityConstants.Permissions.CanViewUsers)]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<GenericSearchResult<User>>> SearchOrganizationUsersAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
+        [ResponseType(typeof(User))]
+        public async Task<ActionResult<UserSearchResult>> SearchOrganizationUsersAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
         {
             searchCriteria.OrganizationId = searchCriteria.OrganizationId ?? WorkContext.CurrentUser?.Contact?.Organization?.Id;
             //Allow to register new users only within own organization
@@ -302,7 +305,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         users.Add(user);
                     }
                 }
-                return new GenericSearchResult<User>
+                return new UserSearchResult
                 {
                     TotalCount = contactsSearchResult.TotalItemCount,
                     Results = users

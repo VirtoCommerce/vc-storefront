@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http.Description;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
@@ -7,6 +8,7 @@ using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
+using VirtoCommerce.Storefront.Model.Common.SearchResults;
 using VirtoCommerce.Storefront.Model.Quote;
 using VirtoCommerce.Storefront.Model.Quote.Services;
 using VirtoCommerce.Storefront.Model.Services;
@@ -32,14 +34,15 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/quoterequests/search
         [HttpPost("quoterequests/search")]
-        public ActionResult<GenericSearchResult<QuoteRequest>> QuoteSearch([FromBody] QuoteSearchCriteria criteria)
+        [ResponseType(typeof(QuoteSearchResult))]
+        public ActionResult<QuoteSearchResult> QuoteSearch([FromBody] QuoteSearchCriteria criteria)
         {
             if (WorkContext.CurrentUser.IsRegisteredUser)
             {
                 //allow search only within self quotes
                 criteria.CustomerId = WorkContext.CurrentUser.Id;
                 var result = _quoteService.SearchQuotes(criteria);
-                return new GenericSearchResult<QuoteRequest>
+                return new QuoteSearchResult
                 {
                     Results = result.ToArray(),
                     TotalCount = result.TotalItemCount

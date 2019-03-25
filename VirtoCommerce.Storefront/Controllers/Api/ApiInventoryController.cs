@@ -1,9 +1,11 @@
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http.Description;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common.SearchResults;
 using VirtoCommerce.Storefront.Model.Inventory;
 using VirtoCommerce.Storefront.Model.Inventory.Services;
 
@@ -23,12 +25,13 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/fulfillmentcenters/search
         [HttpPost("fulfillmentcenters/search")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<GenericSearchResult<FulfillmentCenter>>> SearchFulfillmentCenters([FromBody] FulfillmentCenterSearchCriteria criteria)
+        [ResponseType(typeof(FulfillmentCenterSearchResult))]
+        public async Task<ActionResult<FulfillmentCenterSearchResult>> SearchFulfillmentCenters([FromBody] FulfillmentCenterSearchCriteria criteria)
         {
             if (criteria != null)
             {
                 var result = await _inventoryService.SearchFulfillmentCentersAsync(criteria);
-                return new GenericSearchResult<FulfillmentCenter>
+                return new FulfillmentCenterSearchResult
                 {
                     TotalCount = result.TotalItemCount,
                     Results = result.ToArray()

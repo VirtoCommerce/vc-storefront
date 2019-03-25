@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http.Description;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
@@ -10,6 +11,7 @@ using VirtoCommerce.Storefront.Infrastructure.Swagger;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
+using VirtoCommerce.Storefront.Model.Common.SearchResults;
 using VirtoCommerce.Storefront.Model.Order;
 using orderModel = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models;
 
@@ -31,7 +33,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/orders/search
         [HttpPost("search")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<GenericSearchResult<CustomerOrder>>> SearchCustomerOrders([FromBody] OrderSearchCriteria criteria)
+        [ResponseType(typeof(CustomerOrderSearchResult))]
+        public async Task<ActionResult<CustomerOrderSearchResult>> SearchCustomerOrders([FromBody] OrderSearchCriteria criteria)
         {
             if (criteria == null)
             {
@@ -42,7 +45,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             var result = await _orderApi.SearchAsync(criteria.ToSearchCriteriaDto());
 
-            return new GenericSearchResult<CustomerOrder>
+            return new CustomerOrderSearchResult
             {
                 Results = result.CustomerOrders.Select(x => x.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage)).ToArray(),
                 TotalCount = result.TotalCount ?? default(int),

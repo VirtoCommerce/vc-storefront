@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace VirtoCommerce.Storefront.Model.Common
+namespace VirtoCommerce.Storefront.Model.Common.SearchResults
 {
     public class GenericSearchResult<T>
     {

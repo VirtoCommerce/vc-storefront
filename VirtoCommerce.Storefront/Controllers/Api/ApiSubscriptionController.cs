@@ -1,10 +1,12 @@
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http.Description;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
+using VirtoCommerce.Storefront.Model.Common.SearchResults;
 using VirtoCommerce.Storefront.Model.Subscriptions;
 using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 
@@ -24,7 +26,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/subscriptions/search
         [HttpPost("search")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<GenericSearchResult<Subscription>>> SearchCustomerSubscriptions([FromBody] SubscriptionSearchCriteria searchCriteria)
+        [ResponseType(typeof(SubscriptionSearchResult))]
+        public async Task<ActionResult<SubscriptionSearchResult>> SearchCustomerSubscriptions([FromBody] SubscriptionSearchCriteria searchCriteria)
         {
             if (searchCriteria == null)
             {
@@ -36,7 +39,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             var result = await _subscriptionService.SearchSubscriptionsAsync(searchCriteria);
 
-            return new GenericSearchResult<Subscription>
+            return new SubscriptionSearchResult
             {
                 TotalCount = result.TotalItemCount,
                 Results = result.ToArray()

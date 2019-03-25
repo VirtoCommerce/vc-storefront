@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http.Description;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common.SearchResults;
 using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
@@ -98,7 +100,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/lists/search
         [HttpPost("search")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<GenericSearchResult<ShoppingCart>>> SearchLists([FromBody] CartSearchCriteria searchCriteria)
+        [ResponseType(typeof(ShoppingCartSearchResult))]
+        public async Task<ActionResult<ShoppingCartSearchResult>> SearchLists([FromBody] CartSearchCriteria searchCriteria)
         {
             if (searchCriteria == null)
             {
@@ -113,7 +116,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             var cartPagedList = await _cartService.SearchCartsAsync(searchCriteria);
 
-            return new GenericSearchResult<ShoppingCart>
+            return new ShoppingCartSearchResult
             {
                 Results = cartPagedList.ToArray(),
                 TotalCount = cartPagedList.TotalItemCount
