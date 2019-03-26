@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using VirtoCommerce.Storefront.Domain;
@@ -16,7 +15,6 @@ using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Events;
-using VirtoCommerce.Storefront.Model.Common.SearchResults;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Security;
@@ -31,19 +29,16 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IMemberService _memberService;
-        private readonly IStorefrontSecurity _commerceCoreApi;
         private readonly INotifications _platformNotificationApi;
         private readonly IAuthorizationService _authorizationService;
 
         public ApiAccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, UserManager<User> userManager, SignInManager<User> signInManager, IAuthorizationService authorizationService,
-        IMemberService memberService, IEventPublisher publisher, IStorefrontSecurity commerceCoreApi,
-                                    INotifications platformNotificationApi)
+        IMemberService memberService, IEventPublisher publisher, INotifications platformNotificationApi)
             : base(workContextAccessor, urlBuilder)
         {
             _userManager = userManager;
             _memberService = memberService;
             _publisher = publisher;
-            _commerceCoreApi = commerceCoreApi;
             _platformNotificationApi = platformNotificationApi;
             _authorizationService = authorizationService;
             _signInManager = signInManager;
