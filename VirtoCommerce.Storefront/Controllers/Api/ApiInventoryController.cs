@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http.Description;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
@@ -25,7 +24,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/fulfillmentcenters/search
         [HttpPost("fulfillmentcenters/search")]
         [ValidateAntiForgeryToken]
-        [ResponseType(typeof(FulfillmentCenterSearchResult))]
         public async Task<ActionResult<FulfillmentCenterSearchResult>> SearchFulfillmentCenters([FromBody] FulfillmentCenterSearchCriteria criteria)
         {
             if (criteria != null)

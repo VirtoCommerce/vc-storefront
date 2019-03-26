@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http.Description;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
@@ -34,7 +33,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/quoterequests/search
         [HttpPost("quoterequests/search")]
-        [ResponseType(typeof(QuoteSearchResult))]
         public ActionResult<QuoteSearchResult> QuoteSearch([FromBody] QuoteSearchCriteria criteria)
         {
             if (WorkContext.CurrentUser.IsRegisteredUser)

@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http.Description;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
@@ -33,7 +32,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/orders/search
         [HttpPost("search")]
         [ValidateAntiForgeryToken]
-        [ResponseType(typeof(CustomerOrderSearchResult))]
         public async Task<ActionResult<CustomerOrderSearchResult>> SearchCustomerOrders([FromBody] OrderSearchCriteria criteria)
         {
             if (criteria == null)

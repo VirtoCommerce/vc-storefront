@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http.Description;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -282,7 +281,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost("organization/users/search")]
         [Authorize(SecurityConstants.Permissions.CanViewUsers)]
         [ValidateAntiForgeryToken]
-        [ResponseType(typeof(User))]
         public async Task<ActionResult<UserSearchResult>> SearchOrganizationUsersAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
         {
             searchCriteria.OrganizationId = searchCriteria.OrganizationId ?? WorkContext.CurrentUser?.Contact?.Organization?.Id;

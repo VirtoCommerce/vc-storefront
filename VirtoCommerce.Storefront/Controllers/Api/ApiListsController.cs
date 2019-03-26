@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http.Description;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
@@ -100,7 +99,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/lists/search
         [HttpPost("search")]
         [ValidateAntiForgeryToken]
-        [ResponseType(typeof(ShoppingCartSearchResult))]
         public async Task<ActionResult<ShoppingCartSearchResult>> SearchLists([FromBody] CartSearchCriteria searchCriteria)
         {
             if (searchCriteria == null)
