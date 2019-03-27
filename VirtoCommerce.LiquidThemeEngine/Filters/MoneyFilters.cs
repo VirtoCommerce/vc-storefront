@@ -58,7 +58,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             {
                 var amount = Convert.ToDecimal(input, CultureInfo.InvariantCulture);
                 var currency = currencyCode == null ? themeEngine.WorkContext.CurrentCurrency : new Currency(themeEngine.WorkContext.CurrentLanguage, currencyCode);
-                return new Money(amount / 100, currency);
+                return new Money(amount, currency);
             }
         }
     }
