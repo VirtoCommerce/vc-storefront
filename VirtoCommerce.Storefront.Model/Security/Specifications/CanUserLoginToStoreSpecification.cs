@@ -25,13 +25,6 @@ namespace VirtoCommerce.Storefront.Model.Security.Specifications
             {
                 result = store.TrustedGroups.Concat(new[] { store.Id }).Contains(_user.StoreId);
             }
-
-            // Check if it is anonymous user and it is allowed for the store
-            if (result && !_user.IsRegisteredUser)
-            {
-                result = store.Settings.GetSettingValue("Stores.AllowAnonymousUsers", true);
-            }
-
             return result;
         }
 

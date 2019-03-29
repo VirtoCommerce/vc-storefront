@@ -27,6 +27,16 @@ namespace VirtoCommerce.Storefront.Domain.Security
             }).ToList();
 
             var user = await signInManager.UserManager.GetUserAsync(builder.HttpContext.User);
+
+            var anonymousAllowedForStore = builder.WorkContext.CurrentStore.Settings.GetSettingValue("Stores.AllowAnonymousUsers", true);
+
+            // If user is anonymous and it is not allowed for the store - sign out so it will be redirected to login page
+            if (!user.IsRegisteredUser && !anonymousAllowedForStore)
+            {
+                await signInManager.SignOutAsync();
+                user = null;
+            }
+
             //User doesn't have permissions for login to current store 
             //need to do sign out 
             if (user != null && !new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(builder.WorkContext.CurrentStore))
@@ -39,8 +49,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 await signInManager.SignOutAsync();
                 user = null;
             }
-            // Login as a new anonymous user, if it is allowed for the store
-            if ((user == null || user.IsTransient()) && builder.WorkContext.CurrentStore.Settings.GetSettingValue("Stores.AllowAnonymousUsers", true))
+
+            // Login as a new anonymous user if anonymous user is allowed for the store
+            if ((user == null || user.IsTransient()) && anonymousAllowedForStore)
             {
                 user = new User
                 {
