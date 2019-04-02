@@ -63,7 +63,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             workContext.Form.PostedSuccessfully = !string.Equals(context.HttpContext.Request.Method, "GET", StringComparison.InvariantCultureIgnoreCase);
             if (formErrors.Any())
             {
-                workContext.Form.Errors = formErrors;
+                workContext.Form.Errors.AddRange(formErrors.Select(x => new FormError { Description = x }));
                 workContext.Form.PostedSuccessfully = false;
             }
 
@@ -72,7 +72,7 @@ namespace VirtoCommerce.LiquidThemeEngine
 
             if (!string.IsNullOrEmpty(_workContextAccessor.WorkContext.ErrorMessage))
             {
-                workContext.ErrorMessage = _workContextAccessor.WorkContext.ErrorMessage;
+                workContext.ErrorMessage = _workContextAccessor.WorkContext.ErrorMessage ?? workContext.Form.Errors.FirstOrDefault()?.Description;
             }
             var scriptObject = workContext.ToScriptObject();
 

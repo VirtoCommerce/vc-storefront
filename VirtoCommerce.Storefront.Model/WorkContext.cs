@@ -27,6 +27,7 @@ namespace VirtoCommerce.Storefront.Model
         {
             ExternalLoginProviders = new List<LoginProvider>();
             ApplicationSettings = new Dictionary<string, object>();
+            Form = new Form();
         }
 
         public string Template { get; set; }

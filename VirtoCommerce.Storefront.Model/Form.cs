@@ -7,7 +7,7 @@ using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model
 {
-    public partial class Form : IDictionary<string, object>
+    public partial class Form : IDictionary
     {
         private readonly IDictionary<string, object> _dict;
 
@@ -19,7 +19,7 @@ namespace VirtoCommerce.Storefront.Model
         private Form(IDictionary<string, object> dict)
         {
             _dict = dict;
-            Errors = new List<string>();
+            Errors = new List<FormError>();
             PostedSuccessfully = true;
         }
 
@@ -38,11 +38,46 @@ namespace VirtoCommerce.Storefront.Model
             return new Form(dict);
         }
 
+        public void Add(object key, object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Contains(object key)
+        {
+            return TryGetValue(key, out var dummy);
+        }
+
+        public IDictionaryEnumerator GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(object key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CopyTo(Array array, int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
-        /// Returns an array of strings if the form was not submitted successfully.
-        /// The strings returned depend on which fields of the form were left empty or contained errors.
+        /// Returns an array of errors if the form was not submitted successfully.
+        /// The error returned depend on which fields of the form were left empty or contained errors.
         /// </summary>
-        public IList<string> Errors { get { return _dict["errors"] as IList<string>; } set { _dict["errors"] = value; } }
+        public IList<FormError> Errors { get { return _dict["errors"] as IList<FormError>; } set { _dict["errors"] = value; } }
 
         /// <summary>
         /// Returns true if the form was submitted successfully, or false if the form contained errors.
@@ -51,69 +86,56 @@ namespace VirtoCommerce.Storefront.Model
         /// </summary>
         public bool? PostedSuccessfully { get { return _dict["posted_successfully"] as bool?; } set { _dict["posted_successfully"] = value; } }
 
-        public void Add(string key, object value)
-        {
-            _dict.Add(key, value);
-        }
+        public bool IsFixedSize => false;
 
-        public bool ContainsKey(string key)
-        {
-            return _dict.ContainsKey(key);
-        }
+        public bool IsReadOnly => false;
 
-        public bool Remove(string key)
-        {
-            return _dict.Remove(key);
-        }
+        public ICollection Keys => throw new NotImplementedException();
 
-        public bool TryGetValue(string key, out object value)
-        {
-            return _dict.TryGetValue(key, out value);
-        }
-
-        public void Add(KeyValuePair<string, object> item)
-        {
-            _dict.Add(item);
-        }
-
-        public void Clear()
-        {
-            _dict.Clear();
-        }
-
-        public bool Contains(KeyValuePair<string, object> item)
-        {
-            return _dict.Contains(item);
-        }
-
-        public void CopyTo(KeyValuePair<string, object>[] array, int arrayIndex)
-        {
-            _dict.CopyTo(array, arrayIndex);
-        }
-
-        public bool Remove(KeyValuePair<string, object> item)
-        {
-            return _dict.Remove(item);
-        }
-
-        public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
-        {
-            return _dict.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _dict.GetEnumerator();
-        }
-
-        public ICollection<string> Keys => _dict.Keys;
-
-        public ICollection<object> Values => _dict.Values;
+        public ICollection Values => throw new NotImplementedException();
 
         public int Count => _dict.Count();
 
-        public bool IsReadOnly => _dict.IsReadOnly;
+        public bool IsSynchronized => false;
 
-        public object this[string key] { get => _dict[key]; set => _dict[key] = value; }
+        public object SyncRoot => _dict;
+
+        public object this[object key]
+        {
+            get
+            {
+                TryGetValue(key, out var result);
+                return result;
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private bool TryGetValue(object key, out object value)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            value = null;
+
+            if (key is string stringKey)
+            {
+                if (stringKey == "size")
+                {
+                    value = Count;
+                }
+                else
+                {
+                    value = _dict[stringKey];
+                }
+            }
+
+            return value != null;
+        }
+
     }
 }
