@@ -1,3 +1,5 @@
+
+Install Node.js v4.0.0 or above (we recommend latest LTS version https://nodejs.org/en/)
 Install latest AutoRest v1 globally via 'npm install -g autorest@1.2.2' command
  
 1. Open Tools > NuGet Package Manager > Package Manager Console
