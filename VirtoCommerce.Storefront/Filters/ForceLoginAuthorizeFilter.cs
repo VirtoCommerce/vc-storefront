@@ -10,11 +10,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace VirtoCommerce.Storefront.Filters
 {
-    public class DenyAnonymousForStoreAuthorizeFilter : IAsyncAuthorizationFilter
+    /// <summary>
+    /// Authorization filter that redirects all unauthorized users to Login page (deafult AuthorizeFilter could show AccessDenied for non-authorized authenticated users)
+    /// </summary>
+    public class ForceLoginAuthorizeFilter : IAsyncAuthorizationFilter
     {
         public AuthorizationPolicy Policy { get; }
 
-        public DenyAnonymousForStoreAuthorizeFilter(AuthorizationPolicy policy)
+        public ForceLoginAuthorizeFilter(AuthorizationPolicy policy)
         {
             Policy = policy ?? throw new ArgumentNullException(nameof(policy));
         }
@@ -36,11 +39,10 @@ namespace VirtoCommerce.Storefront.Filters
             var authenticateResult = await policyEvaluator.AuthenticateAsync(Policy, context.HttpContext);
             var authorizeResult = await policyEvaluator.AuthorizeAsync(Policy, authenticateResult, context.HttpContext, context);
 
-
-            // For all the results except Succeeded we need to return 
+            // For all the results except Succeeded we need to return <see cref="ChallengeResult"/>
             if (!authorizeResult.Succeeded)
             {
-                // Here we need only ChallengeResult to redirect to login instead of ForbiddenResult that standard AuthorizeFilter returns in that case (authenticated and non authorized user)
+                // Here we need only ChallengeResult to redirect to Login instead of ForbiddenResult that standard AuthorizeFilter returns in that case (authenticated and non authorized user)
                 // https://github.com/aspnet/AspNetCore/blob/v2.2.3/src/Mvc/Mvc.Core/src/Authorization/AuthorizeFilter.cs#L210
                 // https://github.com/aspnet/AspNetCore/blob/v2.2.3/src/Security/Authorization/Policy/src/PolicyEvaluator.cs#L91
                 context.Result = new ChallengeResult(Policy.AuthenticationSchemes.ToArray());

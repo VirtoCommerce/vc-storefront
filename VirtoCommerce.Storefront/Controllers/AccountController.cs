@@ -360,7 +360,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 IdentityResult identityResult;
 
                 var currentUser = WorkContext.CurrentUser;
-                if (currentUser?.IsRegisteredUser == true)
+                if (currentUser.IsRegisteredUser)
                 {
                     identityResult = await _signInManager.UserManager.AddLoginAsync(currentUser, loginInfo);
                 }

@@ -261,7 +261,7 @@ namespace VirtoCommerce.Storefront
                 var policy = new AuthorizationPolicyBuilder()
                     .AddRequirements(new DenyAnonymousForStoreAuthorizationRequirement())
                     .Build();
-                options.Filters.Add(new DenyAnonymousForStoreAuthorizeFilter(policy));
+                options.Filters.Add(new ForceLoginAuthorizeFilter(policy));
 
                 options.CacheProfiles.Add("Default", new CacheProfile()
                 {

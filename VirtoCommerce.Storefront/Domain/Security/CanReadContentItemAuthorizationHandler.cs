@@ -23,7 +23,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             var workContext = _workContextAccessor.WorkContext;
             if (resource.Authorize)
             {
-                if (workContext.CurrentUser?.IsRegisteredUser == true)
+                if (workContext.CurrentUser.IsRegisteredUser)
                 {
                     context.Succeed(requirement);
                 }

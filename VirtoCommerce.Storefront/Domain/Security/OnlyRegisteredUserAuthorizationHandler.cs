@@ -22,7 +22,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OnlyRegisteredUserAuthorizationRequirement requirement)
         {
             var workContext = _workContextAccessor.WorkContext;
-            if (workContext.CurrentUser?.IsRegisteredUser == true)
+            if (workContext.CurrentUser.IsRegisteredUser)
             {
                 context.Succeed(requirement);
             }
