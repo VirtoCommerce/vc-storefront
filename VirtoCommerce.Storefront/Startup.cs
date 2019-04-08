@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -261,9 +260,8 @@ namespace VirtoCommerce.Storefront
                 // Thus we disable anonymous users based on "Store:AllowAnonymous" store option
                 var policy = new AuthorizationPolicyBuilder()
                     .AddRequirements(new DenyAnonymousForStoreAuthorizationRequirement())
-                    .RequireAuthenticatedUser()
                     .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
+                options.Filters.Add(new DenyAnonymousForStoreAuthorizeFilter(policy));
 
                 options.CacheProfiles.Add("Default", new CacheProfile()
                 {
