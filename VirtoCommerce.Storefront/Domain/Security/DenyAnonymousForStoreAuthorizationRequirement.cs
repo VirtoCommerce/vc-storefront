@@ -13,6 +13,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
     public class DenyAnonymousForStoreAuthorizationHandler : AuthorizationHandler<DenyAnonymousForStoreAuthorizationRequirement>
     {
         private readonly IWorkContextAccessor _workContextAccessor;
+
         public DenyAnonymousForStoreAuthorizationHandler(IWorkContextAccessor workContextAccessor)
         {
             _workContextAccessor = workContextAccessor;
