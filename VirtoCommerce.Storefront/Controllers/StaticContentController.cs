@@ -88,7 +88,7 @@ namespace VirtoCommerce.Storefront.Controllers
                     return Challenge();
                 }
                 SetCurrentPage(contentPage);
-                if (contentPage.FileName.EndsWith(".json"))
+                if (contentPage.FileName.EndsWith(".page"))
                 {
                     var model = new JsonPage
                     {
