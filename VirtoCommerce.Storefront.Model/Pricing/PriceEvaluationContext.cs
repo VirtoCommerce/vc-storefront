@@ -8,6 +8,7 @@ namespace VirtoCommerce.Storefront.Model.Pricing
     {
         public string StoreId { get; set; }
         public string CatalogId { get; set; }
+		public DateTime? CertainDate { get; set; }
         public IList<string> ProductIds { get; set; } = new List<string>();
         public IList<string> PricelistIds { get; set; } = new List<string>();
         public double? Quantity { get; set; }
@@ -35,6 +36,7 @@ namespace VirtoCommerce.Storefront.Model.Pricing
             yield return OrganizationId;
             yield return Language;
             yield return Quantity;
+			yield return CertainDate;
 
             //Remove user for equality because marketing promotions very rarely depend on concrete customer and exclude  user from  cache key can have significant affect to performance
             //yield return CustomerId;
