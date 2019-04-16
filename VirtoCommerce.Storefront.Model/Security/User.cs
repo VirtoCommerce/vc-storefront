@@ -1,9 +1,8 @@
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
+using Newtonsoft.Json;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Order;
@@ -149,6 +148,5 @@ namespace VirtoCommerce.Storefront.Model.Security
         public Address DefaultAddress => Contact?.DefaultAddress;
         public Address DefaultBillingAddress => Contact?.DefaultBillingAddress;
         public Address DefaultShippingAddress => Contact?.DefaultShippingAddress;
-        public IList<Address> Addresses => Contact?.Addresses;
     }
 }
