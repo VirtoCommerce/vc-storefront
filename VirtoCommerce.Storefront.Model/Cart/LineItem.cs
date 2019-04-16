@@ -325,8 +325,11 @@ namespace VirtoCommerce.Storefront.Model.Cart
                 if (reward.IsValid)
                 {
                     var discount = reward.ToDiscountModel(ListPrice - DiscountAmount, Quantity);
-                    Discounts.Add(discount);
-                    DiscountAmount += discount.Amount;
+                    if (discount.Amount.InternalAmount > 0)
+                    {
+                        Discounts.Add(discount);
+                        DiscountAmount += discount.Amount;
+                    }
                 }
             }
         }

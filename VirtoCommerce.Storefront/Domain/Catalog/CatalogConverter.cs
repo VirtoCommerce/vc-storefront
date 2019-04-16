@@ -232,7 +232,11 @@ namespace VirtoCommerce.Storefront.Domain
                 Outline = categoryDto.Outlines.GetOutlinePath(store.Catalog),
                 SeoPath = categoryDto.Outlines.GetSeoPath(store, currentLanguage, null)
             };
-
+            if (result.Outline != null)
+            {
+                //Need to take virtual parent from outline (get second last) because for virtual catalog category.ParentId still points to a physical category
+                result.ParentId = result.Outline.Split("/").Reverse().Skip(1).Take(1).FirstOrDefault() ?? result.ParentId;
+            }
             result.Url = "/" + (result.SeoPath ?? "category/" + categoryDto.Id);
 
             if (!categoryDto.SeoInfos.IsNullOrEmpty())

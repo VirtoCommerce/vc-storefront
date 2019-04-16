@@ -436,7 +436,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
                     tierPrice.DiscountAmount = new Money(Math.Max(0, (Price.ListPrice - tierPrice.Price).Amount), Currency);
                 }
 
-                if (reward.IsValid)
+                if (reward.IsValid && discount.Amount.InternalAmount > 0)
                 {
                     Discounts.Add(discount);
                     Price.DiscountAmount += discount.Amount;
@@ -444,7 +444,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
                     //apply discount to tier prices
                     foreach (var tierPrice in Price.TierPrices)
                     {
-                        discount = reward.ToDiscountModel(tierPrice.Price - tierPrice.DiscountAmount);
+                        discount = reward.ToDiscountModel(tierPrice.Price);
                         tierPrice.DiscountAmount += discount.Amount;
                     }
                 }

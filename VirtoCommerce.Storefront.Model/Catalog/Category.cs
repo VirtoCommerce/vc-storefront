@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using VirtoCommerce.Storefront.Model.Common;
 
@@ -30,6 +31,10 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// All parent categories ids concatenated with "/". E.g. (1/21/344)
         /// </summary>
         public string Outline { get; set; }
+
+        //Level in hierarchy
+        public int Level => Outline?.Split("/").Count() ?? 0;
+
         /// <summary>
         /// Slug  path e.g /camcorders
         /// </summary>
@@ -61,6 +66,10 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         [JsonIgnore]
         public IMutablePagedList<Category> Collections => Categories;
 
+        public override string ToString()
+        {
+            return SeoPath ?? base.ToString();
+        }
 
         #region IHasProperties Members
         public IList<CatalogProperty> Properties { get; set; }
