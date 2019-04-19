@@ -485,7 +485,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             if (userDto != null)
             {
                 var user = userDto.ToUser();
-                options.AddExpirationToken(PollingApiUserChangeToken.CreateChangeToken(_platformSecurityApi, _options.ChangesPollingInterval));
+                options.AddExpirationToken(new PollingApiUserChangeToken(_platformSecurityApi, _options.ChangesPollingInterval));
                 options.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
                 return user;
             }

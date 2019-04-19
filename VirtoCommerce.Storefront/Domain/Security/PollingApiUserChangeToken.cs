@@ -22,15 +22,10 @@ namespace VirtoCommerce.Storefront.Domain.Security
             _previousChangeTimeUtcStatic = _lastCheckedTimeUtcStatic = DateTime.UtcNow;
         }
 
-        private PollingApiUserChangeToken(ISecurity platformSecurityApi, TimeSpan pollingInterval)
+        public PollingApiUserChangeToken(ISecurity platformSecurityApi, TimeSpan pollingInterval)
         {
             _pollingInterval = pollingInterval;
             _platformSecurityApi = platformSecurityApi;
-        }
-
-        public static IChangeToken CreateChangeToken(ISecurity platformSecurityApi, TimeSpan pollingInterval)
-        {
-            return new PollingApiUserChangeToken(platformSecurityApi, pollingInterval);
         }
 
         /// <summary>
