@@ -12,10 +12,10 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
     /// <summary>
     /// HTTP message delegating handler that encapsulates access token handling and renewment
     /// </summary>
-    public class PasswordAccessTokenHandler : DelegatingHandler
+    public class UserPasswordAuthHandler : DelegatingHandler
     {
-        private readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
-        private string _accessToken;
+        private static readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
+        private static string _accessToken;
         private bool _disposed;
 
         private readonly PlatformEndpointOptions _options;
@@ -53,7 +53,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="scope">The scope.</param>
-        public PasswordAccessTokenHandler(IOptions<PlatformEndpointOptions> options, IHttpClientFactory clientFactory)
+        public UserPasswordAuthHandler(IOptions<PlatformEndpointOptions> options, IHttpClientFactory clientFactory)
         {
             _options = options.Value;
             _clientFactory = clientFactory;
