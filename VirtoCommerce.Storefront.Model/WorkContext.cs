@@ -104,7 +104,7 @@ namespace VirtoCommerce.Storefront.Model
         public QuoteSearchCriteria CurrentQuoteSearchCriteria { get; set; }
 
         public Lazy<QuoteRequest> CurrentQuoteRequest { get; set; }
-        public QuoteRequest QuoteRequest => CurrentQuoteRequest.IsValueCreated ? CurrentQuoteRequest.Value : null;
+        public QuoteRequest QuoteRequest => CurrentQuoteRequest?.IsValueCreated ?? false ? CurrentQuoteRequest.Value : null;
 
         /// <summary>
         /// Gets or sets the HTML code for payment method prepared form

@@ -155,7 +155,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 currentThemeFilePath = searchPatterns.SelectMany(x => _themeBlobProvider.Search(Path.Combine(CurrentThemePath, "assets"), x, true)).FirstOrDefault();
             }
             //If not found by current theme path try find them by base path if it is defined
-            if (currentThemeFilePath == null)
+            if (currentThemeFilePath == null && BaseThemePath != null)
             {
                 currentThemeFilePath = searchPatterns.SelectMany(x => _themeBlobProvider.Search(Path.Combine(BaseThemePath, "assets"), x, true)).FirstOrDefault();
             }
