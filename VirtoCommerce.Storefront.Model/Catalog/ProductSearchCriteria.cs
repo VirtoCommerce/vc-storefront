@@ -63,6 +63,10 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         }
         public override IEnumerable<KeyValuePair<string, string>> GetKeyValues()
         {
+			 foreach (var basePair in base.GetKeyValues())
+            {
+                yield return basePair;
+            }
             if (!string.IsNullOrEmpty(Keyword))
             {
                 yield return new KeyValuePair<string, string>("keyword", Keyword);

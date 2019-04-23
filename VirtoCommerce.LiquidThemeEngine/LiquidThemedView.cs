@@ -54,7 +54,8 @@ namespace VirtoCommerce.LiquidThemeEngine
             workContext.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
             var formErrors = context.ViewData.ModelState.Where(x => x.Value.Errors.Any())
-                                                        .SelectMany(x => x.Value.Errors.Select(y => y.ErrorMessage)).ToList();
+                                                        .SelectMany(x => x.Value.Errors.Select(y => new FormError { Code = x.Key.PascalToKebabCase(), Description = y.ErrorMessage })).ToList();
+
 
             if (workContext.Form == null)
             {
@@ -63,7 +64,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             workContext.Form.PostedSuccessfully = !string.Equals(context.HttpContext.Request.Method, "GET", StringComparison.InvariantCultureIgnoreCase);
             if (formErrors.Any())
             {
-                workContext.Form.Errors.AddRange(formErrors.Select(x => new FormError { Description = x }));
+                workContext.Form.Errors.AddRange(formErrors);
                 workContext.Form.PostedSuccessfully = false;
             }
 
