@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
+using VirtoCommerce.Storefront.Domain.Security;
 
 namespace VirtoCommerce.Storefront.Filters
 {
@@ -15,11 +16,11 @@ namespace VirtoCommerce.Storefront.Filters
     /// </summary>
     public class ForceLoginAuthorizeFilter : IAsyncAuthorizationFilter
     {
-        public AuthorizationPolicy Policy { get; }
+        public readonly IAuthorizationPolicyProvider _policyProvider;
 
-        public ForceLoginAuthorizeFilter(AuthorizationPolicy policy)
+        public ForceLoginAuthorizeFilter(IAuthorizationPolicyProvider policyProvider)
         {
-            Policy = policy ?? throw new ArgumentNullException(nameof(policy));
+            _policyProvider = policyProvider;
         }
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
@@ -35,9 +36,10 @@ namespace VirtoCommerce.Storefront.Filters
                 return;
             }
 
+            var policy = await _policyProvider.GetPolicyAsync(DenyAnonymousForStoreAuthorizationRequirement.PolicyName);
             var policyEvaluator = context.HttpContext.RequestServices.GetRequiredService<IPolicyEvaluator>();
-            var authenticateResult = await policyEvaluator.AuthenticateAsync(Policy, context.HttpContext);
-            var authorizeResult = await policyEvaluator.AuthorizeAsync(Policy, authenticateResult, context.HttpContext, context);
+            var authenticateResult = await policyEvaluator.AuthenticateAsync(policy, context.HttpContext);
+            var authorizeResult = await policyEvaluator.AuthorizeAsync(policy, authenticateResult, context.HttpContext, context);
 
             // For all the results except Succeeded we need to return <see cref="ChallengeResult"/>
             if (!authorizeResult.Succeeded)
@@ -45,7 +47,7 @@ namespace VirtoCommerce.Storefront.Filters
                 // Here we need only ChallengeResult to redirect to Login instead of ForbiddenResult that standard AuthorizeFilter returns in that case (authenticated and non authorized user)
                 // https://github.com/aspnet/AspNetCore/blob/v2.2.3/src/Mvc/Mvc.Core/src/Authorization/AuthorizeFilter.cs#L210
                 // https://github.com/aspnet/AspNetCore/blob/v2.2.3/src/Security/Authorization/Policy/src/PolicyEvaluator.cs#L91
-                context.Result = new ChallengeResult(Policy.AuthenticationSchemes.ToArray());
+                context.Result = new ChallengeResult(policy.AuthenticationSchemes.ToArray());
             }
         }
     }

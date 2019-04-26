@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
@@ -23,7 +22,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         {
             var workContext = _workContextAccessor.WorkContext;
 
-            if (workContext.CurrentUser.IsRegisteredUser || workContext.CurrentStore.Settings.GetSettingValue("Stores.AllowAnonymousUsers", true))
+            if (workContext.CurrentUser.IsRegisteredUser || workContext.CurrentStore.AnonymousUsersAllowed)
             {
                 context.Succeed(requirement);
             }
