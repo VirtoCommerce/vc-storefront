@@ -42,7 +42,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         private void Parse(NameValueCollection queryString)
         {
-            IsFuzzySearch = queryString.Get("fuzzy").EqualsInvariant(bool.FalseString);
+            IsFuzzySearch = queryString.Get("fuzzy").EqualsInvariant(bool.TrueString);
             Keyword = queryString.Get("q");
             SortBy = queryString.Get("sort_by");
             ResponseGroup = EnumUtility.SafeParse<CategoryResponseGroup>(queryString.Get("resp_group"), CategoryResponseGroup.Small);
