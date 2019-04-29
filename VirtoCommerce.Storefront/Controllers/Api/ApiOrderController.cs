@@ -169,9 +169,22 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [SwaggerFileResponse]
         public async Task<ActionResult> GetInvoicePdf(string orderNumber)
         {
+
+            await CheckCurrentUserOrderAccess(orderNumber);
+
             var stream = await _orderApi.GetInvoicePdfAsync(orderNumber);
 
             return File(stream, "application/pdf");
+        }
+
+        /// <summary>
+        /// Current user access to order checking. If order not belong current user StorefrontException will be thrown
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <returns></returns>
+        private async Task CheckCurrentUserOrderAccess(string orderNumber)
+        {
+            await GetOrderDtoByNumber(orderNumber);
         }
 
         private async Task<CustomerOrder> GetOrderByNumber(string number)
@@ -181,6 +194,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             WorkContext.CurrentOrder = order.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
             return WorkContext.CurrentOrder;
         }
+
 
         private async Task<orderModel.CustomerOrder> GetOrderDtoByNumber(string number)
         {
