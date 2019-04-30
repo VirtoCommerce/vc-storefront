@@ -1,5 +1,5 @@
-using PagedList.Core;
 using System.Linq;
+using PagedList.Core;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -28,7 +28,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.Handle = category.SeoInfo != null ? category.SeoInfo.Slug : category.Id;
             result.Title = category.Name;
             result.Url = category.Url;
-            result.DefaultSortBy = "manual";
+            result.DefaultSortBy = "priority-descending;name-ascending";
             result.Images = category.Images.Select(x => x.ToShopifyModel()).ToArray();
             if (category.PrimaryImage != null)
             {

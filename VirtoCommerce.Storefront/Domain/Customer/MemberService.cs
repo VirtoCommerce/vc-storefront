@@ -1,13 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using PagedList.Core;
 using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
-using VirtoCommerce.Storefront.Caching;
-using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
@@ -89,7 +86,7 @@ namespace VirtoCommerce.Storefront.Domain
             CustomerCacheRegion.ExpireMember(contact.Id);
         }
 
-        public async Task UpdateContactAddressesAsync(string contactId, IList<Address> addresses)
+        public virtual async Task UpdateContactAddressesAsync(string contactId, IList<Address> addresses)
         {
             var existContact = await GetContactByIdAsync(contactId);
             if (existContact != null)
@@ -103,11 +100,13 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual async Task<Vendor[]> GetVendorsByIdsAsync(Store store, Language language, params string[] vendorIds)
         {
+            vendorIds = vendorIds.Distinct().ToArray();
             return (await _customerApi.GetVendorsByIdsAsync(vendorIds)).Select(x => x.ToVendor(language, store)).ToArray();
         }
 
         public virtual Vendor[] GetVendorsByIds(Store store, Language language, params string[] vendorIds)
         {
+            vendorIds = vendorIds.Distinct().ToArray();
             var retVal = _customerApi.GetVendorsByIds(vendorIds).Select(x => x.ToVendor(language, store)).ToArray();
             return retVal;
         }

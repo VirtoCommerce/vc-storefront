@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
-using VirtoCommerce.Storefront.Caching;
-using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
@@ -487,7 +485,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             if (userDto != null)
             {
                 var user = userDto.ToUser();
-                options.AddExpirationToken(PollingApiUserChangeToken.CreateChangeToken(user, _platformSecurityApi, _options.ChangesPollingInterval));
+                options.AddExpirationToken(new PollingApiUserChangeToken(_platformSecurityApi, _options.ChangesPollingInterval));
                 options.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
                 return user;
             }
