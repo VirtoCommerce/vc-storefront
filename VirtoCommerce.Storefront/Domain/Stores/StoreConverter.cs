@@ -89,6 +89,10 @@ namespace VirtoCommerce.Storefront.Domain
             result.TrustedGroups = storeDto.TrustedGroups;
             result.StoreState = EnumUtility.SafeParse(storeDto.StoreState, StoreStatus.Open);
             result.SeoLinksType = EnumUtility.SafeParse(result.Settings.GetSettingValue("Stores.SeoLinksType", ""), SeoLinksType.Collapsed);
+            result.QuotesEnabled = result.Settings.GetSettingValue("Quotes.EnableQuotes", false);
+            result.SubscriptionEnabled = result.Settings.GetSettingValue("Subscription.EnableSubscriptions", false);
+            result.TaxCalculationEnabled = result.Settings.GetSettingValue("Stores.TaxCalculationEnabled", true);
+            result.AnonymousUsersAllowed = result.Settings.GetSettingValue("Stores.AllowAnonymousUsers", true);
 
             return result;
         }
