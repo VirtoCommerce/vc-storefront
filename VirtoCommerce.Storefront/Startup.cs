@@ -324,12 +324,7 @@ namespace VirtoCommerce.Storefront
                 c.ParameterFilter<EnumDefaultValueParameterFilter>();
 
                 // To avoid errors with repeating type names
-                // Also need to replace some symbols for RFC3986-compliance: https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/752
-                c.CustomSchemaIds((type) => type.ToString()
-                    .Replace("[", "_")
-                    .Replace("]", "_")
-                    .Replace(",", "-")
-                    .Replace("`", "_")
+                c.CustomSchemaIds(type => type.ToString()
                 );
             });
 
