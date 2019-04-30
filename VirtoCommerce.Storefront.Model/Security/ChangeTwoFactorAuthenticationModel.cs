@@ -1,6 +1,6 @@
 namespace VirtoCommerce.Storefront.Model.Security
 {
-    public class EnableTwoFactorAuthenticationModel
+    public class ChangeTwoFactorAuthenticationModel
     {
         public bool Enabled { get; set; }
     }

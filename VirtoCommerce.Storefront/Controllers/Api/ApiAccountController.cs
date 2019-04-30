@@ -446,8 +446,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/account/twofactorauthentification
         [HttpPost("twofactorauthentification")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<ChangeTwoFactorAuthenticationResult>> EnableTwoFactorAuthentication([FromBody] EnableTwoFactorAuthenticationModel model)
-        {        
+        public async Task<ActionResult<ChangeTwoFactorAuthenticationResult>> ChangeTwoFactorAuthentication([FromBody] ChangeTwoFactorAuthenticationModel model)
+        {
             var phoneConfirmed = await _signInManager.UserManager.IsPhoneNumberConfirmedAsync(WorkContext.CurrentUser);
             if (!phoneConfirmed)
             {
@@ -455,12 +455,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
                 return new ChangeTwoFactorAuthenticationResult { Succeeded = false, VerificationUrl = url };
             }
-                             
-            var result = await _signInManager.UserManager.SetTwoFactorEnabledAsync(WorkContext.CurrentUser, !model.Enabled);
+
+            var result = await _signInManager.UserManager.SetTwoFactorEnabledAsync(WorkContext.CurrentUser, model.Enabled);
             await _signInManager.SignInAsync(WorkContext.CurrentUser, isPersistent: false);
 
             return new ChangeTwoFactorAuthenticationResult { Succeeded = result.Succeeded, Errors = result.Errors.Select(x => x.Description) };
-            
+
 
         }
 
@@ -469,20 +469,20 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<UpdatePhoneNumberResult>> UpdatePhoneNumber([FromBody] UpdatePhoneNumberModel model)
         {
-            var pattern = "^[+]?[0-9]?[(]?[0-9]{0,3}[)]?[0-9]{0,7}$";            
-            var regexResult = Regex.IsMatch(model.PhoneNumber,pattern);
+            var pattern = "^[+]?[0-9]?[(]?[0-9]{0,3}[)]?[0-9]{0,7}$";
+            var regexResult = Regex.IsMatch(model.PhoneNumber, pattern);
 
             if (!regexResult)
             {
-                return new UpdatePhoneNumberResult { Succeeded = false, Error = "Phone number is not valid"};
+                return new UpdatePhoneNumberResult { Succeeded = false, Error = "Phone number is not valid" };
             }
 
             var code = await _signInManager.UserManager.GenerateChangePhoneNumberTokenAsync(WorkContext.CurrentUser, model.PhoneNumber);
-            var result = await _signInManager.UserManager.ChangePhoneNumberAsync(WorkContext.CurrentUser, model.PhoneNumber, code);      
+            var result = await _signInManager.UserManager.ChangePhoneNumberAsync(WorkContext.CurrentUser, model.PhoneNumber, code);
             await _signInManager.SignInAsync(WorkContext.CurrentUser, isPersistent: false);
 
             return new UpdatePhoneNumberResult { Succeeded = result.Succeeded };
-            
+
         }
 
     }
