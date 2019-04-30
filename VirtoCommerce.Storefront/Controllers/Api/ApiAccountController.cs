@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using VirtoCommerce.Storefront.Domain;
@@ -30,19 +29,16 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IMemberService _memberService;
-        private readonly IStorefrontSecurity _commerceCoreApi;
         private readonly INotifications _platformNotificationApi;
         private readonly IAuthorizationService _authorizationService;
 
         public ApiAccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, UserManager<User> userManager, SignInManager<User> signInManager, IAuthorizationService authorizationService,
-        IMemberService memberService, IEventPublisher publisher, IStorefrontSecurity commerceCoreApi,
-                                    INotifications platformNotificationApi)
+        IMemberService memberService, IEventPublisher publisher, INotifications platformNotificationApi)
             : base(workContextAccessor, urlBuilder)
         {
             _userManager = userManager;
             _memberService = memberService;
             _publisher = publisher;
-            _commerceCoreApi = commerceCoreApi;
             _platformNotificationApi = platformNotificationApi;
             _authorizationService = authorizationService;
             _signInManager = signInManager;
@@ -280,7 +276,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost("organization/users/search")]
         [Authorize(SecurityConstants.Permissions.CanViewUsers)]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<GenericSearchResult<User>>> SearchOrganizationUsersAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
+        public async Task<ActionResult<UserSearchResult>> SearchOrganizationUsersAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
         {
             searchCriteria.OrganizationId = searchCriteria.OrganizationId ?? WorkContext.CurrentUser?.Contact?.Organization?.Id;
             //Allow to register new users only within own organization
@@ -302,7 +298,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         users.Add(user);
                     }
                 }
-                return new GenericSearchResult<User>
+                return new UserSearchResult
                 {
                     TotalCount = contactsSearchResult.TotalItemCount,
                     Results = users
