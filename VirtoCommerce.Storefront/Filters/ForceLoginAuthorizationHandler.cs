@@ -14,11 +14,11 @@ namespace VirtoCommerce.Storefront.Filters
     /// <summary>
     /// Authorization filter that redirects all unauthorized users to Login page (deafult AuthorizeFilter could show AccessDenied for non-authorized authenticated users)
     /// </summary>
-    public class ForceLoginAuthorizeFilter : IAsyncAuthorizationFilter
+    public class ForceLoginAuthorizationHandler : IAsyncAuthorizationFilter
     {
         public readonly IAuthorizationPolicyProvider _policyProvider;
 
-        public ForceLoginAuthorizeFilter(IAuthorizationPolicyProvider policyProvider)
+        public ForceLoginAuthorizationHandler(IAuthorizationPolicyProvider policyProvider)
         {
             _policyProvider = policyProvider;
         }
@@ -36,7 +36,7 @@ namespace VirtoCommerce.Storefront.Filters
                 return;
             }
 
-            var policy = await _policyProvider.GetPolicyAsync(DenyAnonymousForStoreAuthorizationRequirement.PolicyName);
+            var policy = await _policyProvider.GetPolicyAsync(AnonymousUserForStoreAuthorizationRequirement.PolicyName);
             var policyEvaluator = context.HttpContext.RequestServices.GetRequiredService<IPolicyEvaluator>();
             var authenticateResult = await policyEvaluator.AuthenticateAsync(policy, context.HttpContext);
             var authorizeResult = await policyEvaluator.AuthorizeAsync(policy, authenticateResult, context.HttpContext, context);

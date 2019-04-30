@@ -109,7 +109,7 @@ namespace VirtoCommerce.Storefront
             services.AddTransient<ICartBuilder, CartBuilder>();
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<AngularAntiforgeryCookieResultFilter>();
-            services.AddTransient<ForceLoginAuthorizeFilter>();
+            services.AddTransient<ForceLoginAuthorizationHandler>();
 
             //Register events framework dependencies
             services.AddSingleton(new InProcessBus());
@@ -165,7 +165,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IAuthorizationHandler, CanImpersonateAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, CanReadContentItemAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, OnlyRegisteredUserAuthorizationHandler>();
-            services.AddSingleton<IAuthorizationHandler, DenyAnonymousForStoreAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, AnonymousUserForStoreAuthorizationHandler>();
             // register the AuthorizationPolicyProvider which dynamically registers authorization policies for each permission defined in the platform 
             services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
             //Storefront authorization handler for policy based on permissions 
@@ -181,8 +181,8 @@ namespace VirtoCommerce.Storefront
                                 policy => policy.Requirements.Add(new CanEditOrganizationResourceAuthorizeRequirement()));
                 options.AddPolicy(OnlyRegisteredUserAuthorizationRequirement.PolicyName,
                                 policy => policy.Requirements.Add(new OnlyRegisteredUserAuthorizationRequirement()));
-                options.AddPolicy(DenyAnonymousForStoreAuthorizationRequirement.PolicyName,
-                                policy => policy.Requirements.Add(new DenyAnonymousForStoreAuthorizationRequirement()));
+                options.AddPolicy(AnonymousUserForStoreAuthorizationRequirement.PolicyName,
+                                policy => policy.Requirements.Add(new AnonymousUserForStoreAuthorizationRequirement()));
             });
 
 
@@ -259,7 +259,7 @@ namespace VirtoCommerce.Storefront
                 options.AllowCombiningAuthorizeFilters = false;
 
                 // Thus we disable anonymous users based on "Store:AllowAnonymous" store option
-                options.Filters.AddService<ForceLoginAuthorizeFilter>();
+                options.Filters.AddService<ForceLoginAuthorizationHandler>();
 
                 options.CacheProfiles.Add("Default", new CacheProfile()
                 {
