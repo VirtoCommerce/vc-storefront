@@ -109,7 +109,7 @@ namespace VirtoCommerce.Storefront
             services.AddTransient<ICartBuilder, CartBuilder>();
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<AngularAntiforgeryCookieResultFilter>();
-            services.AddTransient<ForceLoginAuthorizationHandler>();
+            services.AddTransient<AnonymousUserForStoreAuthorizationFilter>();
 
             //Register events framework dependencies
             services.AddSingleton(new InProcessBus());
@@ -259,7 +259,7 @@ namespace VirtoCommerce.Storefront
                 options.AllowCombiningAuthorizeFilters = false;
 
                 // Thus we disable anonymous users based on "Store:AllowAnonymous" store option
-                options.Filters.AddService<ForceLoginAuthorizationHandler>();
+                options.Filters.AddService<AnonymousUserForStoreAuthorizationFilter>();
 
                 options.CacheProfiles.Add("Default", new CacheProfile()
                 {

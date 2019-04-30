@@ -14,11 +14,11 @@ namespace VirtoCommerce.Storefront.Filters
     /// <summary>
     /// Authorization filter that redirects all unauthorized users to Login page (deafult AuthorizeFilter could show AccessDenied for non-authorized authenticated users)
     /// </summary>
-    public class ForceLoginAuthorizationHandler : IAsyncAuthorizationFilter
+    public class AnonymousUserForStoreAuthorizationFilter : IAsyncAuthorizationFilter
     {
         public readonly IAuthorizationPolicyProvider _policyProvider;
 
-        public ForceLoginAuthorizationHandler(IAuthorizationPolicyProvider policyProvider)
+        public AnonymousUserForStoreAuthorizationFilter(IAuthorizationPolicyProvider policyProvider)
         {
             _policyProvider = policyProvider;
         }
