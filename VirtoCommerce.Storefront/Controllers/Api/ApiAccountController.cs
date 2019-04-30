@@ -437,6 +437,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<RemovePhoneNumberResult>> RemovePhoneNumber()
         {
+            var twoFactorAuthEnabled = await _signInManager.UserManager.GetTwoFactorEnabledAsync(WorkContext.CurrentUser);
+            if (twoFactorAuthEnabled)
+            {
+                return Forbid();
+            }
+
             var result = await _signInManager.UserManager.SetPhoneNumberAsync(WorkContext.CurrentUser, null);
             await _signInManager.SignInAsync(WorkContext.CurrentUser, isPersistent: false);
 
@@ -448,12 +454,15 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<ChangeTwoFactorAuthenticationResult>> ChangeTwoFactorAuthentication([FromBody] ChangeTwoFactorAuthenticationModel model)
         {
-            var phoneConfirmed = await _signInManager.UserManager.IsPhoneNumberConfirmedAsync(WorkContext.CurrentUser);
-            if (!phoneConfirmed)
+            if (model.Enabled)
             {
-                var url = "/account/phonenumber";
+                var phoneConfirmed = await _signInManager.UserManager.IsPhoneNumberConfirmedAsync(WorkContext.CurrentUser);
+                if (!phoneConfirmed)
+                {
+                    var url = "/account/phonenumber";
 
-                return new ChangeTwoFactorAuthenticationResult { Succeeded = false, VerificationUrl = url };
+                    return new ChangeTwoFactorAuthenticationResult { Succeeded = false, VerificationUrl = url };
+                }
             }
 
             var result = await _signInManager.UserManager.SetTwoFactorEnabledAsync(WorkContext.CurrentUser, model.Enabled);
