@@ -1,4 +1,5 @@
-using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models;
+using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Order;
 
 namespace VirtoCommerce.Storefront.Domain
 {
