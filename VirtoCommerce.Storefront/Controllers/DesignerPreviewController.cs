@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -22,7 +23,8 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpGet("designer-preview")]
         public IActionResult Index()
         {
-            Response.Headers.Add("Content-Security-Policy", "frame-src http://localhost:4200/ http://dev-cms-vm.westeurope.cloudapp.azure.com;");
+            //Response.Headers.Add("Content-Security-Policy", "frame-src http://localhost:4200/ http://dev-cms-vm.westeurope.cloudapp.azure.com;");
+            //Response.Headers.Add("Content-Security-Policy", "frame-src https://vc-com-new-initial-platform.azurewebsites.net;");
             WorkContext.Layout = Request.Query["layout"].ToString();
             return View("json-preview", WorkContext);
         }

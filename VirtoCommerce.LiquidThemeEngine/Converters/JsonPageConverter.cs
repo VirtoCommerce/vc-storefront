@@ -45,13 +45,17 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 var value = keyValue.Value;
                 if (value is JArray)
                 {
-                        var array = (JArray)value;
-                        var resultArray = new List<IDictionary<string, object>>();
-                        foreach (JObject item in array)
-                        {
-                            resultArray.Add(ProcessBlockRecursively(item));
-                        }
-                        result.Add(key, resultArray);
+                    var array = (JArray)value;
+                    var resultArray = new List<IDictionary<string, object>>();
+                    foreach (JObject item in array)
+                    {
+                        resultArray.Add(ProcessBlockRecursively(item));
+                    }
+                    result.Add(key, resultArray);
+                }
+                else if (value is JObject v)
+                {
+                    result.Add(key, ProcessBlockRecursively(v));
                 }
                 else
                 {
