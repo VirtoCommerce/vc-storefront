@@ -1,10 +1,12 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Domain;
+using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Infrastructure.Swagger;
 using VirtoCommerce.Storefront.Model;
@@ -20,12 +22,16 @@ namespace VirtoCommerce.Storefront.Controllers.Api
     {
         private readonly IOrderModule _orderApi;
         private readonly IStoreModule _storeApi;
+        private readonly IAuthorizationService _authorizationService;
 
-        public ApiOrderController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IOrderModule orderApi, IStoreModule storeApi)
+
+        public ApiOrderController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IOrderModule orderApi, IStoreModule storeApi
+            , IAuthorizationService authorizationService)
             : base(workContextAccessor, urlBuilder)
         {
             _orderApi = orderApi;
             _storeApi = storeApi;
+            _authorizationService = authorizationService;
         }
 
         // POST: storefrontapi/orders/search
@@ -200,7 +206,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         {
             var order = await _orderApi.GetByNumberAsync(number);
 
-            if (order == null || order.CustomerId != WorkContext.CurrentUser.Id)
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, order, CanAccessOrderAuthorizationRequirement.PolicyName);
+
+            if (!authorizationResult.Succeeded)
             {
                 throw new StorefrontException($"Order with number {{ number }} not found (or not belongs to current user)");
             }
