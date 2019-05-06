@@ -271,6 +271,9 @@ namespace VirtoCommerce.Storefront
 
                 // To include only Api controllers to swagger document
                 options.Conventions.Add(new ApiExplorerApiControllersConvention());
+
+                // Use the routing logic of ASP.NET Core 2.1 or earlier:
+                options.EnableEndpointRouting = false;
             }).AddJsonOptions(options =>
             {
                 options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
@@ -289,7 +292,7 @@ namespace VirtoCommerce.Storefront
             {
                 options.ViewEngines.Add(snapshotProvider.GetService<ILiquidViewEngine>());
             })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 
             //Register event handlers via reflection
