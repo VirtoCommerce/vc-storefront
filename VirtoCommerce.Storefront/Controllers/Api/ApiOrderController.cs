@@ -24,9 +24,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private readonly IStoreModule _storeApi;
         private readonly IAuthorizationService _authorizationService;
 
-
-        public ApiOrderController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IOrderModule orderApi, IStoreModule storeApi
-            , IAuthorizationService authorizationService)
+        public ApiOrderController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IOrderModule orderApi, IStoreModule storeApi, IAuthorizationService authorizationService)
             : base(workContextAccessor, urlBuilder)
         {
             _orderApi = orderApi;
@@ -167,7 +165,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 }
                 return paymentDto;
             }
-
         }
 
         // GET: storefrontapi/orders/{orderNumber}/invoice
@@ -175,37 +172,22 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [SwaggerFileResponse]
         public async Task<ActionResult> GetInvoicePdf(string orderNumber)
         {
-
-            await CheckCurrentUserOrderAccess(orderNumber);
-
-            var stream = await _orderApi.GetInvoicePdfAsync(orderNumber);
-
-            return File(stream, "application/pdf");
-        }
-
-        /// <summary>
-        /// Current user access to order checking. If order not belong current user StorefrontException will be thrown
-        /// </summary>
-        /// <param name="orderNumber"></param>
-        /// <returns></returns>
-        private async Task CheckCurrentUserOrderAccess(string orderNumber)
-        {
+            // Current user access to order checking. If order not belong current user StorefrontException will be thrown
             await GetOrderDtoByNumber(orderNumber);
+            var stream = await _orderApi.GetInvoicePdfAsync(orderNumber);
+            return File(stream, "application/pdf");
         }
 
         private async Task<CustomerOrder> GetOrderByNumber(string number)
         {
             var order = await GetOrderDtoByNumber(number);
-
             WorkContext.CurrentOrder = order.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
             return WorkContext.CurrentOrder;
         }
 
-
         private async Task<orderModel.CustomerOrder> GetOrderDtoByNumber(string number)
         {
             var order = await _orderApi.GetByNumberAsync(number);
-
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, order, CanAccessOrderAuthorizationRequirement.PolicyName);
 
             if (!authorizationResult.Succeeded)

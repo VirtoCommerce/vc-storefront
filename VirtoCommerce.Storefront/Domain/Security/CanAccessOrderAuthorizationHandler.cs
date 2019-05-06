@@ -3,21 +3,18 @@ using Microsoft.AspNetCore.Authorization;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models;
 using VirtoCommerce.Storefront.Model;
 
-
 namespace VirtoCommerce.Storefront.Domain.Security
 {
-
     /// <summary>
     /// Auth policies requirement for checking if can user access to the given order 
     /// </summary>
     public class CanAccessOrderAuthorizationRequirement : IAuthorizationRequirement
     {
-        public const string PolicyName = "CanReadOrder";
+        public const string PolicyName = "CanAccessOrder";
     }
 
     public class CanAccessOrderAuthorizationHandler : AuthorizationHandler<CanAccessOrderAuthorizationRequirement, CustomerOrder>
     {
-
         private readonly IWorkContextAccessor _workContextAccessor;
 
         public CanAccessOrderAuthorizationHandler(IWorkContextAccessor workContextAccessor)
@@ -27,12 +24,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, CanAccessOrderAuthorizationRequirement requirement, CustomerOrder resource)
         {
-
-            var workContext = _workContextAccessor.WorkContext;
-
-            var currentUserId = workContext.CurrentUser?.Id;
-
-            var result = resource != null && resource.CustomerId == currentUserId;
+            var result = resource != null && resource.CustomerId == _workContextAccessor.WorkContext.CurrentUser?.Id;
 
             if (result)
             {
@@ -40,8 +32,6 @@ namespace VirtoCommerce.Storefront.Domain.Security
             }
 
             return Task.CompletedTask;
-
-
         }
     }
 }
