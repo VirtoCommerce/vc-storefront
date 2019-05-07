@@ -7,7 +7,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
 {
     public partial class VirtoCommerceStoreRESTAPIdocumentation
     {
-
         public VirtoCommerceStoreRESTAPIdocumentation(HttpClient httpClient, IOptions<PlatformEndpointOptions> options)
             : base(httpClient)
         {

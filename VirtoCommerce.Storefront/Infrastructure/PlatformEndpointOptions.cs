@@ -21,27 +21,30 @@ namespace VirtoCommerce.Storefront.Infrastructure
         public TimeSpan RequestTimeout { get; set; } = TimeSpan.FromSeconds(30);
 
         public PollyPoliciesOptions PollyPolicies { get; set; }
+    }
 
-        /// <summary>
-        /// Options for polly policies
-        /// </summary>
-        public class PollyPoliciesOptions
+
+
+    /// <summary>
+    /// Options for polly policies
+    /// </summary>
+    public class PollyPoliciesOptions
+    {
+        public CircuitBreakerPolicyOptions HttpCircuitBreaker { get; set; }
+        public RetryPolicyOptions HttpRetry { get; set; }
+
+
+        public class CircuitBreakerPolicyOptions
         {
-            public CircuitBreakerPolicyOptions HttpCircuitBreaker { get; set; }
-            public RetryPolicyOptions HttpRetry { get; set; }
+            public TimeSpan DurationOfBreak { get; set; } = TimeSpan.FromSeconds(30);
+            public int ExceptionsAllowedBeforeBreaking { get; set; } = 12;
+        }
 
-
-            public class CircuitBreakerPolicyOptions
-            {
-                public TimeSpan DurationOfBreak { get; set; } = TimeSpan.FromSeconds(30);
-                public int ExceptionsAllowedBeforeBreaking { get; set; } = 12;
-            }
-
-            public class RetryPolicyOptions
-            {
-                public int Count { get; set; } = 3;
-                public int BackoffPower { get; set; } = 2;
-            }
+        public class RetryPolicyOptions
+        {
+            public int Count { get; set; } = 3;
+            public int BackoffPower { get; set; } = 2;
         }
     }
+
 }
