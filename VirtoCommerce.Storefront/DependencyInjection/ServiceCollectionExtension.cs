@@ -57,7 +57,12 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             //TODO: Switch AutoRest clients to use IHttpClientFactory with Polly transient error handling
             //http://michaco.net/blog/IntegratingAutorestWithHttpClientFactoryAndDI
 
-            services.AddSingleton<IStoreModule>(provider => new StoreModule(new VirtoCommerceStoreRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
+            services.AddSingleton<IStoreModule>(provider =>
+            new StoreModule(
+                new VirtoCommerceStoreRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url
+                                                            , new EmptyServiceClientCredentials()
+                                                            , provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler())
+                                                                .DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
             services.AddSingleton<ICommerce>(provider => new Commerce(new VirtoCommerceCoreRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
             services.AddSingleton<ICatalogModuleCategories>(provider => new CatalogModuleCategories(new VirtoCommerceCatalogRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
             services.AddSingleton<ICatalogModuleProducts>(provider => new CatalogModuleProducts(new VirtoCommerceCatalogRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));

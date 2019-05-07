@@ -9,29 +9,27 @@ using VirtoCommerce.Storefront.Model;
 
 namespace VirtoCommerce.Storefront.Infrastructure.Autorest
 {
-    public class ApiKeySecretAuthHandler : DelegatingHandler
+    public class ApiKeySecretAuthHandler : AbstractAuthHandler
     {
         private static readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
         private bool _disposed;
-        /// <summary>
-        /// Instance of used HttpClient
-        /// </summary>
-        private static HttpClient _client;
-
         /// <summary>
         /// Gets or sets the timeout
         /// </summary>
         public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(5);
 
-        private readonly IWorkContextAccessor _workContextAccessor;
-        private readonly PlatformEndpointOptions _options;
-        private readonly IHttpClientFactory _clientFactory;
+        /// <summary>
+        /// Instance of used HttpClient
+        /// </summary>
+        private static HttpClient _client;
 
-        public ApiKeySecretAuthHandler(IOptions<PlatformEndpointOptions> options, IWorkContextAccessor workContextAccessor, IHttpClientFactory clientFactory)
+        private readonly IWorkContextAccessor _workContextAccessor;
+
+
+        public ApiKeySecretAuthHandler(IOptions<PlatformEndpointOptions> options, IHttpClientFactory clientFactory, IWorkContextAccessor workContextAccessor)
+            : base(options, clientFactory)
         {
-            _options = options.Value;
             _workContextAccessor = workContextAccessor;
-            _clientFactory = clientFactory;
         }
 
         /// <summary>
@@ -68,7 +66,6 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
                 };
 
                 signature.Hash = HmacUtility.GetHashString(key => new HMACSHA256(key), _options.SecretKey, parameters);
-
                 request.Headers.Authorization = new AuthenticationHeaderValue("HMACSHA256", signature.ToString());
             }
         }
