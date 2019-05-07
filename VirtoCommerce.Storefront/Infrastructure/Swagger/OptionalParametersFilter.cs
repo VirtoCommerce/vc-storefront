@@ -12,8 +12,9 @@ namespace VirtoCommerce.Storefront.Infrastructure.Swagger
             if (operation.Parameters?.Any() == true)
             {
                 var optionalParameters = context.ApiDescription.ParameterDescriptions
-                    .Where(x => x.ParameterDescriptor != null &&
-                        ((ControllerParameterDescriptor)x.ParameterDescriptor).ParameterInfo.CustomAttributes.Any(attr => attr.AttributeType == typeof(SwaggerOptionalAttribute)))
+                    .Where(x => !x.IsRequired || x.ParameterDescriptor != null &&
+                                ((ControllerParameterDescriptor)x.ParameterDescriptor).ParameterInfo.CustomAttributes
+                                .Any(attr => attr.AttributeType == typeof(SwaggerOptionalAttribute)))
                     .ToList();
 
                 foreach (var apiParameter in optionalParameters)
