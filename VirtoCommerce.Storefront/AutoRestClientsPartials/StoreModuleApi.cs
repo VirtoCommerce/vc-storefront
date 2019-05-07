@@ -1,11 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System;
+using System.Net.Http;
+using Microsoft.Extensions.Options;
+using VirtoCommerce.Storefront.Infrastructure;
 
-namespace VirtoCommerce.Storefront.AutoRestClientsPartials
+namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
 {
-    public class StoreModuleApi
+    public partial class VirtoCommerceStoreRESTAPIdocumentation
     {
+
+        public VirtoCommerceStoreRESTAPIdocumentation(HttpClient httpClient, IOptions<PlatformEndpointOptions> options)
+            : base(httpClient)
+        {
+            var platformEndpointOptions = options.Value ?? throw new ArgumentNullException(nameof(options));
+            BaseUri = platformEndpointOptions.Url;
+        }
+
     }
 }

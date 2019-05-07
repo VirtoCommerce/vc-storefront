@@ -13,5 +13,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
             _options = options.Value;
             _clientFactory = clientFactory;
         }
+
+
     }
 }

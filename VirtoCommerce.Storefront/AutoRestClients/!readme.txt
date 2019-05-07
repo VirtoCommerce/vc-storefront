@@ -11,3 +11,8 @@ Troubleshooting
 
 See AutoRest guide here:
 https://github.com/Azure/autorest/blob/master/docs/developer/guide/building-code.md#strong-name-validation-errors
+
+
+
+$modules = @('Store')
+$modules.ForEach( { autoRest -Input http://localhost/admin/docs/VirtoCommerce.$_/v1  -OutputFileName $_`ModuleApi_2.cs -Namespace VirtoCommerce.Storefront.AutoRestClients.$_`ModuleApi_2 -ClientName $_`ModuleApi_2Client -OutputDirectory VirtoCommerce.Storefront\AutoRestClients -UseDateTimeOffset false })

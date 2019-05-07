@@ -2,12 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.Rest;
+using Polly;
+using Polly.Extensions.Http;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.AutoRestClients.CacheModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CartModuleApi;
@@ -36,8 +40,70 @@ using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.DependencyInjection
 {
+
+    public static class PolicyName
+    {
+        public const string HttpCircuitBreaker = nameof(HttpCircuitBreaker);
+        public const string HttpRetry = nameof(HttpRetry);
+    }
+
+
     public static class ServiceCollectionExtension
     {
+
+
+        /// <summary>
+        /// Extention method for add Polly policies to shared policy registry service.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="platformEndpointOptions"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddPolicies(this IServiceCollection services, PlatformEndpointOptions platformEndpointOptions)
+        {
+            var policyOptions = platformEndpointOptions.PollyPolicies;
+
+            var policyRegistry = services.AddPolicyRegistry();
+            policyRegistry.Add(
+                PolicyName.HttpRetry,
+                HttpPolicyExtensions
+                    .HandleTransientHttpError()
+                    .WaitAndRetryAsync(
+                        policyOptions.HttpRetry.Count,
+                        retryAttempt => TimeSpan.FromSeconds(Math.Pow(policyOptions.HttpRetry.BackoffPower, retryAttempt))));
+            policyRegistry.Add(
+                PolicyName.HttpCircuitBreaker,
+                HttpPolicyExtensions
+                    .HandleTransientHttpError()
+                    .CircuitBreakerAsync(
+                        handledEventsAllowedBeforeBreaking: policyOptions.HttpCircuitBreaker.ExceptionsAllowedBeforeBreaking,
+                        durationOfBreak: policyOptions.HttpCircuitBreaker.DurationOfBreak));
+
+            return services;
+        }
+
+
+        public static IServiceCollection AddAutoRestClient<TIModule, TModuleImplementation, TInnerServiceClient>(this IServiceCollection services, Func<TInnerServiceClient, TModuleImplementation> crateModuleImplementationFunc)
+        where TIModule : class
+        where TModuleImplementation : class, TIModule
+        where TInnerServiceClient : ServiceClient<TInnerServiceClient>
+        {
+            services.AddHttpClient<TInnerServiceClient>()
+               .ConfigureHttpClient((sp, httpClient) =>
+               {
+                   var platformEndpointOptions = sp.GetRequiredService<IOptions<PlatformEndpointOptions>>().Value;
+                   httpClient.BaseAddress = platformEndpointOptions.Url;
+                   httpClient.Timeout = platformEndpointOptions.RequestTimeout;
+               })
+               .ConfigureHttpMessageHandlerBuilder(b => new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate })
+               .AddHttpMessageHandler(sp => sp.GetService<AuthenticationHandlerFactory>().CreateAuthHandler())
+               .AddPolicyHandlerFromRegistry(PolicyName.HttpRetry)
+               .AddPolicyHandlerFromRegistry(PolicyName.HttpCircuitBreaker);
+
+            services.AddSingleton<TIModule>(sp => crateModuleImplementationFunc(sp.GetRequiredService<TInnerServiceClient>()));
+
+            return services;
+        }
+
         public static void AddPlatformEndpoint(this IServiceCollection services, Action<PlatformEndpointOptions> setupAction = null)
         {
             ServicePointManager.UseNagleAlgorithm = false;
@@ -45,17 +111,39 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddTransient<UserPasswordAuthHandler>();
             services.AddSingleton<AuthenticationHandlerFactory>();
 
+
             // TODO: Apply compression for HttpClient
             //var httpHandlerWithCompression = new HttpClientHandler
             //{
             //    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             //};
 
+
+
             // This line needs to prevent error about IHttpClientFactory injection
-            services.AddHttpClient<IStoreModule, StoreModule>();
+            //services.AddHttpClient<IStoreModule, StoreModule>();
 
             //TODO: Switch AutoRest clients to use IHttpClientFactory with Polly transient error handling
             //http://michaco.net/blog/IntegratingAutorestWithHttpClientFactoryAndDI
+
+
+            //services.AddHttpClient<VirtoCommerceStoreRESTAPIdocumentation>()
+            //    .ConfigureHttpClient((sp, httpClient) =>
+            //    {
+            //        var platformEndpointOptions = sp.GetRequiredService<IOptions<PlatformEndpointOptions>>().Value;
+            //        httpClient.BaseAddress = platformEndpointOptions.Url;
+            //        httpClient.Timeout = platformEndpointOptions.RequestTimeout;
+            //    })
+            //    .ConfigureHttpMessageHandlerBuilder(b => new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate })
+            //    .AddHttpMessageHandler(sp => sp.GetService<AuthenticationHandlerFactory>().CreateAuthHandler())
+            //    .AddPolicyHandlerFromRegistry(PolicyName.HttpRetry)
+            //    .AddPolicyHandlerFromRegistry(PolicyName.HttpCircuitBreaker);
+
+
+            //services.AddSingleton<IStoreModule>(sp => new StoreModule(sp.GetRequiredService<VirtoCommerceStoreRESTAPIdocumentation>()));
+
+            services.AddAutoRestClient<IStoreModule, StoreModule, VirtoCommerceStoreRESTAPIdocumentation>(innerServiceClient => new StoreModule(innerServiceClient));
+
 
             services.AddSingleton<IStoreModule>(provider =>
             new StoreModule(

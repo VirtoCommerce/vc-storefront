@@ -66,6 +66,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// </returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+
             var accessToken = await GetAccessTokenAsync(cancellationToken);
             if (string.IsNullOrWhiteSpace(accessToken) && (await RenewTokensAsync(cancellationToken) == false))
             {
