@@ -53,7 +53,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
             {
                 Email = registerForm.Email,
                 UserName = registerForm.UserName,
-                Password = registerForm.Password
+                Password = registerForm.Password,
+                UserType = "Customer"
             };
             //Take userName as Email if it valid and Email is not set 
             if (string.IsNullOrEmpty(result.Email))

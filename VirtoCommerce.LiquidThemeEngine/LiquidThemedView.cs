@@ -71,9 +71,9 @@ namespace VirtoCommerce.LiquidThemeEngine
             //Add settings to context
             workContext.Settings = _liquidThemeEngine.GetSettings();
 
-            if (!string.IsNullOrEmpty(_workContextAccessor.WorkContext.ErrorMessage))
+            if (string.IsNullOrEmpty(_workContextAccessor.WorkContext.ErrorMessage))
             {
-                workContext.ErrorMessage = _workContextAccessor.WorkContext.ErrorMessage ?? workContext.Form.Errors.FirstOrDefault()?.Description;
+                workContext.ErrorMessage = workContext.Form.Errors.FirstOrDefault()?.Description;
             }
             var scriptObject = workContext.ToScriptObject();
 

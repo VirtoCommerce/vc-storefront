@@ -278,7 +278,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 var user = await _signInManager.UserManager.FindByNameAsync(login.UserName);
 
                 //Check that current user can sing in to current store
-                if (new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore))
+                if (new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore) && new IsUserSuspendedSpecification().IsSatisfiedBy(user) == false)
                 {
                     await _publisher.Publish(new UserLoginEvent(WorkContext, user));
                     return StoreFrontRedirect(returnUrl);
