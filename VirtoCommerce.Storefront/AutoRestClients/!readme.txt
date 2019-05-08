@@ -11,3 +11,4 @@ Troubleshooting
 
 See AutoRest guide here:
 https://github.com/Azure/autorest/blob/master/docs/developer/guide/building-code.md#strong-name-validation-errors
+$modules = @('Subscription')
