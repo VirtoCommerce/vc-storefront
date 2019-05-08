@@ -22,7 +22,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         {
             if (input != null)
             {
-                input.AddSuffixToFileUrl(size);
+                input = input.AddSuffixToFileUrl("_" + size.TrimStart('_'));
             }
             return input;
         }
