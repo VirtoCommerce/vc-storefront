@@ -12,15 +12,19 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
     /// <summary>
     /// HTTP message delegating handler that encapsulates access token handling and renewment
     /// </summary>
-    public class UserPasswordAuthHandler : AbstractAuthHandler
+    public class UserPasswordAuthHandler : DelegatingHandler
     {
         private static readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
         private static string _accessToken;
         private bool _disposed;
+        private readonly PlatformEndpointOptions _options;
+        private readonly IHttpClientFactory _clientFactory;
+
         /// <summary>
         /// Gets or sets the timeout
         /// </summary>
         public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(5);
+
 
         /// <summary>
         /// Gets the current access token
@@ -51,9 +55,9 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// <param name="options"></param>
         /// <param name="clientFactory"></param>
         public UserPasswordAuthHandler(IOptions<PlatformEndpointOptions> options, IHttpClientFactory clientFactory)
-            : base(options, clientFactory)
         {
-
+            _options = options.Value;
+            _clientFactory = clientFactory;
         }
 
         /// <summary>

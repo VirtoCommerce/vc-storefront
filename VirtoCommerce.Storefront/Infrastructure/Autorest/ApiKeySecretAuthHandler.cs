@@ -1,4 +1,3 @@
-using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
@@ -9,26 +8,14 @@ using VirtoCommerce.Storefront.Model;
 
 namespace VirtoCommerce.Storefront.Infrastructure.Autorest
 {
-    public class ApiKeySecretAuthHandler : AbstractAuthHandler
+    public class ApiKeySecretAuthHandler : DelegatingHandler
     {
-        private static readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
-        private bool _disposed;
-        /// <summary>
-        /// Gets or sets the timeout
-        /// </summary>
-        public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(5);
-
-        /// <summary>
-        /// Instance of used HttpClient
-        /// </summary>
-        private static HttpClient _client;
-
+        private readonly PlatformEndpointOptions _options;
         private readonly IWorkContextAccessor _workContextAccessor;
 
-
-        public ApiKeySecretAuthHandler(IOptions<PlatformEndpointOptions> options, IHttpClientFactory clientFactory, IWorkContextAccessor workContextAccessor)
-            : base(options, clientFactory)
+        public ApiKeySecretAuthHandler(IOptions<PlatformEndpointOptions> options, IWorkContextAccessor workContextAccessor)
         {
+            _options = options.Value;
             _workContextAccessor = workContextAccessor;
         }
 
@@ -42,10 +29,6 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// </returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if (_client == null)
-            {
-                CreateHttpClient();
-            }
 
             AddAuthorization(request);
             AddCurrentUser(request);
@@ -93,46 +76,6 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Creates one HttpClient instance. It will be used for all requests.
-        /// It is necessary to avoid exception "This instance has already started one or more requests. Properties can only be modified before sending the first request."
-        /// if every autorest client would try to create its own HttpClient
-        /// </summary>
-        private void CreateHttpClient()
-        {
-            if (_lock.Wait(Timeout))
-            {
-                try
-                {
-                    if (_client == null)
-                    {
-                        _client = _clientFactory.CreateClient();
-                    }
-                }
-                finally
-                {
-                    _lock.Release();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Releases the unmanaged resources used by the <see cref="T:System.Net.Http.DelegatingHandler" />, and optionally disposes of the managed resources.
-        /// </summary>
-        /// <param name="disposing">true to release both managed and unmanaged resources; false to releases only unmanaged resources.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && !_disposed)
-            {
-                _disposed = true;
-                _lock.Dispose();
-                _client.Dispose();
-                _client = null;
-            }
-
-            base.Dispose(disposing);
         }
     }
 }
