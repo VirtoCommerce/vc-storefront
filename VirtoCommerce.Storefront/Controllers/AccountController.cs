@@ -113,6 +113,17 @@ namespace VirtoCommerce.Storefront.Controllers
                     await _signInManager.SignInAsync(user, isPersistent: true);
                     await _publisher.Publish(new UserLoginEvent(WorkContext, user));
 
+                    //Send new user registration notification
+                    var registrationEmailNotification = new RegistrationEmailNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                    {
+                        FirstName = registration.FirstName,
+                        LastName = registration.LastName,
+                        Login = registration.UserName,
+                        Sender = WorkContext.CurrentStore.Email,
+                        Recipient = GetUserEmail(user)
+                    };
+                    await _platformNotificationApi.SendNotificationAsync(registrationEmailNotification.ToNotificationDto());
+
                     if (_options.SendAccountConfirmation)
                     {
                         var token = await _signInManager.UserManager.GenerateEmailConfirmationTokenAsync(user);
@@ -125,6 +136,7 @@ namespace VirtoCommerce.Storefront.Controllers
                         };
                         await _platformNotificationApi.SendNotificationAsync(emailConfirmationNotification.ToNotificationDto());
                     }
+
 
                     return StoreFrontRedirect("~/account");
                 }
