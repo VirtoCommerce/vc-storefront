@@ -29,7 +29,6 @@ using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
-using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Infrastructure.Autorest;
@@ -41,12 +40,11 @@ using VirtoCommerce.Storefront.Model.StaticContent;
 namespace VirtoCommerce.Storefront.DependencyInjection
 {
 
-    public static class PolicyName
+    public static class PollyPolicyName
     {
         public const string HttpCircuitBreaker = nameof(HttpCircuitBreaker);
         public const string HttpRetry = nameof(HttpRetry);
     }
-
 
     public static class ServiceCollectionExtension
     {
@@ -62,15 +60,17 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             setupAction?.Invoke(policyOptions);
 
             var policyRegistry = services.AddPolicyRegistry();
+
             policyRegistry.Add(
-                PolicyName.HttpRetry,
+                PollyPolicyName.HttpRetry,
                 HttpPolicyExtensions
                     .HandleTransientHttpError()
                     .WaitAndRetryAsync(
                         policyOptions.HttpRetry.Count,
                         retryAttempt => TimeSpan.FromSeconds(Math.Pow(policyOptions.HttpRetry.BackoffPower, retryAttempt))));
+
             policyRegistry.Add(
-                PolicyName.HttpCircuitBreaker,
+                PollyPolicyName.HttpCircuitBreaker,
                 HttpPolicyExtensions
                     .HandleTransientHttpError()
                     .CircuitBreakerAsync(
@@ -93,7 +93,6 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             where TIModule : class
             where TModuleImplementation : class, TIModule
             where TInnerServiceClient : ServiceClient<TInnerServiceClient>
-
         {
             if (!services.Any(x => x.ServiceType == typeof(TInnerServiceClient)))
             {
@@ -104,10 +103,11 @@ namespace VirtoCommerce.Storefront.DependencyInjection
                        httpClient.BaseAddress = platformEndpointOptions.Url;
                        httpClient.Timeout = platformEndpointOptions.RequestTimeout;
                    })
+                   .SetHandlerLifetime(TimeSpan.FromMinutes(5))
                    .ConfigurePrimaryHttpMessageHandler(x => new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate })
                    .AddHttpMessageHandler(sp => sp.GetService<AuthenticationHandlerFactory>().CreateAuthHandler())
-                   .AddPolicyHandlerFromRegistry(PolicyName.HttpRetry)
-                   .AddPolicyHandlerFromRegistry(PolicyName.HttpCircuitBreaker);
+                   .AddPolicyHandlerFromRegistry(PollyPolicyName.HttpRetry)
+                   .AddPolicyHandlerFromRegistry(PollyPolicyName.HttpCircuitBreaker);
             }
 
             services.AddSingleton<TIModule>(sp => crateModuleImplementationFunc(sp.GetRequiredService<TInnerServiceClient>()));
@@ -115,48 +115,13 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             return services;
         }
 
-
-
         public static void AddPlatformEndpoint(this IServiceCollection services, Action<PlatformEndpointOptions> setupAction = null)
         {
             ServicePointManager.UseNagleAlgorithm = false;
             services.AddTransient<ApiKeySecretAuthHandler>();
             services.AddTransient<UserPasswordAuthHandler>();
             services.AddSingleton<AuthenticationHandlerFactory>();
-
             services.AddHttpClient();
-
-
-            // TODO: Apply compression for HttpClient
-            //var httpHandlerWithCompression = new HttpClientHandler
-            //{
-            //    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-            //};
-
-
-
-            // This line needs to prevent error about IHttpClientFactory injection
-            //services.AddHttpClient<IStoreModule, StoreModule>();
-
-            //TODO: Switch AutoRest clients to use IHttpClientFactory with Polly transient error handling
-            //http://michaco.net/blog/IntegratingAutorestWithHttpClientFactoryAndDI
-
-
-            //services.AddHttpClient<VirtoCommerceStoreRESTAPIdocumentation>()
-            //    .ConfigureHttpClient((sp, httpClient) =>
-            //    {
-            //        var platformEndpointOptions = sp.GetRequiredService<IOptions<PlatformEndpointOptions>>().Value;
-            //        httpClient.BaseAddress = platformEndpointOptions.Url;
-            //        httpClient.Timeout = platformEndpointOptions.RequestTimeout;
-            //    })
-            //    .ConfigureHttpMessageHandlerBuilder(b => new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate })
-            //    .AddHttpMessageHandler(sp => sp.GetService<AuthenticationHandlerFactory>().CreateAuthHandler())
-            //    .AddPolicyHandlerFromRegistry(PolicyName.HttpRetry)
-            //    .AddPolicyHandlerFromRegistry(PolicyName.HttpCircuitBreaker);
-
-
-            //services.AddSingleton<IStoreModule>(sp => new StoreModule(sp.GetRequiredService<VirtoCommerceStoreRESTAPIdocumentation>()));
-
             services.AddAutoRestClient<IStoreModule, StoreModule, VirtoCommerceStoreRESTAPIdocumentation>(x => new StoreModule(x));
             services.AddAutoRestClient<ICommerce, Commerce, VirtoCommerceCoreRESTAPIdocumentation>(x => new Commerce(x));
             services.AddAutoRestClient<ICatalogModuleCategories, CatalogModuleCategories, VirtoCommerceCatalogRESTAPIdocumentation>(x => new CatalogModuleCategories(x));
@@ -167,7 +132,7 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddAutoRestClient<ICustomerModule, CustomerModule, VirtoCommerceCustomerRESTAPIdocumentation>(x => new CustomerModule(x));
             services.AddAutoRestClient<IOrderModule, OrderModule, VirtoCommerceOrdersRESTAPIdocumentation>(x => new OrderModule(x));
             services.AddAutoRestClient<IQuoteModule, QuoteModule, VirtoCommerceQuoteRESTAPIdocumentation>(x => new QuoteModule(x));
-            //services.AddAutoRestClient<ISubscriptionModule, SubscriptionModule, VirtoCommerceSubscriptionRESTAPIdocumentation>(x => new SubscriptionModule(x));
+            services.AddAutoRestClient<ISubscriptionModule, SubscriptionModule, VirtoCommerceSubscriptionRESTAPIdocumentation>(x => new SubscriptionModule(x));
             services.AddAutoRestClient<IInventoryModule, InventoryModule, VirtoCommerceInventoryRESTAPIdocumentation>(x => new InventoryModule(x));
             services.AddAutoRestClient<IMarketingModulePromotion, MarketingModulePromotion, VirtoCommerceMarketingRESTAPIdocumentation>(x => new MarketingModulePromotion(x));
             services.AddAutoRestClient<IMarketingModuleDynamicContent, MarketingModuleDynamicContent, VirtoCommerceMarketingRESTAPIdocumentation>(x => new MarketingModuleDynamicContent(x));
@@ -179,30 +144,6 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddAutoRestClient<ISitemapsModuleApiOperations, SitemapsModuleApiOperations, VirtoCommerceSitemapsRESTAPIdocumentation>(x => new SitemapsModuleApiOperations(x));
             services.AddAutoRestClient<ICacheModule, CacheModule, VirtoCommerceCacheRESTAPIdocumentation>(x => new CacheModule(x));
             services.AddAutoRestClient<INotifications, Notifications, VirtoCommercePlatformRESTAPIdocumentation>(x => new Notifications(x));
-
-
-            //services.AddSingleton<IStoreModule>(provider =>new StoreModule(new VirtoCommerceStoreRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<ICommerce>(provider => new Commerce(new VirtoCommerceCoreRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<ICatalogModuleCategories>(provider => new CatalogModuleCategories(new VirtoCommerceCatalogRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<ICatalogModuleProducts>(provider => new CatalogModuleProducts(new VirtoCommerceCatalogRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<ICatalogModuleSearch>(provider => new CatalogModuleSearch(new VirtoCommerceCatalogRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<ISecurity>(provider => new Security(new VirtoCommercePlatformRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<IStorefrontSecurity>(provider => new StorefrontSecurity(new VirtoCommerceCoreRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<ICustomerModule>(provider => new CustomerModule(new VirtoCommerceCustomerRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<IOrderModule>(provider => new OrderModule(new VirtoCommerceOrdersRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<IQuoteModule>(provider => new QuoteModule(new VirtoCommerceQuoteRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            services.AddSingleton<ISubscriptionModule>(provider => new SubscriptionModule(new VirtoCommerceSubscriptionRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<IInventoryModule>(provider => new InventoryModule(new VirtoCommerceInventoryRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<IMarketingModulePromotion>(provider => new MarketingModulePromotion(new VirtoCommerceMarketingRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<IMarketingModuleDynamicContent>(provider => new MarketingModuleDynamicContent(new VirtoCommerceMarketingRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<IPricingModule>(provider => new PricingModule(new VirtoCommercePricingRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<ICartModule>(provider => new CartModule(new VirtoCommerceCartRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<IMenu>(provider => new Menu(new VirtoCommerceContentRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<IContent>(provider => new Content(new VirtoCommerceContentRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<IRecommendations>(provider => new Recommendations(new VirtoCommerceProductRecommendationsRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<ISitemapsModuleApiOperations>(provider => new SitemapsModuleApiOperations(new VirtoCommerceSitemapsRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<ICacheModule>(provider => new CacheModule(new VirtoCommerceCacheRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
-            //services.AddSingleton<INotifications>(provider => new Notifications(new VirtoCommercePlatformRESTAPIdocumentation(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.Url, new EmptyServiceClientCredentials(), provider.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()).DisableRetries().WithTimeout(provider.GetService<IOptions<PlatformEndpointOptions>>().Value.RequestTimeout)));
 
             if (setupAction != null)
             {

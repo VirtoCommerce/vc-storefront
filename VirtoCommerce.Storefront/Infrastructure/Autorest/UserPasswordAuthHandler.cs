@@ -25,7 +25,6 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// </summary>
         public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(5);
 
-
         /// <summary>
         /// Gets the current access token
         /// </summary>
