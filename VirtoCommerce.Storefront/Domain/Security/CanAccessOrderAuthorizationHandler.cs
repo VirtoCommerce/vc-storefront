@@ -24,9 +24,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, CanAccessOrderAuthorizationRequirement requirement, CustomerOrder resource)
         {
-            var result = resource != null && resource.CustomerId == _workContextAccessor.WorkContext.CurrentUser?.Id;
-
-            if (result)
+            if (resource != null && resource.CustomerId == _workContextAccessor.WorkContext.CurrentUser?.Id)
             {
                 context.Succeed(requirement);
             }
