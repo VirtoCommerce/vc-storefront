@@ -98,7 +98,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/lists/search
         [HttpPost("search")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<GenericSearchResult<ShoppingCart>>> SearchLists([FromBody] CartSearchCriteria searchCriteria)
+        public async Task<ActionResult<ShoppingCartSearchResult>> SearchLists([FromBody] CartSearchCriteria searchCriteria)
         {
             if (searchCriteria == null)
             {
@@ -113,7 +113,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             var cartPagedList = await _cartService.SearchCartsAsync(searchCriteria);
 
-            return new GenericSearchResult<ShoppingCart>
+            return new ShoppingCartSearchResult
             {
                 Results = cartPagedList.ToArray(),
                 TotalCount = cartPagedList.TotalItemCount

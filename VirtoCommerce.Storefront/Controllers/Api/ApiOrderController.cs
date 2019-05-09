@@ -35,7 +35,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/orders/search
         [HttpPost("search")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<GenericSearchResult<CustomerOrder>>> SearchCustomerOrders([FromBody] OrderSearchCriteria criteria)
+        public async Task<ActionResult<CustomerOrderSearchResult>> SearchCustomerOrders([FromBody] OrderSearchCriteria criteria)
         {
             if (criteria == null)
             {
@@ -46,7 +46,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             var result = await _orderApi.SearchAsync(criteria.ToSearchCriteriaDto());
 
-            return new GenericSearchResult<CustomerOrder>
+            return new CustomerOrderSearchResult
             {
                 Results = result.CustomerOrders.Select(x => x.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage)).ToArray(),
                 TotalCount = result.TotalCount ?? default(int),
