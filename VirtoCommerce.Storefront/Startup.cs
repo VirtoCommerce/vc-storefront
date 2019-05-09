@@ -171,6 +171,7 @@ namespace VirtoCommerce.Storefront
             //Storefront authorization handler for policy based on permissions 
             services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, CanEditOrganizationResourceAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, CanAccessOrderAuthorizationHandler>();
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(CanImpersonateAuthorizationRequirement.PolicyName,
