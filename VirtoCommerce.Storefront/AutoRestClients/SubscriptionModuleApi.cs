@@ -6,11 +6,16 @@
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 {
-    using System.Collections.Generic;
-    using System.Net.Http;
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
+    using Models;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class VirtoCommerceSubscriptionRESTAPIdocumentation : ServiceClient<VirtoCommerceSubscriptionRESTAPIdocumentation>, IVirtoCommerceSubscriptionRESTAPIdocumentation
     {
@@ -161,7 +166,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public VirtoCommerceSubscriptionRESTAPIdocumentation(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient = false) : this(httpClient, disposeHttpClient)
+        public VirtoCommerceSubscriptionRESTAPIdocumentation(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
         {
             if (credentials == null)
             {
@@ -290,7 +295,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
                 NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
                 ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize,
                 ContractResolver = new ReadOnlyJsonContractResolver(),
-                Converters = new List<JsonConverter>
+                Converters = new  List<JsonConverter>
                     {
                         new Iso8601TimeSpanConverter()
                     }
@@ -320,7 +325,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 {
     using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Models;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// </summary>
@@ -363,15 +376,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 {
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
     using Models;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// SubscriptionModule operations.
@@ -454,7 +470,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             if (customHeaders != null)
             {
-                foreach (var _header in customHeaders)
+                foreach(var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -466,11 +482,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if (criteria != null)
+            if(criteria != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -495,12 +511,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null)
-                {
+                if (_httpResponse.Content != null) {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else
-                {
+                else {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -611,7 +625,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             if (customHeaders != null)
             {
-                foreach (var _header in customHeaders)
+                foreach(var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -646,12 +660,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null)
-                {
+                if (_httpResponse.Content != null) {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else
-                {
+                else {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -775,7 +787,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             if (customHeaders != null)
             {
-                foreach (var _header in customHeaders)
+                foreach(var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -810,12 +822,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null)
-                {
+                if (_httpResponse.Content != null) {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else
-                {
+                else {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -913,7 +923,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             if (customHeaders != null)
             {
-                foreach (var _header in customHeaders)
+                foreach(var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -925,11 +935,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if (subscription != null)
+            if(subscription != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(subscription, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -954,12 +964,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null)
-                {
+                if (_httpResponse.Content != null) {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else
-                {
+                else {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -1057,7 +1065,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             if (customHeaders != null)
             {
-                foreach (var _header in customHeaders)
+                foreach(var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -1069,11 +1077,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if (subscription != null)
+            if(subscription != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(subscription, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -1098,12 +1106,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null)
-                {
+                if (_httpResponse.Content != null) {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else
-                {
+                else {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -1217,7 +1223,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             if (customHeaders != null)
             {
-                foreach (var _header in customHeaders)
+                foreach(var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -1252,12 +1258,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             if ((int)_statusCode != 204)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null)
-                {
+                if (_httpResponse.Content != null) {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else
-                {
+                else {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -1337,7 +1341,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             if (customHeaders != null)
             {
-                foreach (var _header in customHeaders)
+                foreach(var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -1349,11 +1353,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if (subscription != null)
+            if(subscription != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(subscription, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -1378,12 +1382,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null)
-                {
+                if (_httpResponse.Content != null) {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else
-                {
+                else {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -1481,7 +1483,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             if (customHeaders != null)
             {
-                foreach (var _header in customHeaders)
+                foreach(var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -1493,11 +1495,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if (cancelRequest != null)
+            if(cancelRequest != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(cancelRequest, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -1522,12 +1524,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null)
-                {
+                if (_httpResponse.Content != null) {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else
-                {
+                else {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -1626,7 +1626,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             if (customHeaders != null)
             {
-                foreach (var _header in customHeaders)
+                foreach(var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -1661,12 +1661,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null)
-                {
+                if (_httpResponse.Content != null) {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else
-                {
+                else {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -1783,7 +1781,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             if (customHeaders != null)
             {
-                foreach (var _header in customHeaders)
+                foreach(var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -1818,12 +1816,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null)
-                {
+                if (_httpResponse.Content != null) {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else
-                {
+                else {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -1921,7 +1917,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             if (customHeaders != null)
             {
-                foreach (var _header in customHeaders)
+                foreach(var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -1933,11 +1929,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if (plan != null)
+            if(plan != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(plan, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -1962,12 +1958,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null)
-                {
+                if (_httpResponse.Content != null) {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else
-                {
+                else {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -2065,7 +2059,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             if (customHeaders != null)
             {
-                foreach (var _header in customHeaders)
+                foreach(var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -2077,11 +2071,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if (plan != null)
+            if(plan != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(plan, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -2106,12 +2100,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null)
-                {
+                if (_httpResponse.Content != null) {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else
-                {
+                else {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -2225,7 +2217,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             if (customHeaders != null)
             {
-                foreach (var _header in customHeaders)
+                foreach(var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -2260,12 +2252,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             if ((int)_statusCode != 204)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null)
-                {
+                if (_httpResponse.Content != null) {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else
-                {
+                else {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -2345,7 +2335,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             if (customHeaders != null)
             {
-                foreach (var _header in customHeaders)
+                foreach(var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -2357,11 +2347,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if (ids != null)
+            if(ids != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(ids, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -2386,12 +2376,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null)
-                {
+                if (_httpResponse.Content != null) {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else
-                {
+                else {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -2446,11 +2434,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Models;
+    using Newtonsoft.Json;
+    using System.Collections;
     using System.Collections.Generic;
+    using System.Net;
+    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Microsoft.Rest;
-    using Models;
 
     /// <summary>
     /// SubscriptionModule operations.
@@ -2717,381 +2710,387 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Models;
+    using Newtonsoft.Json;
+    using System.Collections;
     using System.Collections.Generic;
+    using System.Net;
+    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Models;
 
     /// <summary>
     /// Extension methods for SubscriptionModule.
     /// </summary>
     public static partial class SubscriptionModuleExtensions
     {
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='criteria'>
-        /// </param>
-        public static SubscriptionSearchResult SearchSubscriptions(this ISubscriptionModule operations, SubscriptionSearchCriteria criteria)
-        {
-            return operations.SearchSubscriptionsAsync(criteria).GetAwaiter().GetResult();
-        }
-
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='criteria'>
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        public static async Task<SubscriptionSearchResult> SearchSubscriptionsAsync(this ISubscriptionModule operations, SubscriptionSearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (var _result = await operations.SearchSubscriptionsWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='criteria'>
+            /// </param>
+            public static SubscriptionSearchResult SearchSubscriptions(this ISubscriptionModule operations, SubscriptionSearchCriteria criteria)
             {
-                return _result.Body;
+                return operations.SearchSubscriptionsAsync(criteria).GetAwaiter().GetResult();
             }
-        }
 
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='id'>
-        /// </param>
-        /// <param name='respGroup'>
-        /// </param>
-        public static Subscription GetSubscriptionById(this ISubscriptionModule operations, string id, string respGroup = default(string))
-        {
-            return operations.GetSubscriptionByIdAsync(id, respGroup).GetAwaiter().GetResult();
-        }
-
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='id'>
-        /// </param>
-        /// <param name='respGroup'>
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        public static async Task<Subscription> GetSubscriptionByIdAsync(this ISubscriptionModule operations, string id, string respGroup = default(string), CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (var _result = await operations.GetSubscriptionByIdWithHttpMessagesAsync(id, respGroup, null, cancellationToken).ConfigureAwait(false))
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='criteria'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<SubscriptionSearchResult> SearchSubscriptionsAsync(this ISubscriptionModule operations, SubscriptionSearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
             {
-                return _result.Body;
+                using (var _result = await operations.SearchSubscriptionsWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
-        }
 
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='ids'>
-        /// </param>
-        /// <param name='respGroup'>
-        /// </param>
-        public static IList<Subscription> GetSubscriptionByIds(this ISubscriptionModule operations, IList<string> ids, string respGroup = default(string))
-        {
-            return operations.GetSubscriptionByIdsAsync(ids, respGroup).GetAwaiter().GetResult();
-        }
-
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='ids'>
-        /// </param>
-        /// <param name='respGroup'>
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        public static async Task<IList<Subscription>> GetSubscriptionByIdsAsync(this ISubscriptionModule operations, IList<string> ids, string respGroup = default(string), CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (var _result = await operations.GetSubscriptionByIdsWithHttpMessagesAsync(ids, respGroup, null, cancellationToken).ConfigureAwait(false))
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='id'>
+            /// </param>
+            /// <param name='respGroup'>
+            /// </param>
+            public static Subscription GetSubscriptionById(this ISubscriptionModule operations, string id, string respGroup = default(string))
             {
-                return _result.Body;
+                return operations.GetSubscriptionByIdAsync(id, respGroup).GetAwaiter().GetResult();
             }
-        }
 
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='subscription'>
-        /// </param>
-        public static Subscription UpdateSubscription(this ISubscriptionModule operations, Subscription subscription)
-        {
-            return operations.UpdateSubscriptionAsync(subscription).GetAwaiter().GetResult();
-        }
-
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='subscription'>
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        public static async Task<Subscription> UpdateSubscriptionAsync(this ISubscriptionModule operations, Subscription subscription, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (var _result = await operations.UpdateSubscriptionWithHttpMessagesAsync(subscription, null, cancellationToken).ConfigureAwait(false))
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='id'>
+            /// </param>
+            /// <param name='respGroup'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<Subscription> GetSubscriptionByIdAsync(this ISubscriptionModule operations, string id, string respGroup = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
-                return _result.Body;
+                using (var _result = await operations.GetSubscriptionByIdWithHttpMessagesAsync(id, respGroup, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
-        }
 
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='subscription'>
-        /// </param>
-        public static Subscription CreateSubscription(this ISubscriptionModule operations, Subscription subscription)
-        {
-            return operations.CreateSubscriptionAsync(subscription).GetAwaiter().GetResult();
-        }
-
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='subscription'>
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        public static async Task<Subscription> CreateSubscriptionAsync(this ISubscriptionModule operations, Subscription subscription, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (var _result = await operations.CreateSubscriptionWithHttpMessagesAsync(subscription, null, cancellationToken).ConfigureAwait(false))
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='ids'>
+            /// </param>
+            /// <param name='respGroup'>
+            /// </param>
+            public static IList<Subscription> GetSubscriptionByIds(this ISubscriptionModule operations, IList<string> ids, string respGroup = default(string))
             {
-                return _result.Body;
+                return operations.GetSubscriptionByIdsAsync(ids, respGroup).GetAwaiter().GetResult();
             }
-        }
 
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='ids'>
-        /// </param>
-        public static void DeleteSubscriptionsByIds(this ISubscriptionModule operations, IList<string> ids)
-        {
-            operations.DeleteSubscriptionsByIdsAsync(ids).GetAwaiter().GetResult();
-        }
-
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='ids'>
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        public static async Task DeleteSubscriptionsByIdsAsync(this ISubscriptionModule operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            (await operations.DeleteSubscriptionsByIdsWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false)).Dispose();
-        }
-
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='subscription'>
-        /// </param>
-        public static CustomerOrder CreateReccurentOrderForSubscription(this ISubscriptionModule operations, Subscription subscription)
-        {
-            return operations.CreateReccurentOrderForSubscriptionAsync(subscription).GetAwaiter().GetResult();
-        }
-
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='subscription'>
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        public static async Task<CustomerOrder> CreateReccurentOrderForSubscriptionAsync(this ISubscriptionModule operations, Subscription subscription, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (var _result = await operations.CreateReccurentOrderForSubscriptionWithHttpMessagesAsync(subscription, null, cancellationToken).ConfigureAwait(false))
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='ids'>
+            /// </param>
+            /// <param name='respGroup'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<IList<Subscription>> GetSubscriptionByIdsAsync(this ISubscriptionModule operations, IList<string> ids, string respGroup = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
-                return _result.Body;
+                using (var _result = await operations.GetSubscriptionByIdsWithHttpMessagesAsync(ids, respGroup, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
-        }
 
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='cancelRequest'>
-        /// </param>
-        public static Subscription CancelSubscription(this ISubscriptionModule operations, SubscriptionCancelRequest cancelRequest)
-        {
-            return operations.CancelSubscriptionAsync(cancelRequest).GetAwaiter().GetResult();
-        }
-
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='cancelRequest'>
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        public static async Task<Subscription> CancelSubscriptionAsync(this ISubscriptionModule operations, SubscriptionCancelRequest cancelRequest, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (var _result = await operations.CancelSubscriptionWithHttpMessagesAsync(cancelRequest, null, cancellationToken).ConfigureAwait(false))
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='subscription'>
+            /// </param>
+            public static Subscription UpdateSubscription(this ISubscriptionModule operations, Subscription subscription)
             {
-                return _result.Body;
+                return operations.UpdateSubscriptionAsync(subscription).GetAwaiter().GetResult();
             }
-        }
 
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='id'>
-        /// </param>
-        public static PaymentPlan GetPaymentPlanById(this ISubscriptionModule operations, string id)
-        {
-            return operations.GetPaymentPlanByIdAsync(id).GetAwaiter().GetResult();
-        }
-
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='id'>
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        public static async Task<PaymentPlan> GetPaymentPlanByIdAsync(this ISubscriptionModule operations, string id, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (var _result = await operations.GetPaymentPlanByIdWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='subscription'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<Subscription> UpdateSubscriptionAsync(this ISubscriptionModule operations, Subscription subscription, CancellationToken cancellationToken = default(CancellationToken))
             {
-                return _result.Body;
+                using (var _result = await operations.UpdateSubscriptionWithHttpMessagesAsync(subscription, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
-        }
 
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='ids'>
-        /// </param>
-        public static IList<PaymentPlan> GetPaymentPlanByIds(this ISubscriptionModule operations, IList<string> ids)
-        {
-            return operations.GetPaymentPlanByIdsAsync(ids).GetAwaiter().GetResult();
-        }
-
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='ids'>
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        public static async Task<IList<PaymentPlan>> GetPaymentPlanByIdsAsync(this ISubscriptionModule operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (var _result = await operations.GetPaymentPlanByIdsWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false))
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='subscription'>
+            /// </param>
+            public static Subscription CreateSubscription(this ISubscriptionModule operations, Subscription subscription)
             {
-                return _result.Body;
+                return operations.CreateSubscriptionAsync(subscription).GetAwaiter().GetResult();
             }
-        }
 
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='plan'>
-        /// </param>
-        public static PaymentPlan UpdatePaymentPlan(this ISubscriptionModule operations, PaymentPlan plan)
-        {
-            return operations.UpdatePaymentPlanAsync(plan).GetAwaiter().GetResult();
-        }
-
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='plan'>
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        public static async Task<PaymentPlan> UpdatePaymentPlanAsync(this ISubscriptionModule operations, PaymentPlan plan, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (var _result = await operations.UpdatePaymentPlanWithHttpMessagesAsync(plan, null, cancellationToken).ConfigureAwait(false))
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='subscription'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<Subscription> CreateSubscriptionAsync(this ISubscriptionModule operations, Subscription subscription, CancellationToken cancellationToken = default(CancellationToken))
             {
-                return _result.Body;
+                using (var _result = await operations.CreateSubscriptionWithHttpMessagesAsync(subscription, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
-        }
 
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='plan'>
-        /// </param>
-        public static PaymentPlan CreatePaymentPlan(this ISubscriptionModule operations, PaymentPlan plan)
-        {
-            return operations.CreatePaymentPlanAsync(plan).GetAwaiter().GetResult();
-        }
-
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='plan'>
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        public static async Task<PaymentPlan> CreatePaymentPlanAsync(this ISubscriptionModule operations, PaymentPlan plan, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (var _result = await operations.CreatePaymentPlanWithHttpMessagesAsync(plan, null, cancellationToken).ConfigureAwait(false))
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='ids'>
+            /// </param>
+            public static void DeleteSubscriptionsByIds(this ISubscriptionModule operations, IList<string> ids)
             {
-                return _result.Body;
+                operations.DeleteSubscriptionsByIdsAsync(ids).GetAwaiter().GetResult();
             }
-        }
 
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='ids'>
-        /// </param>
-        public static void DeletePlansByIds(this ISubscriptionModule operations, IList<string> ids)
-        {
-            operations.DeletePlansByIdsAsync(ids).GetAwaiter().GetResult();
-        }
-
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='ids'>
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        public static async Task DeletePlansByIdsAsync(this ISubscriptionModule operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            (await operations.DeletePlansByIdsWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false)).Dispose();
-        }
-
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='ids'>
-        /// </param>
-        public static IList<PaymentPlan> GetPaymentPlansByPlentyIds(this ISubscriptionModule operations, IList<string> ids)
-        {
-            return operations.GetPaymentPlansByPlentyIdsAsync(ids).GetAwaiter().GetResult();
-        }
-
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='ids'>
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        public static async Task<IList<PaymentPlan>> GetPaymentPlansByPlentyIdsAsync(this ISubscriptionModule operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            using (var _result = await operations.GetPaymentPlansByPlentyIdsWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false))
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='ids'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task DeleteSubscriptionsByIdsAsync(this ISubscriptionModule operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
             {
-                return _result.Body;
+                (await operations.DeleteSubscriptionsByIdsWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
-        }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='subscription'>
+            /// </param>
+            public static CustomerOrder CreateReccurentOrderForSubscription(this ISubscriptionModule operations, Subscription subscription)
+            {
+                return operations.CreateReccurentOrderForSubscriptionAsync(subscription).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='subscription'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<CustomerOrder> CreateReccurentOrderForSubscriptionAsync(this ISubscriptionModule operations, Subscription subscription, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.CreateReccurentOrderForSubscriptionWithHttpMessagesAsync(subscription, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='cancelRequest'>
+            /// </param>
+            public static Subscription CancelSubscription(this ISubscriptionModule operations, SubscriptionCancelRequest cancelRequest)
+            {
+                return operations.CancelSubscriptionAsync(cancelRequest).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='cancelRequest'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<Subscription> CancelSubscriptionAsync(this ISubscriptionModule operations, SubscriptionCancelRequest cancelRequest, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.CancelSubscriptionWithHttpMessagesAsync(cancelRequest, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='id'>
+            /// </param>
+            public static PaymentPlan GetPaymentPlanById(this ISubscriptionModule operations, string id)
+            {
+                return operations.GetPaymentPlanByIdAsync(id).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='id'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<PaymentPlan> GetPaymentPlanByIdAsync(this ISubscriptionModule operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.GetPaymentPlanByIdWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='ids'>
+            /// </param>
+            public static IList<PaymentPlan> GetPaymentPlanByIds(this ISubscriptionModule operations, IList<string> ids)
+            {
+                return operations.GetPaymentPlanByIdsAsync(ids).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='ids'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<IList<PaymentPlan>> GetPaymentPlanByIdsAsync(this ISubscriptionModule operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.GetPaymentPlanByIdsWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='plan'>
+            /// </param>
+            public static PaymentPlan UpdatePaymentPlan(this ISubscriptionModule operations, PaymentPlan plan)
+            {
+                return operations.UpdatePaymentPlanAsync(plan).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='plan'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<PaymentPlan> UpdatePaymentPlanAsync(this ISubscriptionModule operations, PaymentPlan plan, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.UpdatePaymentPlanWithHttpMessagesAsync(plan, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='plan'>
+            /// </param>
+            public static PaymentPlan CreatePaymentPlan(this ISubscriptionModule operations, PaymentPlan plan)
+            {
+                return operations.CreatePaymentPlanAsync(plan).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='plan'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<PaymentPlan> CreatePaymentPlanAsync(this ISubscriptionModule operations, PaymentPlan plan, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.CreatePaymentPlanWithHttpMessagesAsync(plan, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='ids'>
+            /// </param>
+            public static void DeletePlansByIds(this ISubscriptionModule operations, IList<string> ids)
+            {
+                operations.DeletePlansByIdsAsync(ids).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='ids'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task DeletePlansByIdsAsync(this ISubscriptionModule operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.DeletePlansByIdsWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='ids'>
+            /// </param>
+            public static IList<PaymentPlan> GetPaymentPlansByPlentyIds(this ISubscriptionModule operations, IList<string> ids)
+            {
+                return operations.GetPaymentPlansByPlentyIdsAsync(ids).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='ids'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<IList<PaymentPlan>> GetPaymentPlansByPlentyIdsAsync(this ISubscriptionModule operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.GetPaymentPlansByPlentyIdsWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
 
     }
 }
@@ -3103,7 +3102,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class SortInfo
     {
@@ -3153,8 +3161,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class SubscriptionSearchCriteria
     {
@@ -3309,7 +3325,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class Address
     {
@@ -3456,8 +3481,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class SettingEntry
     {
@@ -3599,7 +3632,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class TaxDetail
     {
@@ -3652,8 +3694,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class PaymentMethod
     {
@@ -3828,7 +3878,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class ProcessPaymentResult
     {
@@ -3911,7 +3970,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class Discount
     {
@@ -3988,7 +4056,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class PaymentGatewayTransaction
     {
@@ -4137,8 +4214,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class IOperation
     {
@@ -4227,7 +4312,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class DynamicPropertyObjectValue
     {
@@ -4304,7 +4398,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class DynamicPropertyName
     {
@@ -4351,8 +4454,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class DynamicObjectProperty
     {
@@ -4495,7 +4606,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class OperationLog
     {
@@ -4588,8 +4708,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class PaymentIn
     {
@@ -4918,7 +5046,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class CatalogLanguage
     {
@@ -4983,7 +5120,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class PropertyValue
     {
@@ -5107,7 +5253,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class CategoryLink
     {
@@ -5172,7 +5327,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class SeoInfo
     {
@@ -5303,8 +5467,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class Image
     {
@@ -5423,8 +5595,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class OutlineItem
     {
@@ -5483,8 +5663,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class Outline
     {
@@ -5525,8 +5713,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class Category
     {
@@ -5717,7 +5913,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class PropertyAttribute
     {
@@ -5806,7 +6011,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class PropertyDisplayName
     {
@@ -5853,7 +6067,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class PropertyValidationRule
     {
@@ -5930,8 +6153,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class Property
     {
@@ -6095,8 +6326,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class Catalog
     {
@@ -6173,8 +6412,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class Asset
     {
@@ -6299,7 +6546,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class EditorialReview
     {
@@ -6388,7 +6644,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class Entity
     {
@@ -6429,8 +6694,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class ProductAssociation
     {
@@ -6507,8 +6780,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class DynamicExpression
     {
@@ -6561,8 +6842,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class ConditionExpressionTree
     {
@@ -6615,7 +6904,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class PricelistAssignment
     {
@@ -6746,8 +7044,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class Pricelist
     {
@@ -6842,7 +7148,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class Price
     {
@@ -6967,7 +7282,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class FulfillmentCenter
     {
@@ -7056,7 +7380,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class InventoryInfo
     {
@@ -7203,8 +7536,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class CatalogProduct
     {
@@ -7563,8 +7904,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class LineItem
     {
@@ -7905,8 +8254,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class ShippingMethod
     {
@@ -7995,7 +8352,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class ShipmentItem
     {
@@ -8084,8 +8450,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class ShipmentPackage
     {
@@ -8204,8 +8578,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class Shipment
     {
@@ -8564,8 +8946,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class CustomerOrder
     {
@@ -9032,8 +9422,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class Subscription
     {
@@ -9256,8 +9654,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
-    using System.Collections.Generic;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class SubscriptionSearchResult
     {
@@ -9304,7 +9710,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class SubscriptionCancelRequest
     {
@@ -9351,7 +9766,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
 namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public partial class PaymentPlan
     {
