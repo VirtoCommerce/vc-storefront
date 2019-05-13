@@ -118,6 +118,7 @@ namespace VirtoCommerce.Storefront.DependencyInjection
         public static void AddPlatformEndpoint(this IServiceCollection services, Action<PlatformEndpointOptions> setupAction = null)
         {
             ServicePointManager.UseNagleAlgorithm = false;
+            services.AddSingleton<ServiceClientCredentials>(sp => new EmptyServiceClientCredentials());
             services.AddTransient<ApiKeySecretAuthHandler>();
             services.AddTransient<UserPasswordAuthHandler>();
             services.AddSingleton<AuthenticationHandlerFactory>();
@@ -132,7 +133,7 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddAutoRestClient<ICustomerModule, CustomerModule, VirtoCommerceCustomerRESTAPIdocumentation>(x => new CustomerModule(x));
             services.AddAutoRestClient<IOrderModule, OrderModule, VirtoCommerceOrdersRESTAPIdocumentation>(x => new OrderModule(x));
             services.AddAutoRestClient<IQuoteModule, QuoteModule, VirtoCommerceQuoteRESTAPIdocumentation>(x => new QuoteModule(x));
-            services.AddAutoRestClient<ISubscriptionModule, SubscriptionModule, VirtoCommerceSubscriptionRESTAPIdocumentation>(x => new SubscriptionModule(x));
+            //services.AddAutoRestClient<ISubscriptionModule, SubscriptionModule, VirtoCommerceSubscriptionRESTAPIdocumentationExtended>(x => new SubscriptionModule(x));
             services.AddAutoRestClient<IInventoryModule, InventoryModule, VirtoCommerceInventoryRESTAPIdocumentation>(x => new InventoryModule(x));
             services.AddAutoRestClient<IMarketingModulePromotion, MarketingModulePromotion, VirtoCommerceMarketingRESTAPIdocumentation>(x => new MarketingModulePromotion(x));
             services.AddAutoRestClient<IMarketingModuleDynamicContent, MarketingModuleDynamicContent, VirtoCommerceMarketingRESTAPIdocumentation>(x => new MarketingModuleDynamicContent(x));
@@ -149,6 +150,32 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             {
                 services.Configure(setupAction);
             }
+
+
+            //services.AddHttpClient()
+
+            services.AddHttpClient<VirtoCommerceSubscriptionRESTAPIdocumentationExtended>()
+                  .ConfigureHttpClient((sp, httpClient) =>
+                  {
+
+                      var platformEndpointOptions = sp.GetRequiredService<IOptions<PlatformEndpointOptions>>().Value;
+                      httpClient.BaseAddress = platformEndpointOptions.Url;
+                      httpClient.Timeout = platformEndpointOptions.RequestTimeout;
+                  })
+                  .SetHandlerLifetime(TimeSpan.FromMinutes(5))
+                  .ConfigurePrimaryHttpMessageHandler(x => new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate })
+                  .AddHttpMessageHandler(sp => sp.GetService<AuthenticationHandlerFactory>().CreateAuthHandler())
+                  .AddPolicyHandlerFromRegistry(PollyPolicyName.HttpRetry)
+                  .AddPolicyHandlerFromRegistry(PollyPolicyName.HttpCircuitBreaker);
+
+            services.AddSingleton<ISubscriptionModule>(sp => new SubscriptionModule(sp.GetRequiredService<VirtoCommerceSubscriptionRESTAPIdocumentationExtended>()));
+
+
+            //var sp2 = services.BuildServiceProvider();
+            //var platformOps = sp2.GetRequiredService<IOptions<PlatformEndpointOptions>>().Value;
+            //var subsClient = sp2.GetRequiredService<VirtoCommerceSubscriptionRESTAPIdocumentation>();
+            //subsClient.BaseUri = platformOps.Url;
+
         }
 
         public static void AddFileSystemBlobContent(this IServiceCollection services, Action<FileSystemBlobContentOptions> setupAction = null)
