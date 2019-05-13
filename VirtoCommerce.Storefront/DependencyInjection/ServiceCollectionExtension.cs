@@ -81,22 +81,17 @@ namespace VirtoCommerce.Storefront.DependencyInjection
         }
 
         /// <summary>
-        /// Add AutoRest generated module and client to services
-        /// </summary>
-        /// <typeparam name="TIModule"></typeparam>
-        /// <typeparam name="TModuleImplementation"></typeparam>
-        /// <typeparam name="TInnerServiceClient"></typeparam>
-        /// <param name="services"></param>
-        /// <param name="crateModuleImplementationFunc"></param>
+        /// Add AutoRest generated service client to services and configure its underhood httpClient
+        /// </summary>       
+        /// <typeparam name="TServiceClient"></typeparam>
+        /// <param name="services"></param>        
         /// <returns></returns>
-        public static IServiceCollection AddAutoRestClient<TIModule, TModuleImplementation, TInnerServiceClient>(this IServiceCollection services, Func<TInnerServiceClient, TModuleImplementation> crateModuleImplementationFunc)
-            where TIModule : class
-            where TModuleImplementation : class, TIModule
-            where TInnerServiceClient : ServiceClient<TInnerServiceClient>
+        public static IServiceCollection AddAutoRestClient<TServiceClient>(this IServiceCollection services)
+            where TServiceClient : class
         {
-            if (!services.Any(x => x.ServiceType == typeof(TInnerServiceClient)))
+            if (!services.Any(x => x.ServiceType == typeof(TServiceClient)))
             {
-                services.AddHttpClient<TInnerServiceClient>()
+                services.AddHttpClient<TServiceClient>()
                    .ConfigureHttpClient((sp, httpClient) =>
                    {
                        var platformEndpointOptions = sp.GetRequiredService<IOptions<PlatformEndpointOptions>>().Value;
@@ -110,8 +105,6 @@ namespace VirtoCommerce.Storefront.DependencyInjection
                    .AddPolicyHandlerFromRegistry(PollyPolicyName.HttpCircuitBreaker);
             }
 
-            services.AddSingleton<TIModule>(sp => crateModuleImplementationFunc(sp.GetRequiredService<TInnerServiceClient>()));
-
             return services;
         }
 
@@ -123,58 +116,51 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddTransient<UserPasswordAuthHandler>();
             services.AddSingleton<AuthenticationHandlerFactory>();
             services.AddHttpClient();
-            services.AddAutoRestClient<IStoreModule, StoreModule, VirtoCommerceStoreRESTAPIdocumentation>(x => new StoreModule(x));
-            services.AddAutoRestClient<ICommerce, Commerce, VirtoCommerceCoreRESTAPIdocumentation>(x => new Commerce(x));
-            services.AddAutoRestClient<ICatalogModuleCategories, CatalogModuleCategories, VirtoCommerceCatalogRESTAPIdocumentation>(x => new CatalogModuleCategories(x));
-            services.AddAutoRestClient<ICatalogModuleProducts, CatalogModuleProducts, VirtoCommerceCatalogRESTAPIdocumentation>(x => new CatalogModuleProducts(x));
-            services.AddAutoRestClient<ICatalogModuleSearch, CatalogModuleSearch, VirtoCommerceCatalogRESTAPIdocumentation>(x => new CatalogModuleSearch(x));
-            services.AddAutoRestClient<ISecurity, Security, VirtoCommercePlatformRESTAPIdocumentation>(x => new Security(x));
-            services.AddAutoRestClient<IStorefrontSecurity, StorefrontSecurity, VirtoCommerceCoreRESTAPIdocumentation>(x => new StorefrontSecurity(x));
-            services.AddAutoRestClient<ICustomerModule, CustomerModule, VirtoCommerceCustomerRESTAPIdocumentation>(x => new CustomerModule(x));
-            services.AddAutoRestClient<IOrderModule, OrderModule, VirtoCommerceOrdersRESTAPIdocumentation>(x => new OrderModule(x));
-            services.AddAutoRestClient<IQuoteModule, QuoteModule, VirtoCommerceQuoteRESTAPIdocumentation>(x => new QuoteModule(x));
-            //services.AddAutoRestClient<ISubscriptionModule, SubscriptionModule, VirtoCommerceSubscriptionRESTAPIdocumentationExtended>(x => new SubscriptionModule(x));
-            services.AddAutoRestClient<IInventoryModule, InventoryModule, VirtoCommerceInventoryRESTAPIdocumentation>(x => new InventoryModule(x));
-            services.AddAutoRestClient<IMarketingModulePromotion, MarketingModulePromotion, VirtoCommerceMarketingRESTAPIdocumentation>(x => new MarketingModulePromotion(x));
-            services.AddAutoRestClient<IMarketingModuleDynamicContent, MarketingModuleDynamicContent, VirtoCommerceMarketingRESTAPIdocumentation>(x => new MarketingModuleDynamicContent(x));
-            services.AddAutoRestClient<IPricingModule, PricingModule, VirtoCommercePricingRESTAPIdocumentation>(x => new PricingModule(x));
-            services.AddAutoRestClient<ICartModule, CartModule, VirtoCommerceCartRESTAPIdocumentation>(x => new CartModule(x));
-            services.AddAutoRestClient<IMenu, Menu, VirtoCommerceContentRESTAPIdocumentation>(x => new Menu(x));
-            services.AddAutoRestClient<IContent, Content, VirtoCommerceContentRESTAPIdocumentation>(x => new Content(x));
-            services.AddAutoRestClient<IRecommendations, Recommendations, VirtoCommerceProductRecommendationsRESTAPIdocumentation>(x => new Recommendations(x));
-            services.AddAutoRestClient<ISitemapsModuleApiOperations, SitemapsModuleApiOperations, VirtoCommerceSitemapsRESTAPIdocumentation>(x => new SitemapsModuleApiOperations(x));
-            services.AddAutoRestClient<ICacheModule, CacheModule, VirtoCommerceCacheRESTAPIdocumentation>(x => new CacheModule(x));
-            services.AddAutoRestClient<INotifications, Notifications, VirtoCommercePlatformRESTAPIdocumentation>(x => new Notifications(x));
+            services.AddAutoRestClient<VirtoCommerceStoreRESTAPIdocumentationExtended>();
+            services.AddSingleton<IStoreModule>(sp => new StoreModule(sp.GetRequiredService<VirtoCommerceStoreRESTAPIdocumentationExtended>()));
+            services.AddAutoRestClient<VirtoCommerceCoreRESTAPIdocumentationExtended>();
+            services.AddSingleton<IStorefrontSecurity>(sp => new StorefrontSecurity(sp.GetRequiredService<VirtoCommerceCoreRESTAPIdocumentationExtended>()));
+            services.AddSingleton<ICommerce>(sp => new Commerce(sp.GetRequiredService<VirtoCommerceCoreRESTAPIdocumentationExtended>()));
+            services.AddAutoRestClient<VirtoCommerceCatalogRESTAPIdocumentationExtended>();
+            services.AddSingleton<ICatalogModuleCategories>(sp => new CatalogModuleCategories(sp.GetRequiredService<VirtoCommerceCatalogRESTAPIdocumentationExtended>()));
+            services.AddSingleton<ICatalogModuleProducts>(sp => new CatalogModuleProducts(sp.GetRequiredService<VirtoCommerceCatalogRESTAPIdocumentationExtended>()));
+            services.AddSingleton<ICatalogModuleSearch>(sp => new CatalogModuleSearch(sp.GetRequiredService<VirtoCommerceCatalogRESTAPIdocumentationExtended>()));
+            services.AddAutoRestClient<VirtoCommercePlatformRESTAPIdocumentationExtended>();
+            services.AddSingleton<ISecurity>(sp => new Security(sp.GetRequiredService<VirtoCommercePlatformRESTAPIdocumentationExtended>()));
+            services.AddSingleton<INotifications>(sp => new Notifications(sp.GetRequiredService<VirtoCommercePlatformRESTAPIdocumentationExtended>()));
+            services.AddAutoRestClient<VirtoCommerceCustomerRESTAPIdocumentationExtended>();
+            services.AddSingleton<ICustomerModule>(sp => new CustomerModule(sp.GetRequiredService<VirtoCommerceCustomerRESTAPIdocumentationExtended>()));
+            services.AddAutoRestClient<VirtoCommerceOrdersRESTAPIdocumentationExtended>();
+            services.AddSingleton<IOrderModule>(sp => new OrderModule(sp.GetRequiredService<VirtoCommerceOrdersRESTAPIdocumentationExtended>()));
+            services.AddAutoRestClient<VirtoCommerceSubscriptionRESTAPIdocumentationExtended>();
+            services.AddSingleton<ISubscriptionModule>(sp => new SubscriptionModule(sp.GetRequiredService<VirtoCommerceSubscriptionRESTAPIdocumentationExtended>()));
+            services.AddAutoRestClient<VirtoCommerceInventoryRESTAPIdocumentationExtended>();
+            services.AddSingleton<IInventoryModule>(sp => new InventoryModule(sp.GetRequiredService<VirtoCommerceInventoryRESTAPIdocumentationExtended>()));
+            services.AddAutoRestClient<VirtoCommerceMarketingRESTAPIdocumentationExtended>();
+            services.AddSingleton<IMarketingModulePromotion>(sp => new MarketingModulePromotion(sp.GetRequiredService<VirtoCommerceMarketingRESTAPIdocumentationExtended>()));
+            services.AddSingleton<IMarketingModuleDynamicContent>(sp => new MarketingModuleDynamicContent(sp.GetRequiredService<VirtoCommerceMarketingRESTAPIdocumentationExtended>()));
+            services.AddAutoRestClient<VirtoCommercePricingRESTAPIdocumentationExtended>();
+            services.AddSingleton<IPricingModule>(sp => new PricingModule(sp.GetRequiredService<VirtoCommercePricingRESTAPIdocumentationExtended>()));
+            services.AddAutoRestClient<VirtoCommerceCartRESTAPIdocumentationExtended>();
+            services.AddSingleton<ICartModule>(sp => new CartModule(sp.GetRequiredService<VirtoCommerceCartRESTAPIdocumentationExtended>()));
+            services.AddAutoRestClient<VirtoCommerceContentRESTAPIdocumentationExtended>();
+            services.AddSingleton<IMenu>(sp => new Menu(sp.GetRequiredService<VirtoCommerceContentRESTAPIdocumentationExtended>()));
+            services.AddSingleton<IContent>(sp => new Content(sp.GetRequiredService<VirtoCommerceContentRESTAPIdocumentationExtended>()));
+            services.AddAutoRestClient<VirtoCommerceProductRecommendationsRESTAPIdocumentationExtended>();
+            services.AddSingleton<IRecommendations>(sp => new Recommendations(sp.GetRequiredService<VirtoCommerceProductRecommendationsRESTAPIdocumentationExtended>()));
+            services.AddAutoRestClient<VirtoCommerceSitemapsRESTAPIdocumentationExtended>();
+            services.AddSingleton<ISitemapsModuleApiOperations>(sp => new SitemapsModuleApiOperations(sp.GetRequiredService<VirtoCommerceSitemapsRESTAPIdocumentationExtended>()));
+            services.AddAutoRestClient<VirtoCommerceCacheRESTAPIdocumentationExtended>();
+            services.AddSingleton<ICacheModule>(sp => new CacheModule(sp.GetRequiredService<VirtoCommerceCacheRESTAPIdocumentationExtended>()));
+            //For quotes api still client generated earlier is used
+            services.AddAutoRestClient<VirtoCommerceQuoteRESTAPIdocumentation>();
+            services.AddSingleton<IQuoteModule>(sp => new QuoteModule(sp.GetRequiredService<VirtoCommerceQuoteRESTAPIdocumentation>()));
+
 
             if (setupAction != null)
             {
                 services.Configure(setupAction);
             }
-
-
-            //services.AddHttpClient()
-
-            services.AddHttpClient<VirtoCommerceSubscriptionRESTAPIdocumentationExtended>()
-                  .ConfigureHttpClient((sp, httpClient) =>
-                  {
-
-                      var platformEndpointOptions = sp.GetRequiredService<IOptions<PlatformEndpointOptions>>().Value;
-                      httpClient.BaseAddress = platformEndpointOptions.Url;
-                      httpClient.Timeout = platformEndpointOptions.RequestTimeout;
-                  })
-                  .SetHandlerLifetime(TimeSpan.FromMinutes(5))
-                  .ConfigurePrimaryHttpMessageHandler(x => new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate })
-                  .AddHttpMessageHandler(sp => sp.GetService<AuthenticationHandlerFactory>().CreateAuthHandler())
-                  .AddPolicyHandlerFromRegistry(PollyPolicyName.HttpRetry)
-                  .AddPolicyHandlerFromRegistry(PollyPolicyName.HttpCircuitBreaker);
-
-            services.AddSingleton<ISubscriptionModule>(sp => new SubscriptionModule(sp.GetRequiredService<VirtoCommerceSubscriptionRESTAPIdocumentationExtended>()));
-
-
-            //var sp2 = services.BuildServiceProvider();
-            //var platformOps = sp2.GetRequiredService<IOptions<PlatformEndpointOptions>>().Value;
-            //var subsClient = sp2.GetRequiredService<VirtoCommerceSubscriptionRESTAPIdocumentation>();
-            //subsClient.BaseUri = platformOps.Url;
 
         }
 
