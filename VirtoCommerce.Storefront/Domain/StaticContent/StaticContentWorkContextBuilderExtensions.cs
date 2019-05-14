@@ -14,9 +14,9 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public static class StaticContentWorkContextBuilderExtensions
     {
-        public static Task WithMenuLinksAsync(this IWorkContextBuilder builder, IMutablePagedList<MenuLinkList> linlitsts)
+        public static Task WithMenuLinksAsync(this IWorkContextBuilder builder, IMutablePagedList<MenuLinkList> linklists)
         {
-            builder.WorkContext.CurrentLinkLists = linlitsts;
+            builder.WorkContext.CurrentLinkLists = linklists;
             return Task.CompletedTask;
         }
 

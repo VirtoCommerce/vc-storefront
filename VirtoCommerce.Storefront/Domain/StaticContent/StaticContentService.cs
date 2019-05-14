@@ -110,7 +110,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             try
             {
-                if (contentPath.EndsWith(".json"))
+                if (contentPath.EndsWith(".page"))
                 {
                     var page = JsonConvert.DeserializeObject<JArray>(content);
                     var settings = page.FirstOrDefault(x =>
