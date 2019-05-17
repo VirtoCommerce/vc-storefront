@@ -444,7 +444,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<VirtoCommerceQuoteModuleWebModelQuoteRequestSearchResult>> SearchWithHttpMessagesAsync(VirtoCommerceDomainQuoteModelQuoteRequestSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<QuoteRequestSearchResult>> SearchWithHttpMessagesAsync(QuoteRequestSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (criteria == null)
             {
@@ -535,7 +535,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<VirtoCommerceQuoteModuleWebModelQuoteRequestSearchResult>();
+            var _result = new HttpOperationResponse<QuoteRequestSearchResult>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -544,7 +544,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<VirtoCommerceQuoteModuleWebModelQuoteRequestSearchResult>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<QuoteRequestSearchResult>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -593,7 +593,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<VirtoCommerceQuoteModuleWebModelQuoteRequest>> GetByIdWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<QuoteRequest>> GetByIdWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (id == null)
             {
@@ -679,7 +679,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<VirtoCommerceQuoteModuleWebModelQuoteRequest>();
+            var _result = new HttpOperationResponse<QuoteRequest>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -688,7 +688,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<VirtoCommerceQuoteModuleWebModelQuoteRequest>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<QuoteRequest>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -731,7 +731,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> UpdateWithHttpMessagesAsync(VirtoCommerceQuoteModuleWebModelQuoteRequest quoteRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> UpdateWithHttpMessagesAsync(QuoteRequest quoteRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (quoteRequest == null)
             {
@@ -859,7 +859,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<VirtoCommerceQuoteModuleWebModelQuoteRequest>> CreateWithHttpMessagesAsync(VirtoCommerceQuoteModuleWebModelQuoteRequest quoteRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<QuoteRequest>> CreateWithHttpMessagesAsync(QuoteRequest quoteRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (quoteRequest == null)
             {
@@ -950,7 +950,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<VirtoCommerceQuoteModuleWebModelQuoteRequest>();
+            var _result = new HttpOperationResponse<QuoteRequest>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -959,7 +959,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<VirtoCommerceQuoteModuleWebModelQuoteRequest>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<QuoteRequest>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -1146,7 +1146,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<VirtoCommerceQuoteModuleWebModelQuoteRequest>> CalculateTotalsWithHttpMessagesAsync(VirtoCommerceQuoteModuleWebModelQuoteRequest quoteRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<QuoteRequest>> CalculateTotalsWithHttpMessagesAsync(QuoteRequest quoteRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (quoteRequest == null)
             {
@@ -1237,7 +1237,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<VirtoCommerceQuoteModuleWebModelQuoteRequest>();
+            var _result = new HttpOperationResponse<QuoteRequest>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -1246,7 +1246,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<VirtoCommerceQuoteModuleWebModelQuoteRequest>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<QuoteRequest>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -1292,7 +1292,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<VirtoCommerceQuoteModuleWebModelShipmentMethod>>> GetShipmentMethodsWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<ShipmentMethod>>> GetShipmentMethodsWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (id == null)
             {
@@ -1378,7 +1378,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IList<VirtoCommerceQuoteModuleWebModelShipmentMethod>>();
+            var _result = new HttpOperationResponse<IList<ShipmentMethod>>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -1387,7 +1387,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IList<VirtoCommerceQuoteModuleWebModelShipmentMethod>>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<ShipmentMethod>>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -1453,7 +1453,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<VirtoCommerceQuoteModuleWebModelQuoteRequestSearchResult>> SearchWithHttpMessagesAsync(VirtoCommerceDomainQuoteModelQuoteRequestSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<QuoteRequestSearchResult>> SearchWithHttpMessagesAsync(QuoteRequestSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Get RFQ by id
         /// </summary>
@@ -1478,7 +1478,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<VirtoCommerceQuoteModuleWebModelQuoteRequest>> GetByIdWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<QuoteRequest>> GetByIdWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Update a existing RFQ
         /// </summary>
@@ -1497,7 +1497,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse> UpdateWithHttpMessagesAsync(VirtoCommerceQuoteModuleWebModelQuoteRequest quoteRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> UpdateWithHttpMessagesAsync(QuoteRequest quoteRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Create new RFQ
         /// </summary>
@@ -1519,7 +1519,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<VirtoCommerceQuoteModuleWebModelQuoteRequest>> CreateWithHttpMessagesAsync(VirtoCommerceQuoteModuleWebModelQuoteRequest quoteRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<QuoteRequest>> CreateWithHttpMessagesAsync(QuoteRequest quoteRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Deletes the specified quotes by id.
         /// </summary>
@@ -1563,7 +1563,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<VirtoCommerceQuoteModuleWebModelQuoteRequest>> CalculateTotalsWithHttpMessagesAsync(VirtoCommerceQuoteModuleWebModelQuoteRequest quoteRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<QuoteRequest>> CalculateTotalsWithHttpMessagesAsync(QuoteRequest quoteRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Get available shipping methods with prices for quote requests
         /// </summary>
@@ -1585,7 +1585,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<IList<VirtoCommerceQuoteModuleWebModelShipmentMethod>>> GetShipmentMethodsWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<ShipmentMethod>>> GetShipmentMethodsWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -1621,7 +1621,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
             /// <param name='criteria'>
             /// criteria
             /// </param>
-            public static VirtoCommerceQuoteModuleWebModelQuoteRequestSearchResult Search(this IQuoteModule operations, VirtoCommerceDomainQuoteModelQuoteRequestSearchCriteria criteria)
+            public static QuoteRequestSearchResult Search(this IQuoteModule operations, QuoteRequestSearchCriteria criteria)
             {
                 return operations.SearchAsync(criteria).GetAwaiter().GetResult();
             }
@@ -1638,7 +1638,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<VirtoCommerceQuoteModuleWebModelQuoteRequestSearchResult> SearchAsync(this IQuoteModule operations, VirtoCommerceDomainQuoteModelQuoteRequestSearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<QuoteRequestSearchResult> SearchAsync(this IQuoteModule operations, QuoteRequestSearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.SearchWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1658,7 +1658,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
             /// <param name='id'>
             /// RFQ id
             /// </param>
-            public static VirtoCommerceQuoteModuleWebModelQuoteRequest GetById(this IQuoteModule operations, string id)
+            public static QuoteRequest GetById(this IQuoteModule operations, string id)
             {
                 return operations.GetByIdAsync(id).GetAwaiter().GetResult();
             }
@@ -1678,7 +1678,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<VirtoCommerceQuoteModuleWebModelQuoteRequest> GetByIdAsync(this IQuoteModule operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<QuoteRequest> GetByIdAsync(this IQuoteModule operations, string id, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetByIdWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1695,7 +1695,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
             /// <param name='quoteRequest'>
             /// RFQ
             /// </param>
-            public static void Update(this IQuoteModule operations, VirtoCommerceQuoteModuleWebModelQuoteRequest quoteRequest)
+            public static void Update(this IQuoteModule operations, QuoteRequest quoteRequest)
             {
                 operations.UpdateAsync(quoteRequest).GetAwaiter().GetResult();
             }
@@ -1712,7 +1712,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task UpdateAsync(this IQuoteModule operations, VirtoCommerceQuoteModuleWebModelQuoteRequest quoteRequest, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task UpdateAsync(this IQuoteModule operations, QuoteRequest quoteRequest, CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.UpdateWithHttpMessagesAsync(quoteRequest, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
@@ -1726,7 +1726,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
             /// <param name='quoteRequest'>
             /// RFQ
             /// </param>
-            public static VirtoCommerceQuoteModuleWebModelQuoteRequest Create(this IQuoteModule operations, VirtoCommerceQuoteModuleWebModelQuoteRequest quoteRequest)
+            public static QuoteRequest Create(this IQuoteModule operations, QuoteRequest quoteRequest)
             {
                 return operations.CreateAsync(quoteRequest).GetAwaiter().GetResult();
             }
@@ -1743,7 +1743,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<VirtoCommerceQuoteModuleWebModelQuoteRequest> CreateAsync(this IQuoteModule operations, VirtoCommerceQuoteModuleWebModelQuoteRequest quoteRequest, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<QuoteRequest> CreateAsync(this IQuoteModule operations, QuoteRequest quoteRequest, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.CreateWithHttpMessagesAsync(quoteRequest, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1794,7 +1794,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
             /// <param name='quoteRequest'>
             /// RFQ
             /// </param>
-            public static VirtoCommerceQuoteModuleWebModelQuoteRequest CalculateTotals(this IQuoteModule operations, VirtoCommerceQuoteModuleWebModelQuoteRequest quoteRequest)
+            public static QuoteRequest CalculateTotals(this IQuoteModule operations, QuoteRequest quoteRequest)
             {
                 return operations.CalculateTotalsAsync(quoteRequest).GetAwaiter().GetResult();
             }
@@ -1814,7 +1814,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<VirtoCommerceQuoteModuleWebModelQuoteRequest> CalculateTotalsAsync(this IQuoteModule operations, VirtoCommerceQuoteModuleWebModelQuoteRequest quoteRequest, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<QuoteRequest> CalculateTotalsAsync(this IQuoteModule operations, QuoteRequest quoteRequest, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.CalculateTotalsWithHttpMessagesAsync(quoteRequest, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1831,7 +1831,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
             /// <param name='id'>
             /// RFQ id
             /// </param>
-            public static IList<VirtoCommerceQuoteModuleWebModelShipmentMethod> GetShipmentMethods(this IQuoteModule operations, string id)
+            public static IList<ShipmentMethod> GetShipmentMethods(this IQuoteModule operations, string id)
             {
                 return operations.GetShipmentMethodsAsync(id).GetAwaiter().GetResult();
             }
@@ -1848,7 +1848,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<VirtoCommerceQuoteModuleWebModelShipmentMethod>> GetShipmentMethodsAsync(this IQuoteModule operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<ShipmentMethod>> GetShipmentMethodsAsync(this IQuoteModule operations, string id, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetShipmentMethodsWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1877,24 +1877,22 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommercePlatformCoreCommonSortInfo
+    public partial class SortInfo
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommercePlatformCoreCommonSortInfo class.
+        /// Initializes a new instance of the SortInfo class.
         /// </summary>
-        public VirtoCommercePlatformCoreCommonSortInfo()
+        public SortInfo()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommercePlatformCoreCommonSortInfo class.
+        /// Initializes a new instance of the SortInfo class.
         /// </summary>
         /// <param name="sortDirection">Possible values include: 'Ascending',
         /// 'Descending'</param>
-        public VirtoCommercePlatformCoreCommonSortInfo(string sortColumn = default(string), string sortDirection = default(string))
+        public SortInfo(string sortColumn = default(string), string sortDirection = default(string))
         {
             SortColumn = sortColumn;
             SortDirection = sortDirection;
@@ -1938,22 +1936,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainQuoteModelQuoteRequestSearchCriteria
+    public partial class QuoteRequestSearchCriteria
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainQuoteModelQuoteRequestSearchCriteria class.
+        /// Initializes a new instance of the QuoteRequestSearchCriteria class.
         /// </summary>
-        public VirtoCommerceDomainQuoteModelQuoteRequestSearchCriteria()
+        public QuoteRequestSearchCriteria()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainQuoteModelQuoteRequestSearchCriteria class.
+        /// Initializes a new instance of the QuoteRequestSearchCriteria class.
         /// </summary>
-        public VirtoCommerceDomainQuoteModelQuoteRequestSearchCriteria(string number = default(string), string keyword = default(string), string customerId = default(string), string storeId = default(string), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string status = default(string), string tag = default(string), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<VirtoCommercePlatformCoreCommonSortInfo> sortInfos = default(IList<VirtoCommercePlatformCoreCommonSortInfo>), int? skip = default(int?), int? take = default(int?))
+        public QuoteRequestSearchCriteria(string number = default(string), string keyword = default(string), string customerId = default(string), string storeId = default(string), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string status = default(string), string tag = default(string), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
             Number = number;
             Keyword = keyword;
@@ -2059,7 +2055,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "sortInfos")]
-        public IList<VirtoCommercePlatformCoreCommonSortInfo> SortInfos { get; private set; }
+        public IList<SortInfo> SortInfos { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -2092,20 +2088,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceQuoteModuleWebModelQuoteRequestTotals
+    public partial class QuoteRequestTotals
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceQuoteModuleWebModelQuoteRequestTotals class.
+        /// Initializes a new instance of the QuoteRequestTotals class.
         /// </summary>
-        public VirtoCommerceQuoteModuleWebModelQuoteRequestTotals()
+        public QuoteRequestTotals()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceQuoteModuleWebModelQuoteRequestTotals class.
+        /// Initializes a new instance of the QuoteRequestTotals class.
         /// </summary>
         /// <param name="originalSubTotalExlTax">Original subtotal tier
         /// quantity * sale price</param>
@@ -2117,7 +2111,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// shipping - discount</param>
         /// <param name="grandTotalInclTax">Grand total subtotal + shipping -
         /// discount + tax</param>
-        public VirtoCommerceQuoteModuleWebModelQuoteRequestTotals(double? originalSubTotalExlTax = default(double?), double? subTotalExlTax = default(double?), double? shippingTotal = default(double?), double? discountTotal = default(double?), double? taxTotal = default(double?), double? adjustmentQuoteExlTax = default(double?), double? grandTotalExlTax = default(double?), double? grandTotalInclTax = default(double?))
+        public QuoteRequestTotals(double? originalSubTotalExlTax = default(double?), double? subTotalExlTax = default(double?), double? shippingTotal = default(double?), double? discountTotal = default(double?), double? taxTotal = default(double?), double? adjustmentQuoteExlTax = default(double?), double? grandTotalExlTax = default(double?), double? grandTotalInclTax = default(double?))
         {
             OriginalSubTotalExlTax = originalSubTotalExlTax;
             SubTotalExlTax = subTotalExlTax;
@@ -2201,22 +2195,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceQuoteModuleWebModelShipmentMethod
+    public partial class ShipmentMethod
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceQuoteModuleWebModelShipmentMethod class.
+        /// Initializes a new instance of the ShipmentMethod class.
         /// </summary>
-        public VirtoCommerceQuoteModuleWebModelShipmentMethod()
+        public ShipmentMethod()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceQuoteModuleWebModelShipmentMethod class.
+        /// Initializes a new instance of the ShipmentMethod class.
         /// </summary>
-        public VirtoCommerceQuoteModuleWebModelShipmentMethod(string shipmentMethodCode = default(string), string optionName = default(string), string name = default(string), string logoUrl = default(string), string currency = default(string), double? price = default(double?))
+        public ShipmentMethod(string shipmentMethodCode = default(string), string optionName = default(string), string name = default(string), string logoUrl = default(string), string currency = default(string), double? price = default(double?))
         {
             ShipmentMethodCode = shipmentMethodCode;
             OptionName = optionName;
@@ -2283,24 +2275,22 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceQuoteModuleWebModelAddress
+    public partial class QuoteAddress
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceQuoteModuleWebModelAddress class.
+        /// Initializes a new instance of the QuoteAddress class.
         /// </summary>
-        public VirtoCommerceQuoteModuleWebModelAddress()
+        public QuoteAddress()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceQuoteModuleWebModelAddress class.
+        /// Initializes a new instance of the QuoteAddress class.
         /// </summary>
         /// <param name="addressType">Possible values include: 'Billing',
         /// 'Shipping', 'Pickup', 'BillingAndShipping'</param>
-        public VirtoCommerceQuoteModuleWebModelAddress(string addressType = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
+        public QuoteAddress(string addressType = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
         {
             AddressType = addressType;
             Organization = organization;
@@ -2429,22 +2419,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCatalogModelCatalogLanguage
+    public partial class CatalogLanguage
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelCatalogLanguage class.
+        /// Initializes a new instance of the CatalogLanguage class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelCatalogLanguage()
+        public CatalogLanguage()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelCatalogLanguage class.
+        /// Initializes a new instance of the CatalogLanguage class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelCatalogLanguage(string catalogId = default(string), VirtoCommerceDomainCatalogModelCatalog catalog = default(VirtoCommerceDomainCatalogModelCatalog), bool? isDefault = default(bool?), string languageCode = default(string), string id = default(string))
+        public CatalogLanguage(string catalogId = default(string), Catalog catalog = default(Catalog), bool? isDefault = default(bool?), string languageCode = default(string), string id = default(string))
         {
             CatalogId = catalogId;
             Catalog = catalog;
@@ -2467,7 +2455,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "catalog")]
-        public VirtoCommerceDomainCatalogModelCatalog Catalog { get; set; }
+        public Catalog Catalog { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2505,25 +2493,23 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCatalogModelPropertyValue
+    public partial class PropertyValue
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelPropertyValue class.
+        /// Initializes a new instance of the PropertyValue class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelPropertyValue()
+        public PropertyValue()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelPropertyValue class.
+        /// Initializes a new instance of the PropertyValue class.
         /// </summary>
         /// <param name="valueType">Possible values include: 'ShortText',
         /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
         /// 'GeoPoint'</param>
-        public VirtoCommerceDomainCatalogModelPropertyValue(string propertyId = default(string), string propertyName = default(string), VirtoCommerceDomainCatalogModelProperty property = default(VirtoCommerceDomainCatalogModelProperty), string alias = default(string), string valueId = default(string), object value = default(object), string valueType = default(string), string languageCode = default(string), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public PropertyValue(string propertyId = default(string), string propertyName = default(string), Property property = default(Property), string alias = default(string), string valueId = default(string), object value = default(object), string valueType = default(string), string languageCode = default(string), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             PropertyId = propertyId;
             PropertyName = propertyName;
@@ -2560,7 +2546,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "property")]
-        public VirtoCommerceDomainCatalogModelProperty Property { get; set; }
+        public Property Property { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2640,22 +2626,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCatalogModelCategoryLink
+    public partial class CategoryLink
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelCategoryLink class.
+        /// Initializes a new instance of the CategoryLink class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelCategoryLink()
+        public CategoryLink()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelCategoryLink class.
+        /// Initializes a new instance of the CategoryLink class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelCategoryLink(int? priority = default(int?), string catalogId = default(string), VirtoCommerceDomainCatalogModelCatalog catalog = default(VirtoCommerceDomainCatalogModelCatalog), string categoryId = default(string), VirtoCommerceDomainCatalogModelCategory category = default(VirtoCommerceDomainCatalogModelCategory))
+        public CategoryLink(int? priority = default(int?), string catalogId = default(string), Catalog catalog = default(Catalog), string categoryId = default(string), Category category = default(Category))
         {
             Priority = priority;
             CatalogId = catalogId;
@@ -2683,7 +2667,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "catalog")]
-        public VirtoCommerceDomainCatalogModelCatalog Catalog { get; set; }
+        public Catalog Catalog { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2693,7 +2677,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "category")]
-        public VirtoCommerceDomainCatalogModelCategory Category { get; set; }
+        public Category Category { get; set; }
 
     }
 }
@@ -2716,22 +2700,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCommerceModelSeoInfo
+    public partial class SeoInfo
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCommerceModelSeoInfo class.
+        /// Initializes a new instance of the SeoInfo class.
         /// </summary>
-        public VirtoCommerceDomainCommerceModelSeoInfo()
+        public SeoInfo()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCommerceModelSeoInfo class.
+        /// Initializes a new instance of the SeoInfo class.
         /// </summary>
-        public VirtoCommerceDomainCommerceModelSeoInfo(string name = default(string), string semanticUrl = default(string), string pageTitle = default(string), string metaDescription = default(string), string imageAltDescription = default(string), string metaKeywords = default(string), string storeId = default(string), string objectId = default(string), string objectType = default(string), bool? isActive = default(bool?), string languageCode = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public SeoInfo(string name = default(string), string semanticUrl = default(string), string pageTitle = default(string), string metaDescription = default(string), string imageAltDescription = default(string), string metaKeywords = default(string), string storeId = default(string), string objectId = default(string), string objectType = default(string), bool? isActive = default(bool?), string languageCode = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             SemanticUrl = semanticUrl;
@@ -2858,22 +2840,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCatalogModelImage
+    public partial class Image
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelImage class.
+        /// Initializes a new instance of the Image class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelImage()
+        public Image()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelImage class.
+        /// Initializes a new instance of the Image class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelImage(string name = default(string), string url = default(string), string group = default(string), int? sortOrder = default(int?), byte[] binaryData = default(byte[]), bool? isInherited = default(bool?), string seoObjectType = default(string), IList<VirtoCommerceDomainCommerceModelSeoInfo> seoInfos = default(IList<VirtoCommerceDomainCommerceModelSeoInfo>), string languageCode = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Image(string name = default(string), string url = default(string), string group = default(string), int? sortOrder = default(int?), byte[] binaryData = default(byte[]), bool? isInherited = default(bool?), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), string languageCode = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             Url = url;
@@ -2935,7 +2915,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "seoInfos")]
-        public IList<VirtoCommerceDomainCommerceModelSeoInfo> SeoInfos { get; set; }
+        public IList<SeoInfo> SeoInfos { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2988,22 +2968,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCatalogModelOutlineItem
+    public partial class OutlineItem
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelOutlineItem class.
+        /// Initializes a new instance of the OutlineItem class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelOutlineItem()
+        public OutlineItem()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelOutlineItem class.
+        /// Initializes a new instance of the OutlineItem class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelOutlineItem(string id = default(string), string seoObjectType = default(string), IList<VirtoCommerceDomainCommerceModelSeoInfo> seoInfos = default(IList<VirtoCommerceDomainCommerceModelSeoInfo>), bool? hasVirtualParent = default(bool?))
+        public OutlineItem(string id = default(string), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), bool? hasVirtualParent = default(bool?))
         {
             Id = id;
             SeoObjectType = seoObjectType;
@@ -3030,7 +3008,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "seoInfos")]
-        public IList<VirtoCommerceDomainCommerceModelSeoInfo> SeoInfos { get; set; }
+        public IList<SeoInfo> SeoInfos { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3058,22 +3036,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCatalogModelOutline
+    public partial class Outline
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelOutline class.
+        /// Initializes a new instance of the Outline class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelOutline()
+        public Outline()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelOutline class.
+        /// Initializes a new instance of the Outline class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelOutline(IList<VirtoCommerceDomainCatalogModelOutlineItem> items = default(IList<VirtoCommerceDomainCatalogModelOutlineItem>))
+        public Outline(IList<OutlineItem> items = default(IList<OutlineItem>))
         {
             Items = items;
             CustomInit();
@@ -3087,7 +3063,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "items")]
-        public IList<VirtoCommerceDomainCatalogModelOutlineItem> Items { get; set; }
+        public IList<OutlineItem> Items { get; set; }
 
     }
 }
@@ -3110,22 +3086,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCatalogModelCategory
+    public partial class Category
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelCategory class.
+        /// Initializes a new instance of the Category class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelCategory()
+        public Category()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelCategory class.
+        /// Initializes a new instance of the Category class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelCategory(string catalogId = default(string), VirtoCommerceDomainCatalogModelCatalog catalog = default(VirtoCommerceDomainCatalogModelCatalog), string parentId = default(string), string code = default(string), string taxType = default(string), string name = default(string), string path = default(string), bool? isVirtual = default(bool?), int? level = default(int?), IList<VirtoCommerceDomainCatalogModelCategory> parents = default(IList<VirtoCommerceDomainCatalogModelCategory>), string packageType = default(string), int? priority = default(int?), bool? isActive = default(bool?), IList<VirtoCommerceDomainCatalogModelCategory> children = default(IList<VirtoCommerceDomainCatalogModelCategory>), IList<VirtoCommerceDomainCatalogModelProperty> properties = default(IList<VirtoCommerceDomainCatalogModelProperty>), IList<VirtoCommerceDomainCatalogModelPropertyValue> propertyValues = default(IList<VirtoCommerceDomainCatalogModelPropertyValue>), IList<VirtoCommerceDomainCatalogModelCategoryLink> links = default(IList<VirtoCommerceDomainCatalogModelCategoryLink>), string seoObjectType = default(string), IList<VirtoCommerceDomainCommerceModelSeoInfo> seoInfos = default(IList<VirtoCommerceDomainCommerceModelSeoInfo>), IList<VirtoCommerceDomainCatalogModelImage> images = default(IList<VirtoCommerceDomainCatalogModelImage>), IList<VirtoCommerceDomainCatalogModelOutline> outlines = default(IList<VirtoCommerceDomainCatalogModelOutline>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Category(string catalogId = default(string), Catalog catalog = default(Catalog), string parentId = default(string), string code = default(string), string taxType = default(string), string name = default(string), string path = default(string), bool? isVirtual = default(bool?), int? level = default(int?), IList<Category> parents = default(IList<Category>), string packageType = default(string), int? priority = default(int?), bool? isActive = default(bool?), IList<Category> children = default(IList<Category>), IList<Property> properties = default(IList<Property>), IList<PropertyValue> propertyValues = default(IList<PropertyValue>), IList<CategoryLink> links = default(IList<CategoryLink>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), IList<Image> images = default(IList<Image>), IList<Outline> outlines = default(IList<Outline>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             CatalogId = catalogId;
             Catalog = catalog;
@@ -3169,7 +3143,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "catalog")]
-        public VirtoCommerceDomainCatalogModelCatalog Catalog { get; set; }
+        public Catalog Catalog { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3209,7 +3183,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "parents")]
-        public IList<VirtoCommerceDomainCatalogModelCategory> Parents { get; set; }
+        public IList<Category> Parents { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3229,22 +3203,22 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "children")]
-        public IList<VirtoCommerceDomainCatalogModelCategory> Children { get; set; }
+        public IList<Category> Children { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "properties")]
-        public IList<VirtoCommerceDomainCatalogModelProperty> Properties { get; set; }
+        public IList<Property> Properties { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "propertyValues")]
-        public IList<VirtoCommerceDomainCatalogModelPropertyValue> PropertyValues { get; set; }
+        public IList<PropertyValue> PropertyValues { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "links")]
-        public IList<VirtoCommerceDomainCatalogModelCategoryLink> Links { get; set; }
+        public IList<CategoryLink> Links { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3254,17 +3228,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "seoInfos")]
-        public IList<VirtoCommerceDomainCommerceModelSeoInfo> SeoInfos { get; set; }
+        public IList<SeoInfo> SeoInfos { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "images")]
-        public IList<VirtoCommerceDomainCatalogModelImage> Images { get; set; }
+        public IList<Image> Images { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "outlines")]
-        public IList<VirtoCommerceDomainCatalogModelOutline> Outlines { get; set; }
+        public IList<Outline> Outlines { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3312,22 +3286,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCatalogModelPropertyAttribute
+    public partial class PropertyAttribute
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelPropertyAttribute class.
+        /// Initializes a new instance of the PropertyAttribute class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelPropertyAttribute()
+        public PropertyAttribute()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelPropertyAttribute class.
+        /// Initializes a new instance of the PropertyAttribute class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelPropertyAttribute(string propertyId = default(string), VirtoCommerceDomainCatalogModelProperty property = default(VirtoCommerceDomainCatalogModelProperty), string value = default(string), string name = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public PropertyAttribute(string propertyId = default(string), Property property = default(Property), string value = default(string), string name = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             PropertyId = propertyId;
             Property = property;
@@ -3354,7 +3326,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "property")]
-        public VirtoCommerceDomainCatalogModelProperty Property { get; set; }
+        public Property Property { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3412,22 +3384,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCatalogModelPropertyDisplayName
+    public partial class PropertyDisplayName
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelPropertyDisplayName class.
+        /// Initializes a new instance of the PropertyDisplayName class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelPropertyDisplayName()
+        public PropertyDisplayName()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelPropertyDisplayName class.
+        /// Initializes a new instance of the PropertyDisplayName class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelPropertyDisplayName(string name = default(string), string languageCode = default(string))
+        public PropertyDisplayName(string name = default(string), string languageCode = default(string))
         {
             Name = name;
             LanguageCode = languageCode;
@@ -3470,22 +3440,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCatalogModelPropertyValidationRule
+    public partial class PropertyValidationRule
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelPropertyValidationRule class.
+        /// Initializes a new instance of the PropertyValidationRule class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelPropertyValidationRule()
+        public PropertyValidationRule()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelPropertyValidationRule class.
+        /// Initializes a new instance of the PropertyValidationRule class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelPropertyValidationRule(bool? isUnique = default(bool?), int? charCountMin = default(int?), int? charCountMax = default(int?), string regExp = default(string), string propertyId = default(string), VirtoCommerceDomainCatalogModelProperty property = default(VirtoCommerceDomainCatalogModelProperty), string id = default(string))
+        public PropertyValidationRule(bool? isUnique = default(bool?), int? charCountMin = default(int?), int? charCountMax = default(int?), string regExp = default(string), string propertyId = default(string), Property property = default(Property), string id = default(string))
         {
             IsUnique = isUnique;
             CharCountMin = charCountMin;
@@ -3530,7 +3498,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "property")]
-        public VirtoCommerceDomainCatalogModelProperty Property { get; set; }
+        public Property Property { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3558,27 +3526,25 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCatalogModelProperty
+    public partial class Property
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelProperty class.
+        /// Initializes a new instance of the Property class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelProperty()
+        public Property()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelProperty class.
+        /// Initializes a new instance of the Property class.
         /// </summary>
         /// <param name="valueType">Possible values include: 'ShortText',
         /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
         /// 'GeoPoint'</param>
         /// <param name="type">Possible values include: 'Product', 'Variation',
         /// 'Category', 'Catalog'</param>
-        public VirtoCommerceDomainCatalogModelProperty(string catalogId = default(string), VirtoCommerceDomainCatalogModelCatalog catalog = default(VirtoCommerceDomainCatalogModelCatalog), string categoryId = default(string), VirtoCommerceDomainCatalogModelCategory category = default(VirtoCommerceDomainCatalogModelCategory), string name = default(string), bool? required = default(bool?), bool? dictionary = default(bool?), bool? multivalue = default(bool?), bool? multilanguage = default(bool?), bool? hidden = default(bool?), string valueType = default(string), string type = default(string), IList<VirtoCommerceDomainCatalogModelPropertyAttribute> attributes = default(IList<VirtoCommerceDomainCatalogModelPropertyAttribute>), IList<VirtoCommerceDomainCatalogModelPropertyDisplayName> displayNames = default(IList<VirtoCommerceDomainCatalogModelPropertyDisplayName>), IList<VirtoCommerceDomainCatalogModelPropertyValidationRule> validationRules = default(IList<VirtoCommerceDomainCatalogModelPropertyValidationRule>), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Property(string catalogId = default(string), Catalog catalog = default(Catalog), string categoryId = default(string), Category category = default(Category), string name = default(string), bool? required = default(bool?), bool? dictionary = default(bool?), bool? multivalue = default(bool?), bool? multilanguage = default(bool?), bool? hidden = default(bool?), string valueType = default(string), string type = default(string), IList<PropertyAttribute> attributes = default(IList<PropertyAttribute>), IList<PropertyDisplayName> displayNames = default(IList<PropertyDisplayName>), IList<PropertyValidationRule> validationRules = default(IList<PropertyValidationRule>), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             CatalogId = catalogId;
             Catalog = catalog;
@@ -3617,7 +3583,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "catalog")]
-        public VirtoCommerceDomainCatalogModelCatalog Catalog { get; set; }
+        public Catalog Catalog { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3627,7 +3593,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "category")]
-        public VirtoCommerceDomainCatalogModelCategory Category { get; set; }
+        public Category Category { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3676,17 +3642,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "attributes")]
-        public IList<VirtoCommerceDomainCatalogModelPropertyAttribute> Attributes { get; set; }
+        public IList<PropertyAttribute> Attributes { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "displayNames")]
-        public IList<VirtoCommerceDomainCatalogModelPropertyDisplayName> DisplayNames { get; set; }
+        public IList<PropertyDisplayName> DisplayNames { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "validationRules")]
-        public IList<VirtoCommerceDomainCatalogModelPropertyValidationRule> ValidationRules { get; set; }
+        public IList<PropertyValidationRule> ValidationRules { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3739,22 +3705,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCatalogModelCatalog
+    public partial class Catalog
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelCatalog class.
+        /// Initializes a new instance of the Catalog class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelCatalog()
+        public Catalog()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelCatalog class.
+        /// Initializes a new instance of the Catalog class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelCatalog(string name = default(string), bool? isVirtual = default(bool?), VirtoCommerceDomainCatalogModelCatalogLanguage defaultLanguage = default(VirtoCommerceDomainCatalogModelCatalogLanguage), IList<VirtoCommerceDomainCatalogModelCatalogLanguage> languages = default(IList<VirtoCommerceDomainCatalogModelCatalogLanguage>), IList<VirtoCommerceDomainCatalogModelProperty> properties = default(IList<VirtoCommerceDomainCatalogModelProperty>), IList<VirtoCommerceDomainCatalogModelPropertyValue> propertyValues = default(IList<VirtoCommerceDomainCatalogModelPropertyValue>), string id = default(string))
+        public Catalog(string name = default(string), bool? isVirtual = default(bool?), CatalogLanguage defaultLanguage = default(CatalogLanguage), IList<CatalogLanguage> languages = default(IList<CatalogLanguage>), IList<Property> properties = default(IList<Property>), IList<PropertyValue> propertyValues = default(IList<PropertyValue>), string id = default(string))
         {
             Name = name;
             IsVirtual = isVirtual;
@@ -3784,22 +3748,22 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "defaultLanguage")]
-        public VirtoCommerceDomainCatalogModelCatalogLanguage DefaultLanguage { get; private set; }
+        public CatalogLanguage DefaultLanguage { get; private set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "languages")]
-        public IList<VirtoCommerceDomainCatalogModelCatalogLanguage> Languages { get; set; }
+        public IList<CatalogLanguage> Languages { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "properties")]
-        public IList<VirtoCommerceDomainCatalogModelProperty> Properties { get; set; }
+        public IList<Property> Properties { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "propertyValues")]
-        public IList<VirtoCommerceDomainCatalogModelPropertyValue> PropertyValues { get; set; }
+        public IList<PropertyValue> PropertyValues { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3827,22 +3791,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCatalogModelAsset
+    public partial class Asset
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelAsset class.
+        /// Initializes a new instance of the Asset class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelAsset()
+        public Asset()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelAsset class.
+        /// Initializes a new instance of the Asset class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelAsset(string name = default(string), string url = default(string), string group = default(string), string mimeType = default(string), long? size = default(long?), byte[] binaryData = default(byte[]), string seoObjectType = default(string), IList<VirtoCommerceDomainCommerceModelSeoInfo> seoInfos = default(IList<VirtoCommerceDomainCommerceModelSeoInfo>), string languageCode = default(string), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Asset(string name = default(string), string url = default(string), string group = default(string), string mimeType = default(string), long? size = default(long?), byte[] binaryData = default(byte[]), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), string languageCode = default(string), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             Url = url;
@@ -3905,7 +3867,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "seoInfos")]
-        public IList<VirtoCommerceDomainCommerceModelSeoInfo> SeoInfos { get; set; }
+        public IList<SeoInfo> SeoInfos { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3963,22 +3925,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCatalogModelEditorialReview
+    public partial class EditorialReview
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelEditorialReview class.
+        /// Initializes a new instance of the EditorialReview class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelEditorialReview()
+        public EditorialReview()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelEditorialReview class.
+        /// Initializes a new instance of the EditorialReview class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelEditorialReview(string content = default(string), string reviewType = default(string), string languageCode = default(string), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public EditorialReview(string content = default(string), string reviewType = default(string), string languageCode = default(string), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Content = content;
             ReviewType = reviewType;
@@ -4063,22 +4023,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommercePlatformCoreCommonEntity
+    public partial class Entity
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommercePlatformCoreCommonEntity class.
+        /// Initializes a new instance of the Entity class.
         /// </summary>
-        public VirtoCommercePlatformCoreCommonEntity()
+        public Entity()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommercePlatformCoreCommonEntity class.
+        /// Initializes a new instance of the Entity class.
         /// </summary>
-        public VirtoCommercePlatformCoreCommonEntity(string id = default(string))
+        public Entity(string id = default(string))
         {
             Id = id;
             CustomInit();
@@ -4115,22 +4073,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCatalogModelProductAssociation
+    public partial class ProductAssociation
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelProductAssociation class.
+        /// Initializes a new instance of the ProductAssociation class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelProductAssociation()
+        public ProductAssociation()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelProductAssociation class.
+        /// Initializes a new instance of the ProductAssociation class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelProductAssociation(string type = default(string), int? priority = default(int?), int? quantity = default(int?), string associatedObjectId = default(string), string associatedObjectType = default(string), VirtoCommercePlatformCoreCommonEntity associatedObject = default(VirtoCommercePlatformCoreCommonEntity), IList<string> tags = default(IList<string>))
+        public ProductAssociation(string type = default(string), int? priority = default(int?), int? quantity = default(int?), string associatedObjectId = default(string), string associatedObjectType = default(string), Entity associatedObject = default(Entity), IList<string> tags = default(IList<string>))
         {
             Type = type;
             Priority = priority;
@@ -4175,7 +4131,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "associatedObject")]
-        public VirtoCommercePlatformCoreCommonEntity AssociatedObject { get; set; }
+        public Entity AssociatedObject { get; set; }
 
         /// <summary>
         /// </summary>
@@ -4203,22 +4159,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCommonDynamicExpression
+    public partial class DynamicExpression
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCommonDynamicExpression class.
+        /// Initializes a new instance of the DynamicExpression class.
         /// </summary>
-        public VirtoCommerceDomainCommonDynamicExpression()
+        public DynamicExpression()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCommonDynamicExpression class.
+        /// Initializes a new instance of the DynamicExpression class.
         /// </summary>
-        public VirtoCommerceDomainCommonDynamicExpression(string id = default(string), IList<VirtoCommerceDomainCommonDynamicExpression> availableChildren = default(IList<VirtoCommerceDomainCommonDynamicExpression>), IList<VirtoCommerceDomainCommonDynamicExpression> children = default(IList<VirtoCommerceDomainCommonDynamicExpression>))
+        public DynamicExpression(string id = default(string), IList<DynamicExpression> availableChildren = default(IList<DynamicExpression>), IList<DynamicExpression> children = default(IList<DynamicExpression>))
         {
             Id = id;
             AvailableChildren = availableChildren;
@@ -4239,12 +4193,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "availableChildren")]
-        public IList<VirtoCommerceDomainCommonDynamicExpression> AvailableChildren { get; set; }
+        public IList<DynamicExpression> AvailableChildren { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "children")]
-        public IList<VirtoCommerceDomainCommonDynamicExpression> Children { get; set; }
+        public IList<DynamicExpression> Children { get; set; }
 
     }
 }
@@ -4267,22 +4221,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCommonConditionExpressionTree
+    public partial class ConditionExpressionTree
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCommonConditionExpressionTree class.
+        /// Initializes a new instance of the ConditionExpressionTree class.
         /// </summary>
-        public VirtoCommerceDomainCommonConditionExpressionTree()
+        public ConditionExpressionTree()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCommonConditionExpressionTree class.
+        /// Initializes a new instance of the ConditionExpressionTree class.
         /// </summary>
-        public VirtoCommerceDomainCommonConditionExpressionTree(string id = default(string), IList<VirtoCommerceDomainCommonDynamicExpression> availableChildren = default(IList<VirtoCommerceDomainCommonDynamicExpression>), IList<VirtoCommerceDomainCommonDynamicExpression> children = default(IList<VirtoCommerceDomainCommonDynamicExpression>))
+        public ConditionExpressionTree(string id = default(string), IList<DynamicExpression> availableChildren = default(IList<DynamicExpression>), IList<DynamicExpression> children = default(IList<DynamicExpression>))
         {
             Id = id;
             AvailableChildren = availableChildren;
@@ -4303,12 +4255,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "availableChildren")]
-        public IList<VirtoCommerceDomainCommonDynamicExpression> AvailableChildren { get; set; }
+        public IList<DynamicExpression> AvailableChildren { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "children")]
-        public IList<VirtoCommerceDomainCommonDynamicExpression> Children { get; set; }
+        public IList<DynamicExpression> Children { get; set; }
 
     }
 }
@@ -4331,22 +4283,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainPricingModelPricelistAssignment
+    public partial class PricelistAssignment
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainPricingModelPricelistAssignment class.
+        /// Initializes a new instance of the PricelistAssignment class.
         /// </summary>
-        public VirtoCommerceDomainPricingModelPricelistAssignment()
+        public PricelistAssignment()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainPricingModelPricelistAssignment class.
+        /// Initializes a new instance of the PricelistAssignment class.
         /// </summary>
-        public VirtoCommerceDomainPricingModelPricelistAssignment(string catalogId = default(string), string pricelistId = default(string), VirtoCommerceDomainPricingModelPricelist pricelist = default(VirtoCommerceDomainPricingModelPricelist), string name = default(string), string description = default(string), int? priority = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string conditionExpression = default(string), string predicateVisualTreeSerialized = default(string), VirtoCommerceDomainCommonConditionExpressionTree dynamicExpression = default(VirtoCommerceDomainCommonConditionExpressionTree), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public PricelistAssignment(string catalogId = default(string), string pricelistId = default(string), Pricelist pricelist = default(Pricelist), string name = default(string), string description = default(string), int? priority = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string conditionExpression = default(string), string predicateVisualTreeSerialized = default(string), ConditionExpressionTree dynamicExpression = default(ConditionExpressionTree), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             CatalogId = catalogId;
             PricelistId = pricelistId;
@@ -4385,7 +4335,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "pricelist")]
-        public VirtoCommerceDomainPricingModelPricelist Pricelist { get; set; }
+        public Pricelist Pricelist { get; set; }
 
         /// <summary>
         /// </summary>
@@ -4425,7 +4375,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "dynamicExpression")]
-        public VirtoCommerceDomainCommonConditionExpressionTree DynamicExpression { get; set; }
+        public ConditionExpressionTree DynamicExpression { get; set; }
 
         /// <summary>
         /// </summary>
@@ -4473,22 +4423,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainPricingModelPricelist
+    public partial class Pricelist
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainPricingModelPricelist class.
+        /// Initializes a new instance of the Pricelist class.
         /// </summary>
-        public VirtoCommerceDomainPricingModelPricelist()
+        public Pricelist()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainPricingModelPricelist class.
+        /// Initializes a new instance of the Pricelist class.
         /// </summary>
-        public VirtoCommerceDomainPricingModelPricelist(string name = default(string), string description = default(string), string currency = default(string), IList<VirtoCommerceDomainPricingModelPrice> prices = default(IList<VirtoCommerceDomainPricingModelPrice>), IList<VirtoCommerceDomainPricingModelPricelistAssignment> assignments = default(IList<VirtoCommerceDomainPricingModelPricelistAssignment>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Pricelist(string name = default(string), string description = default(string), string currency = default(string), IList<Price> prices = default(IList<Price>), IList<PricelistAssignment> assignments = default(IList<PricelistAssignment>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             Description = description;
@@ -4526,12 +4474,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "prices")]
-        public IList<VirtoCommerceDomainPricingModelPrice> Prices { get; set; }
+        public IList<Price> Prices { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "assignments")]
-        public IList<VirtoCommerceDomainPricingModelPricelistAssignment> Assignments { get; set; }
+        public IList<PricelistAssignment> Assignments { get; set; }
 
         /// <summary>
         /// </summary>
@@ -4579,22 +4527,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainPricingModelPrice
+    public partial class Price
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainPricingModelPrice class.
+        /// Initializes a new instance of the Price class.
         /// </summary>
-        public VirtoCommerceDomainPricingModelPrice()
+        public Price()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainPricingModelPrice class.
+        /// Initializes a new instance of the Price class.
         /// </summary>
-        public VirtoCommerceDomainPricingModelPrice(string pricelistId = default(string), VirtoCommerceDomainPricingModelPricelist pricelist = default(VirtoCommerceDomainPricingModelPricelist), string currency = default(string), string productId = default(string), double? sale = default(double?), double? list = default(double?), int? minQuantity = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), double? effectiveValue = default(double?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Price(string pricelistId = default(string), Pricelist pricelist = default(Pricelist), string currency = default(string), string productId = default(string), double? sale = default(double?), double? list = default(double?), int? minQuantity = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), double? effectiveValue = default(double?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             PricelistId = pricelistId;
             Pricelist = pricelist;
@@ -4627,7 +4573,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "pricelist")]
-        public VirtoCommerceDomainPricingModelPricelist Pricelist { get; set; }
+        public Pricelist Pricelist { get; set; }
 
         /// <summary>
         /// </summary>
@@ -4715,24 +4661,22 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCommerceModelAddress
+    public partial class Address
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCommerceModelAddress class.
+        /// Initializes a new instance of the Address class.
         /// </summary>
-        public VirtoCommerceDomainCommerceModelAddress()
+        public Address()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCommerceModelAddress class.
+        /// Initializes a new instance of the Address class.
         /// </summary>
         /// <param name="addressType">Possible values include: 'Billing',
         /// 'Shipping', 'Pickup', 'BillingAndShipping'</param>
-        public VirtoCommerceDomainCommerceModelAddress(string key = default(string), string addressType = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
+        public Address(string key = default(string), string addressType = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
         {
             Key = key;
             AddressType = addressType;
@@ -4873,22 +4817,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainInventoryModelFulfillmentCenter
+    public partial class FulfillmentCenter
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainInventoryModelFulfillmentCenter class.
+        /// Initializes a new instance of the FulfillmentCenter class.
         /// </summary>
-        public VirtoCommerceDomainInventoryModelFulfillmentCenter()
+        public FulfillmentCenter()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainInventoryModelFulfillmentCenter class.
+        /// Initializes a new instance of the FulfillmentCenter class.
         /// </summary>
-        public VirtoCommerceDomainInventoryModelFulfillmentCenter(string name = default(string), string description = default(string), string geoLocation = default(string), VirtoCommerceDomainCommerceModelAddress address = default(VirtoCommerceDomainCommerceModelAddress), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public FulfillmentCenter(string name = default(string), string description = default(string), string geoLocation = default(string), Address address = default(Address), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             Description = description;
@@ -4925,7 +4867,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "address")]
-        public VirtoCommerceDomainCommerceModelAddress Address { get; set; }
+        public Address Address { get; set; }
 
         /// <summary>
         /// </summary>
@@ -4973,24 +4915,22 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainInventoryModelInventoryInfo
+    public partial class InventoryInfo
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainInventoryModelInventoryInfo class.
+        /// Initializes a new instance of the InventoryInfo class.
         /// </summary>
-        public VirtoCommerceDomainInventoryModelInventoryInfo()
+        public InventoryInfo()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainInventoryModelInventoryInfo class.
+        /// Initializes a new instance of the InventoryInfo class.
         /// </summary>
         /// <param name="status">Possible values include: 'Disabled',
         /// 'Enabled', 'Ignored'</param>
-        public VirtoCommerceDomainInventoryModelInventoryInfo(System.DateTime? createdDate = default(System.DateTime?), string createdBy = default(string), System.DateTime? modifiedDate = default(System.DateTime?), string modifiedBy = default(string), string fulfillmentCenterId = default(string), VirtoCommerceDomainInventoryModelFulfillmentCenter fulfillmentCenter = default(VirtoCommerceDomainInventoryModelFulfillmentCenter), string productId = default(string), long? inStockQuantity = default(long?), long? reservedQuantity = default(long?), long? reorderMinQuantity = default(long?), long? preorderQuantity = default(long?), long? backorderQuantity = default(long?), bool? allowBackorder = default(bool?), bool? allowPreorder = default(bool?), long? inTransit = default(long?), System.DateTime? preorderAvailabilityDate = default(System.DateTime?), System.DateTime? backorderAvailabilityDate = default(System.DateTime?), string status = default(string))
+        public InventoryInfo(System.DateTime? createdDate = default(System.DateTime?), string createdBy = default(string), System.DateTime? modifiedDate = default(System.DateTime?), string modifiedBy = default(string), string fulfillmentCenterId = default(string), FulfillmentCenter fulfillmentCenter = default(FulfillmentCenter), string productId = default(string), long? inStockQuantity = default(long?), long? reservedQuantity = default(long?), long? reorderMinQuantity = default(long?), long? preorderQuantity = default(long?), long? backorderQuantity = default(long?), bool? allowBackorder = default(bool?), bool? allowPreorder = default(bool?), long? inTransit = default(long?), System.DateTime? preorderAvailabilityDate = default(System.DateTime?), System.DateTime? backorderAvailabilityDate = default(System.DateTime?), string status = default(string))
         {
             CreatedDate = createdDate;
             CreatedBy = createdBy;
@@ -5046,7 +4986,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "fulfillmentCenter")]
-        public VirtoCommerceDomainInventoryModelFulfillmentCenter FulfillmentCenter { get; set; }
+        public FulfillmentCenter FulfillmentCenter { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5131,22 +5071,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCatalogModelCatalogProduct
+    public partial class CatalogProduct
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelCatalogProduct class.
+        /// Initializes a new instance of the CatalogProduct class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelCatalogProduct()
+        public CatalogProduct()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCatalogModelCatalogProduct class.
+        /// Initializes a new instance of the CatalogProduct class.
         /// </summary>
-        public VirtoCommerceDomainCatalogModelCatalogProduct(string code = default(string), string manufacturerPartNumber = default(string), string gtin = default(string), string name = default(string), string catalogId = default(string), VirtoCommerceDomainCatalogModelCatalog catalog = default(VirtoCommerceDomainCatalogModelCatalog), string categoryId = default(string), VirtoCommerceDomainCatalogModelCategory category = default(VirtoCommerceDomainCatalogModelCategory), string mainProductId = default(string), VirtoCommerceDomainCatalogModelCatalogProduct mainProduct = default(VirtoCommerceDomainCatalogModelCatalogProduct), bool? isBuyable = default(bool?), bool? isActive = default(bool?), bool? trackInventory = default(bool?), System.DateTime? indexingDate = default(System.DateTime?), int? maxQuantity = default(int?), int? minQuantity = default(int?), string productType = default(string), string packageType = default(string), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), bool? enableReview = default(bool?), int? maxNumberOfDownload = default(int?), System.DateTime? downloadExpiration = default(System.DateTime?), string downloadType = default(string), bool? hasUserAgreement = default(bool?), string shippingType = default(string), string taxType = default(string), string vendor = default(string), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), int? priority = default(int?), IList<VirtoCommerceDomainCatalogModelProperty> properties = default(IList<VirtoCommerceDomainCatalogModelProperty>), IList<VirtoCommerceDomainCatalogModelPropertyValue> propertyValues = default(IList<VirtoCommerceDomainCatalogModelPropertyValue>), IList<VirtoCommerceDomainCatalogModelImage> images = default(IList<VirtoCommerceDomainCatalogModelImage>), IList<VirtoCommerceDomainCatalogModelAsset> assets = default(IList<VirtoCommerceDomainCatalogModelAsset>), IList<VirtoCommerceDomainCatalogModelCategoryLink> links = default(IList<VirtoCommerceDomainCatalogModelCategoryLink>), IList<VirtoCommerceDomainCatalogModelCatalogProduct> variations = default(IList<VirtoCommerceDomainCatalogModelCatalogProduct>), string seoObjectType = default(string), IList<VirtoCommerceDomainCommerceModelSeoInfo> seoInfos = default(IList<VirtoCommerceDomainCommerceModelSeoInfo>), IList<VirtoCommerceDomainCatalogModelEditorialReview> reviews = default(IList<VirtoCommerceDomainCatalogModelEditorialReview>), IList<VirtoCommerceDomainCatalogModelProductAssociation> associations = default(IList<VirtoCommerceDomainCatalogModelProductAssociation>), IList<VirtoCommerceDomainCatalogModelProductAssociation> referencedAssociations = default(IList<VirtoCommerceDomainCatalogModelProductAssociation>), IList<VirtoCommerceDomainPricingModelPrice> prices = default(IList<VirtoCommerceDomainPricingModelPrice>), IList<VirtoCommerceDomainInventoryModelInventoryInfo> inventories = default(IList<VirtoCommerceDomainInventoryModelInventoryInfo>), IList<VirtoCommerceDomainCatalogModelOutline> outlines = default(IList<VirtoCommerceDomainCatalogModelOutline>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public CatalogProduct(string code = default(string), string manufacturerPartNumber = default(string), string gtin = default(string), string name = default(string), string catalogId = default(string), Catalog catalog = default(Catalog), string categoryId = default(string), Category category = default(Category), string mainProductId = default(string), CatalogProduct mainProduct = default(CatalogProduct), bool? isBuyable = default(bool?), bool? isActive = default(bool?), bool? trackInventory = default(bool?), System.DateTime? indexingDate = default(System.DateTime?), int? maxQuantity = default(int?), int? minQuantity = default(int?), string productType = default(string), string packageType = default(string), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), bool? enableReview = default(bool?), int? maxNumberOfDownload = default(int?), System.DateTime? downloadExpiration = default(System.DateTime?), string downloadType = default(string), bool? hasUserAgreement = default(bool?), string shippingType = default(string), string taxType = default(string), string vendor = default(string), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), int? priority = default(int?), IList<Property> properties = default(IList<Property>), IList<PropertyValue> propertyValues = default(IList<PropertyValue>), IList<Image> images = default(IList<Image>), IList<Asset> assets = default(IList<Asset>), IList<CategoryLink> links = default(IList<CategoryLink>), IList<CatalogProduct> variations = default(IList<CatalogProduct>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), IList<EditorialReview> reviews = default(IList<EditorialReview>), IList<ProductAssociation> associations = default(IList<ProductAssociation>), IList<ProductAssociation> referencedAssociations = default(IList<ProductAssociation>), IList<Price> prices = default(IList<Price>), IList<InventoryInfo> inventories = default(IList<InventoryInfo>), IList<Outline> outlines = default(IList<Outline>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Code = code;
             ManufacturerPartNumber = manufacturerPartNumber;
@@ -5238,7 +5176,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "catalog")]
-        public VirtoCommerceDomainCatalogModelCatalog Catalog { get; set; }
+        public Catalog Catalog { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5248,7 +5186,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "category")]
-        public VirtoCommerceDomainCatalogModelCategory Category { get; set; }
+        public Category Category { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5258,7 +5196,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "mainProduct")]
-        public VirtoCommerceDomainCatalogModelCatalogProduct MainProduct { get; set; }
+        public CatalogProduct MainProduct { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5388,32 +5326,32 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "properties")]
-        public IList<VirtoCommerceDomainCatalogModelProperty> Properties { get; set; }
+        public IList<Property> Properties { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "propertyValues")]
-        public IList<VirtoCommerceDomainCatalogModelPropertyValue> PropertyValues { get; set; }
+        public IList<PropertyValue> PropertyValues { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "images")]
-        public IList<VirtoCommerceDomainCatalogModelImage> Images { get; set; }
+        public IList<Image> Images { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "assets")]
-        public IList<VirtoCommerceDomainCatalogModelAsset> Assets { get; set; }
+        public IList<Asset> Assets { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "links")]
-        public IList<VirtoCommerceDomainCatalogModelCategoryLink> Links { get; set; }
+        public IList<CategoryLink> Links { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "variations")]
-        public IList<VirtoCommerceDomainCatalogModelCatalogProduct> Variations { get; set; }
+        public IList<CatalogProduct> Variations { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5423,37 +5361,37 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "seoInfos")]
-        public IList<VirtoCommerceDomainCommerceModelSeoInfo> SeoInfos { get; set; }
+        public IList<SeoInfo> SeoInfos { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "reviews")]
-        public IList<VirtoCommerceDomainCatalogModelEditorialReview> Reviews { get; set; }
+        public IList<EditorialReview> Reviews { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "associations")]
-        public IList<VirtoCommerceDomainCatalogModelProductAssociation> Associations { get; set; }
+        public IList<ProductAssociation> Associations { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "referencedAssociations")]
-        public IList<VirtoCommerceDomainCatalogModelProductAssociation> ReferencedAssociations { get; set; }
+        public IList<ProductAssociation> ReferencedAssociations { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "prices")]
-        public IList<VirtoCommerceDomainPricingModelPrice> Prices { get; set; }
+        public IList<Price> Prices { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "inventories")]
-        public IList<VirtoCommerceDomainInventoryModelInventoryInfo> Inventories { get; set; }
+        public IList<InventoryInfo> Inventories { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "outlines")]
-        public IList<VirtoCommerceDomainCatalogModelOutline> Outlines { get; set; }
+        public IList<Outline> Outlines { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5501,22 +5439,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceQuoteModuleWebModelTierPrice
+    public partial class TierPrice
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceQuoteModuleWebModelTierPrice class.
+        /// Initializes a new instance of the TierPrice class.
         /// </summary>
-        public VirtoCommerceQuoteModuleWebModelTierPrice()
+        public TierPrice()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceQuoteModuleWebModelTierPrice class.
+        /// Initializes a new instance of the TierPrice class.
         /// </summary>
-        public VirtoCommerceQuoteModuleWebModelTierPrice(double? price = default(double?), long? quantity = default(long?))
+        public TierPrice(double? price = default(double?), long? quantity = default(long?))
         {
             Price = price;
             Quantity = quantity;
@@ -5559,27 +5495,25 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceQuoteModuleWebModelQuoteItem
+    public partial class QuoteItem
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceQuoteModuleWebModelQuoteItem class.
+        /// Initializes a new instance of the QuoteItem class.
         /// </summary>
-        public VirtoCommerceQuoteModuleWebModelQuoteItem()
+        public QuoteItem()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceQuoteModuleWebModelQuoteItem class.
+        /// Initializes a new instance of the QuoteItem class.
         /// </summary>
         /// <param name="listPrice">Base catalog price</param>
         /// <param name="salePrice">Sale price for buyer</param>
         /// <param name="selectedTierPrice">Selected proposal tier
         /// price</param>
         /// <param name="proposalPrices">Proposal tier prices</param>
-        public VirtoCommerceQuoteModuleWebModelQuoteItem(string currency = default(string), double? listPrice = default(double?), double? salePrice = default(double?), string productId = default(string), VirtoCommerceDomainCatalogModelCatalogProduct product = default(VirtoCommerceDomainCatalogModelCatalogProduct), string catalogId = default(string), string categoryId = default(string), string name = default(string), string comment = default(string), string imageUrl = default(string), string sku = default(string), string taxType = default(string), VirtoCommerceQuoteModuleWebModelTierPrice selectedTierPrice = default(VirtoCommerceQuoteModuleWebModelTierPrice), IList<VirtoCommerceQuoteModuleWebModelTierPrice> proposalPrices = default(IList<VirtoCommerceQuoteModuleWebModelTierPrice>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public QuoteItem(string currency = default(string), double? listPrice = default(double?), double? salePrice = default(double?), string productId = default(string), CatalogProduct product = default(CatalogProduct), string catalogId = default(string), string categoryId = default(string), string name = default(string), string comment = default(string), string imageUrl = default(string), string sku = default(string), string taxType = default(string), TierPrice selectedTierPrice = default(TierPrice), IList<TierPrice> proposalPrices = default(IList<TierPrice>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Currency = currency;
             ListPrice = listPrice;
@@ -5633,7 +5567,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "product")]
-        public VirtoCommerceDomainCatalogModelCatalogProduct Product { get; set; }
+        public CatalogProduct Product { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5674,13 +5608,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// Gets or sets selected proposal tier price
         /// </summary>
         [JsonProperty(PropertyName = "selectedTierPrice")]
-        public VirtoCommerceQuoteModuleWebModelTierPrice SelectedTierPrice { get; set; }
+        public TierPrice SelectedTierPrice { get; set; }
 
         /// <summary>
         /// Gets or sets proposal tier prices
         /// </summary>
         [JsonProperty(PropertyName = "proposalPrices")]
-        public IList<VirtoCommerceQuoteModuleWebModelTierPrice> ProposalPrices { get; set; }
+        public IList<TierPrice> ProposalPrices { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5728,22 +5662,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceQuoteModuleWebModelQuoteAttachment
+    public partial class QuoteAttachment
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceQuoteModuleWebModelQuoteAttachment class.
+        /// Initializes a new instance of the QuoteAttachment class.
         /// </summary>
-        public VirtoCommerceQuoteModuleWebModelQuoteAttachment()
+        public QuoteAttachment()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceQuoteModuleWebModelQuoteAttachment class.
+        /// Initializes a new instance of the QuoteAttachment class.
         /// </summary>
-        public VirtoCommerceQuoteModuleWebModelQuoteAttachment(string name = default(string), string url = default(string), string mimeType = default(string), long? size = default(long?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public QuoteAttachment(string name = default(string), string url = default(string), string mimeType = default(string), long? size = default(long?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             Url = url;
@@ -5828,22 +5760,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceDomainCommerceModelTaxDetail
+    public partial class TaxDetail
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCommerceModelTaxDetail class.
+        /// Initializes a new instance of the TaxDetail class.
         /// </summary>
-        public VirtoCommerceDomainCommerceModelTaxDetail()
+        public TaxDetail()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceDomainCommerceModelTaxDetail class.
+        /// Initializes a new instance of the TaxDetail class.
         /// </summary>
-        public VirtoCommerceDomainCommerceModelTaxDetail(double? rate = default(double?), double? amount = default(double?), string name = default(string))
+        public TaxDetail(double? rate = default(double?), double? amount = default(double?), string name = default(string))
         {
             Rate = rate;
             Amount = amount;
@@ -5892,27 +5822,23 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommercePlatformCoreDynamicPropertiesDynamicPropertyObjectValue
+    public partial class DynamicPropertyObjectValue
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommercePlatformCoreDynamicPropertiesDynamicPropertyObjectValue
-        /// class.
+        /// Initializes a new instance of the DynamicPropertyObjectValue class.
         /// </summary>
-        public VirtoCommercePlatformCoreDynamicPropertiesDynamicPropertyObjectValue()
+        public DynamicPropertyObjectValue()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommercePlatformCoreDynamicPropertiesDynamicPropertyObjectValue
-        /// class.
+        /// Initializes a new instance of the DynamicPropertyObjectValue class.
         /// </summary>
         /// <param name="valueType">Possible values include: 'Undefined',
         /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
         /// 'Boolean', 'Html', 'Image'</param>
-        public VirtoCommercePlatformCoreDynamicPropertiesDynamicPropertyObjectValue(string objectType = default(string), string objectId = default(string), string locale = default(string), object value = default(object), string valueId = default(string), string valueType = default(string))
+        public DynamicPropertyObjectValue(string objectType = default(string), string objectId = default(string), string locale = default(string), object value = default(object), string valueId = default(string), string valueType = default(string))
         {
             ObjectType = objectType;
             ObjectId = objectId;
@@ -5982,24 +5908,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommercePlatformCoreDynamicPropertiesDynamicPropertyName
+    public partial class DynamicPropertyName
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommercePlatformCoreDynamicPropertiesDynamicPropertyName
-        /// class.
+        /// Initializes a new instance of the DynamicPropertyName class.
         /// </summary>
-        public VirtoCommercePlatformCoreDynamicPropertiesDynamicPropertyName()
+        public DynamicPropertyName()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommercePlatformCoreDynamicPropertiesDynamicPropertyName
-        /// class.
+        /// Initializes a new instance of the DynamicPropertyName class.
         /// </summary>
-        public VirtoCommercePlatformCoreDynamicPropertiesDynamicPropertyName(string locale = default(string), string name = default(string))
+        public DynamicPropertyName(string locale = default(string), string name = default(string))
         {
             Locale = locale;
             Name = name;
@@ -6042,27 +5964,23 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommercePlatformCoreDynamicPropertiesDynamicObjectProperty
+    public partial class DynamicObjectProperty
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommercePlatformCoreDynamicPropertiesDynamicObjectProperty
-        /// class.
+        /// Initializes a new instance of the DynamicObjectProperty class.
         /// </summary>
-        public VirtoCommercePlatformCoreDynamicPropertiesDynamicObjectProperty()
+        public DynamicObjectProperty()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommercePlatformCoreDynamicPropertiesDynamicObjectProperty
-        /// class.
+        /// Initializes a new instance of the DynamicObjectProperty class.
         /// </summary>
         /// <param name="valueType">Possible values include: 'Undefined',
         /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
         /// 'Boolean', 'Html', 'Image'</param>
-        public VirtoCommercePlatformCoreDynamicPropertiesDynamicObjectProperty(string objectId = default(string), IList<VirtoCommercePlatformCoreDynamicPropertiesDynamicPropertyObjectValue> values = default(IList<VirtoCommercePlatformCoreDynamicPropertiesDynamicPropertyObjectValue>), string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<VirtoCommercePlatformCoreDynamicPropertiesDynamicPropertyName> displayNames = default(IList<VirtoCommercePlatformCoreDynamicPropertiesDynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public DynamicObjectProperty(string objectId = default(string), IList<DynamicPropertyObjectValue> values = default(IList<DynamicPropertyObjectValue>), string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             ObjectId = objectId;
             Values = values;
@@ -6097,7 +6015,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "values")]
-        public IList<VirtoCommercePlatformCoreDynamicPropertiesDynamicPropertyObjectValue> Values { get; set; }
+        public IList<DynamicPropertyObjectValue> Values { get; set; }
 
         /// <summary>
         /// </summary>
@@ -6150,7 +6068,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "displayNames")]
-        public IList<VirtoCommercePlatformCoreDynamicPropertiesDynamicPropertyName> DisplayNames { get; set; }
+        public IList<DynamicPropertyName> DisplayNames { get; set; }
 
         /// <summary>
         /// </summary>
@@ -6198,24 +6116,22 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommercePlatformCoreChangeLogOperationLog
+    public partial class OperationLog
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommercePlatformCoreChangeLogOperationLog class.
+        /// Initializes a new instance of the OperationLog class.
         /// </summary>
-        public VirtoCommercePlatformCoreChangeLogOperationLog()
+        public OperationLog()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommercePlatformCoreChangeLogOperationLog class.
+        /// Initializes a new instance of the OperationLog class.
         /// </summary>
         /// <param name="operationType">Possible values include: 'Detached',
         /// 'Unchanged', 'Added', 'Deleted', 'Modified'</param>
-        public VirtoCommercePlatformCoreChangeLogOperationLog(string objectType = default(string), string objectId = default(string), string operationType = default(string), string detail = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public OperationLog(string objectType = default(string), string objectId = default(string), string operationType = default(string), string detail = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             ObjectType = objectType;
             ObjectId = objectId;
@@ -6307,20 +6223,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     /// purpose is to invite suppliers into a
     /// bidding process to bid on specific products or services.
     /// </summary>
-    public partial class VirtoCommerceQuoteModuleWebModelQuoteRequest
+    public partial class QuoteRequest
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceQuoteModuleWebModelQuoteRequest class.
+        /// Initializes a new instance of the QuoteRequest class.
         /// </summary>
-        public VirtoCommerceQuoteModuleWebModelQuoteRequest()
+        public QuoteRequest()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceQuoteModuleWebModelQuoteRequest class.
+        /// Initializes a new instance of the QuoteRequest class.
         /// </summary>
         /// <param name="number">Unique user friendly document number (generate
         /// automatically based on special algorithm realization)</param>
@@ -6350,7 +6264,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// delivery order created from current RFQ</param>
         /// <param name="items">RFQ items</param>
         /// <param name="objectType">System property</param>
-        public VirtoCommerceQuoteModuleWebModelQuoteRequest(string number = default(string), string storeId = default(string), string channelId = default(string), bool? isAnonymous = default(bool?), string customerId = default(string), string customerName = default(string), string organizationName = default(string), string organizationId = default(string), string employeeId = default(string), string employeeName = default(string), System.DateTime? expirationDate = default(System.DateTime?), System.DateTime? reminderDate = default(System.DateTime?), bool? enableNotification = default(bool?), bool? isLocked = default(bool?), string status = default(string), string tag = default(string), string comment = default(string), string innerComment = default(string), string currency = default(string), VirtoCommerceQuoteModuleWebModelQuoteRequestTotals totals = default(VirtoCommerceQuoteModuleWebModelQuoteRequestTotals), string coupon = default(string), double? manualShippingTotal = default(double?), double? manualSubTotal = default(double?), double? manualRelDiscountAmount = default(double?), VirtoCommerceQuoteModuleWebModelShipmentMethod shipmentMethod = default(VirtoCommerceQuoteModuleWebModelShipmentMethod), IList<VirtoCommerceQuoteModuleWebModelAddress> addresses = default(IList<VirtoCommerceQuoteModuleWebModelAddress>), IList<VirtoCommerceQuoteModuleWebModelQuoteItem> items = default(IList<VirtoCommerceQuoteModuleWebModelQuoteItem>), IList<VirtoCommerceQuoteModuleWebModelQuoteAttachment> attachments = default(IList<VirtoCommerceQuoteModuleWebModelQuoteAttachment>), string languageCode = default(string), IList<VirtoCommerceDomainCommerceModelTaxDetail> taxDetails = default(IList<VirtoCommerceDomainCommerceModelTaxDetail>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), string objectType = default(string), IList<VirtoCommercePlatformCoreDynamicPropertiesDynamicObjectProperty> dynamicProperties = default(IList<VirtoCommercePlatformCoreDynamicPropertiesDynamicObjectProperty>), IList<VirtoCommercePlatformCoreChangeLogOperationLog> operationsLog = default(IList<VirtoCommercePlatformCoreChangeLogOperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public QuoteRequest(string number = default(string), string storeId = default(string), string channelId = default(string), bool? isAnonymous = default(bool?), string customerId = default(string), string customerName = default(string), string organizationName = default(string), string organizationId = default(string), string employeeId = default(string), string employeeName = default(string), System.DateTime? expirationDate = default(System.DateTime?), System.DateTime? reminderDate = default(System.DateTime?), bool? enableNotification = default(bool?), bool? isLocked = default(bool?), string status = default(string), string tag = default(string), string comment = default(string), string innerComment = default(string), string currency = default(string), QuoteRequestTotals totals = default(QuoteRequestTotals), string coupon = default(string), double? manualShippingTotal = default(double?), double? manualSubTotal = default(double?), double? manualRelDiscountAmount = default(double?), ShipmentMethod shipmentMethod = default(ShipmentMethod), IList<QuoteAddress> addresses = default(IList<QuoteAddress>), IList<QuoteItem> items = default(IList<QuoteItem>), IList<QuoteAttachment> attachments = default(IList<QuoteAttachment>), string languageCode = default(string), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Number = number;
             StoreId = storeId;
@@ -6511,7 +6425,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// Gets or sets resulting totals for selected proposals
         /// </summary>
         [JsonProperty(PropertyName = "totals")]
-        public VirtoCommerceQuoteModuleWebModelQuoteRequestTotals Totals { get; set; }
+        public QuoteRequestTotals Totals { get; set; }
 
         /// <summary>
         /// </summary>
@@ -6542,23 +6456,23 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// created from current RFQ
         /// </summary>
         [JsonProperty(PropertyName = "shipmentMethod")]
-        public VirtoCommerceQuoteModuleWebModelShipmentMethod ShipmentMethod { get; set; }
+        public ShipmentMethod ShipmentMethod { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "addresses")]
-        public IList<VirtoCommerceQuoteModuleWebModelAddress> Addresses { get; set; }
+        public IList<QuoteAddress> Addresses { get; set; }
 
         /// <summary>
         /// Gets or sets RFQ items
         /// </summary>
         [JsonProperty(PropertyName = "items")]
-        public IList<VirtoCommerceQuoteModuleWebModelQuoteItem> Items { get; set; }
+        public IList<QuoteItem> Items { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "attachments")]
-        public IList<VirtoCommerceQuoteModuleWebModelQuoteAttachment> Attachments { get; set; }
+        public IList<QuoteAttachment> Attachments { get; set; }
 
         /// <summary>
         /// </summary>
@@ -6568,7 +6482,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "taxDetails")]
-        public IList<VirtoCommerceDomainCommerceModelTaxDetail> TaxDetails { get; set; }
+        public IList<TaxDetail> TaxDetails { get; set; }
 
         /// <summary>
         /// </summary>
@@ -6594,12 +6508,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "dynamicProperties")]
-        public IList<VirtoCommercePlatformCoreDynamicPropertiesDynamicObjectProperty> DynamicProperties { get; set; }
+        public IList<DynamicObjectProperty> DynamicProperties { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "operationsLog")]
-        public IList<VirtoCommercePlatformCoreChangeLogOperationLog> OperationsLog { get; set; }
+        public IList<OperationLog> OperationsLog { get; set; }
 
         /// <summary>
         /// </summary>
@@ -6647,22 +6561,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceQuoteModuleWebModelQuoteRequestSearchResult
+    public partial class QuoteRequestSearchResult
     {
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceQuoteModuleWebModelQuoteRequestSearchResult class.
+        /// Initializes a new instance of the QuoteRequestSearchResult class.
         /// </summary>
-        public VirtoCommerceQuoteModuleWebModelQuoteRequestSearchResult()
+        public QuoteRequestSearchResult()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the
-        /// VirtoCommerceQuoteModuleWebModelQuoteRequestSearchResult class.
+        /// Initializes a new instance of the QuoteRequestSearchResult class.
         /// </summary>
-        public VirtoCommerceQuoteModuleWebModelQuoteRequestSearchResult(int? totalCount = default(int?), IList<VirtoCommerceQuoteModuleWebModelQuoteRequest> quoteRequests = default(IList<VirtoCommerceQuoteModuleWebModelQuoteRequest>))
+        public QuoteRequestSearchResult(int? totalCount = default(int?), IList<QuoteRequest> quoteRequests = default(IList<QuoteRequest>))
         {
             TotalCount = totalCount;
             QuoteRequests = quoteRequests;
@@ -6682,7 +6594,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "quoteRequests")]
-        public IList<VirtoCommerceQuoteModuleWebModelQuoteRequest> QuoteRequests { get; set; }
+        public IList<QuoteRequest> QuoteRequests { get; set; }
 
     }
 }
