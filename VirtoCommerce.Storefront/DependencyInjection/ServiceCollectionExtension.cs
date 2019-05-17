@@ -101,9 +101,16 @@ namespace VirtoCommerce.Storefront.DependencyInjection
                    .AddHttpMessageHandler(sp => sp.GetService<AuthenticationHandlerFactory>().CreateAuthHandler())
                    .AddPolicyHandlerFromRegistry(PollyPolicyName.HttpRetry)
                    .AddPolicyHandlerFromRegistry(PollyPolicyName.HttpCircuitBreaker);
+
             return services;
         }
-
+        /// <summary>
+        ///  init autorest generated ServiceClient instance with platform enpoint HttpClient and add it into DI services as singlton
+        /// </summary>
+        /// <typeparam name="TServiceClient"></typeparam>
+        /// <param name="services"></param>
+        /// <param name="serviceClietnFactory"></param>
+        /// <returns></returns>
         private static IServiceCollection AddAutoRestClient<TServiceClient>(this IServiceCollection services, Func<ServiceClientCredentials, HttpClient, bool, TServiceClient> serviceClietnFactory)
             where TServiceClient : ServiceClient<TServiceClient>
         {
@@ -127,7 +134,6 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddSingleton<AuthenticationHandlerFactory>();
             services.AddHttpClient();
             services.AddPlatformEnpointHttpClient();
-
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient) => new VirtoCommerceStoreRESTAPIdocumentation(credentials, httpClient, disposeHttpClient));
             services.AddSingleton<IStoreModule>(sp => new StoreModule(sp.GetRequiredService<VirtoCommerceStoreRESTAPIdocumentation>()));
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient) => new VirtoCommerceCoreRESTAPIdocumentation(credentials, httpClient, disposeHttpClient));
@@ -163,17 +169,14 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient) => new VirtoCommerceSitemapsRESTAPIdocumentation(credentials, httpClient, disposeHttpClient));
             services.AddSingleton<ISitemapsModuleApiOperations>(sp => new SitemapsModuleApiOperations(sp.GetRequiredService<VirtoCommerceSitemapsRESTAPIdocumentation>()));
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient) => new VirtoCommerceCacheRESTAPIdocumentation(credentials, httpClient, disposeHttpClient));
-            services.AddSingleton<ICacheModule>(sp => new CacheModule(sp.GetRequiredService<VirtoCommerceCacheRESTAPIdocumentationExtended>()));
-            //For quotes api still client generated earlier is used
-            services.AddAutoRestClient<VirtoCommerceQuoteRESTAPIdocumentation>();
+            services.AddSingleton<ICacheModule>(sp => new CacheModule(sp.GetRequiredService<VirtoCommerceCacheRESTAPIdocumentation>()));
+            services.AddAutoRestClient((credentials, httpClient, disposeHttpClient) => new VirtoCommerceQuoteRESTAPIdocumentation(credentials, httpClient, disposeHttpClient));
             services.AddSingleton<IQuoteModule>(sp => new QuoteModule(sp.GetRequiredService<VirtoCommerceQuoteRESTAPIdocumentation>()));
-
 
             if (setupAction != null)
             {
                 services.Configure(setupAction);
             }
-
         }
 
         public static void AddFileSystemBlobContent(this IServiceCollection services, Action<FileSystemBlobContentOptions> setupAction = null)
