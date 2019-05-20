@@ -32,6 +32,19 @@ namespace VirtoCommerce.Storefront.Model.Stores
         /// </summary>
         public string SecureUrl { get; set; }
 
+        public string Host
+        {
+            get
+            {
+                string result = null;
+                if (!string.IsNullOrEmpty(Url) && Uri.TryCreate(Url, UriKind.Absolute, out var url))
+                {
+                    result = url.Host;
+                }
+                return result;
+            }
+        }
+
         /// <summary>
         /// State of store (open, closing, maintenance)
         /// </summary>

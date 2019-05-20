@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
+using Microsoft.Extensions.Options;
+
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -21,11 +23,13 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IStoreModule _storeApi;
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
-        public StoreService(IStoreModule storeApi, IStorefrontMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
+        private readonly StorefrontOptions _storefrontOptions;
+        public StoreService(IStoreModule storeApi, IStorefrontMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher, IOptions<StorefrontOptions> storefrontOptions)
         {
             _storeApi = storeApi;
             _memoryCache = memoryCache;
             _apiChangesWatcher = apiChangesWatcher;
+            _storefrontOptions = storefrontOptions.Value;
         }
         public async Task<Model.Stores.Store[]> GetAllStoresAsync()
         {
@@ -35,8 +39,14 @@ namespace VirtoCommerce.Storefront.Domain
                 cacheEntry.AddExpirationToken(StoreCacheRegion.CreateChangeToken());
                 cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
 
-                return (await _storeApi.GetStoresAsync()).Select(x => x.ToStore()).ToArray();
-            }, cacheNullValue : false);
+                var result = (await _storeApi.GetStoresAsync()).Select(x => x.ToStore()).ToArray();
+                //use url for stores from configuration file with hight priority than store url defined in manager
+                foreach (var store in result)
+                {
+                    store.Url = _storefrontOptions.StoreUrls[store.Id] ?? store.Url;
+                }
+                return result;
+            }, cacheNullValue: false);
         }
     }
 }

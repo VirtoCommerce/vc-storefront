@@ -229,7 +229,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     {
                         user = await _userManager.FindByNameAsync(user.UserName);
                         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                        var callbackUrl = Url.Action("ConfirmInvitation", "Account", new { OrganizationId = organizationId, user.Email, Token = token }, Request.Scheme);
+                        var callbackUrl = Url.Action("ConfirmInvitation", "Account", new { OrganizationId = organizationId, user.Email, Token = token }, Request.Scheme, host: WorkContext.CurrentStore.Host);
                         var inviteNotification = new RegistrationInvitationNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
                         {
                             InviteUrl = callbackUrl,
