@@ -53,17 +53,27 @@ namespace VirtoCommerce.Storefront.Controllers
 
         //GET: /account
         [HttpGet]
-        [Authorize(OnlyRegisteredUserAuthorizationRequirement.PolicyName)]
-        public ActionResult GetAccount()
+        public async Task<ActionResult> GetAccount()
         {
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
+            if (!authorizationResult.Succeeded)
+            {
+                return new ChallengeResult();
+            }
+
             //Customer should be already populated in WorkContext middle-ware
             return View("customers/account", WorkContext);
         }
 
         [HttpGet("order/{number}")]
-        [Authorize(OnlyRegisteredUserAuthorizationRequirement.PolicyName)]
-        public ActionResult GetOrderDetails(string number)
+        public async Task<ActionResult> GetOrderDetails(string number)
         {
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
+            if (!authorizationResult.Succeeded)
+            {
+                return new ChallengeResult();
+            }
+
             var order = WorkContext.CurrentUser?.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(number));
             if (order != null)
             {
@@ -74,9 +84,14 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         [HttpGet("addresses")]
-        [Authorize(OnlyRegisteredUserAuthorizationRequirement.PolicyName)]
-        public ActionResult GetAddresses()
+        public async Task<ActionResult> GetAddresses()
         {
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
+            if (!authorizationResult.Succeeded)
+            {
+                return new ChallengeResult();
+            }
+
             return View("customers/addresses", WorkContext);
         }
 
@@ -136,7 +151,6 @@ namespace VirtoCommerce.Storefront.Controllers
                         };
                         await _platformNotificationApi.SendNotificationAsync(emailConfirmationNotification.ToNotificationDto());
                     }
-
 
                     return StoreFrontRedirect("~/account");
                 }
@@ -708,7 +722,7 @@ namespace VirtoCommerce.Storefront.Controllers
             catch
             {
                 result.IsSuccess = false;
-                result.ErrorMessage = "Error occured while sending notification";
+                result.ErrorMessage = "Error occurred while sending notification";
             }
 
             return result;
