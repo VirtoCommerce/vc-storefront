@@ -11,6 +11,7 @@ using VirtoCommerce.Storefront.Model.Pricing.Services;
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
     [StorefrontApiRoute("pricing")]
+    [ResponseCache(CacheProfileName = "None")]
     public class ApiPricingController : StorefrontControllerBase
     {
         private readonly IPricingService _pricingService;

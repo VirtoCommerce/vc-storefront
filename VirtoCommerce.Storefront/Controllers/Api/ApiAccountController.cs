@@ -24,6 +24,7 @@ using VirtoCommerce.Storefront.Model.Security.Events;
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
     [StorefrontApiRoute("account")]
+    [ResponseCache(CacheProfileName = "None")]
     public class ApiAccountController : StorefrontControllerBase
     {
         private readonly IEventPublisher _publisher;

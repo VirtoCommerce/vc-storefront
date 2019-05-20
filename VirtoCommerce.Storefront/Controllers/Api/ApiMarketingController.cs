@@ -11,6 +11,7 @@ using VirtoCommerce.Storefront.Model.Marketing.Services;
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
     [StorefrontApiRoute("marketing")]
+    [ResponseCache(CacheProfileName = "None")]
     public class ApiMarketingController : StorefrontControllerBase
     {
         private readonly IDynamicContentEvaluator _dynamicContentEvaluator;

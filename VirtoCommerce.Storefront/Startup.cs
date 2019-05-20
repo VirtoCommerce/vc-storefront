@@ -261,6 +261,11 @@ namespace VirtoCommerce.Storefront
                     Duration = (int)TimeSpan.FromHours(1).TotalSeconds,
                     VaryByHeader = "host"
                 });
+                options.CacheProfiles.Add("None", new CacheProfile()
+                {
+                    NoStore = true,
+                    Location = ResponseCacheLocation.None
+                });
 
                 options.Filters.AddService(typeof(AngularAntiforgeryCookieResultFilter));
 

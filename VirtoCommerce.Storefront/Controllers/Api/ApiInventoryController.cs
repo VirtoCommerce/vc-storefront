@@ -10,6 +10,7 @@ using VirtoCommerce.Storefront.Model.Inventory.Services;
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
     [StorefrontApiRoute("")]
+    [ResponseCache(CacheProfileName = "None")]
     public class ApiInventoryController : StorefrontControllerBase
     {
         private readonly IInventoryService _inventoryService;

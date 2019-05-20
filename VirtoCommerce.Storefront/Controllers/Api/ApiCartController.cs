@@ -21,6 +21,7 @@ using orderModel = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Mode
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
     [StorefrontApiRoute("cart")]
+    [ResponseCache(CacheProfileName = "None")]
     public class ApiCartController : StorefrontControllerBase
     {
         private readonly ICartBuilder _cartBuilder;

@@ -11,6 +11,7 @@ using VirtoCommerce.Storefront.Model.Common;
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
     [StorefrontApiRoute("")]
+    [ResponseCache(CacheProfileName = "None")]
     public class ApiCommonController : StorefrontControllerBase
     {
         private readonly IStoreModule _storeApi;

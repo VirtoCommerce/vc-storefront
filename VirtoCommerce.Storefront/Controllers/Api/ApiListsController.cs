@@ -12,6 +12,7 @@ using VirtoCommerce.Storefront.Model.Services;
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
     [StorefrontApiRoute("lists")]
+    [ResponseCache(CacheProfileName = "None")]
     public class ApiListsController : StorefrontControllerBase
     {
         private readonly ICartService _cartService;
