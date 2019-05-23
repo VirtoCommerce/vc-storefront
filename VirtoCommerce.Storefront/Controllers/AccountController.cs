@@ -58,7 +58,7 @@ namespace VirtoCommerce.Storefront.Controllers
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
             {
-                return new ChallengeResult();
+                  return StoreFrontRedirect("~/account/login");
             }
 
             //Customer should be already populated in WorkContext middle-ware
@@ -71,7 +71,7 @@ namespace VirtoCommerce.Storefront.Controllers
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
             {
-                return new ChallengeResult();
+                 return StoreFrontRedirect("~/account/login");
             }
 
             var order = WorkContext.CurrentUser?.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(number));
@@ -89,7 +89,7 @@ namespace VirtoCommerce.Storefront.Controllers
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
             {
-                return new ChallengeResult();
+                  return StoreFrontRedirect("~/account/login");
             }
 
             return View("customers/addresses", WorkContext);
