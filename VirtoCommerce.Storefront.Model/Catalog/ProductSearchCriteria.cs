@@ -44,6 +44,8 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         public IList<Term> Terms { get; set; } = new List<Term>();
 
+        public IList<string> UserGroups { get; set; } = new List<string>();
+
         public string SortBy { get; set; }
 
         public string VendorId { get; set; }
