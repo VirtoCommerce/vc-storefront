@@ -109,16 +109,16 @@ namespace VirtoCommerce.Storefront.DependencyInjection
         /// </summary>
         /// <typeparam name="TServiceClient"></typeparam>
         /// <param name="services"></param>
-        /// <param name="serviceClietnFactory"></param>
+        /// <param name="serviceClientFactory"></param>
         /// <returns></returns>
-        private static IServiceCollection AddAutoRestClient<TServiceClient>(this IServiceCollection services, Func<ServiceClientCredentials, HttpClient, bool, TServiceClient> serviceClietnFactory)
+        private static IServiceCollection AddAutoRestClient<TServiceClient>(this IServiceCollection services, Func<ServiceClientCredentials, HttpClient, bool, TServiceClient> serviceClientFactory)
             where TServiceClient : ServiceClient<TServiceClient>
         {
             services.AddSingleton<TServiceClient>(sp =>
             {
                 var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
                 var httpClient = httpClientFactory.CreateClient(PlatformEndpointHttpClientName);
-                var serviceClient = serviceClietnFactory(new EmptyServiceClientCredentials(), httpClient, true);
+                var serviceClient = serviceClientFactory(new EmptyServiceClientCredentials(), httpClient, true);
                 return serviceClient;
             });
 
