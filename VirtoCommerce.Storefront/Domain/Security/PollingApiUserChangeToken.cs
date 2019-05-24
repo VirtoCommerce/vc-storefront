@@ -1,31 +1,31 @@
 using System;
+using System.Linq;
 using System.Threading;
 using Microsoft.Extensions.Primitives;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Security;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
     public sealed class PollingApiUserChangeToken : IChangeToken
     {
         private readonly ISecurity _platformSecurityApi;
-        private DateTime _lastCheckedTimeUtc;
+        private static DateTime _previousChangeTimeUtcStatic;
+        private static DateTime _lastCheckedTimeUtcStatic;
         private readonly TimeSpan _pollingInterval;
-        private readonly User _user;
+
         private readonly object _lock = new object();
 
-        private PollingApiUserChangeToken(User user, ISecurity platformSecurityApi, TimeSpan pollingInterval)
+        static PollingApiUserChangeToken()
         {
-            _user = user;
-            _lastCheckedTimeUtc = DateTime.UtcNow;
-            _pollingInterval = pollingInterval;
-            _platformSecurityApi = platformSecurityApi;
+            _previousChangeTimeUtcStatic = _lastCheckedTimeUtcStatic = DateTime.UtcNow;
         }
 
-        public static IChangeToken CreateChangeToken(User user, ISecurity platformSecurityApi, TimeSpan pollingInterval)
+        public PollingApiUserChangeToken(ISecurity platformSecurityApi, TimeSpan pollingInterval)
         {
-            return new PollingApiUserChangeToken(user, platformSecurityApi, pollingInterval);
+            _pollingInterval = pollingInterval;
+            _platformSecurityApi = platformSecurityApi;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             get
             {
                 var currentTime = DateTime.UtcNow;
-                if (currentTime - _lastCheckedTimeUtc < _pollingInterval)
+                if (currentTime - _lastCheckedTimeUtcStatic < _pollingInterval)
                 {
                     return false;
                 }
@@ -49,15 +49,22 @@ namespace VirtoCommerce.Storefront.Domain.Security
                     //Do not wait if is locked by another thread 
                     if (lockTaken)
                     {
-                        var user = _platformSecurityApi.GetUserById(_user.Id)?.ToUser();
-                        _lastCheckedTimeUtc = currentTime;
-                        //TODO: Add additional properties check
-                        if (user != null && user.IsLockedOut != _user.IsLockedOut)
+                        var result = _platformSecurityApi.SearchUsersAsync(new UserSearchRequest()
                         {
-                            SecurityCacheRegion.ExpireUser(_user.Id);
-                            return true;
-                        }
+                            SkipCount = 0,
+                            TakeCount = int.MaxValue,
+                            ModifiedSinceDate = _previousChangeTimeUtcStatic
+                        });
 
+                        if (result.TotalCount > 0)
+                        {
+                            _previousChangeTimeUtcStatic = currentTime;
+                            foreach (var userId in result.Users.Select(x => x.Id))
+                            {
+                                SecurityCacheRegion.ExpireUser(userId);
+                            }
+                        }
+                        _lastCheckedTimeUtcStatic = currentTime;
                     }
                 }
                 finally

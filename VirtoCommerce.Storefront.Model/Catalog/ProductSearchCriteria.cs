@@ -64,11 +64,10 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         }
 
         private void Parse(NameValueCollection queryString)
-        {
+        {        
+            IsFuzzySearch = queryString.Get("fuzzy").EqualsInvariant(bool.TrueString);
             Keyword = queryString.Get("q") ?? queryString.Get("keyword");
-
             SortBy = queryString.Get("sort_by");
-
             ResponseGroup = EnumUtility.SafeParse(queryString.Get("resp_group"), ItemResponseGroup.ItemSmall | ItemResponseGroup.ItemWithPrices | ItemResponseGroup.Inventory | ItemResponseGroup.ItemWithDiscounts | ItemResponseGroup.ItemWithVendor | ItemResponseGroup.ItemProperties);
             // terms=name1:value1,value2,value3;name2:value1,value2,value3
             Terms = (queryString.GetValues("terms") ?? new string[0])

@@ -512,7 +512,8 @@ namespace VirtoCommerce.Storefront.Domain
                 OrganizationId = cart.OrganizationId,
                 Status = cart.Status,
                 StoreId = cart.StoreId,
-                Type = cart.Type
+                Type = cart.Type,
+                IsAnonymous = cart.IsAnonymous
             };
 
             if (cart.Language != null)

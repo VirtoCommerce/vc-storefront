@@ -5,7 +5,7 @@ using VirtoCommerce.Storefront.Model.Security;
 
 namespace VirtoCommerce.Storefront.Model.Cart
 {
-    public class CartSearchCriteria : PagedSearchCriteria
+    public partial class CartSearchCriteria : PagedSearchCriteria
     {
         public static int DefaultPageSize { get; set; } = 20;
 
