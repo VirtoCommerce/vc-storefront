@@ -102,7 +102,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
                 try
                 {
                     var client = _clientFactory.CreateClient();
-                    var response = await client.RequestPasswordTokenAsync(new PasswordTokenRequest { Address = _options.Url + "connect/token", UserName = _options.UserName, Password = _options.Password });
+                    var response = await client.RequestPasswordTokenAsync(new PasswordTokenRequest { Address = $"{_options.Url?.ToString().TrimEnd('/')}/connect/token", UserName = _options.UserName, Password = _options.Password });
 
                     if (!response.IsError)
                     {
