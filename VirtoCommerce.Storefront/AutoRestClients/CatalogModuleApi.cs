@@ -331,7 +331,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
                 NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
                 ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize,
                 ContractResolver = new ReadOnlyJsonContractResolver(),
-                Converters = new  List<JsonConverter>
+                Converters = new List<JsonConverter>
                     {
                         new Iso8601TimeSpanConverter()
                     }
@@ -556,7 +556,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -591,10 +591,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -696,7 +698,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -708,11 +710,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(catalog != null)
+            if (catalog != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(catalog, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -737,10 +739,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 204)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -827,7 +831,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -839,11 +843,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(catalog != null)
+            if (catalog != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(catalog, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -868,10 +872,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -977,7 +983,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -1012,10 +1018,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -1118,7 +1126,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -1153,10 +1161,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 204)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -1229,7 +1239,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -1264,10 +1274,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -1355,7 +1367,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -1390,10 +1402,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -1645,269 +1659,269 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
     /// </summary>
     public static partial class CatalogModuleCatalogsExtensions
     {
-            /// <summary>
-            /// Get Catalogs list
-            /// </summary>
-            /// <remarks>
-            /// Get common and virtual Catalogs list with minimal information included.
-            /// Returns array of Catalog
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='sort'>
-            /// </param>
-            /// <param name='skip'>
-            /// </param>
-            /// <param name='take'>
-            /// </param>
-            public static IList<Catalog> GetCatalogs(this ICatalogModuleCatalogs operations, string sort = default(string), int? skip = default(int?), int? take = default(int?))
-            {
-                return operations.GetCatalogsAsync(sort, skip, take).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Get Catalogs list
+        /// </summary>
+        /// <remarks>
+        /// Get common and virtual Catalogs list with minimal information included.
+        /// Returns array of Catalog
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='sort'>
+        /// </param>
+        /// <param name='skip'>
+        /// </param>
+        /// <param name='take'>
+        /// </param>
+        public static IList<Catalog> GetCatalogs(this ICatalogModuleCatalogs operations, string sort = default(string), int? skip = default(int?), int? take = default(int?))
+        {
+            return operations.GetCatalogsAsync(sort, skip, take).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Get Catalogs list
-            /// </summary>
-            /// <remarks>
-            /// Get common and virtual Catalogs list with minimal information included.
-            /// Returns array of Catalog
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='sort'>
-            /// </param>
-            /// <param name='skip'>
-            /// </param>
-            /// <param name='take'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<IList<Catalog>> GetCatalogsAsync(this ICatalogModuleCatalogs operations, string sort = default(string), int? skip = default(int?), int? take = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Get Catalogs list
+        /// </summary>
+        /// <remarks>
+        /// Get common and virtual Catalogs list with minimal information included.
+        /// Returns array of Catalog
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='sort'>
+        /// </param>
+        /// <param name='skip'>
+        /// </param>
+        /// <param name='take'>
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<IList<Catalog>> GetCatalogsAsync(this ICatalogModuleCatalogs operations, string sort = default(string), int? skip = default(int?), int? take = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetCatalogsWithHttpMessagesAsync(sort, skip, take, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetCatalogsWithHttpMessagesAsync(sort, skip, take, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Updates the specified catalog.
-            /// </summary>
-            /// <remarks>
-            /// Updates the specified catalog.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='catalog'>
-            /// The catalog.
-            /// </param>
-            public static void Update(this ICatalogModuleCatalogs operations, Catalog catalog)
-            {
-                operations.UpdateAsync(catalog).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Updates the specified catalog.
+        /// </summary>
+        /// <remarks>
+        /// Updates the specified catalog.
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='catalog'>
+        /// The catalog.
+        /// </param>
+        public static void Update(this ICatalogModuleCatalogs operations, Catalog catalog)
+        {
+            operations.UpdateAsync(catalog).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Updates the specified catalog.
-            /// </summary>
-            /// <remarks>
-            /// Updates the specified catalog.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='catalog'>
-            /// The catalog.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task UpdateAsync(this ICatalogModuleCatalogs operations, Catalog catalog, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.UpdateWithHttpMessagesAsync(catalog, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
+        /// <summary>
+        /// Updates the specified catalog.
+        /// </summary>
+        /// <remarks>
+        /// Updates the specified catalog.
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='catalog'>
+        /// The catalog.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task UpdateAsync(this ICatalogModuleCatalogs operations, Catalog catalog, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            (await operations.UpdateWithHttpMessagesAsync(catalog, null, cancellationToken).ConfigureAwait(false)).Dispose();
+        }
 
-            /// <summary>
-            /// Creates the specified catalog.
-            /// </summary>
-            /// <remarks>
-            /// Creates the specified catalog
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='catalog'>
-            /// The catalog to create
-            /// </param>
-            public static Catalog Create(this ICatalogModuleCatalogs operations, Catalog catalog)
-            {
-                return operations.CreateAsync(catalog).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Creates the specified catalog.
+        /// </summary>
+        /// <remarks>
+        /// Creates the specified catalog
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='catalog'>
+        /// The catalog to create
+        /// </param>
+        public static Catalog Create(this ICatalogModuleCatalogs operations, Catalog catalog)
+        {
+            return operations.CreateAsync(catalog).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Creates the specified catalog.
-            /// </summary>
-            /// <remarks>
-            /// Creates the specified catalog
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='catalog'>
-            /// The catalog to create
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Catalog> CreateAsync(this ICatalogModuleCatalogs operations, Catalog catalog, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Creates the specified catalog.
+        /// </summary>
+        /// <remarks>
+        /// Creates the specified catalog
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='catalog'>
+        /// The catalog to create
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<Catalog> CreateAsync(this ICatalogModuleCatalogs operations, Catalog catalog, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.CreateWithHttpMessagesAsync(catalog, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.CreateWithHttpMessagesAsync(catalog, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Gets Catalog by id.
-            /// </summary>
-            /// <remarks>
-            /// Gets Catalog by id with full information loaded
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='id'>
-            /// The Catalog id.
-            /// </param>
-            public static Catalog Get(this ICatalogModuleCatalogs operations, string id)
-            {
-                return operations.GetAsync(id).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Gets Catalog by id.
+        /// </summary>
+        /// <remarks>
+        /// Gets Catalog by id with full information loaded
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='id'>
+        /// The Catalog id.
+        /// </param>
+        public static Catalog Get(this ICatalogModuleCatalogs operations, string id)
+        {
+            return operations.GetAsync(id).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Gets Catalog by id.
-            /// </summary>
-            /// <remarks>
-            /// Gets Catalog by id with full information loaded
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='id'>
-            /// The Catalog id.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Catalog> GetAsync(this ICatalogModuleCatalogs operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Gets Catalog by id.
+        /// </summary>
+        /// <remarks>
+        /// Gets Catalog by id with full information loaded
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='id'>
+        /// The Catalog id.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<Catalog> GetAsync(this ICatalogModuleCatalogs operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Deletes catalog by id.
-            /// </summary>
-            /// <remarks>
-            /// Deletes catalog by id
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='id'>
-            /// Catalog id.
-            /// </param>
-            public static void Delete(this ICatalogModuleCatalogs operations, string id)
-            {
-                operations.DeleteAsync(id).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Deletes catalog by id.
+        /// </summary>
+        /// <remarks>
+        /// Deletes catalog by id
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='id'>
+        /// Catalog id.
+        /// </param>
+        public static void Delete(this ICatalogModuleCatalogs operations, string id)
+        {
+            operations.DeleteAsync(id).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Deletes catalog by id.
-            /// </summary>
-            /// <remarks>
-            /// Deletes catalog by id
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='id'>
-            /// Catalog id.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task DeleteAsync(this ICatalogModuleCatalogs operations, string id, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.DeleteWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
+        /// <summary>
+        /// Deletes catalog by id.
+        /// </summary>
+        /// <remarks>
+        /// Deletes catalog by id
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='id'>
+        /// Catalog id.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task DeleteAsync(this ICatalogModuleCatalogs operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            (await operations.DeleteWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false)).Dispose();
+        }
 
-            /// <summary>
-            /// Gets the template for a new catalog.
-            /// </summary>
-            /// <remarks>
-            /// Gets the template for a new common catalog
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            public static Catalog GetNewCatalog(this ICatalogModuleCatalogs operations)
-            {
-                return operations.GetNewCatalogAsync().GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Gets the template for a new catalog.
+        /// </summary>
+        /// <remarks>
+        /// Gets the template for a new common catalog
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        public static Catalog GetNewCatalog(this ICatalogModuleCatalogs operations)
+        {
+            return operations.GetNewCatalogAsync().GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Gets the template for a new catalog.
-            /// </summary>
-            /// <remarks>
-            /// Gets the template for a new common catalog
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Catalog> GetNewCatalogAsync(this ICatalogModuleCatalogs operations, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Gets the template for a new catalog.
+        /// </summary>
+        /// <remarks>
+        /// Gets the template for a new common catalog
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<Catalog> GetNewCatalogAsync(this ICatalogModuleCatalogs operations, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetNewCatalogWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetNewCatalogWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Gets the template for a new virtual catalog.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            public static Catalog GetNewVirtualCatalog(this ICatalogModuleCatalogs operations)
-            {
-                return operations.GetNewVirtualCatalogAsync().GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Gets the template for a new virtual catalog.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        public static Catalog GetNewVirtualCatalog(this ICatalogModuleCatalogs operations)
+        {
+            return operations.GetNewVirtualCatalogAsync().GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Gets the template for a new virtual catalog.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Catalog> GetNewVirtualCatalogAsync(this ICatalogModuleCatalogs operations, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Gets the template for a new virtual catalog.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<Catalog> GetNewVirtualCatalogAsync(this ICatalogModuleCatalogs operations, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetNewVirtualCatalogWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetNewVirtualCatalogWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
     }
 }
@@ -2018,7 +2032,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -2053,10 +2067,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -2187,7 +2203,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -2222,10 +2238,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -2327,7 +2345,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -2339,11 +2357,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(category != null)
+            if (category != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(category, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -2368,10 +2386,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 204)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -2471,7 +2491,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -2506,10 +2526,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 204)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -2608,7 +2630,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -2620,11 +2642,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(ids != null)
+            if (ids != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(ids, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -2649,10 +2671,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -2768,7 +2792,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -2803,10 +2827,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -3046,235 +3072,235 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
     /// </summary>
     public static partial class CatalogModuleCategoriesExtensions
     {
-            /// <summary>
-            /// Gets category by id.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='id'>
-            /// Category id.
-            /// </param>
-            public static Category Get(this ICatalogModuleCategories operations, string id)
-            {
-                return operations.GetAsync(id).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Gets category by id.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='id'>
+        /// Category id.
+        /// </param>
+        public static Category Get(this ICatalogModuleCategories operations, string id)
+        {
+            return operations.GetAsync(id).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Gets category by id.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='id'>
-            /// Category id.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Category> GetAsync(this ICatalogModuleCategories operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Gets category by id.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='id'>
+        /// Category id.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<Category> GetAsync(this ICatalogModuleCategories operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Gets categories by ids
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ids'>
-            /// Categories ids
-            /// </param>
-            /// <param name='respGroup'>
-            /// Response group. Possible values include: 'None', 'Info', 'WithImages',
-            /// 'WithProperties', 'WithLinks', 'WithSeo', 'WithParents', 'WithOutlines',
-            /// 'Full'
-            /// </param>
-            public static IList<Category> GetCategoriesByIds(this ICatalogModuleCategories operations, IList<string> ids, string respGroup = default(string))
-            {
-                return operations.GetCategoriesByIdsAsync(ids, respGroup).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Gets categories by ids
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='ids'>
+        /// Categories ids
+        /// </param>
+        /// <param name='respGroup'>
+        /// Response group. Possible values include: 'None', 'Info', 'WithImages',
+        /// 'WithProperties', 'WithLinks', 'WithSeo', 'WithParents', 'WithOutlines',
+        /// 'Full'
+        /// </param>
+        public static IList<Category> GetCategoriesByIds(this ICatalogModuleCategories operations, IList<string> ids, string respGroup = default(string))
+        {
+            return operations.GetCategoriesByIdsAsync(ids, respGroup).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Gets categories by ids
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ids'>
-            /// Categories ids
-            /// </param>
-            /// <param name='respGroup'>
-            /// Response group. Possible values include: 'None', 'Info', 'WithImages',
-            /// 'WithProperties', 'WithLinks', 'WithSeo', 'WithParents', 'WithOutlines',
-            /// 'Full'
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<IList<Category>> GetCategoriesByIdsAsync(this ICatalogModuleCategories operations, IList<string> ids, string respGroup = default(string), CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Gets categories by ids
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='ids'>
+        /// Categories ids
+        /// </param>
+        /// <param name='respGroup'>
+        /// Response group. Possible values include: 'None', 'Info', 'WithImages',
+        /// 'WithProperties', 'WithLinks', 'WithSeo', 'WithParents', 'WithOutlines',
+        /// 'Full'
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<IList<Category>> GetCategoriesByIdsAsync(this ICatalogModuleCategories operations, IList<string> ids, string respGroup = default(string), CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetCategoriesByIdsWithHttpMessagesAsync(ids, respGroup, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetCategoriesByIdsWithHttpMessagesAsync(ids, respGroup, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Creates or updates the specified category.
-            /// </summary>
-            /// <remarks>
-            /// If category.id is null, a new category is created. It's updated otherwise
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='category'>
-            /// The category.
-            /// </param>
-            public static void CreateOrUpdateCategory(this ICatalogModuleCategories operations, Category category)
-            {
-                operations.CreateOrUpdateCategoryAsync(category).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Creates or updates the specified category.
+        /// </summary>
+        /// <remarks>
+        /// If category.id is null, a new category is created. It's updated otherwise
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='category'>
+        /// The category.
+        /// </param>
+        public static void CreateOrUpdateCategory(this ICatalogModuleCategories operations, Category category)
+        {
+            operations.CreateOrUpdateCategoryAsync(category).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Creates or updates the specified category.
-            /// </summary>
-            /// <remarks>
-            /// If category.id is null, a new category is created. It's updated otherwise
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='category'>
-            /// The category.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task CreateOrUpdateCategoryAsync(this ICatalogModuleCategories operations, Category category, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.CreateOrUpdateCategoryWithHttpMessagesAsync(category, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
+        /// <summary>
+        /// Creates or updates the specified category.
+        /// </summary>
+        /// <remarks>
+        /// If category.id is null, a new category is created. It's updated otherwise
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='category'>
+        /// The category.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task CreateOrUpdateCategoryAsync(this ICatalogModuleCategories operations, Category category, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            (await operations.CreateOrUpdateCategoryWithHttpMessagesAsync(category, null, cancellationToken).ConfigureAwait(false)).Dispose();
+        }
 
-            /// <summary>
-            /// Deletes the specified categories by id.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ids'>
-            /// The categories ids.
-            /// </param>
-            public static void Delete(this ICatalogModuleCategories operations, IList<string> ids)
-            {
-                operations.DeleteAsync(ids).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Deletes the specified categories by id.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='ids'>
+        /// The categories ids.
+        /// </param>
+        public static void Delete(this ICatalogModuleCategories operations, IList<string> ids)
+        {
+            operations.DeleteAsync(ids).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Deletes the specified categories by id.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ids'>
-            /// The categories ids.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task DeleteAsync(this ICatalogModuleCategories operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.DeleteWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
+        /// <summary>
+        /// Deletes the specified categories by id.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='ids'>
+        /// The categories ids.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task DeleteAsync(this ICatalogModuleCategories operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            (await operations.DeleteWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false)).Dispose();
+        }
 
-            /// <summary>
-            /// Get categories by plenty ids
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ids'>
-            /// Categories ids
-            /// </param>
-            /// <param name='respGroup'>
-            /// Response group. Possible values include: 'None', 'Info', 'WithImages',
-            /// 'WithProperties', 'WithLinks', 'WithSeo', 'WithParents', 'WithOutlines',
-            /// 'Full'
-            /// </param>
-            public static IList<Category> GetCategoriesByPlentyIds(this ICatalogModuleCategories operations, IList<string> ids, string respGroup = default(string))
-            {
-                return operations.GetCategoriesByPlentyIdsAsync(ids, respGroup).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Get categories by plenty ids
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='ids'>
+        /// Categories ids
+        /// </param>
+        /// <param name='respGroup'>
+        /// Response group. Possible values include: 'None', 'Info', 'WithImages',
+        /// 'WithProperties', 'WithLinks', 'WithSeo', 'WithParents', 'WithOutlines',
+        /// 'Full'
+        /// </param>
+        public static IList<Category> GetCategoriesByPlentyIds(this ICatalogModuleCategories operations, IList<string> ids, string respGroup = default(string))
+        {
+            return operations.GetCategoriesByPlentyIdsAsync(ids, respGroup).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Get categories by plenty ids
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ids'>
-            /// Categories ids
-            /// </param>
-            /// <param name='respGroup'>
-            /// Response group. Possible values include: 'None', 'Info', 'WithImages',
-            /// 'WithProperties', 'WithLinks', 'WithSeo', 'WithParents', 'WithOutlines',
-            /// 'Full'
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<IList<Category>> GetCategoriesByPlentyIdsAsync(this ICatalogModuleCategories operations, IList<string> ids, string respGroup = default(string), CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Get categories by plenty ids
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='ids'>
+        /// Categories ids
+        /// </param>
+        /// <param name='respGroup'>
+        /// Response group. Possible values include: 'None', 'Info', 'WithImages',
+        /// 'WithProperties', 'WithLinks', 'WithSeo', 'WithParents', 'WithOutlines',
+        /// 'Full'
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<IList<Category>> GetCategoriesByPlentyIdsAsync(this ICatalogModuleCategories operations, IList<string> ids, string respGroup = default(string), CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetCategoriesByPlentyIdsWithHttpMessagesAsync(ids, respGroup, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetCategoriesByPlentyIdsWithHttpMessagesAsync(ids, respGroup, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Gets the template for a new category.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='catalogId'>
-            /// The catalog id.
-            /// </param>
-            /// <param name='parentCategoryId'>
-            /// The parent category id. (Optional)
-            /// </param>
-            public static Category GetNewCategory(this ICatalogModuleCategories operations, string catalogId, string parentCategoryId = default(string))
-            {
-                return operations.GetNewCategoryAsync(catalogId, parentCategoryId).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Gets the template for a new category.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='catalogId'>
+        /// The catalog id.
+        /// </param>
+        /// <param name='parentCategoryId'>
+        /// The parent category id. (Optional)
+        /// </param>
+        public static Category GetNewCategory(this ICatalogModuleCategories operations, string catalogId, string parentCategoryId = default(string))
+        {
+            return operations.GetNewCategoryAsync(catalogId, parentCategoryId).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Gets the template for a new category.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='catalogId'>
-            /// The catalog id.
-            /// </param>
-            /// <param name='parentCategoryId'>
-            /// The parent category id. (Optional)
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Category> GetNewCategoryAsync(this ICatalogModuleCategories operations, string catalogId, string parentCategoryId = default(string), CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Gets the template for a new category.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='catalogId'>
+        /// The catalog id.
+        /// </param>
+        /// <param name='parentCategoryId'>
+        /// The parent category id. (Optional)
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<Category> GetNewCategoryAsync(this ICatalogModuleCategories operations, string catalogId, string parentCategoryId = default(string), CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetNewCategoryWithHttpMessagesAsync(catalogId, parentCategoryId, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetNewCategoryWithHttpMessagesAsync(catalogId, parentCategoryId, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
     }
 }
@@ -3384,7 +3410,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -3396,11 +3422,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if (criteria != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -3425,10 +3451,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -3527,7 +3555,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -3539,11 +3567,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(links != null)
+            if (links != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(links, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -3568,10 +3596,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 204)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -3651,7 +3681,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -3663,11 +3693,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(creationRequest != null)
+            if (creationRequest != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(creationRequest, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -3692,10 +3722,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 204)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -3776,7 +3808,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -3788,11 +3820,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(links != null)
+            if (links != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(links, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -3817,10 +3849,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 204)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -3901,7 +3935,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -3913,11 +3947,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(moveInfo != null)
+            if (moveInfo != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(moveInfo, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -3942,10 +3976,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 204)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -4123,161 +4159,161 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
     /// </summary>
     public static partial class CatalogModuleListEntryExtensions
     {
-            /// <summary>
-            /// Searches for the items by complex criteria.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='criteria'>
-            /// The search criteria.
-            /// </param>
-            public static ListEntrySearchResult ListItemsSearch(this ICatalogModuleListEntry operations, SearchCriteria criteria)
-            {
-                return operations.ListItemsSearchAsync(criteria).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Searches for the items by complex criteria.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='criteria'>
+        /// The search criteria.
+        /// </param>
+        public static ListEntrySearchResult ListItemsSearch(this ICatalogModuleListEntry operations, SearchCriteria criteria)
+        {
+            return operations.ListItemsSearchAsync(criteria).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Searches for the items by complex criteria.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='criteria'>
-            /// The search criteria.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<ListEntrySearchResult> ListItemsSearchAsync(this ICatalogModuleListEntry operations, SearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Searches for the items by complex criteria.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='criteria'>
+        /// The search criteria.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<ListEntrySearchResult> ListItemsSearchAsync(this ICatalogModuleListEntry operations, SearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.ListItemsSearchWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.ListItemsSearchWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Creates links for categories or items to parent categories and catalogs.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='links'>
-            /// The links.
-            /// </param>
-            public static void CreateLinks(this ICatalogModuleListEntry operations, IList<ListEntryLink> links)
-            {
-                operations.CreateLinksAsync(links).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Creates links for categories or items to parent categories and catalogs.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='links'>
+        /// The links.
+        /// </param>
+        public static void CreateLinks(this ICatalogModuleListEntry operations, IList<ListEntryLink> links)
+        {
+            operations.CreateLinksAsync(links).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Creates links for categories or items to parent categories and catalogs.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='links'>
-            /// The links.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task CreateLinksAsync(this ICatalogModuleListEntry operations, IList<ListEntryLink> links, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.CreateLinksWithHttpMessagesAsync(links, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
+        /// <summary>
+        /// Creates links for categories or items to parent categories and catalogs.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='links'>
+        /// The links.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task CreateLinksAsync(this ICatalogModuleListEntry operations, IList<ListEntryLink> links, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            (await operations.CreateLinksWithHttpMessagesAsync(links, null, cancellationToken).ConfigureAwait(false)).Dispose();
+        }
 
-            /// <summary>
-            /// Bulk create links to categories and items
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='creationRequest'>
-            /// </param>
-            public static void BulkCreateLinks(this ICatalogModuleListEntry operations, BulkLinkCreationRequest creationRequest)
-            {
-                operations.BulkCreateLinksAsync(creationRequest).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Bulk create links to categories and items
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='creationRequest'>
+        /// </param>
+        public static void BulkCreateLinks(this ICatalogModuleListEntry operations, BulkLinkCreationRequest creationRequest)
+        {
+            operations.BulkCreateLinksAsync(creationRequest).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Bulk create links to categories and items
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='creationRequest'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task BulkCreateLinksAsync(this ICatalogModuleListEntry operations, BulkLinkCreationRequest creationRequest, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.BulkCreateLinksWithHttpMessagesAsync(creationRequest, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
+        /// <summary>
+        /// Bulk create links to categories and items
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='creationRequest'>
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task BulkCreateLinksAsync(this ICatalogModuleListEntry operations, BulkLinkCreationRequest creationRequest, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            (await operations.BulkCreateLinksWithHttpMessagesAsync(creationRequest, null, cancellationToken).ConfigureAwait(false)).Dispose();
+        }
 
-            /// <summary>
-            /// Unlinks the linked categories or items from parent categories and catalogs.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='links'>
-            /// The links.
-            /// </param>
-            public static void DeleteLinks(this ICatalogModuleListEntry operations, IList<ListEntryLink> links)
-            {
-                operations.DeleteLinksAsync(links).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Unlinks the linked categories or items from parent categories and catalogs.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='links'>
+        /// The links.
+        /// </param>
+        public static void DeleteLinks(this ICatalogModuleListEntry operations, IList<ListEntryLink> links)
+        {
+            operations.DeleteLinksAsync(links).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Unlinks the linked categories or items from parent categories and catalogs.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='links'>
-            /// The links.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task DeleteLinksAsync(this ICatalogModuleListEntry operations, IList<ListEntryLink> links, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.DeleteLinksWithHttpMessagesAsync(links, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
+        /// <summary>
+        /// Unlinks the linked categories or items from parent categories and catalogs.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='links'>
+        /// The links.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task DeleteLinksAsync(this ICatalogModuleListEntry operations, IList<ListEntryLink> links, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            (await operations.DeleteLinksWithHttpMessagesAsync(links, null, cancellationToken).ConfigureAwait(false)).Dispose();
+        }
 
-            /// <summary>
-            /// Move categories or products to another location.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='moveInfo'>
-            /// Move operation details
-            /// </param>
-            public static void Move(this ICatalogModuleListEntry operations, MoveInfo moveInfo)
-            {
-                operations.MoveAsync(moveInfo).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Move categories or products to another location.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='moveInfo'>
+        /// Move operation details
+        /// </param>
+        public static void Move(this ICatalogModuleListEntry operations, MoveInfo moveInfo)
+        {
+            operations.MoveAsync(moveInfo).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Move categories or products to another location.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='moveInfo'>
-            /// Move operation details
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task MoveAsync(this ICatalogModuleListEntry operations, MoveInfo moveInfo, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.MoveWithHttpMessagesAsync(moveInfo, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
+        /// <summary>
+        /// Move categories or products to another location.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='moveInfo'>
+        /// Move operation details
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task MoveAsync(this ICatalogModuleListEntry operations, MoveInfo moveInfo, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            (await operations.MoveWithHttpMessagesAsync(moveInfo, null, cancellationToken).ConfigureAwait(false)).Dispose();
+        }
 
     }
 }
@@ -4404,7 +4440,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -4439,10 +4475,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -4574,7 +4612,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -4609,10 +4647,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -4714,7 +4754,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -4726,11 +4766,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(product != null)
+            if (product != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(product, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -4755,10 +4795,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -4876,7 +4918,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -4911,10 +4953,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 204)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -5014,7 +5058,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -5026,11 +5070,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(ids != null)
+            if (ids != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(ids, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -5055,10 +5099,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -5164,7 +5210,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -5199,10 +5245,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -5317,7 +5365,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -5352,10 +5400,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -5458,7 +5508,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -5493,10 +5543,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -5595,7 +5647,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -5630,10 +5682,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -5732,7 +5786,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -5744,11 +5798,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(products != null)
+            if (products != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(products, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -5773,10 +5827,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 204)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -5859,7 +5915,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -5871,11 +5927,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if (criteria != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -5900,10 +5956,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -6261,417 +6319,417 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
     /// </summary>
     public static partial class CatalogModuleProductsExtensions
     {
-            /// <summary>
-            /// Gets product by id.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='id'>
-            /// Item id.
-            /// </param>
-            /// <param name='respGroup'>
-            /// Response group. Possible values include: 'None', 'ItemInfo', 'ItemAssets',
-            /// 'ItemProperties', 'ItemAssociations', 'ItemEditorialReviews', 'Variations',
-            /// 'Seo', 'Links', 'Inventory', 'Outlines', 'ReferencedAssociations',
-            /// 'ItemSmall', 'ItemMedium', 'ItemLarge'
-            /// </param>
-            public static Product GetProductById(this ICatalogModuleProducts operations, string id, string respGroup = default(string))
-            {
-                return operations.GetProductByIdAsync(id, respGroup).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Gets product by id.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='id'>
+        /// Item id.
+        /// </param>
+        /// <param name='respGroup'>
+        /// Response group. Possible values include: 'None', 'ItemInfo', 'ItemAssets',
+        /// 'ItemProperties', 'ItemAssociations', 'ItemEditorialReviews', 'Variations',
+        /// 'Seo', 'Links', 'Inventory', 'Outlines', 'ReferencedAssociations',
+        /// 'ItemSmall', 'ItemMedium', 'ItemLarge'
+        /// </param>
+        public static Product GetProductById(this ICatalogModuleProducts operations, string id, string respGroup = default(string))
+        {
+            return operations.GetProductByIdAsync(id, respGroup).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Gets product by id.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='id'>
-            /// Item id.
-            /// </param>
-            /// <param name='respGroup'>
-            /// Response group. Possible values include: 'None', 'ItemInfo', 'ItemAssets',
-            /// 'ItemProperties', 'ItemAssociations', 'ItemEditorialReviews', 'Variations',
-            /// 'Seo', 'Links', 'Inventory', 'Outlines', 'ReferencedAssociations',
-            /// 'ItemSmall', 'ItemMedium', 'ItemLarge'
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Product> GetProductByIdAsync(this ICatalogModuleProducts operations, string id, string respGroup = default(string), CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Gets product by id.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='id'>
+        /// Item id.
+        /// </param>
+        /// <param name='respGroup'>
+        /// Response group. Possible values include: 'None', 'ItemInfo', 'ItemAssets',
+        /// 'ItemProperties', 'ItemAssociations', 'ItemEditorialReviews', 'Variations',
+        /// 'Seo', 'Links', 'Inventory', 'Outlines', 'ReferencedAssociations',
+        /// 'ItemSmall', 'ItemMedium', 'ItemLarge'
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<Product> GetProductByIdAsync(this ICatalogModuleProducts operations, string id, string respGroup = default(string), CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetProductByIdWithHttpMessagesAsync(id, respGroup, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetProductByIdWithHttpMessagesAsync(id, respGroup, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Gets products by ids
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ids'>
-            /// Item ids
-            /// </param>
-            /// <param name='respGroup'>
-            /// Response group. Possible values include: 'None', 'ItemInfo', 'ItemAssets',
-            /// 'ItemProperties', 'ItemAssociations', 'ItemEditorialReviews', 'Variations',
-            /// 'Seo', 'Links', 'Inventory', 'Outlines', 'ReferencedAssociations',
-            /// 'ItemSmall', 'ItemMedium', 'ItemLarge'
-            /// </param>
-            public static IList<Product> GetProductByIds(this ICatalogModuleProducts operations, IList<string> ids, string respGroup = default(string))
-            {
-                return operations.GetProductByIdsAsync(ids, respGroup).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Gets products by ids
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='ids'>
+        /// Item ids
+        /// </param>
+        /// <param name='respGroup'>
+        /// Response group. Possible values include: 'None', 'ItemInfo', 'ItemAssets',
+        /// 'ItemProperties', 'ItemAssociations', 'ItemEditorialReviews', 'Variations',
+        /// 'Seo', 'Links', 'Inventory', 'Outlines', 'ReferencedAssociations',
+        /// 'ItemSmall', 'ItemMedium', 'ItemLarge'
+        /// </param>
+        public static IList<Product> GetProductByIds(this ICatalogModuleProducts operations, IList<string> ids, string respGroup = default(string))
+        {
+            return operations.GetProductByIdsAsync(ids, respGroup).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Gets products by ids
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ids'>
-            /// Item ids
-            /// </param>
-            /// <param name='respGroup'>
-            /// Response group. Possible values include: 'None', 'ItemInfo', 'ItemAssets',
-            /// 'ItemProperties', 'ItemAssociations', 'ItemEditorialReviews', 'Variations',
-            /// 'Seo', 'Links', 'Inventory', 'Outlines', 'ReferencedAssociations',
-            /// 'ItemSmall', 'ItemMedium', 'ItemLarge'
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<IList<Product>> GetProductByIdsAsync(this ICatalogModuleProducts operations, IList<string> ids, string respGroup = default(string), CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Gets products by ids
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='ids'>
+        /// Item ids
+        /// </param>
+        /// <param name='respGroup'>
+        /// Response group. Possible values include: 'None', 'ItemInfo', 'ItemAssets',
+        /// 'ItemProperties', 'ItemAssociations', 'ItemEditorialReviews', 'Variations',
+        /// 'Seo', 'Links', 'Inventory', 'Outlines', 'ReferencedAssociations',
+        /// 'ItemSmall', 'ItemMedium', 'ItemLarge'
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<IList<Product>> GetProductByIdsAsync(this ICatalogModuleProducts operations, IList<string> ids, string respGroup = default(string), CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetProductByIdsWithHttpMessagesAsync(ids, respGroup, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetProductByIdsWithHttpMessagesAsync(ids, respGroup, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Create/Update the specified product.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='product'>
-            /// The product.
-            /// </param>
-            public static Product SaveProduct(this ICatalogModuleProducts operations, Product product)
-            {
-                return operations.SaveProductAsync(product).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Create/Update the specified product.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='product'>
+        /// The product.
+        /// </param>
+        public static Product SaveProduct(this ICatalogModuleProducts operations, Product product)
+        {
+            return operations.SaveProductAsync(product).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Create/Update the specified product.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='product'>
-            /// The product.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Product> SaveProductAsync(this ICatalogModuleProducts operations, Product product, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Create/Update the specified product.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='product'>
+        /// The product.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<Product> SaveProductAsync(this ICatalogModuleProducts operations, Product product, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.SaveProductWithHttpMessagesAsync(product, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.SaveProductWithHttpMessagesAsync(product, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Deletes the specified items by id.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ids'>
-            /// The items ids.
-            /// </param>
-            public static void Delete(this ICatalogModuleProducts operations, IList<string> ids)
-            {
-                operations.DeleteAsync(ids).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Deletes the specified items by id.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='ids'>
+        /// The items ids.
+        /// </param>
+        public static void Delete(this ICatalogModuleProducts operations, IList<string> ids)
+        {
+            operations.DeleteAsync(ids).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Deletes the specified items by id.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ids'>
-            /// The items ids.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task DeleteAsync(this ICatalogModuleProducts operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.DeleteWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
+        /// <summary>
+        /// Deletes the specified items by id.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='ids'>
+        /// The items ids.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task DeleteAsync(this ICatalogModuleProducts operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            (await operations.DeleteWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false)).Dispose();
+        }
 
-            /// <summary>
-            /// Gets products by plenty ids
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ids'>
-            /// Item ids
-            /// </param>
-            /// <param name='respGroup'>
-            /// Response group. Possible values include: 'None', 'ItemInfo', 'ItemAssets',
-            /// 'ItemProperties', 'ItemAssociations', 'ItemEditorialReviews', 'Variations',
-            /// 'Seo', 'Links', 'Inventory', 'Outlines', 'ReferencedAssociations',
-            /// 'ItemSmall', 'ItemMedium', 'ItemLarge'
-            /// </param>
-            public static IList<Product> GetProductByPlentyIds(this ICatalogModuleProducts operations, IList<string> ids, string respGroup = default(string))
-            {
-                return operations.GetProductByPlentyIdsAsync(ids, respGroup).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Gets products by plenty ids
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='ids'>
+        /// Item ids
+        /// </param>
+        /// <param name='respGroup'>
+        /// Response group. Possible values include: 'None', 'ItemInfo', 'ItemAssets',
+        /// 'ItemProperties', 'ItemAssociations', 'ItemEditorialReviews', 'Variations',
+        /// 'Seo', 'Links', 'Inventory', 'Outlines', 'ReferencedAssociations',
+        /// 'ItemSmall', 'ItemMedium', 'ItemLarge'
+        /// </param>
+        public static IList<Product> GetProductByPlentyIds(this ICatalogModuleProducts operations, IList<string> ids, string respGroup = default(string))
+        {
+            return operations.GetProductByPlentyIdsAsync(ids, respGroup).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Gets products by plenty ids
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ids'>
-            /// Item ids
-            /// </param>
-            /// <param name='respGroup'>
-            /// Response group. Possible values include: 'None', 'ItemInfo', 'ItemAssets',
-            /// 'ItemProperties', 'ItemAssociations', 'ItemEditorialReviews', 'Variations',
-            /// 'Seo', 'Links', 'Inventory', 'Outlines', 'ReferencedAssociations',
-            /// 'ItemSmall', 'ItemMedium', 'ItemLarge'
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<IList<Product>> GetProductByPlentyIdsAsync(this ICatalogModuleProducts operations, IList<string> ids, string respGroup = default(string), CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Gets products by plenty ids
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='ids'>
+        /// Item ids
+        /// </param>
+        /// <param name='respGroup'>
+        /// Response group. Possible values include: 'None', 'ItemInfo', 'ItemAssets',
+        /// 'ItemProperties', 'ItemAssociations', 'ItemEditorialReviews', 'Variations',
+        /// 'Seo', 'Links', 'Inventory', 'Outlines', 'ReferencedAssociations',
+        /// 'ItemSmall', 'ItemMedium', 'ItemLarge'
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<IList<Product>> GetProductByPlentyIdsAsync(this ICatalogModuleProducts operations, IList<string> ids, string respGroup = default(string), CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetProductByPlentyIdsWithHttpMessagesAsync(ids, respGroup, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetProductByPlentyIdsWithHttpMessagesAsync(ids, respGroup, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Gets the template for a new product (outside of category).
-            /// </summary>
-            /// <remarks>
-            /// Use when need to create item belonging to catalog directly.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='catalogId'>
-            /// The catalog id.
-            /// </param>
-            public static Product GetNewProductByCatalog(this ICatalogModuleProducts operations, string catalogId)
-            {
-                return operations.GetNewProductByCatalogAsync(catalogId).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Gets the template for a new product (outside of category).
+        /// </summary>
+        /// <remarks>
+        /// Use when need to create item belonging to catalog directly.
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='catalogId'>
+        /// The catalog id.
+        /// </param>
+        public static Product GetNewProductByCatalog(this ICatalogModuleProducts operations, string catalogId)
+        {
+            return operations.GetNewProductByCatalogAsync(catalogId).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Gets the template for a new product (outside of category).
-            /// </summary>
-            /// <remarks>
-            /// Use when need to create item belonging to catalog directly.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='catalogId'>
-            /// The catalog id.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Product> GetNewProductByCatalogAsync(this ICatalogModuleProducts operations, string catalogId, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Gets the template for a new product (outside of category).
+        /// </summary>
+        /// <remarks>
+        /// Use when need to create item belonging to catalog directly.
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='catalogId'>
+        /// The catalog id.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<Product> GetNewProductByCatalogAsync(this ICatalogModuleProducts operations, string catalogId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetNewProductByCatalogWithHttpMessagesAsync(catalogId, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetNewProductByCatalogWithHttpMessagesAsync(catalogId, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Gets the template for a new product (inside category).
-            /// </summary>
-            /// <remarks>
-            /// Use when need to create item belonging to catalog category.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='catalogId'>
-            /// The catalog id.
-            /// </param>
-            /// <param name='categoryId'>
-            /// The category id.
-            /// </param>
-            public static Product GetNewProductByCatalogAndCategory(this ICatalogModuleProducts operations, string catalogId, string categoryId)
-            {
-                return operations.GetNewProductByCatalogAndCategoryAsync(catalogId, categoryId).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Gets the template for a new product (inside category).
+        /// </summary>
+        /// <remarks>
+        /// Use when need to create item belonging to catalog category.
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='catalogId'>
+        /// The catalog id.
+        /// </param>
+        /// <param name='categoryId'>
+        /// The category id.
+        /// </param>
+        public static Product GetNewProductByCatalogAndCategory(this ICatalogModuleProducts operations, string catalogId, string categoryId)
+        {
+            return operations.GetNewProductByCatalogAndCategoryAsync(catalogId, categoryId).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Gets the template for a new product (inside category).
-            /// </summary>
-            /// <remarks>
-            /// Use when need to create item belonging to catalog category.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='catalogId'>
-            /// The catalog id.
-            /// </param>
-            /// <param name='categoryId'>
-            /// The category id.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Product> GetNewProductByCatalogAndCategoryAsync(this ICatalogModuleProducts operations, string catalogId, string categoryId, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Gets the template for a new product (inside category).
+        /// </summary>
+        /// <remarks>
+        /// Use when need to create item belonging to catalog category.
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='catalogId'>
+        /// The catalog id.
+        /// </param>
+        /// <param name='categoryId'>
+        /// The category id.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<Product> GetNewProductByCatalogAndCategoryAsync(this ICatalogModuleProducts operations, string catalogId, string categoryId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetNewProductByCatalogAndCategoryWithHttpMessagesAsync(catalogId, categoryId, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetNewProductByCatalogAndCategoryWithHttpMessagesAsync(catalogId, categoryId, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Gets the template for a new variation.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='productId'>
-            /// The parent product id.
-            /// </param>
-            public static Product GetNewVariation(this ICatalogModuleProducts operations, string productId)
-            {
-                return operations.GetNewVariationAsync(productId).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Gets the template for a new variation.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='productId'>
+        /// The parent product id.
+        /// </param>
+        public static Product GetNewVariation(this ICatalogModuleProducts operations, string productId)
+        {
+            return operations.GetNewVariationAsync(productId).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Gets the template for a new variation.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='productId'>
-            /// The parent product id.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Product> GetNewVariationAsync(this ICatalogModuleProducts operations, string productId, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Gets the template for a new variation.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='productId'>
+        /// The parent product id.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<Product> GetNewVariationAsync(this ICatalogModuleProducts operations, string productId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetNewVariationWithHttpMessagesAsync(productId, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetNewVariationWithHttpMessagesAsync(productId, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='productId'>
-            /// </param>
-            public static Product CloneProduct(this ICatalogModuleProducts operations, string productId)
-            {
-                return operations.CloneProductAsync(productId).GetAwaiter().GetResult();
-            }
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='productId'>
+        /// </param>
+        public static Product CloneProduct(this ICatalogModuleProducts operations, string productId)
+        {
+            return operations.CloneProductAsync(productId).GetAwaiter().GetResult();
+        }
 
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='productId'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Product> CloneProductAsync(this ICatalogModuleProducts operations, string productId, CancellationToken cancellationToken = default(CancellationToken))
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='productId'>
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<Product> CloneProductAsync(this ICatalogModuleProducts operations, string productId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.CloneProductWithHttpMessagesAsync(productId, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.CloneProductWithHttpMessagesAsync(productId, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Create/Update the specified products.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='products'>
-            /// The products.
-            /// </param>
-            public static void SaveProducts(this ICatalogModuleProducts operations, IList<Product> products)
-            {
-                operations.SaveProductsAsync(products).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Create/Update the specified products.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='products'>
+        /// The products.
+        /// </param>
+        public static void SaveProducts(this ICatalogModuleProducts operations, IList<Product> products)
+        {
+            operations.SaveProductsAsync(products).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Create/Update the specified products.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='products'>
-            /// The products.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task SaveProductsAsync(this ICatalogModuleProducts operations, IList<Product> products, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.SaveProductsWithHttpMessagesAsync(products, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
+        /// <summary>
+        /// Create/Update the specified products.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='products'>
+        /// The products.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task SaveProductsAsync(this ICatalogModuleProducts operations, IList<Product> products, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            (await operations.SaveProductsWithHttpMessagesAsync(products, null, cancellationToken).ConfigureAwait(false)).Dispose();
+        }
 
-            /// <summary>
-            /// Return product and product's associations products
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='criteria'>
-            /// </param>
-            public static ProductAssociationSearchResult SearchProductAssociations(this ICatalogModuleProducts operations, ProductAssociationSearchCriteria criteria)
-            {
-                return operations.SearchProductAssociationsAsync(criteria).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Return product and product's associations products
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='criteria'>
+        /// </param>
+        public static ProductAssociationSearchResult SearchProductAssociations(this ICatalogModuleProducts operations, ProductAssociationSearchCriteria criteria)
+        {
+            return operations.SearchProductAssociationsAsync(criteria).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Return product and product's associations products
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='criteria'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<ProductAssociationSearchResult> SearchProductAssociationsAsync(this ICatalogModuleProducts operations, ProductAssociationSearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Return product and product's associations products
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='criteria'>
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<ProductAssociationSearchResult> SearchProductAssociationsAsync(this ICatalogModuleProducts operations, ProductAssociationSearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.SearchProductAssociationsWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.SearchProductAssociationsWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
     }
 }
@@ -6796,7 +6854,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -6831,10 +6889,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -6937,7 +6997,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -6972,10 +7032,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -7078,7 +7140,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -7113,10 +7175,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -7219,7 +7283,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -7254,10 +7318,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -7360,7 +7426,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -7372,11 +7438,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(property != null)
+            if (property != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(property, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -7401,10 +7467,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 204)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -7502,7 +7570,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -7537,10 +7605,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 204)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -7756,225 +7826,225 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
     /// </summary>
     public static partial class CatalogModulePropertiesExtensions
     {
-            /// <summary>
-            /// Gets all dictionary values that specified property can have.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='propertyId'>
-            /// The property id.
-            /// </param>
-            /// <param name='keyword'>
-            /// The keyword. (Optional)
-            /// </param>
-            [System.Obsolete("This operation is deprecated. Please do not use it any longer.")]
-            public static IList<PropertyDictionaryValue> GetPropertyValues(this ICatalogModuleProperties operations, string propertyId, string keyword = default(string))
-            {
-                return operations.GetPropertyValuesAsync(propertyId, keyword).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Gets all dictionary values that specified property can have.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='propertyId'>
+        /// The property id.
+        /// </param>
+        /// <param name='keyword'>
+        /// The keyword. (Optional)
+        /// </param>
+        [System.Obsolete("This operation is deprecated. Please do not use it any longer.")]
+        public static IList<PropertyDictionaryValue> GetPropertyValues(this ICatalogModuleProperties operations, string propertyId, string keyword = default(string))
+        {
+            return operations.GetPropertyValuesAsync(propertyId, keyword).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Gets all dictionary values that specified property can have.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='propertyId'>
-            /// The property id.
-            /// </param>
-            /// <param name='keyword'>
-            /// The keyword. (Optional)
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            [System.Obsolete("This operation is deprecated. Please do not use it any longer.")]
-            public static async Task<IList<PropertyDictionaryValue>> GetPropertyValuesAsync(this ICatalogModuleProperties operations, string propertyId, string keyword = default(string), CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Gets all dictionary values that specified property can have.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='propertyId'>
+        /// The property id.
+        /// </param>
+        /// <param name='keyword'>
+        /// The keyword. (Optional)
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        [System.Obsolete("This operation is deprecated. Please do not use it any longer.")]
+        public static async Task<IList<PropertyDictionaryValue>> GetPropertyValuesAsync(this ICatalogModuleProperties operations, string propertyId, string keyword = default(string), CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetPropertyValuesWithHttpMessagesAsync(propertyId, keyword, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetPropertyValuesWithHttpMessagesAsync(propertyId, keyword, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Gets property metainformation by id.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='propertyId'>
-            /// The property id.
-            /// </param>
-            public static Property Get(this ICatalogModuleProperties operations, string propertyId)
-            {
-                return operations.GetAsync(propertyId).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Gets property metainformation by id.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='propertyId'>
+        /// The property id.
+        /// </param>
+        public static Property Get(this ICatalogModuleProperties operations, string propertyId)
+        {
+            return operations.GetAsync(propertyId).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Gets property metainformation by id.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='propertyId'>
-            /// The property id.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Property> GetAsync(this ICatalogModuleProperties operations, string propertyId, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Gets property metainformation by id.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='propertyId'>
+        /// The property id.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<Property> GetAsync(this ICatalogModuleProperties operations, string propertyId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetWithHttpMessagesAsync(propertyId, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetWithHttpMessagesAsync(propertyId, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Gets the template for a new catalog property.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='catalogId'>
-            /// The catalog id.
-            /// </param>
-            public static Property GetNewCatalogProperty(this ICatalogModuleProperties operations, string catalogId)
-            {
-                return operations.GetNewCatalogPropertyAsync(catalogId).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Gets the template for a new catalog property.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='catalogId'>
+        /// The catalog id.
+        /// </param>
+        public static Property GetNewCatalogProperty(this ICatalogModuleProperties operations, string catalogId)
+        {
+            return operations.GetNewCatalogPropertyAsync(catalogId).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Gets the template for a new catalog property.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='catalogId'>
-            /// The catalog id.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Property> GetNewCatalogPropertyAsync(this ICatalogModuleProperties operations, string catalogId, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Gets the template for a new catalog property.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='catalogId'>
+        /// The catalog id.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<Property> GetNewCatalogPropertyAsync(this ICatalogModuleProperties operations, string catalogId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetNewCatalogPropertyWithHttpMessagesAsync(catalogId, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetNewCatalogPropertyWithHttpMessagesAsync(catalogId, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Gets the template for a new category property.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='categoryId'>
-            /// The category id.
-            /// </param>
-            public static Property GetNewCategoryProperty(this ICatalogModuleProperties operations, string categoryId)
-            {
-                return operations.GetNewCategoryPropertyAsync(categoryId).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Gets the template for a new category property.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='categoryId'>
+        /// The category id.
+        /// </param>
+        public static Property GetNewCategoryProperty(this ICatalogModuleProperties operations, string categoryId)
+        {
+            return operations.GetNewCategoryPropertyAsync(categoryId).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Gets the template for a new category property.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='categoryId'>
-            /// The category id.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Property> GetNewCategoryPropertyAsync(this ICatalogModuleProperties operations, string categoryId, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Gets the template for a new category property.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='categoryId'>
+        /// The category id.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<Property> GetNewCategoryPropertyAsync(this ICatalogModuleProperties operations, string categoryId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.GetNewCategoryPropertyWithHttpMessagesAsync(categoryId, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.GetNewCategoryPropertyWithHttpMessagesAsync(categoryId, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Creates or updates the specified property.
-            /// </summary>
-            /// <remarks>
-            /// If property.IsNew == True, a new property is created. It's updated
-            /// otherwise
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='property'>
-            /// The property.
-            /// </param>
-            public static void CreateOrUpdateProperty(this ICatalogModuleProperties operations, Property property)
-            {
-                operations.CreateOrUpdatePropertyAsync(property).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Creates or updates the specified property.
+        /// </summary>
+        /// <remarks>
+        /// If property.IsNew == True, a new property is created. It's updated
+        /// otherwise
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='property'>
+        /// The property.
+        /// </param>
+        public static void CreateOrUpdateProperty(this ICatalogModuleProperties operations, Property property)
+        {
+            operations.CreateOrUpdatePropertyAsync(property).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Creates or updates the specified property.
-            /// </summary>
-            /// <remarks>
-            /// If property.IsNew == True, a new property is created. It's updated
-            /// otherwise
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='property'>
-            /// The property.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task CreateOrUpdatePropertyAsync(this ICatalogModuleProperties operations, Property property, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.CreateOrUpdatePropertyWithHttpMessagesAsync(property, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
+        /// <summary>
+        /// Creates or updates the specified property.
+        /// </summary>
+        /// <remarks>
+        /// If property.IsNew == True, a new property is created. It's updated
+        /// otherwise
+        /// </remarks>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='property'>
+        /// The property.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task CreateOrUpdatePropertyAsync(this ICatalogModuleProperties operations, Property property, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            (await operations.CreateOrUpdatePropertyWithHttpMessagesAsync(property, null, cancellationToken).ConfigureAwait(false)).Dispose();
+        }
 
-            /// <summary>
-            /// Deletes property by id.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='id'>
-            /// The property id.
-            /// </param>
-            /// <param name='doDeleteValues'>
-            /// Flag indicating to remove property values from objects as well
-            /// </param>
-            public static void Delete(this ICatalogModuleProperties operations, string id, bool? doDeleteValues = default(bool?))
-            {
-                operations.DeleteAsync(id, doDeleteValues).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Deletes property by id.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='id'>
+        /// The property id.
+        /// </param>
+        /// <param name='doDeleteValues'>
+        /// Flag indicating to remove property values from objects as well
+        /// </param>
+        public static void Delete(this ICatalogModuleProperties operations, string id, bool? doDeleteValues = default(bool?))
+        {
+            operations.DeleteAsync(id, doDeleteValues).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Deletes property by id.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='id'>
-            /// The property id.
-            /// </param>
-            /// <param name='doDeleteValues'>
-            /// Flag indicating to remove property values from objects as well
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task DeleteAsync(this ICatalogModuleProperties operations, string id, bool? doDeleteValues = default(bool?), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.DeleteWithHttpMessagesAsync(id, doDeleteValues, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
+        /// <summary>
+        /// Deletes property by id.
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='id'>
+        /// The property id.
+        /// </param>
+        /// <param name='doDeleteValues'>
+        /// Flag indicating to remove property values from objects as well
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task DeleteAsync(this ICatalogModuleProperties operations, string id, bool? doDeleteValues = default(bool?), CancellationToken cancellationToken = default(CancellationToken))
+        {
+            (await operations.DeleteWithHttpMessagesAsync(id, doDeleteValues, null, cancellationToken).ConfigureAwait(false)).Dispose();
+        }
 
     }
 }
@@ -8084,7 +8154,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -8096,11 +8166,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if (criteria != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -8125,10 +8195,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -8226,7 +8298,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -8238,11 +8310,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(propertyDictItems != null)
+            if (propertyDictItems != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(propertyDictItems, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -8267,10 +8339,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 204)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -8370,7 +8444,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -8405,10 +8479,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 204)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -8546,99 +8622,99 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
     /// </summary>
     public static partial class CatalogModulePropertyDictionaryItemsExtensions
     {
-            /// <summary>
-            /// Search property dictionary items
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='criteria'>
-            /// The search criteria
-            /// </param>
-            public static IList<PropertyDictionaryItem> SearchPropertyDictionaryItems(this ICatalogModulePropertyDictionaryItems operations, PropertyDictionaryItemSearchCriteria criteria)
-            {
-                return operations.SearchPropertyDictionaryItemsAsync(criteria).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Search property dictionary items
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='criteria'>
+        /// The search criteria
+        /// </param>
+        public static IList<PropertyDictionaryItem> SearchPropertyDictionaryItems(this ICatalogModulePropertyDictionaryItems operations, PropertyDictionaryItemSearchCriteria criteria)
+        {
+            return operations.SearchPropertyDictionaryItemsAsync(criteria).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Search property dictionary items
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='criteria'>
-            /// The search criteria
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<IList<PropertyDictionaryItem>> SearchPropertyDictionaryItemsAsync(this ICatalogModulePropertyDictionaryItems operations, PropertyDictionaryItemSearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Search property dictionary items
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='criteria'>
+        /// The search criteria
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<IList<PropertyDictionaryItem>> SearchPropertyDictionaryItemsAsync(this ICatalogModulePropertyDictionaryItems operations, PropertyDictionaryItemSearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.SearchPropertyDictionaryItemsWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.SearchPropertyDictionaryItemsWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <summary>
-            /// Creates or updates the specified property dictionary items
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='propertyDictItems'>
-            /// </param>
-            public static void SaveChanges(this ICatalogModulePropertyDictionaryItems operations, IList<PropertyDictionaryItem> propertyDictItems)
-            {
-                operations.SaveChangesAsync(propertyDictItems).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Creates or updates the specified property dictionary items
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='propertyDictItems'>
+        /// </param>
+        public static void SaveChanges(this ICatalogModulePropertyDictionaryItems operations, IList<PropertyDictionaryItem> propertyDictItems)
+        {
+            operations.SaveChangesAsync(propertyDictItems).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Creates or updates the specified property dictionary items
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='propertyDictItems'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task SaveChangesAsync(this ICatalogModulePropertyDictionaryItems operations, IList<PropertyDictionaryItem> propertyDictItems, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.SaveChangesWithHttpMessagesAsync(propertyDictItems, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
+        /// <summary>
+        /// Creates or updates the specified property dictionary items
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='propertyDictItems'>
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task SaveChangesAsync(this ICatalogModulePropertyDictionaryItems operations, IList<PropertyDictionaryItem> propertyDictItems, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            (await operations.SaveChangesWithHttpMessagesAsync(propertyDictItems, null, cancellationToken).ConfigureAwait(false)).Dispose();
+        }
 
-            /// <summary>
-            /// Delete property dictionary items by ids
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ids'>
-            /// The identifiers of objects that needed to be deleted
-            /// </param>
-            public static void Delete(this ICatalogModulePropertyDictionaryItems operations, IList<string> ids)
-            {
-                operations.DeleteAsync(ids).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Delete property dictionary items by ids
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='ids'>
+        /// The identifiers of objects that needed to be deleted
+        /// </param>
+        public static void Delete(this ICatalogModulePropertyDictionaryItems operations, IList<string> ids)
+        {
+            operations.DeleteAsync(ids).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Delete property dictionary items by ids
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ids'>
-            /// The identifiers of objects that needed to be deleted
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task DeleteAsync(this ICatalogModulePropertyDictionaryItems operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.DeleteWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
+        /// <summary>
+        /// Delete property dictionary items by ids
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='ids'>
+        /// The identifiers of objects that needed to be deleted
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task DeleteAsync(this ICatalogModulePropertyDictionaryItems operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            (await operations.DeleteWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false)).Dispose();
+        }
 
     }
 }
@@ -8748,7 +8824,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -8760,11 +8836,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if (criteria != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -8789,10 +8865,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -8890,7 +8968,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -8902,11 +8980,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if (criteria != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -8931,10 +9009,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -9032,7 +9112,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -9044,11 +9124,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if (criteria != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -9073,10 +9153,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -9231,91 +9313,91 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi
     /// </summary>
     public static partial class CatalogModuleSearchExtensions
     {
-            /// <summary>
-            /// Searches for the items by complex criteria
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='criteria'>
-            /// The search criteria.
-            /// </param>
-            public static CatalogSearchResult Search(this ICatalogModuleSearch operations, SearchCriteria criteria)
-            {
-                return operations.SearchAsync(criteria).GetAwaiter().GetResult();
-            }
+        /// <summary>
+        /// Searches for the items by complex criteria
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='criteria'>
+        /// The search criteria.
+        /// </param>
+        public static CatalogSearchResult Search(this ICatalogModuleSearch operations, SearchCriteria criteria)
+        {
+            return operations.SearchAsync(criteria).GetAwaiter().GetResult();
+        }
 
-            /// <summary>
-            /// Searches for the items by complex criteria
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='criteria'>
-            /// The search criteria.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<CatalogSearchResult> SearchAsync(this ICatalogModuleSearch operations, SearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Searches for the items by complex criteria
+        /// </summary>
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='criteria'>
+        /// The search criteria.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<CatalogSearchResult> SearchAsync(this ICatalogModuleSearch operations, SearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.SearchWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.SearchWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='criteria'>
-            /// </param>
-            public static ProductSearchResult SearchProducts(this ICatalogModuleSearch operations, ProductSearchCriteria criteria)
-            {
-                return operations.SearchProductsAsync(criteria).GetAwaiter().GetResult();
-            }
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='criteria'>
+        /// </param>
+        public static ProductSearchResult SearchProducts(this ICatalogModuleSearch operations, ProductSearchCriteria criteria)
+        {
+            return operations.SearchProductsAsync(criteria).GetAwaiter().GetResult();
+        }
 
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='criteria'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<ProductSearchResult> SearchProductsAsync(this ICatalogModuleSearch operations, ProductSearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='criteria'>
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<ProductSearchResult> SearchProductsAsync(this ICatalogModuleSearch operations, ProductSearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.SearchProductsWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.SearchProductsWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='criteria'>
-            /// </param>
-            public static CategorySearchResult SearchCategories(this ICatalogModuleSearch operations, CategorySearchCriteria criteria)
-            {
-                return operations.SearchCategoriesAsync(criteria).GetAwaiter().GetResult();
-            }
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='criteria'>
+        /// </param>
+        public static CategorySearchResult SearchCategories(this ICatalogModuleSearch operations, CategorySearchCriteria criteria)
+        {
+            return operations.SearchCategoriesAsync(criteria).GetAwaiter().GetResult();
+        }
 
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='criteria'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<CategorySearchResult> SearchCategoriesAsync(this ICatalogModuleSearch operations, CategorySearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='criteria'>
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        public static async Task<CategorySearchResult> SearchCategoriesAsync(this ICatalogModuleSearch operations, CategorySearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            using (var _result = await operations.SearchCategoriesWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
             {
-                using (var _result = await operations.SearchCategoriesWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                return _result.Body;
             }
+        }
 
     }
 }
@@ -9731,7 +9813,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
         /// 'GeoPoint'</param>
         /// <param name="type">Possible values include: 'Product', 'Variation',
         /// 'Category', 'Catalog'</param>
-        public Property(bool? isReadOnly = default(bool?), bool? isManageable = default(bool?), bool? isNew = default(bool?), string catalogId = default(string), string categoryId = default(string), string name = default(string), bool? required = default(bool?), bool? dictionary = default(bool?), bool? multivalue = default(bool?), bool? multilanguage = default(bool?), string valueType = default(string), string type = default(string), IList<PropertyValue> values = default(IList<PropertyValue>), IList<PropertyAttribute> attributes = default(IList<PropertyAttribute>), IList<PropertyDisplayName> displayNames = default(IList<PropertyDisplayName>), PropertyValidationRule validationRule = default(PropertyValidationRule), bool? isInherited = default(bool?), string id = default(string))
+        public Property(bool? isReadOnly = default(bool?), bool? isManageable = default(bool?), bool? isNew = default(bool?), string catalogId = default(string), string categoryId = default(string), string name = default(string), bool? required = default(bool?), bool? dictionary = default(bool?), bool? multivalue = default(bool?), bool? multilanguage = default(bool?), string valueType = default(string), string type = default(string), IList<PropertyValue> values = default(IList<PropertyValue>), IList<PropertyAttribute> attributes = default(IList<PropertyAttribute>), IList<PropertyDisplayName> displayNames = default(IList<PropertyDisplayName>), PropertyValidationRule validationRule = default(PropertyValidationRule), bool? isInherited = default(bool?), bool? hidden = default(bool?), string id = default(string))
         {
             IsReadOnly = isReadOnly;
             IsManageable = isManageable;
@@ -9750,6 +9832,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
             DisplayNames = displayNames;
             ValidationRule = validationRule;
             IsInherited = isInherited;
+            Hidden = hidden;
             Id = id;
             CustomInit();
         }
@@ -9822,6 +9905,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "type")]
         public string Type { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "hidden")]
+        public bool? Hidden { get; set; }
 
         /// <summary>
         /// </summary>

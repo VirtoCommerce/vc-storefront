@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
@@ -12,18 +13,22 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var serviceProvider = builder.HttpContext.RequestServices;
             var catalogService = serviceProvider.GetRequiredService<ICatalogService>();
+            var workContext = builder.WorkContext;
 
             //Initialize catalog search criteria
-            builder.WorkContext.CurrentProductSearchCriteria = new ProductSearchCriteria(builder.WorkContext.CurrentLanguage, builder.WorkContext.CurrentCurrency, builder.WorkContext.QueryString);
-
+            var productSearchcriteria = new ProductSearchCriteria(workContext.CurrentLanguage, workContext.CurrentCurrency, workContext.QueryString)
+            {
+                UserGroups = workContext.CurrentUser?.Contact?.UserGroups ?? new List<string>()
+            };
+            workContext.CurrentProductSearchCriteria = productSearchcriteria;
             //Initialize product response group.
             //TODO: Need to find possibility to set this response group in theme
-            builder.WorkContext.CurrentProductResponseGroup = EnumUtility.SafeParse(builder.WorkContext.QueryString.Get("resp_group"), ItemResponseGroup.ItemMedium | ItemResponseGroup.ItemWithPrices | ItemResponseGroup.ItemWithVendor | ItemResponseGroup.ItemAssociations);
+            workContext.CurrentProductResponseGroup = EnumUtility.SafeParse(workContext.QueryString.Get("resp_group"), ItemResponseGroup.ItemMedium | ItemResponseGroup.ItemWithPrices | ItemResponseGroup.ItemWithVendor | ItemResponseGroup.ItemAssociations);
 
             //This line make delay categories loading initialization (categories can be evaluated on view rendering time)
-            builder.WorkContext.Categories = new MutablePagedList<Category>((pageNumber, pageSize, sortInfos, @params) =>
+            workContext.Categories = new MutablePagedList<Category>((pageNumber, pageSize, sortInfos, @params) =>
             {
-                var criteria = new CategorySearchCriteria(builder.WorkContext.CurrentLanguage)
+                var criteria = new CategorySearchCriteria(workContext.CurrentLanguage)
                 {
                     PageNumber = pageNumber,
                     PageSize = pageSize,
@@ -43,12 +48,13 @@ namespace VirtoCommerce.Storefront.Domain
                 {
                     category.Products = new MutablePagedList<Product>((pageNumber2, pageSize2, sortInfos2, params2) =>
                     {
-                        var productSearchCriteria = new ProductSearchCriteria(builder.WorkContext.CurrentLanguage, builder.WorkContext.CurrentCurrency)
+                        var productSearchCriteria = new ProductSearchCriteria(workContext.CurrentLanguage, workContext.CurrentCurrency)
                         {
                             PageNumber = pageNumber2,
                             PageSize = pageSize2,
                             Outline = category.Outline,
-                            ResponseGroup = builder.WorkContext.CurrentProductSearchCriteria.ResponseGroup
+                            ResponseGroup = workContext.CurrentProductSearchCriteria.ResponseGroup,
+                            UserGroups = workContext.CurrentUser?.Contact?.UserGroups ?? new List<string>()
                         };
                         if (params2 != null)
                         {
@@ -64,7 +70,7 @@ namespace VirtoCommerce.Storefront.Domain
 
                         //Because catalog search products returns also aggregations we can use it to populate workContext using C# closure
                         //now workContext.Aggregation will be contains preloaded aggregations for current category
-                        builder.WorkContext.Aggregations = new MutablePagedList<Aggregation>(searchResult.Aggregations);
+                        workContext.Aggregations = new MutablePagedList<Aggregation>(searchResult.Aggregations);
                         return searchResult.Products;
                     }, 1, ProductSearchCriteria.DefaultPageSize);
                 }
@@ -72,9 +78,9 @@ namespace VirtoCommerce.Storefront.Domain
             }, 1, CategorySearchCriteria.DefaultPageSize);
 
             //This line make delay products loading initialization (products can be evaluated on view rendering time)
-            builder.WorkContext.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
+            workContext.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
             {
-                var criteria = builder.WorkContext.CurrentProductSearchCriteria.Clone() as ProductSearchCriteria;
+                var criteria = workContext.CurrentProductSearchCriteria.Clone() as ProductSearchCriteria;
                 criteria.PageNumber = pageNumber;
                 criteria.PageSize = pageSize;
                 if (string.IsNullOrEmpty(criteria.SortBy) && !sortInfos.IsNullOrEmpty())
@@ -89,14 +95,14 @@ namespace VirtoCommerce.Storefront.Domain
                 //Prevent double api request for get aggregations
                 //Because catalog search products returns also aggregations we can use it to populate workContext using C# closure
                 //now workContext.Aggregation will be contains preloaded aggregations for current search criteria
-                builder.WorkContext.Aggregations = new MutablePagedList<Aggregation>(result.Aggregations);
+                workContext.Aggregations = new MutablePagedList<Aggregation>(result.Aggregations);
                 return result.Products;
             }, 1, ProductSearchCriteria.DefaultPageSize);
 
             //This line make delay aggregation loading initialization (aggregation can be evaluated on view rendering time)
-            builder.WorkContext.Aggregations = new MutablePagedList<Aggregation>((pageNumber, pageSize, sortInfos, @params) =>
+            workContext.Aggregations = new MutablePagedList<Aggregation>((pageNumber, pageSize, sortInfos, @params) =>
             {
-                var criteria = builder.WorkContext.CurrentProductSearchCriteria.Clone() as ProductSearchCriteria;
+                var criteria = workContext.CurrentProductSearchCriteria.Clone() as ProductSearchCriteria;
                 criteria.PageNumber = pageNumber;
                 criteria.PageSize = pageSize;
                 if (string.IsNullOrEmpty(criteria.SortBy) && !sortInfos.IsNullOrEmpty())
@@ -108,8 +114,8 @@ namespace VirtoCommerce.Storefront.Domain
                     criteria.CopyFrom(@params);
                 }
                 //Force to load products and its also populate workContext.Aggregations by preloaded values
-                builder.WorkContext.Products.Slice(pageNumber, pageSize, sortInfos);
-                return builder.WorkContext.Aggregations;
+                workContext.Products.Slice(pageNumber, pageSize, sortInfos);
+                return workContext.Aggregations;
             }, 1, ProductSearchCriteria.DefaultPageSize);
 
             return Task.CompletedTask;

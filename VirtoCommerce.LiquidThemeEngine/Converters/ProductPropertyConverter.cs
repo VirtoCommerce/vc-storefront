@@ -21,8 +21,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
             result.Value = property.Value;
             result.Name = property.Name;
             result.DisplayName = property.DisplayName ?? property.Name;
+            result.Hidden = property.Hidden;
             return result;
         }
     }
-
 }

@@ -1,7 +1,8 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
@@ -12,6 +13,7 @@ using VirtoCommerce.Storefront.Model.StaticContent;
 namespace VirtoCommerce.Storefront.Controllers
 {
     [StorefrontRoute]
+    [AllowAnonymous]
     public class AssetController : StorefrontControllerBase
     {
         private readonly ILiquidThemeEngine _themeEngine;

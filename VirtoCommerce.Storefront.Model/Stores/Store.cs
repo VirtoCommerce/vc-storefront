@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Inventory;
 
 namespace VirtoCommerce.Storefront.Model.Stores
 {
@@ -108,29 +106,13 @@ namespace VirtoCommerce.Storefront.Model.Stores
         /// </summary>
         public IList<string> AvailFulfillmentCenterIds { get; set; }
 
-        public bool QuotesEnabled
-        {
-            get
-            {
-                return Settings.GetSettingValue("Quotes.EnableQuotes", false);
-            }
-        }
+        public bool QuotesEnabled { get; set; }
 
-        public bool SubscriptionEnabled
-        {
-            get
-            {
-                return Settings.GetSettingValue("Subscription.EnableSubscriptions", false);
-            }
-        }
+        public bool SubscriptionEnabled { get; set; }
 
-        public bool TaxCalculationEnabled
-        {
-            get
-            {
-                return Settings.GetSettingValue("Stores.TaxCalculationEnabled", true);
-            }
-        }
+        public bool TaxCalculationEnabled { get; set; }
+
+        public bool AnonymousUsersAllowed { get; set; }
 
         public decimal FixedTaxRate { get; set; }
 
