@@ -118,9 +118,6 @@ namespace VirtoCommerce.Storefront
             //Cache
             services.AddSingleton<IStorefrontMemoryCache, StorefrontMemoryCache>();
 
-            //Polly policies for continues HttpClientFactory usage
-            services.AddPollyPolicies(options => Configuration.GetSection("VirtoCommerce:Endpoint:PollyPolicies").Bind(options));
-
             //Register platform API clients
             services.AddPlatformEndpoint(options =>
             {
