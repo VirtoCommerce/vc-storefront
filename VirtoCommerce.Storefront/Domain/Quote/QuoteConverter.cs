@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
@@ -90,12 +90,12 @@ namespace VirtoCommerce.Storefront.Domain
             return QuoteConverterInstance.ToShippingMethod(shippingMethodDto, currency);
         }
 
-        public static Address ToAddress(this quoteDto.Address addressDto)
+        public static Address ToAddress(this quoteDto.QuoteAddress addressDto)
         {
             return QuoteConverterInstance.ToAddress(addressDto);
         }
 
-        public static quoteDto.Address ToQuoteAddressDto(this Address address)
+        public static quoteDto.QuoteAddress ToQuoteAddressDto(this Address address)
         {
             return QuoteConverterInstance.ToQuoteAddressDto(address);
         }
@@ -157,14 +157,59 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public virtual Address ToAddress(quoteDto.Address addressDto)
+        public virtual Address ToAddress(quoteDto.QuoteAddress addressDto)
         {
-            return addressDto.JsonConvert<coreDto.Address>().ToAddress();
+
+            var retVal = new Address
+            {
+                City = addressDto.City,
+                CountryCode = addressDto.CountryCode,
+                CountryName = addressDto.CountryName,
+                Email = addressDto.Email,
+                FirstName = addressDto.FirstName,
+                LastName = addressDto.LastName,
+                Line1 = addressDto.Line1,
+                Line2 = addressDto.Line2,
+                MiddleName = addressDto.MiddleName,
+                Organization = addressDto.Organization,
+                Phone = addressDto.Phone,
+                PostalCode = addressDto.PostalCode,
+                RegionId = addressDto.RegionId,
+                RegionName = addressDto.RegionName,
+                Zip = addressDto.Zip,
+
+                Type = (AddressType)Enum.Parse(typeof(AddressType), addressDto.AddressType, true)
+            };
+            return retVal;
+
+            //return addressDto.JsonConvert<coreDto.Address>().ToAddress();
         }
 
-        public virtual quoteDto.Address ToQuoteAddressDto(Address address)
+        public virtual quoteDto.QuoteAddress ToQuoteAddressDto(Address address)
         {
-            return address.ToCoreAddressDto().JsonConvert<quoteDto.Address>();
+            var result = new quoteDto.QuoteAddress
+            {
+                City = address.City,
+                CountryCode = address.CountryCode,
+                CountryName = address.CountryName,
+                Email = address.Email,
+                FirstName = address.FirstName,
+                LastName = address.LastName,
+                Line1 = address.Line1,
+                Line2 = address.Line2,
+                MiddleName = address.MiddleName,
+                Organization = address.Organization,
+                Phone = address.Phone,
+                PostalCode = address.PostalCode,
+                RegionId = address.RegionId,
+                RegionName = address.RegionName,
+                Zip = address.Zip,
+
+                AddressType = address.Type.ToString()
+            };
+
+            return result;
+            //return address.ToCoreAddressDto().JsonConvert<quoteDto.Address>();
         }
 
         public virtual QuoteRequest ToQuoteRequest(quoteDto.QuoteRequest quoteRequestDto, Currency currency, Language language)
