@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
-using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Infrastructure;
@@ -13,6 +12,7 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 using VirtoCommerce.Storefront.Model.Order;
+using VirtoCommerce.Storefront.Model.Stores;
 using orderModel = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
@@ -21,14 +21,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
     public class ApiOrderController : StorefrontControllerBase
     {
         private readonly IOrderModule _orderApi;
-        private readonly IStoreModule _storeApi;
+        private readonly IStoreService _storeService;
         private readonly IAuthorizationService _authorizationService;
 
-        public ApiOrderController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IOrderModule orderApi, IStoreModule storeApi, IAuthorizationService authorizationService)
+        public ApiOrderController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IOrderModule orderApi, IStoreService storeService, IAuthorizationService authorizationService)
             : base(workContextAccessor, urlBuilder)
         {
             _orderApi = orderApi;
-            _storeApi = storeApi;
+            _storeService = storeService;
             _authorizationService = authorizationService;
         }
 
@@ -66,11 +66,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         public async Task<ActionResult<NewPaymentData>> GetNewPaymentData(string orderNumber)
         {
             var order = await GetOrderByNumber(orderNumber);
-
-            var storeDto = await _storeApi.GetStoreByIdAsync(order.StoreId);
-            var paymentMethods = storeDto.PaymentMethods
-                                        .Where(x => x.IsActive.Value)
-                                        .Select(x => x.ToPaymentMethod(order));
+            var store = await _storeService.GetStoreByIdAsync(order.StoreId, order.Currency);
 
             var paymentDto = await _orderApi.GetNewPaymentAsync(order.Id);
             var payment = paymentDto.ToOrderInPayment(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
@@ -78,7 +74,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return new NewPaymentData
             {
                 Payment = payment,
-                PaymentMethods = paymentMethods,
+                PaymentMethods = store.PaymentMethods,
                 Order = order
             };
         }
