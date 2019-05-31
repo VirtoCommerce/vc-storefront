@@ -4,11 +4,17 @@ using Microsoft.Extensions.Caching.Memory;
 using VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models;
+using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Stores;
+using StorePaymentMethod = VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models.PaymentMethod;
+using TaxProvider = VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models.TaxProvider;
+using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -21,13 +27,15 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
         private readonly IPaymentModule _paymentModule;
+        private readonly ITaxModule _taxModule;
 
-        public StoreService(IStoreModule storeApi, IStorefrontMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher, IPaymentModule paymentModule)
+        public StoreService(IStoreModule storeApi, IStorefrontMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher, IPaymentModule paymentModule, ITaxModule taxModule)
         {
             _storeApi = storeApi;
             _memoryCache = memoryCache;
             _apiChangesWatcher = apiChangesWatcher;
             _paymentModule = paymentModule;
+            _taxModule = taxModule;
         }
         public async Task<Model.Stores.Store[]> GetAllStoresAsync()
         {
@@ -50,16 +58,44 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 result.PaymentMethods = storeDto.PaymentMethods
                     .Where(pm => pm.IsActive != null && pm.IsActive.Value)
-                    .Select(pm => pm.ToPaymentMethod(currency)).ToArray();
+                    .Select(pm => pm.ToStorePaymentMethod(currency)).ToArray();
             }
             else if (storeDto.PaymentMethods.IsNullOrEmpty() && currency != null)
             {
-                var paymentSearchCriteria = new PaymentMethodsSearchCriteria() { StoreId = id };
+                var paymentSearchCriteria = new PaymentMethodsSearchCriteria { StoreId = id };
                 var paymentsSearchResult = await _paymentModule.SearchPaymentMethodsAsync(paymentSearchCriteria);
 
                 result.PaymentMethods = paymentsSearchResult.Results
-                                                            .Where(pm => pm.IsActive != null && pm.IsActive.Value)
-                                                            .Select(pm => pm.ToPaymentMethod(currency)).ToArray();
+                    .Where(pm => pm.IsActive != null && pm.IsActive.Value)
+                    .Select(pm =>
+                    {
+                        var paymentMethod = pm.JsonConvert<StorePaymentMethod>().ToStorePaymentMethod(currency);
+                        paymentMethod.Name = pm.TypeName;
+                        return paymentMethod;
+                    }).ToArray();
+            }
+
+            if (storeDto.TaxProviders.IsNullOrEmpty())
+            {
+                var taxSearchCriteria = new TaxProviderSearchCriteria { StoreId = id };
+                var taxProviderSearchResult = await _taxModule.SearchTaxProvidersAsync(taxSearchCriteria);
+                var fixedTaxProvider = taxProviderSearchResult.Results.FirstOrDefault(x => x.IsActive.GetValueOrDefault(false) && x.Code == "FixedRate");
+                if (fixedTaxProvider != null && !fixedTaxProvider.Settings.IsNullOrEmpty())
+                {
+                    result.FixedTaxRate = fixedTaxProvider.Settings
+                        .Select(x => x.JsonConvert<AutoRestClients.PlatformModuleApi.Models.Setting>().ToSettingEntry())
+                        .GetSettingValue("VirtoCommerce.Core.FixedTaxRateProvider.Rate", 0.00m);
+                }
+            }
+            else if (!storeDto.TaxProviders.IsNullOrEmpty())
+            {
+                var fixedTaxProvider = storeDto.TaxProviders.FirstOrDefault(x => x.IsActive.GetValueOrDefault(false) && x.Code == "FixedRate");
+                if (fixedTaxProvider != null && !fixedTaxProvider.Settings.IsNullOrEmpty())
+                {
+                    result.FixedTaxRate = fixedTaxProvider.Settings
+                        .Select(x => x.JsonConvert<AutoRestClients.PlatformModuleApi.Models.Setting>().ToSettingEntry())
+                        .GetSettingValue("VirtoCommerce.Core.FixedTaxRateProvider.Rate", 0.00m);
+                }
             }
 
             return result;
