@@ -184,6 +184,8 @@ namespace VirtoCommerce.Storefront
                                 policy => policy.Requirements.Add(new OnlyRegisteredUserAuthorizationRequirement()));
                 options.AddPolicy(AnonymousUserForStoreAuthorizationRequirement.PolicyName,
                                 policy => policy.Requirements.Add(new AnonymousUserForStoreAuthorizationRequirement()));
+                options.AddPolicy(CanAccessOrderAuthorizationRequirement.PolicyName,
+                              policy => policy.Requirements.Add(new CanAccessOrderAuthorizationRequirement()));
             });
 
 
