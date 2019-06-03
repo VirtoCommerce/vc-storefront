@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models;
+using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models;
@@ -14,7 +16,6 @@ using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Stores;
 using StorePaymentMethod = VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models.PaymentMethod;
 using TaxProvider = VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models.TaxProvider;
-using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -79,23 +80,25 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 var taxSearchCriteria = new TaxProviderSearchCriteria { StoreId = id };
                 var taxProviderSearchResult = await _taxModule.SearchTaxProvidersAsync(taxSearchCriteria);
-                var fixedTaxProvider = taxProviderSearchResult.Results.FirstOrDefault(x => x.IsActive.GetValueOrDefault(false) && x.Code == "FixedRate");
-                if (fixedTaxProvider != null && !fixedTaxProvider.Settings.IsNullOrEmpty())
-                {
-                    result.FixedTaxRate = fixedTaxProvider.Settings
-                        .Select(x => x.JsonConvert<AutoRestClients.PlatformModuleApi.Models.Setting>().ToSettingEntry())
-                        .GetSettingValue("VirtoCommerce.Core.FixedTaxRateProvider.Rate", 0.00m);
-                }
+                result.FixedTaxRate = GetFixedTaxRate(taxProviderSearchResult.Results.Select(xp => xp.JsonConvert<TaxProvider>()).ToArray());
             }
-            else if (!storeDto.TaxProviders.IsNullOrEmpty())
+            else
             {
-                var fixedTaxProvider = storeDto.TaxProviders.FirstOrDefault(x => x.IsActive.GetValueOrDefault(false) && x.Code == "FixedRate");
-                if (fixedTaxProvider != null && !fixedTaxProvider.Settings.IsNullOrEmpty())
-                {
-                    result.FixedTaxRate = fixedTaxProvider.Settings
-                        .Select(x => x.JsonConvert<AutoRestClients.PlatformModuleApi.Models.Setting>().ToSettingEntry())
-                        .GetSettingValue("VirtoCommerce.Core.FixedTaxRateProvider.Rate", 0.00m);
-                }
+                result.FixedTaxRate = GetFixedTaxRate(storeDto.TaxProviders);
+            }
+
+            return result;
+        }
+
+        private decimal GetFixedTaxRate(IList<TaxProvider> taxProviders)
+        {
+            var result = 0m;
+            var fixedTaxProvider = taxProviders.FirstOrDefault(x => x.IsActive.GetValueOrDefault(false) && x.Code == "FixedRate");
+            if (fixedTaxProvider != null && !fixedTaxProvider.Settings.IsNullOrEmpty())
+            {
+                result = fixedTaxProvider.Settings
+                    .Select(x => x.JsonConvert<Setting>().ToSettingEntry())
+                    .GetSettingValue("VirtoCommerce.Core.FixedTaxRateProvider.Rate", 0.00m);
             }
 
             return result;
