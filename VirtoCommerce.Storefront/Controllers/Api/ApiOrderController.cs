@@ -108,7 +108,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/orders/{orderNumber}/payments/{paymentNumber}/process
         [HttpPost("{orderNumber}/payments/{paymentNumber}/process")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<ProcessOrderPaymentResult>> ProcessOrderPayment(string orderNumber, string paymentNumber, [FromBody][SwaggerOptional] orderModel.BankCardInfo bankCardInfo)
+        public async Task<ActionResult<ProcessOrderPaymentResult>> ProcessOrderPayment(string orderNumber, string paymentNumber, [FromBody][SwaggerOptional] BankCardInfo bankCardInfo)
         {
             //Need lock to prevent concurrent access to same order
             using (await AsyncLock.GetLockByKey(GetAsyncLockKey(orderNumber, WorkContext)).LockAsync())
@@ -119,11 +119,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 {
                     throw new StorefrontException("payment " + paymentNumber + " not found");
                 }
-                var processingResult = await _orderApi.ProcessOrderPaymentsAsync(orderDto.Id, paymentDto.Id, bankCardInfo);
+                var processingResult = await _orderApi.ProcessOrderPaymentsAsync(orderDto.Id, paymentDto.Id, bankCardInfo.ToBankCardInfoDto());
+                var order = orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
                 return new ProcessOrderPaymentResult
                 {
-                    OrderProcessingResult = processingResult,
-                    PaymentMethod = paymentDto.PaymentMethod
+                    OrderProcessingResult = processingResult.ToProcessPaymentResult(order),
+                    PaymentMethod = paymentDto.PaymentMethod.ToPaymentMethod(order)
                 };
             }
         }
@@ -131,7 +132,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/orders/{orderNumber}/payments
         [HttpPost("{orderNumber}/payments")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<orderModel.PaymentIn>> AddOrUpdateOrderPayment(string orderNumber, [FromBody] PaymentIn payment)
+        public async Task<ActionResult<PaymentIn>> AddOrUpdateOrderPayment(string orderNumber, [FromBody] PaymentIn payment)
         {
             if (payment.Sum.Amount == 0)
             {
@@ -163,7 +164,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     //Because we don't know the new payment id we need to get latest payment with same gateway code
                     paymentDto = orderDto.InPayments.Where(x => x.GatewayCode.EqualsInvariant(payment.GatewayCode)).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
                 }
-                return paymentDto;
+                return paymentDto.ToOrderInPayment(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
             }
         }
 

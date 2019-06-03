@@ -478,6 +478,11 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
+        public static PaymentMethod ToPaymentMethod(this orderDto.PaymentMethod paymentMethodDto, CustomerOrder order)
+        {
+            return paymentMethodDto.JsonConvert<storeDto.PaymentMethod>().ToPaymentMethod(order);
+        }
+
         public static PaymentMethod ToPaymentMethod(this storeDto.PaymentMethod paymentMethodDto, CustomerOrder order)
         {
             var retVal = new PaymentMethod(order.Currency)
@@ -510,6 +515,20 @@ namespace VirtoCommerce.Storefront.Domain
             }
 
             return retVal;
+        }
+
+        public static ProcessPaymentResult ToProcessPaymentResult(this orderDto.ProcessPaymentResult processPaymentResultDto, CustomerOrder order)
+        {
+            return new ProcessPaymentResult()
+            {
+                Error = processPaymentResultDto.Error,
+                HtmlForm = processPaymentResultDto.HtmlForm,
+                IsSuccess = processPaymentResultDto.IsSuccess ?? false,
+                NewPaymentStatus = processPaymentResultDto.NewPaymentStatus,
+                OuterId = processPaymentResultDto.OuterId,
+                PaymentMethod = processPaymentResultDto.PaymentMethod.ToPaymentMethod(order),
+                RedirectUrl = processPaymentResultDto.RedirectUrl
+            };
         }
 
         public static TaxDetail ToTaxDetail(this storeDto.TaxDetail dto, Currency currency)
