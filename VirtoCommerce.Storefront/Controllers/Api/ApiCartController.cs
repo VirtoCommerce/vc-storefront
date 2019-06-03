@@ -354,7 +354,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/cart/createorder
         [HttpPost("createorder")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<OrderCreatedInfo>> CreateOrder([FromBody] orderModel.BankCardInfo bankCardInfo)
+        public async Task<ActionResult<OrderCreatedInfo>> CreateOrder([FromBody] BankCardInfo bankCardInfo)
         {
             EnsureCartExists();
 
@@ -363,21 +363,22 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
 
-                var order = await _orderApi.CreateOrderFromCartAsync(cartBuilder.Cart.Id);
+                var orderDto = await _orderApi.CreateOrderFromCartAsync(cartBuilder.Cart.Id);
+                var order = orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
 
                 var taskList = new List<Task>
                 {
                     //Raise domain event asynchronously
-                    _publisher.Publish(new OrderPlacedEvent(WorkContext, order.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage), cartBuilder.Cart)),
+                    _publisher.Publish(new OrderPlacedEvent(WorkContext, orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage), cartBuilder.Cart)),
                     //Remove the cart asynchronously
                     cartBuilder.RemoveCartAsync()
                 };
                 //Process order asynchronously
-                var incomingPayment = order.InPayments != null ? order.InPayments.FirstOrDefault() : null;
+                var incomingPaymentDto = orderDto.InPayments?.FirstOrDefault();
                 Task<orderModel.ProcessPaymentResult> processPaymentTask = null;
-                if (incomingPayment != null)
+                if (incomingPaymentDto != null)
                 {
-                    processPaymentTask = _orderApi.ProcessOrderPaymentsAsync(order.Id, incomingPayment.Id, bankCardInfo);
+                    processPaymentTask = _orderApi.ProcessOrderPaymentsAsync(orderDto.Id, incomingPaymentDto.Id, bankCardInfo.ToBankCardInfoDto());
                     taskList.Add(processPaymentTask);
                 }
                 await Task.WhenAll(taskList.ToArray());
@@ -385,8 +386,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 return new OrderCreatedInfo
                 {
                     Order = order,
-                    OrderProcessingResult = processPaymentTask != null ? await processPaymentTask : null,
-                    PaymentMethod = incomingPayment != null ? incomingPayment.PaymentMethod : null,
+                    OrderProcessingResult = processPaymentTask != null ? (await processPaymentTask).ToProcessPaymentResult(order) : null,
+                    PaymentMethod = incomingPaymentDto?.PaymentMethod.ToPaymentMethod(order),
                 };
             }
         }
