@@ -491,7 +491,7 @@ namespace VirtoCommerce.Storefront.Domain
                 IsSuccess = processPaymentResultDto.IsSuccess ?? false,
                 NewPaymentStatus = processPaymentResultDto.NewPaymentStatus,
                 OuterId = processPaymentResultDto.OuterId,
-                PaymentMethod = processPaymentResultDto.PaymentMethod.ToPaymentMethod(order),
+                PaymentMethod = processPaymentResultDto.PaymentMethod?.ToPaymentMethod(order),
                 RedirectUrl = processPaymentResultDto.RedirectUrl
             };
         }
