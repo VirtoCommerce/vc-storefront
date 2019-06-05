@@ -51,7 +51,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             if (!cart.IsTransient())
             {
                 var payments = await _cartApi.GetAvailablePaymentMethodsAsync(cart.Id);
-                result = payments.Select(x => x.ToPaymentMethod(cart)).OrderBy(x => x.Priority).ToList();
+                result = payments.Select(x => x.ToCartPaymentMethod(cart)).OrderBy(x => x.Priority).ToList();
             }
             return result;
         }

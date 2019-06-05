@@ -271,7 +271,7 @@ namespace VirtoCommerce.Storefront.Domain
             return retVal;
         }
 
-        public static PaymentMethod ToPaymentMethod(this cartDto.PaymentMethod paymentMethodDto, ShoppingCart cart)
+        public static PaymentMethod ToCartPaymentMethod(this cartDto.PaymentMethod paymentMethodDto, ShoppingCart cart)
         {
             var retVal = new PaymentMethod(cart.Currency)
             {

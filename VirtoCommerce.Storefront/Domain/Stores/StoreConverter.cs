@@ -43,6 +43,7 @@ namespace VirtoCommerce.Storefront.Domain
                 DefaultFulfillmentCenterId = storeDto.MainFulfillmentCenterId,
                 AvailFulfillmentCenterIds = storeDto.AdditionalFulfillmentCenterIds ?? Array.Empty<string>()
             };
+
             if (result.DefaultFulfillmentCenterId != null)
             {
                 result.AvailFulfillmentCenterIds.Add(result.DefaultFulfillmentCenterId);
@@ -77,15 +78,6 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Settings = storeDto.Settings.Where(x => !x.ValueType.EqualsInvariant("SecureString")).Select(x => x.JsonConvert<platformDto.Setting>().ToSettingEntry()).ToList();
             }
 
-            if (!storeDto.TaxProviders.IsNullOrEmpty())
-            {
-                var fixedTaxProvider = storeDto.TaxProviders.FirstOrDefault(x => x.IsActive.GetValueOrDefault(false) && x.Code == "FixedRate");
-                if (fixedTaxProvider != null && !fixedTaxProvider.Settings.IsNullOrEmpty())
-                {
-                    result.FixedTaxRate = fixedTaxProvider.Settings.Select(x => x.JsonConvert<platformDto.Setting>().ToSettingEntry()).GetSettingValue("VirtoCommerce.Core.FixedTaxRateProvider.Rate", 0.00m);
-                }
-            }
-
             result.TrustedGroups = storeDto.TrustedGroups;
             result.StoreState = EnumUtility.SafeParse(storeDto.StoreState, StoreStatus.Open);
             result.SeoLinksType = EnumUtility.SafeParse(result.Settings.GetSettingValue("Stores.SeoLinksType", ""), SeoLinksType.Collapsed);
@@ -94,6 +86,52 @@ namespace VirtoCommerce.Storefront.Domain
             result.TaxCalculationEnabled = result.Settings.GetSettingValue("Stores.TaxCalculationEnabled", true);
             result.AnonymousUsersAllowed = result.Settings.GetSettingValue("Stores.AllowAnonymousUsers", true);
 
+            return result;
+        }
+
+
+        public static PaymentMethod ToStorePaymentMethod(this storeDto.PaymentMethod paymentMethodDto, Currency currency)
+        {
+            var retVal = new PaymentMethod(currency)
+            {
+                Code = paymentMethodDto.Code,
+                Description = paymentMethodDto.Currency,
+                IsAvailableForPartial = paymentMethodDto.IsAvailableForPartial ?? false,
+                LogoUrl = paymentMethodDto.LogoUrl,
+                Name = paymentMethodDto.Name,
+                PaymentMethodGroupType = paymentMethodDto.PaymentMethodGroupType,
+                PaymentMethodType = paymentMethodDto.PaymentMethodType,
+                TaxType = paymentMethodDto.TaxType,
+
+                Priority = paymentMethodDto.Priority ?? 0
+            };
+
+            if (paymentMethodDto.Settings != null)
+            {
+                retVal.Settings = paymentMethodDto.Settings.Where(x => !x.ValueType.EqualsInvariant("SecureString")).Select(x => x.JsonConvert<AutoRestClients.PlatformModuleApi.Models.Setting>().ToSettingEntry()).ToList();
+            }
+
+            retVal.Currency = currency;
+            retVal.Price = new Money(paymentMethodDto.Price ?? 0, currency);
+            retVal.DiscountAmount = new Money(paymentMethodDto.DiscountAmount ?? 0, currency);
+            retVal.TaxPercentRate = (decimal?)paymentMethodDto.TaxPercentRate ?? 0m;
+
+            if (paymentMethodDto.TaxDetails != null)
+            {
+                retVal.TaxDetails = paymentMethodDto.TaxDetails.Select(td => ToTaxDetail(td, currency)).ToList();
+            }
+
+            return retVal;
+        }
+
+        public static TaxDetail ToTaxDetail(this storeDto.TaxDetail dto, Currency currency)
+        {
+            var result = new TaxDetail(currency)
+            {
+                Amount = new Money(dto.Amount ?? 0, currency),
+                Rate = new Money(dto.Rate ?? 0, currency),
+                Name = dto.Name
+            };
             return result;
         }
     }

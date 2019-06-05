@@ -20,13 +20,16 @@ using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.ProductRecommendationsModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Infrastructure.Autorest;
@@ -138,6 +141,12 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddSingleton<ICacheModule>(sp => new CacheModule(sp.GetRequiredService<VirtoCommerceCacheRESTAPIdocumentation>()));
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new VirtoCommerceQuoteRESTAPIdocumentation(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
             services.AddSingleton<IQuoteModule>(sp => new QuoteModule(sp.GetRequiredService<VirtoCommerceQuoteRESTAPIdocumentation>()));
+            services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new PaymentModule(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
+            services.AddSingleton<IPaymentModule>(sp => sp.GetRequiredService<PaymentModule>());
+            services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new ShippingModule(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
+            services.AddSingleton<IShippingModule>(sp => sp.GetRequiredService<ShippingModule>());
+            services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new TaxModule(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
+            services.AddSingleton<ITaxModule>(sp => sp.GetRequiredService<TaxModule>());
 
             if (setupAction != null)
             {
