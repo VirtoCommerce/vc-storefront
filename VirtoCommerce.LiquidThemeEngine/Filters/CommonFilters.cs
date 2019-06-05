@@ -2,8 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
+using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using PagedList.Core;
 using Scriban;
@@ -11,10 +15,6 @@ using Scriban.Syntax;
 using VirtoCommerce.LiquidThemeEngine.Extensions;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 using VirtoCommerce.Storefront.Model.Common;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using System.IO;
-using System.Text.Encodings.Web;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
@@ -51,6 +51,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                new JsonSerializerSettings()
                {
                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                   ContractResolver = new DefaultContractResolver()
+                   {
+                       NamingStrategy = new CamelCaseNamingStrategy()
+                   }
                    //TODO:
                    //ContractResolver = new RubyContractResolver(),
                });
