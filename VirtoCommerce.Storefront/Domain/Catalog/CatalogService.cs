@@ -75,7 +75,7 @@ namespace VirtoCommerce.Storefront.Domain
 
                 var productsWithVariations = result.Concat(result.SelectMany(p => p.Variations)).ToList();
 
-                await LoadProductProperties(productsWithVariations, responseGroup, workContext);
+                await LoadProductDependencies(productsWithVariations, responseGroup, workContext);
             }
 
             return result;
@@ -168,7 +168,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (productsWithVariations.Any())
             {
-                await LoadProductProperties(productsWithVariations, criteria.ResponseGroup, workContext);
+                await LoadProductDependencies(productsWithVariations, criteria.ResponseGroup, workContext);
             }
 
             return new CatalogSearchResult
@@ -179,7 +179,7 @@ namespace VirtoCommerce.Storefront.Domain
         }
         #endregion
 
-        protected virtual async Task LoadProductProperties(List<Product> products, ItemResponseGroup responseGroup, WorkContext workContext)
+        protected virtual async Task LoadProductDependencies(List<Product> products, ItemResponseGroup responseGroup, WorkContext workContext)
         {
             if (!products.IsNullOrEmpty())
             {
