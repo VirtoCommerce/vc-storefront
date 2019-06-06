@@ -1,13 +1,10 @@
-using Microsoft.Extensions.Caching.Memory;
-using PagedList.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
+using PagedList.Core;
 using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
-using VirtoCommerce.Storefront.Caching;
-using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
@@ -19,6 +16,7 @@ using VirtoCommerce.Storefront.Model.Inventory.Services;
 using VirtoCommerce.Storefront.Model.Pricing.Services;
 using VirtoCommerce.Storefront.Model.Services;
 using VirtoCommerce.Storefront.Model.Subscriptions.Services;
+using catalogDto = VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -75,47 +73,9 @@ namespace VirtoCommerce.Storefront.Domain
 
                 result = await GetProductsAsync(ids, responseGroup, workContext);
 
-                var allProducts = result.Concat(result.SelectMany(p => p.Variations)).ToList();
+                var productsWithVariations = result.Concat(result.SelectMany(p => p.Variations)).ToList();
 
-
-                if (!allProducts.IsNullOrEmpty())
-                {
-                    var taskList = new List<Task>();
-
-                    if (responseGroup.HasFlag(ItemResponseGroup.Inventory))
-                    {
-                        taskList.Add(LoadProductInventoriesAsync(allProducts, workContext));
-                    }
-
-                    if (responseGroup.HasFlag(ItemResponseGroup.ItemAssociations))
-                    {
-                        taskList.Add(LoadProductsAssociationsAsync(allProducts, workContext));
-                    }
-
-                    if (responseGroup.HasFlag(ItemResponseGroup.ItemWithPrices))
-                    {
-                        taskList.Add(_pricingService.EvaluateProductPricesAsync(allProducts, workContext));
-                    }
-
-                    if (responseGroup.HasFlag(ItemResponseGroup.ItemWithVendor))
-                    {
-                        taskList.Add(LoadProductVendorsAsync(allProducts, workContext));
-                    }
-
-                    if (workContext.CurrentStore.SubscriptionEnabled && responseGroup.HasFlag(ItemResponseGroup.ItemWithPaymentPlan))
-                    {
-                        taskList.Add(LoadProductPaymentPlanAsync(allProducts, workContext));
-                    }
-
-                    await Task.WhenAll(taskList.ToArray());
-
-                    foreach (var product in allProducts)
-                    {
-                        product.IsBuyable = new ProductIsBuyableSpecification().IsSatisfiedBy(product);
-                        product.IsAvailable = new ProductIsAvailableSpecification(product).IsSatisfiedBy(1);
-                        product.IsInStock = new ProductIsInStockSpecification().IsSatisfiedBy(product);
-                    }
-                }
+                await LoadProductDependencies(productsWithVariations, responseGroup, workContext);
             }
 
             return result;
@@ -201,61 +161,65 @@ namespace VirtoCommerce.Storefront.Domain
         public virtual async Task<CatalogSearchResult> SearchProductsAsync(ProductSearchCriteria criteria)
         {
             var workContext = _workContextAccessor.WorkContext;
-            var cacheKey = CacheKey.With(GetType(), "SearchProductsAsync", criteria.GetCacheKey(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
-            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+
+            var result = await SearchProductsAsync(criteria, workContext);
+            var products = result.Items?.Select(x => x.ToProduct(workContext.CurrentLanguage, workContext.CurrentCurrency, workContext.CurrentStore)).ToList() ?? new List<Product>();
+            var productsWithVariations = products.Concat(products.SelectMany(p => p.Variations)).ToList();
+
+            if (productsWithVariations.Any())
             {
-                cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
-                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
+                await LoadProductDependencies(productsWithVariations, criteria.ResponseGroup, workContext);
+            }
 
-                criteria = criteria.Clone() as ProductSearchCriteria;
-
-                var searchCriteria = criteria.ToProductSearchCriteriaDto(workContext);
-                var result = await _searchApi.SearchProductsAsync(searchCriteria);
-                var products = result.Items?.Select(x => x.ToProduct(workContext.CurrentLanguage, workContext.CurrentCurrency, workContext.CurrentStore)).ToList() ?? new List<Product>();
-
-                if (products.Any())
-                {
-                    var productsWithVariations = products.Concat(products.SelectMany(x => x.Variations)).ToList();
-                    var taskList = new List<Task>();
-
-                    if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.Inventory))
-                    {
-                        taskList.Add(LoadProductInventoriesAsync(productsWithVariations, workContext));
-                    }
-
-                    if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.ItemAssociations))
-                    {
-                        taskList.Add(LoadProductsAssociationsAsync(productsWithVariations, workContext));
-                    }
-
-                    if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.ItemWithVendor))
-                    {
-                        taskList.Add(LoadProductVendorsAsync(productsWithVariations, workContext));
-                    }
-
-                    if (criteria.ResponseGroup.HasFlag(ItemResponseGroup.ItemWithPrices))
-                    {
-                        taskList.Add(_pricingService.EvaluateProductPricesAsync(productsWithVariations, workContext));
-                    }
-
-                    await Task.WhenAll(taskList.ToArray());
-
-                    foreach (var product in productsWithVariations)
-                    {
-                        product.IsBuyable = new ProductIsBuyableSpecification().IsSatisfiedBy(product);
-                        product.IsAvailable = new ProductIsAvailableSpecification(product).IsSatisfiedBy(1);
-                        product.IsInStock = new ProductIsInStockSpecification().IsSatisfiedBy(product);
-                    }
-                }
-                return new CatalogSearchResult
-                {
-                    Products = new StaticPagedList<Product>(products, criteria.PageNumber, criteria.PageSize, (int?)result.TotalCount ?? 0),
-                    Aggregations = !result.Aggregations.IsNullOrEmpty() ? result.Aggregations.Select(x => x.ToAggregation(workContext.CurrentLanguage.CultureName)).ToArray() : new Aggregation[] { }
-                };
-            });
+            return new CatalogSearchResult
+            {
+                Products = new StaticPagedList<Product>(products, criteria.PageNumber, criteria.PageSize, (int?)result.TotalCount ?? 0),
+                Aggregations = !result.Aggregations.IsNullOrEmpty() ? result.Aggregations.Select(x => x.ToAggregation(workContext.CurrentLanguage.CultureName)).ToArray() : new Aggregation[] { }
+            };
         }
         #endregion
 
+        protected virtual async Task LoadProductDependencies(List<Product> products, ItemResponseGroup responseGroup, WorkContext workContext)
+        {
+            if (!products.IsNullOrEmpty())
+            {
+                var taskList = new List<Task>();
+
+                if (responseGroup.HasFlag(ItemResponseGroup.Inventory))
+                {
+                    taskList.Add(LoadProductInventoriesAsync(products, workContext));
+                }
+
+                if (responseGroup.HasFlag(ItemResponseGroup.ItemAssociations))
+                {
+                    taskList.Add(LoadProductsAssociationsAsync(products, workContext));
+                }
+
+                if (responseGroup.HasFlag(ItemResponseGroup.ItemWithPrices))
+                {
+                    taskList.Add(_pricingService.EvaluateProductPricesAsync(products, workContext));
+                }
+
+                if (responseGroup.HasFlag(ItemResponseGroup.ItemWithVendor))
+                {
+                    taskList.Add(LoadProductVendorsAsync(products, workContext));
+                }
+
+                if (workContext.CurrentStore.SubscriptionEnabled && responseGroup.HasFlag(ItemResponseGroup.ItemWithPaymentPlan))
+                {
+                    taskList.Add(LoadProductPaymentPlanAsync(products, workContext));
+                }
+
+                await Task.WhenAll(taskList.ToArray());
+
+                foreach (var product in products)
+                {
+                    product.IsBuyable = new ProductIsBuyableSpecification().IsSatisfiedBy(product);
+                    product.IsAvailable = new ProductIsAvailableSpecification(product).IsSatisfiedBy(1);
+                    product.IsInStock = new ProductIsInStockSpecification().IsSatisfiedBy(product);
+                }
+            }
+        }
 
         protected virtual async Task<Product[]> GetProductsAsync(IList<string> ids, ItemResponseGroup responseGroup, WorkContext workContext)
         {
@@ -268,6 +232,22 @@ namespace VirtoCommerce.Storefront.Domain
                 return await _productsApi.GetProductByPlentyIdsAsync(ids, ((int)responseGroup).ToString());
             });
             return result.Select(x => x.ToProduct(workContext.CurrentLanguage, workContext.CurrentCurrency, workContext.CurrentStore)).ToArray();
+        }
+
+        protected virtual async Task<catalogDto.ProductSearchResult> SearchProductsAsync(ProductSearchCriteria criteria, WorkContext workContext)
+        {
+            var cacheKey = CacheKey.With(GetType(), "SearchProductsAsync", criteria.GetCacheKey(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
+
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
+                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
+
+                criteria = criteria.Clone() as ProductSearchCriteria;
+
+                var searchCriteria = criteria.ToProductSearchCriteriaDto(workContext);
+                return await _searchApi.SearchProductsAsync(searchCriteria);
+            });
         }
 
         protected virtual async Task LoadProductVendorsAsync(List<Product> products, WorkContext workContext)
