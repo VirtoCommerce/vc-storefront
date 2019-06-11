@@ -1,9 +1,10 @@
-using PagedList.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using Newtonsoft.Json;
+using PagedList.Core;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
@@ -262,6 +263,8 @@ namespace VirtoCommerce.Storefront.Model.Common
                 throw new NotImplementedException();
             }
         }
+
+        
         IDictionaryEnumerator IDictionary.GetEnumerator()
         {
             throw new NotImplementedException();

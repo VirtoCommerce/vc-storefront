@@ -14,6 +14,7 @@ using PagedList.Core;
 using Scriban;
 using Scriban.Syntax;
 using VirtoCommerce.LiquidThemeEngine.Extensions;
+using VirtoCommerce.LiquidThemeEngine.JsonConverters;
 using VirtoCommerce.LiquidThemeEngine.Objects;
 using VirtoCommerce.Storefront.Model.Common;
 
@@ -47,19 +48,19 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 return null;
             }
 
-            var serializedString = JsonConvert.SerializeObject(
-               input,
-               new JsonSerializerSettings()
-               {
-                   ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                   ContractResolver = new DefaultContractResolver()
-                   {
-                       NamingStrategy = new CamelCaseNamingStrategy()
-                   }
-                   //TODO:
-                   //ContractResolver = new RubyContractResolver(),
-               });
+            var jsonSettings = new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                ContractResolver = new DefaultContractResolver()
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                }
+                //TODO:
+                //ContractResolver = new RubyContractResolver(),
+            };
 
+            jsonSettings.Converters.Add(new MutablePagedListAsArrayJsonConverter());
+            var serializedString = JsonConvert.SerializeObject(input, jsonSettings);
             return serializedString;
         }
 
