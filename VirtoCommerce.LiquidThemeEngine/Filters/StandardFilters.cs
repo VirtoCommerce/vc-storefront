@@ -376,7 +376,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
                 if (format == "long")
                 {
-                    format = "%d %b %Y %X";
+                    //todo: define which way to use. IMHO using modern style is more prefered
+                    //format = "%d %b %Y %X";
+                    format = "f";
                 }
             }
 

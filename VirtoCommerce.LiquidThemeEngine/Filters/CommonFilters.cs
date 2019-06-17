@@ -55,10 +55,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 {
                     NamingStrategy = new CamelCaseNamingStrategy()
                 }
-                //TODO:
+                //TODO: 
                 //ContractResolver = new RubyContractResolver(),
             };
-
+            //TODO: duplicated code of custom json convertor MutablePagedListAsArrayJsonConverter. 
             jsonSettings.Converters.Add(new MutablePagedListAsArrayJsonConverter());
             var serializedString = JsonConvert.SerializeObject(input, jsonSettings);
             return serializedString;
