@@ -390,8 +390,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 return date.ToString(format);
             }
 
+
+            //TODO: it is necessary to use current store lng
             return DateTime.TryParse(input.ToString(), out date)
-                ? date.ToString(format)
+                ? date.ToString(format, context.CurrentCulture)
                 : input.ToString();
         }
 
