@@ -384,7 +384,7 @@ namespace VirtoCommerce.Storefront
                     rewriteOptions.AddIISUrlRewrite(iisUrlRewriteStreamReader);
                 }
             }
-
+            //redirection from tilda paths to normal paths. 
             rewriteOptions.AddRedirect("(?<s1>.*([^/]))?[/]?~(?<s2>.+)", "${s1}${s2}");
             rewriteOptions.Add(new StorefrontUrlNormalizeRule());
 
