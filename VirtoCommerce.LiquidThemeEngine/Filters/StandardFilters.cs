@@ -367,34 +367,44 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             if (format.IsNullOrWhiteSpace())
                 return input.ToString();
 
-            if (!string.IsNullOrEmpty(format) && !format.Contains("%")) // special formats that can be defined in settings
+            switch (format)
             {
-                var key = string.Concat("date_formats.", format);
-                var newFormat = TranslationFilter.T(context, key);
-                if (newFormat != key)
-                    format = newFormat;
-
-                if (format == "long")
-                {
+                case "long":
                     //todo: define which way to use. IMHO using modern style is more prefered
                     //format = "%d %b %Y %X";
                     format = "f";
-                }
+                    break;
             }
 
-
+            string result = input.ToString();
             DateTime date;
+            bool dateParsed = false;
+
             if (input.ToString().Equals("now", StringComparison.OrdinalIgnoreCase))
             {
                 date = DateTime.Now;
-                return date.ToString(format);
+                dateParsed = true;
+            }
+            else if (DateTime.TryParse(input.ToString(), out date))
+            {
+                dateParsed = true;
             }
 
+            if (dateParsed)
+            {
+                if (!TryFormatDateTime(date, format, out result, context.CurrentCulture))
+                {
+                    var key = string.Concat("date_formats.", format);
+                    var newFormat = TranslationFilter.T(context, key);
+                    if (newFormat != key)
+                    {
+                        format = newFormat;
+                        TryFormatDateTime(date, format, out result, context.CurrentCulture);
+                    }
+                }
+            }
 
-            //TODO: it is necessary to use current store lng
-            return DateTime.TryParse(input.ToString(), out date)
-                ? date.ToString(format, context.CurrentCulture)
-                : input.ToString();
+            return result;
         }
 
         /// <summary>
@@ -498,6 +508,26 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 ? null
                 : ExpressionUtility.CreateExpression(operation, input.GetType(), operand.GetType(), input.GetType(), true)
                     .DynamicInvoke(input, operand);
+        }
+
+        private static bool TryFormatDateTime(DateTime input, string format, out string formated, IFormatProvider formatProvider = null)
+        {
+            if (format == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
+            formated = null;
+
+            try
+            {
+                formated = input.ToString(format, formatProvider);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private static double Evaluate(string expression)
