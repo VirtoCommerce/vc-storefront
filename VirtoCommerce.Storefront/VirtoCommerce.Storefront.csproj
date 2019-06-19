@@ -56,7 +56,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Nito.AsyncEx" Version="5.0.0-pre-05" />
+    <PackageReference Include="Nito.AsyncEx" Version="5.0.0" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
     <PackageReference Include="Scrutor" Version="3.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="4.0.1" />
