@@ -18,6 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.WebEncoders;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Binders;
@@ -273,6 +274,10 @@ namespace VirtoCommerce.Storefront
                 options.Conventions.Add(new ApiExplorerApiControllersConvention());
             }).AddJsonOptions(options =>
             {
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver()
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                };
                 options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
