@@ -400,7 +400,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
             if (dateParsed)
             {
-                TryFormatDateTime(date, format, out result, context.CurrentCulture);
+                var themeEngine = (ShopifyLiquidThemeEngine)context.TemplateLoader;
+                TryFormatDateTime(date, format, out result, CultureInfo.GetCultureInfo(themeEngine.WorkContext.CurrentLanguage.CultureName));
             }
 
             return result;
