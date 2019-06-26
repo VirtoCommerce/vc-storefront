@@ -390,18 +390,17 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 dateParsed = true;
             }
 
+            var key = string.Concat("date_formats.", format);
+            var newFormat = TranslationFilter.T(context, key);
+
+            if (!newFormat.IsNullOrEmpty())
+            {
+                format = newFormat;
+            }
+
             if (dateParsed)
             {
-                if (!TryFormatDateTime(date, format, out result, context.CurrentCulture))
-                {
-                    var key = string.Concat("date_formats.", format);
-                    var newFormat = TranslationFilter.T(context, key);
-                    if (newFormat != key)
-                    {
-                        format = newFormat;
-                        TryFormatDateTime(date, format, out result, context.CurrentCulture);
-                    }
-                }
+                TryFormatDateTime(date, format, out result, context.CurrentCulture);
             }
 
             return result;
