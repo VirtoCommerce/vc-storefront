@@ -25,7 +25,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/subscriptions/search
         [HttpPost("search")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<GenericSearchResult<Subscription>>> SearchCustomerSubscriptions([FromBody] SubscriptionSearchCriteria searchCriteria)
+        public async Task<ActionResult<SubscriptionSearchResult>> SearchCustomerSubscriptions([FromBody] SubscriptionSearchCriteria searchCriteria)
         {
             if (searchCriteria == null)
             {
@@ -37,7 +37,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             var result = await _subscriptionService.SearchSubscriptionsAsync(searchCriteria);
 
-            return new GenericSearchResult<Subscription>
+            return new SubscriptionSearchResult
             {
                 TotalCount = result.TotalItemCount,
                 Results = result.ToArray()

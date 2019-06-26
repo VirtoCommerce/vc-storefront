@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using VirtoCommerce.Storefront.Infrastructure.Swagger;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Marketing;
 
@@ -8,6 +9,7 @@ namespace VirtoCommerce.Storefront.Model.Order
     /// <summary>
     /// Represents order shipment
     /// </summary>
+    [SwaggerSchemaId("OrderShipment")]
     public partial class Shipment
     {
         public Shipment(Currency currency)

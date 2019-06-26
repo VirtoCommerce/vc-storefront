@@ -51,7 +51,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         #region ICartBuilder Members
 
-        public virtual ShoppingCart Cart { get; private set; }
+        public virtual ShoppingCart Cart { get; protected set; }
 
         public virtual async Task TakeCartAsync(ShoppingCart cart)
         {

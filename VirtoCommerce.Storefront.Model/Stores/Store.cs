@@ -116,29 +116,13 @@ namespace VirtoCommerce.Storefront.Model.Stores
         /// </summary>
         public IList<string> AvailFulfillmentCenterIds { get; set; }
 
-        public bool QuotesEnabled
-        {
-            get
-            {
-                return Settings.GetSettingValue("Quotes.EnableQuotes", false);
-            }
-        }
+        public bool QuotesEnabled { get; set; }
 
-        public bool SubscriptionEnabled
-        {
-            get
-            {
-                return Settings.GetSettingValue("Subscription.EnableSubscriptions", false);
-            }
-        }
+        public bool SubscriptionEnabled { get; set; }
 
-        public bool TaxCalculationEnabled
-        {
-            get
-            {
-                return Settings.GetSettingValue("Stores.TaxCalculationEnabled", true);
-            }
-        }
+        public bool TaxCalculationEnabled { get; set; }
+
+        public bool AnonymousUsersAllowed { get; set; }
 
         public decimal FixedTaxRate { get; set; }
 
@@ -152,6 +136,8 @@ namespace VirtoCommerce.Storefront.Model.Stores
         #endregion
 
         public SeoLinksType SeoLinksType { get; set; }
+
+        public IList<PaymentMethod> PaymentMethods { get; set; }
 
         /// <summary>
         /// Checks if specified URL starts with store URL or store secure URL.

@@ -1,13 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using PagedList.Core;
 using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
-using VirtoCommerce.Storefront.Caching;
-using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
@@ -89,7 +86,7 @@ namespace VirtoCommerce.Storefront.Domain
             CustomerCacheRegion.ExpireMember(contact.Id);
         }
 
-        public async Task UpdateContactAddressesAsync(string contactId, IList<Address> addresses)
+        public virtual async Task UpdateContactAddressesAsync(string contactId, IList<Address> addresses)
         {
             var existContact = await GetContactByIdAsync(contactId);
             if (existContact != null)

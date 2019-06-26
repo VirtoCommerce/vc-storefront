@@ -48,5 +48,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public IList<string> Values { get; set; }
 
         public string IndexKey => Name;
+
+        public bool Hidden { get; set; }
     }
 }
