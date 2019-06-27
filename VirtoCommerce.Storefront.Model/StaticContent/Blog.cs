@@ -11,5 +11,7 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
         }
 
         public IMutablePagedList<BlogArticle> Articles { get; set; }
+
+        public override string Handle => Name.Handelize();
     }
 }

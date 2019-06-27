@@ -23,6 +23,7 @@ using VirtoCommerce.Storefront.Model.Security.Events;
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
     [StorefrontApiRoute("account")]
+    [ResponseCache(CacheProfileName = "None")]
     public class ApiAccountController : StorefrontControllerBase
     {
         private readonly IEventPublisher _publisher;
@@ -224,7 +225,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     {
                         user = await _userManager.FindByNameAsync(user.UserName);
                         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                        var callbackUrl = Url.Action("ConfirmInvitation", "Account", new { OrganizationId = organizationId, user.Email, Token = token }, Request.Scheme);
+                        var callbackUrl = Url.Action("ConfirmInvitation", "Account", new { OrganizationId = organizationId, user.Email, Token = token }, Request.Scheme, host: WorkContext.CurrentStore.Host);
                         var inviteNotification = new RegistrationInvitationNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
                         {
                             InviteUrl = callbackUrl,
@@ -414,7 +415,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             var result = await _userManager.ChangePasswordAsync(WorkContext.CurrentUser, formModel.OldPassword, formModel.NewPassword);
 
-            return new PasswordChangeResult { Succeeded = result.Succeeded, Errors = result.Errors.Select(x => x.Description) };
+            return new PasswordChangeResult { Succeeded = result.Succeeded, Errors = result.Errors.Select(x => new FormError { Code = x.Code.PascalToKebabCase(), Description = x.Description }).ToList() };
         }
 
         // POST: storefrontapi/account/addresses

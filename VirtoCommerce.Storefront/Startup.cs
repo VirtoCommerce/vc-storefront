@@ -18,6 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.WebEncoders;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using VirtoCommerce.LiquidThemeEngine;
@@ -97,6 +98,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IPricingService, PricingService>();
             services.AddSingleton<ITaxEvaluator, TaxEvaluator>();
             services.AddSingleton<IPromotionEvaluator, PromotionEvaluator>();
+            services.AddSingleton<IDynamicContentEvaluator, DynamicContentEvaluator>();
             services.AddSingleton<IMarketingService, MarketingService>();
             services.AddSingleton<IStaticContentService, StaticContentService>();
             services.AddSingleton<IMenuLinkListService, MenuLinkListServiceImpl>();
@@ -125,6 +127,7 @@ namespace VirtoCommerce.Storefront
             {
                 Configuration.GetSection("VirtoCommerce:Endpoint").Bind(options);
             });
+
 
             services.AddSingleton<ICountriesService, FileSystemCountriesService>();
             services.Configure<FileSystemCountriesOptions>(options =>
@@ -270,6 +273,11 @@ namespace VirtoCommerce.Storefront
                     Duration = (int)TimeSpan.FromHours(1).TotalSeconds,
                     VaryByHeader = "host"
                 });
+                options.CacheProfiles.Add("None", new CacheProfile()
+                {
+                    NoStore = true,
+                    Location = ResponseCacheLocation.None
+                });
 
                 options.Filters.AddService(typeof(AngularAntiforgeryCookieResultFilter));
 
@@ -280,6 +288,10 @@ namespace VirtoCommerce.Storefront
                 options.EnableEndpointRouting = false;
             }).AddJsonOptions(options =>
             {
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver()
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                };
                 options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -289,6 +301,8 @@ namespace VirtoCommerce.Storefront
                 options.SerializerSettings.Converters.Add(new CurrencyJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
                 options.SerializerSettings.Converters.Add(new OrderTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
                 options.SerializerSettings.Converters.Add(new RecommendationJsonConverter(snapshotProvider.GetService<IRecommendationProviderFactory>()));
+                //Force serialize MutablePagedList type as array, instead of dictionary
+                options.SerializerSettings.Converters.Add(new MutablePagedListAsArrayJsonConverter(options.SerializerSettings));
                 //Converter for providing back compatibility with old themes was used CustomerInfo type which has contained user and contact data in the single type.
                 //May be removed when all themes will fixed to new User type with nested Contact property.
                 options.SerializerSettings.Converters.Add(new UserBackwardCompatibilityJsonConverter(options.SerializerSettings));
@@ -383,6 +397,7 @@ namespace VirtoCommerce.Storefront
                     rewriteOptions.AddIISUrlRewrite(iisUrlRewriteStreamReader);
                 }
             }
+
             rewriteOptions.Add(new StorefrontUrlNormalizeRule());
 
             var requireHttpsOptions = new RequireHttpsOptions();

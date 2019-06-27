@@ -32,10 +32,10 @@ namespace VirtoCommerce.Storefront.Controllers
         public async Task<ActionResult> GetSitemapIndex()
         {
             var stream = await TryGetSitemapStream("sitemap.xml");
-            if(stream != null)
+            if (stream != null)
             {
                 return File(stream, "text/xml");
-            }       
+            }
             return NotFound("sitemap.xml");
         }
 
@@ -60,11 +60,11 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             //If sitemap files have big size for generation on the fly you might place already generated xml files in the theme/assets folder or schedule 
             // execution of GenerateSitemapJob.GenerateStoreSitemap method for pre-generation sitemaps  
-            var stream = _liquidThemeEngine.GetAssetStream(filePath);          
-            if(stream == null)
-            {                
+            var stream = await _liquidThemeEngine.GetAssetStreamAsync(filePath);
+            if (stream == null)
+            {
                 var absUrl = UrlBuilder.ToAppAbsolute("~/", WorkContext.CurrentStore, WorkContext.CurrentLanguage);
-                var storeUrl = new Uri(WorkContext.RequestUrl, absUrl).ToString(); 
+                var storeUrl = new Uri(WorkContext.RequestUrl, absUrl).ToString();
                 //remove language from base url SitemapAPI will add it automatically
                 storeUrl = storeUrl.Replace("/" + WorkContext.CurrentLanguage.CultureName + "/", "/");
                 stream = await _siteMapApi.GenerateSitemapAsync(WorkContext.CurrentStore.Id, storeUrl, filePath);

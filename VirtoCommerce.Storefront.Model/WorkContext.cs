@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
@@ -20,13 +21,28 @@ namespace VirtoCommerce.Storefront.Model
     /// <summary>
     /// Main working context contains all data which could be used in presentation logic
     /// </summary>
-    public partial class WorkContext : IDisposable
+    public partial class WorkContext : IDisposable, ICloneable
     {
         public WorkContext()
         {
             ExternalLoginProviders = new List<LoginProvider>();
             ApplicationSettings = new Dictionary<string, object>();
+            Form = new Form();
         }
+
+        public string Template { get; set; }
+        /// <summary>
+        /// Merchants can specify a page_description.
+        /// </summary>
+        public string PageDescription => CurrentPageSeo?.MetaDescription ?? string.Empty;
+
+        /// <summary>
+        /// The liquid object page_title returns the title of the current page.
+        /// </summary>
+        public string PageTitle => CurrentPageSeo?.Title ?? string.Empty;
+        public string PageImageUrl => CurrentPageSeo?.ImageUrl ?? string.Empty;
+        public string CanonicalUrl => CurrentPageSeo?.Slug ?? string.Empty;
+
         /// <summary>
         /// Layout which will be used for rendering current view
         /// </summary>
@@ -38,11 +54,13 @@ namespace VirtoCommerce.Storefront.Model
 
         public NameValueCollection QueryString { get; set; }
 
+        public IMutablePagedList<Country> Countries { get; set; }
 
         /// <summary>
         /// Current user
         /// </summary>
         public User CurrentUser { get; set; }
+        public User Customer => CurrentUser;
 
         /// <summary>
         /// Current language and culture
@@ -65,11 +83,20 @@ namespace VirtoCommerce.Storefront.Model
         /// Current store
         /// </summary>
         public Store CurrentStore { get; set; }
+        public Store Shop => CurrentStore;
 
         /// <summary>
         /// Gets or sets the current shopping cart
         /// </summary>
         public Lazy<ShoppingCart> CurrentCart { get; set; }
+        public ShoppingCart Cart => CurrentCart.IsValueCreated ? CurrentCart.Value : null;
+
+
+        /// <summary>
+        /// Current single form aggregates ModelState errors
+        /// </summary>
+        public Form Form { get; set; }
+
 
         /// <summary>
         /// Represent current quotes search criteria taken from request url
@@ -77,6 +104,7 @@ namespace VirtoCommerce.Storefront.Model
         public QuoteSearchCriteria CurrentQuoteSearchCriteria { get; set; }
 
         public Lazy<QuoteRequest> CurrentQuoteRequest { get; set; }
+        public QuoteRequest QuoteRequest => CurrentQuoteRequest?.IsValueCreated ?? false ? CurrentQuoteRequest.Value : null;
 
         /// <summary>
         /// Gets or sets the HTML code for payment method prepared form
@@ -87,6 +115,8 @@ namespace VirtoCommerce.Storefront.Model
         /// Gets or sets the collection of site navigation menu link lists
         /// </summary>
         public IMutablePagedList<MenuLinkList> CurrentLinkLists { get; set; }
+        [JsonIgnore]
+        public IMutablePagedList<MenuLinkList> Linklists => CurrentLinkLists;
 
         /// <summary>
         /// List of all supported stores
@@ -115,24 +145,29 @@ namespace VirtoCommerce.Storefront.Model
         /// Represent current product
         /// </summary>
         public Product CurrentProduct { get; set; }
+        [JsonIgnore]
+        public Product Product => CurrentProduct;
         /// <summary>
         /// Represent current category
         /// </summary>
         public Category CurrentCategory { get; set; }
+        public Category Collection => CurrentCategory;
+
         /// <summary>
         /// Represent all store catalog categories filtered by current search criteria CurrentCatalogSearchCriteria (loaded on first access by lazy loading)
         /// </summary>
         public IMutablePagedList<Category> Categories { get; set; }
+        public IMutablePagedList<Category> Collections => Categories;
+
         /// <summary>
         /// Represent products filtered by current search criteria CurrentCatalogSearchCriteria (loaded on first access by lazy loading)
         /// </summary>
         public IMutablePagedList<Product> Products { get; set; }
 
         /// <summary>
-        /// Represent bucket, aggregated data based on a search query resulted by current search criteria CurrentCatalogSearchCriteria (example  color 33, gr
+        /// Represent the current product search result
         /// </summary>
-        public IMutablePagedList<Aggregation> Aggregations { get; set; }
-
+        public CatalogSearchResult ProductSearchResult { get; set; } = new CatalogSearchResult();
         /// <summary>
         /// Current search product search criterias
         /// </summary>
@@ -146,11 +181,13 @@ namespace VirtoCommerce.Storefront.Model
         public IMutablePagedList<Vendor> Vendors { get; set; }
 
         public Vendor CurrentVendor { get; set; }
+        public Vendor Vendor => CurrentVendor;
 
         #endregion
 
         #region Static Content Properties
         public ContentPage CurrentPage { get; set; }
+        public ContentPage Page => CurrentPage;
 
         public StaticContentSearchCriteria CurrentStaticSearchCriteria { get; set; }
 
@@ -159,8 +196,11 @@ namespace VirtoCommerce.Storefront.Model
         public BlogSearchCriteria CurrentBlogSearchCritera { get; set; }
 
         public Blog CurrentBlog { get; set; }
+        public Blog Blog => CurrentBlog;
+
 
         public BlogArticle CurrentBlogArticle { get; set; }
+        public BlogArticle Article => CurrentBlogArticle;
         #endregion
 
         private DateTime? _utcNow;
@@ -182,9 +222,11 @@ namespace VirtoCommerce.Storefront.Model
         public IList<Country> AllCountries { get; set; }
 
         public CustomerOrder CurrentOrder { get; set; }
+        public CustomerOrder Order => CurrentOrder;
 
 
         public StorefrontNotification StorefrontNotification { get; set; }
+        public StorefrontNotification Notification => StorefrontNotification;
 
         /// <summary>
         /// All static content items (Pages, blog articles etc) for current store and theme
@@ -205,6 +247,7 @@ namespace VirtoCommerce.Storefront.Model
         /// Current fulfillment center
         /// </summary>
         public FulfillmentCenter CurrentFulfillmentCenter { get; set; }
+        public FulfillmentCenter FulfillmentCenter => CurrentFulfillmentCenter;
 
         /// <summary>
         ///  All available fulfillment centers 
@@ -216,16 +259,30 @@ namespace VirtoCommerce.Storefront.Model
         /// </summary>
         public IDictionary<string, object> ApplicationSettings { get; set; }
 
-        //Represent the form data sent and processed on the server side and used for render result view and display errors
-        public object Form { get; set; }
         /// <summary>
         /// Current page number
         /// </summary>
-        public int? PageNumber { get; set; }
+        public int? PageNumber { get; set; } = 1;
         /// <summary>
         /// Current page size
         /// </summary>
         public int? PageSize { get; set; }
+        /// <summary>
+        /// Settings defined in theme
+        /// </summary>
+        public IDictionary<string, object> Settings { get; set; }
+
+        public string Version { get; set; }
+
+        #region GDPR consent
+        public bool CanTrack { get; set; }
+        public string ConsentCookie { get; set; }
+        #endregion
+
+        /// <summary>
+        /// Checks if the current hosting environment name is Microsoft.AspNetCore.Hosting.EnvironmentName.Development.
+        /// </summary>
+        public bool IsDevelopment { get; set; }
 
         #region IDisposable Implementation
 
@@ -239,6 +296,13 @@ namespace VirtoCommerce.Storefront.Model
             if (disposing)
             {
             }
+        }
+
+        public object Clone()
+        {
+            //TODO: Implement deep clone
+            var result = MemberwiseClone() as WorkContext;
+            return result;
         }
 
         #endregion

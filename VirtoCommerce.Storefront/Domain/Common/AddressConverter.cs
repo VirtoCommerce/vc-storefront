@@ -64,7 +64,7 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
 
-        public static Address ToWebModel(this shopifyModel.Address address, Country[] countries)
+        public static Address ToWebModel(this Address address, Country[] countries)
         {
             var result = new Address();
             result.CopyFrom(address, countries);
@@ -72,7 +72,7 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
 
-        public static Address CopyFrom(this Address result, shopifyModel.Address address, Country[] countries)
+        public static Address CopyFrom(this Address result, Address address, Country[] countries)
         {
             result.City = address.City;
             result.CountryCode = address.CountryCode;

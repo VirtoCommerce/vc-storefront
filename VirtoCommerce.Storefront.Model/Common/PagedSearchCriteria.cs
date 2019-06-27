@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 
 namespace VirtoCommerce.Storefront.Model.Common
@@ -21,6 +22,12 @@ namespace VirtoCommerce.Storefront.Model.Common
 
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
-      
+
+        public virtual IEnumerable<KeyValuePair<string, string>> GetKeyValues()
+        {
+            yield return new KeyValuePair<string, string>("page", PageNumber.ToString());
+            yield return new KeyValuePair<string, string>("page_size", PageSize.ToString());
+        }
+
     }
 }

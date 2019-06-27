@@ -69,13 +69,15 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (!storeDto.DynamicProperties.IsNullOrEmpty())
             {
-                result.DynamicProperties = storeDto.DynamicProperties.Select(ToDynamicProperty).ToList();
+                result.DynamicProperties = new MutablePagedList<DynamicProperty>(storeDto.DynamicProperties.Select(ToDynamicProperty).ToList());
                 result.ThemeName = result.DynamicProperties.GetDynamicPropertyValue("DefaultThemeName");
             }
 
             if (!storeDto.Settings.IsNullOrEmpty())
             {
-                result.Settings = storeDto.Settings.Where(x => !x.ValueType.EqualsInvariant("SecureString")).Select(x => x.JsonConvert<platformDto.Setting>().ToSettingEntry()).ToList();
+                result.Settings = new MutablePagedList<SettingEntry>(storeDto.Settings.Where(x => !x.ValueType.EqualsInvariant("SecureString"))
+                                                                                      .Select(x => x.JsonConvert<platformDto.Setting>()
+                                                                                      .ToSettingEntry()));
             }
 
             result.TrustedGroups = storeDto.TrustedGroups;

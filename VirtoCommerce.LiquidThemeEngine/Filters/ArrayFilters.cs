@@ -4,13 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using DotLiquid;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.LiquidThemeEngine.Objects;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
-    public class ArrayFilters
+    public partial class ArrayFilters
     {
         public static object Tree(object input, string propName, string titlePropName, string delimiter, string sortByPropName)
         {
@@ -79,13 +77,13 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static object Where(object input, string propName, string op, string value)
         {
             var retVal = input;
-            IEnumerable enumerable = retVal as IEnumerable;
+            var enumerable = retVal as IEnumerable;
             if (enumerable != null)
             {
                 var queryable = enumerable.AsQueryable();
                 var elementType = enumerable.GetType().GetEnumerableType();
 
-                ParameterExpression paramX = Expression.Parameter(elementType, "x");
+                var paramX = Expression.Parameter(elementType, "x");
                 var propInfo = elementType.GetProperty(propName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                 var left = Expression.Property(paramX, propInfo);
                 var objValue = ParseString(value);
@@ -109,23 +107,23 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                     {
                         var containsMethod = typeof(string).GetMethods().Where(x => x.Name == "Contains").First();
                         expr = Expression.Call(left, containsMethod, right);
-                    } 
+                    }
                     else
                     {
                         var containsMethod = typeof(Enumerable).GetMethods().Where(x => x.Name == "Contains" && x.GetParameters().Count() == 2).First().MakeGenericMethod(new Type[] { objValue.GetType() });
                         expr = Expression.Call(containsMethod, left, right);
-                    }                 
-                
+                    }
+
                     //where(x=> x.Tags.Contains(y))
                     binaryOp = Expression.Equal(expr, Expression.Constant(true));
                 }
                 else
                     binaryOp = Expression.LessThanOrEqual(left, right);
 
-                Type delegateType = typeof(Func<,>).MakeGenericType(elementType, typeof(bool));
+                var delegateType = typeof(Func<,>).MakeGenericType(elementType, typeof(bool));
 
                 //Construct Func<T, bool> = (x) => x.propName == value expression
-                LambdaExpression lambda = Expression.Lambda(delegateType, binaryOp, paramX);
+                var lambda = Expression.Lambda(delegateType, binaryOp, paramX);
 
                 //Find Queryable.Where(Expression<Func<TSource, bool>>) method
                 var whereMethod = typeof(Queryable).GetMethods()
@@ -164,6 +162,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             var retVal = input;
             IEnumerable enumerable = retVal as IEnumerable;
             IMutablePagedList muttablePagedList = input as IMutablePagedList;
+
             var sortInfos = SortInfo.Parse(sort).ToList();
             if (muttablePagedList != null)
             {

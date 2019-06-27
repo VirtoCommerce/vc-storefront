@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
@@ -50,13 +51,14 @@ namespace VirtoCommerce.Storefront.Controllers
         /// <returns></returns>
         [HttpGet("themes/assets/{*path}")]
         [ResponseCache(CacheProfileName = "Default")]
-        public ActionResult GetThemeAssets(string path)
+        public async Task<ActionResult> GetThemeAssets(string path)
         {
-            var stream = _themeEngine.GetAssetStream(path);
+            var stream = await _themeEngine.GetAssetStreamAsync(path);
             return stream != null
                 ? File(stream, MimeTypes.GetMimeType(path))
                 : HandleStaticFiles(path);
         }
+
 
         /// <summary>
         /// GET: /assets/{*path}

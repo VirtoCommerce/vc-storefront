@@ -1,14 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using DotLiquid;
-using DotLiquid.Util;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
@@ -17,11 +8,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
     /// String filters are used to manipulate outputs and variables of the string type.
     /// https://docs.shopify.com/themes/liquid-documentation/filters/string-filters
     /// </summary>
-    public class StringFilters
+    public partial class StringFilters
     {
-        private static readonly Regex TagSyntax = R.B(R.Q(@"([A-Za-z0-9]+)_([A-Za-z0-9].+)"));
-        private static readonly Regex WordReplaceSyntax = R.B(R.Q(@"[^\w\s-]"));
-        private static readonly Regex WordReplaceSyntax2 = R.B(R.Q(@"[\s-]+"));
 
         /// <summary>
         /// Converts a string into CamelCase.
@@ -47,6 +35,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return result;
         }
 
+        public static string Handle(string input)
+        {
+            return Handleize(input);
+        }
+
+
         /// <summary>
         /// Formats a string into a handle.
         /// Input
@@ -63,7 +57,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 return input;
             }
 
-           return input.Handelize();
+            return input.Handelize();
         }
 
         /// <summary>
@@ -127,13 +121,5 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
     }
 
-    public class RubyContractResolver : DefaultContractResolver
-    {
-        #region Methods
-        protected override string ResolvePropertyName(string propertyName)
-        {
-            return Template.NamingConvention.GetMemberName(propertyName);
-        }
-        #endregion
-    }
+
 }

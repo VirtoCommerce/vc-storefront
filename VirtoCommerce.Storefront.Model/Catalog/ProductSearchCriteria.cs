@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -62,20 +63,37 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
             return result;
         }
+        public override IEnumerable<KeyValuePair<string, string>> GetKeyValues()
+        {
+			 foreach (var basePair in base.GetKeyValues())
+            {
+                yield return basePair;
+            }
+            if (!string.IsNullOrEmpty(Keyword))
+            {
+                yield return new KeyValuePair<string, string>("keyword", Keyword);
+            }
+            if (!string.IsNullOrEmpty(SortBy))
+            {
+                yield return new KeyValuePair<string, string>("sort_by", SortBy);
+            }
+            if (!Terms.IsNullOrEmpty())
+            {
+                var termsString = string.Join(";", Terms.ToStrings());
+                yield return new KeyValuePair<string, string>("terms", termsString);
+            }
+
+        }
 
         private void Parse(NameValueCollection queryString)
         {        
             IsFuzzySearch = queryString.Get("fuzzy").EqualsInvariant(bool.TrueString);
             Keyword = queryString.Get("q") ?? queryString.Get("keyword");
             SortBy = queryString.Get("sort_by");
-            ResponseGroup = EnumUtility.SafeParse(queryString.Get("resp_group"), ItemResponseGroup.ItemSmall | ItemResponseGroup.ItemWithPrices | ItemResponseGroup.Inventory | ItemResponseGroup.ItemWithDiscounts | ItemResponseGroup.ItemWithVendor | ItemResponseGroup.ItemProperties);
+
+            ResponseGroup = EnumUtility.SafeParse(queryString.Get("resp_group"), ItemResponseGroup.Default);
             // terms=name1:value1,value2,value3;name2:value1,value2,value3
-            Terms = (queryString.GetValues("terms") ?? new string[0])
-                .SelectMany(s => s.Split(';'))
-                .Select(s => s.Split(':'))
-                .Where(a => a.Length == 2)
-                .SelectMany(a => a[1].Split(',').Select(v => new Term { Name = a[0], Value = v }))
-                .ToArray();
+            Terms = (queryString.GetValues("terms") ?? Array.Empty<string>()).SelectMany(x => x.ToTerms()).ToList();
         }
 
         public override string ToString()

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Markdig;
+using PagedList.Core;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
@@ -36,9 +37,12 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (aggregationDto.Items != null)
             {
-                result.Items = aggregationDto.Items
-                    .Select(i => i.ToAggregationItem(currentLanguage))
-                    .ToArray();
+                result.Items = aggregationDto.Items.Select(i => i.ToAggregationItem(currentLanguage))
+                                             .ToArray();
+                foreach (var aggregationItem in result.Items)
+                {
+                    aggregationItem.Group = result;
+                }
             }
 
             if (aggregationDto.Labels != null)
@@ -229,8 +233,12 @@ namespace VirtoCommerce.Storefront.Domain
                 Outline = categoryDto.Outlines.GetOutlinePath(store.Catalog),
                 SeoPath = categoryDto.Outlines.GetSeoPath(store, currentLanguage, null)
             };
-
-            result.Url = "~/" + (result.SeoPath ?? "category/" + categoryDto.Id);
+            if (result.Outline != null)
+            {
+                //Need to take virtual parent from outline (get second last) because for virtual catalog category.ParentId still points to a physical category
+                result.ParentId = result.Outline.Split("/").Reverse().Skip(1).Take(1).FirstOrDefault() ?? result.ParentId;
+            }
+            result.Url = "/" + (result.SeoPath ?? "category/" + categoryDto.Id);
 
             if (!categoryDto.SeoInfos.IsNullOrEmpty())
             {
@@ -334,19 +342,19 @@ namespace VirtoCommerce.Storefront.Domain
                 Outline = productDto.Outlines.GetOutlinePath(store.Catalog),
                 SeoPath = productDto.Outlines.GetSeoPath(store, currentLanguage, null),
             };
-            result.Url = "~/" + (result.SeoPath ?? "product/" + result.Id);
+            result.Url = "/" + (result.SeoPath ?? "product/" + result.Id);
 
             if (productDto.Properties != null)
             {
-                result.Properties = productDto.Properties
+                result.Properties = new MutablePagedList<CatalogProperty>(productDto.Properties
                     .Where(x => string.Equals(x.Type, "Product", StringComparison.InvariantCultureIgnoreCase))
                     .Select(p => ToProperty(p, currentLanguage))
-                    .ToList();
+                    .ToList());
 
-                result.VariationProperties = productDto.Properties
+                result.VariationProperties = new MutablePagedList<CatalogProperty>(productDto.Properties
                     .Where(x => string.Equals(x.Type, "Variation", StringComparison.InvariantCultureIgnoreCase))
                     .Select(p => ToProperty(p, currentLanguage))
-                    .ToList();
+                    .ToList());
             }
 
             if (productDto.Images != null)
@@ -399,14 +407,16 @@ namespace VirtoCommerce.Storefront.Domain
                                             Value = Markdown.ToHtml(r.Content, _markdownPipeline)
                                         });
                 //Select only best matched description for current language in the each description type
+                var tmpDescriptionList = new List<EditorialReview>();
                 foreach (var descriptionGroup in descriptions.GroupBy(x => x.ReviewType))
                 {
                     var description = descriptionGroup.FindWithLanguage(currentLanguage);
                     if (description != null)
                     {
-                        result.Descriptions.Add(description);
+                        tmpDescriptionList.Add(description);
                     }
                 }
+                result.Descriptions = new MutablePagedList<EditorialReview>(tmpDescriptionList);
                 result.Description = (result.Descriptions.FirstOrDefault(x => x.ReviewType.EqualsInvariant("FullReview")) ?? result.Descriptions.FirstOrDefault())?.Value;
             }
 

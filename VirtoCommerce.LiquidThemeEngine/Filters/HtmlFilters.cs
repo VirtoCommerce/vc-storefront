@@ -3,7 +3,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
     /// <summary>
     /// https://docs.shopify.com/themes/liquid-documentation/filters/html-filters
     /// </summary>
-    public class HtmlFilters
+    public partial class HtmlFilters
     {
         /// <summary>
         /// Generates a script tag.
@@ -14,6 +14,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string ScriptTag(string input)
         {
             return string.Format("<script type=\"text/javascript\" src=\"{0}\"></script>", input);
+        }
+
+        public static string ScriptTagAsync(string input)
+        {
+            return string.Format("<script async type=\"text/javascript\" src=\"{0}\"></script>", input);
         }
 
         /// <summary>

@@ -14,8 +14,6 @@ namespace VirtoCommerce.Storefront.Model.Stores
             Languages = new List<Language>();
             CurrenciesCodes = new List<string>();
             SeoInfos = new List<SeoInfo>();
-            DynamicProperties = new List<DynamicProperty>();
-            Settings = new List<SettingEntry>();
             AvailFulfillmentCenterIds = new List<string>();
             TrustedGroups = new List<string>();
         }
@@ -34,6 +32,19 @@ namespace VirtoCommerce.Storefront.Model.Stores
         /// </summary>
         public string SecureUrl { get; set; }
 
+        public string Host
+        {
+            get
+            {
+                string result = null;
+                if (!string.IsNullOrEmpty(Url) && Uri.TryCreate(Url, UriKind.Absolute, out var url))
+                {
+                    result = url.Host;
+                }
+                return result;
+            }
+        }
+
         /// <summary>
         /// State of store (open, closing, maintenance)
         /// </summary>
@@ -45,6 +56,7 @@ namespace VirtoCommerce.Storefront.Model.Stores
 
         public string Region { get; set; }
 
+        public string Status => StoreState.ToString();
         /// <summary>
         /// Default Language culture name  of store ( example en-US )
         /// </summary>
@@ -84,8 +96,6 @@ namespace VirtoCommerce.Storefront.Model.Stores
         /// </summary>
         public string ThemeName { get; set; }
 
-        public IList<DynamicProperty> DynamicProperties { get; set; }
-
         /// <summary>
         /// All store seo informations for all languages
         /// </summary>
@@ -116,9 +126,12 @@ namespace VirtoCommerce.Storefront.Model.Stores
 
         public decimal FixedTaxRate { get; set; }
 
+
+        public IMutablePagedList<DynamicProperty> DynamicProperties { get; set; }
+
         #region IHasSettings Members
 
-        public IList<SettingEntry> Settings { get; set; }
+        public IMutablePagedList<SettingEntry> Settings { get; set; }
 
         #endregion
 

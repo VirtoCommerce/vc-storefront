@@ -12,6 +12,14 @@ namespace VirtoCommerce.Storefront.Model
         public Money Rate { get; set; }
 
         public Money Amount { get; set; }
+        public string Title => Name;
+        public decimal Price
+        {
+            get
+            {
+                return Amount.Amount * 100;
+            }
+        }
 
         public string Name { get; set; }
 

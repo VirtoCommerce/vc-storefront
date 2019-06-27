@@ -11,6 +11,7 @@ using VirtoCommerce.Storefront.Model.Recommendations;
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
     [StorefrontApiRoute("useractions")]
+    [ResponseCache(CacheProfileName = "None")]
     public class ApiUserActionsController : StorefrontControllerBase
     {
         private readonly IRecommendationsProvider _productRecommendationsService;

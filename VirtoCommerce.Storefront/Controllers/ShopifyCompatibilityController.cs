@@ -105,7 +105,7 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             EnsureCartExists();
             var cartBuilder = await LoadOrCreateCartAsync();
-            return LiquidJson(cartBuilder.Cart.ToShopifyModel(WorkContext.CurrentLanguage, UrlBuilder));
+            return LiquidJson(cartBuilder.Cart);
         }
 
         // POST: /cart/add.js
@@ -127,7 +127,7 @@ namespace VirtoCommerce.Storefront.Controllers
                     lineItem = cartBuilder.Cart.Items.FirstOrDefault(i => i.ProductId == id);
                 }
             }
-            return LiquidJson(lineItem != null ? lineItem.ToShopifyModel(WorkContext.CurrentLanguage, UrlBuilder) : null);
+            return LiquidJson(lineItem);
         }
 
         // POST: /cart/change.js
@@ -140,7 +140,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 var cartBuilder = await LoadOrCreateCartAsync();
                 await cartBuilder.ChangeItemQuantityAsync(id, quantity);
                 await cartBuilder.SaveAsync();
-                return LiquidJson(cartBuilder.Cart.ToShopifyModel(WorkContext.CurrentLanguage, UrlBuilder));
+                return LiquidJson(cartBuilder.Cart);
             }
         }
 
@@ -154,7 +154,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 var cartBuilder = await LoadOrCreateCartAsync();
                 await cartBuilder.ChangeItemsQuantitiesAsync(updates);
                 await cartBuilder.SaveAsync();
-                return LiquidJson(cartBuilder.Cart.ToShopifyModel(WorkContext.CurrentLanguage, UrlBuilder));
+                return LiquidJson(cartBuilder.Cart);
             }
         }
 
@@ -168,7 +168,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 var cartBuilder = await LoadOrCreateCartAsync();
                 await cartBuilder.ClearAsync();
                 await cartBuilder.SaveAsync();
-                return LiquidJson(_cartBuilder.Cart.ToShopifyModel(WorkContext.CurrentLanguage, UrlBuilder));
+                return LiquidJson(_cartBuilder.Cart);
             }
         }
 
@@ -187,7 +187,7 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             return new JsonResult(obj, new JsonSerializerSettings
             {
-                ContractResolver = new LiquidThemeEngine.Filters.RubyContractResolver(),
+                //ContractResolver = new LiquidThemeEngine.Filters.RubyContractResolver(),
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             });
         }

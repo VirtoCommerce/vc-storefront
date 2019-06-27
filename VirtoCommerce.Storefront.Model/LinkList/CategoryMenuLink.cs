@@ -12,7 +12,8 @@ namespace VirtoCommerce.Storefront.Model
     /// </summary>
     public class CategoryMenuLink : MenuLink
     {
-     
+
         public Category Category { get; set; }
+        public override string Type => "collection";
     }
 }

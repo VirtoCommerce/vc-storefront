@@ -16,6 +16,7 @@ namespace VirtoCommerce.Storefront.Model
         /// Image title
         /// </summary>
         public string Title { get; set; }
+        public string Name => Title;
 
         /// <summary>
         /// Image alt text

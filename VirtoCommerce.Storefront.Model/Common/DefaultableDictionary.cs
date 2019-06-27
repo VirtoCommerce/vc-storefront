@@ -1,114 +1,43 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
+    public static class DefaultableDictionaryExtensions
+    {
+        public static IDictionary<TKey, TValue> WithDefaultValue<TValue, TKey>(this IDictionary<TKey, TValue> dictionary, TValue defaultValue)
+        {
+            return new DefaultableDictionary<TKey, TValue>(dictionary, defaultValue);
+        }
+    }
+
     /// <summary>
     /// Represent dictionary  returning a default value if the key does not exist 
     /// </summary>
-    public class DefaultableDictionary : IDictionary
+    public class DefaultableDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
-        private readonly IDictionary _dictionary;
-        private readonly object _defaultValue;
+        private readonly IDictionary<TKey, TValue> _dictionary;
+        private readonly TValue _defaultValue;
 
-        public DefaultableDictionary(Dictionary<string, object> dictionary, object defaultValue)
+        public DefaultableDictionary(IDictionary<TKey, TValue> dictionary, TValue defaultValue)
         {
-            _dictionary = dictionary;
-            _defaultValue = defaultValue;
+            this._dictionary = dictionary;
+            this._defaultValue = defaultValue;
         }
 
-        public DefaultableDictionary(object defaultValue)
-            : this(new Dictionary<string, object>(), defaultValue)
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
+            return _dictionary.GetEnumerator();
         }
 
-        #region IDictionary members
-        public ICollection Keys
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            get
-            {
-                return _dictionary.Keys;
-            }
+            return GetEnumerator();
         }
 
-        public ICollection Values
+        public void Add(KeyValuePair<TKey, TValue> item)
         {
-            get
-            {
-                return _dictionary.Values;
-            }
-        }
-
-        public bool IsReadOnly
-        {
-            get
-            {
-                return _dictionary.IsReadOnly;
-            }
-        }
-
-        public bool IsFixedSize
-        {
-            get
-            {
-                return _dictionary.IsFixedSize;
-            }
-        }
-
-        public int Count
-        {
-            get
-            {
-                return _dictionary.Count;
-            }
-        }
-
-        public object SyncRoot
-        {
-            get
-            {
-                return _dictionary.SyncRoot;
-            }
-        }
-
-        public bool IsSynchronized
-        {
-            get
-            {
-                return _dictionary.IsSynchronized;
-            }
-        }
-
-        public object this[object key]
-        {
-            get
-            {
-                object retVal;
-                if (!((Dictionary<string, object>)_dictionary).TryGetValue(key.ToString(), out retVal))
-                {
-                    retVal = _defaultValue;
-                }
-                return retVal;
-            }
-
-
-            set { _dictionary[key] = value; }
-        }
-
-
-
-        public bool Contains(object key)
-        {
-            return true;
-        }
-
-        public void Add(object key, object value)
-        {
-            _dictionary.Add(key, value);
+            _dictionary.Add(item);
         }
 
         public void Clear()
@@ -116,26 +45,81 @@ namespace VirtoCommerce.Storefront.Model.Common
             _dictionary.Clear();
         }
 
-        public IDictionaryEnumerator GetEnumerator()
+        public bool Contains(KeyValuePair<TKey, TValue> item)
         {
-            return _dictionary.GetEnumerator();
+            return _dictionary.Contains(item);
         }
 
-        public void Remove(object key)
+        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
-            _dictionary.Remove(key);
+            _dictionary.CopyTo(array, arrayIndex);
         }
 
-        public void CopyTo(Array array, int index)
+        public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            _dictionary.CopyTo(array, index);
+            return _dictionary.Remove(item);
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        public int Count
         {
-            return _dictionary.GetEnumerator();
+            get { return _dictionary.Count; }
         }
 
-        #endregion
+        public bool IsReadOnly
+        {
+            get { return _dictionary.IsReadOnly; }
+        }
+
+        public bool ContainsKey(TKey key)
+        {
+            return _dictionary.ContainsKey(key);
+        }
+
+        public void Add(TKey key, TValue value)
+        {
+            _dictionary.Add(key, value);
+        }
+
+        public bool Remove(TKey key)
+        {
+            return _dictionary.Remove(key);
+        }
+
+        public bool TryGetValue(TKey key, out TValue value)
+        {
+            if (!_dictionary.TryGetValue(key, out value))
+                value = _defaultValue;
+
+            return true;
+        }
+
+        public TValue this[TKey key]
+        {
+            get
+            {
+                TValue result;
+                if (!_dictionary.TryGetValue(key, out result))
+                {
+                    result = _defaultValue;
+                }
+                return result;
+            }
+
+            set { _dictionary[key] = value; }
+        }
+
+        public ICollection<TKey> Keys
+        {
+            get { return _dictionary.Keys; }
+        }
+
+        public ICollection<TValue> Values
+        {
+            get
+            {
+                var values = new List<TValue>(_dictionary.Values) { _defaultValue };
+                return values;
+            }
+        }
     }
 }

@@ -686,7 +686,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (lineItemDto.DynamicProperties != null)
             {
-                result.DynamicProperties = lineItemDto.DynamicProperties.Select(ToDynamicProperty).ToList();
+                result.DynamicProperties = new MutablePagedList<DynamicProperty>(lineItemDto.DynamicProperties.Select(ToDynamicProperty).ToList());
             }
 
             if (!lineItemDto.Discounts.IsNullOrEmpty())

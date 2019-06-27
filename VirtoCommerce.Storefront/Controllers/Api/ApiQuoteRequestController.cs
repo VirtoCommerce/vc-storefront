@@ -14,6 +14,7 @@ using VirtoCommerce.Storefront.Model.Services;
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
     [StorefrontApiRoute("")]
+    [ResponseCache(CacheProfileName = "None")]
     public class ApiQuoteRequestController : StorefrontControllerBase
     {
         private readonly IQuoteRequestBuilder _quoteRequestBuilder;

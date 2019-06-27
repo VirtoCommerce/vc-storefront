@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Security;
-using VirtoCommerce.Storefront.Model.Security.Specifications;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
@@ -27,18 +26,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             }).ToList();
 
             var user = await signInManager.UserManager.GetUserAsync(builder.HttpContext.User);
-            //User doesn't have permissions for login to current store 
-            //need to do sign out 
-            if (user != null && !new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(builder.WorkContext.CurrentStore))
-            {
-                await signInManager.SignOutAsync();
-                user = null;
-            }
-            if (user != null && new IsUserSuspendedSpecification().IsSatisfiedBy(user))
-            {
-                await signInManager.SignOutAsync();
-                user = null;
-            }
+           
             //Login as a new anonymous user
             if (user == null || user.IsTransient())
             {

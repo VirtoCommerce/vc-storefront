@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model
 {
     public interface IHasSettings
     {
-        IList<SettingEntry> Settings { get; }
+        IMutablePagedList<SettingEntry> Settings { get; }
     }
 }

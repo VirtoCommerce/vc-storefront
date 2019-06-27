@@ -40,6 +40,12 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
 
+        public async Task<CustomerOrder> GetOrderByIdAsync(string id)
+        {
+            var workContext = _workContextAccessor.WorkContext;
+            return (await _orderApi.GetByIdAsync(id))?.ToCustomerOrder(workContext.AllCurrencies, workContext.CurrentLanguage);
+        }
+		
         protected virtual async Task<IPagedList<CustomerOrder>> InnerSearchOrdersAsync(OrderSearchCriteria criteria, WorkContext workContext)
         {
             if (criteria == null)

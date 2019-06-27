@@ -21,12 +21,12 @@ namespace VirtoCommerce.Storefront.Domain.Quote.Handlers
         /// <summary>
         /// Merge anonymous user quote to newly log in user quote by log in event
         /// </summary>
-        /// <param name="userLoginEvent"></param>
         public virtual async Task Handle(UserLoginEvent @event)
         {
             if (@event == null)
+            {
                 return;
-
+            }
             var workContext = @event.WorkContext;
             var prevUser = @event.WorkContext.CurrentUser;
             var prevUserCart = @event.WorkContext.CurrentCart.Value;

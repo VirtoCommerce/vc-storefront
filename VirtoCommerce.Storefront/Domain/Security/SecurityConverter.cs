@@ -47,14 +47,20 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return result;
         }
 
-        public static  User ToUser(this UserRegistration registerForm)
+        public static User ToUser(this UserRegistration registerForm)
         {
             var result = new User
             {
                 Email = registerForm.Email,
                 UserName = registerForm.UserName,
-                Password = registerForm.Password               
+                Password = registerForm.Password,
+                UserType = "Customer"
             };
+            //Take userName as Email if it valid and Email is not set 
+            if (string.IsNullOrEmpty(result.Email))
+            {
+                result.Email = registerForm.UserName.IsValidEmail() ? registerForm.UserName : result.Email;
+            }
             return result;
         }
 
@@ -108,7 +114,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 StoreId = userDto.StoreId,
                 IsRegisteredUser = true,
                 IsAdministrator = userDto.IsAdministrator ?? false,
-                Permissions = userDto.Permissions,              
+                Permissions = userDto.Permissions,
                 AccessFailedCount = userDto.AccessFailedCount ?? 0,
                 LockoutEnabled = userDto.LockoutEnabled ?? false,
                 EmailConfirmed = userDto.EmailConfirmed ?? false,
