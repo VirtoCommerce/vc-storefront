@@ -362,10 +362,14 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string Date(TemplateContext context, object input, string format)
         {
             if (input == null)
+            {
                 return null;
+            }
 
             if (format.IsNullOrWhiteSpace())
+            {
                 return input.ToString();
+            }
 
             switch (format)
             {
@@ -390,12 +394,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 dateParsed = true;
             }
 
-            var key = string.Concat("date_formats.", format);
-            var newFormat = TranslationFilter.T(context, key);
-
-            if (!newFormat.IsNullOrEmpty() && newFormat != key)
+            if (Regex.IsMatch(format, @"[\w\d_-]"))
             {
-                format = newFormat;
+                var key = string.Concat("date_formats.", format);
+                var newFormat = TranslationFilter.T(context, key);
+                if (!newFormat.IsNullOrEmpty() && newFormat != key)
+                {
+                    format = newFormat;
+                }
+
             }
 
             if (dateParsed)
