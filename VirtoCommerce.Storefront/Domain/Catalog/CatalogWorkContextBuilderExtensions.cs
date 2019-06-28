@@ -18,7 +18,8 @@ namespace VirtoCommerce.Storefront.Domain
             //Initialize catalog search criteria
             var productSearchcriteria = new ProductSearchCriteria(workContext.CurrentLanguage, workContext.CurrentCurrency, workContext.QueryString)
             {
-                UserGroups = workContext.CurrentUser?.Contact?.UserGroups ?? new List<string>()
+                UserGroups = workContext.CurrentUser?.Contact?.UserGroups ?? new List<string>(),
+                SortBy = "priority-descending;name-ascending"
             };
             workContext.CurrentProductSearchCriteria = productSearchcriteria;
             //Initialize product response group.
