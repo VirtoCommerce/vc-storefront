@@ -393,7 +393,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             var key = string.Concat("date_formats.", format);
             var newFormat = TranslationFilter.T(context, key);
 
-            if (!newFormat.IsNullOrEmpty())
+            if (!newFormat.IsNullOrEmpty() && newFormat != key)
             {
                 format = newFormat;
             }
