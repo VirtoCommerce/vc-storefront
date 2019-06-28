@@ -394,7 +394,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 dateParsed = true;
             }
 
-            if (Regex.IsMatch(format, @"[\w\d_-]"))
+            if (Regex.IsMatch(format, @"^[\w\d_\-]+$"))
             {
                 var key = string.Concat("date_formats.", format);
                 var newFormat = TranslationFilter.T(context, key);
