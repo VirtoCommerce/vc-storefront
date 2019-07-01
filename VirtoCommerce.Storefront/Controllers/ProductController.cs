@@ -25,7 +25,6 @@ namespace VirtoCommerce.Storefront.Controllers
         /// This action used by storefront to get product details by product id
         /// </summary>
         /// <param name="productId"></param>
-        /// <returns></returns
         [HttpGet("product/{productId}")]
         public async Task<ActionResult> ProductDetails(string productId)
         {

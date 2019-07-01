@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model
 {
-    public partial class DynamicProperty : Entity
+    public partial class DynamicProperty : Entity, IAccessibleByIndexKey
     {
         public string Name { get; set; }
 
@@ -31,7 +28,9 @@ namespace VirtoCommerce.Storefront.Model
         public IList<DynamicPropertyDictionaryItem> DictionaryValues { get; set; } = new List<DynamicPropertyDictionaryItem>();
         //All possible dictionary values
         public IList<DynamicPropertyDictionaryItem> DictionaryItems { get; set; } = new List<DynamicPropertyDictionaryItem>();
+
+        public string IndexKey => Name;
     }
 
-  
+
 }

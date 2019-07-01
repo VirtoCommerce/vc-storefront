@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.StaticContent
 {
-    public abstract class ContentItem : IHasLanguage
+    public abstract class ContentItem : IHasLanguage, IAccessibleByIndexKey
     {
         protected ContentItem()
         {
@@ -41,6 +42,8 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
 
         public bool IsPublished { get; set; } = true;
 
+        public DateTime? PublishedAt => PublishedDate ?? CreatedDate;
+
         /// <summary>
         /// Content file name without extension
         /// </summary>
@@ -71,7 +74,11 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
         /// </summary>
         public bool Authorize { get; set; }
 
+        public virtual string Handle => Url;
         public IDictionary<string, IEnumerable<string>> MetaInfo { get; set; }
+        public IDictionary<string, IEnumerable<string>> MetaFields => MetaInfo;
+
+        public virtual string IndexKey => Handle;
 
         public virtual void LoadContent(string content, IDictionary<string, IEnumerable<string>> metaInfoMap)
         {
@@ -108,15 +115,15 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
                             PublishedDate = CreatedDate = DateTime.TryParse(settingValue, out date) ? date : new DateTime();
                             break;
                         case "tags":
-                            Tags = setting.Value.ToList();
+                            Tags = setting.Value.ToList().OrderBy(t => t).Select(t => t.Handelize()).ToList();
                             break;
 
                         case "categories":
-                            Categories = setting.Value.ToList();
+                            Categories = setting.Value?.Select(x => x.Handelize()).ToList();
                             break;
 
                         case "category":
-                            Category = settingValue;
+                            Category = settingValue?.Handelize();
                             break;
 
                         case "layout":

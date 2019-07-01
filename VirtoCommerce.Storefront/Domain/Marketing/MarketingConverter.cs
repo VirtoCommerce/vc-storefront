@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.Storefront.Common;
@@ -87,25 +88,45 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
+        public static DynamicContentEvaluationContext ToDynamicContentEvaluationContext(this WorkContext workContext, IEnumerable<Product> products = null)
+        {
+            var result = new DynamicContentEvaluationContext(workContext.CurrentLanguage, workContext.CurrentCurrency)
+            {
+                User = workContext.CurrentUser,
+                StoreId = workContext.CurrentStore.Id,
+            };
+            return result;
+        }
+
         public static PromotionEvaluationContext ToPromotionEvaluationContext(this WorkContext workContext, IEnumerable<Product> products = null)
         {
             var result = new PromotionEvaluationContext(workContext.CurrentLanguage, workContext.CurrentCurrency)
             {
-                Currency = workContext.CurrentCurrency,
                 User = workContext.CurrentUser,
-                Language = workContext.CurrentLanguage,
                 StoreId = workContext.CurrentStore.Id,
-
                 Product = workContext.CurrentProduct
             };
-
             if (products != null)
             {
                 result.Products = products.ToList();
             }
-
             return result;
         }
+
+        public static marketingDto.DynamicContentEvaluationContext ToDynamicContentEvaluationContextDto(this DynamicContentEvaluationContext dynamicContentEvalContext)
+        {
+            var result = new marketingDto.DynamicContentEvaluationContext
+            {
+                UserGroups = dynamicContentEvalContext?.User?.Contact?.UserGroups,
+                Language = dynamicContentEvalContext.Language != null ? dynamicContentEvalContext.Language.CultureName : null,
+                StoreId = dynamicContentEvalContext.StoreId,
+                Tags = dynamicContentEvalContext.Tags,
+                ToDate = dynamicContentEvalContext.ToDate,
+                PlaceName = dynamicContentEvalContext.PlaceName
+            };
+            return result;
+        }
+
 
         public static marketingDto.PromotionEvaluationContext ToPromotionEvaluationContextDto(this PromotionEvaluationContext promoEvalContext)
         {

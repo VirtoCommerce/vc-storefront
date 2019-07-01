@@ -1,19 +1,19 @@
-using Newtonsoft.Json.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace VirtoCommerce.LiquidThemeEngine
 {
-    public interface ILiquidThemeEngine 
+    public interface ILiquidThemeEngine
     {
         IEnumerable<string> DiscoveryPaths { get; }
         string ResolveTemplatePath(string templateName);
-        string RenderTemplateByName(string templateName, Dictionary<string, object> parameters);
-        string RenderTemplate(string templateContent, Dictionary<string, object> parameters);
-        IDictionary GetSettings(string defaultValue = null);
+        ValueTask<string> RenderTemplateByNameAsync(string templateName, object context);
+        ValueTask<string> RenderTemplateAsync(string templateContent, string templatePath, object context);
+        IDictionary<string, object> GetSettings(string defaultValue = null);
         JObject ReadLocalization();
-        Stream GetAssetStream(string fileName);
+        Task<Stream> GetAssetStreamAsync(string fileName);
         string GetAssetHash(string fileName);
         string GetAssetAbsoluteUrl(string assetName);
     }

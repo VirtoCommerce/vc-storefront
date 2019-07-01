@@ -10,6 +10,7 @@ using VirtoCommerce.Storefront.Model.Inventory.Services;
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
     [StorefrontApiRoute("")]
+    [ResponseCache(CacheProfileName = "None")]
     public class ApiInventoryController : StorefrontControllerBase
     {
         private readonly IInventoryService _inventoryService;
@@ -23,12 +24,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/fulfillmentcenters/search
         [HttpPost("fulfillmentcenters/search")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<GenericSearchResult<FulfillmentCenter>>> SearchFulfillmentCenters([FromBody] FulfillmentCenterSearchCriteria criteria)
+        public async Task<ActionResult<FulfillmentCenterSearchResult>> SearchFulfillmentCenters([FromBody] FulfillmentCenterSearchCriteria criteria)
         {
             if (criteria != null)
             {
                 var result = await _inventoryService.SearchFulfillmentCentersAsync(criteria);
-                return new GenericSearchResult<FulfillmentCenter>
+                return new FulfillmentCenterSearchResult
                 {
                     TotalCount = result.TotalItemCount,
                     Results = result.ToArray()

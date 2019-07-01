@@ -16,7 +16,7 @@ namespace VirtoCommerce.Storefront.JsonConverters
             _workContextAccessor = workContextAccessor;
         }
 
-        public override bool CanWrite { get { return false; } }
+        public override bool CanWrite { get { return true; } }
         public override bool CanRead { get { return true; } }
 
         public override bool CanConvert(Type objectType)
@@ -37,13 +37,19 @@ namespace VirtoCommerce.Storefront.JsonConverters
                 {
                     throw new NotSupportedException("Unknown currency code: " + currencyCode);
                 }
-            }         
+            }
             return retVal;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            var currency = value as Currency;
+
+            if (currency != null)
+            {
+                var result = JObject.FromObject(new { currency.Code, currency.Symbol }, serializer);
+                result.WriteTo(writer);
+            }
         }
     }
 }

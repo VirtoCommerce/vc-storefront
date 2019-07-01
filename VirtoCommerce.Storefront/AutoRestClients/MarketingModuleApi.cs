@@ -52,6 +52,19 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <summary>
         /// Initializes a new instance of the VirtoCommerceMarketingRESTAPIdocumentation class.
         /// </summary>
+        /// <param name='httpClient'>
+        /// HttpClient to be used
+        /// </param>
+        /// <param name='disposeHttpClient'>
+        /// True: will dispose the provided httpClient on calling VirtoCommerceMarketingRESTAPIdocumentation.Dispose(). False: will not dispose provided httpClient</param>
+        protected VirtoCommerceMarketingRESTAPIdocumentation(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
+        {
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the VirtoCommerceMarketingRESTAPIdocumentation class.
+        /// </summary>
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
@@ -132,6 +145,33 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// Thrown when a required parameter is null
         /// </exception>
         public VirtoCommerceMarketingRESTAPIdocumentation(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        {
+            if (credentials == null)
+            {
+                throw new System.ArgumentNullException("credentials");
+            }
+            Credentials = credentials;
+            if (Credentials != null)
+            {
+                Credentials.InitializeServiceClient(this);
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the VirtoCommerceMarketingRESTAPIdocumentation class.
+        /// </summary>
+        /// <param name='credentials'>
+        /// Required. Subscription credentials which uniquely identify client subscription.
+        /// </param>
+        /// <param name='httpClient'>
+        /// HttpClient to be used
+        /// </param>
+        /// <param name='disposeHttpClient'>
+        /// True: will dispose the provided httpClient on calling VirtoCommerceMarketingRESTAPIdocumentation.Dispose(). False: will not dispose provided httpClient</param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        public VirtoCommerceMarketingRESTAPIdocumentation(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
         {
             if (credentials == null)
             {
@@ -7861,10 +7901,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the DynamicPropertyObjectValue class.
         /// </summary>
-        public DynamicPropertyObjectValue(string locale = default(string), object value = default(object))
+        /// <param name="valueType">Possible values include: 'Undefined',
+        /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
+        /// 'Boolean', 'Html', 'Image'</param>
+        public DynamicPropertyObjectValue(string objectType = default(string), string objectId = default(string), string locale = default(string), object value = default(object), string valueId = default(string), string valueType = default(string))
         {
+            ObjectType = objectType;
+            ObjectId = objectId;
             Locale = locale;
             Value = value;
+            ValueId = valueId;
+            ValueType = valueType;
             CustomInit();
         }
 
@@ -7875,6 +7922,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectId")]
+        public string ObjectId { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "locale")]
         public string Locale { get; set; }
 
@@ -7882,6 +7939,19 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "value")]
         public object Value { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "valueId")]
+        public string ValueId { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Undefined', 'ShortText',
+        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html',
+        /// 'Image'
+        /// </summary>
+        [JsonProperty(PropertyName = "valueType")]
+        public string ValueType { get; set; }
 
     }
 }

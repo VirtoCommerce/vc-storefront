@@ -10,6 +10,7 @@ using VirtoCommerce.Storefront.Model.Recommendations;
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
     [StorefrontApiRoute("recommendations")]
+    [ResponseCache(CacheProfileName = "None")]
     public class ApiRecommendationsController : StorefrontControllerBase
     {
         private readonly IRecommendationProviderFactory _providerFactory;

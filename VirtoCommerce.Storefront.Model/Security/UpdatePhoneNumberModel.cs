@@ -7,6 +7,7 @@ namespace VirtoCommerce.Storefront.Model.Security
     {
         [Required]
         [FromForm(Name = "customer[phoneNumber]")]
+        [Phone]
         public string PhoneNumber { get; set; }
     }
 }

@@ -1,0 +1,85 @@
+{%- unless template == 'index' or template == 'cart' -%}
+<nav class="breadcrumb" role="navigation" aria-label="breadcrumbs">
+  <a href="{{ "/" | absolute_url }}" title="{{ 'general.breadcrumbs.home_link_title' | t }}">{{ 'general.breadcrumbs.home' | t }}</a>
+  {%- if template contains 'vendor' -%}
+    <span class="divider" aria-hidden="true">&rsaquo;</span>
+    <span class="breadcrumb--truncate">{{ vendor.name }}</span>
+  {%- elsif template contains 'product' -%}
+    {%- if collection -%}   
+      {%- for parent in collection.parents -%}
+         <span class="divider" aria-hidden="true">&rsaquo;</span>
+        {%- capture url -%}{{ parent.handle | absolute_url }}{%- endcapture -%}
+        {{ parent.title | link_to: url }}
+      {%- endfor -%}     
+    {%- endif -%}
+    <span class="divider" aria-hidden="true">&rsaquo;</span>
+    <span class="breadcrumb--truncate">{{ product.title }}</span>
+  {%- elsif template contains 'collection' and collection.handle -%}
+    {%- if current_tags -%}
+      {%- capture url -%}{{ collection.handle | absolute_url }}{%- endcapture -%}
+      {{ collection.title | link_to: url }}
+      <span class="divider" aria-hidden="true">&rsaquo;</span>
+      {%- comment -%}
+        Loop through tags and our custom tag array to strip out prepended tag categories if they exist.
+        snippet/advanced-tag-loop.liquid is required for this to work.
+      {%- endcomment -%}
+      {%- for tag in current_tags -%}
+        {%- if forloop.first -%}
+          {%- assign additional_tag = false -%}
+        {%- else -%}
+          {%- assign additional_tag = true -%}
+        {%- endif -%}
+        {%- comment -%}
+          Track whether the tag gets printed
+        {%- endcomment -%}
+        {%- for cat_item in collection.all_tags -%}
+          {%- unless cat_item == '' -%}
+            {%- if tag == cat_item -%}
+              {%- if additional_tag -%}
+                <span>+</span>
+              {%- endif -%}
+              {%- include 'tag-label' tag: cat_item -%}
+              <span>{{ tag_label | escape }}</span>
+            {%- endif -%}
+          {%- endunless -%}
+        {%- endfor -%}
+        {%- comment -%}
+          We have a regular tag that wasn't printed, so print it now
+        {%- endcomment -%}
+      {%- endfor -%}
+    {%- else -%}
+      {%- for parent in collection.parents -%}
+        {%- unless parent.title == collection.title -%}
+          <span class="divider" aria-hidden="true">&rsaquo;</span>
+          {%- capture url -%}{{ parent.handle | absolute_url }}{%- endcapture -%}
+          {{ parent.title | link_to: url}}
+        {%- endunless -%}
+      {%- endfor -%}
+      <span class="divider" aria-hidden="true">&rsaquo;</span>
+      <span>{{ collection.title }}</span>
+  {%- endif -%}
+  {%- elsif template == 'blog' -%}
+    <span class="divider" aria-hidden="true">&rsaquo;</span>
+    {%- if current_tags -%}
+      {%- assign blog_url = blog.url | absolute_url -%}
+      {{ blog.title | link_to: blog_url }}
+      <span class="divider" aria-hidden="true">&rsaquo;</span>
+      <span>{{ current_tags | join: " + " }}</span>
+    {%- else -%}
+    <span>{{ blog.title }}</span>
+    {%- endif -%}
+  {%- elsif template == 'article' -%}
+    <span class="divider" aria-hidden="true">&rsaquo;</span>
+    {%- assign blog_url = blog.url | absolute_url -%}
+    {{ blog.title | link_to: blog_url }}
+    <span class="divider" aria-hidden="true">&rsaquo;</span>
+    <span>{{ article.title }}</span>
+  {%- elsif template contains 'page' -%}
+    <span class="divider" aria-hidden="true">&rsaquo;</span>
+   <span>{{ page.title }}</span>
+  {%- else -%}
+    <span class="divider" aria-hidden="true">&rsaquo;</span>
+   <span>{{ page_title }}</span>
+  {%- endif -%}
+</nav>
+{%- endunless -%}

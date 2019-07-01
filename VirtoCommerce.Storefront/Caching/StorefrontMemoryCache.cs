@@ -47,7 +47,7 @@ namespace VirtoCommerce.Storefront.Caching
             return _memoryCache.TryGetValue(key, out value);
         }
 
-        protected TimeSpan AbsoluteExpiration => _storefrontOptions.CacheAbsoluteExpiration;
+        protected TimeSpan? AbsoluteExpiration => _storefrontOptions.CacheAbsoluteExpiration;
 
         protected bool CacheEnabled => _storefrontOptions.CacheEnabled;
 

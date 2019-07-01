@@ -18,7 +18,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.WebEncoders;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Binders;
 using VirtoCommerce.Storefront.Caching;
@@ -96,6 +98,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IPricingService, PricingService>();
             services.AddSingleton<ITaxEvaluator, TaxEvaluator>();
             services.AddSingleton<IPromotionEvaluator, PromotionEvaluator>();
+            services.AddSingleton<IDynamicContentEvaluator, DynamicContentEvaluator>();
             services.AddSingleton<IMarketingService, MarketingService>();
             services.AddSingleton<IStaticContentService, StaticContentService>();
             services.AddSingleton<IMenuLinkListService, MenuLinkListServiceImpl>();
@@ -109,6 +112,7 @@ namespace VirtoCommerce.Storefront
             services.AddTransient<ICartBuilder, CartBuilder>();
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<AngularAntiforgeryCookieResultFilter>();
+            services.AddTransient<AnonymousUserForStoreAuthorizationFilter>();
 
             //Register events framework dependencies
             services.AddSingleton(new InProcessBus());
@@ -123,6 +127,7 @@ namespace VirtoCommerce.Storefront
             {
                 Configuration.GetSection("VirtoCommerce:Endpoint").Bind(options);
             });
+
 
             services.AddSingleton<ICountriesService, FileSystemCountriesService>();
             services.Configure<FileSystemCountriesOptions>(options =>
@@ -164,11 +169,13 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IAuthorizationHandler, CanImpersonateAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, CanReadContentItemAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, OnlyRegisteredUserAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, AnonymousUserForStoreAuthorizationHandler>();
             // register the AuthorizationPolicyProvider which dynamically registers authorization policies for each permission defined in the platform 
             services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
             //Storefront authorization handler for policy based on permissions 
             services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, CanEditOrganizationResourceAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, CanAccessOrderAuthorizationHandler>();
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(CanImpersonateAuthorizationRequirement.PolicyName,
@@ -179,6 +186,10 @@ namespace VirtoCommerce.Storefront
                                 policy => policy.Requirements.Add(new CanEditOrganizationResourceAuthorizeRequirement()));
                 options.AddPolicy(OnlyRegisteredUserAuthorizationRequirement.PolicyName,
                                 policy => policy.Requirements.Add(new OnlyRegisteredUserAuthorizationRequirement()));
+                options.AddPolicy(AnonymousUserForStoreAuthorizationRequirement.PolicyName,
+                                policy => policy.Requirements.Add(new AnonymousUserForStoreAuthorizationRequirement()));
+                options.AddPolicy(CanAccessOrderAuthorizationRequirement.PolicyName,
+                              policy => policy.Requirements.Add(new CanAccessOrderAuthorizationRequirement()));
             });
 
 
@@ -254,19 +265,33 @@ namespace VirtoCommerce.Storefront
                 //TODO: Try to remove in ASP.NET Core 2.2
                 options.AllowCombiningAuthorizeFilters = false;
 
+                // Thus we disable anonymous users based on "Store:AllowAnonymous" store option
+                options.Filters.AddService<AnonymousUserForStoreAuthorizationFilter>();
 
                 options.CacheProfiles.Add("Default", new CacheProfile()
                 {
                     Duration = (int)TimeSpan.FromHours(1).TotalSeconds,
                     VaryByHeader = "host"
                 });
+                options.CacheProfiles.Add("None", new CacheProfile()
+                {
+                    NoStore = true,
+                    Location = ResponseCacheLocation.None
+                });
 
                 options.Filters.AddService(typeof(AngularAntiforgeryCookieResultFilter));
 
                 // To include only Api controllers to swagger document
                 options.Conventions.Add(new ApiExplorerApiControllersConvention());
+
+                // Use the routing logic of ASP.NET Core 2.1 or earlier:
+                options.EnableEndpointRouting = false;
             }).AddJsonOptions(options =>
             {
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver()
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                };
                 options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -276,6 +301,8 @@ namespace VirtoCommerce.Storefront
                 options.SerializerSettings.Converters.Add(new CurrencyJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
                 options.SerializerSettings.Converters.Add(new OrderTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
                 options.SerializerSettings.Converters.Add(new RecommendationJsonConverter(snapshotProvider.GetService<IRecommendationProviderFactory>()));
+                //Force serialize MutablePagedList type as array, instead of dictionary
+                options.SerializerSettings.Converters.Add(new MutablePagedListAsArrayJsonConverter(options.SerializerSettings));
                 //Converter for providing back compatibility with old themes was used CustomerInfo type which has contained user and contact data in the single type.
                 //May be removed when all themes will fixed to new User type with nested Contact property.
                 options.SerializerSettings.Converters.Add(new UserBackwardCompatibilityJsonConverter(options.SerializerSettings));
@@ -283,7 +310,7 @@ namespace VirtoCommerce.Storefront
             {
                 options.ViewEngines.Add(snapshotProvider.GetService<ILiquidViewEngine>());
             })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 
             //Register event handlers via reflection
@@ -318,14 +345,11 @@ namespace VirtoCommerce.Storefront
                 c.ParameterFilter<EnumDefaultValueParameterFilter>();
 
                 // To avoid errors with repeating type names
-                // Also need to replace some symbols for RFC3986-compliance: https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/752
-                c.CustomSchemaIds((type) => type.ToString()
-                    .Replace("[", "_")
-                    .Replace("]", "_")
-                    .Replace(",", "-")
-                    .Replace("`", "_")
-                );
+                c.CustomSchemaIds(type => (Attribute.GetCustomAttribute(type, typeof(SwaggerSchemaIdAttribute)) as SwaggerSchemaIdAttribute)?.Id ?? type.FriendlyId());
             });
+
+            services.AddResponseCompression();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -344,6 +368,8 @@ namespace VirtoCommerce.Storefront
             TelemetryDebugWriter.IsTracingDisabled = true;
 
             app.UseResponseCaching();
+
+            app.UseResponseCompression();
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
@@ -371,6 +397,7 @@ namespace VirtoCommerce.Storefront
                     rewriteOptions.AddIISUrlRewrite(iisUrlRewriteStreamReader);
                 }
             }
+
             rewriteOptions.Add(new StorefrontUrlNormalizeRule());
 
             var requireHttpsOptions = new RequireHttpsOptions();
