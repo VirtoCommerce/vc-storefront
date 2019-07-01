@@ -13,8 +13,8 @@ namespace VirtoCommerce.LiquidThemeEngine
         ValueTask<string> RenderTemplateAsync(string templateContent, string templatePath, object context);
         IDictionary<string, object> GetSettings(string defaultValue = null);
         JObject ReadLocalization();
-        Task<Stream> GetAssetStreamAsync(string fileName);
-        string GetAssetHash(string fileName);
+        Task<Stream> GetAssetStreamAsync(string filePath);
+        string GetAssetHash(string filePath);
         string GetAssetAbsoluteUrl(string assetName);
     }
 }

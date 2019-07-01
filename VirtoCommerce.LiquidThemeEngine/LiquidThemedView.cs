@@ -36,18 +36,19 @@ namespace VirtoCommerce.LiquidThemeEngine
         public string Path { get; private set; }
 
         #region IView members
-
-        public void Render(ViewContext viewContext, TextWriter writer)
-        {
-        }
-
-        public async Task RenderAsync(ViewContext context)
+        public virtual Task RenderAsync(ViewContext context)
         {
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
+            return RenderInternalAsync(context);
+        }
 
+        #endregion
+
+        protected virtual async Task RenderInternalAsync(ViewContext context)
+        {
             var workContext = _workContextAccessor.WorkContext;
             //Set current template
             workContext.Template = _viewName;
@@ -95,6 +96,5 @@ namespace VirtoCommerce.LiquidThemeEngine
             await context.Writer.WriteAsync(result);
         }
 
-        #endregion
     }
 }

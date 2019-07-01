@@ -16,7 +16,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
     /// <summary>
     /// https://docs.shopify.com/themes/liquid-documentation/filters/url-filters
     /// </summary>
-    public partial class UrlFilters
+    public static partial class UrlFilters
     {
         public static string SizeImageLink(string input, string size)
         {

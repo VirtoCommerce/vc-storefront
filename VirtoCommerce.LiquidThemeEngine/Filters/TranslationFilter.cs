@@ -8,7 +8,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
     /// <summary>
     /// Filter used for localization 
     /// </summary>
-    public partial class TranslationFilter
+    public static partial class TranslationFilter
     {
         private static string[] _countSuffixes = new[] { ".zero", ".one", ".two" };
 

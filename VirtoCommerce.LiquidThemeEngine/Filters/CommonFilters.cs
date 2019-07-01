@@ -20,7 +20,7 @@ using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
-    public partial class CommonFilters
+    public static partial class CommonFilters
     {
         private static readonly string[] _poweredLinks = {
                                              "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">.NET ecommerce platform</a> by Virto",

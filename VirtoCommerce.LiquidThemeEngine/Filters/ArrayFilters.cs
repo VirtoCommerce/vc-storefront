@@ -8,7 +8,7 @@ using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
-    public partial class ArrayFilters
+    public static partial class ArrayFilters
     {
         public static object Tree(object input, string propName, string titlePropName, string delimiter, string sortByPropName)
         {

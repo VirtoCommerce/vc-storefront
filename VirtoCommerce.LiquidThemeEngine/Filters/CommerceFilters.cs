@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
-    public partial class CommerceFilters
+    public static partial class CommerceFilters
     {
         #region Static Fields
         private static readonly Lazy<CultureInfo[]> _cultures = new Lazy<CultureInfo[]>(

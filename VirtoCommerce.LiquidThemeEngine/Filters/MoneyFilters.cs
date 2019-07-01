@@ -9,7 +9,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
     /// <summary>
     /// https://docs.shopify.com/themes/liquid-documentation/filters/money-filters
     /// </summary>
-    public partial class MoneyFilters
+    public static partial class MoneyFilters
     {
         /// <summary>
         /// Formats the price based on the shop's HTML without currency setting.

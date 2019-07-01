@@ -8,7 +8,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
     /// String filters are used to manipulate outputs and variables of the string type.
     /// https://docs.shopify.com/themes/liquid-documentation/filters/string-filters
     /// </summary>
-    public partial class StringFilters
+    public static partial class StringFilters
     {
 
         /// <summary>

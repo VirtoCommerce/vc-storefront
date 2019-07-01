@@ -115,7 +115,7 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
                             PublishedDate = CreatedDate = DateTime.TryParse(settingValue, out date) ? date : new DateTime();
                             break;
                         case "tags":
-                            Tags = setting.Value.ToList().OrderBy(t => t).Select(t => t.Handelize()).ToList();
+                            Tags = setting.Value.OrderBy(t => t).Select(t => t.Handelize()).ToList();
                             break;
 
                         case "categories":
@@ -141,7 +141,10 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
 
                         case "authorize":
                             bool isAuthorize;
-                            Authorize = bool.TryParse(settingValue, out isAuthorize) ? isAuthorize : false;
+                            if (bool.TryParse(settingValue, out isAuthorize))
+                            {
+                                Authorize = isAuthorize;
+                            }
                             break;
                     }
                 }

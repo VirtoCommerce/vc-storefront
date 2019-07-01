@@ -89,7 +89,7 @@ namespace VirtoCommerce.Storefront.Model
         /// Gets or sets the current shopping cart
         /// </summary>
         public Lazy<ShoppingCart> CurrentCart { get; set; }
-        public ShoppingCart Cart => CurrentCart.IsValueCreated ? CurrentCart.Value : null;
+        public ShoppingCart Cart => (CurrentCart?.IsValueCreated ?? false) ? CurrentCart.Value : null;
 
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace VirtoCommerce.Storefront.Model
         public QuoteSearchCriteria CurrentQuoteSearchCriteria { get; set; }
 
         public Lazy<QuoteRequest> CurrentQuoteRequest { get; set; }
-        public QuoteRequest QuoteRequest => CurrentQuoteRequest?.IsValueCreated ?? false ? CurrentQuoteRequest.Value : null;
+        public QuoteRequest QuoteRequest => (CurrentQuoteRequest?.IsValueCreated ?? false) ? CurrentQuoteRequest.Value : null;
 
         /// <summary>
         /// Gets or sets the HTML code for payment method prepared form

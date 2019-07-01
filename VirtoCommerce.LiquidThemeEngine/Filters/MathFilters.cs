@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
-    public partial class MathFilters
+    public static partial class MathFilters
     {
         public static object Round(object input, int digits = 0)
         {

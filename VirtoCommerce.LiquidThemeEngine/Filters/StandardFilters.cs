@@ -24,11 +24,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static int Size(object input)
         {
-            if (input is string)
-                return ((string)input).Length;
-            if (input is IEnumerable)
-                return ((IEnumerable)input).Cast<object>().Count();
-            return 0;
+            if (input is string str)
+            {
+                return str.Length;
+            }
+
+            return input is IEnumerable enumerable ? enumerable.Cast<object>().Count() : 0;
         }
 
         /// <summary>
@@ -41,11 +42,20 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string Slice(string input, int start, int len = 1)
         {
             if (input == null || start > input.Length)
+            {
                 return null;
+            }
+
             if (start < 0)
+            {
                 start += input.Length;
+            }
+
             if (start + len > input.Length)
+            {
                 len = input.Length - start;
+            }
+
             return input.Substring(start, len);
         }
 
@@ -78,10 +88,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static string Capitalize(string input)
         {
-            if (input.IsNullOrWhiteSpace())
-                return input;
-
-            return string.IsNullOrEmpty(input)
+            return input.IsNullOrWhiteSpace()
+                ? input
+                : string.IsNullOrEmpty(input)
                 ? input
                 : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(input);
         }
@@ -89,7 +98,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string Escape(string input)
         {
             if (string.IsNullOrEmpty(input))
+            {
                 return input;
+            }
 
             try
             {
@@ -116,9 +127,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string Truncate(string input, int length = 50, string truncateString = "...")
         {
             if (string.IsNullOrEmpty(input))
+            {
                 return input;
+            }
 
-            int l = length - truncateString.Length;
+            var l = length - truncateString.Length;
 
             return input.Length > length
                 ? input.Substring(0, l < 0 ? 0 : l) + truncateString
@@ -128,10 +141,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string Truncatewords(string input, int words = 15, string truncateString = "...")
         {
             if (string.IsNullOrEmpty(input))
+            {
                 return input;
+            }
 
             var wordList = input.Split(' ').ToList();
-            int l = words < 0 ? 0 : words;
+            var l = words < 0 ? 0 : words;
 
             return wordList.Count > l
                 ? string.Join(" ", wordList.Take(l).ToArray()) + truncateString
@@ -154,7 +169,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string StripHtml(object input)
         {
             if (input == null)
+            {
                 return String.Empty;
+            }
 
             var inputString = input.ToString();
 
@@ -186,9 +203,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string Join(IEnumerable input, string glue = " ")
         {
             if (input == null)
+            {
                 return null;
+            }
 
-            IEnumerable<object> castInput = input.Cast<object>();
+            var castInput = input.Cast<object>();
 
             return string.Join(glue, castInput);
         }
@@ -202,20 +221,24 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static IEnumerable Sort(object input, string property = null)
         {
-            List<object> ary;
-            if (input is IEnumerable)
-                ary = ((IEnumerable)input).Flatten().Cast<object>().ToList();
-            else
-                ary = new List<object>(new[] { input });
+            var ary = input is IEnumerable ? ((IEnumerable)input).Flatten().Cast<object>().ToList() : new List<object>(new[] { input });
             if (!ary.Any())
+            {
                 return ary;
+            }
 
             if (string.IsNullOrEmpty(property))
+            {
                 ary.Sort();
+            }
             else if ((ary.All(o => o is IDictionary)) && ((IDictionary)ary.First()).Contains(property))
+            {
                 ary.Sort((a, b) => Comparer.Default.Compare(((IDictionary)a)[property], ((IDictionary)b)[property]));
+            }
             else if (ary.All(o => o.RespondTo(property)))
+            {
                 ary.Sort((a, b) => Comparer.Default.Compare(a.Send(property), b.Send(property)));
+            }
 
             return ary;
         }
@@ -229,18 +252,22 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static IEnumerable Map(IEnumerable input, string property)
         {
             if (input == null)
+            {
                 return null;
+            }
 
-            List<object> ary = input.Cast<object>().ToList();
+            var ary = input.Cast<object>().ToList();
             if (!ary.Any())
+            {
                 return ary;
+            }
 
             if ((ary.All(o => o is IDictionary)) && ((IDictionary)ary.First()).Contains(property))
+            {
                 return ary.Select(e => ((IDictionary)e)[property]);
-            if (ary.All(o => o.RespondTo(property)))
-                return ary.Select(e => e.Send(property));
+            }
 
-            return ary;
+            return ary.All(o => o.RespondTo(property)) ? ary.Select(e => e.Send(property)) : ary;
         }
 
         /// <summary>
@@ -253,10 +280,14 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string Replace(object input, string @string, string replacement = "")
         {
             if (input == null)
+            {
                 return null;
+            }
 
             if (string.IsNullOrEmpty(input.ToString()) || string.IsNullOrEmpty(@string))
+            {
                 return input.ToString();
+            }
 
             //try
             {
@@ -280,13 +311,17 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string ReplaceFirst(string input, string @string, string replacement = "")
         {
             if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(@string))
+            {
                 return input;
+            }
 
-            bool doneReplacement = false;
+            var doneReplacement = false;
             return Regex.Replace(input, @string, m =>
             {
                 if (doneReplacement)
+                {
                     return m.Value;
+                }
 
                 doneReplacement = true;
                 return replacement;
@@ -362,10 +397,14 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string Date(TemplateContext context, object input, string format)
         {
             if (input == null)
+            {
                 return null;
+            }
 
             if (format.IsNullOrWhiteSpace())
+            {
                 return input.ToString();
+            }
 
             switch (format)
             {
@@ -376,9 +415,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                     break;
             }
 
-            string result = input.ToString();
+            var result = input.ToString();
             DateTime date;
-            bool dateParsed = false;
+            var dateParsed = false;
 
             if (input.ToString().Equals("now", StringComparison.OrdinalIgnoreCase))
             {
@@ -417,10 +456,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static object First(IEnumerable array)
         {
-            if (array == null)
-                return null;
-
-            return array.Cast<object>().FirstOrDefault();
+            return array == null ? null : array.Cast<object>().FirstOrDefault();
         }
 
         /// <summary>
@@ -433,10 +469,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static object Last(IEnumerable array)
         {
-            if (array == null)
-                return null;
-
-            return array.Cast<object>().LastOrDefault();
+            return array == null ? null : array.Cast<object>().LastOrDefault();
         }
 
         /// <summary>
@@ -568,8 +601,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static Delegate CreateExpression(Func<Expression, Expression, BinaryExpression> body,
             Type leftType, Type rightType, Type resultType, bool castArgsToResultOnFailure)
         {
-            ParameterExpression lhs = Expression.Parameter(leftType, "lhs");
-            ParameterExpression rhs = Expression.Parameter(rightType, "rhs");
+            var lhs = Expression.Parameter(leftType, "lhs");
+            var rhs = Expression.Parameter(rightType, "rhs");
 
             Expression lhsExpression = lhs;
             Expression rhsExpression = rhs;
@@ -589,8 +622,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                     {
                         // already "TValue, TValue, TValue"...
                         // convert both lhs and rhs to TResult (as appropriate)
-                        Expression castLhs = leftType == resultType ? lhs : (Expression)Expression.Convert(lhs, resultType);
-                        Expression castRhs = rightType == resultType ? rhs : (Expression)Expression.Convert(rhs, resultType);
+                        var castLhs = leftType == resultType ? lhs : (Expression)Expression.Convert(lhs, resultType);
+                        var castRhs = rightType == resultType ? rhs : (Expression)Expression.Convert(rhs, resultType);
 
                         return Expression.Lambda(body(castLhs, castRhs), lhs, rhs).Compile();
                     }
@@ -599,7 +632,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }
             catch (Exception ex)
             {
-                string msg = ex.Message; // avoid capture of ex itself
+                var msg = ex.Message; // avoid capture of ex itself
                 return (Action)(delegate
                 { throw new InvalidOperationException(msg); });
             }
@@ -611,12 +644,18 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             var rightTypeCode = Type.GetTypeCode(right.Type);
 
             if (leftTypeCode == rightTypeCode)
+            {
                 return;
+            }
 
             if (leftTypeCode > rightTypeCode && leftTypeCode != TypeCode.String)
+            {
                 right = Expression.Convert(right, left.Type);
+            }
             else
+            {
                 left = Expression.Convert(left, right.Type);
+            }
         }
     }
 
@@ -625,37 +664,39 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static bool RespondTo(this object value, string member, bool ensureNoParameters = true)
         {
             if (value == null)
+            {
                 throw new ArgumentNullException("value");
+            }
 
-            Type type = value.GetType();
+            var type = value.GetType();
 
-            MethodInfo methodInfo = type.GetMethod(member);
+            var methodInfo = type.GetMethod(member);
             if (methodInfo != null && (!ensureNoParameters || !methodInfo.GetParameters().Any()))
+            {
                 return true;
+            }
 
-            PropertyInfo propertyInfo = type.GetProperty(member);
-            if (propertyInfo != null && propertyInfo.CanRead)
-                return true;
-
-            return false;
+            var propertyInfo = type.GetProperty(member);
+            return propertyInfo != null && propertyInfo.CanRead ? true : false;
         }
 
         public static object Send(this object value, string member, object[] parameters = null)
         {
             if (value == null)
+            {
                 throw new ArgumentNullException("value");
+            }
 
-            Type type = value.GetType();
+            var type = value.GetType();
 
-            MethodInfo methodInfo = type.GetMethod(member);
+            var methodInfo = type.GetMethod(member);
             if (methodInfo != null)
+            {
                 return methodInfo.Invoke(value, parameters);
+            }
 
-            PropertyInfo propertyInfo = type.GetProperty(member);
-            if (propertyInfo != null)
-                return propertyInfo.GetValue(value, null);
-
-            return null;
+            var propertyInfo = type.GetProperty(member);
+            return propertyInfo != null ? propertyInfo.GetValue(value, null) : null;
         }
     }
 
@@ -668,10 +709,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
         public static string ToSafeString(this object s)
         {
-            if (s == null)
-                return "";
-
-            return s.ToString();
+            return s == null ? "" : s.ToString();
         }
 
         public static object ToNumber(this object s)
@@ -714,7 +752,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
                 match = Regex.Match(s as string, string.Format("(?-mix:{0})", @"^([+-]?\d+).*$"));
                 if (match.Success)
+                {
                     return Convert.ToInt32(match.Groups[1].Value);
+                }
             }
 
             return 0;
@@ -740,22 +780,30 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static IEnumerable Flatten(this IEnumerable array)
         {
             foreach (var item in array)
+            {
                 if (item is string)
+                {
                     yield return item;
+                }
                 else if (item is IEnumerable)
+                {
                     foreach (var subitem in Flatten((IEnumerable)item))
                     {
                         yield return subitem;
                     }
+                }
                 else
+                {
                     yield return item;
+                }
+            }
         }
 
         public static void EachWithIndex(this IEnumerable<object> array, Action<object, int> callback)
         {
-            int index = 0;
-            ;
-            foreach (object item in array)
+            var index = 0;
+
+            foreach (var item in array)
             {
                 callback(item, index);
                 ++index;
