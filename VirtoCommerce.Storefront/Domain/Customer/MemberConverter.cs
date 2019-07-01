@@ -107,7 +107,7 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new Contact
             {
                 Name = userRegistration.Name ?? userRegistration.UserName,
-                FullName = string.Join(" ", userRegistration.FirstName, userRegistration.LastName),
+                FullName = string.IsNullOrWhiteSpace(userRegistration.FullName)? string.Join(" ", userRegistration.FirstName, userRegistration.LastName) : userRegistration.FullName,
                 FirstName = userRegistration.FirstName,
                 LastName = userRegistration.LastName,
                 Salutation = userRegistration.Salutation,

@@ -392,6 +392,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     {
                         user.Contact.FirstName = userUpdateInfo.FirstName;
                         user.Contact.LastName = userUpdateInfo.LastName;
+                        user.Contact.FullName = userUpdateInfo.FullName;
                     }
 
                     user.Email = userUpdateInfo.Email;
