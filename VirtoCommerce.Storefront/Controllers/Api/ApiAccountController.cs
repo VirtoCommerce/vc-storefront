@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -392,6 +393,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     {
                         user.Contact.FirstName = userUpdateInfo.FirstName;
                         user.Contact.LastName = userUpdateInfo.LastName;
+                        user.Contact.FullName = userUpdateInfo.FullName;
                     }
 
                     user.Email = userUpdateInfo.Email;
@@ -427,5 +429,65 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             return Ok();
         }
+
+        // DELETE: storefrontapi/account/phonenumber
+        [HttpDelete("phonenumber")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult<RemovePhoneNumberResult>> RemovePhoneNumber()
+        {
+            var twoFactorAuthEnabled = await _signInManager.UserManager.GetTwoFactorEnabledAsync(WorkContext.CurrentUser);
+            if (twoFactorAuthEnabled)
+            {
+                return Forbid();
+            }
+
+            var result = await _signInManager.UserManager.SetPhoneNumberAsync(WorkContext.CurrentUser, null);
+            await _signInManager.SignInAsync(WorkContext.CurrentUser, isPersistent: false);
+
+            return new RemovePhoneNumberResult { Succeeded = result.Succeeded, Errors = result.Errors.Select(x => x.Description) };
+        }
+
+        // POST: storefrontapi/account/twofactorauthentification
+        [HttpPost("twofactorauthentification")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult<ChangeTwoFactorAuthenticationResult>> ChangeTwoFactorAuthentication([FromBody] ChangeTwoFactorAuthenticationModel model)
+        {
+            if (model.Enabled)
+            {
+                var phoneConfirmed = await _signInManager.UserManager.IsPhoneNumberConfirmedAsync(WorkContext.CurrentUser);
+                if (!phoneConfirmed)
+                {
+                    var url = "/account/phonenumber";
+
+                    return new ChangeTwoFactorAuthenticationResult { Succeeded = false, VerificationUrl = url };
+                }
+            }
+
+            var result = await _signInManager.UserManager.SetTwoFactorEnabledAsync(WorkContext.CurrentUser, model.Enabled);
+            await _signInManager.SignInAsync(WorkContext.CurrentUser, isPersistent: false);
+
+            return new ChangeTwoFactorAuthenticationResult { Succeeded = result.Succeeded, Errors = result.Errors.Select(x => x.Description) };
+        }
+
+        // POST: storefrontapi/account/phonenumber
+        [HttpPost("phonenumber")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult<UpdatePhoneNumberResult>> UpdatePhoneNumber([FromBody] UpdatePhoneNumberModel model)
+        {
+            TryValidateModel(model);
+
+            if (!ModelState.IsValid)
+            {
+                return new UpdatePhoneNumberResult { Succeeded = false, Error = "Phone number is not valid" };
+            }
+
+            var code = await _signInManager.UserManager.GenerateChangePhoneNumberTokenAsync(WorkContext.CurrentUser, model.PhoneNumber);
+            var result = await _signInManager.UserManager.ChangePhoneNumberAsync(WorkContext.CurrentUser, model.PhoneNumber, code);
+            await _signInManager.SignInAsync(WorkContext.CurrentUser, isPersistent: false);
+
+            return new UpdatePhoneNumberResult { Succeeded = result.Succeeded };
+
+        }
+
     }
 }

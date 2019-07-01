@@ -97,6 +97,22 @@ namespace VirtoCommerce.Storefront.Model.Security
                 Description = "Invitation has already been used"
             };
         }
+        public static FormError PhoneNumberVerificationFailed()
+        {
+            return new FormError
+            {
+                Code = nameof(PhoneNumberVerificationFailed).PascalToKebabCase(),
+                Description = "Phone number verification failed"
+            };
+        }
+        public static FormError ErrorSendNotification(string error)
+        {
+            return new FormError
+            {
+                Code = nameof(ErrorSendNotification).PascalToKebabCase(),
+                Description = error
+            };
+        }
 
     }
 }

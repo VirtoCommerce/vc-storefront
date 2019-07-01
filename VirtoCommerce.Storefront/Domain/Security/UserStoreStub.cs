@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
@@ -18,8 +19,18 @@ using VirtoCommerce.Storefront.Model.Security;
 namespace VirtoCommerce.Storefront.Domain.Security
 {
     //Stub for UserManager
-    public sealed class UserStoreStub : IUserStore<User>, IUserEmailStore<User>, IUserPasswordStore<User>, IUserLockoutStore<User>, IUserLoginStore<User>,
-        IUserSecurityStampStore<User>, IUserClaimStore<User>, IRoleStore<Role>, IUserPhoneNumberStore<User>, IUserTwoFactorStore<User>
+    public sealed class UserStoreStub :
+        IUserStore<User>,
+        IUserEmailStore<User>,
+        IUserPasswordStore<User>,
+        IUserLockoutStore<User>,
+        IUserLoginStore<User>,
+        IUserSecurityStampStore<User>,
+        IUserClaimStore<User>,
+        IRoleStore<Role>,
+        IUserPhoneNumberStore<User>,
+        IUserTwoFactorStore<User>,
+        IUserAuthenticatorKeyStore<User>
     {
         private readonly ISecurity _platformSecurityApi;
         private readonly IStorefrontMemoryCache _memoryCache;
@@ -473,6 +484,19 @@ namespace VirtoCommerce.Storefront.Domain.Security
             throw new NotImplementedException();
         }
         #endregion
+
+        #region IUserAuthenticatorKeyStore<User>
+        public Task SetAuthenticatorKeyAsync(User user, string key, CancellationToken cancellationToken)
+        {
+            user.TwoFactorAuthenticatorKey = key;
+            return Task.CompletedTask;
+        }
+
+        public Task<string> GetAuthenticatorKeyAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.TwoFactorAuthenticatorKey);
+        }
+        #endregion IUserAuthenticatorKeyStore<User>
 
         public void Dispose()
         {
