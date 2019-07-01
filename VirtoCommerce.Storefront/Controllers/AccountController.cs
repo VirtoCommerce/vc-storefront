@@ -137,12 +137,8 @@ namespace VirtoCommerce.Storefront.Controllers
                         Sender = WorkContext.CurrentStore.Email,
                         Recipient = GetUserEmail(user)
                     };
-                    var sendNotifcationResult = await SendNotificationAsync(registrationEmailNotification);
-                    if (sendNotifcationResult.IsSuccess == false)
-                    {
-                        WorkContext.Form.Errors.Add(SecurityErrorDescriber.ErrorSendNotification(sendNotifcationResult.ErrorMessage));
-                        return View("customers/register", WorkContext);
-                    }
+                    await SendNotificationAsync(registrationEmailNotification);
+
                     if (_options.SendAccountConfirmation)
                     {
                         var token = await _signInManager.UserManager.GenerateEmailConfirmationTokenAsync(user);
@@ -153,7 +149,7 @@ namespace VirtoCommerce.Storefront.Controllers
                             Sender = WorkContext.CurrentStore.Email,
                             Recipient = GetUserEmail(user)
                         };
-                        sendNotifcationResult = await SendNotificationAsync(emailConfirmationNotification);
+                        var sendNotifcationResult = await SendNotificationAsync(emailConfirmationNotification);
                         if (sendNotifcationResult.IsSuccess == false)
                         {
                             WorkContext.Form.Errors.Add(SecurityErrorDescriber.ErrorSendNotification(sendNotifcationResult.ErrorMessage));
