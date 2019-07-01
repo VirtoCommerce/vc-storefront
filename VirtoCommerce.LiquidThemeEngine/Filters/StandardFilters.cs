@@ -402,7 +402,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 {
                     format = newFormat;
                 }
-
             }
 
             if (dateParsed)
