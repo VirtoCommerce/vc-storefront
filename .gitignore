@@ -267,3 +267,4 @@ __pycache__/
 # Cake - Uncomment if you are using it
 # tools/
 /VirtoCommerce.Storefront/wwwroot/cms-content
+.vscode
