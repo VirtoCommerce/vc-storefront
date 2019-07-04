@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.XPath;
 using Scriban;
@@ -429,12 +428,14 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 dateParsed = true;
             }
 
-            var key = string.Concat("date_formats.", format);
-            var newFormat = TranslationFilter.T(context, key);
-
-            if (!newFormat.IsNullOrEmpty())
+            if (Regex.IsMatch(format, @"^[\w\d_\-]+$"))
             {
-                format = newFormat;
+                var key = string.Concat("date_formats.", format);
+                var newFormat = TranslationFilter.T(context, key);
+                if (!newFormat.IsNullOrEmpty())
+                {
+                    format = newFormat;
+                }
             }
 
             if (dateParsed)
