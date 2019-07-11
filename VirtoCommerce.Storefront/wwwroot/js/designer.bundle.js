@@ -332,6 +332,7 @@ exports.DndInteractor = DndInteractor;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Environment = {
     RenderBlockApiUrl: '/designer-preview/block',
+    ResetCacheApiUrl: '/designer-preview/reset-cache',
     DesignerUrl: 'http://localhost/'
     // DesignerUrl: 'http://vc-admin-test.azurewebsites.net/designer'
     // DesignerUrl: 'https://vc-com-new-initial-platform.azurewebsites.net/designer'
@@ -432,7 +433,8 @@ HandlersFactory.handlers = [
     new handlers.SwapHandler(),
     new handlers.ReloadHandler(),
     new handlers.PageHandler(),
-    new handlers.HoverHandler()
+    new handlers.HoverHandler(),
+    new handlers.ResetHandler()
 ];
 exports.HandlersFactory = HandlersFactory;
 
@@ -659,6 +661,7 @@ __export(__webpack_require__(/*! ./select.handler */ "./handlers/select.handler.
 __export(__webpack_require__(/*! ./show.handler */ "./handlers/show.handler.ts"));
 __export(__webpack_require__(/*! ./swap.handler */ "./handlers/swap.handler.ts"));
 __export(__webpack_require__(/*! ./update.handler */ "./handlers/update.handler.ts"));
+__export(__webpack_require__(/*! ./reset.handler */ "./handlers/reset.handler.ts"));
 __export(__webpack_require__(/*! ./reload.handler */ "./handlers/reload.handler.ts"));
 __export(__webpack_require__(/*! ./page.handler */ "./handlers/page.handler.ts"));
 
@@ -793,6 +796,33 @@ class RemoveHandler extends base_handler_1.BaseHandler {
     }
 }
 exports.RemoveHandler = RemoveHandler;
+
+
+/***/ }),
+
+/***/ "./handlers/reset.handler.ts":
+/*!***********************************!*\
+  !*** ./handlers/reset.handler.ts ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const environment_1 = __webpack_require__(/*! ./../environment */ "./environment.ts");
+const service_locator_1 = __webpack_require__(/*! ./../service-locator */ "./service-locator.ts");
+const base_handler_1 = __webpack_require__(/*! ./base.handler */ "./handlers/base.handler.ts");
+class ResetHandler extends base_handler_1.BaseHandler {
+    constructor() {
+        super(...arguments);
+        this.key = 'reset';
+    }
+    executeInternal(msg, list, vm) {
+        service_locator_1.ServiceLocator.getHttp().postTo(environment_1.Environment.ResetCacheApiUrl, {});
+    }
+}
+exports.ResetHandler = ResetHandler;
 
 
 /***/ }),
@@ -1314,11 +1344,11 @@ class HttpService {
     }
     get() {
     }
-    post(model) {
+    postTo(endpoint, model) {
         // https://gist.github.com/codecorsair/e14ec90cee91fa8f56054afaa0a39f13
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
-            xhr.open('post', this.endpoint);
+            xhr.open('post', endpoint);
             xhr.setRequestHeader('Accept', 'application/json, text/javascript, text/plain');
             xhr.setRequestHeader('Cache-Control', 'no-cache');
             xhr.setRequestHeader('Content-Type', 'application/json');
@@ -1342,6 +1372,9 @@ class HttpService {
             //   resolve(errorResponse(xhr, 'Request took longer than expected.'));
             // };
         });
+    }
+    post(model) {
+        return this.postTo(this.endpoint, model);
     }
 }
 exports.HttpService = HttpService;

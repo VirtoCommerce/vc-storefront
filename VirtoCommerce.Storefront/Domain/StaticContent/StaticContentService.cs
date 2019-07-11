@@ -48,10 +48,16 @@ namespace VirtoCommerce.Storefront.Domain
 
         #region IStaticContentService Members
 
+        public void ResetCache(Store store)
+        {
+            ContentBlobCacheRegion.ExpireRegion();
+            StaticContentCacheRegion.ExpireRegion();
+        }
+
         public IEnumerable<ContentItem> LoadStoreStaticContent(Store store)
         {
-            var baseStoreContentPath = _basePath + "/" + store.Id;
-            var cacheKey = CacheKey.With(GetType(), "LoadStoreStaticContent", store.Id);
+            var baseStoreContentPath = string.Concat(_basePath, "/", store.Id);
+            var cacheKey = GetCacheKey(store);
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { StaticContentCacheRegion.CreateChangeToken(), _contentBlobProvider.Watch(baseStoreContentPath + "/**/*") }));
@@ -95,6 +101,11 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
         #endregion
+
+        private string GetCacheKey(Store store)
+        {
+            return CacheKey.With(GetType(), "LoadStoreStaticContent", store.Id);
+        }
 
         private void LoadAndRenderContentItem(string contentPath, ContentItem contentItem)
         {

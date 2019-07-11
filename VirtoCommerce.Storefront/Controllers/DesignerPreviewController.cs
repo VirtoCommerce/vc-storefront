@@ -15,9 +15,12 @@ namespace VirtoCommerce.Storefront.Controllers
     [StorefrontRoute]
     public class DesignerPreviewController : StorefrontControllerBase
     {
-        public DesignerPreviewController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder) :
+        readonly IStaticContentService contentService;
+
+        public DesignerPreviewController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IStaticContentService contentService) :
             base(workContextAccessor, urlBuilder)
         {
+            this.contentService = contentService;
         }
 
         [HttpGet("designer-preview")]
@@ -27,6 +30,13 @@ namespace VirtoCommerce.Storefront.Controllers
             //Response.Headers.Add("Content-Security-Policy", "frame-src https://vc-com-new-initial-platform.azurewebsites.net;");
             WorkContext.Layout = Request.Query["layout"].ToString();
             return View("json-preview", WorkContext);
+        }
+
+        [HttpPost("designer-preview/reset-cache")]
+        public IActionResult ResetCache()
+        {
+            contentService.ResetCache(WorkContext.CurrentStore);
+            return Ok();
         }
 
         [HttpPost("designer-preview/block")]

@@ -86,7 +86,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
                 if (cancellationToken.IsCancellationRequested)
                     break;
 
-                var lastModifiedUtc = file.Properties.LastModified.HasValue ? file.Properties.LastModified.Value.UtcDateTime : DateTime.MinValue;
+                var lastModifiedUtc = file.Properties.LastModified.HasValue ? file.Properties.LastModified.Value.UtcDateTime : DateTime.UtcNow;
 
                 if (!_previousChangeTimeUtcTokenLookup.TryGetValue(file.Name, out DateTime dt))
                 {
