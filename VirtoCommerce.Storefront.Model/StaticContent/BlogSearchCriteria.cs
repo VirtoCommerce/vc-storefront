@@ -3,6 +3,10 @@ using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.StaticContent
 {
+    public class BlogSearchCriteriaModel
+    {
+        public BlogSearchCriteria Criteria { get; set; }
+    }
     public partial class BlogSearchCriteria : PagedSearchCriteria
     {
         private static int _defaultPageSize = 20;

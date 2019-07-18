@@ -20,8 +20,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/blog/{blogName}/search
         [HttpPost("{blogName}/search")]
         [ValidateAntiForgeryToken]
-        public ActionResult<List<BlogArticle>> Search([FromQuery] string blogName, [FromBody] BlogSearchCriteria criteria)
+        public ActionResult<List<BlogArticle>> Search([FromRoute] string blogName, [FromBody] BlogSearchCriteriaModel model)
         {
+            var criteria = model.Criteria;
             var articles = new List<BlogArticle>();
 
             var blog = WorkContext.Blogs.FirstOrDefault(b => b.Name.Equals(blogName, StringComparison.OrdinalIgnoreCase));
