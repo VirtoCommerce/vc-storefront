@@ -141,11 +141,21 @@ namespace VirtoCommerce.Storefront.Model
 
             if (taxRate != null && taxRate.Rate.Amount > 0)
             {
-                var amount = Total.Amount > 0 ? Total.Amount : Price.Amount;
-                if (amount > 0)
+                if (taxRate.PercentRate > 0)
                 {
-                    TaxPercentRate = TaxRate.TaxPercentRound(taxRate.Rate.Amount / amount);
+                    TaxPercentRate = taxRate.PercentRate;
                 }
+                else
+                {
+                    var amount = Total.Amount > 0 ? Total.Amount : Price.Amount;
+                    if (amount > 0)
+                    {
+                        TaxPercentRate = TaxRate.TaxPercentRound(taxRate.Rate.Amount / amount);
+                    }
+                }
+
+                TaxDetails.Clear();
+                TaxDetails.AddRange(taxRate.Line.TaxDetails);
             }
         }
 

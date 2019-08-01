@@ -560,7 +560,8 @@ namespace VirtoCommerce.Storefront.Domain
                     Name = lineItem.Name,
                     TaxType = lineItem.TaxType,
                     //Special case when product have 100% discount and need to calculate tax for old value
-                    Amount = lineItem.ExtendedPrice.Amount > 0 ? lineItem.ExtendedPrice : lineItem.SalePrice
+                    Amount = lineItem.ExtendedPrice.Amount > 0 ? lineItem.ExtendedPrice : lineItem.SalePrice,
+                    TypeName = "item"
                 });
             }
 
@@ -573,7 +574,8 @@ namespace VirtoCommerce.Storefront.Domain
                     Name = shipment.ShipmentMethodOption,
                     TaxType = shipment.TaxType,
                     //Special case when shipment have 100% discount and need to calculate tax for old value
-                    Amount = shipment.Total.Amount > 0 ? shipment.Total : shipment.Price
+                    Amount = shipment.Total.Amount > 0 ? shipment.Total : shipment.Price,
+                    TypeName = "shipment"
                 };
                 result.Lines.Add(totalTaxLine);
 
@@ -592,7 +594,8 @@ namespace VirtoCommerce.Storefront.Domain
                     Name = payment.PaymentGatewayCode,
                     TaxType = payment.TaxType,
                     //Special case when shipment have 100% discount and need to calculate tax for old value
-                    Amount = payment.Total.Amount > 0 ? payment.Total : payment.Price
+                    Amount = payment.Total.Amount > 0 ? payment.Total : payment.Price,
+                    TypeName = "payment"
                 };
                 result.Lines.Add(totalTaxLine);
             }
@@ -604,7 +607,8 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new TaxDetail(currency)
             {
                 Name = taxDeatilDto.Name,
-                Rate = new Money(taxDeatilDto.Rate ?? 0, currency)
+                Rate = (decimal)(taxDeatilDto.Rate ?? 0),
+                Amount = new Money(taxDeatilDto.Amount ?? 0, currency),
             };
             return result;
         }
@@ -614,7 +618,8 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new cartDto.TaxDetail
             {
                 Name = taxDetail.Name,
-                Rate = (double)taxDetail.Rate.Amount
+                Rate = (double)taxDetail.Rate,
+                Amount = (double)taxDetail.Amount.Amount,
             };
             return result;
         }

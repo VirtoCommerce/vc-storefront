@@ -131,7 +131,7 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new TaxDetail(currency)
             {
                 Amount = new Money(dto.Amount ?? 0, currency),
-                Rate = new Money(dto.Rate ?? 0, currency),
+                Rate = (decimal)(dto.Rate ?? 0),
                 Name = dto.Name
             };
             return result;
