@@ -561,6 +561,8 @@ namespace VirtoCommerce.Storefront.Domain
                     TaxType = lineItem.TaxType,
                     //Special case when product have 100% discount and need to calculate tax for old value
                     Amount = lineItem.ExtendedPrice.Amount > 0 ? lineItem.ExtendedPrice : lineItem.SalePrice,
+                    Quantity = lineItem.Quantity,
+                    Price = lineItem.PlacedPrice,
                     TypeName = "item"
                 });
             }
