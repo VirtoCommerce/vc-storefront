@@ -113,8 +113,7 @@ namespace VirtoCommerce.Storefront.Model
                     }
                 }
 
-                TaxDetails.Clear();
-                TaxDetails.AddRange(shipmentTaxRate.Line.TaxDetails);
+                TaxDetails = shipmentTaxRate.Line.TaxDetails;
             }
         }
         #endregion

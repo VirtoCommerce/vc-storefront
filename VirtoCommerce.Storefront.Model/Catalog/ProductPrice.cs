@@ -182,8 +182,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
                     }
                 }
 
-                TaxDetails.Clear();
-                TaxDetails.AddRange(taxRate.Line.TaxDetails);
+                TaxDetails = taxRate.Line.TaxDetails;
             }
             foreach (var tierPrice in TierPrices)
             {

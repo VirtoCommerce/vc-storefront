@@ -154,8 +154,7 @@ namespace VirtoCommerce.Storefront.Model
                     }
                 }
 
-                TaxDetails.Clear();
-                TaxDetails.AddRange(taxRate.Line.TaxDetails);
+                TaxDetails = taxRate.Line.TaxDetails;
             }
         }
 

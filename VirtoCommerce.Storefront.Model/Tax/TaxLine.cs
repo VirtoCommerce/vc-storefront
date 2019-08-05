@@ -9,7 +9,6 @@ namespace VirtoCommerce.Storefront.Model
         {
             Amount = new Money(currency);
             Price = new Money(currency);
-            TaxDetails = new List<TaxDetail>();
         }
         /// <summary>
         /// represent  original object code (lineItem, shipment etc)
@@ -28,6 +27,6 @@ namespace VirtoCommerce.Storefront.Model
         public Money Price { get; set; }
         public string TaxType { get; set; }
         public string TypeName { get; set; }
-        public ICollection<TaxDetail> TaxDetails { get; set; }
+        public IList<TaxDetail> TaxDetails { get; set; } = new List<TaxDetail>();
     }
 }
