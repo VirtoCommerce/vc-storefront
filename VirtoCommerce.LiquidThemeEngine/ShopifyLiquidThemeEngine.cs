@@ -144,8 +144,8 @@ namespace VirtoCommerce.LiquidThemeEngine
         {
             Stream retVal = null;
             var filePathWithoutExtension = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
-            //file.ext => file.ext || file || file.liquid || file.ext.liquid        
-            var searchPatterns = new[] { filePath, filePathWithoutExtension, string.Format(_liquidTemplateFormat, filePathWithoutExtension), string.Format(_liquidTemplateFormat, filePath) };
+            //file.ext => file.ext || file.liquid || file.ext.liquid || file     
+            var searchPatterns = new[] { filePath, string.Format(_liquidTemplateFormat, filePathWithoutExtension), string.Format(_liquidTemplateFormat, filePath), filePathWithoutExtension };
 
 
             string currentThemeFilePath = null;

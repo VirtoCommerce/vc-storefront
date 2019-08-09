@@ -14,7 +14,7 @@ namespace VirtoCommerce.Storefront.Model.Common
         private static readonly Regex _regex1 = new Regex(@"([A-Z]+)([A-Z][a-z])", RegexOptions.Compiled);
         private static readonly Regex _regex2 = new Regex(@"([a-z\d])([A-Z])", RegexOptions.Compiled);
         private static readonly Regex _emailRegex = new Regex(@"^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-||_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+([a-z]+|\d|-|\.{0,1}|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])?([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$", RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1));
-
+        private static  char[] _maskChars = { '*', '?' };
         public static string PascalToKebabCase(this string name)
         {
             if (name == null)
@@ -77,6 +77,11 @@ namespace VirtoCommerce.Storefront.Model.Common
         public static bool EqualsInvariant(this string str1, string str2)
         {
             return string.Equals(str1, str2, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public static bool FilePathHasMaskChars(this string path)
+        {
+            return (!string.IsNullOrEmpty(path) && path.IndexOfAny(_maskChars) >= 0);
         }
 
         public static bool FitsMask(this string fileName, string fileMask)

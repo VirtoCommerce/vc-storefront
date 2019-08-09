@@ -136,7 +136,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var retVal = new List<string>();
             path = NormalizePath(path);
-            //Search pattern may contains part of path /path/*.jpg then nedd add this part to base path
+            //Search pattern may contains a part of path /path/*.jpg then need to add this part to a base path
             searchPattern = searchPattern.Replace('\\', '/').TrimStart('/');
             var subDir = NormalizePath(Path.GetDirectoryName(searchPattern));
             if (!string.IsNullOrEmpty(subDir))
@@ -144,29 +144,41 @@ namespace VirtoCommerce.Storefront.Domain
                 path = path.TrimEnd('/') + "/" + subDir;
                 searchPattern = Path.GetFileName(searchPattern);
             }
-            var context = new OperationContext();
-            var blobItems = new List<IListBlobItem>();
-            BlobContinuationToken token = null;
-            var operationContext = new OperationContext();
-            var directory = GetCloudBlobDirectory(path);
-            do
-            {
-                var resultSegment = await directory.ListBlobsSegmentedAsync(recursive, BlobListingDetails.Metadata, null, token, _options.BlobRequestOptions, operationContext);
-                token = resultSegment.ContinuationToken;
-                blobItems.AddRange(resultSegment.Results);
-            } while (token != null);
 
-            // Loop over items within the container and output the length and URI.
-            foreach (var item in blobItems)
+            //Try to check that passed search pattern doesn't contain mask wildcard characters
+            //this means that a direct link to the resource is passed, and we do not need to perform any search
+            if (!searchPattern.FilePathHasMaskChars())
             {
-                var block = item as CloudBlockBlob;
-                if (block != null)
+                var directPath = Path.Combine(path, searchPattern);
+                if (await PathExistsAsync(directPath))
                 {
-                    var blobRelativePath = GetRelativeUrl(block.Uri.ToString());
-                    var fileName = Path.GetFileName(Uri.UnescapeDataString(block.Uri.ToString()));
-                    if (fileName.FitsMask(searchPattern))
+                    retVal.Add(directPath);
+                }
+            }
+            else
+            {
+                var blobItems = new List<IListBlobItem>();
+                BlobContinuationToken token = null;
+                var operationContext = new OperationContext();
+                var directory = GetCloudBlobDirectory(path);
+                do
+                {
+                    var resultSegment = await directory.ListBlobsSegmentedAsync(recursive, BlobListingDetails.Metadata, null, token, _options.BlobRequestOptions, operationContext);
+                    token = resultSegment.ContinuationToken;
+                    blobItems.AddRange(resultSegment.Results);
+                } while (token != null);
+
+                // Loop over items within the container and output the length and URI.
+                foreach (var item in blobItems)
+                {
+                    if (item is CloudBlockBlob block)
                     {
-                        retVal.Add(blobRelativePath);
+                        var blobRelativePath = GetRelativeUrl(block.Uri.ToString());
+                        var fileName = Path.GetFileName(Uri.UnescapeDataString(block.Uri.ToString()));
+                        if (fileName.FitsMask(searchPattern))
+                        {
+                            retVal.Add(blobRelativePath);
+                        }
                     }
                 }
             }
