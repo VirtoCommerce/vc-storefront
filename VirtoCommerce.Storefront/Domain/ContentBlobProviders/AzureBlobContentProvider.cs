@@ -147,13 +147,10 @@ namespace VirtoCommerce.Storefront.Domain
 
             //Try to check that passed search pattern doesn't contain mask wildcard characters
             //this means that a direct link to the resource is passed, and we do not need to perform any search
-            if (!searchPattern.FilePathHasMaskChars())
+            var directPath = Path.Combine(path, searchPattern);
+            if (!searchPattern.FilePathHasMaskChars() && await PathExistsAsync(directPath))
             {
-                var directPath = Path.Combine(path, searchPattern);
-                if (await PathExistsAsync(directPath))
-                {
-                    retVal.Add(directPath);
-                }
+                retVal.Add(directPath);
             }
             else
             {
