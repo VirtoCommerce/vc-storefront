@@ -32,7 +32,6 @@ namespace VirtoCommerce.Storefront.Model.Order
         public string Status { get; set; }
         public IList<string> Statuses { get; set; }
 
-
     }
 }
 
