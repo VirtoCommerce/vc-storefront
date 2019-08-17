@@ -35,13 +35,13 @@ namespace VirtoCommerce.Storefront.Model.Security
             public static readonly Role ProcurementPortalAdmin = new Role
             {
                 Id = "pp-admin",
-                Name = "Administrator",
+                Name = "Procurement Portal Administrator",
                 Permissions = new string[] { Permissions.CanViewUsers, Permissions.CanCreateUsers, Permissions.CanSeeOrganizationDetail, Permissions.CanDeleteUsers, Permissions.CanEditOrganization, Permissions.CanEditUsers, Permissions.CanInviteUsers, Permissions.CanViewOrders }
             };
             public static readonly Role ProcurementPortalAgent = new Role
             {
                 Id = "pp-agent",
-                Name = "Agent",
+                Name = "Procurement Portal Agent",
                 Permissions = new string[] { Permissions.CanSeeOrganizationDetail }
             };
 
