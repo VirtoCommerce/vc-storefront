@@ -186,7 +186,6 @@ namespace VirtoCommerce.Storefront.Domain
                 Name = organizaionDto.Name,
                 MemberType = organizaionDto.MemberType,
                 UserGroups = organizaionDto.Groups,
-                Emails = organizaionDto.Emails
             };
 
             if (organizaionDto.Addresses != null)
@@ -296,7 +295,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (!org.Phones.IsNullOrEmpty())
             {
-                retVal.Emails = org.Emails;
+                retVal.Phones = org.Phones;
             }
 
             if (!org.DynamicProperties.IsNullOrEmpty())
