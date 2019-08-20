@@ -6,9 +6,10 @@ namespace VirtoCommerce.Storefront.Model
     {
         public TaxDetail(Currency currency)
         {
+            Rate = new Money(currency);
             Amount = new Money(currency);
         }
-        public decimal Rate { get; set; }
+        public Money Rate { get; set; }
 
         public Money Amount { get; set; }
         public string Title => Name;
@@ -25,7 +26,7 @@ namespace VirtoCommerce.Storefront.Model
         public override object Clone()
         {
             var result = base.Clone() as TaxDetail;
-            result.Rate = Rate;
+            result.Rate = Rate?.Clone() as Money;
             result.Amount = Amount?.Clone() as Money;
             return result;
         }

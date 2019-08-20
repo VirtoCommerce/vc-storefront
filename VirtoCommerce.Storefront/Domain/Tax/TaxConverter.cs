@@ -84,7 +84,6 @@ namespace VirtoCommerce.Storefront.Domain
                 Price = (double)taxLine.Price.Amount,
                 TypeName = taxLine.TypeName
             };
-
         }
 
         public static TaxEvaluationContext ToTaxEvaluationContext(this WorkContext workContext, IEnumerable<Product> products = null)
@@ -113,10 +112,8 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 Name = taxDetailDto.Name,
                 Amount = new Money(taxDetailDto.Amount ?? 0, currency),
-                Rate = (decimal)(taxDetailDto.Rate ?? 0)
+                Rate = new Money(taxDetailDto.Rate ?? 0, currency),
             };
         }
-
-
     }
 }

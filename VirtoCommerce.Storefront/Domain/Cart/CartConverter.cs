@@ -609,7 +609,7 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new TaxDetail(currency)
             {
                 Name = taxDeatilDto.Name,
-                Rate = (decimal)(taxDeatilDto.Rate ?? 0),
+                Rate = new Money(taxDeatilDto.Rate ?? 0, currency),
                 Amount = new Money(taxDeatilDto.Amount ?? 0, currency),
             };
             return result;
@@ -620,7 +620,7 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new cartDto.TaxDetail
             {
                 Name = taxDetail.Name,
-                Rate = (double)taxDetail.Rate,
+                Rate = (double)taxDetail.Rate.Amount,
                 Amount = (double)taxDetail.Amount.Amount,
             };
             return result;
