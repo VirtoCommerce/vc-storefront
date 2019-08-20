@@ -8674,8 +8674,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the TaxLine class.
         /// </summary>
-        public TaxLine(string code = default(string), string name = default(string), double? amount = default(double?), int? quantity = default(int?), double? price = default(double?), string taxType = default(string), string id = default(string))
+        public TaxLine(string typeName = default(string), string code = default(string), string name = default(string), double? amount = default(double?), int? quantity = default(int?), double? price = default(double?), string taxType = default(string), string id = default(string))
         {
+            TypeName = typeName;
             Code = code;
             Name = name;
             Amount = amount;
@@ -8690,6 +8691,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "typeName")]
+        public string TypeName { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8858,12 +8864,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the TaxRate class.
         /// </summary>
-        public TaxRate(double? rate = default(double?), string currency = default(string), TaxLine line = default(TaxLine), string taxProviderCode = default(string))
+        public TaxRate(double? rate = default(double?), double? percentRate = default(double?), string currency = default(string), TaxLine line = default(TaxLine), string taxProviderCode = default(string), IList<TaxDetail> taxDetails = default(IList<TaxDetail>))
         {
             Rate = rate;
+            PercentRate = percentRate;
             Currency = currency;
             Line = line;
             TaxProviderCode = taxProviderCode;
+            TaxDetails = taxDetails;
             CustomInit();
         }
 
@@ -8879,6 +8887,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "percentRate")]
+        public double? PercentRate { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "currency")]
         public string Currency { get; set; }
 
@@ -8891,6 +8904,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "taxProviderCode")]
         public string TaxProviderCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxDetails")]
+        public IList<TaxDetail> TaxDetails { get; set; }
 
     }
 }

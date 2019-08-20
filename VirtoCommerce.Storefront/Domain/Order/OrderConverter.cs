@@ -472,7 +472,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 Name = taxDetailDto.Name,
                 Amount = new Money(taxDetailDto.Amount ?? 0, currency),
-                Rate = new Money(taxDetailDto.Rate ?? 0, currency)
+                Rate = new Money(taxDetailDto.Rate ?? 0, currency),
             };
             return result;
         }
