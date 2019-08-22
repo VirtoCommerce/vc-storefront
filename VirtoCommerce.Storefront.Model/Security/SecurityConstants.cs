@@ -32,20 +32,20 @@ namespace VirtoCommerce.Storefront.Model.Security
                 Permissions = new string[] { Permissions.CanSeeOrganizationDetail }
             };
 
-            public static readonly Role ProcurementPortalAdmin = new Role
+            public static readonly Role StoreAdministrator = new Role
             {
-                Id = "pp-admin",
-                Name = "Procurement Portal Administrator",
+                Id = "store-admin",
+                Name = "Store administrator",
                 Permissions = new string[] { Permissions.CanViewUsers, Permissions.CanCreateUsers, Permissions.CanSeeOrganizationDetail, Permissions.CanDeleteUsers, Permissions.CanEditOrganization, Permissions.CanEditUsers, Permissions.CanInviteUsers, Permissions.CanViewOrders }
             };
-            public static readonly Role ProcurementPortalAgent = new Role
+            public static readonly Role StoreManager = new Role
             {
-                Id = "pp-agent",
-                Name = "Procurement Portal Agent",
-                Permissions = new string[] { Permissions.CanSeeOrganizationDetail }
+                Id = "store-manager",
+                Name = "Store manager",
+                Permissions = new string[] { Permissions.CanSeeOrganizationDetail, Permissions.CanViewOrders }
             };
 
-            public static readonly IEnumerable<Role> AllRoles = new[] { OrganizationMaintainer, OrganizationEmployee, ProcurementPortalAdmin, ProcurementPortalAgent };
+            public static readonly IEnumerable<Role> AllRoles = new[] { OrganizationMaintainer, OrganizationEmployee, StoreAdministrator, StoreManager };
         }
 
         public static class Permissions
