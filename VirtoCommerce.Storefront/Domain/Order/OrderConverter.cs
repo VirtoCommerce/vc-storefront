@@ -19,6 +19,10 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new orderDto.CustomerOrderSearchCriteria
             {
                 CustomerId = criteria.CustomerId,
+                StartDate = criteria.StartDate,
+                EndDate = criteria.EndDate,
+                Status = criteria.Status,
+                Statuses = criteria.Statuses,
 
                 Skip = criteria.Start,
                 Take = criteria.PageSize,
