@@ -1,8 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model
@@ -30,5 +26,7 @@ namespace VirtoCommerce.Storefront.Model
         /// </summary>
         public Money Price { get; set; }
         public string TaxType { get; set; }
+        public string TypeName { get; set; }
+        public IList<TaxDetail> TaxDetails { get; set; } = new List<TaxDetail>();
     }
 }

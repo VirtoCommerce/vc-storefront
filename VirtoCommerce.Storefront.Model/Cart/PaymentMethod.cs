@@ -154,13 +154,22 @@ namespace VirtoCommerce.Storefront.Model
         {
             TaxPercentRate = 0m;
             var paymentTaxRate = taxRates.FirstOrDefault(x => x.Line.Id != null && x.Line.Id.EqualsInvariant(Code ?? ""));
-            if (paymentTaxRate != null && paymentTaxRate.Rate.Amount > 0)
+            if (paymentTaxRate != null)
             {
-                var amount = Total.Amount > 0 ? Total.Amount : Price.Amount;
-                if (amount > 0)
+                if (paymentTaxRate.PercentRate > 0)
                 {
-                    TaxPercentRate = TaxRate.TaxPercentRound(paymentTaxRate.Rate.Amount / amount);
+                    TaxPercentRate = paymentTaxRate.PercentRate;
                 }
+                else
+                {
+                    var amount = Total.Amount > 0 ? Total.Amount : Price.Amount;
+                    if (amount > 0)
+                    {
+                        TaxPercentRate = TaxRate.TaxPercentRound(paymentTaxRate.Rate.Amount / amount);
+                    }
+                }
+
+                TaxDetails = paymentTaxRate.Line.TaxDetails;
             }
         }
         #endregion
