@@ -31,10 +31,12 @@ namespace VirtoCommerce.Storefront.Domain
                     TypeName = taxRateDto.Line.TypeName,
 
                     Amount = new Money(taxRateDto.Line.Amount.Value, currency),
-                    Price = new Money(taxRateDto.Line.Price.Value, currency),
-
-                    TaxDetails = taxRateDto.TaxDetails.Select(x => x.ToTaxDetail(currency)).ToList()
+                    Price = new Money(taxRateDto.Line.Price.Value, currency)
                 };
+                if (taxRateDto.TaxDetails != null)
+                {
+                    result.Line.TaxDetails = taxRateDto.TaxDetails.Select(x => x.ToTaxDetail(currency)).ToList();
+                }
             }
 
             return result;
