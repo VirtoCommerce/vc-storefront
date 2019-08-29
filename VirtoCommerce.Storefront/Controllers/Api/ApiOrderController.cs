@@ -190,13 +190,15 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private async Task<orderModel.CustomerOrder> GetOrderDtoByNumber(string number)
         {
             var order = await _orderApi.GetByNumberAsync(number);
-            var authorizationResult = await _authorizationService.AuthorizeAsync(User, order, CanAccessOrderAuthorizationRequirement.PolicyName);
-
-            if (!authorizationResult.Succeeded)
+            var viewAllOrdersAuthorizationResult = await _authorizationService.AuthorizeAsync(User, null, SecurityConstants.Permissions.CanViewOrders);
+            if (!viewAllOrdersAuthorizationResult.Succeeded)
             {
-                throw new StorefrontException($"Order with number {{ number }} not found (or not belongs to current user)");
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, order, CanAccessOrderAuthorizationRequirement.PolicyName);
+                if (!authorizationResult.Succeeded)
+                {
+                    throw new StorefrontException($"Order with number {{ number }} not found (or not belongs to current user)");
+                }
             }
-
             return order;
         }
 
