@@ -180,6 +180,28 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return File(stream, "application/pdf");
         }
 
+        // PUT: storefrontapi/orders/{orderNumber}/status
+        [HttpPut("{orderNumber}/status")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeOrderStatus(string orderNumber, [FromBody] dynamic payload)
+        {
+            var newStatus = payload.newStatus.ToString();
+
+            if (string.IsNullOrEmpty(newStatus))
+            {
+                throw new StorefrontException("The new order status can't be nullable or empty");
+            }
+
+            using (await AsyncLock.GetLockByKey(GetAsyncLockKey(orderNumber, WorkContext)).LockAsync())
+            {
+                var orderDto = await GetOrderDtoByNumber(orderNumber);
+                orderDto.Status = newStatus;
+                await _orderApi.UpdateAsync(orderDto);
+            }
+
+            return Ok();
+        }
+
         private async Task<CustomerOrder> GetOrderByNumber(string number)
         {
             var order = await GetOrderDtoByNumber(number);
