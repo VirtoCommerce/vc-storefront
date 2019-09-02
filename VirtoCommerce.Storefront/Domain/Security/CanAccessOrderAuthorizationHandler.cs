@@ -1,7 +1,9 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Security;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
@@ -24,11 +26,11 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, CanAccessOrderAuthorizationRequirement requirement, CustomerOrder resource)
         {
-            if (resource != null && resource.CustomerId == _workContextAccessor.WorkContext.CurrentUser?.Id)
+            var userCanViewAllOrders = (_workContextAccessor.WorkContext.CurrentUser?.Permissions.Any(x => x == SecurityConstants.Permissions.CanViewOrders) ?? false);
+            if (resource != null && (resource.CustomerId == _workContextAccessor.WorkContext.CurrentUser?.Id || userCanViewAllOrders))
             {
                 context.Succeed(requirement);
             }
-
             return Task.CompletedTask;
         }
     }
