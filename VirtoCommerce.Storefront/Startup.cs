@@ -176,6 +176,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, CanEditOrganizationResourceAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, CanAccessOrderAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, OrderStatusChangeHandler>();
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(CanImpersonateAuthorizationRequirement.PolicyName,
@@ -190,6 +191,8 @@ namespace VirtoCommerce.Storefront
                                 policy => policy.Requirements.Add(new AnonymousUserForStoreAuthorizationRequirement()));
                 options.AddPolicy(CanAccessOrderAuthorizationRequirement.PolicyName,
                               policy => policy.Requirements.Add(new CanAccessOrderAuthorizationRequirement()));
+                options.AddPolicy(OrderStatusChangeAuthorizationRequirement.PolicyName,
+                               policy => policy.Requirements.Add(new OrderStatusChangeAuthorizationRequirement()));
             });
 
 
