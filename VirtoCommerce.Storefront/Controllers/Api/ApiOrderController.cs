@@ -220,7 +220,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, order, CanAccessOrderAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
             {
-                throw new StorefrontException($"Order with number {{ number }} not found (or current user can not get access)");
+                throw new StorefrontException($"Order with number { number } not found (or current user can not get access)");
             }
             return order;
         }
