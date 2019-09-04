@@ -59,10 +59,10 @@ namespace VirtoCommerce.Storefront.Domain
                         };
                         if (params2 != null)
                         {
-                            criteria.CopyFrom(params2);
+                            productSearchCriteria.CopyFrom(params2);
                         }
                         //criteria.CategoryId = category.Id;
-                        if (string.IsNullOrEmpty(criteria.SortBy) && !sortInfos2.IsNullOrEmpty())
+                        if (string.IsNullOrEmpty(productSearchCriteria.SortBy) && !sortInfos2.IsNullOrEmpty())
                         {
                             productSearchCriteria.SortBy = SortInfo.ToString(sortInfos2);
                         }

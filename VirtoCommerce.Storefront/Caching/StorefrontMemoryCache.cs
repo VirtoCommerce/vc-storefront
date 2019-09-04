@@ -20,10 +20,24 @@ namespace VirtoCommerce.Storefront.Caching
 
         public MemoryCacheEntryOptions GetDefaultCacheEntryOptions()
         {
-            return new MemoryCacheEntryOptions
+            var result = new MemoryCacheEntryOptions();
+
+            if (!CacheEnabled)
             {
-                AbsoluteExpirationRelativeToNow = CacheEnabled ? AbsoluteExpiration : TimeSpan.FromTicks(1)
-            };
+                result.AbsoluteExpirationRelativeToNow = TimeSpan.FromTicks(1);
+            }
+            else
+            {
+                if (AbsoluteExpiration != null)
+                {
+                    result.AbsoluteExpirationRelativeToNow = AbsoluteExpiration;
+                }
+                else if (SlidingExpiration != null)
+                {
+                    result.SlidingExpiration = SlidingExpiration;
+                }
+            }
+            return result;
         }
 
         public ICacheEntry CreateEntry(object key)
@@ -48,6 +62,7 @@ namespace VirtoCommerce.Storefront.Caching
         }
 
         protected TimeSpan? AbsoluteExpiration => _storefrontOptions.CacheAbsoluteExpiration;
+        protected TimeSpan? SlidingExpiration => _storefrontOptions.CacheSlidingExpiration;
 
         protected bool CacheEnabled => _storefrontOptions.CacheEnabled;
 

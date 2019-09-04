@@ -29,10 +29,23 @@ namespace VirtoCommerce.Storefront.Model.Security
             {
                 Id = "org-employee",
                 Name = "Organization employee",
-                Permissions = new string[] { Permissions.CanSeeOrganizationDetail } 
+                Permissions = new string[] { Permissions.CanSeeOrganizationDetail }
             };
 
-            public static readonly IEnumerable<Role> AllRoles = new[] { OrganizationMaintainer, OrganizationEmployee };
+            public static readonly Role StoreAdministrator = new Role
+            {
+                Id = "store-admin",
+                Name = "Store administrator",
+                Permissions = new string[] { Permissions.CanViewUsers, Permissions.CanCreateUsers, Permissions.CanSeeOrganizationDetail, Permissions.CanDeleteUsers, Permissions.CanEditOrganization, Permissions.CanEditUsers, Permissions.CanInviteUsers, Permissions.CanViewOrders }
+            };
+            public static readonly Role StoreManager = new Role
+            {
+                Id = "store-manager",
+                Name = "Store manager",
+                Permissions = new string[] { Permissions.CanSeeOrganizationDetail, Permissions.CanViewOrders }
+            };
+
+            public static readonly IEnumerable<Role> AllRoles = new[] { OrganizationMaintainer, OrganizationEmployee, StoreAdministrator, StoreManager };
         }
 
         public static class Permissions
@@ -45,8 +58,9 @@ namespace VirtoCommerce.Storefront.Model.Security
             public const string CanEditUsers = "storefront:user:edit";
             public const string CanDeleteUsers = "storefront:user:delete";
             public const string CanViewUsers = "storefront:user:view";
+            public const string CanViewOrders = "storefront:order:view";
 
-            public static readonly IEnumerable<string> AllPermissions = new [] { CanViewUsers, CanResetCache, CanSeeOrganizationDetail, CanEditOrganization, CanInviteUsers, CanEditUsers, CanDeleteUsers, CanCreateUsers };
+            public static readonly IEnumerable<string> AllPermissions = new[] { CanViewUsers, CanResetCache, CanSeeOrganizationDetail, CanEditOrganization, CanInviteUsers, CanEditUsers, CanDeleteUsers, CanCreateUsers, CanViewOrders };
         }
     }
 }
