@@ -183,7 +183,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // PUT: storefrontapi/orders/{orderNumber}/status
         [HttpPut("{orderNumber}/status")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangeOrderStatus(string orderNumber, [FromBody] OrderStatusChange payload)
+        public async Task<ActionResult> ChangeOrderStatus(string orderNumber, [FromBody] ChangeOrderStatus changeOrderStatus)
         {
             if (!ModelState.IsValid)
             {
@@ -192,16 +192,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             using (await AsyncLock.GetLockByKey(GetAsyncLockKey(orderNumber, WorkContext)).LockAsync())
             {
-                var order = await _orderApi.GetByNumberAsync(orderNumber);
+                var order = await GetOrderDtoByNumber(orderNumber);
                 var authorizationResult = await _authorizationService.AuthorizeAsync(User, order, OrderStatusChangeAuthorizationRequirement.PolicyName);
                 if (!authorizationResult.Succeeded)
                 {
                     throw new StorefrontException("The current user doesn't have any permissions to change the order status");
                 }
-
-                var orderDto = await GetOrderDtoByNumber(orderNumber);
-                orderDto.Status = payload.NewStatus;
-                await _orderApi.UpdateAsync(orderDto);
+                order.Status = changeOrderStatus.NewStatus;
+                await _orderApi.UpdateAsync(order);
             }
 
             return Ok();
