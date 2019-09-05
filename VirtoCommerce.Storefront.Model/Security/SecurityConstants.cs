@@ -36,13 +36,13 @@ namespace VirtoCommerce.Storefront.Model.Security
             {
                 Id = "store-admin",
                 Name = "Store administrator",
-                Permissions = new string[] { Permissions.CanViewUsers, Permissions.CanCreateUsers, Permissions.CanSeeOrganizationDetail, Permissions.CanDeleteUsers, Permissions.CanEditOrganization, Permissions.CanEditUsers, Permissions.CanInviteUsers, Permissions.CanViewOrders }
+                Permissions = new string[] { Permissions.CanViewUsers, Permissions.CanCreateUsers, Permissions.CanSeeOrganizationDetail, Permissions.CanDeleteUsers, Permissions.CanEditOrganization, Permissions.CanEditUsers, Permissions.CanInviteUsers, Permissions.CanViewOrders, Permissions.CanChangeOrderStatus }
             };
             public static readonly Role StoreManager = new Role
             {
                 Id = "store-manager",
                 Name = "Store manager",
-                Permissions = new string[] { Permissions.CanSeeOrganizationDetail, Permissions.CanViewOrders }
+                Permissions = new string[] { Permissions.CanSeeOrganizationDetail, Permissions.CanViewOrders, Permissions.CanChangeOrderStatus }
             };
 
             public static readonly IEnumerable<Role> AllRoles = new[] { OrganizationMaintainer, OrganizationEmployee, StoreAdministrator, StoreManager };
@@ -59,8 +59,8 @@ namespace VirtoCommerce.Storefront.Model.Security
             public const string CanDeleteUsers = "storefront:user:delete";
             public const string CanViewUsers = "storefront:user:view";
             public const string CanViewOrders = "storefront:order:view";
-
-            public static readonly IEnumerable<string> AllPermissions = new[] { CanViewUsers, CanResetCache, CanSeeOrganizationDetail, CanEditOrganization, CanInviteUsers, CanEditUsers, CanDeleteUsers, CanCreateUsers, CanViewOrders };
+            public const string CanChangeOrderStatus = "storefront:order:changestatus";
+            public static readonly IEnumerable<string> AllPermissions = new[] { CanViewUsers, CanResetCache, CanSeeOrganizationDetail, CanEditOrganization, CanInviteUsers, CanEditUsers, CanDeleteUsers, CanCreateUsers, CanViewOrders, CanChangeOrderStatus };
         }
     }
 }
