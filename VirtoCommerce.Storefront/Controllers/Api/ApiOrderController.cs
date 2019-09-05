@@ -180,6 +180,27 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return File(stream, "application/pdf");
         }
 
+        // PUT: storefrontapi/orders/{orderNumber}/status
+        [HttpPut("{orderNumber}/status")]
+        [ValidateAntiForgeryToken]
+        [Authorize(SecurityConstants.Permissions.CanChangeOrderStatus)]
+        public async Task<ActionResult> ChangeOrderStatus(string orderNumber, [FromBody] ChangeOrderStatus changeOrderStatus)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            using (await AsyncLock.GetLockByKey(GetAsyncLockKey(orderNumber, WorkContext)).LockAsync())
+            {
+                var order = await GetOrderDtoByNumber(orderNumber);
+                order.Status = changeOrderStatus.NewStatus;
+                await _orderApi.UpdateAsync(order);
+            }
+
+            return Ok();
+        }
+
         private async Task<CustomerOrder> GetOrderByNumber(string number)
         {
             var order = await GetOrderDtoByNumber(number);
@@ -193,7 +214,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, order, CanAccessOrderAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
             {
-                throw new StorefrontException($"Order with number {{ number }} not found (or current user can not get access)");
+                throw new StorefrontException($"Order with number { number } not found (or current user can not get access)");
             }
             return order;
         }
