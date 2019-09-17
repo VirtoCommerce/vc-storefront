@@ -26,8 +26,18 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, CanAccessOrderAuthorizationRequirement requirement, CustomerOrder resource)
         {
-            var userCanViewAllOrders = (_workContextAccessor.WorkContext.CurrentUser?.Permissions.Any(x => x == SecurityConstants.Permissions.CanViewOrders) ?? false);
-            if (resource != null && (resource.CustomerId == _workContextAccessor.WorkContext.CurrentUser?.Id || userCanViewAllOrders))
+            var user = _workContextAccessor.WorkContext.CurrentUser;
+
+            var result = user.IsAdministrator;
+            if (!result)
+            {
+                result = user.Permissions.Contains(SecurityConstants.Permissions.CanViewOrders);
+            }
+            if (!result)
+            {
+                result = resource != null && resource.CustomerId == user.Id;
+            }
+            if (result)
             {
                 context.Succeed(requirement);
             }
