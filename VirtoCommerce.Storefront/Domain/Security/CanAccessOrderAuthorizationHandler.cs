@@ -29,7 +29,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             var user = _workContextAccessor.WorkContext.CurrentUser;
 
             var result = user.IsAdministrator;
-            if (!result)
+            if (!result && user.Permissions != null)
             {
                 result = user.Permissions.Contains(SecurityConstants.Permissions.CanViewOrders);
             }
