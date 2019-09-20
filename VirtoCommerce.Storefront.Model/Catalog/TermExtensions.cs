@@ -29,6 +29,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         {
             List<string> result = null;
 
+            const string commaEscapeString = "%x2C";
             if (terms != null)
             {
                 var strings = terms
@@ -38,7 +39,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
                         g =>
                             string.Join(":", g.Key,
                                 string.Join(",",
-                                    g.Select(t => t.Value)
+                                    g.Select(t => t.Value?.Replace(",", commaEscapeString))
                                         .Distinct(StringComparer.OrdinalIgnoreCase)
                                         .OrderBy(v => v))))
                     .ToList();

@@ -1,9 +1,12 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using System.Threading.Tasks;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -192,9 +195,8 @@ namespace VirtoCommerce.Storefront
                               policy => policy.Requirements.Add(new CanAccessOrderAuthorizationRequirement()));
             });
 
-
             var auth = services.AddAuthentication();
-
+  
             var facebookSection = Configuration.GetSection("Authentication:Facebook");
             if (facebookSection.GetChildren().Any())
             {
@@ -232,8 +234,13 @@ namespace VirtoCommerce.Storefront
             //and it can lead to platform access denied for them. (TODO: Need to remove after platform migration to .NET Core)
             services.Configure<PasswordHasherOptions>(option => option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2);
             services.Configure<IdentityOptions>(Configuration.GetSection("IdentityOptions"));
-            services.Configure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, Configuration.GetSection("CookieAuthenticationOptions"));
             services.AddIdentity<User, Role>(options => { }).AddDefaultTokenProviders();
+
+            services.AddScoped<CustomCookieAuthenticationEvents>();
+            services.ConfigureApplicationCookie(options => {
+                Configuration.GetSection("CookieAuthenticationOptions").Bind(options);
+                options.EventsType = typeof(CustomCookieAuthenticationEvents);
+            });
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -247,9 +254,6 @@ namespace VirtoCommerce.Storefront
             {
                 options.Cookie.IsEssential = true;
             });
-
-            services.Replace(ServiceDescriptor.Transient<CookieAuthenticationHandler, CustomCookieAuthenticationHandler>());
-
             //Add Liquid view engine
             services.AddLiquidViewEngine(options =>
             {
@@ -382,8 +386,11 @@ namespace VirtoCommerce.Storefront
             app.UseMiddleware<CreateStorefrontRolesMiddleware>();
             app.UseMiddleware<ApiErrorHandlingMiddleware>();
 
-
-            app.UseStatusCodePagesWithReExecute("/error/{0}");
+            //Do not use status code pages for Api requests
+            app.UseWhen(context => !context.Request.Path.IsApi(), appBuilder =>
+            {
+                appBuilder.UseStatusCodePagesWithReExecute("/error/{0}");
+            });
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger(c => c.RouteTemplate = "docs/{documentName}/docs.json");
