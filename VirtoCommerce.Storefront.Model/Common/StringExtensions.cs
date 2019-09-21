@@ -122,9 +122,9 @@ namespace VirtoCommerce.Storefront.Model.Common
             var retVal = phrase;
             if (phrase != null)
             {
-                retVal = phrase.RemoveAccent().ToLower();
+                retVal = phrase.ToLower();
 
-                retVal = Regex.Replace(retVal, @"[^\w\d\s-]", ""); // invalid chars           
+                retVal = Regex.Replace(retVal, @"[^\p{L}\d\s-]", ""); // invalid chars           
                 retVal = Regex.Replace(retVal, @"\s+", " ").Trim(); // convert multiple spaces into one space   
                 retVal = retVal.Substring(0, retVal.Length <= 240 ? retVal.Length : 240).Trim(); // cut and trim it   
                 retVal = Regex.Replace(retVal, @"\s", "-"); // hyphens   
