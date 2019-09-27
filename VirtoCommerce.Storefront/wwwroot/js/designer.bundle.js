@@ -333,9 +333,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Environment = {
     RenderBlockApiUrl: '/designer-preview/block',
     ResetCacheApiUrl: '/designer-preview/reset-cache',
-    DesignerUrl: 'http://localhost/'
-    // DesignerUrl: 'http://vc-admin-test.azurewebsites.net/designer'
-    // DesignerUrl: 'https://vc-com-new-initial-platform.azurewebsites.net/designer'
+    DesignerUrl: ''
 };
 
 
@@ -1005,9 +1003,11 @@ exports.measureElement = measureElement;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const environment_1 = __webpack_require__(/*! ./environment */ "./environment.ts");
 const service_locator_1 = __webpack_require__(/*! ./service-locator */ "./service-locator.ts");
 document.addEventListener('DOMContentLoaded', () => {
     console.log('run preview window');
+    environment_1.Environment.DesignerUrl = window['__designer_preview__'];
     const app = service_locator_1.ServiceLocator.createApp();
     app.run();
 });

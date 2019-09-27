@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Infrastructure;
@@ -17,7 +18,9 @@ namespace VirtoCommerce.Storefront.Controllers
     {
         readonly IStaticContentService contentService;
 
-        public DesignerPreviewController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IStaticContentService contentService) :
+        public DesignerPreviewController(IWorkContextAccessor workContextAccessor,
+            IStorefrontUrlBuilder urlBuilder,
+            IStaticContentService contentService) :
             base(workContextAccessor, urlBuilder)
         {
             this.contentService = contentService;

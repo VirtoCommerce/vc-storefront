@@ -10,9 +10,4 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         public IDictionary<string, object> Settings { set; get; }
         public List<IDictionary<string, object>> Blocks { set; get; }
     }
-
-    public class JsonBlock : Drop
-    {
-        public dynamic Block { set; get; }
-    }
 }
