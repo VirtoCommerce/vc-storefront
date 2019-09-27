@@ -13,17 +13,17 @@ namespace VirtoCommerce.Storefront.Model.Security.Specifications
         {
             _user = user;
         }
-        public virtual bool IsSatisfiedBy(Store store)
+        public virtual bool IsSatisfiedBy(Store obj)
         {
-            if (store == null)
+            if (obj == null)
             {
-                throw new ArgumentNullException(nameof(store));
+                throw new ArgumentNullException(nameof(obj));
             }
             //Allow to login to store for administrators or for users not assigned to store
             var result = _user.IsAdministrator || _user.StoreId.IsNullOrEmpty();
             if(!result)
             {   
-                result = store.TrustedGroups.Concat(new[] { store.Id } ).Contains(_user.StoreId);
+                result = obj.TrustedGroups.Concat(new[] { obj.Id } ).Contains(_user.StoreId);
             }
             return result;
         }

@@ -47,14 +47,20 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return result;
         }
 
-        public static  User ToUser(this UserRegistration registerForm)
+        public static User ToUser(this UserRegistration registerForm)
         {
             var result = new User
             {
                 Email = registerForm.Email,
                 UserName = registerForm.UserName,
-                Password = registerForm.Password               
+                Password = registerForm.Password,
+                UserType = "Customer"
             };
+            //Take userName as Email if it valid and Email is not set 
+            if (string.IsNullOrEmpty(result.Email))
+            {
+                result.Email = registerForm.UserName.IsValidEmail() ? registerForm.UserName : result.Email;
+            }
             return result;
         }
 
@@ -77,7 +83,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 PasswordHash = user.PasswordHash,
                 UserState = user.UserState.ToString(),
                 UserType = user.UserType,
-                IsAdministrator = user.IsAdministrator
+                IsAdministrator = user.IsAdministrator,
+                PhoneNumber = user.PhoneNumber,
+                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
             };
 
             if (!user.Roles.IsNullOrEmpty())
@@ -108,7 +116,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 StoreId = userDto.StoreId,
                 IsRegisteredUser = true,
                 IsAdministrator = userDto.IsAdministrator ?? false,
-                Permissions = userDto.Permissions,              
+                Permissions = userDto.Permissions,
                 AccessFailedCount = userDto.AccessFailedCount ?? 0,
                 LockoutEnabled = userDto.LockoutEnabled ?? false,
                 EmailConfirmed = userDto.EmailConfirmed ?? false,
@@ -116,7 +124,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 PasswordHash = userDto.PasswordHash,
                 SecurityStamp = userDto.SecurityStamp,
                 UserState = EnumUtility.SafeParse(userDto.UserState, AccountState.Approved),
-                UserType = userDto.UserType
+                UserType = userDto.UserType,
+                TwoFactorEnabled = userDto.TwoFactorEnabled ?? false,
+                PhoneNumberConfirmed = userDto.PhoneNumberConfirmed ?? false,
             };
 
             if (!userDto.Roles.IsNullOrEmpty())

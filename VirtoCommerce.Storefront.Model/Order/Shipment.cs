@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using VirtoCommerce.Storefront.Infrastructure.Swagger;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Marketing;
 
@@ -8,6 +9,7 @@ namespace VirtoCommerce.Storefront.Model.Order
     /// <summary>
     /// Represents order shipment
     /// </summary>
+    [SwaggerSchemaId("OrderShipment")]
     public partial class Shipment
     {
         public Shipment(Currency currency)
@@ -32,7 +34,8 @@ namespace VirtoCommerce.Storefront.Model.Order
             Discounts = new List<Discount>();
 
         }
-
+        public string Title => ShipmentMethodCode;
+        public string Handle => ShipmentMethodCode;
         /// <summary>
         /// Customer organization
         /// </summary>
@@ -173,8 +176,8 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// <summary>
         /// Gets or Sets TaxIncluded
         /// </summary>
-        public bool? TaxIncluded { get; set; }     
-       
+        public bool? TaxIncluded { get; set; }
+
         /// <summary>
         /// Gets or Sets IsCancelled
         /// </summary>

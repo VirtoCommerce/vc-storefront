@@ -1,69 +1,47 @@
-using Microsoft.Extensions.Caching.Memory;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi;
-using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models;
-using VirtoCommerce.Storefront.Caching;
-using VirtoCommerce.Storefront.Extensions;
-using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Model.Caching;
-using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Marketing;
+using VirtoCommerce.Storefront.Model.Marketing.Services;
 using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Domain
 {
     public class MarketingService : IMarketingService
     {
-        private readonly IMarketingModuleDynamicContent _dynamicContentApi;
-        private readonly IStorefrontMemoryCache _memoryCache;
-        private readonly IApiChangesWatcher _apiChangesWatcher;
+        private readonly IDynamicContentEvaluator _dynamicContentEvaluator;
         private readonly IWorkContextAccessor _workContextAccessor;
 
-        public MarketingService(IMarketingModuleDynamicContent dynamicContentApi, IStorefrontMemoryCache memoryCache, IApiChangesWatcher changesWatcher, IWorkContextAccessor workContextAccessor)
+        public MarketingService(IDynamicContentEvaluator dynamicContentEvaluator, IWorkContextAccessor workContextAccessor)
         {
-            _dynamicContentApi = dynamicContentApi;
-            _memoryCache = memoryCache;
-            _apiChangesWatcher = changesWatcher;
+            _dynamicContentEvaluator = dynamicContentEvaluator;
             _workContextAccessor = workContextAccessor;
         }
 
+        [Obsolete("Use IDynamicContentEvaluator instead")]
         public virtual async Task<string> GetDynamicContentHtmlAsync(string storeId, string placeholderName)
         {
             string htmlContent = null;
 
-            //TODO: make full context
-            var evaluationContext = new DynamicContentEvaluationContext
+            var evalContext = _workContextAccessor.WorkContext.ToDynamicContentEvaluationContext();
+            evalContext.PlaceName = placeholderName;
+            evalContext.StoreId = storeId;
+            var result = await _dynamicContentEvaluator.EvaluateDynamicContentItemsAsync(evalContext);
+            if (result != null)
             {
-                StoreId = storeId,
-                PlaceName = placeholderName,
-                UserGroups = _workContextAccessor.WorkContext.CurrentUser?.Contact?.UserGroups
-            };
-
-            var cacheKey = CacheKey.With(GetType(), "GetDynamicContentHtmlAsync", storeId, placeholderName, !evaluationContext.UserGroups.IsNullOrEmpty() ? string.Join(',', evaluationContext.UserGroups) : "");
-            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-            {
-                cacheEntry.AddExpirationToken(MarketingCacheRegion.CreateChangeToken());
-                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
-                var dynamicContentItems = (await _dynamicContentApi.EvaluateDynamicContentAsync(evaluationContext)).Select(x => x.ToDynamicContentItem());
-
-                if (dynamicContentItems != null)
+                var htmlContentSpec = new HtmlDynamicContentSpecification();
+                var htmlDynamicContent = result.FirstOrDefault(htmlContentSpec.IsSatisfiedBy);
+                if (htmlDynamicContent != null)
                 {
-                    var htmlContentSpec = new HtmlDynamicContentSpecification();
-                    var htmlDynamicContent = dynamicContentItems.FirstOrDefault(htmlContentSpec.IsSatisfiedBy);
-                    if (htmlDynamicContent != null)
+                    var dynamicProperty = htmlDynamicContent.DynamicProperties.FirstOrDefault(htmlContentSpec.IsSatisfiedBy);
+                    if (dynamicProperty != null && dynamicProperty.Values.Any(v => v.Value != null))
                     {
-                        var dynamicProperty = htmlDynamicContent.DynamicProperties.FirstOrDefault(htmlContentSpec.IsSatisfiedBy);
-                        if (dynamicProperty != null && dynamicProperty.Values.Any(v => v.Value != null))
-                        {
-                            htmlContent = dynamicProperty.Values.First().Value.ToString();
-                        }
+                        htmlContent = dynamicProperty.Values.First().Value.ToString();
                     }
                 }
-                return htmlContent;
-            });
+            }
+            return htmlContent;
         }
     }
 }

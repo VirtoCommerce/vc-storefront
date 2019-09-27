@@ -1,24 +1,30 @@
-using PagedList.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using Newtonsoft.Json;
+using PagedList.Core;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
-    public sealed class MutablePagedList<T> : PagedListMetaData, IMutablePagedList<T>
+    public sealed class MutablePagedList<T> : PagedListMetaData, IMutablePagedList<T>, IList, IDictionary
     {
-
+        private static readonly MutablePagedList<T> _empty = new MutablePagedList<T>(Enumerable.Empty<T>());
         private readonly Func<int, int, IEnumerable<SortInfo>, NameValueCollection, IPagedList<T>> _getter;
         private IPagedList<T> _pagedList;
         private readonly object _lockObject = new object();
 
-        public MutablePagedList(IEnumerable<T> superSet)
-            : this((newPageNumber, newPageSize, sortInfos) => new PagedList<T>(superSet.AsQueryable(), newPageNumber, newPageSize), 1, Math.Max(superSet.Count(), 1))
+        public MutablePagedList(IEnumerable<T> superSet, int pageNumber, int pageSize, int totalCount)
+          : this((newPageNumber, newPageSize, sortInfos) => new StaticPagedList<T>(superSet.AsQueryable(), newPageNumber, newPageSize, totalCount), pageNumber, pageSize)
         {
-            TotalItemCount = superSet.Count();
+            TotalItemCount = totalCount;
             PageCount = 1;
+        }
+
+        public MutablePagedList(IEnumerable<T> superSet)
+            : this(superSet, 1, 1, superSet.Count())
+        {
         }
 
         public MutablePagedList(Func<int, int, IEnumerable<SortInfo>, IPagedList<T>> getter, int pageNumber, int pageSize)
@@ -31,6 +37,14 @@ namespace VirtoCommerce.Storefront.Model.Common
             PageNumber = pageNumber;
             PageSize = pageSize;
             _getter = getter;
+        }
+
+        public static MutablePagedList<T> Empty
+        {
+            get
+            {
+                return _empty;
+            }
         }
 
         #region IMutablePagedList Members
@@ -134,6 +148,159 @@ namespace VirtoCommerce.Storefront.Model.Common
         }
 
         #endregion
+
+        #region IList
+        object IList.this[int index]
+        {
+            get
+            {
+                TryReloadPagedData();
+                return _pagedList.OfType<object>().ToList()[index];
+
+            }
+            set => throw new NotImplementedException();
+        }
+
+        public bool IsFixedSize => false;
+
+        public bool IsReadOnly => true;
+
+
+        public bool IsSynchronized => false;
+
+        public object SyncRoot => _pagedList;
+
+
+
+        public int Add(object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CanWrite(string member)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool Contains(object value)
+        {
+            return TryGetValue(value, out var dummy);
+        }
+
+
+        public void CopyTo(Array array, int index)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public int IndexOf(object value)
+        {
+            var result = -1;
+            if (TryGetValue(value, out var obj))
+            {
+                result = _pagedList.OfType<object>().ToList().IndexOf(obj);
+            }
+            return result;
+        }
+
+        public void Insert(int index, object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveAt(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Add(object key, object value)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        #endregion
+        #region IDictionary
+
+        public ICollection Keys
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public ICollection Values
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+
+
+        public object this[object key]
+        {
+            get
+            {
+                TryGetValue(key, out var result);
+                return result;
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        
+        IDictionaryEnumerator IDictionary.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        private bool TryGetValue(object key, out object value)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            value = null;
+            TryReloadPagedData();
+            if (key is string stringKey)
+            {
+                if (stringKey == "size")
+                {
+                    value = Count;
+                }
+                else
+                {
+                    value = _pagedList.OfType<IAccessibleByIndexKey>().Where(x => !string.IsNullOrEmpty(x.IndexKey)).FirstOrDefault(x => x.IndexKey.EqualsInvariant(stringKey));
+                }
+            }
+            else if (key is IAccessibleByIndexKey accessibleByIndexKey)
+            {
+                value = _pagedList.OfType<IAccessibleByIndexKey>().FirstOrDefault(x => x.IndexKey.EqualsInvariant(accessibleByIndexKey.IndexKey));
+            }
+            else
+            {
+                value = _pagedList.FirstOrDefault(x => x.Equals(key));
+            }
+            return value != null;
+        }
 
         private void TryReloadPagedData()
         {

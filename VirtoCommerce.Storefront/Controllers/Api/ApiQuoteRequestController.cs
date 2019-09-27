@@ -14,6 +14,7 @@ using VirtoCommerce.Storefront.Model.Services;
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
     [StorefrontApiRoute("")]
+    [ResponseCache(CacheProfileName = "None")]
     public class ApiQuoteRequestController : StorefrontControllerBase
     {
         private readonly IQuoteRequestBuilder _quoteRequestBuilder;
@@ -32,14 +33,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/quoterequests/search
         [HttpPost("quoterequests/search")]
-        public ActionResult<GenericSearchResult<QuoteRequest>> QuoteSearch([FromBody] QuoteSearchCriteria criteria)
+        public ActionResult<QuoteSearchResult> QuoteSearch([FromBody] QuoteSearchCriteria criteria)
         {
             if (WorkContext.CurrentUser.IsRegisteredUser)
             {
                 //allow search only within self quotes
                 criteria.CustomerId = WorkContext.CurrentUser.Id;
                 var result = _quoteService.SearchQuotes(criteria);
-                return new GenericSearchResult<QuoteRequest>
+                return new QuoteSearchResult
                 {
                     Results = result.ToArray(),
                     TotalCount = result.TotalItemCount

@@ -1,13 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using PagedList.Core;
 using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
-using VirtoCommerce.Storefront.Caching;
-using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
@@ -89,7 +86,7 @@ namespace VirtoCommerce.Storefront.Domain
             CustomerCacheRegion.ExpireMember(contact.Id);
         }
 
-        public async Task UpdateContactAddressesAsync(string contactId, IList<Address> addresses)
+        public virtual async Task UpdateContactAddressesAsync(string contactId, IList<Address> addresses)
         {
             var existContact = await GetContactByIdAsync(contactId);
             if (existContact != null)
@@ -103,19 +100,22 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual async Task<Vendor[]> GetVendorsByIdsAsync(Store store, Language language, params string[] vendorIds)
         {
-            return (await _customerApi.GetVendorsByIdsAsync(vendorIds)).Select(x => x.ToVendor(language, store)).ToArray();
+            var cacheKey = CacheKey.With(GetType(), "GetVendorsByIdsAsync", string.Join("-", vendorIds.OrderBy(x => x)));
+            var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                return await _customerApi.GetVendorsByIdsAsync(vendorIds);
+            });
+            return result?.Select(x => x.ToVendor(language, store)).ToArray();
         }
 
         public virtual Vendor[] GetVendorsByIds(Store store, Language language, params string[] vendorIds)
         {
-            var retVal = _customerApi.GetVendorsByIds(vendorIds).Select(x => x.ToVendor(language, store)).ToArray();
-            return retVal;
+            return GetVendorsByIdsAsync(store, language, vendorIds).GetAwaiter().GetResult();
         }
 
         public virtual IPagedList<Vendor> SearchVendors(Store store, Language language, string keyword, int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos)
         {
             // TODO: implement indexed search for vendors
-            //TODO: Add caching for vendors
             var criteria = new customerDto.MembersSearchCriteria
             {
                 SearchPhrase = keyword,
@@ -123,14 +123,17 @@ namespace VirtoCommerce.Storefront.Domain
                 Skip = (pageNumber - 1) * pageSize,
                 Take = pageSize
             };
-
             if (!sortInfos.IsNullOrEmpty())
             {
                 criteria.Sort = SortInfo.ToString(sortInfos);
             }
-            var vendorSearchResult = _customerApi.SearchVendors(criteria);
-            var vendors = vendorSearchResult.Vendors.Select(x => x.ToVendor(language, store));
-            return new StaticPagedList<Vendor>(vendors, pageNumber, pageSize, vendorSearchResult.TotalCount.Value);
+            var cacheKey = CacheKey.With(GetType(), "SearchVendors", keyword, pageNumber.ToString(), pageSize.ToString(), criteria.Sort);
+            var result = _memoryCache.GetOrCreateExclusive(cacheKey, cacheEntry =>
+            {
+                return _customerApi.SearchVendors(criteria);
+            });
+            var vendors = result.Vendors.Select(x => x.ToVendor(language, store));
+            return new StaticPagedList<Vendor>(vendors, pageNumber, pageSize, result.TotalCount.Value);
         }
 
         public async Task<Organization> GetOrganizationByIdAsync(string organizationId)

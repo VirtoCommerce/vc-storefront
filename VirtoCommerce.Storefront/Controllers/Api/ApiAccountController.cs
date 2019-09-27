@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using VirtoCommerce.Storefront.Domain;
@@ -24,25 +24,23 @@ using VirtoCommerce.Storefront.Model.Security.Events;
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
     [StorefrontApiRoute("account")]
+    [ResponseCache(CacheProfileName = "None")]
     public class ApiAccountController : StorefrontControllerBase
     {
         private readonly IEventPublisher _publisher;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IMemberService _memberService;
-        private readonly IStorefrontSecurity _commerceCoreApi;
         private readonly INotifications _platformNotificationApi;
         private readonly IAuthorizationService _authorizationService;
 
         public ApiAccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, UserManager<User> userManager, SignInManager<User> signInManager, IAuthorizationService authorizationService,
-        IMemberService memberService, IEventPublisher publisher, IStorefrontSecurity commerceCoreApi,
-                                    INotifications platformNotificationApi)
+        IMemberService memberService, IEventPublisher publisher, INotifications platformNotificationApi)
             : base(workContextAccessor, urlBuilder)
         {
             _userManager = userManager;
             _memberService = memberService;
             _publisher = publisher;
-            _commerceCoreApi = commerceCoreApi;
             _platformNotificationApi = platformNotificationApi;
             _authorizationService = authorizationService;
             _signInManager = signInManager;
@@ -228,7 +226,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     {
                         user = await _userManager.FindByNameAsync(user.UserName);
                         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                        var callbackUrl = Url.Action("ConfirmInvitation", "Account", new { OrganizationId = organizationId, user.Email, Token = token }, Request.Scheme);
+                        var callbackUrl = Url.Action("ConfirmInvitation", "Account", new { OrganizationId = organizationId, user.Email, Token = token }, Request.Scheme, host: WorkContext.CurrentStore.Host);
                         var inviteNotification = new RegistrationInvitationNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
                         {
                             InviteUrl = callbackUrl,
@@ -280,7 +278,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost("organization/users/search")]
         [Authorize(SecurityConstants.Permissions.CanViewUsers)]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<GenericSearchResult<User>>> SearchOrganizationUsersAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
+        public async Task<ActionResult<UserSearchResult>> SearchOrganizationUsersAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
         {
             searchCriteria.OrganizationId = searchCriteria.OrganizationId ?? WorkContext.CurrentUser?.Contact?.Organization?.Id;
             //Allow to register new users only within own organization
@@ -302,7 +300,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         users.Add(user);
                     }
                 }
-                return new GenericSearchResult<User>
+                return new UserSearchResult
                 {
                     TotalCount = contactsSearchResult.TotalItemCount,
                     Results = users
@@ -395,6 +393,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     {
                         user.Contact.FirstName = userUpdateInfo.FirstName;
                         user.Contact.LastName = userUpdateInfo.LastName;
+                        user.Contact.FullName = userUpdateInfo.FullName;
                     }
 
                     user.Email = userUpdateInfo.Email;
@@ -418,7 +417,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             var result = await _userManager.ChangePasswordAsync(WorkContext.CurrentUser, formModel.OldPassword, formModel.NewPassword);
 
-            return new PasswordChangeResult { Succeeded = result.Succeeded, Errors = result.Errors.Select(x => x.Description) };
+            return new PasswordChangeResult { Succeeded = result.Succeeded, Errors = result.Errors.Select(x => new FormError { Code = x.Code.PascalToKebabCase(), Description = x.Description }).ToList() };
         }
 
         // POST: storefrontapi/account/addresses
@@ -430,5 +429,65 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             return Ok();
         }
+
+        // DELETE: storefrontapi/account/phonenumber
+        [HttpDelete("phonenumber")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult<RemovePhoneNumberResult>> RemovePhoneNumber()
+        {
+            var twoFactorAuthEnabled = await _signInManager.UserManager.GetTwoFactorEnabledAsync(WorkContext.CurrentUser);
+            if (twoFactorAuthEnabled)
+            {
+                return Forbid();
+            }
+
+            var result = await _signInManager.UserManager.SetPhoneNumberAsync(WorkContext.CurrentUser, null);
+            await _signInManager.SignInAsync(WorkContext.CurrentUser, isPersistent: false);
+
+            return new RemovePhoneNumberResult { Succeeded = result.Succeeded, Errors = result.Errors.Select(x => x.Description) };
+        }
+
+        // POST: storefrontapi/account/twofactorauthentification
+        [HttpPost("twofactorauthentification")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult<ChangeTwoFactorAuthenticationResult>> ChangeTwoFactorAuthentication([FromBody] ChangeTwoFactorAuthenticationModel model)
+        {
+            if (model.Enabled)
+            {
+                var phoneConfirmed = await _signInManager.UserManager.IsPhoneNumberConfirmedAsync(WorkContext.CurrentUser);
+                if (!phoneConfirmed)
+                {
+                    var url = "/account/phonenumber";
+
+                    return new ChangeTwoFactorAuthenticationResult { Succeeded = false, VerificationUrl = url };
+                }
+            }
+
+            var result = await _signInManager.UserManager.SetTwoFactorEnabledAsync(WorkContext.CurrentUser, model.Enabled);
+            await _signInManager.SignInAsync(WorkContext.CurrentUser, isPersistent: false);
+
+            return new ChangeTwoFactorAuthenticationResult { Succeeded = result.Succeeded, Errors = result.Errors.Select(x => x.Description) };
+        }
+
+        // POST: storefrontapi/account/phonenumber
+        [HttpPost("phonenumber")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult<UpdatePhoneNumberResult>> UpdatePhoneNumber([FromBody] UpdatePhoneNumberModel model)
+        {
+            TryValidateModel(model);
+
+            if (!ModelState.IsValid)
+            {
+                return new UpdatePhoneNumberResult { Succeeded = false, Error = "Phone number is not valid" };
+            }
+
+            var code = await _signInManager.UserManager.GenerateChangePhoneNumberTokenAsync(WorkContext.CurrentUser, model.PhoneNumber);
+            var result = await _signInManager.UserManager.ChangePhoneNumberAsync(WorkContext.CurrentUser, model.PhoneNumber, code);
+            await _signInManager.SignInAsync(WorkContext.CurrentUser, isPersistent: false);
+
+            return new UpdatePhoneNumberResult { Succeeded = result.Succeeded };
+
+        }
+
     }
 }

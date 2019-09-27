@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Marketing;
 
@@ -91,6 +92,16 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// </summary>
         /// <value>All shipping and billing order addresses</value>
         public IList<Address> Addresses { get; set; }
+        [JsonIgnore]
+        public Address ShippingAddress => Addresses?.FirstOrDefault(a => (a.Type & AddressType.Shipping) == AddressType.Shipping);
+        [JsonIgnore]
+        public Address BillingAddress => Addresses?.FirstOrDefault(a => (a.Type & AddressType.Billing) == AddressType.Billing) ?? ShippingAddress;
+        [JsonIgnore]
+        public string Email => Addresses?.Where(a => !string.IsNullOrEmpty(a.Email)).Select(a => a.Email).FirstOrDefault();
+
+        //TODO: Can be evaluated for each 
+        public string FinancialStatus => Status;
+
 
         /// <summary>
         /// Incoming payments operations
@@ -150,11 +161,13 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// </summary>
         /// <value>Currency code</value>
         public Currency Currency { get; set; }
-     
+        public string CurrencyCode => Currency?.Code;
+
         /// <summary>
         /// Gets or Sets IsCancelled
         /// </summary>
         public bool? IsCancelled { get; set; }
+        public bool? Cancelled => IsCancelled;
 
         /// <summary>
         /// Gets or Sets CancelledDate
@@ -192,7 +205,7 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// </summary>
         public string ModifiedBy { get; set; }
 
-     
+
         public IList<Discount> Discounts { get; set; }
 
         public Money Total { get; set; }

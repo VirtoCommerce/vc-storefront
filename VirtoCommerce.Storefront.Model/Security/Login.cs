@@ -12,7 +12,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         public bool UsernamesEnabled { get; set; }
         [FromForm(Name = "customer[user_name]")]
         [Required]
-        public string Username { get; set; }
+        public string UserName { get; set; }
         [FromForm(Name = "customer[password]")]
         [Required]
         public string Password { get; set; }

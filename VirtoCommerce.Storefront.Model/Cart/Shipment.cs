@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using VirtoCommerce.Storefront.Infrastructure.Swagger;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Cart.ValidationErrors;
 using VirtoCommerce.Storefront.Model.Common;
@@ -7,6 +8,7 @@ using VirtoCommerce.Storefront.Model.Marketing;
 
 namespace VirtoCommerce.Storefront.Model.Cart
 {
+    [SwaggerSchemaId("CartShipment")]
     public partial class Shipment : Entity, IDiscountable, IValidatable, ITaxable
     {
         public Shipment()
@@ -193,7 +195,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
             {
                 var discount = reward.ToDiscountModel(Price - DiscountAmount);
 
-                if (reward.IsValid)
+                if (reward.IsValid && discount.Amount.InternalAmount > 0)
                 {
                     Discounts.Add(discount);
                     DiscountAmount += discount.Amount;

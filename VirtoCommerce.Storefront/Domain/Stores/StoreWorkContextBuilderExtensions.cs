@@ -21,7 +21,14 @@ namespace VirtoCommerce.Storefront.Domain
             }
 
             builder.WorkContext.AllStores = stores.ToArray();
-            builder.WorkContext.CurrentStore = builder.HttpContext.GetCurrentStore(stores, defaultStoreId);
+            var currentStore = builder.HttpContext.GetCurrentStore(stores, defaultStoreId);
+            //Very important workaround. If left  Null or Empty as Url for default store with condition of multiple stores present, will be generated a relative url '/store_name/' instead of
+            // '/' thats can  leads to invalid urls to default store and other issue with  <base href=""> that contains invalid relative  url
+            if (defaultStoreId != null && string.IsNullOrEmpty(currentStore.Url) && currentStore.Id.EqualsInvariant(defaultStoreId))
+            {
+                currentStore.Url = "/";
+            }
+            builder.WorkContext.CurrentStore = currentStore;
             builder.WorkContext.CurrentLanguage = builder.HttpContext.GetCurrentLanguage(builder.WorkContext.CurrentStore);
 
             // SEO for category, product and blogs is set inside corresponding controllers

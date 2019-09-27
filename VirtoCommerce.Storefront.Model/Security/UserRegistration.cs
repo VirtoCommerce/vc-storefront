@@ -12,6 +12,9 @@ namespace VirtoCommerce.Storefront.Model.Security
         [FromForm(Name = "customer[first_name]")]
         public string FirstName { get; set; }
 
+        [FromForm(Name = "customer[full_name]")]
+        public string FullName { get; set; }
+
         [FromForm(Name = "customer[last_name]")]
         public string LastName { get; set; }
 
@@ -37,8 +40,6 @@ namespace VirtoCommerce.Storefront.Model.Security
         public Address Address { get; set; }
         [FromForm(Name = "customer[salutation]")]
         public string Salutation { get; set; }
-        [FromForm(Name = "customer[fullName]")]
-        public string FullName { get; set; }
         [FromForm(Name = "customer[middleName]")]
         public string MiddleName { get; set; }
         [FromForm(Name = "customer[birthDate]")]

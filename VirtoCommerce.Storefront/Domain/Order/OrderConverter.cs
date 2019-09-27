@@ -7,11 +7,10 @@ using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Order;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 using orderDto = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models;
-using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using storeDto = VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
-{   
+{
 
     public static partial class OrderConverter
     {
@@ -76,10 +75,10 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var result = new ShipmentItem();
 
-            result.BarCode = shipmentItemDto.BarCode;            
+            result.BarCode = shipmentItemDto.BarCode;
             result.Id = shipmentItemDto.Id;
             result.LineItemId = shipmentItemDto.LineItemId;
-            result.Quantity = shipmentItemDto.Quantity;            
+            result.Quantity = shipmentItemDto.Quantity;
 
             if (shipmentItemDto.LineItem != null)
             {
@@ -264,7 +263,7 @@ namespace VirtoCommerce.Storefront.Domain
             retVal.ParentOperationId = paymentIn.ParentOperationId;
             retVal.Purpose = paymentIn.Purpose;
             retVal.Status = paymentIn.Status;
-           
+
 
             if (paymentIn.BillingAddress != null)
             {
@@ -478,49 +477,23 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static PaymentMethod ToPaymentMethod(this storeDto.PaymentMethod paymentMethodDto, CustomerOrder order)
+        public static PaymentMethod ToPaymentMethod(this orderDto.PaymentMethod paymentMethodDto, CustomerOrder order)
         {
-            var retVal = new PaymentMethod(order.Currency)
-            {
-                Code = paymentMethodDto.Code,
-                Description = paymentMethodDto.Currency,
-                IsAvailableForPartial = paymentMethodDto.IsAvailableForPartial ?? false,
-                LogoUrl = paymentMethodDto.LogoUrl,
-                Name = paymentMethodDto.Name,
-                PaymentMethodGroupType = paymentMethodDto.PaymentMethodGroupType,
-                PaymentMethodType = paymentMethodDto.PaymentMethodType,
-                TaxType = paymentMethodDto.TaxType,
-
-                Priority = paymentMethodDto.Priority ?? 0
-            };
-
-            if (paymentMethodDto.Settings != null)
-            {
-                retVal.Settings = paymentMethodDto.Settings.Where(x => !x.ValueType.EqualsInvariant("SecureString")).Select(x => x.JsonConvert<platformDto.Setting>().ToSettingEntry()).ToList();
-            }
-
-            retVal.Currency = order.Currency;
-            retVal.Price = new Money(paymentMethodDto.Price ?? 0, order.Currency);
-            retVal.DiscountAmount = new Money(paymentMethodDto.DiscountAmount ?? 0, order.Currency);
-            retVal.TaxPercentRate = (decimal?)paymentMethodDto.TaxPercentRate ?? 0m;
-
-            if (paymentMethodDto.TaxDetails != null)
-            {
-                retVal.TaxDetails = paymentMethodDto.TaxDetails.Select(td => ToTaxDetail(td, order.Currency)).ToList();
-            }
-
-            return retVal;
+            return paymentMethodDto.JsonConvert<storeDto.PaymentMethod>().ToStorePaymentMethod(order.Currency);
         }
 
-        public static TaxDetail ToTaxDetail(this storeDto.TaxDetail dto, Currency currency)
+        public static ProcessPaymentResult ToProcessPaymentResult(this orderDto.ProcessPaymentResult processPaymentResultDto, CustomerOrder order)
         {
-            var result = new TaxDetail(currency)
+            return new ProcessPaymentResult()
             {
-                Amount = new Money(dto.Amount ?? 0, currency),
-                Rate = new Money(dto.Rate ?? 0, currency),
-                Name = dto.Name
+                Error = processPaymentResultDto.Error,
+                HtmlForm = processPaymentResultDto.HtmlForm,
+                IsSuccess = processPaymentResultDto.IsSuccess ?? false,
+                NewPaymentStatus = processPaymentResultDto.NewPaymentStatus,
+                OuterId = processPaymentResultDto.OuterId,
+                PaymentMethod = processPaymentResultDto.PaymentMethod?.ToPaymentMethod(order),
+                RedirectUrl = processPaymentResultDto.RedirectUrl
             };
-            return result;
         }
     }
 }

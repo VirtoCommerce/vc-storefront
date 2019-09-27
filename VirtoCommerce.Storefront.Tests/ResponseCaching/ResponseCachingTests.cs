@@ -28,7 +28,7 @@ namespace VirtoCommerce.Storefront.Tests.OutputCache
                     {
                         var mockEngine = new Mock<ILiquidThemeEngine>();
                         mockEngine.Setup(x => x.ReadLocalization()).Returns(new Newtonsoft.Json.Linq.JObject());
-                        mockEngine.Setup(x => x.GetAssetStream(It.IsAny<string>())).Returns(new MemoryStream(Encoding.UTF8.GetBytes("some data")));
+                        mockEngine.Setup(x => x.GetAssetStreamAsync(It.IsAny<string>())).Returns(Task.FromResult((Stream)new MemoryStream(Encoding.UTF8.GetBytes("some data"))));
                         mockEngine.Setup(x => x.ResolveTemplatePath(It.IsIn(new[] { "index" }))).Returns("path");
                         services.AddSingleton(mockEngine.Object);
                         var mockStoreService = new Mock<IStoreService>();

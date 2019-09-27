@@ -51,34 +51,49 @@ namespace VirtoCommerce.Storefront.Controllers
     //        _authorizationService = authorizationService;
     //    }
 
-    //    //GET: /account
-    //    [HttpGet]
-    //    [Authorize(OnlyRegisteredUserAuthorizationRequirement.PolicyName)]
-    //    public ActionResult GetAccount()
-    //    {
-    //        //Customer should be already populated in WorkContext middle-ware
-    //        return View("customers/account", WorkContext);
-    //    }
+        //GET: /account
+        [HttpGet]
+        public async Task<ActionResult> GetAccount()
+        {
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
+            if (!authorizationResult.Succeeded)
+            {
+                return StoreFrontRedirect("~/account/login");
+            }
 
-    //    [HttpGet("order/{number}")]
-    //    [Authorize(OnlyRegisteredUserAuthorizationRequirement.PolicyName)]
-    //    public ActionResult GetOrderDetails(string number)
-    //    {
-    //        var order = WorkContext.CurrentUser?.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(number));
-    //        if (order != null)
-    //        {
-    //            WorkContext.CurrentOrder = order;
-    //        }
+            //Customer should be already populated in WorkContext middle-ware
+            return View("customers/account", WorkContext);
+        }
+
+        [HttpGet("order/{number}")]
+        public async Task<ActionResult> GetOrderDetails(string number)
+        {
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
+            if (!authorizationResult.Succeeded)
+            {
+                return StoreFrontRedirect("~/account/login");
+            }
+
+            var order = WorkContext.CurrentUser?.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(number));
+            if (order != null)
+            {
+                WorkContext.CurrentOrder = order;
+            }
 
     //        return View("customers/order", WorkContext);
     //    }
 
-    //    [HttpGet("addresses")]
-    //    [Authorize(OnlyRegisteredUserAuthorizationRequirement.PolicyName)]
-    //    public ActionResult GetAddresses()
-    //    {
-    //        return View("customers/addresses", WorkContext);
-    //    }
+        [HttpGet("addresses")]
+        public async Task<ActionResult> GetAddresses()
+        {
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
+            if (!authorizationResult.Succeeded)
+            {
+                return StoreFrontRedirect("~/account/login");
+            }
+
+            return View("customers/addresses", WorkContext);
+        }
 
     //    [HttpGet("register")]
     //    [AllowAnonymous]
@@ -94,12 +109,15 @@ namespace VirtoCommerce.Storefront.Controllers
     //    {
     //        TryValidateModel(registration);
 
-    //        if (ModelState.IsValid)
-    //        {
-    //            //Register user
-    //            var user = registration.ToUser();
-    //            user.Contact = registration.ToContact();
-    //            user.StoreId = WorkContext.CurrentStore.Id;
+            //This required for populate fields on form on post-back
+            WorkContext.Form = Form.FromObject(registration);
+
+            if (ModelState.IsValid)
+            {
+                //Register user
+                var user = registration.ToUser();
+                user.Contact = registration.ToContact();
+                user.StoreId = WorkContext.CurrentStore.Id;
 
     //            var result = await _signInManager.UserManager.CreateAsync(user, registration.Password);
     //            if (result.Succeeded)
@@ -110,73 +128,81 @@ namespace VirtoCommerce.Storefront.Controllers
     //                await _signInManager.SignInAsync(user, isPersistent: true);
     //                await _publisher.Publish(new UserLoginEvent(WorkContext, user));
 
-    //                if (_options.SendAccountConfirmation)
-    //                {
-    //                    var token = await _signInManager.UserManager.GenerateEmailConfirmationTokenAsync(user);
-    //                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { UserId = user.Id, Token = token }, protocol: Request.Scheme);
-    //                    var emailConfirmationNotification = new EmailConfirmationNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
-    //                    {
-    //                        Url = callbackUrl,
-    //                        Sender = WorkContext.CurrentStore.Email,
-    //                        Recipient = GetUserEmail(user)
-    //                    };
-    //                    await _platformNotificationApi.SendNotificationAsync(emailConfirmationNotification.ToNotificationDto());
-    //                }
+                    //Send new user registration notification
+                    var registrationEmailNotification = new RegistrationEmailNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                    {
+                        FirstName = registration.FirstName,
+                        LastName = registration.LastName,
+                        Login = registration.UserName,
+                        Sender = WorkContext.CurrentStore.Email,
+                        Recipient = GetUserEmail(user)
+                    };
+                    await SendNotificationAsync(registrationEmailNotification);
 
-    //                return StoreFrontRedirect("~/account");
-    //            }
-    //            else
-    //            {
-    //                foreach (var error in result.Errors)
-    //                {
-    //                    ModelState.AddModelError("form", error.Description);
-    //                }
-    //            }
-    //        }
+                    if (_options.SendAccountConfirmation)
+                    {
+                        var token = await _signInManager.UserManager.GenerateEmailConfirmationTokenAsync(user);
+                        var callbackUrl = Url.Action("ConfirmEmail", "Account", new { UserId = user.Id, Token = token }, protocol: Request.Scheme, host: WorkContext.CurrentStore.Host);
+                        var emailConfirmationNotification = new EmailConfirmationNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                        {
+                            Url = callbackUrl,
+                            Sender = WorkContext.CurrentStore.Email,
+                            Recipient = GetUserEmail(user)
+                        };
+                        var sendNotifcationResult = await SendNotificationAsync(emailConfirmationNotification);
+                        if (sendNotifcationResult.IsSuccess == false)
+                        {
+                            WorkContext.Form.Errors.Add(SecurityErrorDescriber.ErrorSendNotification(sendNotifcationResult.ErrorMessage));
+                            return View("customers/register", WorkContext);
+                        }
+                    }
 
-    //        WorkContext.Form = registration;
-    //        return View("customers/register", WorkContext);
-    //    }
+                    return StoreFrontRedirect("~/account");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        WorkContext.Form.Errors.Add(new FormError { Code = error.Code.PascalToKebabCase(), Description = error.Description });
+                    }
+                }
+            }
 
-    //    [HttpGet("confirminvitation")]
-    //    [AllowAnonymous]
-    //    public async Task<ActionResult> ConfirmInvitation(string organizationId, string email, string token)
-    //    {
-    //        if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
-    //        {
-    //            WorkContext.ErrorMessage = "Error in URL format";
-    //            return View("error", WorkContext);
-    //        }
+            return View("customers/register", WorkContext);
+        }
 
-    //        var user = await _signInManager.UserManager.FindByEmailAsync(email);
-    //        if (user == null)
-    //        {
-    //            WorkContext.ErrorMessage = "User was not found.";
-    //            return View("error", WorkContext);
-    //        }
+        [HttpGet("confirminvitation")]
+        [AllowAnonymous]
+        public async Task<ActionResult> ConfirmInvitation(string organizationId, string email, string token)
+        {
+            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.InvalidUrl());
+                return View("error", WorkContext);
+            }
 
-    //        if (!string.IsNullOrEmpty(user.PasswordHash))
-    //        {
-    //            WorkContext.ErrorMessage = "Sorry, this invitation can be used only once.";
-    //            return View("error", WorkContext);
-    //        }
+            var user = await _signInManager.UserManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserNotFound());
+                return View("error", WorkContext);
+            }
 
-    //        var isValidToken = await _signInManager.UserManager.VerifyUserTokenAsync(user, _signInManager.UserManager.Options.Tokens.PasswordResetTokenProvider, UserManager<User>.ResetPasswordTokenPurpose, token);
-    //        if (!isValidToken)
-    //        {
-    //            WorkContext.ErrorMessage = "Invitation token is invalid or expired";
-    //            return View("error", WorkContext);
-    //        }
+            if (!string.IsNullOrEmpty(user.PasswordHash))
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.InvitationHasAreadyBeenUsed());
+                return View("error", WorkContext);
+            }
 
-    //        WorkContext.Form = new UserRegistrationByInvitation
-    //        {
-    //            Email = email,
-    //            OrganizationId = organizationId,
-    //            Token = token
-    //        };
+            var isValidToken = await _signInManager.UserManager.VerifyUserTokenAsync(user, _signInManager.UserManager.Options.Tokens.PasswordResetTokenProvider, UserManager<User>.ResetPasswordTokenPurpose, token);
+            if (!isValidToken)
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.InvalidToken());
+                return View("error", WorkContext);
+            }
 
-    //        return View("customers/confirm_invitation", WorkContext);
-    //    }
+            return View("customers/confirm_invitation", WorkContext);
+        }
 
     //    [HttpPost("confirminvitation")]
     //    [AllowAnonymous]
@@ -206,19 +232,16 @@ namespace VirtoCommerce.Storefront.Controllers
     //                        await _publisher.Publish(new UserLoginEvent(WorkContext, user));
     //                    }
 
-    //                    return StoreFrontRedirect("~/account");
-    //                }
-    //            }
-    //        }
 
-    //        foreach (var error in result.Errors)
-    //        {
-    //            ModelState.AddModelError(string.Empty, error.Description);
-    //        }
+                        return StoreFrontRedirect("~/account");
+                    }
+                }
+            }
 
-    //        WorkContext.Form = register;
-    //        return View("customers/confirm_invitation", WorkContext);
-    //    }
+            WorkContext.Form.Errors.AddRange(result.Errors.Select(x => new FormError { Code = x.Code.PascalToKebabCase(), Description = x.Description }));
+
+            return View("customers/confirm_invitation", WorkContext);
+        }
 
     //    [HttpGet("confirmemail")]
     //    [AllowAnonymous]
@@ -269,58 +292,152 @@ namespace VirtoCommerce.Storefront.Controllers
     //    {
     //        TryValidateModel(login);
 
-    //        if (!ModelState.IsValid)
-    //        {
-    //            return View("customers/login", WorkContext);
-    //        }
-    //        login.Username = login.Username?.Trim();
+            //This required for populate fields on form on post-back
+            WorkContext.Form = Form.FromObject(login);
 
-    //        var loginResult = await _signInManager.PasswordSignInAsync(login.Username, login.Password, login.RememberMe, lockoutOnFailure: true);
+            if (!ModelState.IsValid)
+            {
+                return View("customers/login", WorkContext);
+            }
+            login.UserName = login.UserName?.Trim();
 
-    //        if (loginResult.Succeeded)
-    //        {
-    //            var user = await _signInManager.UserManager.FindByNameAsync(login.Username);
+            var loginResult = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, login.RememberMe, lockoutOnFailure: true);
 
-    //            //Check that current user can sing in to current store
-    //            if (new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore))
-    //            {
-    //                await _publisher.Publish(new UserLoginEvent(WorkContext, user));
-    //                return StoreFrontRedirect(returnUrl);
-    //            }
-    //            else
-    //            {
-    //                ModelState.AddModelError("form", "User cannot login to current store.");
-    //            }
-    //        }
+            if (loginResult.Succeeded)
+            {
+                var user = await _signInManager.UserManager.FindByNameAsync(login.UserName);
 
-    //        if (loginResult.IsLockedOut)
-    //        {
-    //            return View("lockedout", WorkContext);
-    //        }
+                //Check that current user can sing in to current store
+                if (new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore) && new IsUserSuspendedSpecification().IsSatisfiedBy(user) == false)
+                {
+                    await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                    return StoreFrontRedirect(returnUrl);
+                }
+                else
+                {
+                    WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserCannotLoginInStore());
+                }
+            }
 
-    //        if (loginResult.RequiresTwoFactor)
-    //        {
-    //            return StoreFrontRedirect("~/account/sendcode");
-    //        }
+            if (loginResult.RequiresTwoFactor)
+            {
+                var user = await _signInManager.UserManager.FindByNameAsync(login.UserName);
+                if (user == null)
+                {
+                    WorkContext.Form.Errors.Add(SecurityErrorDescriber.OperationFailed());
+                    return View("customers/login", WorkContext);
+                }
 
-    //        if (loginResult is CustomSignInResult signInResult && signInResult.IsRejected)
-    //        {
-    //            ModelState.AddModelError("form", "Administrator suspended this account");
-    //        }
+                var selectedProvider = _options.TwoFactorAuthenticationNotificationGateway;
 
-    //        ModelState.AddModelError("form", "Login attempt failed.");
-    //        WorkContext.Form = login;
+                var userManager = _signInManager.UserManager;
+                var code = await userManager.GenerateTwoFactorTokenAsync(user, selectedProvider);
+
+                if (string.IsNullOrWhiteSpace(code))
+                {
+                    WorkContext.Form.Errors.Add(SecurityErrorDescriber.OperationFailed());
+                    return View("customers/login", WorkContext);
+                }
+
+                NotificationBase twoFactorNotification = null;
+                var veryfyCodeViewModel = new VerifyCodeViewModel { Provider = selectedProvider, ReturnUrl = returnUrl, RememberMe = login.RememberMe, Username = login.UserName };
+
+                if (veryfyCodeViewModel.Provider.EqualsInvariant("Phone"))
+                {
+                    var phoneNumber = await userManager.GetPhoneNumberAsync(user);
+
+                    if (string.IsNullOrEmpty(phoneNumber))
+                    {
+                        // Do not tell we have this user without phone
+                        WorkContext.Form.Errors.Add(SecurityErrorDescriber.OperationFailed());
+                        return View("customers/login", WorkContext);
+                    }
+
+                    twoFactorNotification = new TwoFactorSmsNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                    {
+                        Token = code,
+                        Recipient = phoneNumber,
+                    };
+
+                }
+                else // "Email"
+                {
+                    twoFactorNotification = new TwoFactorEmailNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                    {
+                        Token = code,
+                        Sender = WorkContext.CurrentStore.Email,
+                        Recipient = GetUserEmail(user)
+                    };
+                }
+                var sendingResult = await SendNotificationAsync(twoFactorNotification);
+
+                if (sendingResult.IsSuccess != true)
+                {
+                    WorkContext.Form.Errors.Add(SecurityErrorDescriber.ErrorSendNotification(sendingResult.ErrorMessage));
+                    return View("customers/login", WorkContext);
+                }
+
+                WorkContext.Form = Form.FromObject(veryfyCodeViewModel);
+
+                return View("customers/verify_code", WorkContext);
+            }
+
+            if (loginResult.IsLockedOut)
+            {
+                return View("lockedout", WorkContext);
+            }
+
+            if (loginResult is CustomSignInResult signInResult && signInResult.IsRejected)
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.AccountIsBlocked());
+            }
+
+            WorkContext.Form.Errors.Add(SecurityErrorDescriber.LoginFailed());
 
     //        return View("customers/login", WorkContext);
     //    }
 
-    //    [HttpGet("logout")]
-    //    [AllowAnonymous]
-    //    public async Task<ActionResult> Logout()
-    //    {
-    //        await _signInManager.SignOutAsync();
-    //        return StoreFrontRedirect("~/");
-    //    }
+        [HttpPost("verifycode")]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> VerifyCode(VerifyCodeViewModel model)
+        {
+            TryValidateModel(model);
+            if (!ModelState.IsValid)
+            {
+                return View("customers/verify_code", WorkContext);
+            }
+
+            // The following code protects for brute force attacks against the two factor codes.
+            // If a user enters incorrect codes for a specified amount of time then the user account
+            // will be locked out for a specified amount of time.
+            var result = await _signInManager.TwoFactorSignInAsync(model.Provider, model.Code, model.RememberMe ?? false, model.RememberBrowser ?? false);
+
+            if (result.Succeeded)
+            {
+                var user = await _signInManager.UserManager.FindByNameAsync(model.Username);
+                await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                return StoreFrontRedirect(model.ReturnUrl);
+            }
+
+            if (result.IsLockedOut)
+            {
+                return View("lockedout", WorkContext);
+            }
+
+            WorkContext.Form = Form.FromObject(model);
+            WorkContext.Form.Errors.Add(SecurityErrorDescriber.InvalidToken());
+
+            return View("customers/verify_code", WorkContext);
+        }
+
+        [HttpGet("logout")]
+        [AllowAnonymous]
+        public async Task<ActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return StoreFrontRedirect("~/");
+        }
 
     //    [HttpGet("externallogin")]
     //    [AllowAnonymous]
@@ -391,15 +508,12 @@ namespace VirtoCommerce.Storefront.Controllers
     //                }
     //            }
 
-    //            if (!identityResult.Succeeded)
-    //            {
-    //                foreach (var error in identityResult.Errors)
-    //                {
-    //                    ModelState.AddModelError(string.Empty, error.Description);
-    //                }
-    //                return View("customers/login", WorkContext);
-    //            }
-    //        }
+                if (!identityResult.Succeeded)
+                {
+                    WorkContext.Form.Errors.AddRange(identityResult.Errors.Select(x => new FormError { Code = x.Code.PascalToKebabCase(), Description = x.Description }));
+                    return View("customers/login", WorkContext);
+                }
+            }
 
     //        user = await _signInManager.UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey);
 
@@ -437,11 +551,11 @@ namespace VirtoCommerce.Storefront.Controllers
     //            user = await _signInManager.UserManager.FindByNameAsync(formModel.Email);
     //        }
 
-    //        if (user == null)
-    //        {
-    //            ModelState.AddModelError("form", "Operation failed");
-    //            return View("customers/forgot_password", WorkContext);
-    //        }
+            if (user == null)
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.OperationFailed());
+                return View("customers/forgot_password", WorkContext);
+            }
 
     //        var successViewName = "customers/forgot_password";
     //        NotificationBase resetPasswordNotification = null;
@@ -451,11 +565,11 @@ namespace VirtoCommerce.Storefront.Controllers
     //            successViewName = "customers/forgot_password_code";
     //            var phoneNumber = await _signInManager.UserManager.GetPhoneNumberAsync(user);
 
-    //            if (string.IsNullOrEmpty(phoneNumber))
-    //            {
-    //                ModelState.AddModelError("form", "Operation failed");
-    //                return View("customers/forgot_password", WorkContext);
-    //            }
+                if (string.IsNullOrEmpty(phoneNumber))
+                {
+                    WorkContext.Form.Errors.Add(SecurityErrorDescriber.OperationFailed());
+                    return View("customers/forgot_password", WorkContext);
+                }
 
     //            var token = await _signInManager.UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultPhoneProvider, "ResetPassword");
 
@@ -465,16 +579,16 @@ namespace VirtoCommerce.Storefront.Controllers
     //                Recipient = phoneNumber,
     //            };
 
-    //            //This required for populate hidden fields on the form
-    //            WorkContext.Form = new ResetPasswordByCodeModel
-    //            {
-    //                Email = user.Email
-    //            };
-    //        }
-    //        else // "Email"
-    //        {
-    //            var token = await _signInManager.UserManager.GeneratePasswordResetTokenAsync(user);
-    //            var callbackUrl = Url.Action("ResetPassword", "Account", new { UserId = user.Id, Token = token }, protocol: Request.Scheme);
+                //This required for populate hidden fields on the form
+                WorkContext.Form = Form.FromObject(new ResetPasswordByCodeModel
+                {
+                    Email = user.Email
+                });
+            }
+            else // "Email"
+            {
+                var token = await _signInManager.UserManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { UserId = user.Id, Token = token }, protocol: Request.Scheme, host: WorkContext.CurrentStore.Host);
 
     //            resetPasswordNotification = new ResetPasswordEmailNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
     //            {
@@ -484,15 +598,15 @@ namespace VirtoCommerce.Storefront.Controllers
     //            };
     //        }
 
-    //        var sendingResult = await SendNotification(resetPasswordNotification);
-    //        if (sendingResult.IsSuccess == true)
-    //        {
-    //            return View(successViewName, WorkContext);
-    //        }
+            var sendingResult = await SendNotificationAsync(resetPasswordNotification);
+            if (sendingResult.IsSuccess == true)
+            {
+                return View(successViewName, WorkContext);
+            }
 
-    //        ModelState.AddModelError("form", sendingResult.ErrorMessage);
-    //        return View("customers/forgot_password", WorkContext);
-    //    }
+            WorkContext.Form.Errors.Add(new FormError { Description = sendingResult.ErrorMessage });
+            return View("customers/forgot_password", WorkContext);
+        }
 
     //    [HttpGet("forgotlogin")]
     //    [AllowAnonymous]
@@ -501,132 +615,142 @@ namespace VirtoCommerce.Storefront.Controllers
     //        return View("customers/forgot_login", WorkContext);
     //    }
 
-    //    [HttpPost("forgotlogin")]
-    //    [AllowAnonymous]
-    //    [ValidateAntiForgeryToken]
-    //    public async Task<ActionResult> ForgotLogin(ForgotPassword formModel)
-    //    {
-    //        var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
-    //        if (user != null)
-    //        {
-    //            var remindUserNameNotification = new RemindUserNameNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
-    //            {
-    //                UserName = user.UserName,
-    //                Sender = WorkContext.CurrentStore.Email,
-    //                Recipient = GetUserEmail(user)
-    //            };
+        [HttpPost("forgotlogin")]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ForgotLogin(ForgotPassword formModel)
+        {
+            TryValidateModel(formModel);
+            if (!ModelState.IsValid)
+            {
+                return View("customers/forgot_login", WorkContext);
+            }
 
-    //            var sendingResult = await _platformNotificationApi.SendNotificationAsync(remindUserNameNotification.ToNotificationDto());
-    //            if (sendingResult.IsSuccess != true)
-    //            {
-    //                ModelState.AddModelError("form", sendingResult.ErrorMessage);
-    //            }
-    //        }
-    //        else
-    //        {
-    //            ModelState.AddModelError("form", "User not found");
-    //        }
-    //        return View("customers/forgot_login", WorkContext);
-    //    }
+            var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
+            if (user != null)
+            {
+                var remindUserNameNotification = new RemindUserNameNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                {
+                    UserName = user.UserName,
+                    Sender = WorkContext.CurrentStore.Email,
+                    Recipient = GetUserEmail(user)
+                };
 
-    //    [HttpPost("forgotpasswordbycode")]
-    //    [AllowAnonymous]
-    //    public async Task<ActionResult> ResetPasswordByCode(ResetPasswordByCodeModel formModel)
-    //    {
-    //        TryValidateModel(formModel);
-    //        //Reassign the passed form to the current context to allow user post it again as hidden fields in the form
-    //        WorkContext.Form = formModel;
+                var sendingResult = await SendNotificationAsync(remindUserNameNotification);
+
+                if (sendingResult.IsSuccess != true)
+                {
+                    WorkContext.Form.Errors.Add(new FormError { Description = sendingResult.ErrorMessage });
+                }
+            }
+            else
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserNotFound());
+            }
+
+            return View("customers/forgot_login", WorkContext);
+        }
+
+        [HttpPost("forgotpasswordbycode")]
+        [AllowAnonymous]
+        public async Task<ActionResult> ResetPasswordByCode(ResetPasswordByCodeModel formModel)
+        {
+            TryValidateModel(formModel);
+            //Reassign the passed form to the current context to allow user post it again as hidden fields in the form
+            WorkContext.Form = Form.FromObject(formModel);
 
     //        if (!ModelState.IsValid)
     //        {
     //            return View("customers/forgot_password_code", WorkContext);
     //        }
 
-    //        if (!_options.ResetPasswordNotificationGateway.EqualsInvariant("Phone"))
-    //        {
-    //            ModelState.AddModelError("form", "Reset password by code is turned off.");
-    //            return View("customers/forgot_password_code", WorkContext);
-    //        }
+            if (!_options.ResetPasswordNotificationGateway.EqualsInvariant("Phone"))
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.ResetPasswordIsTurnedOff());
+                return View("customers/forgot_password_code", WorkContext);
+            }
 
-    //        var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
-    //        if (user == null)
-    //        {
-    //            ModelState.AddModelError("form", "Operation failed");
-    //            return View("customers/forgot_password_code", WorkContext);
-    //        }
+            var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
+            if (user == null)
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.OperationFailed());
+                return View("customers/forgot_password_code", WorkContext);
+            }
 
     //        var isValidToken = await _signInManager.UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultPhoneProvider, "ResetPassword", formModel.Code);
 
-    //        if (!isValidToken)
-    //        {
-    //            ModelState.AddModelError("form", "Reset password token is invalid or expired");
-    //            return View("customers/forgot_password_code", WorkContext);
-    //        }
+            if (!isValidToken)
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.InvalidToken());
+                return View("customers/forgot_password_code", WorkContext);
+            }
 
     //        var token = await _signInManager.UserManager.GeneratePasswordResetTokenAsync(user);
 
-    //        WorkContext.Form = new ResetPassword
-    //        {
-    //            Token = token,
-    //            Email = user.Email,
-    //            UserName = user.UserName
-    //        };
+            WorkContext.Form = Form.FromObject(new ResetPassword
+            {
+                Token = token,
+                Email = user.Email,
+                UserName = user.UserName
+            });
 
     //        return View("customers/reset_password", WorkContext);
     //    }
 
-    //    [HttpGet("resetpassword")]
-    //    [AllowAnonymous]
-    //    public async Task<ActionResult> ResetPassword(string token, string userId)
-    //    {
-    //        if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(userId))
-    //        {
-    //            WorkContext.ErrorMessage = "Error in URL format";
-    //            return View("error", WorkContext);
-    //        }
+        [HttpGet("resetpassword")]
+        [AllowAnonymous]
+        public async Task<ActionResult> ResetPassword(string token, string userId)
+        {
+            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(userId))
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.InvalidUrl());
+                return View("error", WorkContext);
+            }
 
-    //        var user = await _signInManager.UserManager.FindByIdAsync(userId);
-    //        if (user == null)
-    //        {
-    //            WorkContext.ErrorMessage = "User was not found.";
-    //            return View("error", WorkContext);
-    //        }
+            var user = await _signInManager.UserManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserNotFound());
+                return View("error", WorkContext);
+            }
 
     //        var isValidToken = await _signInManager.UserManager.VerifyUserTokenAsync(user, _signInManager.UserManager.Options.Tokens.PasswordResetTokenProvider, UserManager<User>.ResetPasswordTokenPurpose, token);
 
-    //        if (!isValidToken)
-    //        {
-    //            WorkContext.ErrorMessage = "Reset password token is invalid or expired";
-    //            return View("error", WorkContext);
-    //        }
+            if (!isValidToken)
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.InvalidToken());
+                return View("error", WorkContext);
+            }
 
-    //        WorkContext.Form = new ResetPassword
-    //        {
-    //            Token = token,
-    //            Email = user.Email,
-    //            UserName = user.UserName
-    //        };
-    //        return View("customers/reset_password", WorkContext);
-    //    }
+            WorkContext.Form = Form.FromObject(new ResetPassword
+            {
+                Token = token,
+                Email = user.Email,
+                UserName = user.UserName
+            });
+            return View("customers/reset_password", WorkContext);
+        }
 
-    //    [HttpPost("resetpassword")]
-    //    [AllowAnonymous]
-    //    [ValidateAntiForgeryToken]
-    //    public async Task<ActionResult> ResetPassword(ResetPassword formModel)
-    //    {
-    //        TryValidateModel(formModel);
-    //        //Need reassign the passed form to the current context to allow for user post it again with initial data such as Token and Email
-    //        WorkContext.Form = formModel;
+        [HttpPost("resetpassword")]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ResetPassword(ResetPassword formModel)
+        {
+            TryValidateModel(formModel);
+            //Need reassign the passed form to the current context to allow for user post it again with initial data such as Token and Email
+            WorkContext.Form = Form.FromObject(formModel);
 
-    //        if (string.IsNullOrEmpty(formModel.Email) && string.IsNullOrEmpty(formModel.UserName))
-    //        {
-    //            ModelState.AddModelError("form", "Not enough info for reseting password");
-    //        }
+            if (string.IsNullOrEmpty(formModel.Email) && string.IsNullOrEmpty(formModel.UserName))
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.ResetPasswordInvalidData());
+                return View("customers/reset_password", WorkContext);
+            }
 
-    //        if (formModel.Password != formModel.PasswordConfirmation)
-    //        {
-    //            ModelState.AddModelError("form", "Passwords aren't equal");
-    //        }
+            if (formModel.Password != formModel.PasswordConfirmation)
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.PasswordAndConfirmPasswordDoesNotMatch());
+                return View("customers/reset_password", WorkContext);
+            }
 
     //        if (!ModelState.IsValid)
     //        {
@@ -658,58 +782,119 @@ namespace VirtoCommerce.Storefront.Controllers
     //            return View("customers/reset_password_confirmation", WorkContext);
     //        }
 
-    //        foreach (var error in result.Errors)
-    //        {
-    //            ModelState.AddModelError(string.Empty, error.Description);
-    //        }
-
-    //        return View("customers/reset_password", WorkContext);
-    //    }
+            WorkContext.Form.Errors.AddRange(result.Errors.Select(x => new FormError { Code = x.Code.PascalToKebabCase(), Description = x.Description }));
+            return View("customers/reset_password", WorkContext);
+        }
 
     //    [HttpPost("password")]
     //    public async Task<ActionResult> ChangePassword(ChangePassword formModel)
     //    {
     //        var result = await _signInManager.UserManager.ChangePasswordAsync(WorkContext.CurrentUser, formModel.OldPassword, formModel.NewPassword);
 
-    //        if (result.Succeeded)
-    //        {
-    //            return StoreFrontRedirect("~/account");
-    //        }
-    //        else
-    //        {
-    //            ModelState.AddModelError("form", result.Errors.FirstOrDefault()?.Description);
-    //            return View("customers/account", WorkContext);
-    //        }
-    //    }
+            if (result.Succeeded)
+            {
+                return StoreFrontRedirect("~/account");
+            }
+            else
+            {
+                WorkContext.Form.Errors.AddRange(result.Errors.Select(x => new FormError { Code = x.Code.PascalToKebabCase(), Description = x.Description }));
+                return View("customers/account", WorkContext);
+            }
+        }
 
-    //    private static string GetUserEmail(User user)
-    //    {
-    //        string email = null;
-    //        if (user != null)
-    //        {
-    //            email = user.Email ?? user.UserName;
-    //            if (user.Contact != null)
-    //            {
-    //                email = user.Contact?.Email ?? email;
-    //            }
-    //        }
-    //        return email;
-    //    }
+        [HttpGet("phonenumber")]
+        public async Task<ActionResult> UpdatePhoneNumber()
+        {
+            var phoneNumber = await _signInManager.UserManager.GetPhoneNumberAsync(WorkContext.CurrentUser);
+            WorkContext.Form = Form.FromObject(new UpdatePhoneNumberModel { PhoneNumber = phoneNumber });
+
+            return View("customers/phone_number", WorkContext);
+        }
+
+        [HttpPost("phonenumber")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdatePhoneNumber([FromForm]UpdatePhoneNumberModel formModel)
+        {
+            TryValidateModel(formModel);
+            if (!ModelState.IsValid)
+            {
+                return View("customers/phone_number", WorkContext);
+            }
+            // Generate the token and send it
+            var code = await _signInManager.UserManager.GenerateChangePhoneNumberTokenAsync(WorkContext.CurrentUser, formModel.PhoneNumber);
+
+            var changePhoneNumberSmsNotification = new ChangePhoneNumberSmsNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+            {
+                Token = code,
+                Recipient = formModel.PhoneNumber,
+            };
+
+            var sendingResult = await SendNotificationAsync(changePhoneNumberSmsNotification);
+
+            if (sendingResult.IsSuccess != true)
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.ErrorSendNotification(sendingResult.ErrorMessage));
+                WorkContext.Form = Form.FromObject(formModel);
+                return View("customers/phone_number", WorkContext);
+            }
+
+            WorkContext.Form = Form.FromObject(new VerifyPhoneNumberModel { PhoneNumber = formModel.PhoneNumber });
+            return View("customers/verify_phone_number", WorkContext);
+        }
+
+        [HttpPost("phonenumber/verify")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> VerifyPhoneNumber([FromForm]VerifyPhoneNumberModel formModel)
+        {
+            TryValidateModel(formModel);
+            if (!ModelState.IsValid)
+            {
+                return View("customers/verify_phone_number", WorkContext);
+            }
+
+            var result = await _signInManager.UserManager.ChangePhoneNumberAsync(WorkContext.CurrentUser, formModel.PhoneNumber, formModel.Code);
+
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(WorkContext.CurrentUser, isPersistent: false);
+                return StoreFrontRedirect("~/account");
+            }
+
+            // If we got this far, something failed
+            WorkContext.Form.Errors.Add(SecurityErrorDescriber.PhoneNumberVerificationFailed());
+            WorkContext.Form = Form.FromObject(formModel);
+
+            return View("customers/verify_phone_number", WorkContext);
+        }
+
+        private static string GetUserEmail(User user)
+        {
+            string email = null;
+            if (user != null)
+            {
+                email = user.Email ?? user.UserName;
+                if (user.Contact != null)
+                {
+                    email = user.Contact?.Email ?? email;
+                }
+            }
+            return email;
+        }
 
 
-    //    private async Task<SendNotificationResult> SendNotification(NotificationBase notification)
-    //    {
-    //        var result = new SendNotificationResult();
+        private async Task<SendNotificationResult> SendNotificationAsync(NotificationBase notification)
+        {
+            var result = new SendNotificationResult();
 
-    //        try
-    //        {
-    //            result = await _platformNotificationApi.SendNotificationAsync(notification.ToNotificationDto());
-    //        }
-    //        catch
-    //        {
-    //            result.IsSuccess = false;
-    //            result.ErrorMessage = "Error occured while sending notification";
-    //        }
+            try
+            {
+                result = await _platformNotificationApi.SendNotificationAsync(notification.ToNotificationDto());
+            }
+            catch
+            {
+                result.IsSuccess = false;
+                result.ErrorMessage = "Error occurred while sending notification";
+            }
 
     //        return result;
     //    }

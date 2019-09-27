@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
-using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Caching;
@@ -20,8 +19,18 @@ using VirtoCommerce.Storefront.Model.Security;
 namespace VirtoCommerce.Storefront.Domain.Security
 {
     //Stub for UserManager
-    public sealed class UserStoreStub : IUserStore<User>, IUserEmailStore<User>, IUserPasswordStore<User>, IUserLockoutStore<User>, IUserLoginStore<User>,
-        IUserSecurityStampStore<User>, IUserClaimStore<User>, IRoleStore<Role>, IUserPhoneNumberStore<User>, IUserTwoFactorStore<User>
+    public sealed class UserStoreStub :
+        IUserStore<User>,
+        IUserEmailStore<User>,
+        IUserPasswordStore<User>,
+        IUserLockoutStore<User>,
+        IUserLoginStore<User>,
+        IUserSecurityStampStore<User>,
+        IUserClaimStore<User>,
+        IRoleStore<Role>,
+        IUserPhoneNumberStore<User>,
+        IUserTwoFactorStore<User>,
+        IUserAuthenticatorKeyStore<User>
     {
         private readonly ISecurity _platformSecurityApi;
         private readonly IStorefrontMemoryCache _memoryCache;
@@ -315,6 +324,43 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return Task.FromResult(user.SecurityStamp);
         }
         #endregion
+
+        #region IUserPhoneNumberStore<User> members
+        public Task SetPhoneNumberAsync(User user, string phoneNumber, CancellationToken cancellationToken)
+        {
+            user.PhoneNumber = phoneNumber;
+            return Task.CompletedTask;
+        }
+
+        public Task<string> GetPhoneNumberAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.PhoneNumber);
+        }
+
+        public Task<bool> GetPhoneNumberConfirmedAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.PhoneNumberConfirmed);
+        }
+
+        public Task SetPhoneNumberConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
+        {
+            user.PhoneNumberConfirmed = confirmed;
+            return Task.CompletedTask;
+        }
+
+        #endregion
+
+        public Task SetTwoFactorEnabledAsync(User user, bool enabled, CancellationToken cancellationToken)
+        {
+            user.TwoFactorEnabled = enabled;
+            return Task.CompletedTask;
+        }
+
+        public Task<bool> GetTwoFactorEnabledAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.TwoFactorEnabled);
+        }
+
         #region IUserClaimStore<User> members
         public Task<IList<Claim>> GetClaimsAsync(User user, CancellationToken cancellationToken)
         {
@@ -379,44 +425,6 @@ namespace VirtoCommerce.Storefront.Domain.Security
         }
         #endregion
 
-        #region IUserPhoneNumberStore<User> members
-        public Task SetPhoneNumberAsync(User user, string phoneNumber, CancellationToken cancellationToken)
-        {
-            user.PhoneNumber = phoneNumber;
-            return Task.CompletedTask;
-        }
-
-        public Task<string> GetPhoneNumberAsync(User user, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(user.PhoneNumber);
-        }
-
-        public Task<bool> GetPhoneNumberConfirmedAsync(User user, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(user.PhoneNumberConfirmed);
-        }
-
-        public Task SetPhoneNumberConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
-        {
-            user.PhoneNumberConfirmed = confirmed;
-            return Task.CompletedTask;
-        }
-
-        #endregion
-
-        #region IUserTwoFactorStore<User> members
-        public Task SetTwoFactorEnabledAsync(User user, bool enabled, CancellationToken cancellationToken)
-        {
-            user.TwoFactorEnabled = enabled;
-            return Task.CompletedTask;
-        }
-
-        public Task<bool> GetTwoFactorEnabledAsync(User user, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(user.TwoFactorEnabled);
-        }
-        #endregion
-
         #region IRoleStore<Role> members
 
         public async Task<IdentityResult> CreateAsync(Role role, CancellationToken cancellationToken)
@@ -477,6 +485,19 @@ namespace VirtoCommerce.Storefront.Domain.Security
         }
         #endregion
 
+        #region IUserAuthenticatorKeyStore<User>
+        public Task SetAuthenticatorKeyAsync(User user, string key, CancellationToken cancellationToken)
+        {
+            user.TwoFactorAuthenticatorKey = key;
+            return Task.CompletedTask;
+        }
+
+        public Task<string> GetAuthenticatorKeyAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.TwoFactorAuthenticatorKey);
+        }
+        #endregion IUserAuthenticatorKeyStore<User>
+
         public void Dispose()
         {
             // Cleanup
@@ -487,11 +508,12 @@ namespace VirtoCommerce.Storefront.Domain.Security
             if (userDto != null)
             {
                 var user = userDto.ToUser();
-                options.AddExpirationToken(PollingApiUserChangeToken.CreateChangeToken(user, _platformSecurityApi, _options.ChangesPollingInterval));
+                options.AddExpirationToken(new PollingApiUserChangeToken(_platformSecurityApi, _options.ChangesPollingInterval));
                 options.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
                 return user;
             }
             return null;
         }
+
     }
 }
