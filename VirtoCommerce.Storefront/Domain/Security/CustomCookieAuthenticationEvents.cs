@@ -46,10 +46,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
         {
             var redirectUri = new Uri(uri);
             var adjustedAbsolutePath = _storefrontUrlBuilder.ToAppAbsolute(redirectUri.AbsolutePath);
-            var builder = new UriBuilder(redirectUri);
-            builder.Path = adjustedAbsolutePath;
-            string result = builder.Uri.ToString();
-            return result;
+            var uriBuilder = new UriBuilder(redirectUri);
+            uriBuilder.Path = adjustedAbsolutePath;
+            return uriBuilder.Uri.ToString();
         }
 
     }
