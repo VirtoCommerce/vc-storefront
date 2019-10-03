@@ -25,7 +25,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 return Task.CompletedTask;
             }
 
-            context.RedirectUri = AddStoreAndLanguageToUri(context.RedirectUri);
+            context.RedirectUri = GetAbsoluteUri(context.RedirectUri);
 
             return base.RedirectToLogin(context);
         }
@@ -38,7 +38,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 return Task.CompletedTask;
             }
 
-            context.RedirectUri = AddStoreAndLanguageToUri(context.RedirectUri);
+            context.RedirectUri = GetAbsoluteUri(context.RedirectUri);
 
             return base.RedirectToAccessDenied(context);
         }
