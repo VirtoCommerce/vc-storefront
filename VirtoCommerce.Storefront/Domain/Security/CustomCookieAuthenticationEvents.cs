@@ -44,7 +44,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         }
 
 
-        private string AddStoreAndLanguageToUri(string uri)
+        private string GetAbsoluteUri(string uri)
         {
             var redirectUri = new Uri(uri);
             var adjustedAbsolutePath = _storefrontUrlBuilder.ToAppAbsolute(redirectUri.AbsolutePath);
