@@ -87,6 +87,7 @@ namespace VirtoCommerce.Storefront.Domain
             result.SubscriptionEnabled = result.Settings.GetSettingValue("Subscription.EnableSubscriptions", false);
             result.TaxCalculationEnabled = result.Settings.GetSettingValue("Stores.TaxCalculationEnabled", true);
             result.AnonymousUsersAllowed = result.Settings.GetSettingValue("Stores.AllowAnonymousUsers", true);
+            result.IsSpa = result.Settings.GetSettingValue("Stores.IsSpa", false);
 
             return result;
         }
