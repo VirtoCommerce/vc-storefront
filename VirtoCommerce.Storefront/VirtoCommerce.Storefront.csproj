@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -11,9 +11,9 @@
     <PackageLicenseUrl>https://virtocommerce.com/open-source-license</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/VirtoCommerce/vc-storefront-core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/VirtoCommerce/vc-storefront-core</RepositoryUrl>
-    <AssemblyVersion>4.0.0.0</AssemblyVersion>
-    <FileVersion>4.0.0.0</FileVersion>
-    <Version>4.0.0</Version>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <FileVersion>4.1.0.0</FileVersion>
+    <Version>4.1.0</Version>
     <Copyright>Copyright © 2011-2019 Virto Commerce - an enterprise Microsoft ecommerce platform ©. All rights reserved</Copyright>
     <PackageIconUrl>https://virtocommerce.com/themes/assets/logo.jpg</PackageIconUrl>
     <PackageReleaseNotes></PackageReleaseNotes>
