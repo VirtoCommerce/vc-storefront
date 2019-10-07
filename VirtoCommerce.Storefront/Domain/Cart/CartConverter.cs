@@ -662,7 +662,7 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new LineItem(currency, language)
             {
                 Id = lineItemDto.Id,
-                IsReadOnly = lineItemDto.isReadOnly ?? false,
+                IsReadOnly = lineItemDto.IsReadOnly ?? false,
                 CatalogId = lineItemDto.CatalogId,
                 CategoryId = lineItemDto.CategoryId,
                 ImageUrl = lineItemDto.ImageUrl,
@@ -735,7 +735,7 @@ namespace VirtoCommerce.Storefront.Domain
             var retVal = new cartDto.LineItem
             {
                 Id = lineItem.Id,
-                IsReadOnly = lineItem.isReadOnly,
+                IsReadOnly = lineItem.IsReadOnly,
                 CatalogId = lineItem.CatalogId,
                 CategoryId = lineItem.CategoryId,
                 ImageUrl = lineItem.ImageUrl,
