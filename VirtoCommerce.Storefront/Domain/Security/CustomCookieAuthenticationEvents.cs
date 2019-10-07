@@ -1,13 +1,22 @@
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
     public class CustomCookieAuthenticationEvents : CookieAuthenticationEvents
     {
+        private readonly IStorefrontUrlBuilder _storefrontUrlBuilder;
+
+        public CustomCookieAuthenticationEvents(IStorefrontUrlBuilder storefrontUrlBuilder)
+        {
+            _storefrontUrlBuilder = storefrontUrlBuilder;
+        }
+
         public override Task RedirectToLogin(RedirectContext<CookieAuthenticationOptions> context)
         {
             if (context.Request.Path.IsApi())
@@ -15,6 +24,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return Task.CompletedTask;
             }
+
+            context.RedirectUri = GetStoreAbsoluteUri(context.RedirectUri);
+
             return base.RedirectToLogin(context);
         }
 
@@ -25,8 +37,20 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                 return Task.CompletedTask;
             }
+
+            context.RedirectUri = GetStoreAbsoluteUri(context.RedirectUri);
+
             return base.RedirectToAccessDenied(context);
         }
-        
+
+
+        private string GetStoreAbsoluteUri(string uri)
+        {
+            //Need to build from an host absolute url a  relative  store-based url
+            // http://localhost/Account/Login -> http://localhost/{store}/{lang}/Account/Login
+            var redirectUri = new UriBuilder(uri);
+            redirectUri.Path = _storefrontUrlBuilder.ToAppAbsolute(redirectUri.Path);
+            return redirectUri.Uri.ToString();
+        }
     }
 }
