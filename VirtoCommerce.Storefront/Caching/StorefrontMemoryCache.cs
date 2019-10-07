@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Caching;
@@ -11,11 +12,13 @@ namespace VirtoCommerce.Storefront.Caching
         private readonly StorefrontOptions _storefrontOptions;
         private readonly IMemoryCache _memoryCache;
         private bool _disposed;
+        private readonly ILogger _log;
 
-        public StorefrontMemoryCache(IMemoryCache memoryCache, IOptions<StorefrontOptions> storefrontOptions)
+        public StorefrontMemoryCache(IMemoryCache memoryCache, IOptions<StorefrontOptions> storefrontOptions, ILogger<StorefrontMemoryCache> log)
         {
             _memoryCache = memoryCache;
             _storefrontOptions = storefrontOptions.Value;
+            _log = log;
         }
 
         public MemoryCacheEntryOptions GetDefaultCacheEntryOptions()
@@ -40,23 +43,24 @@ namespace VirtoCommerce.Storefront.Caching
             return result;
         }
 
-        public ICacheEntry CreateEntry(object key)
+        public virtual ICacheEntry CreateEntry(object key)
         {
             var result = _memoryCache.CreateEntry(key);
             if (result != null)
             {
+                result.RegisterPostEvictionCallback(callback: EvictionCallback);
                 var options = GetDefaultCacheEntryOptions();
                 result.SetOptions(options);
             }
             return result;
         }
 
-        public void Remove(object key)
+        public virtual void Remove(object key)
         {
             _memoryCache.Remove(key);
         }
 
-        public bool TryGetValue(object key, out object value)
+        public virtual bool TryGetValue(object key, out object value)
         {
             return _memoryCache.TryGetValue(key, out value);
         }
@@ -66,9 +70,7 @@ namespace VirtoCommerce.Storefront.Caching
 
         protected bool CacheEnabled => _storefrontOptions.CacheEnabled;
 
-        /// <summary>
-        /// Cleans up the background collection events.
-        /// </summary>
+
         ~StorefrontMemoryCache()
         {
             Dispose(false);
@@ -77,6 +79,12 @@ namespace VirtoCommerce.Storefront.Caching
         public void Dispose()
         {
             Dispose(true);
+            // This object will be cleaned up by the Dispose method.
+            // Therefore, you should call GC.SupressFinalize to
+            // take this object off the finalization queue
+            // and prevent finalization code for this object
+            // from executing a second time.
+            GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -85,11 +93,15 @@ namespace VirtoCommerce.Storefront.Caching
             {
                 if (disposing)
                 {
-                    GC.SuppressFinalize(this);
+                    _memoryCache.Dispose();
                 }
-
                 _disposed = true;
             }
+        }
+
+        protected virtual void EvictionCallback(object key, object value, EvictionReason reason, object state)
+        {
+            _log.LogInformation($"EvictionCallback: Cache with key {key} has expired.");
         }
     }
 }

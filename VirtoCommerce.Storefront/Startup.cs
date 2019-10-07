@@ -1,13 +1,9 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using System.Threading.Tasks;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,14 +15,17 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.WebEncoders;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Binders;
 using VirtoCommerce.Storefront.Caching;
+using VirtoCommerce.Storefront.Caching.Redis;
 using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Cart;
@@ -123,7 +122,19 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IHandlerRegistrar>(provider => provider.GetService<InProcessBus>());
 
             //Cache
-            services.AddSingleton<IStorefrontMemoryCache, StorefrontMemoryCache>();
+            var redisConnectionString = Configuration.GetConnectionString("RedisConnectionString");
+            if (!string.IsNullOrEmpty(redisConnectionString))
+            {
+                services.AddOptions<RedisCachingOptions>().Bind(Configuration.GetSection("VirtoCommerce:Redis")).ValidateDataAnnotations();
+
+                var redis = ConnectionMultiplexer.Connect(redisConnectionString);
+                services.AddSingleton(redis.GetSubscriber());
+                services.AddSingleton<IStorefrontMemoryCache, RedisStorefrontMemoryCache>();
+            }
+            else
+            {
+                services.AddSingleton<IStorefrontMemoryCache, StorefrontMemoryCache>();
+            }
 
             //Register platform API clients
             services.AddPlatformEndpoint(options =>
@@ -260,7 +271,6 @@ namespace VirtoCommerce.Storefront
                 Configuration.GetSection("VirtoCommerce:LiquidThemeEngine").Bind(options);
             });
 
-            var snapshotProvider = services.BuildServiceProvider();
             services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
             services.AddMvc(options =>
             {
@@ -300,21 +310,12 @@ namespace VirtoCommerce.Storefront
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
-                options.SerializerSettings.Converters.Add(new CartTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
-                options.SerializerSettings.Converters.Add(new MoneyJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
-                options.SerializerSettings.Converters.Add(new CurrencyJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
-                options.SerializerSettings.Converters.Add(new OrderTypesJsonConverter(snapshotProvider.GetService<IWorkContextAccessor>()));
-                options.SerializerSettings.Converters.Add(new RecommendationJsonConverter(snapshotProvider.GetService<IRecommendationProviderFactory>()));
                 //Force serialize MutablePagedList type as array, instead of dictionary
                 options.SerializerSettings.Converters.Add(new MutablePagedListAsArrayJsonConverter(options.SerializerSettings));
                 //Converter for providing back compatibility with old themes was used CustomerInfo type which has contained user and contact data in the single type.
                 //May be removed when all themes will fixed to new User type with nested Contact property.
                 options.SerializerSettings.Converters.Add(new UserBackwardCompatibilityJsonConverter(options.SerializerSettings));
-            }).AddViewOptions(options =>
-            {
-                options.ViewEngines.Add(snapshotProvider.GetService<ILiquidViewEngine>());
-            })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 
             //Register event handlers via reflection
@@ -385,6 +386,16 @@ namespace VirtoCommerce.Storefront
             app.UseMiddleware<NoLiquidThemeMiddleware>();
             app.UseMiddleware<CreateStorefrontRolesMiddleware>();
             app.UseMiddleware<ApiErrorHandlingMiddleware>();
+
+            var mvcJsonOptions = app.ApplicationServices.GetService<IOptions<MvcJsonOptions>>().Value;
+            mvcJsonOptions.SerializerSettings.Converters.Add(new CartTypesJsonConverter(app.ApplicationServices.GetService<IWorkContextAccessor>()));
+            mvcJsonOptions.SerializerSettings.Converters.Add(new MoneyJsonConverter(app.ApplicationServices.GetService<IWorkContextAccessor>()));
+            mvcJsonOptions.SerializerSettings.Converters.Add(new CurrencyJsonConverter(app.ApplicationServices.GetService<IWorkContextAccessor>()));
+            mvcJsonOptions.SerializerSettings.Converters.Add(new OrderTypesJsonConverter(app.ApplicationServices.GetService<IWorkContextAccessor>()));
+            mvcJsonOptions.SerializerSettings.Converters.Add(new RecommendationJsonConverter(app.ApplicationServices.GetService<IRecommendationProviderFactory>()));
+
+            var mvcViewOptions = app.ApplicationServices.GetService<IOptions<MvcViewOptions>>().Value;
+            mvcViewOptions.ViewEngines.Add(app.ApplicationServices.GetService<ILiquidViewEngine>());
 
             //Do not use status code pages for Api requests
             app.UseWhen(context => !context.Request.Path.IsApi(), appBuilder =>
