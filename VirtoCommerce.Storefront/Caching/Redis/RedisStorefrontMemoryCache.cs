@@ -6,21 +6,19 @@ using Newtonsoft.Json;
 using Polly;
 using Polly.Retry;
 using StackExchange.Redis;
-using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Infrastructure;
-using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Caching.Redis
 {
-    public class RedisStorefrontMemoryCache : StorefrontMemoryCache, IStorefrontMemoryCache
+    public class RedisStorefrontMemoryCache : StorefrontMemoryCache
     {
         private readonly ISubscriber _bus;
         private readonly RedisCachingOptions _redisCachingOptions;
         private readonly ILogger _log;
         private readonly RetryPolicy _retryPolicy;
 
-        private static string _cacheId = Guid.NewGuid().ToString("N");
+        private static readonly string _cacheId = Guid.NewGuid().ToString("N");
 
         public RedisStorefrontMemoryCache(IMemoryCache memoryCache, IOptions<StorefrontOptions> options
             , ISubscriber bus

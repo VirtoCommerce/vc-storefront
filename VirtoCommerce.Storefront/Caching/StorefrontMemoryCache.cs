@@ -70,9 +70,7 @@ namespace VirtoCommerce.Storefront.Caching
 
         protected bool CacheEnabled => _storefrontOptions.CacheEnabled;
 
-        /// <summary>
-        /// Cleans up the background collection events.
-        /// </summary>
+
         ~StorefrontMemoryCache()
         {
             Dispose(false);
@@ -81,6 +79,12 @@ namespace VirtoCommerce.Storefront.Caching
         public void Dispose()
         {
             Dispose(true);
+            // This object will be cleaned up by the Dispose method.
+            // Therefore, you should call GC.SupressFinalize to
+            // take this object off the finalization queue
+            // and prevent finalization code for this object
+            // from executing a second time.
+            GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -89,9 +93,8 @@ namespace VirtoCommerce.Storefront.Caching
             {
                 if (disposing)
                 {
-                    GC.SuppressFinalize(this);
+                    _memoryCache.Dispose();
                 }
-
                 _disposed = true;
             }
         }
