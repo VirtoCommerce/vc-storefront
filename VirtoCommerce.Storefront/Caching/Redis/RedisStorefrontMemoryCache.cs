@@ -18,10 +18,9 @@ namespace VirtoCommerce.Storefront.Caching.Redis
         private readonly ISubscriber _bus;
         private readonly RedisCachingOptions _redisCachingOptions;
         private readonly ILogger _log;
-
-        private readonly string _cacheId;
-
         private readonly RetryPolicy _retryPolicy;
+
+        private static string _cacheId = Guid.NewGuid().ToString("N");
 
         public RedisStorefrontMemoryCache(IMemoryCache memoryCache, IOptions<StorefrontOptions> options
             , ISubscriber bus
@@ -31,9 +30,9 @@ namespace VirtoCommerce.Storefront.Caching.Redis
         {
             _log = log;
             _bus = bus;
-            _cacheId = Guid.NewGuid().ToString("N");
 
             _redisCachingOptions = redisCachingOptions.Value;
+            _bus.Unsubscribe(_redisCachingOptions.ChannelName);
             _bus.Subscribe(_redisCachingOptions.ChannelName, OnMessage);
 
             _retryPolicy = Policy.Handle<Exception>().WaitAndRetry(
