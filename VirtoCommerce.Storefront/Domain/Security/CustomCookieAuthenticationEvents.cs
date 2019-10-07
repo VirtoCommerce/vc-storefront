@@ -25,7 +25,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 return Task.CompletedTask;
             }
 
-            context.RedirectUri = GetAbsoluteUri(context.RedirectUri);
+            context.RedirectUri = GetStoreAbsoluteUri(context.RedirectUri);
 
             return base.RedirectToLogin(context);
         }
@@ -38,19 +38,19 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 return Task.CompletedTask;
             }
 
-            context.RedirectUri = GetAbsoluteUri(context.RedirectUri);
+            context.RedirectUri = GetStoreAbsoluteUri(context.RedirectUri);
 
             return base.RedirectToAccessDenied(context);
         }
 
 
-        private string GetAbsoluteUri(string uri)
+        private string GetStoreAbsoluteUri(string uri)
         {
-            var redirectUri = new Uri(uri);
-            var adjustedAbsolutePath = _storefrontUrlBuilder.ToAppAbsolute(redirectUri.AbsolutePath);
-            var uriBuilder = new UriBuilder(redirectUri);
-            uriBuilder.Path = adjustedAbsolutePath;
-            return uriBuilder.Uri.ToString();
+            //Need to build from an host absolute url a  relative  store-based url
+            // http://localhost/Account/Login -> http://localhost/{store}/{lang}/Account/Login
+            var redirectUri = new UriBuilder(uri);
+            redirectUri.Path = _storefrontUrlBuilder.ToAppAbsolute(redirectUri.Path);
+            return redirectUri.Uri.ToString();
         }
     }
 }
