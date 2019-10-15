@@ -64,6 +64,24 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return serializedString;
         }
 
+        public static object ParseJson(string input)
+        {
+            if (input == null)
+            {
+                return null;
+            }
+            var jsonSettings = new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                ContractResolver = new DefaultContractResolver()
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                }
+            };
+            var result = JsonConvert.DeserializeObject(input, jsonSettings);
+            return result;
+        }
+
         public static string PoweredBy(string signature)
         {
             var hashCode = (uint)signature.GetHashCode();
