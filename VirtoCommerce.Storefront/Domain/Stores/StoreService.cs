@@ -57,7 +57,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         public async Task<Store> GetStoreByIdAsync(string id, Currency currency = null)
         {
-            var cacheKey = CacheKey.With(GetType(), "GetStoreByIdAsync");
+            var cacheKey = CacheKey.With(GetType(), "GetStoreByIdAsync", id, currency?.ToString());
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(StoreCacheRegion.CreateChangeToken());
