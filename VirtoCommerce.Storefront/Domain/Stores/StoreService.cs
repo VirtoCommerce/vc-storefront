@@ -17,7 +17,7 @@ using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Stores;
 using StorePaymentMethod = VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models.PaymentMethod;
 using TaxProvider = VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models.TaxProvider;
-
+using StoreApi = VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -50,13 +50,26 @@ namespace VirtoCommerce.Storefront.Domain
                 cacheEntry.AddExpirationToken(StoreCacheRegion.CreateChangeToken());
                 cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
 
-                return (await _storeApi.GetStoresAsync()).Select(x => x.ToStore()).ToArray();
+                var storeDtos = await _storeApi.GetStoresAsync();
+                return  await Task.WhenAll(storeDtos.Select(x => ConvertStoreAndLoadDependeciesAsync(x)));
             }, cacheNullValue: false);
         }
 
-        public async Task<Store> GetStoreByIdAsync(string id, Currency currency)
+        public async Task<Store> GetStoreByIdAsync(string id, Currency currency = null)
         {
-            var storeDto = await _storeApi.GetStoreByIdAsync(id);
+            var cacheKey = CacheKey.With(GetType(), "GetStoreByIdAsync");
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                cacheEntry.AddExpirationToken(StoreCacheRegion.CreateChangeToken());
+                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
+
+                var storeDto = await _storeApi.GetStoreByIdAsync(id);
+                return await ConvertStoreAndLoadDependeciesAsync(storeDto, currency);
+            }, cacheNullValue: false);
+        }
+
+        protected virtual async Task<Store> ConvertStoreAndLoadDependeciesAsync(StoreApi.Store storeDto, Currency currency = null)
+        {
             var result = storeDto.ToStore();
 
             if (!storeDto.PaymentMethods.IsNullOrEmpty() && currency != null)
@@ -67,7 +80,7 @@ namespace VirtoCommerce.Storefront.Domain
             }
             else if (storeDto.PaymentMethods.IsNullOrEmpty() && currency != null)
             {
-                var paymentSearchCriteria = new PaymentMethodsSearchCriteria { StoreId = id };
+                var paymentSearchCriteria = new PaymentMethodsSearchCriteria { StoreId = result.Id };
                 var paymentsSearchResult = await _paymentModule.SearchPaymentMethodsAsync(paymentSearchCriteria);
 
                 result.PaymentMethods = paymentsSearchResult.Results
@@ -82,7 +95,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (storeDto.TaxProviders.IsNullOrEmpty())
             {
-                var taxSearchCriteria = new TaxProviderSearchCriteria { StoreId = id };
+                var taxSearchCriteria = new TaxProviderSearchCriteria { StoreId = result.Id };
                 var taxProviderSearchResult = await _taxModule.SearchTaxProvidersAsync(taxSearchCriteria);
                 result.FixedTaxRate = GetFixedTaxRate(taxProviderSearchResult.Results.Select(xp => xp.JsonConvert<TaxProvider>()).ToArray());
             }
