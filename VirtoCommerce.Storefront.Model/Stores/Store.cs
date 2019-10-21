@@ -122,7 +122,15 @@ namespace VirtoCommerce.Storefront.Model.Stores
 
         public bool TaxCalculationEnabled { get; set; }
 
+        /// <summary>
+        /// This flag restricts anonymous store access
+        /// </summary>
         public bool AnonymousUsersAllowed { get; set; }
+
+        /// <summary>
+        /// This flag enables the SPA fallback routing for a store
+        /// </summary>
+        public bool IsSpa { get; set; }
 
         public decimal FixedTaxRate { get; set; }
 

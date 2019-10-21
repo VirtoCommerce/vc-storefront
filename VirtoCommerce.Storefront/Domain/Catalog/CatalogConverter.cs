@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Markdig;
-using PagedList.Core;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
@@ -155,6 +154,8 @@ namespace VirtoCommerce.Storefront.Domain
 
         public static catalogDto.ProductSearchCriteria ToProductSearchCriteriaDto(this ProductSearchCriteria criteria, WorkContext workContext)
         {
+            var currency = criteria.Currency ?? workContext.CurrentCurrency;
+
             var result = new catalogDto.ProductSearchCriteria
             {
                 SearchPhrase = criteria.Keyword,
@@ -162,8 +163,8 @@ namespace VirtoCommerce.Storefront.Domain
                 StoreId = workContext.CurrentStore.Id,
                 CatalogId = workContext.CurrentStore.Catalog,
                 Outline = criteria.Outline,
-                Currency = criteria.Currency?.Code ?? workContext.CurrentCurrency.Code,
-                Pricelists = workContext.CurrentPricelists.Where(p => p.Currency.Equals(workContext.CurrentCurrency)).Select(p => p.Id).ToList(),
+                Currency = currency.Code,
+                Pricelists = workContext.CurrentPricelists.Where(p => p.Currency.Equals(currency)).Select(p => p.Id).ToList(),
                 PriceRange = criteria.PriceRange?.ToNumericRangeDto(),
                 UserGroups = criteria.UserGroups,
                 Terms = criteria.Terms.ToStrings(),

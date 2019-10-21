@@ -18,6 +18,11 @@ namespace VirtoCommerce.Storefront.Extensions
             return matches.Success ? matches.Value : "/";
         }
 
+        public static bool IsApi(this PathString path)
+        {
+            return path.ToString().Contains("/storefrontapi/");
+        }
+
         public static PathString TrimStoreAndLangSegment(this PathString path, Store store, Language language)
         {
             if (store == null)

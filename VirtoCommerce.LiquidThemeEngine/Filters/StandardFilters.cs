@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.XPath;
 using Scriban;
@@ -170,7 +169,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         {
             if (input == null)
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             var inputString = input.ToString();
@@ -409,7 +408,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             switch (format)
             {
                 case "long":
-                    //todo: define which way to use. IMHO using modern style is more prefered
+                    //TODO: define which way to use. IMHO using modern style is more prefered
                     //format = "%d %b %Y %X";
                     format = "f";
                     break;
@@ -428,15 +427,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             {
                 dateParsed = true;
             }
-
-            var key = string.Concat("date_formats.", format);
-            var newFormat = TranslationFilter.T(context, key);
-
-            if (!newFormat.IsNullOrEmpty())
+            if (Regex.IsMatch(format, @"^[\w\d_\-]+$"))
             {
-                format = newFormat;
+                var key = string.Concat("date_formats.", format);
+                var newFormat = TranslationFilter.T(context, key);
+                if (!newFormat.IsNullOrEmpty() && newFormat != key)
+                {
+                    format = newFormat;
+                }
             }
-
             if (dateParsed)
             {
                 var themeEngine = (ShopifyLiquidThemeEngine)context.TemplateLoader;
@@ -480,12 +479,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static object Plus(object input, object operand)
         {
-            /*
-			return input is string
-				? string.Concat(input, operand)
-				: DoMathsOperation(input, operand, Expression.Add);
-             * */
-
+           
             return DoMathsOperation(input, operand, Expression.Add);
         }
 
@@ -508,10 +502,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static object Times(object input, object operand)
         {
-            //return input is string && operand is int
-            //	? Enumerable.Repeat((string) input, (int) operand)
-            //	: DoMathsOperation(input, operand, Expression.Multiply);
-
+           
             return DoMathsOperation(input, operand, Expression.Multiply);
 
         }
@@ -543,7 +534,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                     .DynamicInvoke(input, operand);
         }
 
-        private static bool TryFormatDateTime(DateTime input, string format, out string formated, IFormatProvider formatProvider = null)
+        private static void TryFormatDateTime(DateTime input, string format, out string formated, IFormatProvider formatProvider = null)
         {
             if (format == null)
             {
@@ -555,27 +546,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             try
             {
                 formated = input.ToString(format, formatProvider);
-                return true;
             }
             catch
             {
-                return false;
+                //Swallow any exception 
             }
-        }
-
-        private static double Evaluate(string expression)
-        {
-            var xsltExpression =
-                string.Format("number({0})",
-                    new Regex(@"([\+\-\*])").Replace(expression, " ${1} ")
-                                            .Replace("/", " div ")
-                                            .Replace("%", " mod "));
-
-            return (double)new XPathDocument
-                (new StringReader("<r/>"))
-                    .CreateNavigator()
-                    .Evaluate(xsltExpression);
-        }
+        }       
     }
 
     /// <summary>

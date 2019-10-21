@@ -15,7 +15,8 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var result = new TaxRate(currency)
             {
-                Rate = new Money(taxRateDto.Rate.Value, currency)
+                Rate = new Money(taxRateDto.Rate.Value, currency),
+                PercentRate = (decimal)(taxRateDto.PercentRate ?? 0)
             };
 
             if (taxRateDto.Line != null)
@@ -27,10 +28,15 @@ namespace VirtoCommerce.Storefront.Domain
                     Name = taxRateDto.Line.Name,
                     Quantity = taxRateDto.Line.Quantity ?? 1,
                     TaxType = taxRateDto.Line.TaxType,
+                    TypeName = taxRateDto.Line.TypeName,
 
                     Amount = new Money(taxRateDto.Line.Amount.Value, currency),
                     Price = new Money(taxRateDto.Line.Price.Value, currency)
                 };
+                if (taxRateDto.TaxDetails != null)
+                {
+                    result.Line.TaxDetails = taxRateDto.TaxDetails.Select(x => x.ToTaxDetail(currency)).ToList();
+                }
             }
 
             return result;
@@ -77,9 +83,9 @@ namespace VirtoCommerce.Storefront.Domain
                 Quantity = taxLine.Quantity,
                 TaxType = taxLine.TaxType,
                 Amount = (double)taxLine.Amount.Amount,
-                Price = (double)taxLine.Price.Amount
+                Price = (double)taxLine.Price.Amount,
+                TypeName = taxLine.TypeName
             };
-
         }
 
         public static TaxEvaluationContext ToTaxEvaluationContext(this WorkContext workContext, IEnumerable<Product> products = null)
@@ -102,6 +108,14 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-
+        public static TaxDetail ToTaxDetail(this coreDto.TaxDetail taxDetailDto, Currency currency)
+        {
+            return new TaxDetail(currency)
+            {
+                Name = taxDetailDto.Name,
+                Amount = new Money(taxDetailDto.Amount ?? 0, currency),
+                Rate = new Money(taxDetailDto.Rate ?? 0, currency),
+            };
+        }
     }
 }

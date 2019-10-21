@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Marketing;
 
 namespace VirtoCommerce.Storefront.Model
 {
@@ -100,9 +99,21 @@ namespace VirtoCommerce.Storefront.Model
         public void ApplyTaxRates(IEnumerable<TaxRate> taxRates)
         {
             var shipmentTaxRate = taxRates.FirstOrDefault(x => x.Line.Quantity == Quantity);
-            if (shipmentTaxRate != null && ActualPrice.Amount > 0 && shipmentTaxRate.Rate.Amount > 0)
+            if (shipmentTaxRate != null)
             {
-                TaxPercentRate = TaxRate.TaxPercentRound(shipmentTaxRate.Rate.Amount / ActualPrice.Amount);
+                if (shipmentTaxRate.PercentRate > 0)
+                {
+                    TaxPercentRate = shipmentTaxRate.PercentRate;
+                }
+                else
+                {
+                    if (ActualPrice.Amount > 0)
+                    {
+                        TaxPercentRate = TaxRate.TaxPercentRound(shipmentTaxRate.Rate.Amount / ActualPrice.Amount);
+                    }
+                }
+
+                TaxDetails = shipmentTaxRate.Line.TaxDetails;
             }
         }
         #endregion

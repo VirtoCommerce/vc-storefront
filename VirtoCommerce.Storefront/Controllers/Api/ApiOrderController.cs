@@ -12,6 +12,7 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 using VirtoCommerce.Storefront.Model.Order;
+using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Stores;
 using orderModel = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models;
 
@@ -42,9 +43,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 criteria = new OrderSearchCriteria();
             }
-            //Does not allow to see a other customer orders
-            criteria.CustomerId = WorkContext.CurrentUser.Id;
-
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, null, SecurityConstants.Permissions.CanViewOrders);
+            if (!authorizationResult.Succeeded)
+            {
+                //Does not allow to see a other customer orders
+                criteria.CustomerId = WorkContext.CurrentUser.Id;
+            }
             var result = await _orderApi.SearchAsync(criteria.ToSearchCriteriaDto());
 
             return new CustomerOrderSearchResult
@@ -58,15 +62,26 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpGet("{orderNumber}")]
         public async Task<ActionResult<CustomerOrder>> GetCustomerOrder(string orderNumber)
         {
-            var retVal = await GetOrderByNumber(orderNumber);
-            return retVal;
+            var orderDto = await _orderApi.GetByNumberAsync(orderNumber);
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, orderDto, CanAccessOrderAuthorizationRequirement.PolicyName);
+            if (!authorizationResult.Succeeded)
+            {
+                return Unauthorized();
+            }
+            return orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
         }
 
         // GET: storefrontapi/orders/{orderNumber}/newpaymentdata
         [HttpGet("{orderNumber}/newpaymentdata")]
         public async Task<ActionResult<NewPaymentData>> GetNewPaymentData(string orderNumber)
         {
-            var order = await GetOrderByNumber(orderNumber);
+            var orderDto = await _orderApi.GetByNumberAsync(orderNumber);
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, orderDto, CanAccessOrderAuthorizationRequirement.PolicyName);
+            if (!authorizationResult.Succeeded)
+            {
+                return Unauthorized();
+            }
+            var order = orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
             var store = await _storeService.GetStoreByIdAsync(order.StoreId, order.Currency);
 
             var paymentDto = await _orderApi.GetNewPaymentAsync(order.Id);
@@ -88,7 +103,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             //Need lock to prevent concurrent access to same object
             using (await AsyncLock.GetLockByKey(GetAsyncLockKey(orderNumber, WorkContext)).LockAsync())
             {
-                var orderDto = await GetOrderDtoByNumber(orderNumber);
+                var orderDto = await _orderApi.GetByNumberAsync(orderNumber);
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, orderDto, CanAccessOrderAuthorizationRequirement.PolicyName);
+                if (!authorizationResult.Succeeded)
+                {
+                    return Unauthorized();
+                }
                 var payment = orderDto.InPayments.FirstOrDefault(x => x.Number.EqualsInvariant(paymentNumber));
                 if (payment != null)
                 {
@@ -110,7 +130,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             //Need lock to prevent concurrent access to same order
             using (await AsyncLock.GetLockByKey(GetAsyncLockKey(orderNumber, WorkContext)).LockAsync())
             {
-                var orderDto = await GetOrderDtoByNumber(orderNumber);
+                var orderDto = await _orderApi.GetByNumberAsync(orderNumber);
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, orderDto, CanAccessOrderAuthorizationRequirement.PolicyName);
+                if (!authorizationResult.Succeeded)
+                {
+                    return Unauthorized();
+                }
                 var paymentDto = orderDto.InPayments.FirstOrDefault(x => x.Number.EqualsInvariant(paymentNumber));
                 if (paymentDto == null)
                 {
@@ -138,7 +163,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             //Need to lock to prevent concurrent access to same object
             using (await AsyncLock.GetLockByKey(GetAsyncLockKey(orderNumber, WorkContext)).LockAsync())
             {
-                var orderDto = await GetOrderDtoByNumber(orderNumber);
+                var orderDto = await _orderApi.GetByNumberAsync(orderNumber);
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, orderDto, CanAccessOrderAuthorizationRequirement.PolicyName);
+                if (!authorizationResult.Succeeded)
+                {
+                    return Unauthorized();
+                }
                 var paymentDto = orderDto.InPayments.FirstOrDefault(x => x.Id.EqualsInvariant(payment.Id));
                 if (paymentDto == null)
                 {
@@ -171,31 +201,43 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         public async Task<ActionResult> GetInvoicePdf(string orderNumber)
         {
             // Current user access to order checking. If order not belong current user StorefrontException will be thrown
-            await GetOrderDtoByNumber(orderNumber);
+            var order = await _orderApi.GetByNumberAsync(orderNumber);
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, order, CanAccessOrderAuthorizationRequirement.PolicyName);
+            if (!authorizationResult.Succeeded)
+            {
+                return Unauthorized();
+            }
             var stream = await _orderApi.GetInvoicePdfAsync(orderNumber);
             return File(stream, "application/pdf");
         }
 
-        private async Task<CustomerOrder> GetOrderByNumber(string number)
+        // PUT: storefrontapi/orders/{orderNumber}/status
+        [HttpPut("{orderNumber}/status")]
+        [ValidateAntiForgeryToken]
+        [Authorize(SecurityConstants.Permissions.CanChangeOrderStatus)]
+        public async Task<ActionResult> ChangeOrderStatus(string orderNumber, [FromBody] ChangeOrderStatus changeOrderStatus)
         {
-            var order = await GetOrderDtoByNumber(number);
-            WorkContext.CurrentOrder = order.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
-            return WorkContext.CurrentOrder;
-        }
-
-        private async Task<orderModel.CustomerOrder> GetOrderDtoByNumber(string number)
-        {
-            var order = await _orderApi.GetByNumberAsync(number);
-            var authorizationResult = await _authorizationService.AuthorizeAsync(User, order, CanAccessOrderAuthorizationRequirement.PolicyName);
-
-            if (!authorizationResult.Succeeded)
+            if (!ModelState.IsValid)
             {
-                throw new StorefrontException($"Order with number {{ number }} not found (or not belongs to current user)");
+                return BadRequest(ModelState);
             }
 
-            return order;
+            using (await AsyncLock.GetLockByKey(GetAsyncLockKey(orderNumber, WorkContext)).LockAsync())
+            {
+                var order = await _orderApi.GetByNumberAsync(orderNumber);
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, order, CanAccessOrderAuthorizationRequirement.PolicyName);
+                if (!authorizationResult.Succeeded)
+                {
+                    return Unauthorized();
+                }
+                order.Status = changeOrderStatus.NewStatus;
+                await _orderApi.UpdateAsync(order);
+            }
+
+            return Ok();
         }
 
+       
         private static string GetAsyncLockKey(string orderNumber, WorkContext ctx)
         {
             return string.Join(":", "Order", orderNumber, ctx.CurrentStore.Id, ctx.CurrentUser.Id);
