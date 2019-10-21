@@ -188,6 +188,7 @@ namespace VirtoCommerce.Storefront.Model
         #region Static Content Properties
         public ContentPage CurrentPage { get; set; }
         public ContentPage Page => CurrentPage;
+
         public StaticContentSearchCriteria CurrentStaticSearchCriteria { get; set; }
 
         public IMutablePagedList<ContentItem> StaticContentSearchResult { get; set; }

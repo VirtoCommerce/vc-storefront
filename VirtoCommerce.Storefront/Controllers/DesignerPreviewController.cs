@@ -43,13 +43,13 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         [HttpPost("designer-preview/block")]
-        public IActionResult Block([FromBody]JObject block)
+        public IActionResult Block([FromBody]string content)
         {
-            //var content = new JsonPage
-            //{
-            //    Blocks = new List<JObject> { block }
-            //};
-            //WorkContext.CurrentJsonPage = content;
+            var page = new ContentPage
+            {
+                Content = content
+            };
+            WorkContext.CurrentPage = page;
             var viewName = "json-blocks";
 
             return PartialView(viewName, WorkContext);

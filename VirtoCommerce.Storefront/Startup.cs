@@ -104,6 +104,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IDynamicContentEvaluator, DynamicContentEvaluator>();
             services.AddSingleton<IMarketingService, MarketingService>();
             services.AddSingleton<IStaticContentService, StaticContentService>();
+            //services.AddSingleton<IMetaDataLoader, StaticContentService>();
             services.AddSingleton<IMenuLinkListService, MenuLinkListServiceImpl>();
             services.AddSingleton<IStaticContentItemFactory, StaticContentItemFactory>();
             services.AddSingleton<IApiChangesWatcher, ApiChangesWatcher>();
