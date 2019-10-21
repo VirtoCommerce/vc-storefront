@@ -69,30 +69,31 @@ namespace VirtoCommerce.Storefront.Controllers
             SetCurrentPage(contentPage);
             if (contentPage.FileName.EndsWith(".page"))
             {
-                var model = new JsonPage
-                {
-                    Blocks = JArray.Parse(contentPage.Content).Cast<JObject>().ToList()
-                };
-                var settings = model.Blocks.Find(x => x.GetValue("type")?.Value<string>() == "settings");
-                if (settings != null)
-                {
-                    if (WorkContext.CurrentPageSeo == null)
-                    {
-                        WorkContext.CurrentPageSeo = new SeoInfo();
-                    }
-                    Action<string, Action<string>> setValue = (key, action) =>
-                    {
-                        var value = settings.GetValue(key)?.Value<string>();
-                        if (!string.IsNullOrEmpty(value))
-                        {
-                            action(value);
-                        }
-                    };
-                    setValue("title", x => WorkContext.CurrentPageSeo.Title = x);
-                    setValue("description", x => WorkContext.CurrentPageSeo.MetaDescription = x);
-                    setValue("layout", x => model.Layout = x);
-                }
-                WorkContext.CurrentJsonPage = model;
+                // TODO: basilkot, read metadata
+                //var model = new JsonPage
+                //{
+                //    Blocks = JArray.Parse(contentPage.Content).Cast<JObject>().ToList()
+                //};
+                //var settings = model.Blocks.Find(x => x.GetValue("type")?.Value<string>() == "settings");
+                //if (settings != null)
+                //{
+                //    if (WorkContext.CurrentPageSeo == null)
+                //    {
+                //        WorkContext.CurrentPageSeo = new SeoInfo();
+                //    }
+                //    Action<string, Action<string>> setValue = (key, action) =>
+                //    {
+                //        var value = settings.GetValue(key)?.Value<string>();
+                //        if (!string.IsNullOrEmpty(value))
+                //        {
+                //            action(value);
+                //        }
+                //    };
+                //    setValue("title", x => WorkContext.CurrentPageSeo.Title = x);
+                //    setValue("description", x => WorkContext.CurrentPageSeo.MetaDescription = x);
+                //    setValue("layout", x => model.Layout = x);
+                //}
+                //WorkContext.CurrentJsonPage = model;
                 return View("json-page", WorkContext);
             }
             return View(contentPage.Template, WorkContext);
@@ -118,30 +119,31 @@ namespace VirtoCommerce.Storefront.Controllers
                 SetCurrentPage(contentPage);
                 if (contentPage.FileName.EndsWith(".page"))
                 {
-                    var model = new JsonPage
-                    {
-                        Blocks = JArray.Parse(contentPage.Content).Cast<JObject>().ToList()
-                    };
-                    var settings = model.Blocks.Find(x => x.GetValue("type")?.Value<string>() == "settings");
-                    if (settings != null)
-                    {
-                        if (WorkContext.CurrentPageSeo == null)
-                        {
-                            WorkContext.CurrentPageSeo = new SeoInfo();
-                        }
-                        Action<string, Action<string>> setValue = (key, action) =>
-                        {
-                            var value = settings.GetValue(key)?.Value<string>();
-                            if (!string.IsNullOrEmpty(value))
-                            {
-                                action(value);
-                            }
-                        };
-                        setValue("title", x=> WorkContext.CurrentPageSeo.Title = x);
-                        setValue("description", x => WorkContext.CurrentPageSeo.MetaDescription = x);
-                        setValue("layout", x => model.Layout = x);
-                    }
-                    WorkContext.CurrentJsonPage = model;
+                    // todo: basilkot. read metadata
+                    //var model = new JsonPage
+                    //{
+                    //    Blocks = JArray.Parse(contentPage.Content).Cast<JObject>().ToList()
+                    //};
+                    //var settings = model.Blocks.Find(x => x.GetValue("type")?.Value<string>() == "settings");
+                    //if (settings != null)
+                    //{
+                    //    if (WorkContext.CurrentPageSeo == null)
+                    //    {
+                    //        WorkContext.CurrentPageSeo = new SeoInfo();
+                    //    }
+                    //    Action<string, Action<string>> setValue = (key, action) =>
+                    //    {
+                    //        var value = settings.GetValue(key)?.Value<string>();
+                    //        if (!string.IsNullOrEmpty(value))
+                    //        {
+                    //            action(value);
+                    //        }
+                    //    };
+                    //    setValue("title", x=> WorkContext.CurrentPageSeo.Title = x);
+                    //    setValue("description", x => WorkContext.CurrentPageSeo.MetaDescription = x);
+                    //    setValue("layout", x => model.Layout = x);
+                    //}
+                    //WorkContext.CurrentJsonPage = model;
                     return View("json-page", WorkContext);
                 }
                 return View(contentPage.Template, WorkContext);
