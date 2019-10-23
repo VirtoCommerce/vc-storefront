@@ -18,9 +18,9 @@ namespace VirtoCommerce.Storefront.Domain
             //Initialize catalog search criteria
             var productSearchcriteria = new ProductSearchCriteria(workContext.CurrentLanguage, workContext.CurrentCurrency, workContext.QueryString)
             {
-                UserGroups = workContext.CurrentUser?.Contact?.UserGroups ?? new List<string>(),
-                SortBy = "priority-descending;name-ascending"
+                UserGroups = workContext.CurrentUser?.Contact?.UserGroups ?? new List<string>()                               
             };
+            productSearchcriteria.SortBy = productSearchcriteria.SortBy ?? "priority-descending;name-ascending";
             workContext.CurrentProductSearchCriteria = productSearchcriteria;
             //Initialize product response group.
             //TODO: Need to find possibility to set this response group in theme
