@@ -27,7 +27,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
             }
             else if (!string.IsNullOrEmpty(options.ClientId) && !string.IsNullOrEmpty(options.ClientSecret))
             {
-                result = _serviceProvider.GetService<ClientCredentialAuthHandler>();
+                result = _serviceProvider.GetService<ClientCredentialsAuthHandler>();
             }
             else if (!string.IsNullOrEmpty(options.UserName) && !string.IsNullOrEmpty(options.Password))
             {

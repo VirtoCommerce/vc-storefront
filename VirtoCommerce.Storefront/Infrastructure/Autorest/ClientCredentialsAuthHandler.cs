@@ -10,9 +10,9 @@ using Microsoft.Extensions.Options;
 namespace VirtoCommerce.Storefront.Infrastructure.Autorest
 {
     /// <summary>
-    /// HTTP message delegating handler that encapsulates access token handling and renewment
+    /// HTTP message delegating handler that encapsulates access token handling and renewal
     /// </summary>
-    public class ClientCredentialAuthHandler : DelegatingHandler
+    public class ClientCredentialsAuthHandler : DelegatingHandler
     {
         private static readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
         private static string _accessToken;
@@ -53,7 +53,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// </summary>
         /// <param name="options"></param>
         /// <param name="clientFactory"></param>
-        public ClientCredentialAuthHandler(IOptions<PlatformEndpointOptions> options, IHttpClientFactory clientFactory)
+        public ClientCredentialsAuthHandler(IOptions<PlatformEndpointOptions> options, IHttpClientFactory clientFactory)
         {
             _options = options.Value;
             _clientFactory = clientFactory;
@@ -69,7 +69,6 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// </returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-
             var accessToken = await GetAccessTokenAsync(cancellationToken);
             if (string.IsNullOrWhiteSpace(accessToken) && (await RenewTokensAsync(cancellationToken) == false))
             {
