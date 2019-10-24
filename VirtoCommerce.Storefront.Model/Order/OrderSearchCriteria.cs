@@ -31,6 +31,7 @@ namespace VirtoCommerce.Storefront.Model.Order
         public DateTime? EndDate { get; set; }
         public string Status { get; set; }
         public IList<string> Statuses { get; set; }
+        public string[] StoreIds { get; set; }
 
     }
 }
