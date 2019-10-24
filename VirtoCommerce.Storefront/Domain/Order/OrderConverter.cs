@@ -23,6 +23,7 @@ namespace VirtoCommerce.Storefront.Domain
                 EndDate = criteria.EndDate,
                 Status = criteria.Status,
                 Statuses = criteria.Statuses,
+                StoreIds = criteria.StoreIds,
 
                 Skip = criteria.Start,
                 Take = criteria.PageSize,
