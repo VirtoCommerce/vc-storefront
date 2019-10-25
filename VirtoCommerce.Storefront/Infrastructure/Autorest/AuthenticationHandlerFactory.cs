@@ -25,7 +25,11 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
             {
                 result = _serviceProvider.GetService<ApiKeySecretAuthHandler>();
             }
-            if (!string.IsNullOrEmpty(options.UserName) && !string.IsNullOrEmpty(options.Password))
+            else if (!string.IsNullOrEmpty(options.ClientId) && !string.IsNullOrEmpty(options.ClientSecret))
+            {
+                result = _serviceProvider.GetService<ClientCredentialsAuthHandler>();
+            }
+            else if (!string.IsNullOrEmpty(options.UserName) && !string.IsNullOrEmpty(options.Password))
             {
                 result = _serviceProvider.GetService<UserPasswordAuthHandler>();
             }
