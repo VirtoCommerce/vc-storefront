@@ -9,6 +9,5 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
     public interface IStaticContentService
     {
         IEnumerable<ContentItem> LoadStoreStaticContent(Store store);
-        void ResetCache(Store store);
     }
 }

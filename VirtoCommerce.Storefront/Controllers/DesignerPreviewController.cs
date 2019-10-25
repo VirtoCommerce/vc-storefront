@@ -35,19 +35,12 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("json-preview", WorkContext);
         }
 
-        [HttpPost("designer-preview/reset-cache")]
-        public IActionResult ResetCache()
-        {
-            contentService.ResetCache(WorkContext.CurrentStore);
-            return Ok();
-        }
-
         [HttpPost("designer-preview/block")]
-        public IActionResult Block([FromBody]string content)
+        public IActionResult Block([FromBody]dynamic data)
         {
             var page = new ContentPage
             {
-                Content = content
+                Content = $"[{data}]"
             };
             WorkContext.CurrentPage = page;
             var viewName = "json-blocks";

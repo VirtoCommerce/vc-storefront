@@ -26,33 +26,23 @@ namespace VirtoCommerce.Storefront.Domain
     /// </summary>
     public class StaticContentService : IStaticContentService
     {
-        private static readonly Regex _headerRegExp = new Regex(@"(?s:^---(.*?)---)");
         private static readonly string[] _extensions = { ".md", ".liquid", ".html", ".page" };
-        private readonly IStorefrontUrlBuilder _urlBuilder;
         private readonly IStaticContentItemFactory _contentItemFactory;
         private readonly IContentBlobProvider _contentBlobProvider;
-        private readonly MarkdownPipeline _markdownPipeline;
         private readonly IStorefrontMemoryCache _memoryCache;
+        private readonly IStaticContentLoaderFactory _metadataFactory;
         private readonly string _basePath = "Pages";
 
-        public StaticContentService(IStorefrontMemoryCache memoryCache, IWorkContextAccessor workContextAccessor,
-                                        IStorefrontUrlBuilder urlBuilder, IStaticContentItemFactory contentItemFactory,
-                                        IContentBlobProvider contentBlobProvider)
+        public StaticContentService(IStorefrontMemoryCache memoryCache, IStaticContentItemFactory contentItemFactory,
+                                        IContentBlobProvider contentBlobProvider, IStaticContentLoaderFactory metadataFactory)
         {
-            _urlBuilder = urlBuilder;
             _contentItemFactory = contentItemFactory;
             _contentBlobProvider = contentBlobProvider;
             _memoryCache = memoryCache;
-            _markdownPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+            _metadataFactory = metadataFactory;
         }
 
         #region IStaticContentService Members
-
-        public void ResetCache(Store store)
-        {
-            ContentBlobCacheRegion.ExpireRegion();
-            StaticContentCacheRegion.ExpireRegion();
-        }
 
         public IEnumerable<ContentItem> LoadStoreStaticContent(Store store)
         {
@@ -116,49 +106,20 @@ namespace VirtoCommerce.Storefront.Domain
                 content = stream.ReadToString();
             }
 
-            IDictionary<string, IEnumerable<string>> metaHeaders;
-            string error = null;
+            IDictionary<string, IEnumerable<string>> metaHeaders = new Dictionary<string, IEnumerable<string>>();
+
+            var metadataReader = _metadataFactory.CreateLoader(contentItem);
 
             try
             {
-                if (contentPath.EndsWith(".page"))
-                {
-                    var page = JsonConvert.DeserializeObject<JArray>(content);
-                    var settings = page.FirstOrDefault(x =>
-                    {
-                        return (x as JObject).GetValue("type").Value<string>() == "settings";
-                    });
-                    metaHeaders = new Dictionary<string, IEnumerable<string>>();
-                    var items = settings.AsJEnumerable();
-                    foreach (JProperty item in items)
-                    {
-                        metaHeaders.Add(item.Name, new List<string> { item.Value.Value<string>() });
-                    }
-                }
-                else
-                {
-                    metaHeaders = ReadYamlHeader(content);
-                }
+                metadataReader.ReadMetaData(content, metaHeaders);
             }
-            catch (Exception ex)
+            catch (Exception ex) // NOTE: Exception must have a concrete type!
             {
-                error = $"Failed to parse YAML header from \"{contentItem.StoragePath}\"<br/>{ex.Message}";
-                metaHeaders = new Dictionary<string, IEnumerable<string>>();
-            }
-
-            content = RemoveYamlHeader(content);
-
-            //Render markdown content
-            if (Path.GetExtension(contentItem.StoragePath).EqualsInvariant(".md"))
-            {
-                content = Markdown.ToHtml(content, _markdownPipeline);
-            }
-
-            if (!string.IsNullOrEmpty(error))
-            {
+                var error = $"Failed to parse YAML header from \"{contentItem.StoragePath}\"<br/>{ex.Message}";
                 content = $"{error}<br/>{content}";
             }
-
+            content = metadataReader.PrepareContent(content);
             contentItem.LoadContent(content, metaHeaders);
 
             if (string.IsNullOrEmpty(contentItem.Permalink))
@@ -181,66 +142,6 @@ namespace VirtoCommerce.Storefront.Domain
                 FilePath = item.StoragePath
             }.ToUrl();
         }
-
-        private static string RemoveYamlHeader(string text)
-        {
-            var retVal = text;
-            var headerMatches = _headerRegExp.Matches(text);
-            if (headerMatches.Count > 0)
-            {
-                retVal = text.Replace(headerMatches[0].Groups[0].Value, "").Trim();
-            }
-            return retVal;
-        }
-
-        private static IDictionary<string, IEnumerable<string>> ReadYamlHeader(string text)
-        {
-            var retVal = new Dictionary<string, IEnumerable<string>>();
-            var headerMatches = _headerRegExp.Matches(text);
-            if (headerMatches.Count == 0)
-                return retVal;
-
-            var input = new StringReader(headerMatches[0].Groups[1].Value);
-            var yaml = new YamlStream();
-
-            yaml.Load(input);
-
-            if (yaml.Documents.Count > 0)
-            {
-                var root = yaml.Documents[0].RootNode;
-                var collection = root as YamlMappingNode;
-                if (collection != null)
-                {
-                    foreach (var entry in collection.Children)
-                    {
-                        var node = entry.Key as YamlScalarNode;
-                        if (node != null)
-                        {
-                            retVal.Add(node.Value, GetYamlNodeValues(entry.Value));
-                        }
-                    }
-                }
-            }
-            return retVal;
-        }
-
-        private static IEnumerable<string> GetYamlNodeValues(YamlNode value)
-        {
-            var retVal = new List<string>();
-            var list = value as YamlSequenceNode;
-
-            if (list != null)
-            {
-                retVal.AddRange(list.Children.OfType<YamlScalarNode>().Select(node => node.Value));
-            }
-            else
-            {
-                retVal.Add(value.ToString());
-            }
-
-            return retVal;
-        }
-
 
         //each content file  has a name pattern {name}.{language?}.{ext}
         private class LocalizedBlobInfo

@@ -4,8 +4,8 @@ using System.Text;
 
 namespace VirtoCommerce.Storefront.Model.StaticContent
 {
-    public interface IMetaDataLoader
+    public interface IStaticContentLoaderFactory
     {
-        void ReadMetaData(string content, IDictionary<string, IEnumerable<string>> metadata);
+        IStaticContentLoader CreateLoader(ContentItem contentItem);
     }
 }
