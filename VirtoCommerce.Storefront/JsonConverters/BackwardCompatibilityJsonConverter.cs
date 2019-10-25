@@ -12,7 +12,7 @@ namespace VirtoCommerce.Storefront.JsonConverters
     public class UserBackwardCompatibilityJsonConverter : JsonConverter
     {
         private readonly JsonSerializerSettings _jsonSettings;
-        private static Type[] _knowTypes = new[] { typeof(User), typeof(UserRegistration) };
+        private static Type[] _knownTypes = new[] { typeof(User), typeof(UserRegistration) };
 
         public UserBackwardCompatibilityJsonConverter(JsonSerializerSettings jsonSettings)
         {
@@ -55,7 +55,7 @@ namespace VirtoCommerce.Storefront.JsonConverters
 
         public override bool CanConvert(Type objectType)
         {
-            return _knowTypes.Any(x => x.IsAssignableFrom(objectType));
+            return _knownTypes.Any(x => x.IsAssignableFrom(objectType));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
