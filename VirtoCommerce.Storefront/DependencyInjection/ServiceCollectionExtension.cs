@@ -100,6 +100,7 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddSingleton<ServiceClientCredentials>(sp => new EmptyServiceClientCredentials());
             services.AddTransient<ApiKeySecretAuthHandler>();
             services.AddTransient<UserPasswordAuthHandler>();
+            services.AddTransient<ClientCredentialsAuthHandler>();
             services.AddSingleton<AuthenticationHandlerFactory>();
             services.AddHttpClient();
             services.AddPlatformEnpointHttpClient();

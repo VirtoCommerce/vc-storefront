@@ -6,11 +6,18 @@ namespace VirtoCommerce.Storefront.Infrastructure
     {
         public ApiAuthMode AuthMode { get; set; } = ApiAuthMode.BarrierToken;
         public Uri Url { get; set; }
+
         /// <summary>
         /// Credentials used for ApiAuthMode.BarrierToken mode
         /// </summary>
         public string AppId { get; set; }
         public string SecretKey { get; set; }
+
+        /// <summary>
+        /// Client credentials used for client credential flow
+        /// </summary>
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
 
         /// <summary>
         /// Credentials used for ApiAuthMode.OAuthPassword mode
@@ -19,7 +26,5 @@ namespace VirtoCommerce.Storefront.Infrastructure
         public string Password { get; set; }
 
         public TimeSpan RequestTimeout { get; set; } = TimeSpan.FromSeconds(30);
-
     }
-
 }

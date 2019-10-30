@@ -1,7 +1,7 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using VirtoCommerce.Storefront.Model.Security;
 
 namespace VirtoCommerce.Storefront.JsonConverters
@@ -12,7 +12,7 @@ namespace VirtoCommerce.Storefront.JsonConverters
     public class UserBackwardCompatibilityJsonConverter : JsonConverter
     {
         private readonly JsonSerializerSettings _jsonSettings;
-        private static Type[] _knowTypes = new[] { typeof(User), typeof(UserRegistration)};
+        private static Type[] _knownTypes = new[] { typeof(User), typeof(UserRegistration) };
 
         public UserBackwardCompatibilityJsonConverter(JsonSerializerSettings jsonSettings)
         {
@@ -55,7 +55,7 @@ namespace VirtoCommerce.Storefront.JsonConverters
 
         public override bool CanConvert(Type objectType)
         {
-            return _knowTypes.Any(x => x.IsAssignableFrom(objectType));
+            return _knownTypes.Any(x => x.IsAssignableFrom(objectType));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -78,8 +78,9 @@ namespace VirtoCommerce.Storefront.JsonConverters
             if (contact != null)
             {
                 var contactJson = JObject.FromObject(contact, serializer);
-                result.Merge(contactJson);
-                var restoreUserIdJson = JObject.FromObject(new { user.Id, user.Email } , serializer);
+                //Used MergeArrayHandling.Merge to prevent array (Addresses, DynamicProperties) values duplication. 
+                result.Merge(contactJson, new JsonMergeSettings() { MergeArrayHandling = MergeArrayHandling.Merge });
+                var restoreUserIdJson = JObject.FromObject(new { user.Id, user.Email }, serializer);
                 result.Merge(restoreUserIdJson);
             }
             result.WriteTo(writer);
