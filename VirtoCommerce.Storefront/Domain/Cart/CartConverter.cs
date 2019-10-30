@@ -407,7 +407,8 @@ namespace VirtoCommerce.Storefront.Domain
                 User = cart.Customer,
                 Currency = cart.Currency,
                 Language = cart.Language,
-                StoreId = cart.StoreId
+                StoreId = cart.StoreId,
+                Products = cart.Items.Select(i => i.Product).ToList()
             };
 
             return result;
