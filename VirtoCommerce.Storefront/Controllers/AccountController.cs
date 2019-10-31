@@ -51,7 +51,7 @@ namespace VirtoCommerce.Storefront.Controllers
             _authorizationService = authorizationService;
         }
 
-        //GET: /account
+        // GET: /account
         [HttpGet]
         public async Task<ActionResult> GetAccount()
         {
@@ -61,7 +61,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 return StoreFrontRedirect("~/account/login");
             }
 
-            //Customer should be already populated in WorkContext middle-ware
+            // Customer should be already populated in WorkContext middle-ware
             return View("customers/account", WorkContext);
         }
 
@@ -109,7 +109,7 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             TryValidateModel(registration);
 
-            //This required for populate fields on form on post - back
+            // This required for populate fields on form on post-back
             WorkContext.Form = Form.FromObject(registration);
 
             if (ModelState.IsValid)
@@ -128,7 +128,7 @@ namespace VirtoCommerce.Storefront.Controllers
                     await _signInManager.SignInAsync(user, isPersistent: true);
                     await _publisher.Publish(new UserLoginEvent(WorkContext, user));
 
-                    //Send new user registration notification
+                    // Send new user registration notification
                     var registrationEmailNotification = new RegistrationEmailNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
                     {
                         FirstName = registration.FirstName,
@@ -292,7 +292,7 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             TryValidateModel(login);
 
-            //This required for populate fields on form on post - back
+            // This required for populate fields on form on post-back
             WorkContext.Form = Form.FromObject(login);
 
             if (!ModelState.IsValid)
@@ -307,7 +307,7 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 var user = await _signInManager.UserManager.FindByNameAsync(login.UserName);
 
-                //Check that current user can sing in to current store
+                // Check that current user can sing in to current store
                 if (new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore) && new IsUserSuspendedSpecification().IsSatisfiedBy(user) == false)
                 {
                     await _publisher.Publish(new UserLoginEvent(WorkContext, user));
@@ -348,7 +348,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
                     if (string.IsNullOrEmpty(phoneNumber))
                     {
-                        //Do not tell we have this user without phone
+                        // Do not tell we have this user without phone
                         WorkContext.Form.Errors.Add(SecurityErrorDescriber.OperationFailed());
                         return View("customers/login", WorkContext);
                     }
@@ -408,9 +408,9 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View("customers/verify_code", WorkContext);
             }
 
-            //The following code protects for brute force attacks against the two factor codes.
-            //If a user enters incorrect codes for a specified amount of time then the user account
-            //will be locked out for a specified amount of time.
+            // The following code protects for brute force attacks against the two factor codes.
+            // If a user enters incorrect codes for a specified amount of time then the user account
+            // will be locked out for a specified amount of time.
 
             var result = await _signInManager.TwoFactorSignInAsync(model.Provider, model.Code, model.RememberMe ?? false, model.RememberBrowser ?? false);
 
@@ -469,7 +469,7 @@ namespace VirtoCommerce.Storefront.Controllers
             var externalLoginResult = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (!externalLoginResult.Succeeded)
             {
-                //TODO: Locked out not work. Need to add some API methods to support lockout data.
+                // TODO: Locked out not work. Need to add some API methods to support lockout data.
                 if (externalLoginResult.IsLockedOut)
                 {
                     return View("lockedout", WorkContext);
@@ -580,7 +580,7 @@ namespace VirtoCommerce.Storefront.Controllers
                     Recipient = phoneNumber,
                 };
 
-                //This required for populate hidden fields on the form
+                // This required for populate hidden fields on the form
                 WorkContext.Form = Form.FromObject(new ResetPasswordByCodeModel
                 {
                     Email = user.Email
@@ -657,7 +657,7 @@ namespace VirtoCommerce.Storefront.Controllers
         public async Task<ActionResult> ResetPasswordByCode(ResetPasswordByCodeModel formModel)
         {
             TryValidateModel(formModel);
-            //Reassign the passed form to the current context to allow user post it again as hidden fields in the form
+            // Reassign the passed form to the current context to allow user post it again as hidden fields in the form
             WorkContext.Form = Form.FromObject(formModel);
 
             if (!ModelState.IsValid)
@@ -738,8 +738,8 @@ namespace VirtoCommerce.Storefront.Controllers
         public async Task<ActionResult> ResetPassword(ResetPassword formModel)
         {
             TryValidateModel(formModel);
-            //Need reassign the passed form to the current context to allow for user post it again with initial data such as Token and Email
-            //WorkContext.Form = Form.FromObject(formModel);
+            // Need reassign the passed form to the current context to allow for user post it again with initial data such as Token and Email
+            // WorkContext.Form = Form.FromObject(formModel);
 
             if (string.IsNullOrEmpty(formModel.Email) && string.IsNullOrEmpty(formModel.UserName))
             {
@@ -821,7 +821,7 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 return View("customers/phone_number", WorkContext);
             }
-            //Generate the token and send it
+            // Generate the token and send it
             var code = await _signInManager.UserManager.GenerateChangePhoneNumberTokenAsync(WorkContext.CurrentUser, formModel.PhoneNumber);
 
             var changePhoneNumberSmsNotification = new ChangePhoneNumberSmsNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
@@ -861,7 +861,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 return StoreFrontRedirect("~/account");
             }
 
-            //If we got this far, something failed
+            // If we got this far, something failed
             WorkContext.Form.Errors.Add(SecurityErrorDescriber.PhoneNumberVerificationFailed());
             WorkContext.Form = Form.FromObject(formModel);
 

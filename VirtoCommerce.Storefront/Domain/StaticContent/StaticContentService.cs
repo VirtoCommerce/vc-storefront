@@ -119,6 +119,7 @@ namespace VirtoCommerce.Storefront.Domain
                 var error = $"Failed to parse YAML header from \"{contentItem.StoragePath}\"<br/>{ex.Message}";
                 content = $"{error}<br/>{content}";
             }
+
             content = metadataReader.PrepareContent(content);
             contentItem.LoadContent(content, metaHeaders);
 
