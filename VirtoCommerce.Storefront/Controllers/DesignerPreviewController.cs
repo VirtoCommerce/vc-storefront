@@ -16,21 +16,14 @@ namespace VirtoCommerce.Storefront.Controllers
     [StorefrontRoute]
     public class DesignerPreviewController : StorefrontControllerBase
     {
-        readonly IStaticContentService contentService;
-
-        public DesignerPreviewController(IWorkContextAccessor workContextAccessor,
-            IStorefrontUrlBuilder urlBuilder,
-            IStaticContentService contentService) :
+        public DesignerPreviewController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder) :
             base(workContextAccessor, urlBuilder)
         {
-            this.contentService = contentService;
         }
 
         [HttpGet("designer-preview")]
         public IActionResult Index()
         {
-            //Response.Headers.Add("Content-Security-Policy", "frame-src http://localhost:4200/ http://dev-cms-vm.westeurope.cloudapp.azure.com;");
-            //Response.Headers.Add("Content-Security-Policy", "frame-src https://vc-com-new-initial-platform.azurewebsites.net;");
             WorkContext.Layout = Request.Query["layout"].ToString();
             return View("json-preview", WorkContext);
         }
@@ -42,17 +35,11 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 Content = $"[{data}]"
             };
+
             WorkContext.CurrentPage = page;
             var viewName = "json-blocks";
 
             return PartialView(viewName, WorkContext);
         }
-
-        //[HttpPost("designer-preview/blocks")]
-        //public IActionResult Blocks([FromBody]JsonPage content)
-        //{
-        //    WorkContext.CurrentJsonPage = content;
-        //    return PartialView("json-page", WorkContext);
-        //}
     }
 }

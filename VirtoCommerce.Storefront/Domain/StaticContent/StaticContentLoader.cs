@@ -27,10 +27,12 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var retVal = text;
             var headerMatches = _headerRegExp.Matches(text);
+
             if (headerMatches.Count > 0)
             {
                 retVal = text.Replace(headerMatches[0].Groups[0].Value, "").Trim();
             }
+
             return retVal;
         }
 

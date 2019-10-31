@@ -16,15 +16,19 @@ namespace VirtoCommerce.Storefront.Domain
         public void ReadMetaData(string content, IDictionary<string, IEnumerable<string>> metadata)
         {
             var page = JsonConvert.DeserializeObject<JArray>(content);
+
             var settings = page.FirstOrDefault(x =>
             {
                 return (x as JObject).GetValue("type").Value<string>() == "settings";
             });
+
             var items = settings.AsJEnumerable();
+
             foreach (JProperty item in items)
             {
                 metadata.Add(item.Name, new List<string> { item.Value.Value<string>() });
             }
+
             metadata.Add("template", new List<string> { "json-page" });
         }
     }

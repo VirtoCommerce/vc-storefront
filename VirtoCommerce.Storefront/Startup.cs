@@ -60,6 +60,7 @@ using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 using VirtoCommerce.Storefront.Model.Tax.Services;
 using VirtoCommerce.Storefront.Routing;
 using VirtoCommerce.Tools;
+using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace VirtoCommerce.Storefront
 {
@@ -104,7 +105,6 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IDynamicContentEvaluator, DynamicContentEvaluator>();
             services.AddSingleton<IMarketingService, MarketingService>();
             services.AddSingleton<IStaticContentService, StaticContentService>();
-            //services.AddSingleton<IMetaDataLoader, StaticContentService>();
             services.AddSingleton<IMenuLinkListService, MenuLinkListServiceImpl>();
             services.AddSingleton<IStaticContentItemFactory, StaticContentItemFactory>();
             services.AddSingleton<IStaticContentLoaderFactory, StaticContentLoaderFactory>();
@@ -244,8 +244,8 @@ namespace VirtoCommerce.Storefront
                 });
             }
 
-            //This line is required in order to use the old Identity V2 hashes to prevent rehashes passwords for platform users which login in the storefront
-            //and it can lead to platform access denied for them. (TODO: Need to remove after platform migration to .NET Core)
+            // This line is required in order to use the old Identity V2 hashes to prevent rehashes passwords for platform users which login in the storefront
+            // and it can lead to platform access denied for them. (TODO: Need to remove after platform migration to .NET Core)
             services.Configure<PasswordHasherOptions>(option => option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2);
             services.Configure<IdentityOptions>(Configuration.GetSection("IdentityOptions"));
             services.AddIdentity<User, Role>(options => { }).AddDefaultTokenProviders();
@@ -260,7 +260,7 @@ namespace VirtoCommerce.Storefront
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             // The Tempdata provider cookie is not essential. Make it essential
             // so Tempdata is functional when tracking is disabled.
@@ -268,7 +268,7 @@ namespace VirtoCommerce.Storefront
             {
                 options.Cookie.IsEssential = true;
             });
-            //Add Liquid view engine
+            // Add Liquid view engine
             services.AddLiquidViewEngine(options =>
             {
                 Configuration.GetSection("VirtoCommerce:LiquidThemeEngine").Bind(options);
@@ -281,9 +281,9 @@ namespace VirtoCommerce.Storefront
             });
             services.AddMvc(options =>
             {
-                //Workaround to avoid 'Null effective policy causing exception' (on logout)
-                //https://github.com/aspnet/Mvc/issues/7809
-                //TODO: Try to remove in ASP.NET Core 2.2
+                // Workaround to avoid 'Null effective policy causing exception' (on logout)
+                // https://github.com/aspnet/Mvc/issues/7809
+                // TODO: Try to remove in ASP.NET Core 2.2
                 options.AllowCombiningAuthorizeFilters = false;
 
                 // Thus we disable anonymous users based on "Store:AllowAnonymous" store option
@@ -317,23 +317,23 @@ namespace VirtoCommerce.Storefront
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
-                //Force serialize MutablePagedList type as array, instead of dictionary
+                // Force serialize MutablePagedList type as array, instead of dictionary
                 options.SerializerSettings.Converters.Add(new MutablePagedListAsArrayJsonConverter(options.SerializerSettings));
-                //Converter for providing back compatibility with old themes was used CustomerInfo type which has contained user and contact data in the single type.
-                //May be removed when all themes will fixed to new User type with nested Contact property.
+                // Converter for providing back compatibility with old themes was used CustomerInfo type which has contained user and contact data in the single type.
+                // May be removed when all themes will fixed to new User type with nested Contact property.
                 options.SerializerSettings.Converters.Add(new UserBackwardCompatibilityJsonConverter(options.SerializerSettings));
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 
-            //Register event handlers via reflection
+            // Register event handlers via reflection
             services.RegisterAssembliesEventHandlers(typeof(Startup));
 
             services.AddApplicationInsightsTelemetry();
             services.AddApplicationInsightsExtensions(Configuration);
 
 
-            //https://github.com/aspnet/HttpAbstractions/issues/315
-            //Changing the default html encoding options, to not encode non-Latin characters
+            // https://github.com/aspnet/HttpAbstractions/issues/315
+            // Changing the default html encoding options, to not encode non-Latin characters
             services.Configure<WebEncoderOptions>(options => options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All));
 
             services.Configure<HstsOptions>(options =>
@@ -376,7 +376,7 @@ namespace VirtoCommerce.Storefront
                 app.UseExceptionHandler("/error/500");
                 app.UseHsts();
             }
-            //Do not write telemetry to debug output 
+            // Do not write telemetry to debug output 
             TelemetryDebugWriter.IsTracingDisabled = true;
 
             app.UseResponseCaching();
@@ -387,14 +387,13 @@ namespace VirtoCommerce.Storefront
             {
                 OnPrepareResponse = ctx => {
                     const int durationInSeconds = 60 * 60 * 24;
-                    ctx.Context.Response.Headers[HeaderNames.CacheControl] =
-                        "public,max-age=" + durationInSeconds;
+                    ctx.Context.Response.Headers[HeaderNames.CacheControl] = "public,max-age=" + durationInSeconds;
                 }
             });
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-            //WorkContextBuildMiddleware must  always be registered first in  the Middleware chain
+            // WorkContextBuildMiddleware must  always be registered first in  the Middleware chain
             app.UseMiddleware<WorkContextBuildMiddleware>();
             app.UseMiddleware<StoreMaintenanceMiddleware>();
             app.UseMiddleware<NoLiquidThemeMiddleware>();
@@ -411,7 +410,7 @@ namespace VirtoCommerce.Storefront
             var mvcViewOptions = app.ApplicationServices.GetService<IOptions<MvcViewOptions>>().Value;
             mvcViewOptions.ViewEngines.Add(app.ApplicationServices.GetService<ILiquidViewEngine>());
 
-            //Do not use status code pages for Api requests
+            // Do not use status code pages for Api requests
             app.UseWhen(context => !context.Request.Path.IsApi(), appBuilder =>
             {
                 appBuilder.UseStatusCodePagesWithReExecute("/error/{0}");
@@ -421,7 +420,7 @@ namespace VirtoCommerce.Storefront
             app.UseSwagger(c => c.RouteTemplate = "docs/{documentName}/docs.json");
 
             var rewriteOptions = new RewriteOptions();
-            //Load IIS url rewrite rules from external file
+            // Load IIS url rewrite rules from external file
             if (File.Exists("IISUrlRewrite.xml"))
             {
                 using (var iisUrlRewriteStreamReader = File.OpenText("IISUrlRewrite.xml"))
@@ -439,7 +438,7 @@ namespace VirtoCommerce.Storefront
                 rewriteOptions.AddRedirectToHttps(requireHttpsOptions.StatusCode, requireHttpsOptions.Port);
             }
             app.UseRewriter(rewriteOptions);
-            //Enable browser XSS protection
+            // Enable browser XSS protection
             app.Use(async (context, next) =>
             {
                 context.Response.Headers["X-Xss-Protection"] = "1";

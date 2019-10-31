@@ -114,7 +114,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
             if (ModelState.IsValid)
             {
-                //Register user
+                // Register user
                 var user = registration.ToUser();
                 user.Contact = registration.ToContact();
                 user.StoreId = WorkContext.CurrentStore.Id;

@@ -54,15 +54,16 @@ namespace VirtoCommerce.Storefront.Domain
 
                 var retVal = new List<ContentItem>();
                 const string searchPattern = "*.*";
+
                 if (_contentBlobProvider.PathExists(baseStoreContentPath))
                 {
 
-                    //Search files by requested search pattern
+                    // Search files by requested search pattern
                     var contentBlobs = _contentBlobProvider.Search(baseStoreContentPath, searchPattern, true)
                                                  .Where(x => _extensions.Any(x.EndsWith))
                                                  .Select(x => x.Replace("\\\\", "\\"));
 
-                    //each content file  has a name pattern {name}.{language?}.{ext}
+                    // each content file  has a name pattern {name}.{language?}.{ext}
                     var localizedBlobs = contentBlobs.Select(x => new LocalizedBlobInfo(x));
 
                     foreach (var localizedBlob in localizedBlobs.OrderBy(x => x.Name))
@@ -75,12 +76,11 @@ namespace VirtoCommerce.Storefront.Domain
                             {
                                 contentItem.Name = localizedBlob.Name;
                             }
+
                             contentItem.Language = localizedBlob.Language;
                             contentItem.FileName = Path.GetFileName(blobRelativePath);
                             contentItem.StoragePath = "/" + blobRelativePath.Replace(baseStoreContentPath + "/", string.Empty).TrimStart('/');
-
                             LoadAndRenderContentItem(blobRelativePath, contentItem);
-
                             retVal.Add(contentItem);
                         }
                     }
@@ -102,12 +102,11 @@ namespace VirtoCommerce.Storefront.Domain
             string content;
             using (var stream = _contentBlobProvider.OpenRead(contentPath))
             {
-                //Load raw content with metadata
+                // Load raw content with metadata
                 content = stream.ReadToString();
             }
 
             IDictionary<string, IEnumerable<string>> metaHeaders = new Dictionary<string, IEnumerable<string>>();
-
             var metadataReader = _metadataFactory.CreateLoader(contentItem);
 
             try
@@ -127,9 +126,10 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 contentItem.Permalink = ":folder/:categories/:title";
             }
-            //Transform permalink template to url
+
+            // Transform permalink template to url
             contentItem.Url = GetContentItemUrl(contentItem, contentItem.Permalink);
-            //Transform aliases permalink templates to urls
+            // Transform aliases permalink templates to urls
             contentItem.AliasesUrls = contentItem.Aliases.Select(x => GetContentItemUrl(contentItem, x)).ToList();
         }
 
@@ -144,7 +144,7 @@ namespace VirtoCommerce.Storefront.Domain
             }.ToUrl();
         }
 
-        //each content file  has a name pattern {name}.{language?}.{ext}
+        // each content file  has a name pattern {name}.{language?}.{ext}
         private class LocalizedBlobInfo
         {
             public LocalizedBlobInfo(string blobPath)

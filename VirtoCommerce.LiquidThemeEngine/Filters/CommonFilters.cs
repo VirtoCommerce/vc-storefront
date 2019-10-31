@@ -70,6 +70,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             {
                 return null;
             }
+
             var jsonSettings = new JsonSerializerSettings()
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -78,6 +79,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                     NamingStrategy = new CamelCaseNamingStrategy()
                 }
             };
+
             var result = JsonConvert.DeserializeObject(input, jsonSettings);
             return result;
         }
