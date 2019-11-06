@@ -57,31 +57,13 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
         public static string Json(object input)
         {
-            if (input == null)
-            {
-                return null;
-            }
-            var serializedString = input != null ? JsonConvert.SerializeObject(input, _defaultJsonSerializeSettings) : input;
+            var serializedString = input != null ? JsonConvert.SerializeObject(input, _defaultJsonSerializeSettings) : null;
             return serializedString;
         }
 
         public static object ParseJson(string input)
         {
-            if (input == null)
-            {
-                return null;
-            }
-
-            var jsonSettings = new JsonSerializerSettings()
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                ContractResolver = new DefaultContractResolver()
-                {
-                    NamingStrategy = new CamelCaseNamingStrategy()
-                }
-            };
-
-            var result = JsonConvert.DeserializeObject(input, jsonSettings);
+            var result = input != null ? JsonConvert.DeserializeObject(input, _defaultJsonSerializeSettings) : null;
             return result;
         }
 
@@ -113,7 +95,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             htmlContent.WriteTo(writer, HtmlEncoder.Default);
             return writer.ToString();
         }
-
 
         public static string Layout(TemplateContext context, string layout)
         {
