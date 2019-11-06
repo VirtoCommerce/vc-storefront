@@ -36,6 +36,20 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                                              "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">Enterprise ecommerce platform</a> by Virto",
                                          };
 
+        private static readonly JsonSerializerSettings _defaultJsonSerializeSettings = new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            ContractResolver = new DefaultContractResolver()
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            }
+        };
+
+        static CommonFilters()
+        {
+            _defaultJsonSerializeSettings.Converters.Add(new MutablePagedListAsArrayJsonConverter());
+        }
+
         public static object Default(object input, object value)
         {
             return input ?? value;
@@ -47,20 +61,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             {
                 return null;
             }
-
-            var jsonSettings = new JsonSerializerSettings()
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                ContractResolver = new DefaultContractResolver()
-                {
-                    NamingStrategy = new CamelCaseNamingStrategy()
-                }
-                //TODO: 
-                //ContractResolver = new RubyContractResolver(),
-            };
-            //TODO: duplicated code of custom json convertor MutablePagedListAsArrayJsonConverter. 
-            jsonSettings.Converters.Add(new MutablePagedListAsArrayJsonConverter());
-            var serializedString = JsonConvert.SerializeObject(input, jsonSettings);
+            var serializedString = input != null ? JsonConvert.SerializeObject(input, _defaultJsonSerializeSettings) : input;
             return serializedString;
         }
 
