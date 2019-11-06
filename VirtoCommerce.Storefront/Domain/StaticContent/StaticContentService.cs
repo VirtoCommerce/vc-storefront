@@ -1,15 +1,9 @@
-using Markdig;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Primitives;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using VirtoCommerce.Storefront.Caching;
-using VirtoCommerce.Storefront.Extensions;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Primitives;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
@@ -18,7 +12,6 @@ using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.StaticContent;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Tools;
-using YamlDotNet.RepresentationModel;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -50,7 +43,7 @@ namespace VirtoCommerce.Storefront.Domain
         public IEnumerable<ContentItem> LoadStoreStaticContent(Store store)
         {
             var baseStoreContentPath = string.Concat(_basePath, "/", store.Id);
-            var cacheKey = GetCacheKey(store);
+            var cacheKey = CacheKey.With(GetType(), "LoadStoreStaticContent", store.Id);
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { StaticContentCacheRegion.CreateChangeToken(), _contentBlobProvider.Watch(baseStoreContentPath + "/**/*") }));
@@ -95,11 +88,6 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
         #endregion
-
-        private string GetCacheKey(Store store)
-        {
-            return CacheKey.With(GetType(), "LoadStoreStaticContent", store.Id);
-        }
 
         private void LoadAndRenderContentItem(string contentPath, ContentItem contentItem)
         {
