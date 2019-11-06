@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
@@ -31,15 +32,17 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IContentBlobProvider _contentBlobProvider;
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IStaticContentLoaderFactory _metadataFactory;
+        private readonly IApiChangesWatcher _apiChangesWatcher;
         private readonly string _basePath = "Pages";
 
         public StaticContentService(IStorefrontMemoryCache memoryCache, IStaticContentItemFactory contentItemFactory,
-                                        IContentBlobProvider contentBlobProvider, IStaticContentLoaderFactory metadataFactory)
+                                        IContentBlobProvider contentBlobProvider, IStaticContentLoaderFactory metadataFactory, IApiChangesWatcher changesWatcher)
         {
             _contentItemFactory = contentItemFactory;
             _contentBlobProvider = contentBlobProvider;
             _memoryCache = memoryCache;
             _metadataFactory = metadataFactory;
+            _apiChangesWatcher = changesWatcher;
         }
 
         #region IStaticContentService Members
@@ -51,6 +54,7 @@ namespace VirtoCommerce.Storefront.Domain
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { StaticContentCacheRegion.CreateChangeToken(), _contentBlobProvider.Watch(baseStoreContentPath + "/**/*") }));
+                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
 
                 var retVal = new List<ContentItem>();
                 const string searchPattern = "*.*";
