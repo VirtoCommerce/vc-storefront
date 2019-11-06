@@ -16,8 +16,8 @@ namespace VirtoCommerce.Storefront.Controllers
     [StorefrontRoute]
     public class DesignerPreviewController : StorefrontControllerBase
     {
-        public DesignerPreviewController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder) :
-            base(workContextAccessor, urlBuilder)
+        public DesignerPreviewController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder)
+            : base(workContextAccessor, urlBuilder)
         {
         }
 

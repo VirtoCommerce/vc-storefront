@@ -117,7 +117,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 metadataReader.ReadMetaData(content, metaHeaders);
             }
-            catch (Exception ex) // NOTE: Exception must have a concrete type!
+            catch (Exception ex) // NOTE: Exception must have a specific type!
             {
                 var error = $"Failed to parse YAML header from \"{contentItem.StoragePath}\"<br/>{ex.Message}";
                 content = $"{error}<br/>{content}";

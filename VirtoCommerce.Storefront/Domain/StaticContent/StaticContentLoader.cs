@@ -25,15 +25,15 @@ namespace VirtoCommerce.Storefront.Domain
 
         private static string RemoveYamlHeader(string text)
         {
-            var retVal = text;
+            var result = text;
             var headerMatches = _headerRegExp.Matches(text);
 
             if (headerMatches.Count > 0)
             {
-                retVal = text.Replace(headerMatches[0].Groups[0].Value, "").Trim();
+                result = text.Replace(headerMatches[0].Groups[0].Value, "").Trim();
             }
 
-            return retVal;
+            return result;
         }
 
         private static void ReadYamlHeader(string text, IDictionary<string, IEnumerable<string>> metadata)
