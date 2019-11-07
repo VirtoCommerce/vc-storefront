@@ -36,18 +36,16 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                                              "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">Enterprise ecommerce platform</a> by Virto",
                                          };
 
-        private static readonly JsonSerializerSettings _defaultJsonSerializeSettings = new JsonSerializerSettings
-        {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            ContractResolver = new DefaultContractResolver()
-            {
-                NamingStrategy = new CamelCaseNamingStrategy()
-            }
-        };
+        private static readonly JsonSerializerSettings _jsonSerializeSettings;
 
         static CommonFilters()
         {
-            _defaultJsonSerializeSettings.Converters.Add(new MutablePagedListAsArrayJsonConverter());
+            _jsonSerializeSettings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                ContractResolver = new DefaultContractResolver() { NamingStrategy = new CamelCaseNamingStrategy() }
+            };
+            _jsonSerializeSettings.Converters.Add(new MutablePagedListAsArrayJsonConverter());
         }
 
         public static object Default(object input, object value)
@@ -57,13 +55,13 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
         public static string Json(object input)
         {
-            var serializedString = input != null ? JsonConvert.SerializeObject(input, _defaultJsonSerializeSettings) : null;
+            var serializedString = input != null ? JsonConvert.SerializeObject(input, _jsonSerializeSettings) : null;
             return serializedString;
         }
 
         public static object ParseJson(string input)
         {
-            var result = input != null ? JsonConvert.DeserializeObject(input, _defaultJsonSerializeSettings) : null;
+            var result = input != null ? JsonConvert.DeserializeObject(input, _jsonSerializeSettings) : null;
             return result;
         }
 

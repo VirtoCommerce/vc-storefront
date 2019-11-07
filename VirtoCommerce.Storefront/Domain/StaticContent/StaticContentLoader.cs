@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model.StaticContent;
 using YamlDotNet.RepresentationModel;
 
@@ -39,26 +37,25 @@ namespace VirtoCommerce.Storefront.Domain
         private static void ReadYamlHeader(string text, IDictionary<string, IEnumerable<string>> metadata)
         {
             var headerMatches = _headerRegExp.Matches(text);
-            if (headerMatches.Count == 0)
-                return;
 
-            var input = new StringReader(headerMatches[0].Groups[1].Value);
-            var yaml = new YamlStream();
-
-            yaml.Load(input);
-
-            if (yaml.Documents.Count > 0)
+            if (headerMatches.Count > 0)
             {
-                var root = yaml.Documents[0].RootNode;
-                var collection = root as YamlMappingNode;
-                if (collection != null)
+                var input = new StringReader(headerMatches[0].Groups[1].Value);
+                var yaml = new YamlStream();
+
+                yaml.Load(input);
+
+                if (yaml.Documents.Count > 0)
                 {
-                    foreach (var entry in collection.Children)
+                    var root = yaml.Documents[0].RootNode;
+                    if (root is YamlMappingNode collection)
                     {
-                        var node = entry.Key as YamlScalarNode;
-                        if (node != null)
+                        foreach (var entry in collection.Children)
                         {
-                            metadata.Add(node.Value, GetYamlNodeValues(entry.Value));
+                            if (entry.Key is YamlScalarNode node)
+                            {
+                                metadata.Add(node.Value, GetYamlNodeValues(entry.Value));
+                            }
                         }
                     }
                 }
@@ -67,19 +64,18 @@ namespace VirtoCommerce.Storefront.Domain
 
         private static IEnumerable<string> GetYamlNodeValues(YamlNode value)
         {
-            var retVal = new List<string>();
-            var list = value as YamlSequenceNode;
+            var result = new List<string>();
 
-            if (list != null)
+            if (value is YamlSequenceNode list)
             {
-                retVal.AddRange(list.Children.OfType<YamlScalarNode>().Select(node => node.Value));
+                result.AddRange(list.Children.OfType<YamlScalarNode>().Select(node => node.Value));
             }
             else
             {
-                retVal.Add(value.ToString());
+                result.Add(value.ToString());
             }
 
-            return retVal;
+            return result;
         }
     }
 }
