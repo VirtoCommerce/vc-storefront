@@ -23,30 +23,31 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
     public static partial class CommonFilters
     {
         private static readonly string[] _poweredLinks = {
-                                             "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">.NET ecommerce platform</a> by Virto",
-                                             "<a href=\"http://virtocommerce.com/shopping-cart\" rel=\"nofollow\" target=\"_blank\">Shopping Cart</a> by Virto",
-                                             "<a href=\"http://virtocommerce.com/shopping-cart\" rel=\"nofollow\" target=\"_blank\">.NET Shopping Cart</a> by Virto",
-                                             "<a href=\"http://virtocommerce.com/shopping-cart\" rel=\"nofollow\" target=\"_blank\">ASP.NET Shopping Cart</a> by Virto",
-                                             "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">.NET ecommerce</a> by Virto",
-                                             "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">.NET ecommerce framework</a> by Virto",
-                                             "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">ASP.NET ecommerce</a> by Virto Commerce",
-                                             "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">ASP.NET ecommerce platform</a> by Virto",
-                                             "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">ASP.NET ecommerce framework</a> by Virto",
-                                             "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">Enterprise ecommerce</a> by Virto",
-                                             "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">Enterprise ecommerce platform</a> by Virto",
-                                         };
+            "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">.NET ecommerce platform</a> by Virto",
+            "<a href=\"http://virtocommerce.com/shopping-cart\" rel=\"nofollow\" target=\"_blank\">Shopping Cart</a> by Virto",
+            "<a href=\"http://virtocommerce.com/shopping-cart\" rel=\"nofollow\" target=\"_blank\">.NET Shopping Cart</a> by Virto",
+            "<a href=\"http://virtocommerce.com/shopping-cart\" rel=\"nofollow\" target=\"_blank\">ASP.NET Shopping Cart</a> by Virto",
+            "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">.NET ecommerce</a> by Virto",
+            "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">.NET ecommerce framework</a> by Virto",
+            "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">ASP.NET ecommerce</a> by Virto Commerce",
+            "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">ASP.NET ecommerce platform</a> by Virto",
+            "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">ASP.NET ecommerce framework</a> by Virto",
+            "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">Enterprise ecommerce</a> by Virto",
+            "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">Enterprise ecommerce platform</a> by Virto",
+        };
 
-        private static readonly JsonSerializerSettings _jsonSerializeSettings;
-
-        static CommonFilters()
+        private static readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings
         {
-            _jsonSerializeSettings = new JsonSerializerSettings
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            ContractResolver = new DefaultContractResolver
             {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                ContractResolver = new DefaultContractResolver() { NamingStrategy = new CamelCaseNamingStrategy() }
-            };
-            _jsonSerializeSettings.Converters.Add(new MutablePagedListAsArrayJsonConverter());
-        }
+                NamingStrategy = new CamelCaseNamingStrategy(),
+            },
+            Converters = new List<JsonConverter>
+            {
+                new MutablePagedListAsArrayJsonConverter(),
+            },
+        };
 
         public static object Default(object input, object value)
         {
@@ -55,13 +56,13 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
         public static string Json(object input)
         {
-            var serializedString = input != null ? JsonConvert.SerializeObject(input, _jsonSerializeSettings) : null;
+            var serializedString = input != null ? JsonConvert.SerializeObject(input, _jsonSerializerSettings) : null;
             return serializedString;
         }
 
         public static object ParseJson(string input)
         {
-            var result = input != null ? JsonConvert.DeserializeObject(input, _jsonSerializeSettings) : null;
+            var result = input != null ? JsonConvert.DeserializeObject(input, _jsonSerializerSettings) : null;
             return result;
         }
 
@@ -80,7 +81,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             var themeEngine = (ShopifyLiquidThemeEngine)context.TemplateLoader;
             var result = themeEngine.RenderTemplateAsync(input, null, context.CurrentGlobal).GetAwaiter().GetResult();
             return result;
-
         }
 
         public static string Antiforgery(TemplateContext context)
@@ -112,6 +112,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             var requestUrl = context.GetValue(new ScriptVariableGlobal("request_url")) as Uri;
             var pageNumber = (int)(context.GetValue(new ScriptVariableGlobal("page_number")) ?? 1);
             var @params = new NameValueCollection();
+
             if (!string.IsNullOrEmpty(filterJson))
             {
                 var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(filterJson);
@@ -120,6 +121,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                     @params.Add(pair.Key, pair.Value);
                 }
             }
+
             if (source is IMutablePagedList mutablePagedList)
             {
                 mutablePagedList.Slice(pageNumber, pageSize, mutablePagedList.SortInfos, @params);
@@ -149,9 +151,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                     result.Parts.Add(part);
                 }
             }
+
             return result;
         }
     }
-
 }
-

@@ -16,12 +16,7 @@ namespace VirtoCommerce.Storefront.Domain
         public void ReadMetaData(string content, IDictionary<string, IEnumerable<string>> metadata)
         {
             var page = JsonConvert.DeserializeObject<JArray>(content);
-
-            var settings = page.FirstOrDefault(x =>
-            {
-                return (x as JObject).GetValue("type").Value<string>() == "settings";
-            });
-
+            var settings = page.FirstOrDefault(x => (x as JObject)?.GetValue("type")?.Value<string>() == "settings");
             var items = settings.AsJEnumerable();
 
             foreach (JProperty item in items)

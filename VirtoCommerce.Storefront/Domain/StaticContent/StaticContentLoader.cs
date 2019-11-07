@@ -21,6 +21,7 @@ namespace VirtoCommerce.Storefront.Domain
             ReadYamlHeader(content, metadata);
         }
 
+
         private static string RemoveYamlHeader(string text)
         {
             var result = text;
