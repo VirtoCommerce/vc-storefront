@@ -22,6 +22,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         [HttpPost("designer-preview/block")]
+        [ValidateAntiForgeryToken]
         public IActionResult Block([FromBody]dynamic data)
         {
             var page = new ContentPage
