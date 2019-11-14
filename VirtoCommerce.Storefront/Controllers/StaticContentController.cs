@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.SyndicationFeed;
 using Microsoft.SyndicationFeed.Rss;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -38,7 +39,7 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 return NotFound();
             }
-            //Checking what only authorized users can read pages which marked as Authorized 
+            // Checking what only authorized users can read pages which marked as Authorized 
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, page, CanReadContentItemAuthorizeRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
             {

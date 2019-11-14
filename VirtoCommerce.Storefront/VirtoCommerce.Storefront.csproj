@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -17,6 +17,7 @@
     <Copyright>Copyright © 2011-2019 Virto Commerce - an enterprise Microsoft ecommerce platform ©. All rights reserved</Copyright>
     <PackageIconUrl>https://virtocommerce.com/themes/assets/logo.jpg</PackageIconUrl>
     <PackageReleaseNotes></PackageReleaseNotes>
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
     <!--Remove later when Azure apps has been updated-->
     <!--<PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>-->
   </PropertyGroup>

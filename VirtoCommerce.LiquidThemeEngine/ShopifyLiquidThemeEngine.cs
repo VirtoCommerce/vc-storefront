@@ -18,7 +18,6 @@ using Newtonsoft.Json.Linq;
 using Scriban;
 using Scriban.Parsing;
 using Scriban.Runtime;
-using VirtoCommerce.LiquidThemeEngine.Filters;
 using VirtoCommerce.LiquidThemeEngine.Scriban;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
@@ -85,7 +84,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// </summary>
         public string CurrentThemeName => !string.IsNullOrEmpty(WorkContext.CurrentStore.ThemeName) ? WorkContext.CurrentStore.ThemeName : "default";
 
-        public string CurrentThemeSettingPath => Path.Combine(CurrentThemePath, "config", "settings_data.json");
+        public string CurrentThemeSettingPath => Path.Combine(CurrentThemePath, "config", GetSettingsFilePath());
         public string CurrentThemeLocalePath => Path.Combine(CurrentThemePath, "locales");
         /// <summary>
         /// The path for current theme 
@@ -485,7 +484,6 @@ namespace VirtoCommerce.LiquidThemeEngine
             return retVal;
         }
 
-
         private string ReadTemplateByPath(string templatePath)
         {
             if (string.IsNullOrEmpty(templatePath))
@@ -504,6 +502,10 @@ namespace VirtoCommerce.LiquidThemeEngine
             });
         }
 
-
+        private string GetSettingsFilePath()
+        {
+            var prefix = _httpContextAccessor.HttpContext.Request.Query["preview_mode"];
+            return prefix.IsNullOrEmpty() ? "settings_data.json" : $"drafts\\{prefix}_settings_data.json";
+        }
     }
 }
