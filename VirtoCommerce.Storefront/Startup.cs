@@ -210,7 +210,7 @@ namespace VirtoCommerce.Storefront
             });
 
             var auth = services.AddAuthentication();
-  
+
             var facebookSection = Configuration.GetSection("Authentication:Facebook");
             if (facebookSection.GetChildren().Any())
             {
@@ -251,7 +251,8 @@ namespace VirtoCommerce.Storefront
             services.AddIdentity<User, Role>(options => { }).AddDefaultTokenProviders();
 
             services.AddScoped<CustomCookieAuthenticationEvents>();
-            services.ConfigureApplicationCookie(options => {
+            services.ConfigureApplicationCookie(options =>
+            {
                 Configuration.GetSection("CookieAuthenticationOptions").Bind(options);
                 options.EventsType = typeof(CustomCookieAuthenticationEvents);
             });
@@ -274,8 +275,8 @@ namespace VirtoCommerce.Storefront
                 Configuration.GetSection("VirtoCommerce:LiquidThemeEngine").Bind(options);
             });
 
-            var snapshotProvider = services.BuildServiceProvider();
-            services.AddAntiforgery(options => {
+            services.AddAntiforgery(options =>
+            {
                 options.HeaderName = "X-XSRF-TOKEN";
                 options.SuppressXFrameOptionsHeader = true;
             });
@@ -385,7 +386,8 @@ namespace VirtoCommerce.Storefront
 
             app.UseStaticFiles(new StaticFileOptions
             {
-                OnPrepareResponse = ctx => {
+                OnPrepareResponse = ctx =>
+                {
                     const int durationInSeconds = 60 * 60 * 24;
                     ctx.Context.Response.Headers[HeaderNames.CacheControl] = "public,max-age=" + durationInSeconds;
                 }
