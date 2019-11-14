@@ -81,9 +81,10 @@ namespace VirtoCommerce.Storefront.Infrastructure
         private void EvaluateBlobsModifiedDate(CancellationToken cancellationToken = default(CancellationToken))
         {
             var files = ListBlobs().GetAwaiter().GetResult();
-            if (!_previousChangeTimeUtcTokenLookup.TryGetValue(BlobName, out DateTime currentValue))
+            if (!_previousChangeTimeUtcTokenLookup.TryGetValue(BlobName, out var currentValue))
             {
-                _previousChangeTimeUtcTokenLookup.GetOrAdd(BlobName, DateTime.UtcNow);
+                currentValue = DateTime.UtcNow;
+                _previousChangeTimeUtcTokenLookup.GetOrAdd(BlobName, currentValue);
             }
 
             foreach (var file in files)
