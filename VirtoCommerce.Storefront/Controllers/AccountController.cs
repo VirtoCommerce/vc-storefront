@@ -739,7 +739,7 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             TryValidateModel(formModel);
             // Need reassign the passed form to the current context to allow for user post it again with initial data such as Token and Email
-            // WorkContext.Form = Form.FromObject(formModel);
+            WorkContext.Form = Form.FromObject(formModel);
 
             if (string.IsNullOrEmpty(formModel.Email) && string.IsNullOrEmpty(formModel.UserName))
             {
