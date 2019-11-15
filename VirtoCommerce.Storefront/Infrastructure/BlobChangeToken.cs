@@ -43,7 +43,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
             get
             {
                 //get last modified dt
-                _lastModifiedUtc = _previousChangeTimeUtcTokenLookup.GetOrAdd(BlobName, _lastModifiedUtc);
+                _lastModifiedUtc = GetLastModifiedUtc();
 
                 var hasChanged = _lastModifiedUtc > _prevModifiedUtc;
                 if (hasChanged)
@@ -78,26 +78,49 @@ namespace VirtoCommerce.Storefront.Infrastructure
             }
         }
 
+        private DateTime GetLastModifiedUtc()
+        {
+            if (IsRegularFileName(BlobName))
+            {
+                return _previousChangeTimeUtcTokenLookup.GetOrAdd(BlobName, _lastModifiedUtc);
+            }
+            else
+            {
+                var list = _previousChangeTimeUtcTokenLookup.Where(x => WildcardMatch(BlobName, x.Key)).Select(x => x.Value.Ticks);
+                var result = list.Any() ? new DateTime(list.Max()) : _lastModifiedUtc;
+                return result;
+            }
+        }
+
+        private static bool WildcardMatch(string wildcard, string filename)
+        {
+            // it's a simplest realization for case when wildcard ends with **/*
+            var path = wildcard.Split('*')[0];
+            return filename.StartsWith(path, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private bool IsRegularFileName(string pattern)
+        {
+            return !new [] { '?', '*' }.Any(pattern.Contains);
+        }
+
         private void EvaluateBlobsModifiedDate(CancellationToken cancellationToken = default(CancellationToken))
         {
             var files = ListBlobs().GetAwaiter().GetResult();
-            if (!_previousChangeTimeUtcTokenLookup.TryGetValue(BlobName, out var currentValue))
-            {
-                currentValue = DateTime.UtcNow;
-                _previousChangeTimeUtcTokenLookup.GetOrAdd(BlobName, currentValue);
-            }
-
             foreach (var file in files)
             {
                 if (cancellationToken.IsCancellationRequested)
                     break;
 
-                var lastModifiedUtc = file.Properties.LastModified?.UtcDateTime;
+                var lastModifiedUtc = file.Properties.LastModified?.UtcDateTime ?? DateTime.UtcNow;
 
-                if (lastModifiedUtc.HasValue && lastModifiedUtc > currentValue)
+                if (!_previousChangeTimeUtcTokenLookup.TryGetValue(file.Name, out DateTime dt))
                 {
-                    _previousChangeTimeUtcTokenLookup[BlobName] = lastModifiedUtc.Value;
-                    break;
+                    _previousChangeTimeUtcTokenLookup.GetOrAdd(file.Name, lastModifiedUtc);
+                }
+                else
+                {
+                    _previousChangeTimeUtcTokenLookup[file.Name] = lastModifiedUtc;
                 }
             }
         }
