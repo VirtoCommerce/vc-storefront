@@ -17,6 +17,7 @@ namespace VirtoCommerce.Storefront.Caching.Redis
         private readonly RedisCachingOptions _redisCachingOptions;
         private readonly ILogger _log;
         private readonly RetryPolicy _retryPolicy;
+        private readonly IMemoryCache _memoryCache;
 
         private static readonly string _cacheId = Guid.NewGuid().ToString("N");
 
@@ -28,6 +29,7 @@ namespace VirtoCommerce.Storefront.Caching.Redis
         {
             _log = log;
             _bus = bus;
+            _memoryCache = memoryCache;
 
             _redisCachingOptions = redisCachingOptions.Value;
             _bus.Unsubscribe(_redisCachingOptions.ChannelName);
@@ -46,7 +48,7 @@ namespace VirtoCommerce.Storefront.Caching.Redis
             {
                 foreach (var item in message.CacheKeys)
                 {
-                    base.Remove(item);
+                    _memoryCache.Remove(item);
 
                     _log.LogInformation($"remove local cache that cache key is {item}");
                 }
