@@ -20,18 +20,17 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         {
             DelegatingHandler result = null;
             var options = _platformEndpointOptions.Value;
-
-            if (!string.IsNullOrEmpty(options.AppId) && !string.IsNullOrEmpty(options.SecretKey))
-            {
-                result = _serviceProvider.GetService<ApiKeySecretAuthHandler>();
-            }
-            else if (!string.IsNullOrEmpty(options.ClientId) && !string.IsNullOrEmpty(options.ClientSecret))
+            if (!string.IsNullOrEmpty(options.ClientId) && !string.IsNullOrEmpty(options.ClientSecret))
             {
                 result = _serviceProvider.GetService<ClientCredentialsAuthHandler>();
             }
             else if (!string.IsNullOrEmpty(options.UserName) && !string.IsNullOrEmpty(options.Password))
             {
                 result = _serviceProvider.GetService<UserPasswordAuthHandler>();
+            }
+            else if (!string.IsNullOrEmpty(options.AppId) && !string.IsNullOrEmpty(options.SecretKey))
+            {
+                result = _serviceProvider.GetService<ApiKeySecretAuthHandler>();
             }
 
             return result;

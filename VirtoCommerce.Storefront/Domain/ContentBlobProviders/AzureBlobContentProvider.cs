@@ -61,7 +61,22 @@ namespace VirtoCommerce.Storefront.Domain
             }
             path = NormalizePath(path);
 
-            return await _container.GetBlobReference(path).OpenReadAsync();
+            Stream result = null;
+            try
+            {
+                result =  await _container.GetBlobReference(path).OpenReadAsync();
+            }
+            catch (Exception)
+            {
+                //we should not throw an exception for the missed directories and return null as result, because the Azure blob storage does not allow us to check if directories exist
+                //and PathExists method will always return true for these paths.                
+                if (!string.IsNullOrEmpty(Path.GetExtension(path)))
+                {
+                    //Throw the not found exception for files
+                    throw;
+                }
+            }
+            return result;
         }
 
         /// <summary>
