@@ -20,91 +20,110 @@ namespace VirtoCommerce.Storefront.Tests.Scriban
         /// https://github.com/lunet-io/scriban/issues/102
         /// </summary>
         [Fact]
-        public void LiquidRawBlock_ParsingError()
+        public void Parse_EmptyRawBlock_IsCorrect()
         {
-            var parsedTemplate = Template.ParseLiquid("{% raw %}{% endraw %}{{ some_var }}");
+            // arrange
+            var template = "{% raw %}{% endraw %}{{ some_var }}";
+            // act
+            var parsedTemplate = Template.ParseLiquid(template);
+            // assert
             Assert.False(parsedTemplate.HasErrors);
         }
 
         [Fact]
-        public void Capture_With_Elsif()
+        public void Parse_CaptureWithElsif_IsCorrect()
         {
-            var template = "{% capture tag_label_template %}tags.{{ tag.group_type }}.{% if tag.lower and tag.upper %}between{% elsif tag.lower %}greater{% elsif tag.upper %}less{% endif %}{% endcapture %} {{ tag_label_template }}";
+            // arrange
+            var template = "{% capture tag_label_template %}tags.{{ tag.group_type }}.{% if tag.lower and tag.upper %}between{% elsif tag.lower %}greater{% elsif tag.upper %}less{% endif %}{% endcapture %}{{ tag_label_template }}";
+            // act
             var parsedTemplate = Template.ParseLiquid(template);
+            // assert
             Assert.False(parsedTemplate.HasErrors);
+        }
 
+        [Fact]
+        public void Render_Capture_With_Elsif_IsCorrect()
+        {
+            //arrange
+            var template = "{% capture tag_label_template %}tags.{{ tag.group_type }}.{% if tag.lower and tag.upper %}between{% elsif tag.lower %}greater{% elsif tag.upper %}less{% endif %}{% endcapture %}{{ tag_label_template }}";
             var scriptObject = new ScriptObject();
             scriptObject.SetValue("tag", new Tag { GroupType = "pricerange", Lower = "11$" }, true);
             var context = new TemplateContext();
-            context.PushGlobal(scriptObject);
 
+            // act
+            var parsedTemplate = Template.ParseLiquid(template);                                  
+            context.PushGlobal(scriptObject);
             var result = parsedTemplate.Render(context);
+
+            // assert
             Assert.Equal("tags.pricerange.greater", result);
         }
+
         [Fact]
-        public void Call_Pipe_Function_With_Named_Argument_Throw_Exception()
+        public void Parse_FunctionWithContextAndParams_IsCorrect()
         {
-            var parsedTemplate = Template.ParseLiquid("{{ math.plus value: 1 with: 2 }}");
+            // arrange
+            var template = "{{ '{0}{1}' | t: '1', '1'  }}";
+            // act
+            var parsedTemplate = Template.ParseLiquid(template);
+            // assert
             Assert.False(parsedTemplate.HasErrors);
-
-            var scriptObject = new ScriptObject();
-            scriptObject.Import(typeof(MyFunctions));
-            var context = new TemplateContext();
-            context.PushGlobal(scriptObject);
-
-            var result = parsedTemplate.Render(context);
-            Assert.Equal("12", result);
         }
 
         [Fact]
-        public void Function_With_Context_And_Params_Throw_Overflow_Exception()
+        public void Render_FunctionWithContextAndParams_IsCorrect()
         {
-            var parsedTemplate = Template.ParseLiquid("{{ '{0}{1}' | t: '1', '1'  }}");
-            Assert.False(parsedTemplate.HasErrors);
-
+            // arrange
+            var parsedTemplate = Template.ParseLiquid("{{ '{0}{1}' | t: '1', '1' }}");            
             var scriptObject = new ScriptObject();
             scriptObject.Import(typeof(MyFunctions));
             var context = new TemplateContext();
-            context.PushGlobal(scriptObject);
 
+            // act
+            context.PushGlobal(scriptObject);
             var result = parsedTemplate.Render(context);
+
+            // assert
             Assert.Equal("11", result);
         }
 
-
         [Fact]
-        public void Pipe_Arguments_Mismatch_Errors()
+        public void Parse_TemplateWithCondition_IsCorrect()
         {
-            var parsedTemplate = Template.ParseLiquid("{{ 22.00 | A | B | string.upcase }}");
+            // arrange
+            var template = "{{ products.size > 0 }} {{ products['headphones'].id }} {{ product = products['headphones'] }}{{ products[product.id].id }}";
+            // act
+            var parsedTemplate = Template.ParseLiquid(template);
+            // assert
             Assert.False(parsedTemplate.HasErrors);
-
-            var scriptObject = new ScriptObject();
-            scriptObject.Import(typeof(MyFunctions));
-            var context = new TemplateContext();
-            context.PushGlobal(scriptObject);
-
-            parsedTemplate.Render(context);
         }
 
         [Fact]
-        public void IndexAccess_For_List()
+        public void Render_TemplateWithCondition_IsCorrect()
         {
-            var parsedTemplate = Template.ParseLiquid("{{ products.size > 0 }} {{ products['headphones'].id }} {{ product = products['headphones'] }} {{ products[product.id].id }}");
-            Assert.False(parsedTemplate.HasErrors);
-
+            // arrange
+            var parsedTemplate = Template.ParseLiquid("{{ products.size > 0 }} {{ products['headphones'].id }} {{ product = products['headphones'] }}{{ products[product.id].id }}");            
             var scriptObject = new ScriptObject();
             scriptObject.Import(new TestContext { Products = new MutablePagedList<Product>(new List<Product> { new Product { Id = "headphones" } }) });
             var context = new TemplateContext();
-            context.PushGlobal(scriptObject);
 
+            // act
+            context.PushGlobal(scriptObject);
             var result = parsedTemplate.Render(context);
+
+            // assert
             Assert.Equal("true headphones headphones", result);
         }
 
+
         [Fact]
-        public void ParsingError()
+        public void Parse_TemplateFromFile_IsCorrect()
         {
-            var parsedTemplate = Template.ParseLiquid(File.ReadAllText(@"C:\Projects\VirtoCommerce\vc-storefront-core\VirtoCommerce.Storefront.Tests\Scriban\test.liquid"));
+            // arrange
+            var template = File.ReadAllText("./Scriban/test.liquid");
+            // act            
+            var parsedTemplate = Template.ParseLiquid(template);
+            // assert
             Assert.False(parsedTemplate.HasErrors);
         }
     }
@@ -126,15 +145,6 @@ namespace VirtoCommerce.Storefront.Tests.Scriban
         public static string T(object input, params object[] variables)
         {
             return string.Format(input.ToString(), variables);
-        }
-
-        public static string A(TemplateContext context, object input, string currencyCode = null)
-        {
-            return input.ToString() + "A";
-        }
-        public static string B(object input)
-        {
-            return input.ToString() + "B";
         }
 
     }

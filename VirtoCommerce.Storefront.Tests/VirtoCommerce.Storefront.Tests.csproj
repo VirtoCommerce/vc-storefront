@@ -31,4 +31,10 @@
     <ProjectReference Include="..\VirtoCommerce.Storefront\VirtoCommerce.Storefront.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Scriban\test.liquid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
