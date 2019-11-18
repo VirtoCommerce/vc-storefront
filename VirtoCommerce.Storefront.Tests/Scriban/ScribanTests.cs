@@ -24,8 +24,10 @@ namespace VirtoCommerce.Storefront.Tests.Scriban
         {
             // arrange
             var template = "{% raw %}{% endraw %}{{ some_var }}";
+
             // act
             var parsedTemplate = Template.ParseLiquid(template);
+
             // assert
             Assert.False(parsedTemplate.HasErrors);
         }
@@ -35,8 +37,10 @@ namespace VirtoCommerce.Storefront.Tests.Scriban
         {
             // arrange
             var template = "{% capture tag_label_template %}tags.{{ tag.group_type }}.{% if tag.lower and tag.upper %}between{% elsif tag.lower %}greater{% elsif tag.upper %}less{% endif %}{% endcapture %}{{ tag_label_template }}";
+
             // act
             var parsedTemplate = Template.ParseLiquid(template);
+
             // assert
             Assert.False(parsedTemplate.HasErrors);
         }
@@ -64,8 +68,10 @@ namespace VirtoCommerce.Storefront.Tests.Scriban
         {
             // arrange
             var template = "{{ '{0}{1}' | t: '1', '1'  }}";
+
             // act
             var parsedTemplate = Template.ParseLiquid(template);
+
             // assert
             Assert.False(parsedTemplate.HasErrors);
         }
@@ -92,8 +98,10 @@ namespace VirtoCommerce.Storefront.Tests.Scriban
         {
             // arrange
             var template = "{{ products.size > 0 }} {{ products['headphones'].id }} {{ product = products['headphones'] }}{{ products[product.id].id }}";
+
             // act
             var parsedTemplate = Template.ParseLiquid(template);
+
             // assert
             Assert.False(parsedTemplate.HasErrors);
         }
@@ -121,32 +129,12 @@ namespace VirtoCommerce.Storefront.Tests.Scriban
         {
             // arrange
             var template = File.ReadAllText("./Scriban/test.liquid");
+
             // act            
             var parsedTemplate = Template.ParseLiquid(template);
+
             // assert
             Assert.False(parsedTemplate.HasErrors);
         }
     }
-
-
-    public class TestContext
-    {
-        public IMutablePagedList<Product> Products { get; set; }
-    }
-    public class Tag
-    {
-        public string GroupType { get; set; }
-        public string Lower { get; set; }
-        public string Upper { get; set; }
-
-    }
-    public class MyFunctions
-    {
-        public static string T(object input, params object[] variables)
-        {
-            return string.Format(input.ToString(), variables);
-        }
-
-    }
-
 }
