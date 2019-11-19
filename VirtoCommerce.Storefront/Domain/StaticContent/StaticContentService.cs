@@ -103,12 +103,23 @@ namespace VirtoCommerce.Storefront.Domain
             }
             catch (Exception ex) // NOTE: Exception must have a specific type!
             {
-                var error = $"Failed to parse YAML header from \"{contentItem.StoragePath}\"<br/>{ex.Message}";
+                var error = $"Failed to parse metadata from \"{contentItem.StoragePath}\"<br/>{ex.Message}";
                 content = $"{error}<br/>{content}";
             }
 
             content = metadataReader.PrepareContent(content);
             contentItem.LoadContent(content, metaHeaders);
+            if (metaHeaders.ContainsKey("language"))
+            {
+                try
+                {
+                    contentItem.Language = new Language(metaHeaders["language"].FirstOrDefault());
+                }
+                catch (Exception)
+                {
+                    // skip
+                }
+            }
 
             if (string.IsNullOrEmpty(contentItem.Permalink))
             {

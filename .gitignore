@@ -268,3 +268,5 @@ __pycache__/
 # tools/
 /VirtoCommerce.Storefront/wwwroot/cms-content
 .vscode
+
+VirtoCommerce.Storefront/wwwroot/js/designer.bundle.js*
