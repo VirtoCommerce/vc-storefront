@@ -109,17 +109,6 @@ namespace VirtoCommerce.Storefront.Domain
 
             content = metadataReader.PrepareContent(content);
             contentItem.LoadContent(content, metaHeaders);
-            if (metaHeaders.ContainsKey("language"))
-            {
-                try
-                {
-                    contentItem.Language = new Language(metaHeaders["language"].FirstOrDefault());
-                }
-                catch (Exception)
-                {
-                    // skip
-                }
-            }
 
             if (string.IsNullOrEmpty(contentItem.Permalink))
             {
