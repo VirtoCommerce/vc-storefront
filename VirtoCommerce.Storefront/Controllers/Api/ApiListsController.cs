@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -180,7 +181,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         private async Task<ICartBuilder> LoadOrCreateCartAsync(string cartName, string type = null)
         {
-            await _cartBuilder.LoadOrCreateNewTransientCartAsync(cartName, WorkContext.CurrentStore, WorkContext.CurrentUser, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency, type);
+            await _cartBuilder.LoadOrCreateNewTransientCartAsync(Uri.UnescapeDataString(cartName), WorkContext.CurrentStore, WorkContext.CurrentUser, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency, type);
             return _cartBuilder;
         }
 
