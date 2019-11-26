@@ -407,8 +407,7 @@ namespace VirtoCommerce.Storefront.Domain
                 User = cart.Customer,
                 Currency = cart.Currency,
                 Language = cart.Language,
-                StoreId = cart.StoreId,
-                Products = cart.Items.Select(i => i.Product).ToList()
+                StoreId = cart.StoreId
             };
 
             return result;
@@ -798,6 +797,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Price = (double)lineItem.SalePrice.Amount,
                 Quantity = lineItem.Quantity,
                 InStockQuantity = lineItem.InStockQuantity,
+                Outline = lineItem.Product.Outline,
                 Variations = null // TODO
             };
 
