@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,9 +32,10 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpGet("{listName}/{type}")]
         public async Task<ActionResult<ShoppingCart>> GetListByName([FromRoute]string listName, [FromRoute]string type)
         {
-            using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, listName, type)).LockAsync())
+            var unescapedListName = Uri.UnescapeDataString(listName);
+            using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, unescapedListName, type)).LockAsync())
             {
-                var cartBuilder = await LoadOrCreateCartAsync(listName, type);
+                var cartBuilder = await LoadOrCreateCartAsync(unescapedListName, type);
                 return cartBuilder.Cart;
             }
         }
@@ -86,10 +88,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<ShoppingCartItems>> RemoveItemFromList(string lineItemId, string listName, string type)
         {
+            var unescapedListName = Uri.UnescapeDataString(listName);
             //Need lock to prevent concurrent access to same list
-            using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, listName, type)).LockAsync())
+            using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, unescapedListName, type)).LockAsync())
             {
-                var cartBuilder = await LoadOrCreateCartAsync(listName, type);
+                var cartBuilder = await LoadOrCreateCartAsync(unescapedListName, type);
                 await cartBuilder.RemoveItemAsync(lineItemId);
                 await cartBuilder.SaveAsync();
                 return new ShoppingCartItems { ItemsCount = cartBuilder.Cart.ItemsQuantity };
@@ -126,7 +129,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<ShoppingCart>> CreateList(string listName, string type)
         {
-            var cartBuilder = await LoadOrCreateCartAsync(listName, type);
+            var cartBuilder = await LoadOrCreateCartAsync(Uri.UnescapeDataString(listName), type);
             if (cartBuilder.Cart.IsTransient())
             {
                 await cartBuilder.SaveAsync();
@@ -161,7 +164,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, currentCartName, string.Empty)).LockAsync())
             {
                 //load list
-                var cartBuilder = await LoadOrCreateCartAsync(listName, type);
+                var cartBuilder = await LoadOrCreateCartAsync(Uri.UnescapeDataString(listName), type);
                 var listCart = cartBuilder.Cart;
 
                 //load or create default cart
