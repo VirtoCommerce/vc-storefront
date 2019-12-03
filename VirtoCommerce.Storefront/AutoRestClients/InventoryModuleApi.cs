@@ -17,7 +17,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceInventoryRESTAPIdocumentation : ServiceClient<VirtoCommerceInventoryRESTAPIdocumentation>, IVirtoCommerceInventoryRESTAPIdocumentation
+    public partial class InventoryModuleClient : ServiceClient<InventoryModuleClient>, IInventoryModuleClient
     {
         /// <summary>
         /// The base URI of the service.
@@ -45,31 +45,31 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         public virtual IInventoryModule InventoryModule { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceInventoryRESTAPIdocumentation class.
+        /// Initializes a new instance of the InventoryModuleClient class.
         /// </summary>
         /// <param name='httpClient'>
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling VirtoCommerceInventoryRESTAPIdocumentation.Dispose(). False: will not dispose provided httpClient</param>
-        protected VirtoCommerceInventoryRESTAPIdocumentation(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
+        /// True: will dispose the provided httpClient on calling InventoryModuleClient.Dispose(). False: will not dispose provided httpClient</param>
+        protected InventoryModuleClient(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceInventoryRESTAPIdocumentation class.
+        /// Initializes a new instance of the InventoryModuleClient class.
         /// </summary>
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected VirtoCommerceInventoryRESTAPIdocumentation(params DelegatingHandler[] handlers) : base(handlers)
+        protected InventoryModuleClient(params DelegatingHandler[] handlers) : base(handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceInventoryRESTAPIdocumentation class.
+        /// Initializes a new instance of the InventoryModuleClient class.
         /// </summary>
         /// <param name='rootHandler'>
         /// Optional. The http client handler used to handle http transport.
@@ -77,13 +77,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected VirtoCommerceInventoryRESTAPIdocumentation(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
+        protected InventoryModuleClient(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceInventoryRESTAPIdocumentation class.
+        /// Initializes a new instance of the InventoryModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -94,7 +94,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected VirtoCommerceInventoryRESTAPIdocumentation(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
+        protected InventoryModuleClient(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -104,7 +104,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceInventoryRESTAPIdocumentation class.
+        /// Initializes a new instance of the InventoryModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -118,7 +118,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected VirtoCommerceInventoryRESTAPIdocumentation(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        protected InventoryModuleClient(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -128,7 +128,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceInventoryRESTAPIdocumentation class.
+        /// Initializes a new instance of the InventoryModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -139,7 +139,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public VirtoCommerceInventoryRESTAPIdocumentation(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public InventoryModuleClient(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (credentials == null)
             {
@@ -153,7 +153,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceInventoryRESTAPIdocumentation class.
+        /// Initializes a new instance of the InventoryModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -162,11 +162,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling VirtoCommerceInventoryRESTAPIdocumentation.Dispose(). False: will not dispose provided httpClient</param>
+        /// True: will dispose the provided httpClient on calling InventoryModuleClient.Dispose(). False: will not dispose provided httpClient</param>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public VirtoCommerceInventoryRESTAPIdocumentation(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
+        public InventoryModuleClient(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
         {
             if (credentials == null)
             {
@@ -180,7 +180,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceInventoryRESTAPIdocumentation class.
+        /// Initializes a new instance of the InventoryModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -194,7 +194,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public VirtoCommerceInventoryRESTAPIdocumentation(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public InventoryModuleClient(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (credentials == null)
             {
@@ -208,7 +208,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceInventoryRESTAPIdocumentation class.
+        /// Initializes a new instance of the InventoryModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -222,7 +222,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public VirtoCommerceInventoryRESTAPIdocumentation(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public InventoryModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -241,7 +241,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceInventoryRESTAPIdocumentation class.
+        /// Initializes a new instance of the InventoryModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -258,7 +258,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public VirtoCommerceInventoryRESTAPIdocumentation(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public InventoryModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -286,7 +286,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         private void Initialize()
         {
             InventoryModule = new InventoryModule(this);
-            BaseUri = new System.Uri("http://localhost/admin");
+            BaseUri = new System.Uri("http://localhost");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
@@ -337,7 +337,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
 
     /// <summary>
     /// </summary>
-    public partial interface IVirtoCommerceInventoryRESTAPIdocumentation : System.IDisposable
+    public partial interface IInventoryModuleClient : System.IDisposable
     {
         /// <summary>
         /// The base URI of the service.
@@ -392,7 +392,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
     /// <summary>
     /// InventoryModule operations.
     /// </summary>
-    public partial class InventoryModule : IServiceOperations<VirtoCommerceInventoryRESTAPIdocumentation>, IInventoryModule
+    public partial class InventoryModule : IServiceOperations<InventoryModuleClient>, IInventoryModule
     {
         /// <summary>
         /// Initializes a new instance of the InventoryModule class.
@@ -403,7 +403,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public InventoryModule(VirtoCommerceInventoryRESTAPIdocumentation client)
+        public InventoryModule(InventoryModuleClient client)
         {
             if (client == null)
             {
@@ -413,9 +413,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         }
 
         /// <summary>
-        /// Gets a reference to the VirtoCommerceInventoryRESTAPIdocumentation
+        /// Gets a reference to the InventoryModuleClient
         /// </summary>
-        public VirtoCommerceInventoryRESTAPIdocumentation Client { get; private set; }
+        public InventoryModuleClient Client { get; private set; }
 
         /// <summary>
         /// Search fulfillment centers registered in the system
@@ -434,21 +434,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<GenericSearchResultFulfillmentCenter>> SearchFulfillmentCentersWithHttpMessagesAsync(FulfillmentCenterSearchCriteria searchCriteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<FulfillmentCenterSearchResult>> SearchFulfillmentCentersWithHttpMessagesAsync(FulfillmentCenterSearchCriteria searchCriteria = default(FulfillmentCenterSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (searchCriteria == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "searchCriteria");
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -489,7 +479,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(searchCriteria, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -534,7 +524,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<GenericSearchResultFulfillmentCenter>();
+            var _result = new HttpOperationResponse<FulfillmentCenterSearchResult>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -543,7 +533,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<GenericSearchResultFulfillmentCenter>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<FulfillmentCenterSearchResult>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -721,20 +711,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<FulfillmentCenter>> SaveFulfillmentCenterWithHttpMessagesAsync(FulfillmentCenter center, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<FulfillmentCenter>> SaveFulfillmentCenterWithHttpMessagesAsync(FulfillmentCenter center = default(FulfillmentCenter), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (center == null)
+            if (center != null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "center");
+                center.Validate();
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -776,7 +760,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(center, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -798,7 +782,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -863,21 +847,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> DeleteFulfillmentCentersWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> DeleteFulfillmentCentersWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (ids == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "ids");
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -953,7 +927,134 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 204)
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Delete  fulfillment centers registered in the system
+        /// </summary>
+        /// <param name='ids'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> DeleteFulfillmentCenters1WithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("ids", ids);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "DeleteFulfillmentCenters1", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/fulfillment/centers").ToString();
+            List<string> _queryParameters = new List<string>();
+            if (ids != null)
+            {
+                if (ids.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in ids)
+                    {
+                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("DELETE");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1007,21 +1108,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<InventoryInfo>>> GetProductsInventoriesWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<InventoryInfo>>> GetProductsInventoriesWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (ids == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "ids");
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -1169,21 +1260,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<InventoryInfo>>> GetProductsInventoriesByPlentyIdsWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<InventoryInfo>>> GetProductsInventoriesByPlentyIdsWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (ids == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "ids");
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -1198,6 +1279,25 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
             var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/inventory/products/plenty").ToString();
+            List<string> _queryParameters = new List<string>();
+            if (ids != null)
+            {
+                if (ids.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in ids)
+                    {
+                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -1220,12 +1320,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(ids != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(ids, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
-            }
             // Set Credentials
             if (Client.Credentials != null)
             {
@@ -1442,15 +1536,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         }
 
         /// <summary>
-        /// Upsert inventory
+        /// Update inventory
         /// </summary>
         /// <remarks>
-        /// Upsert (add or update) given inventory of product.
+        /// Update given inventory of product.
         /// </remarks>
-        /// <param name='inventory'>
-        /// Inventory to upsert
-        /// </param>
         /// <param name='productId'>
+        /// </param>
+        /// <param name='inventory'>
+        /// Inventory to update
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1473,11 +1567,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<InventoryInfo>> UpsertProductInventoryWithHttpMessagesAsync(InventoryInfo inventory, string productId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<InventoryInfo>> UpdateProductInventoryWithHttpMessagesAsync(string productId, InventoryInfo inventory = default(InventoryInfo), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (inventory == null)
+            if (inventory != null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "inventory");
+                inventory.Validate();
             }
             if (productId == null)
             {
@@ -1493,7 +1587,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
                 tracingParameters.Add("inventory", inventory);
                 tracingParameters.Add("productId", productId);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "UpsertProductInventory", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdateProductInventory", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
@@ -1525,7 +1619,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(inventory, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -1547,7 +1641,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1641,10 +1735,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<GenericSearchResultFulfillmentCenter>> SearchFulfillmentCentersWithHttpMessagesAsync(FulfillmentCenterSearchCriteria searchCriteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<FulfillmentCenterSearchResult>> SearchFulfillmentCentersWithHttpMessagesAsync(FulfillmentCenterSearchCriteria searchCriteria = default(FulfillmentCenterSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Find fulfillment center by id
         /// </summary>
@@ -1685,10 +1776,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<FulfillmentCenter>> SaveFulfillmentCenterWithHttpMessagesAsync(FulfillmentCenter center, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<FulfillmentCenter>> SaveFulfillmentCenterWithHttpMessagesAsync(FulfillmentCenter center = default(FulfillmentCenter), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Delete  fulfillment centers registered in the system
         /// </summary>
@@ -1703,10 +1791,22 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="Microsoft.Rest.HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
+        Task<HttpOperationResponse> DeleteFulfillmentCentersWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Delete  fulfillment centers registered in the system
+        /// </summary>
+        /// <param name='ids'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
         /// </exception>
-        Task<HttpOperationResponse> DeleteFulfillmentCentersWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> DeleteFulfillmentCenters1WithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Get inventories of products
         /// </summary>
@@ -1728,10 +1828,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<IList<InventoryInfo>>> GetProductsInventoriesWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<InventoryInfo>>> GetProductsInventoriesWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Get inventories of products
         /// </summary>
@@ -1753,10 +1850,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<IList<InventoryInfo>>> GetProductsInventoriesByPlentyIdsWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<InventoryInfo>>> GetProductsInventoriesByPlentyIdsWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Get inventories of product
         /// </summary>
@@ -1783,15 +1877,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// </exception>
         Task<HttpOperationResponse<IList<InventoryInfo>>> GetProductInventoriesWithHttpMessagesAsync(string productId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
-        /// Upsert inventory
+        /// Update inventory
         /// </summary>
         /// <remarks>
-        /// Upsert (add or update) given inventory of product.
+        /// Update given inventory of product.
         /// </remarks>
-        /// <param name='inventory'>
-        /// Inventory to upsert
-        /// </param>
         /// <param name='productId'>
+        /// </param>
+        /// <param name='inventory'>
+        /// Inventory to update
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1808,7 +1902,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<InventoryInfo>> UpsertProductInventoryWithHttpMessagesAsync(InventoryInfo inventory, string productId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<InventoryInfo>> UpdateProductInventoryWithHttpMessagesAsync(string productId, InventoryInfo inventory = default(InventoryInfo), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -1843,7 +1937,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             /// </param>
             /// <param name='searchCriteria'>
             /// </param>
-            public static GenericSearchResultFulfillmentCenter SearchFulfillmentCenters(this IInventoryModule operations, FulfillmentCenterSearchCriteria searchCriteria)
+            public static FulfillmentCenterSearchResult SearchFulfillmentCenters(this IInventoryModule operations, FulfillmentCenterSearchCriteria searchCriteria = default(FulfillmentCenterSearchCriteria))
             {
                 return operations.SearchFulfillmentCentersAsync(searchCriteria).GetAwaiter().GetResult();
             }
@@ -1859,7 +1953,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<GenericSearchResultFulfillmentCenter> SearchFulfillmentCentersAsync(this IInventoryModule operations, FulfillmentCenterSearchCriteria searchCriteria, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<FulfillmentCenterSearchResult> SearchFulfillmentCentersAsync(this IInventoryModule operations, FulfillmentCenterSearchCriteria searchCriteria = default(FulfillmentCenterSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.SearchFulfillmentCentersWithHttpMessagesAsync(searchCriteria, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1910,7 +2004,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             /// <param name='center'>
             /// fulfillment center
             /// </param>
-            public static FulfillmentCenter SaveFulfillmentCenter(this IInventoryModule operations, FulfillmentCenter center)
+            public static FulfillmentCenter SaveFulfillmentCenter(this IInventoryModule operations, FulfillmentCenter center = default(FulfillmentCenter))
             {
                 return operations.SaveFulfillmentCenterAsync(center).GetAwaiter().GetResult();
             }
@@ -1927,7 +2021,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<FulfillmentCenter> SaveFulfillmentCenterAsync(this IInventoryModule operations, FulfillmentCenter center, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<FulfillmentCenter> SaveFulfillmentCenterAsync(this IInventoryModule operations, FulfillmentCenter center = default(FulfillmentCenter), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.SaveFulfillmentCenterWithHttpMessagesAsync(center, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1943,7 +2037,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             /// </param>
             /// <param name='ids'>
             /// </param>
-            public static void DeleteFulfillmentCenters(this IInventoryModule operations, IList<string> ids)
+            public static void DeleteFulfillmentCenters(this IInventoryModule operations, IList<string> ids = default(IList<string>))
             {
                 operations.DeleteFulfillmentCentersAsync(ids).GetAwaiter().GetResult();
             }
@@ -1959,9 +2053,38 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DeleteFulfillmentCentersAsync(this IInventoryModule operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task DeleteFulfillmentCentersAsync(this IInventoryModule operations, IList<string> ids = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.DeleteFulfillmentCentersWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
+            /// <summary>
+            /// Delete  fulfillment centers registered in the system
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='ids'>
+            /// </param>
+            public static void DeleteFulfillmentCenters1(this IInventoryModule operations, IList<string> ids = default(IList<string>))
+            {
+                operations.DeleteFulfillmentCenters1Async(ids).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Delete  fulfillment centers registered in the system
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='ids'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task DeleteFulfillmentCenters1Async(this IInventoryModule operations, IList<string> ids = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.DeleteFulfillmentCenters1WithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -1976,7 +2099,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             /// <param name='ids'>
             /// Products ids
             /// </param>
-            public static IList<InventoryInfo> GetProductsInventories(this IInventoryModule operations, IList<string> ids)
+            public static IList<InventoryInfo> GetProductsInventories(this IInventoryModule operations, IList<string> ids = default(IList<string>))
             {
                 return operations.GetProductsInventoriesAsync(ids).GetAwaiter().GetResult();
             }
@@ -1996,7 +2119,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<InventoryInfo>> GetProductsInventoriesAsync(this IInventoryModule operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<InventoryInfo>> GetProductsInventoriesAsync(this IInventoryModule operations, IList<string> ids = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetProductsInventoriesWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -2016,7 +2139,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             /// <param name='ids'>
             /// Products ids
             /// </param>
-            public static IList<InventoryInfo> GetProductsInventoriesByPlentyIds(this IInventoryModule operations, IList<string> ids)
+            public static IList<InventoryInfo> GetProductsInventoriesByPlentyIds(this IInventoryModule operations, IList<string> ids = default(IList<string>))
             {
                 return operations.GetProductsInventoriesByPlentyIdsAsync(ids).GetAwaiter().GetResult();
             }
@@ -2036,7 +2159,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<InventoryInfo>> GetProductsInventoriesByPlentyIdsAsync(this IInventoryModule operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<InventoryInfo>> GetProductsInventoriesByPlentyIdsAsync(this IInventoryModule operations, IList<string> ids = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetProductsInventoriesByPlentyIdsWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -2085,104 +2208,48 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             }
 
             /// <summary>
-            /// Upsert inventory
+            /// Update inventory
             /// </summary>
             /// <remarks>
-            /// Upsert (add or update) given inventory of product.
+            /// Update given inventory of product.
             /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='inventory'>
-            /// Inventory to upsert
-            /// </param>
             /// <param name='productId'>
             /// </param>
-            public static InventoryInfo UpsertProductInventory(this IInventoryModule operations, InventoryInfo inventory, string productId)
+            /// <param name='inventory'>
+            /// Inventory to update
+            /// </param>
+            public static InventoryInfo UpdateProductInventory(this IInventoryModule operations, string productId, InventoryInfo inventory = default(InventoryInfo))
             {
-                return operations.UpsertProductInventoryAsync(inventory, productId).GetAwaiter().GetResult();
+                return operations.UpdateProductInventoryAsync(productId, inventory).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Upsert inventory
+            /// Update inventory
             /// </summary>
             /// <remarks>
-            /// Upsert (add or update) given inventory of product.
+            /// Update given inventory of product.
             /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='inventory'>
-            /// Inventory to upsert
-            /// </param>
             /// <param name='productId'>
+            /// </param>
+            /// <param name='inventory'>
+            /// Inventory to update
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<InventoryInfo> UpsertProductInventoryAsync(this IInventoryModule operations, InventoryInfo inventory, string productId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<InventoryInfo> UpdateProductInventoryAsync(this IInventoryModule operations, string productId, InventoryInfo inventory = default(InventoryInfo), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.UpsertProductInventoryWithHttpMessagesAsync(inventory, productId, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.UpdateProductInventoryWithHttpMessagesAsync(productId, inventory, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class GeoPoint
-    {
-        /// <summary>
-        /// Initializes a new instance of the GeoPoint class.
-        /// </summary>
-        public GeoPoint()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the GeoPoint class.
-        /// </summary>
-        public GeoPoint(double? latitude = default(double?), double? longitude = default(double?))
-        {
-            Latitude = latitude;
-            Longitude = longitude;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "latitude")]
-        public double? Latitude { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "longitude")]
-        public double? Longitude { get; set; }
 
     }
 }
@@ -2279,13 +2346,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
         /// Initializes a new instance of the FulfillmentCenterSearchCriteria
         /// class.
         /// </summary>
-        public FulfillmentCenterSearchCriteria(GeoPoint location = default(GeoPoint), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public FulfillmentCenterSearchCriteria(string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
-            Location = location;
             ResponseGroup = responseGroup;
             ObjectType = objectType;
             ObjectTypes = objectTypes;
             ObjectIds = objectIds;
+            Keyword = keyword;
             SearchPhrase = searchPhrase;
             LanguageCode = languageCode;
             Sort = sort;
@@ -2299,11 +2366,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "location")]
-        public GeoPoint Location { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2324,6 +2386,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "objectIds")]
         public IList<string> ObjectIds { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "keyword")]
+        public string Keyword { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2376,25 +2443,25 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class Address
+    public partial class InventoryAddress
     {
         /// <summary>
-        /// Initializes a new instance of the Address class.
+        /// Initializes a new instance of the InventoryAddress class.
         /// </summary>
-        public Address()
+        public InventoryAddress()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the Address class.
+        /// Initializes a new instance of the InventoryAddress class.
         /// </summary>
         /// <param name="addressType">Possible values include: 'Billing',
         /// 'Shipping', 'Pickup', 'BillingAndShipping'</param>
-        public Address(string key = default(string), string addressType = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
+        public InventoryAddress(string addressType = default(string), string key = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
         {
-            Key = key;
             AddressType = addressType;
+            Key = key;
             Name = name;
             Organization = organization;
             CountryCode = countryCode;
@@ -2420,16 +2487,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
         partial void CustomInit();
 
         /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "key")]
-        public string Key { get; set; }
-
-        /// <summary>
         /// Gets or sets possible values include: 'Billing', 'Shipping',
         /// 'Pickup', 'BillingAndShipping'
         /// </summary>
         [JsonProperty(PropertyName = "addressType")]
         public string AddressType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "key")]
+        public string Key { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2545,12 +2612,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the FulfillmentCenter class.
         /// </summary>
-        public FulfillmentCenter(string name = default(string), string description = default(string), string geoLocation = default(string), Address address = default(Address), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public FulfillmentCenter(string name = default(string), string description = default(string), string geoLocation = default(string), InventoryAddress address = default(InventoryAddress), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             Description = description;
             GeoLocation = geoLocation;
             Address = address;
+            OuterId = outerId;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
@@ -2582,7 +2650,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "address")]
-        public Address Address { get; set; }
+        public InventoryAddress Address { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2608,6 +2681,95 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
+
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (CreatedBy != null)
+            {
+                if (CreatedBy.Length > 64)
+                {
+                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
+                }
+                if (CreatedBy.Length < 0)
+                {
+                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
+                }
+            }
+            if (ModifiedBy != null)
+            {
+                if (ModifiedBy.Length > 64)
+                {
+                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
+                }
+                if (ModifiedBy.Length < 0)
+                {
+                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
+                }
+            }
+        }
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class FulfillmentCenterSearchResult
+    {
+        /// <summary>
+        /// Initializes a new instance of the FulfillmentCenterSearchResult
+        /// class.
+        /// </summary>
+        public FulfillmentCenterSearchResult()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the FulfillmentCenterSearchResult
+        /// class.
+        /// </summary>
+        public FulfillmentCenterSearchResult(int? totalCount = default(int?), IList<FulfillmentCenter> results = default(IList<FulfillmentCenter>))
+        {
+            TotalCount = totalCount;
+            Results = results;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "totalCount")]
+        public int? TotalCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "results")]
+        public IList<FulfillmentCenter> Results { get; set; }
 
     }
 }
@@ -2645,12 +2807,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
         /// </summary>
         /// <param name="status">Possible values include: 'Disabled',
         /// 'Enabled', 'Ignored'</param>
-        public InventoryInfo(System.DateTime? createdDate = default(System.DateTime?), string createdBy = default(string), System.DateTime? modifiedDate = default(System.DateTime?), string modifiedBy = default(string), string fulfillmentCenterId = default(string), FulfillmentCenter fulfillmentCenter = default(FulfillmentCenter), string productId = default(string), long? inStockQuantity = default(long?), long? reservedQuantity = default(long?), long? reorderMinQuantity = default(long?), long? preorderQuantity = default(long?), long? backorderQuantity = default(long?), bool? allowBackorder = default(bool?), bool? allowPreorder = default(bool?), long? inTransit = default(long?), System.DateTime? preorderAvailabilityDate = default(System.DateTime?), System.DateTime? backorderAvailabilityDate = default(System.DateTime?), string status = default(string))
+        public InventoryInfo(string fulfillmentCenterId = default(string), FulfillmentCenter fulfillmentCenter = default(FulfillmentCenter), string productId = default(string), long? inStockQuantity = default(long?), long? reservedQuantity = default(long?), long? reorderMinQuantity = default(long?), long? preorderQuantity = default(long?), long? backorderQuantity = default(long?), bool? allowBackorder = default(bool?), bool? allowPreorder = default(bool?), long? inTransit = default(long?), System.DateTime? preorderAvailabilityDate = default(System.DateTime?), System.DateTime? backorderAvailabilityDate = default(System.DateTime?), string status = default(string), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
-            CreatedDate = createdDate;
-            CreatedBy = createdBy;
-            ModifiedDate = modifiedDate;
-            ModifiedBy = modifiedBy;
             FulfillmentCenterId = fulfillmentCenterId;
             FulfillmentCenter = fulfillmentCenter;
             ProductId = productId;
@@ -2665,6 +2823,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
             PreorderAvailabilityDate = preorderAvailabilityDate;
             BackorderAvailabilityDate = backorderAvailabilityDate;
             Status = status;
+            OuterId = outerId;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Id = id;
             CustomInit();
         }
 
@@ -2672,26 +2836,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2765,63 +2909,70 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
         [JsonProperty(PropertyName = "status")]
         public string Status { get; set; }
 
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class GenericSearchResultFulfillmentCenter
-    {
         /// <summary>
-        /// Initializes a new instance of the
-        /// GenericSearchResultFulfillmentCenter class.
         /// </summary>
-        public GenericSearchResultFulfillmentCenter()
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
         {
-            CustomInit();
+            if (FulfillmentCenter != null)
+            {
+                FulfillmentCenter.Validate();
+            }
+            if (CreatedBy != null)
+            {
+                if (CreatedBy.Length > 64)
+                {
+                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
+                }
+                if (CreatedBy.Length < 0)
+                {
+                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
+                }
+            }
+            if (ModifiedBy != null)
+            {
+                if (ModifiedBy.Length > 64)
+                {
+                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
+                }
+                if (ModifiedBy.Length < 0)
+                {
+                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
+                }
+            }
         }
-
-        /// <summary>
-        /// Initializes a new instance of the
-        /// GenericSearchResultFulfillmentCenter class.
-        /// </summary>
-        public GenericSearchResultFulfillmentCenter(int? totalCount = default(int?), IList<FulfillmentCenter> results = default(IList<FulfillmentCenter>))
-        {
-            TotalCount = totalCount;
-            Results = results;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "totalCount")]
-        public int? TotalCount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "results")]
-        public IList<FulfillmentCenter> Results { get; set; }
-
     }
 }

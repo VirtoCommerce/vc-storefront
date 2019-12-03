@@ -4,7 +4,7 @@
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
@@ -12,13 +12,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class SitemapsModuleClient : ServiceClient<SitemapsModuleClient>, ISitemapsModuleClient
+    public partial class NotificationsModuleClient : ServiceClient<NotificationsModuleClient>, INotificationsModuleClient
     {
         /// <summary>
         /// The base URI of the service.
@@ -41,36 +40,36 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         public ServiceClientCredentials Credentials { get; private set; }
 
         /// <summary>
-        /// Gets the ISitemapsModuleApiOperations.
+        /// Gets the INotifications.
         /// </summary>
-        public virtual ISitemapsModuleApiOperations SitemapsModuleApi { get; private set; }
+        public virtual INotifications Notifications { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the SitemapsModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='httpClient'>
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling SitemapsModuleClient.Dispose(). False: will not dispose provided httpClient</param>
-        protected SitemapsModuleClient(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
+        /// True: will dispose the provided httpClient on calling NotificationsModuleClient.Dispose(). False: will not dispose provided httpClient</param>
+        protected NotificationsModuleClient(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the SitemapsModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected SitemapsModuleClient(params DelegatingHandler[] handlers) : base(handlers)
+        protected NotificationsModuleClient(params DelegatingHandler[] handlers) : base(handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the SitemapsModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='rootHandler'>
         /// Optional. The http client handler used to handle http transport.
@@ -78,13 +77,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected SitemapsModuleClient(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
+        protected NotificationsModuleClient(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the SitemapsModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -95,7 +94,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected SitemapsModuleClient(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
+        protected NotificationsModuleClient(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -105,7 +104,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the SitemapsModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -119,7 +118,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected SitemapsModuleClient(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        protected NotificationsModuleClient(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -129,7 +128,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the SitemapsModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -140,7 +139,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public SitemapsModuleClient(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public NotificationsModuleClient(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (credentials == null)
             {
@@ -154,7 +153,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the SitemapsModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -163,11 +162,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling SitemapsModuleClient.Dispose(). False: will not dispose provided httpClient</param>
+        /// True: will dispose the provided httpClient on calling NotificationsModuleClient.Dispose(). False: will not dispose provided httpClient</param>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public SitemapsModuleClient(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
+        public NotificationsModuleClient(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
         {
             if (credentials == null)
             {
@@ -181,7 +180,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the SitemapsModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -195,7 +194,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public SitemapsModuleClient(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public NotificationsModuleClient(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (credentials == null)
             {
@@ -209,7 +208,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the SitemapsModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -223,7 +222,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public SitemapsModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public NotificationsModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -242,7 +241,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the SitemapsModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -259,7 +258,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public SitemapsModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public NotificationsModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -286,7 +285,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         /// </summary>
         private void Initialize()
         {
-            SitemapsModuleApi = new SitemapsModuleApiOperations(this);
+            Notifications = new Notifications(this);
             BaseUri = new System.Uri("http://localhost");
             SerializationSettings = new JsonSerializerSettings
             {
@@ -323,7 +322,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
@@ -331,7 +330,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
@@ -339,7 +337,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
 
     /// <summary>
     /// </summary>
-    public partial interface ISitemapsModuleClient : System.IDisposable
+    public partial interface INotificationsModuleClient : System.IDisposable
     {
         /// <summary>
         /// The base URI of the service.
@@ -364,9 +362,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
 
 
         /// <summary>
-        /// Gets the ISitemapsModuleApiOperations.
+        /// Gets the INotifications.
         /// </summary>
-        ISitemapsModuleApiOperations SitemapsModuleApi { get; }
+        INotifications Notifications { get; }
 
     }
 }
@@ -376,7 +374,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
@@ -392,12 +390,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
     using System.Threading.Tasks;
 
     /// <summary>
-    /// SitemapsModuleApiOperations operations.
+    /// Notifications operations.
     /// </summary>
-    public partial class SitemapsModuleApiOperations : IServiceOperations<SitemapsModuleClient>, ISitemapsModuleApiOperations
+    public partial class Notifications : IServiceOperations<NotificationsModuleClient>, INotifications
     {
         /// <summary>
-        /// Initializes a new instance of the SitemapsModuleApiOperations class.
+        /// Initializes a new instance of the Notifications class.
         /// </summary>
         /// <param name='client'>
         /// Reference to the service client.
@@ -405,7 +403,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public SitemapsModuleApiOperations(SitemapsModuleClient client)
+        public Notifications(NotificationsModuleClient client)
         {
             if (client == null)
             {
@@ -415,11 +413,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         }
 
         /// <summary>
-        /// Gets a reference to the SitemapsModuleClient
+        /// Gets a reference to the NotificationsModuleClient
         /// </summary>
-        public SitemapsModuleClient Client { get; private set; }
+        public NotificationsModuleClient Client { get; private set; }
 
-        /// <param name='request'>
+        /// <summary>
+        /// Get all registered notification types by criteria
+        /// </summary>
+        /// <param name='searchCriteria'>
+        /// criteria for search(keyword, skip, take and etc.)
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -436,7 +438,734 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<SitemapSearchResult>> SearchSitemapsWithHttpMessagesAsync(SitemapSearchCriteria request = default(SitemapSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<NotificationSearchResult>> GetNotificationsWithHttpMessagesAsync(NotificationSearchCriteria searchCriteria = default(NotificationSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("searchCriteria", searchCriteria);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "GetNotifications", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/notifications").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(searchCriteria != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(searchCriteria, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<NotificationSearchResult>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<NotificationSearchResult>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Get notification by type
+        /// </summary>
+        /// <remarks>
+        /// Get all notification templates by notification type, tenantId, teantTypeId.
+        /// Tenant id and tenant type id - params of tenant, that initialize creating
+        /// of
+        /// template. By default tenant id and tenant type id = "Platform". For example
+        /// for store with id = "SampleStore", tenantId = "SampleStore", tenantType =
+        /// "Store".
+        /// </remarks>
+        /// <param name='type'>
+        /// Notification type of template
+        /// </param>
+        /// <param name='tenantId'>
+        /// Tenant id of template
+        /// </param>
+        /// <param name='tenantType'>
+        /// Tenant type id of template
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<Notification>> GetNotificationByTypeIdWithHttpMessagesAsync(string type, string tenantId = default(string), string tenantType = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (type == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "type");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("type", type);
+                tracingParameters.Add("tenantId", tenantId);
+                tracingParameters.Add("tenantType", tenantType);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "GetNotificationByTypeId", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/notifications/{type}").ToString();
+            _url = _url.Replace("{type}", System.Uri.EscapeDataString(type));
+            List<string> _queryParameters = new List<string>();
+            if (tenantId != null)
+            {
+                _queryParameters.Add(string.Format("tenantId={0}", System.Uri.EscapeDataString(tenantId)));
+            }
+            if (tenantType != null)
+            {
+                _queryParameters.Add(string.Format("tenantType={0}", System.Uri.EscapeDataString(tenantType)));
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("GET");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<Notification>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<Notification>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Update notification with templates
+        /// </summary>
+        /// <param name='type'>
+        /// </param>
+        /// <param name='notification'>
+        /// Notification
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> UpdateNotificationWithHttpMessagesAsync(string type, Notification notification = default(Notification), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (notification != null)
+            {
+                notification.Validate();
+            }
+            if (type == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "type");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("notification", notification);
+                tracingParameters.Add("type", type);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdateNotification", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/notifications/{type}").ToString();
+            _url = _url.Replace("{type}", System.Uri.EscapeDataString(type));
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("PUT");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(notification != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(notification, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Render content
+        /// </summary>
+        /// <param name='language'>
+        /// </param>
+        /// <param name='type'>
+        /// </param>
+        /// <param name='request'>
+        /// request of Notification Template with text and data
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> RenderingTemplateWithHttpMessagesAsync(string language, string type, NotificationTemplateRequest request = default(NotificationTemplateRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (request != null)
+            {
+                request.Validate();
+            }
+            if (language == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "language");
+            }
+            if (type == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "type");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("request", request);
+                tracingParameters.Add("language", language);
+                tracingParameters.Add("type", type);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "RenderingTemplate", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/notifications/{type}/templates/{language}/rendercontent").ToString();
+            _url = _url.Replace("{language}", System.Uri.EscapeDataString(language));
+            _url = _url.Replace("{type}", System.Uri.EscapeDataString(type));
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(request != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(request, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Sending notification
+        /// </summary>
+        /// <param name='notificationRequest'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<NotificationSendResult>> SendNotificationWithHttpMessagesAsync(Notification notificationRequest = default(Notification), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (notificationRequest != null)
+            {
+                notificationRequest.Validate();
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("notificationRequest", notificationRequest);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "SendNotification", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/notifications/send").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(notificationRequest != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(notificationRequest, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<NotificationSendResult>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<NotificationSendResult>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Sending notification
+        /// </summary>
+        /// <remarks>
+        /// Method sending notification, that based on notification template. Template
+        /// for rendering chosen by type, objectId, objectTypeId, language.
+        /// Parameters for template may be prepared by the method of
+        /// getTestingParameters. Method returns string. If sending finished with
+        /// success status
+        /// this string is empty, otherwise string contains error message.
+        /// </remarks>
+        /// <param name='request'>
+        /// Notification request
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<NotificationSendResult>> SendNotificationByRequestWithHttpMessagesAsync(NotificationRequest request = default(NotificationRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -447,11 +1176,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("request", request);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "SearchSitemaps", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "SendNotificationByRequest", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/sitemaps/search").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/notification/template/sendnotification").ToString();
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -523,7 +1252,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<SitemapSearchResult>();
+            var _result = new HttpOperationResponse<NotificationSendResult>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -532,7 +1261,148 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<SitemapSearchResult>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<NotificationSendResult>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Get all notification journal
+        /// </summary>
+        /// <remarks>
+        /// Method returns notification journal page with array of notification, that
+        /// was send, sending or will be send in future. Result contains total count,
+        /// that can be used
+        /// for paging.
+        /// </remarks>
+        /// <param name='criteria'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<NotificationMessageSearchResult>> GetNotificationJournalWithHttpMessagesAsync(NotificationMessageSearchCriteria criteria = default(NotificationMessageSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "GetNotificationJournal", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/notifications/journal").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(criteria != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<NotificationMessageSearchResult>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<NotificationMessageSearchResult>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -574,7 +1444,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Sitemap>> GetSitemapByIdWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<NotificationMessage>> GetObjectNotificationJournalWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (id == null)
             {
@@ -589,11 +1459,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("id", id);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "GetSitemapById", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "GetObjectNotificationJournal", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/sitemaps/{id}").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/notifications/journal/{id}").ToString();
             _url = _url.Replace("{id}", System.Uri.EscapeDataString(id));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
@@ -660,7 +1530,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<Sitemap>();
+            var _result = new HttpOperationResponse<NotificationMessage>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -669,1165 +1539,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<Sitemap>(_responseContent, Client.DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <param name='sitemap'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> UpdateSitemapWithHttpMessagesAsync(Sitemap sitemap = default(Sitemap), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (sitemap != null)
-            {
-                sitemap.Validate();
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("sitemap", sitemap);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "UpdateSitemap", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/sitemaps").ToString();
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("PUT");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if(sitemap != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(sitemap, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <param name='sitemap'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> AddSitemapWithHttpMessagesAsync(Sitemap sitemap = default(Sitemap), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (sitemap != null)
-            {
-                sitemap.Validate();
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("sitemap", sitemap);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "AddSitemap", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/sitemaps").ToString();
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("POST");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if(sitemap != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(sitemap, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <param name='ids'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> DeleteSitemapWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("ids", ids);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "DeleteSitemap", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/sitemaps").ToString();
-            List<string> _queryParameters = new List<string>();
-            if (ids != null)
-            {
-                if (ids.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in ids)
-                    {
-                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
-            }
-            if (_queryParameters.Count > 0)
-            {
-                _url += "?" + string.Join("&", _queryParameters);
-            }
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("DELETE");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <param name='request'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse<SitemapItemsSearchResult>> SearchSitemapItemsWithHttpMessagesAsync(SitemapItemSearchCriteria request = default(SitemapItemSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("request", request);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "SearchSitemapItems", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/sitemaps/items/search").ToString();
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("POST");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if(request != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(request, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<SitemapItemsSearchResult>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<SitemapItemsSearchResult>(_responseContent, Client.DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <param name='sitemapId'>
-        /// </param>
-        /// <param name='items'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> AddSitemapItemsWithHttpMessagesAsync(string sitemapId, IList<SitemapItem> items = default(IList<SitemapItem>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (sitemapId == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "sitemapId");
-            }
-            if (items != null)
-            {
-                foreach (var element in items)
-                {
-                    if (element != null)
-                    {
-                        element.Validate();
-                    }
-                }
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("sitemapId", sitemapId);
-                tracingParameters.Add("items", items);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "AddSitemapItems", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/sitemaps/{sitemapId}/items").ToString();
-            _url = _url.Replace("{sitemapId}", System.Uri.EscapeDataString(sitemapId));
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("POST");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if(items != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(items, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 204)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <param name='itemIds'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> RemoveSitemapItemsWithHttpMessagesAsync(IList<string> itemIds = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("itemIds", itemIds);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "RemoveSitemapItems", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/sitemaps/items").ToString();
-            List<string> _queryParameters = new List<string>();
-            if (itemIds != null)
-            {
-                if (itemIds.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("itemIds={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in itemIds)
-                    {
-                        _queryParameters.Add(string.Format("itemIds={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
-            }
-            if (_queryParameters.Count > 0)
-            {
-                _url += "?" + string.Join("&", _queryParameters);
-            }
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("DELETE");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 204)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <param name='storeId'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse<IList<string>>> GetSitemapsSchemaWithHttpMessagesAsync(string storeId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("storeId", storeId);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "GetSitemapsSchema", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/sitemaps/schema").ToString();
-            List<string> _queryParameters = new List<string>();
-            if (storeId != null)
-            {
-                _queryParameters.Add(string.Format("storeId={0}", System.Uri.EscapeDataString(storeId)));
-            }
-            if (_queryParameters.Count > 0)
-            {
-                _url += "?" + string.Join("&", _queryParameters);
-            }
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("GET");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<IList<string>>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IList<string>>(_responseContent, Client.DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <param name='storeId'>
-        /// </param>
-        /// <param name='baseUrl'>
-        /// </param>
-        /// <param name='sitemapUrl'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse<Stream>> GenerateSitemapWithHttpMessagesAsync(string storeId = default(string), string baseUrl = default(string), string sitemapUrl = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("storeId", storeId);
-                tracingParameters.Add("baseUrl", baseUrl);
-                tracingParameters.Add("sitemapUrl", sitemapUrl);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "GenerateSitemap", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/sitemaps/generate").ToString();
-            List<string> _queryParameters = new List<string>();
-            if (storeId != null)
-            {
-                _queryParameters.Add(string.Format("storeId={0}", System.Uri.EscapeDataString(storeId)));
-            }
-            if (baseUrl != null)
-            {
-                _queryParameters.Add(string.Format("baseUrl={0}", System.Uri.EscapeDataString(baseUrl)));
-            }
-            if (sitemapUrl != null)
-            {
-                _queryParameters.Add(string.Format("sitemapUrl={0}", System.Uri.EscapeDataString(sitemapUrl)));
-            }
-            if (_queryParameters.Count > 0)
-            {
-                _url += "?" + string.Join("&", _queryParameters);
-            }
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("GET");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<Stream>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _result.Body = await _httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <param name='storeId'>
-        /// </param>
-        /// <param name='baseUrl'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse<SitemapDownloadNotification>> DownloadSitemapWithHttpMessagesAsync(string storeId = default(string), string baseUrl = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("storeId", storeId);
-                tracingParameters.Add("baseUrl", baseUrl);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "DownloadSitemap", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/sitemaps/download").ToString();
-            List<string> _queryParameters = new List<string>();
-            if (storeId != null)
-            {
-                _queryParameters.Add(string.Format("storeId={0}", System.Uri.EscapeDataString(storeId)));
-            }
-            if (baseUrl != null)
-            {
-                _queryParameters.Add(string.Format("baseUrl={0}", System.Uri.EscapeDataString(baseUrl)));
-            }
-            if (_queryParameters.Count > 0)
-            {
-                _url += "?" + string.Join("&", _queryParameters);
-            }
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("GET");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<SitemapDownloadNotification>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<SitemapDownloadNotification>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<NotificationMessage>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -1854,7 +1566,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
@@ -1862,18 +1574,21 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
-    /// SitemapsModuleApiOperations operations.
+    /// Notifications operations.
     /// </summary>
-    public partial interface ISitemapsModuleApiOperations
+    public partial interface INotifications
     {
-        /// <param name='request'>
+        /// <summary>
+        /// Get all registered notification types by criteria
+        /// </summary>
+        /// <param name='searchCriteria'>
+        /// criteria for search(keyword, skip, take and etc.)
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1887,7 +1602,157 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<SitemapSearchResult>> SearchSitemapsWithHttpMessagesAsync(SitemapSearchCriteria request = default(SitemapSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<NotificationSearchResult>> GetNotificationsWithHttpMessagesAsync(NotificationSearchCriteria searchCriteria = default(NotificationSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Get notification by type
+        /// </summary>
+        /// <remarks>
+        /// Get all notification templates by notification type, tenantId,
+        /// teantTypeId. Tenant id and tenant type id - params of tenant, that
+        /// initialize creating of
+        /// template. By default tenant id and tenant type id = "Platform". For
+        /// example for store with id = "SampleStore", tenantId =
+        /// "SampleStore", tenantType = "Store".
+        /// </remarks>
+        /// <param name='type'>
+        /// Notification type of template
+        /// </param>
+        /// <param name='tenantId'>
+        /// Tenant id of template
+        /// </param>
+        /// <param name='tenantType'>
+        /// Tenant type id of template
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse<Notification>> GetNotificationByTypeIdWithHttpMessagesAsync(string type, string tenantId = default(string), string tenantType = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Update notification with templates
+        /// </summary>
+        /// <param name='type'>
+        /// </param>
+        /// <param name='notification'>
+        /// Notification
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse> UpdateNotificationWithHttpMessagesAsync(string type, Notification notification = default(Notification), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Render content
+        /// </summary>
+        /// <param name='language'>
+        /// </param>
+        /// <param name='type'>
+        /// </param>
+        /// <param name='request'>
+        /// request of Notification Template with text and data
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse> RenderingTemplateWithHttpMessagesAsync(string language, string type, NotificationTemplateRequest request = default(NotificationTemplateRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Sending notification
+        /// </summary>
+        /// <param name='notificationRequest'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        Task<HttpOperationResponse<NotificationSendResult>> SendNotificationWithHttpMessagesAsync(Notification notificationRequest = default(Notification), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Sending notification
+        /// </summary>
+        /// <remarks>
+        /// Method sending notification, that based on notification template.
+        /// Template for rendering chosen by type, objectId, objectTypeId,
+        /// language.
+        /// Parameters for template may be prepared by the method of
+        /// getTestingParameters. Method returns string. If sending finished
+        /// with success status
+        /// this string is empty, otherwise string contains error message.
+        /// </remarks>
+        /// <param name='request'>
+        /// Notification request
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        Task<HttpOperationResponse<NotificationSendResult>> SendNotificationByRequestWithHttpMessagesAsync(NotificationRequest request = default(NotificationRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Get all notification journal
+        /// </summary>
+        /// <remarks>
+        /// Method returns notification journal page with array of
+        /// notification, that was send, sending or will be send in future.
+        /// Result contains total count, that can be used
+        /// for paging.
+        /// </remarks>
+        /// <param name='criteria'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        Task<HttpOperationResponse<NotificationMessageSearchResult>> GetNotificationJournalWithHttpMessagesAsync(NotificationMessageSearchCriteria criteria = default(NotificationMessageSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='id'>
         /// </param>
         /// <param name='customHeaders'>
@@ -1905,138 +1770,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<Sitemap>> GetSitemapByIdWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='sitemap'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        Task<HttpOperationResponse> UpdateSitemapWithHttpMessagesAsync(Sitemap sitemap = default(Sitemap), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='sitemap'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        Task<HttpOperationResponse> AddSitemapWithHttpMessagesAsync(Sitemap sitemap = default(Sitemap), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='ids'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        Task<HttpOperationResponse> DeleteSitemapWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='request'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        Task<HttpOperationResponse<SitemapItemsSearchResult>> SearchSitemapItemsWithHttpMessagesAsync(SitemapItemSearchCriteria request = default(SitemapItemSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='sitemapId'>
-        /// </param>
-        /// <param name='items'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse> AddSitemapItemsWithHttpMessagesAsync(string sitemapId, IList<SitemapItem> items = default(IList<SitemapItem>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='itemIds'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        Task<HttpOperationResponse> RemoveSitemapItemsWithHttpMessagesAsync(IList<string> itemIds = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='storeId'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        Task<HttpOperationResponse<IList<string>>> GetSitemapsSchemaWithHttpMessagesAsync(string storeId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='storeId'>
-        /// </param>
-        /// <param name='baseUrl'>
-        /// </param>
-        /// <param name='sitemapUrl'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        Task<HttpOperationResponse<Stream>> GenerateSitemapWithHttpMessagesAsync(string storeId = default(string), string baseUrl = default(string), string sitemapUrl = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='storeId'>
-        /// </param>
-        /// <param name='baseUrl'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        Task<HttpOperationResponse<SitemapDownloadNotification>> DownloadSitemapWithHttpMessagesAsync(string storeId = default(string), string baseUrl = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<NotificationMessage>> GetObjectNotificationJournalWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -2045,7 +1779,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
@@ -2053,38 +1787,307 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Extension methods for SitemapsModuleApiOperations.
+    /// Extension methods for Notifications.
     /// </summary>
-    public static partial class SitemapsModuleApiOperationsExtensions
+    public static partial class NotificationsExtensions
     {
+            /// <summary>
+            /// Get all registered notification types by criteria
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='request'>
+            /// <param name='searchCriteria'>
+            /// criteria for search(keyword, skip, take and etc.)
             /// </param>
-            public static SitemapSearchResult SearchSitemaps(this ISitemapsModuleApiOperations operations, SitemapSearchCriteria request = default(SitemapSearchCriteria))
+            public static NotificationSearchResult GetNotifications(this INotifications operations, NotificationSearchCriteria searchCriteria = default(NotificationSearchCriteria))
             {
-                return operations.SearchSitemapsAsync(request).GetAwaiter().GetResult();
+                return operations.GetNotificationsAsync(searchCriteria).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Get all registered notification types by criteria
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='request'>
+            /// <param name='searchCriteria'>
+            /// criteria for search(keyword, skip, take and etc.)
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<SitemapSearchResult> SearchSitemapsAsync(this ISitemapsModuleApiOperations operations, SitemapSearchCriteria request = default(SitemapSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<NotificationSearchResult> GetNotificationsAsync(this INotifications operations, NotificationSearchCriteria searchCriteria = default(NotificationSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SearchSitemapsWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetNotificationsWithHttpMessagesAsync(searchCriteria, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Get notification by type
+            /// </summary>
+            /// <remarks>
+            /// Get all notification templates by notification type, tenantId, teantTypeId.
+            /// Tenant id and tenant type id - params of tenant, that initialize creating
+            /// of
+            /// template. By default tenant id and tenant type id = "Platform". For example
+            /// for store with id = "SampleStore", tenantId = "SampleStore", tenantType =
+            /// "Store".
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='type'>
+            /// Notification type of template
+            /// </param>
+            /// <param name='tenantId'>
+            /// Tenant id of template
+            /// </param>
+            /// <param name='tenantType'>
+            /// Tenant type id of template
+            /// </param>
+            public static Notification GetNotificationByTypeId(this INotifications operations, string type, string tenantId = default(string), string tenantType = default(string))
+            {
+                return operations.GetNotificationByTypeIdAsync(type, tenantId, tenantType).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Get notification by type
+            /// </summary>
+            /// <remarks>
+            /// Get all notification templates by notification type, tenantId, teantTypeId.
+            /// Tenant id and tenant type id - params of tenant, that initialize creating
+            /// of
+            /// template. By default tenant id and tenant type id = "Platform". For example
+            /// for store with id = "SampleStore", tenantId = "SampleStore", tenantType =
+            /// "Store".
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='type'>
+            /// Notification type of template
+            /// </param>
+            /// <param name='tenantId'>
+            /// Tenant id of template
+            /// </param>
+            /// <param name='tenantType'>
+            /// Tenant type id of template
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<Notification> GetNotificationByTypeIdAsync(this INotifications operations, string type, string tenantId = default(string), string tenantType = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.GetNotificationByTypeIdWithHttpMessagesAsync(type, tenantId, tenantType, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Update notification with templates
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='type'>
+            /// </param>
+            /// <param name='notification'>
+            /// Notification
+            /// </param>
+            public static void UpdateNotification(this INotifications operations, string type, Notification notification = default(Notification))
+            {
+                operations.UpdateNotificationAsync(type, notification).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Update notification with templates
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='type'>
+            /// </param>
+            /// <param name='notification'>
+            /// Notification
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task UpdateNotificationAsync(this INotifications operations, string type, Notification notification = default(Notification), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.UpdateNotificationWithHttpMessagesAsync(type, notification, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
+            /// <summary>
+            /// Render content
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='language'>
+            /// </param>
+            /// <param name='type'>
+            /// </param>
+            /// <param name='request'>
+            /// request of Notification Template with text and data
+            /// </param>
+            public static void RenderingTemplate(this INotifications operations, string language, string type, NotificationTemplateRequest request = default(NotificationTemplateRequest))
+            {
+                operations.RenderingTemplateAsync(language, type, request).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Render content
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='language'>
+            /// </param>
+            /// <param name='type'>
+            /// </param>
+            /// <param name='request'>
+            /// request of Notification Template with text and data
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task RenderingTemplateAsync(this INotifications operations, string language, string type, NotificationTemplateRequest request = default(NotificationTemplateRequest), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.RenderingTemplateWithHttpMessagesAsync(language, type, request, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
+            /// <summary>
+            /// Sending notification
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='notificationRequest'>
+            /// </param>
+            public static NotificationSendResult SendNotification(this INotifications operations, Notification notificationRequest = default(Notification))
+            {
+                return operations.SendNotificationAsync(notificationRequest).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Sending notification
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='notificationRequest'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<NotificationSendResult> SendNotificationAsync(this INotifications operations, Notification notificationRequest = default(Notification), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.SendNotificationWithHttpMessagesAsync(notificationRequest, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Sending notification
+            /// </summary>
+            /// <remarks>
+            /// Method sending notification, that based on notification template. Template
+            /// for rendering chosen by type, objectId, objectTypeId, language.
+            /// Parameters for template may be prepared by the method of
+            /// getTestingParameters. Method returns string. If sending finished with
+            /// success status
+            /// this string is empty, otherwise string contains error message.
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='request'>
+            /// Notification request
+            /// </param>
+            public static NotificationSendResult SendNotificationByRequest(this INotifications operations, NotificationRequest request = default(NotificationRequest))
+            {
+                return operations.SendNotificationByRequestAsync(request).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Sending notification
+            /// </summary>
+            /// <remarks>
+            /// Method sending notification, that based on notification template. Template
+            /// for rendering chosen by type, objectId, objectTypeId, language.
+            /// Parameters for template may be prepared by the method of
+            /// getTestingParameters. Method returns string. If sending finished with
+            /// success status
+            /// this string is empty, otherwise string contains error message.
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='request'>
+            /// Notification request
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<NotificationSendResult> SendNotificationByRequestAsync(this INotifications operations, NotificationRequest request = default(NotificationRequest), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.SendNotificationByRequestWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Get all notification journal
+            /// </summary>
+            /// <remarks>
+            /// Method returns notification journal page with array of notification, that
+            /// was send, sending or will be send in future. Result contains total count,
+            /// that can be used
+            /// for paging.
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='criteria'>
+            /// </param>
+            public static NotificationMessageSearchResult GetNotificationJournal(this INotifications operations, NotificationMessageSearchCriteria criteria = default(NotificationMessageSearchCriteria))
+            {
+                return operations.GetNotificationJournalAsync(criteria).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Get all notification journal
+            /// </summary>
+            /// <remarks>
+            /// Method returns notification journal page with array of notification, that
+            /// was send, sending or will be send in future. Result contains total count,
+            /// that can be used
+            /// for paging.
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='criteria'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<NotificationMessageSearchResult> GetNotificationJournalAsync(this INotifications operations, NotificationMessageSearchCriteria criteria = default(NotificationMessageSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.GetNotificationJournalWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -2095,9 +2098,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
             /// </param>
             /// <param name='id'>
             /// </param>
-            public static Sitemap GetSitemapById(this ISitemapsModuleApiOperations operations, string id)
+            public static NotificationMessage GetObjectNotificationJournal(this INotifications operations, string id)
             {
-                return operations.GetSitemapByIdAsync(id).GetAwaiter().GetResult();
+                return operations.GetObjectNotificationJournalAsync(id).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
@@ -2108,243 +2111,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Sitemap> GetSitemapByIdAsync(this ISitemapsModuleApiOperations operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<NotificationMessage> GetObjectNotificationJournalAsync(this INotifications operations, string id, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetSitemapByIdWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='sitemap'>
-            /// </param>
-            public static void UpdateSitemap(this ISitemapsModuleApiOperations operations, Sitemap sitemap = default(Sitemap))
-            {
-                operations.UpdateSitemapAsync(sitemap).GetAwaiter().GetResult();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='sitemap'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task UpdateSitemapAsync(this ISitemapsModuleApiOperations operations, Sitemap sitemap = default(Sitemap), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.UpdateSitemapWithHttpMessagesAsync(sitemap, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='sitemap'>
-            /// </param>
-            public static void AddSitemap(this ISitemapsModuleApiOperations operations, Sitemap sitemap = default(Sitemap))
-            {
-                operations.AddSitemapAsync(sitemap).GetAwaiter().GetResult();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='sitemap'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task AddSitemapAsync(this ISitemapsModuleApiOperations operations, Sitemap sitemap = default(Sitemap), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.AddSitemapWithHttpMessagesAsync(sitemap, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ids'>
-            /// </param>
-            public static void DeleteSitemap(this ISitemapsModuleApiOperations operations, IList<string> ids = default(IList<string>))
-            {
-                operations.DeleteSitemapAsync(ids).GetAwaiter().GetResult();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ids'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task DeleteSitemapAsync(this ISitemapsModuleApiOperations operations, IList<string> ids = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.DeleteSitemapWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='request'>
-            /// </param>
-            public static SitemapItemsSearchResult SearchSitemapItems(this ISitemapsModuleApiOperations operations, SitemapItemSearchCriteria request = default(SitemapItemSearchCriteria))
-            {
-                return operations.SearchSitemapItemsAsync(request).GetAwaiter().GetResult();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='request'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<SitemapItemsSearchResult> SearchSitemapItemsAsync(this ISitemapsModuleApiOperations operations, SitemapItemSearchCriteria request = default(SitemapItemSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.SearchSitemapItemsWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='sitemapId'>
-            /// </param>
-            /// <param name='items'>
-            /// </param>
-            public static void AddSitemapItems(this ISitemapsModuleApiOperations operations, string sitemapId, IList<SitemapItem> items = default(IList<SitemapItem>))
-            {
-                operations.AddSitemapItemsAsync(sitemapId, items).GetAwaiter().GetResult();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='sitemapId'>
-            /// </param>
-            /// <param name='items'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task AddSitemapItemsAsync(this ISitemapsModuleApiOperations operations, string sitemapId, IList<SitemapItem> items = default(IList<SitemapItem>), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.AddSitemapItemsWithHttpMessagesAsync(sitemapId, items, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='itemIds'>
-            /// </param>
-            public static void RemoveSitemapItems(this ISitemapsModuleApiOperations operations, IList<string> itemIds = default(IList<string>))
-            {
-                operations.RemoveSitemapItemsAsync(itemIds).GetAwaiter().GetResult();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='itemIds'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task RemoveSitemapItemsAsync(this ISitemapsModuleApiOperations operations, IList<string> itemIds = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.RemoveSitemapItemsWithHttpMessagesAsync(itemIds, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='storeId'>
-            /// </param>
-            public static IList<string> GetSitemapsSchema(this ISitemapsModuleApiOperations operations, string storeId = default(string))
-            {
-                return operations.GetSitemapsSchemaAsync(storeId).GetAwaiter().GetResult();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='storeId'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<IList<string>> GetSitemapsSchemaAsync(this ISitemapsModuleApiOperations operations, string storeId = default(string), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.GetSitemapsSchemaWithHttpMessagesAsync(storeId, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='storeId'>
-            /// </param>
-            /// <param name='baseUrl'>
-            /// </param>
-            /// <param name='sitemapUrl'>
-            /// </param>
-            public static Stream GenerateSitemap(this ISitemapsModuleApiOperations operations, string storeId = default(string), string baseUrl = default(string), string sitemapUrl = default(string))
-            {
-                return operations.GenerateSitemapAsync(storeId, baseUrl, sitemapUrl).GetAwaiter().GetResult();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='storeId'>
-            /// </param>
-            /// <param name='baseUrl'>
-            /// </param>
-            /// <param name='sitemapUrl'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Stream> GenerateSitemapAsync(this ISitemapsModuleApiOperations operations, string storeId = default(string), string baseUrl = default(string), string sitemapUrl = default(string), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                var _result = await operations.GenerateSitemapWithHttpMessagesAsync(storeId, baseUrl, sitemapUrl, null, cancellationToken).ConfigureAwait(false);
-                _result.Request.Dispose();
-                return _result.Body;
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='storeId'>
-            /// </param>
-            /// <param name='baseUrl'>
-            /// </param>
-            public static SitemapDownloadNotification DownloadSitemap(this ISitemapsModuleApiOperations operations, string storeId = default(string), string baseUrl = default(string))
-            {
-                return operations.DownloadSitemapAsync(storeId, baseUrl).GetAwaiter().GetResult();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='storeId'>
-            /// </param>
-            /// <param name='baseUrl'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<SitemapDownloadNotification> DownloadSitemapAsync(this ISitemapsModuleApiOperations operations, string storeId = default(string), string baseUrl = default(string), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.DownloadSitemapWithHttpMessagesAsync(storeId, baseUrl, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetObjectNotificationJournalWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -2358,14 +2127,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -2418,37 +2186,45 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class SitemapSearchCriteria
+    /// <summary>
+    /// Criteria for searching
+    /// </summary>
+    public partial class NotificationSearchCriteria
     {
         /// <summary>
-        /// Initializes a new instance of the SitemapSearchCriteria class.
+        /// Initializes a new instance of the NotificationSearchCriteria class.
         /// </summary>
-        public SitemapSearchCriteria()
+        public NotificationSearchCriteria()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the SitemapSearchCriteria class.
+        /// Initializes a new instance of the NotificationSearchCriteria class.
         /// </summary>
-        public SitemapSearchCriteria(string storeId = default(string), string location = default(string), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        /// <param name="tenantId">Owner Id of Notification</param>
+        /// <param name="tenantType">Owner Type of Notification</param>
+        /// <param name="isActive">only active notification</param>
+        public NotificationSearchCriteria(string notificationType = default(string), IList<string> notificationTypes = default(IList<string>), string tenantId = default(string), string tenantType = default(string), bool? isActive = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
-            StoreId = storeId;
-            Location = location;
+            NotificationType = notificationType;
+            NotificationTypes = notificationTypes;
+            TenantId = tenantId;
+            TenantType = tenantType;
+            IsActive = isActive;
             ResponseGroup = responseGroup;
             ObjectType = objectType;
             ObjectTypes = objectTypes;
@@ -2470,13 +2246,31 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "storeId")]
-        public string StoreId { get; set; }
+        [JsonProperty(PropertyName = "notificationType")]
+        public string NotificationType { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "location")]
-        public string Location { get; set; }
+        [JsonProperty(PropertyName = "notificationTypes")]
+        public IList<string> NotificationTypes { get; set; }
+
+        /// <summary>
+        /// Gets or sets owner Id of Notification
+        /// </summary>
+        [JsonProperty(PropertyName = "tenantId")]
+        public string TenantId { get; set; }
+
+        /// <summary>
+        /// Gets or sets owner Type of Notification
+        /// </summary>
+        [JsonProperty(PropertyName = "tenantType")]
+        public string TenantType { get; set; }
+
+        /// <summary>
+        /// Gets or sets only active notification
+        /// </summary>
+        [JsonProperty(PropertyName = "isActive")]
+        public bool? IsActive { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2541,40 +2335,38 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class SitemapItemAlternateLinkRecord
+    public partial class TenantIdentity
     {
         /// <summary>
-        /// Initializes a new instance of the SitemapItemAlternateLinkRecord
-        /// class.
+        /// Initializes a new instance of the TenantIdentity class.
         /// </summary>
-        public SitemapItemAlternateLinkRecord()
+        public TenantIdentity()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the SitemapItemAlternateLinkRecord
-        /// class.
+        /// Initializes a new instance of the TenantIdentity class.
         /// </summary>
-        public SitemapItemAlternateLinkRecord(string url = default(string), string language = default(string), string type = default(string))
+        public TenantIdentity(string id = default(string), string type = default(string), bool? isEmpty = default(bool?), bool? isValid = default(bool?))
         {
-            Url = url;
-            Language = language;
+            Id = id;
             Type = type;
+            IsEmpty = isEmpty;
+            IsValid = isValid;
             CustomInit();
         }
 
@@ -2585,93 +2377,23 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "url")]
-        public string Url { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "language")]
-        public string Language { get; set; }
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "type")]
         public string Type { get; set; }
 
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class SitemapItemRecord
-    {
         /// <summary>
-        /// Initializes a new instance of the SitemapItemRecord class.
         /// </summary>
-        public SitemapItemRecord()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the SitemapItemRecord class.
-        /// </summary>
-        public SitemapItemRecord(string url = default(string), System.DateTime? modifiedDate = default(System.DateTime?), string updateFrequency = default(string), double? priority = default(double?), IList<SitemapItemAlternateLinkRecord> alternates = default(IList<SitemapItemAlternateLinkRecord>))
-        {
-            Url = url;
-            ModifiedDate = modifiedDate;
-            UpdateFrequency = updateFrequency;
-            Priority = priority;
-            Alternates = alternates;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
+        [JsonProperty(PropertyName = "isEmpty")]
+        public bool? IsEmpty { get; private set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "url")]
-        public string Url { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "updateFrequency")]
-        public string UpdateFrequency { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "priority")]
-        public double? Priority { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "alternates")]
-        public IList<SitemapItemAlternateLinkRecord> Alternates { get; set; }
+        [JsonProperty(PropertyName = "isValid")]
+        public bool? IsValid { get; private set; }
 
     }
 }
@@ -2681,42 +2403,44 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class SitemapItem
+    /// <summary>
+    /// Template of Notification with a different language
+    /// </summary>
+    public partial class NotificationTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the SitemapItem class.
+        /// Initializes a new instance of the NotificationTemplate class.
         /// </summary>
-        public SitemapItem()
+        public NotificationTemplate()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the SitemapItem class.
+        /// Initializes a new instance of the NotificationTemplate class.
         /// </summary>
-        public SitemapItem(string sitemapId = default(string), string title = default(string), string imageUrl = default(string), string objectId = default(string), string objectType = default(string), string urlTemplate = default(string), IList<SitemapItemRecord> itemsRecords = default(IList<SitemapItemRecord>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        /// <param name="languageCode">Code of Language</param>
+        /// <param name="kind">For detecting kind of notifications (email, sms
+        /// and etc.)</param>
+        public NotificationTemplate(string languageCode = default(string), string kind = default(string), bool? isReadonly = default(bool?), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
-            SitemapId = sitemapId;
-            Title = title;
-            ImageUrl = imageUrl;
-            ObjectId = objectId;
-            ObjectType = objectType;
-            UrlTemplate = urlTemplate;
-            ItemsRecords = itemsRecords;
+            LanguageCode = languageCode;
+            Kind = kind;
+            IsReadonly = isReadonly;
+            OuterId = outerId;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
@@ -2731,39 +2455,26 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
         partial void CustomInit();
 
         /// <summary>
+        /// Gets or sets code of Language
         /// </summary>
-        [JsonProperty(PropertyName = "sitemapId")]
-        public string SitemapId { get; set; }
+        [JsonProperty(PropertyName = "languageCode")]
+        public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// Gets for detecting kind of notifications (email, sms and etc.)
+        /// </summary>
+        [JsonProperty(PropertyName = "kind")]
+        public string Kind { get; private set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "title")]
-        public string Title { get; set; }
+        [JsonProperty(PropertyName = "isReadonly")]
+        public bool? IsReadonly { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "imageUrl")]
-        public string ImageUrl { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectId")]
-        public string ObjectId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "urlTemplate")]
-        public string UrlTemplate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "itemsRecords")]
-        public IList<SitemapItemRecord> ItemsRecords { get; set; }
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2829,41 +2540,48 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class Sitemap
+    /// <summary>
+    /// Base class for Notification
+    /// </summary>
+    public partial class Notification
     {
         /// <summary>
-        /// Initializes a new instance of the Sitemap class.
+        /// Initializes a new instance of the Notification class.
         /// </summary>
-        public Sitemap()
+        public Notification()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the Sitemap class.
+        /// Initializes a new instance of the Notification class.
         /// </summary>
-        public Sitemap(string location = default(string), string storeId = default(string), IList<SitemapItem> items = default(IList<SitemapItem>), string urlTemplate = default(string), int? totalItemsCount = default(int?), IList<string> pagedLocations = default(IList<string>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        /// <param name="tenantIdentity">For detecting owner</param>
+        /// <param name="kind">For detecting kind of notifications (email, sms
+        /// and etc.)</param>
+        public Notification(TenantIdentity tenantIdentity = default(TenantIdentity), bool? isActive = default(bool?), string languageCode = default(string), string alias = default(string), string type = default(string), string kind = default(string), string outerId = default(string), IList<NotificationTemplate> templates = default(IList<NotificationTemplate>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
-            Location = location;
-            StoreId = storeId;
-            Items = items;
-            UrlTemplate = urlTemplate;
-            TotalItemsCount = totalItemsCount;
-            PagedLocations = pagedLocations;
+            TenantIdentity = tenantIdentity;
+            IsActive = isActive;
+            LanguageCode = languageCode;
+            Alias = alias;
+            Type = type;
+            Kind = kind;
+            OuterId = outerId;
+            Templates = templates;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
@@ -2878,34 +2596,46 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
         partial void CustomInit();
 
         /// <summary>
+        /// Gets or sets for detecting owner
         /// </summary>
-        [JsonProperty(PropertyName = "location")]
-        public string Location { get; set; }
+        [JsonProperty(PropertyName = "tenantIdentity")]
+        public TenantIdentity TenantIdentity { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "storeId")]
-        public string StoreId { get; set; }
+        [JsonProperty(PropertyName = "isActive")]
+        public bool? IsActive { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "items")]
-        public IList<SitemapItem> Items { get; set; }
+        [JsonProperty(PropertyName = "languageCode")]
+        public string LanguageCode { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "urlTemplate")]
-        public string UrlTemplate { get; set; }
+        [JsonProperty(PropertyName = "alias")]
+        public string Alias { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "totalItemsCount")]
-        public int? TotalItemsCount { get; set; }
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        /// <summary>
+        /// Gets for detecting kind of notifications (email, sms and etc.)
+        /// </summary>
+        [JsonProperty(PropertyName = "kind")]
+        public string Kind { get; private set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "pagedLocations")]
-        public IList<string> PagedLocations { get; set; }
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "templates")]
+        public IList<NotificationTemplate> Templates { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2940,9 +2670,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
         /// </exception>
         public virtual void Validate()
         {
-            if (Items != null)
+            if (Templates != null)
             {
-                foreach (var element in Items)
+                foreach (var element in Templates)
                 {
                     if (element != null)
                     {
@@ -2981,34 +2711,33 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class SitemapSearchResult
+    public partial class NotificationSearchResult
     {
         /// <summary>
-        /// Initializes a new instance of the SitemapSearchResult class.
+        /// Initializes a new instance of the NotificationSearchResult class.
         /// </summary>
-        public SitemapSearchResult()
+        public NotificationSearchResult()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the SitemapSearchResult class.
+        /// Initializes a new instance of the NotificationSearchResult class.
         /// </summary>
-        public SitemapSearchResult(int? totalCount = default(int?), IList<Sitemap> results = default(IList<Sitemap>))
+        public NotificationSearchResult(int? totalCount = default(int?), IList<Notification> results = default(IList<Notification>))
         {
             TotalCount = totalCount;
             Results = results;
@@ -3028,7 +2757,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "results")]
-        public IList<Sitemap> Results { get; set; }
+        public IList<Notification> Results { get; set; }
 
     }
 }
@@ -3038,36 +2767,331 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class SitemapItemSearchCriteria
+    public partial class NotificationTemplateRequest
     {
         /// <summary>
-        /// Initializes a new instance of the SitemapItemSearchCriteria class.
+        /// Initializes a new instance of the NotificationTemplateRequest
+        /// class.
         /// </summary>
-        public SitemapItemSearchCriteria()
+        public NotificationTemplateRequest()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the SitemapItemSearchCriteria class.
+        /// Initializes a new instance of the NotificationTemplateRequest
+        /// class.
         /// </summary>
-        public SitemapItemSearchCriteria(string sitemapId = default(string), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public NotificationTemplateRequest(string text = default(string), Notification data = default(Notification))
         {
-            SitemapId = sitemapId;
+            Text = text;
+            Data = data;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "text")]
+        public string Text { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "data")]
+        public Notification Data { get; set; }
+
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (Data != null)
+            {
+                Data.Validate();
+            }
+        }
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// Result of notification sending
+    /// </summary>
+    public partial class NotificationSendResult
+    {
+        /// <summary>
+        /// Initializes a new instance of the NotificationSendResult class.
+        /// </summary>
+        public NotificationSendResult()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the NotificationSendResult class.
+        /// </summary>
+        public NotificationSendResult(string errorMessage = default(string), bool? isSuccess = default(bool?))
+        {
+            ErrorMessage = errorMessage;
+            IsSuccess = isSuccess;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "errorMessage")]
+        public string ErrorMessage { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isSuccess")]
+        public bool? IsSuccess { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class NotificationParameter
+    {
+        /// <summary>
+        /// Initializes a new instance of the NotificationParameter class.
+        /// </summary>
+        public NotificationParameter()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the NotificationParameter class.
+        /// </summary>
+        /// <param name="type">Possible values include: 'String', 'Integer',
+        /// 'Decimal', 'DateTime', 'Boolean'</param>
+        public NotificationParameter(string parameterName = default(string), string parameterDescription = default(string), string parameterCodeInView = default(string), bool? isDictionary = default(bool?), bool? isArray = default(bool?), string type = default(string), object value = default(object))
+        {
+            ParameterName = parameterName;
+            ParameterDescription = parameterDescription;
+            ParameterCodeInView = parameterCodeInView;
+            IsDictionary = isDictionary;
+            IsArray = isArray;
+            Type = type;
+            Value = value;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "parameterName")]
+        public string ParameterName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "parameterDescription")]
+        public string ParameterDescription { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "parameterCodeInView")]
+        public string ParameterCodeInView { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isDictionary")]
+        public bool? IsDictionary { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isArray")]
+        public bool? IsArray { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'String', 'Integer',
+        /// 'Decimal', 'DateTime', 'Boolean'
+        /// </summary>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "value")]
+        public object Value { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class NotificationRequest
+    {
+        /// <summary>
+        /// Initializes a new instance of the NotificationRequest class.
+        /// </summary>
+        public NotificationRequest()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the NotificationRequest class.
+        /// </summary>
+        public NotificationRequest(string type = default(string), string objectId = default(string), string objectTypeId = default(string), string language = default(string), IList<NotificationParameter> notificationParameters = default(IList<NotificationParameter>))
+        {
+            Type = type;
+            ObjectId = objectId;
+            ObjectTypeId = objectTypeId;
+            Language = language;
+            NotificationParameters = notificationParameters;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectId")]
+        public string ObjectId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectTypeId")]
+        public string ObjectTypeId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "language")]
+        public string Language { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "notificationParameters")]
+        public IList<NotificationParameter> NotificationParameters { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class NotificationMessageSearchCriteria
+    {
+        /// <summary>
+        /// Initializes a new instance of the NotificationMessageSearchCriteria
+        /// class.
+        /// </summary>
+        public NotificationMessageSearchCriteria()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the NotificationMessageSearchCriteria
+        /// class.
+        /// </summary>
+        public NotificationMessageSearchCriteria(string notificationType = default(string), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        {
+            NotificationType = notificationType;
             ResponseGroup = responseGroup;
             ObjectType = objectType;
             ObjectTypes = objectTypes;
@@ -3089,8 +3113,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "sitemapId")]
-        public string SitemapId { get; set; }
+        [JsonProperty(PropertyName = "notificationType")]
+        public string NotificationType { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3155,34 +3179,223 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class SitemapItemsSearchResult
+    /// <summary>
+    /// Base class for message of a notification with information about sending
+    /// </summary>
+    public partial class NotificationMessage
     {
         /// <summary>
-        /// Initializes a new instance of the SitemapItemsSearchResult class.
+        /// Initializes a new instance of the NotificationMessage class.
         /// </summary>
-        public SitemapItemsSearchResult()
+        public NotificationMessage()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the SitemapItemsSearchResult class.
+        /// Initializes a new instance of the NotificationMessage class.
         /// </summary>
-        public SitemapItemsSearchResult(int? totalCount = default(int?), IList<SitemapItem> results = default(IList<SitemapItem>))
+        /// <param name="tenantIdentity">For detecting owner</param>
+        /// <param name="notificationId">Id of Notification</param>
+        /// <param name="notificationType">Type of Notification</param>
+        /// <param name="sendAttemptCount">Count of sending attempt</param>
+        /// <param name="maxSendAttemptCount">Max count of sending
+        /// attempt</param>
+        /// <param name="lastSendError">The last error of sending</param>
+        /// <param name="lastSendAttemptDate">The last date of sending
+        /// attempt</param>
+        /// <param name="sendDate">Date of sending</param>
+        /// <param name="languageCode">Code of language</param>
+        public NotificationMessage(string kind = default(string), TenantIdentity tenantIdentity = default(TenantIdentity), string notificationId = default(string), string notificationType = default(string), int? sendAttemptCount = default(int?), int? maxSendAttemptCount = default(int?), string lastSendError = default(string), System.DateTime? lastSendAttemptDate = default(System.DateTime?), System.DateTime? sendDate = default(System.DateTime?), string languageCode = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        {
+            Kind = kind;
+            TenantIdentity = tenantIdentity;
+            NotificationId = notificationId;
+            NotificationType = notificationType;
+            SendAttemptCount = sendAttemptCount;
+            MaxSendAttemptCount = maxSendAttemptCount;
+            LastSendError = lastSendError;
+            LastSendAttemptDate = lastSendAttemptDate;
+            SendDate = sendDate;
+            LanguageCode = languageCode;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "kind")]
+        public string Kind { get; private set; }
+
+        /// <summary>
+        /// Gets or sets for detecting owner
+        /// </summary>
+        [JsonProperty(PropertyName = "tenantIdentity")]
+        public TenantIdentity TenantIdentity { get; set; }
+
+        /// <summary>
+        /// Gets or sets id of Notification
+        /// </summary>
+        [JsonProperty(PropertyName = "notificationId")]
+        public string NotificationId { get; set; }
+
+        /// <summary>
+        /// Gets or sets type of Notification
+        /// </summary>
+        [JsonProperty(PropertyName = "notificationType")]
+        public string NotificationType { get; set; }
+
+        /// <summary>
+        /// Gets or sets count of sending attempt
+        /// </summary>
+        [JsonProperty(PropertyName = "sendAttemptCount")]
+        public int? SendAttemptCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets max count of sending attempt
+        /// </summary>
+        [JsonProperty(PropertyName = "maxSendAttemptCount")]
+        public int? MaxSendAttemptCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last error of sending
+        /// </summary>
+        [JsonProperty(PropertyName = "lastSendError")]
+        public string LastSendError { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last date of sending attempt
+        /// </summary>
+        [JsonProperty(PropertyName = "lastSendAttemptDate")]
+        public System.DateTime? LastSendAttemptDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets date of sending
+        /// </summary>
+        [JsonProperty(PropertyName = "sendDate")]
+        public System.DateTime? SendDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets code of language
+        /// </summary>
+        [JsonProperty(PropertyName = "languageCode")]
+        public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (CreatedBy != null)
+            {
+                if (CreatedBy.Length > 64)
+                {
+                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
+                }
+                if (CreatedBy.Length < 0)
+                {
+                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
+                }
+            }
+            if (ModifiedBy != null)
+            {
+                if (ModifiedBy.Length > 64)
+                {
+                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
+                }
+                if (ModifiedBy.Length < 0)
+                {
+                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
+                }
+            }
+        }
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class NotificationMessageSearchResult
+    {
+        /// <summary>
+        /// Initializes a new instance of the NotificationMessageSearchResult
+        /// class.
+        /// </summary>
+        public NotificationMessageSearchResult()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the NotificationMessageSearchResult
+        /// class.
+        /// </summary>
+        public NotificationMessageSearchResult(int? totalCount = default(int?), IList<NotificationMessage> results = default(IList<NotificationMessage>))
         {
             TotalCount = totalCount;
             Results = results;
@@ -3202,138 +3415,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "results")]
-        public IList<SitemapItem> Results { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class SitemapDownloadNotification
-    {
-        /// <summary>
-        /// Initializes a new instance of the SitemapDownloadNotification
-        /// class.
-        /// </summary>
-        public SitemapDownloadNotification()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the SitemapDownloadNotification
-        /// class.
-        /// </summary>
-        public SitemapDownloadNotification(System.DateTime? finished = default(System.DateTime?), long? totalCount = default(long?), long? processedCount = default(long?), long? errorCount = default(long?), IList<string> errors = default(IList<string>), string downloadUrl = default(string), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?), string id = default(string))
-        {
-            Finished = finished;
-            TotalCount = totalCount;
-            ProcessedCount = processedCount;
-            ErrorCount = errorCount;
-            Errors = errors;
-            DownloadUrl = downloadUrl;
-            Creator = creator;
-            Created = created;
-            IsNew = isNew;
-            NotifyType = notifyType;
-            Description = description;
-            Title = title;
-            RepeatCount = repeatCount;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "finished")]
-        public System.DateTime? Finished { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "totalCount")]
-        public long? TotalCount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "processedCount")]
-        public long? ProcessedCount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "errorCount")]
-        public long? ErrorCount { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "errors")]
-        public IList<string> Errors { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "downloadUrl")]
-        public string DownloadUrl { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "creator")]
-        public string Creator { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "created")]
-        public System.DateTime? Created { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isNew")]
-        public bool? IsNew { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "notifyType")]
-        public string NotifyType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "title")]
-        public string Title { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "repeatCount")]
-        public int? RepeatCount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
+        public IList<NotificationMessage> Results { get; set; }
 
     }
 }

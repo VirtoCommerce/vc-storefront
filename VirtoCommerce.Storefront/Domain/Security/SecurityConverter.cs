@@ -9,13 +9,13 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
     public static class SecurityConverter
     {
-        public static IdentityResult ToIdentityResult(this dto.SecurityResult resultDto)
+        public static IdentityResult ToIdentityResult(this dto.IdentityResult resultDto)
         {
             if (resultDto.Succeeded == true)
             {
                 return IdentityResult.Success;
             }
-            return IdentityResult.Failed(resultDto.Errors.Select(x => new IdentityError { Description = x }).ToArray());
+            return IdentityResult.Failed(resultDto.Errors.Select(x => new IdentityError { Description = x.Description }).ToArray());
         }
 
         public static dto.Role ToRoleDto(this Role role)
@@ -64,9 +64,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return result;
         }
 
-        public static dto.ApplicationUserExtended ToUserDto(this User user)
+        public static dto.ApplicationUser ToUserDto(this User user)
         {
-            var result = new dto.ApplicationUserExtended
+            var result = new dto.ApplicationUser
             {
                 Id = user.Id,
                 Email = user.Email,
@@ -104,7 +104,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return result;
         }
 
-        public static User ToUser(this dto.ApplicationUserExtended userDto)
+        public static User ToUser(this dto.ApplicationUser userDto)
         {
             var result = new User()
             {

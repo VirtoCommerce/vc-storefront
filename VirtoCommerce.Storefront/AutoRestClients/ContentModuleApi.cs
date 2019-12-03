@@ -17,7 +17,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceContentRESTAPIdocumentation : ServiceClient<VirtoCommerceContentRESTAPIdocumentation>, IVirtoCommerceContentRESTAPIdocumentation
+    public partial class ContentModuleClient : ServiceClient<ContentModuleClient>, IContentModuleClient
     {
         /// <summary>
         /// The base URI of the service.
@@ -50,31 +50,31 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         public virtual IMenu Menu { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceContentRESTAPIdocumentation class.
+        /// Initializes a new instance of the ContentModuleClient class.
         /// </summary>
         /// <param name='httpClient'>
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling VirtoCommerceContentRESTAPIdocumentation.Dispose(). False: will not dispose provided httpClient</param>
-        protected VirtoCommerceContentRESTAPIdocumentation(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
+        /// True: will dispose the provided httpClient on calling ContentModuleClient.Dispose(). False: will not dispose provided httpClient</param>
+        protected ContentModuleClient(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceContentRESTAPIdocumentation class.
+        /// Initializes a new instance of the ContentModuleClient class.
         /// </summary>
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected VirtoCommerceContentRESTAPIdocumentation(params DelegatingHandler[] handlers) : base(handlers)
+        protected ContentModuleClient(params DelegatingHandler[] handlers) : base(handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceContentRESTAPIdocumentation class.
+        /// Initializes a new instance of the ContentModuleClient class.
         /// </summary>
         /// <param name='rootHandler'>
         /// Optional. The http client handler used to handle http transport.
@@ -82,13 +82,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected VirtoCommerceContentRESTAPIdocumentation(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
+        protected ContentModuleClient(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceContentRESTAPIdocumentation class.
+        /// Initializes a new instance of the ContentModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -99,7 +99,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected VirtoCommerceContentRESTAPIdocumentation(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
+        protected ContentModuleClient(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -109,7 +109,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceContentRESTAPIdocumentation class.
+        /// Initializes a new instance of the ContentModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -123,7 +123,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected VirtoCommerceContentRESTAPIdocumentation(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        protected ContentModuleClient(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -133,7 +133,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceContentRESTAPIdocumentation class.
+        /// Initializes a new instance of the ContentModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -144,7 +144,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public VirtoCommerceContentRESTAPIdocumentation(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public ContentModuleClient(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (credentials == null)
             {
@@ -158,7 +158,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceContentRESTAPIdocumentation class.
+        /// Initializes a new instance of the ContentModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -167,11 +167,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling VirtoCommerceContentRESTAPIdocumentation.Dispose(). False: will not dispose provided httpClient</param>
+        /// True: will dispose the provided httpClient on calling ContentModuleClient.Dispose(). False: will not dispose provided httpClient</param>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public VirtoCommerceContentRESTAPIdocumentation(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
+        public ContentModuleClient(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
         {
             if (credentials == null)
             {
@@ -185,7 +185,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceContentRESTAPIdocumentation class.
+        /// Initializes a new instance of the ContentModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -199,7 +199,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public VirtoCommerceContentRESTAPIdocumentation(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public ContentModuleClient(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (credentials == null)
             {
@@ -213,7 +213,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceContentRESTAPIdocumentation class.
+        /// Initializes a new instance of the ContentModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -227,7 +227,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public VirtoCommerceContentRESTAPIdocumentation(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public ContentModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -246,7 +246,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceContentRESTAPIdocumentation class.
+        /// Initializes a new instance of the ContentModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -263,7 +263,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public VirtoCommerceContentRESTAPIdocumentation(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public ContentModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -292,7 +292,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         {
             Content = new Content(this);
             Menu = new Menu(this);
-            BaseUri = new System.Uri("http://localhost/admin");
+            BaseUri = new System.Uri("http://localhost");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
@@ -343,7 +343,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
 
     /// <summary>
     /// </summary>
-    public partial interface IVirtoCommerceContentRESTAPIdocumentation : System.IDisposable
+    public partial interface IContentModuleClient : System.IDisposable
     {
         /// <summary>
         /// The base URI of the service.
@@ -403,7 +403,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
     /// <summary>
     /// Content operations.
     /// </summary>
-    public partial class Content : IServiceOperations<VirtoCommerceContentRESTAPIdocumentation>, IContent
+    public partial class Content : IServiceOperations<ContentModuleClient>, IContent
     {
         /// <summary>
         /// Initializes a new instance of the Content class.
@@ -414,7 +414,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public Content(VirtoCommerceContentRESTAPIdocumentation client)
+        public Content(ContentModuleClient client)
         {
             if (client == null)
             {
@@ -424,13 +424,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         }
 
         /// <summary>
-        /// Gets a reference to the VirtoCommerceContentRESTAPIdocumentation
+        /// Gets a reference to the ContentModuleClient
         /// </summary>
-        public VirtoCommerceContentRESTAPIdocumentation Client { get; private set; }
+        public ContentModuleClient Client { get; private set; }
 
-        /// <summary>
-        /// Return summary content statistic
-        /// </summary>
         /// <param name='storeId'>
         /// </param>
         /// <param name='customHeaders'>
@@ -517,7 +514,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -568,18 +565,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             return _result;
         }
 
-        /// <summary>
-        /// Return streamed data for requested by relativeUrl content (Used to prevent
-        /// Cross domain requests in manager)
-        /// </summary>
         /// <param name='contentType'>
-        /// possible values Themes or Pages
         /// </param>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='relativeUrl'>
-        /// content relative url
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -602,7 +592,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<byte[]>> GetContentItemDataStreamWithHttpMessagesAsync(string contentType, string storeId, string relativeUrl, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<byte[]>> GetContentItemDataStreamWithHttpMessagesAsync(string contentType, string storeId, string relativeUrl = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (contentType == null)
             {
@@ -611,10 +601,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             if (storeId == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "storeId");
-            }
-            if (relativeUrl == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "relativeUrl");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -685,7 +671,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -736,20 +722,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             return _result;
         }
 
-        /// <summary>
-        /// Upload content item
-        /// </summary>
         /// <param name='contentType'>
-        /// possible values Themes or Pages
         /// </param>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='folderUrl'>
-        /// folder relative url where content will be uploaded
         /// </param>
         /// <param name='url'>
-        /// external url which will be used to download content item data
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -772,7 +751,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<ContentItem>>> UploadContentWithHttpMessagesAsync(string contentType, string storeId, string folderUrl, string url = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<ContentItem>>> UploadContentWithHttpMessagesAsync(string contentType, string storeId, string folderUrl = default(string), string url = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (contentType == null)
             {
@@ -781,10 +760,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             if (storeId == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "storeId");
-            }
-            if (folderUrl == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "folderUrl");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -860,7 +835,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -911,17 +886,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             return _result;
         }
 
-        /// <summary>
-        /// Delete content from server
-        /// </summary>
         /// <param name='contentType'>
-        /// possible values Themes or Pages
         /// </param>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='urls'>
-        /// relative content urls to delete
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -941,7 +910,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> DeleteContentWithHttpMessagesAsync(string contentType, string storeId, IList<string> urls, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> DeleteContentWithHttpMessagesAsync(string contentType, string storeId, IList<string> urls = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (contentType == null)
             {
@@ -950,10 +919,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             if (storeId == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "storeId");
-            }
-            if (urls == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "urls");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1034,7 +999,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 204)
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1067,20 +1032,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             return _result;
         }
 
-        /// <summary>
-        /// Search content items in specified folder and using search keyword
-        /// </summary>
         /// <param name='contentType'>
-        /// possible values Themes or Pages
         /// </param>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='folderUrl'>
-        /// relative path for folder where content items will be searched
         /// </param>
         /// <param name='keyword'>
-        /// search keyword
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1187,7 +1145,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1238,20 +1196,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             return _result;
         }
 
-        /// <summary>
-        /// Rename or move content item
-        /// </summary>
         /// <param name='contentType'>
-        /// possible values Themes or Pages
         /// </param>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='oldUrl'>
-        /// old content item relative or absolute url
         /// </param>
         /// <param name='newUrl'>
-        /// new content item relative or absolute url
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1271,7 +1222,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> MoveContentWithHttpMessagesAsync(string contentType, string storeId, string oldUrl, string newUrl, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> MoveContentWithHttpMessagesAsync(string contentType, string storeId, string oldUrl = default(string), string newUrl = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (contentType == null)
             {
@@ -1280,14 +1231,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             if (storeId == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "storeId");
-            }
-            if (oldUrl == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "oldUrl");
-            }
-            if (newUrl == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "newUrl");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1363,7 +1306,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 204)
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1396,14 +1339,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             return _result;
         }
 
-        /// <summary>
-        /// Copy contents
-        /// </summary>
         /// <param name='srcPath'>
-        /// source content  relative path
         /// </param>
         /// <param name='destPath'>
-        /// destination content relative path
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1414,25 +1352,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> CopyContentWithHttpMessagesAsync(string srcPath, string destPath, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> CopyContentWithHttpMessagesAsync(string srcPath = default(string), string destPath = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (srcPath == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "srcPath");
-            }
-            if (destPath == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "destPath");
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -1503,7 +1427,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 204)
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1536,20 +1460,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             return _result;
         }
 
-        /// <summary>
-        /// Unpack contents
-        /// </summary>
         /// <param name='contentType'>
-        /// possible values Themes or Pages
         /// </param>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='archivePath'>
-        /// archive file relative path
         /// </param>
         /// <param name='destPath'>
-        /// destination content relative path
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1569,7 +1486,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> UnpackWithHttpMessagesAsync(string contentType, string storeId, string archivePath, string destPath, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> UnpackWithHttpMessagesAsync(string contentType, string storeId, string archivePath = default(string), string destPath = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (contentType == null)
             {
@@ -1578,14 +1495,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             if (storeId == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "storeId");
-            }
-            if (archivePath == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "archivePath");
-            }
-            if (destPath == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "destPath");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1661,7 +1570,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 204)
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1694,17 +1603,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             return _result;
         }
 
-        /// <summary>
-        /// Create content folder
-        /// </summary>
         /// <param name='contentType'>
-        /// possible values Themes or Pages
         /// </param>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='folder'>
-        /// content folder
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1724,7 +1627,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> CreateContentFolderWithHttpMessagesAsync(string contentType, string storeId, ContentFolder folder, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> CreateContentFolderWithHttpMessagesAsync(string contentType, string storeId, ContentFolder folder = default(ContentFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (contentType == null)
             {
@@ -1733,10 +1636,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             if (storeId == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "storeId");
-            }
-            if (folder == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "folder");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1782,7 +1681,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(folder, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -1804,7 +1703,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 204)
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1863,9 +1762,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
     /// </summary>
     public partial interface IContent
     {
-        /// <summary>
-        /// Return summary content statistic
-        /// </summary>
         /// <param name='storeId'>
         /// </param>
         /// <param name='customHeaders'>
@@ -1884,18 +1780,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// Thrown when a required parameter is null
         /// </exception>
         Task<HttpOperationResponse<ContentStatistic>> GetStoreContentStatsWithHttpMessagesAsync(string storeId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Return streamed data for requested by relativeUrl content (Used to
-        /// prevent Cross domain requests in manager)
-        /// </summary>
         /// <param name='contentType'>
-        /// possible values Themes or Pages
         /// </param>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='relativeUrl'>
-        /// content relative url
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1912,21 +1801,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<byte[]>> GetContentItemDataStreamWithHttpMessagesAsync(string contentType, string storeId, string relativeUrl, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Upload content item
-        /// </summary>
+        Task<HttpOperationResponse<byte[]>> GetContentItemDataStreamWithHttpMessagesAsync(string contentType, string storeId, string relativeUrl = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='contentType'>
-        /// possible values Themes or Pages
         /// </param>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='folderUrl'>
-        /// folder relative url where content will be uploaded
         /// </param>
         /// <param name='url'>
-        /// external url which will be used to download content item data
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1943,18 +1825,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<IList<ContentItem>>> UploadContentWithHttpMessagesAsync(string contentType, string storeId, string folderUrl, string url = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Delete content from server
-        /// </summary>
+        Task<HttpOperationResponse<IList<ContentItem>>> UploadContentWithHttpMessagesAsync(string contentType, string storeId, string folderUrl = default(string), string url = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='contentType'>
-        /// possible values Themes or Pages
         /// </param>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='urls'>
-        /// relative content urls to delete
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1968,21 +1844,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse> DeleteContentWithHttpMessagesAsync(string contentType, string storeId, IList<string> urls, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Search content items in specified folder and using search keyword
-        /// </summary>
+        Task<HttpOperationResponse> DeleteContentWithHttpMessagesAsync(string contentType, string storeId, IList<string> urls = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='contentType'>
-        /// possible values Themes or Pages
         /// </param>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='folderUrl'>
-        /// relative path for folder where content items will be searched
         /// </param>
         /// <param name='keyword'>
-        /// search keyword
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2000,20 +1869,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// Thrown when a required parameter is null
         /// </exception>
         Task<HttpOperationResponse<IList<ContentItem>>> SearchContentWithHttpMessagesAsync(string contentType, string storeId, string folderUrl = default(string), string keyword = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Rename or move content item
-        /// </summary>
         /// <param name='contentType'>
-        /// possible values Themes or Pages
         /// </param>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='oldUrl'>
-        /// old content item relative or absolute url
         /// </param>
         /// <param name='newUrl'>
-        /// new content item relative or absolute url
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2027,15 +1889,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse> MoveContentWithHttpMessagesAsync(string contentType, string storeId, string oldUrl, string newUrl, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Copy contents
-        /// </summary>
+        Task<HttpOperationResponse> MoveContentWithHttpMessagesAsync(string contentType, string storeId, string oldUrl = default(string), string newUrl = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='srcPath'>
-        /// source content  relative path
         /// </param>
         /// <param name='destPath'>
-        /// destination content relative path
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2046,24 +1903,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="Microsoft.Rest.HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse> CopyContentWithHttpMessagesAsync(string srcPath, string destPath, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Unpack contents
-        /// </summary>
+        Task<HttpOperationResponse> CopyContentWithHttpMessagesAsync(string srcPath = default(string), string destPath = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='contentType'>
-        /// possible values Themes or Pages
         /// </param>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='archivePath'>
-        /// archive file relative path
         /// </param>
         /// <param name='destPath'>
-        /// destination content relative path
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2077,18 +1924,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse> UnpackWithHttpMessagesAsync(string contentType, string storeId, string archivePath, string destPath, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Create content folder
-        /// </summary>
+        Task<HttpOperationResponse> UnpackWithHttpMessagesAsync(string contentType, string storeId, string archivePath = default(string), string destPath = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='contentType'>
-        /// possible values Themes or Pages
         /// </param>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='folder'>
-        /// content folder
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2102,7 +1943,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse> CreateContentFolderWithHttpMessagesAsync(string contentType, string storeId, ContentFolder folder, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> CreateContentFolderWithHttpMessagesAsync(string contentType, string storeId, ContentFolder folder = default(ContentFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -2129,9 +1970,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
     /// </summary>
     public static partial class ContentExtensions
     {
-            /// <summary>
-            /// Return summary content statistic
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -2142,9 +1980,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
                 return operations.GetStoreContentStatsAsync(storeId).GetAwaiter().GetResult();
             }
 
-            /// <summary>
-            /// Return summary content statistic
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -2161,47 +1996,33 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
                 }
             }
 
-            /// <summary>
-            /// Return streamed data for requested by relativeUrl content (Used to prevent
-            /// Cross domain requests in manager)
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='contentType'>
-            /// possible values Themes or Pages
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='relativeUrl'>
-            /// content relative url
             /// </param>
-            public static byte[] GetContentItemDataStream(this IContent operations, string contentType, string storeId, string relativeUrl)
+            public static byte[] GetContentItemDataStream(this IContent operations, string contentType, string storeId, string relativeUrl = default(string))
             {
                 return operations.GetContentItemDataStreamAsync(contentType, storeId, relativeUrl).GetAwaiter().GetResult();
             }
 
-            /// <summary>
-            /// Return streamed data for requested by relativeUrl content (Used to prevent
-            /// Cross domain requests in manager)
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='contentType'>
-            /// possible values Themes or Pages
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='relativeUrl'>
-            /// content relative url
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<byte[]> GetContentItemDataStreamAsync(this IContent operations, string contentType, string storeId, string relativeUrl, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<byte[]> GetContentItemDataStreamAsync(this IContent operations, string contentType, string storeId, string relativeUrl = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetContentItemDataStreamWithHttpMessagesAsync(contentType, storeId, relativeUrl, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -2209,51 +2030,37 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
                 }
             }
 
-            /// <summary>
-            /// Upload content item
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='contentType'>
-            /// possible values Themes or Pages
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='folderUrl'>
-            /// folder relative url where content will be uploaded
             /// </param>
             /// <param name='url'>
-            /// external url which will be used to download content item data
             /// </param>
-            public static IList<ContentItem> UploadContent(this IContent operations, string contentType, string storeId, string folderUrl, string url = default(string))
+            public static IList<ContentItem> UploadContent(this IContent operations, string contentType, string storeId, string folderUrl = default(string), string url = default(string))
             {
                 return operations.UploadContentAsync(contentType, storeId, folderUrl, url).GetAwaiter().GetResult();
             }
 
-            /// <summary>
-            /// Upload content item
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='contentType'>
-            /// possible values Themes or Pages
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='folderUrl'>
-            /// folder relative url where content will be uploaded
             /// </param>
             /// <param name='url'>
-            /// external url which will be used to download content item data
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<ContentItem>> UploadContentAsync(this IContent operations, string contentType, string storeId, string folderUrl, string url = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<ContentItem>> UploadContentAsync(this IContent operations, string contentType, string storeId, string folderUrl = default(string), string url = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.UploadContentWithHttpMessagesAsync(contentType, storeId, folderUrl, url, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -2261,89 +2068,63 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
                 }
             }
 
-            /// <summary>
-            /// Delete content from server
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='contentType'>
-            /// possible values Themes or Pages
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='urls'>
-            /// relative content urls to delete
             /// </param>
-            public static void DeleteContent(this IContent operations, string contentType, string storeId, IList<string> urls)
+            public static void DeleteContent(this IContent operations, string contentType, string storeId, IList<string> urls = default(IList<string>))
             {
                 operations.DeleteContentAsync(contentType, storeId, urls).GetAwaiter().GetResult();
             }
 
-            /// <summary>
-            /// Delete content from server
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='contentType'>
-            /// possible values Themes or Pages
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='urls'>
-            /// relative content urls to delete
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DeleteContentAsync(this IContent operations, string contentType, string storeId, IList<string> urls, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task DeleteContentAsync(this IContent operations, string contentType, string storeId, IList<string> urls = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.DeleteContentWithHttpMessagesAsync(contentType, storeId, urls, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
-            /// <summary>
-            /// Search content items in specified folder and using search keyword
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='contentType'>
-            /// possible values Themes or Pages
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='folderUrl'>
-            /// relative path for folder where content items will be searched
             /// </param>
             /// <param name='keyword'>
-            /// search keyword
             /// </param>
             public static IList<ContentItem> SearchContent(this IContent operations, string contentType, string storeId, string folderUrl = default(string), string keyword = default(string))
             {
                 return operations.SearchContentAsync(contentType, storeId, folderUrl, keyword).GetAwaiter().GetResult();
             }
 
-            /// <summary>
-            /// Search content items in specified folder and using search keyword
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='contentType'>
-            /// possible values Themes or Pages
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='folderUrl'>
-            /// relative path for folder where content items will be searched
             /// </param>
             /// <param name='keyword'>
-            /// search keyword
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
@@ -2356,180 +2137,130 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
                 }
             }
 
-            /// <summary>
-            /// Rename or move content item
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='contentType'>
-            /// possible values Themes or Pages
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='oldUrl'>
-            /// old content item relative or absolute url
             /// </param>
             /// <param name='newUrl'>
-            /// new content item relative or absolute url
             /// </param>
-            public static void MoveContent(this IContent operations, string contentType, string storeId, string oldUrl, string newUrl)
+            public static void MoveContent(this IContent operations, string contentType, string storeId, string oldUrl = default(string), string newUrl = default(string))
             {
                 operations.MoveContentAsync(contentType, storeId, oldUrl, newUrl).GetAwaiter().GetResult();
             }
 
-            /// <summary>
-            /// Rename or move content item
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='contentType'>
-            /// possible values Themes or Pages
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='oldUrl'>
-            /// old content item relative or absolute url
             /// </param>
             /// <param name='newUrl'>
-            /// new content item relative or absolute url
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task MoveContentAsync(this IContent operations, string contentType, string storeId, string oldUrl, string newUrl, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task MoveContentAsync(this IContent operations, string contentType, string storeId, string oldUrl = default(string), string newUrl = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.MoveContentWithHttpMessagesAsync(contentType, storeId, oldUrl, newUrl, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
-            /// <summary>
-            /// Copy contents
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='srcPath'>
-            /// source content  relative path
             /// </param>
             /// <param name='destPath'>
-            /// destination content relative path
             /// </param>
-            public static void CopyContent(this IContent operations, string srcPath, string destPath)
+            public static void CopyContent(this IContent operations, string srcPath = default(string), string destPath = default(string))
             {
                 operations.CopyContentAsync(srcPath, destPath).GetAwaiter().GetResult();
             }
 
-            /// <summary>
-            /// Copy contents
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='srcPath'>
-            /// source content  relative path
             /// </param>
             /// <param name='destPath'>
-            /// destination content relative path
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task CopyContentAsync(this IContent operations, string srcPath, string destPath, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task CopyContentAsync(this IContent operations, string srcPath = default(string), string destPath = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.CopyContentWithHttpMessagesAsync(srcPath, destPath, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
-            /// <summary>
-            /// Unpack contents
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='contentType'>
-            /// possible values Themes or Pages
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='archivePath'>
-            /// archive file relative path
             /// </param>
             /// <param name='destPath'>
-            /// destination content relative path
             /// </param>
-            public static void Unpack(this IContent operations, string contentType, string storeId, string archivePath, string destPath)
+            public static void Unpack(this IContent operations, string contentType, string storeId, string archivePath = default(string), string destPath = default(string))
             {
                 operations.UnpackAsync(contentType, storeId, archivePath, destPath).GetAwaiter().GetResult();
             }
 
-            /// <summary>
-            /// Unpack contents
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='contentType'>
-            /// possible values Themes or Pages
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='archivePath'>
-            /// archive file relative path
             /// </param>
             /// <param name='destPath'>
-            /// destination content relative path
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task UnpackAsync(this IContent operations, string contentType, string storeId, string archivePath, string destPath, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task UnpackAsync(this IContent operations, string contentType, string storeId, string archivePath = default(string), string destPath = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.UnpackWithHttpMessagesAsync(contentType, storeId, archivePath, destPath, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
-            /// <summary>
-            /// Create content folder
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='contentType'>
-            /// possible values Themes or Pages
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='folder'>
-            /// content folder
             /// </param>
-            public static void CreateContentFolder(this IContent operations, string contentType, string storeId, ContentFolder folder)
+            public static void CreateContentFolder(this IContent operations, string contentType, string storeId, ContentFolder folder = default(ContentFolder))
             {
                 operations.CreateContentFolderAsync(contentType, storeId, folder).GetAwaiter().GetResult();
             }
 
-            /// <summary>
-            /// Create content folder
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='contentType'>
-            /// possible values Themes or Pages
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='folder'>
-            /// content folder
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task CreateContentFolderAsync(this IContent operations, string contentType, string storeId, ContentFolder folder, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task CreateContentFolderAsync(this IContent operations, string contentType, string storeId, ContentFolder folder = default(ContentFolder), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.CreateContentFolderWithHttpMessagesAsync(contentType, storeId, folder, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
@@ -2560,7 +2291,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
     /// <summary>
     /// Menu operations.
     /// </summary>
-    public partial class Menu : IServiceOperations<VirtoCommerceContentRESTAPIdocumentation>, IMenu
+    public partial class Menu : IServiceOperations<ContentModuleClient>, IMenu
     {
         /// <summary>
         /// Initializes a new instance of the Menu class.
@@ -2571,7 +2302,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public Menu(VirtoCommerceContentRESTAPIdocumentation client)
+        public Menu(ContentModuleClient client)
         {
             if (client == null)
             {
@@ -2581,15 +2312,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         }
 
         /// <summary>
-        /// Gets a reference to the VirtoCommerceContentRESTAPIdocumentation
+        /// Gets a reference to the ContentModuleClient
         /// </summary>
-        public VirtoCommerceContentRESTAPIdocumentation Client { get; private set; }
+        public ContentModuleClient Client { get; private set; }
 
-        /// <summary>
-        /// Get menu link lists
-        /// </summary>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -2675,7 +2402,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -2726,13 +2453,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             return _result;
         }
 
-        /// <summary>
-        /// Update menu link list
-        /// </summary>
-        /// <param name='list'>
-        /// Menu link list
-        /// </param>
         /// <param name='storeId'>
+        /// </param>
+        /// <param name='list'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -2752,11 +2475,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> UpdateWithHttpMessagesAsync(MenuLinkList list, string storeId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> UpdateMenuLinkListWithHttpMessagesAsync(string storeId, MenuLinkList list = default(MenuLinkList), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (list == null)
+            if (list != null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "list");
+                list.Validate();
             }
             if (storeId == null)
             {
@@ -2772,7 +2495,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
                 tracingParameters.Add("list", list);
                 tracingParameters.Add("storeId", storeId);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "Update", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdateMenuLinkList", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
@@ -2804,7 +2527,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             {
                 _requestContent = SafeJsonConvert.SerializeObject(list, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -2826,7 +2549,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 204)
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -2859,13 +2582,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             return _result;
         }
 
-        /// <summary>
-        /// Delete menu link list
-        /// </summary>
-        /// <param name='listIds'>
-        /// Menu link list id
-        /// </param>
         /// <param name='storeId'>
+        /// </param>
+        /// <param name='listIds'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -2885,12 +2604,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> DeleteWithHttpMessagesAsync(IList<string> listIds, string storeId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> DeleteMenuLinkListsWithHttpMessagesAsync(string storeId, IList<string> listIds = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (listIds == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "listIds");
-            }
             if (storeId == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "storeId");
@@ -2905,7 +2620,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
                 tracingParameters.Add("listIds", listIds);
                 tracingParameters.Add("storeId", storeId);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "Delete", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "DeleteMenuLinkLists", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
@@ -2972,7 +2687,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 204)
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -3005,14 +2720,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             return _result;
         }
 
-        /// <summary>
-        /// Get menu link list by id
-        /// </summary>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='listId'>
-        /// List id
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -3104,7 +2814,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -3155,24 +2865,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             return _result;
         }
 
-        /// <summary>
-        /// Checking name of menu link list
-        /// </summary>
-        /// <remarks>
-        /// Checking pair of name+language of menu link list for unique, if checking
-        /// result - false saving unavailable
-        /// </remarks>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='name'>
-        /// Name of menu link list
         /// </param>
         /// <param name='language'>
-        /// Language of menu link list
         /// </param>
         /// <param name='id'>
-        /// Menu link list id
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -3195,15 +2894,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<bool?>> CheckNameWithHttpMessagesAsync(string storeId, string name, string language = default(string), string id = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<bool?>> CheckNameWithHttpMessagesAsync(string storeId, string name = default(string), string language = "", string id = "", Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (storeId == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "storeId");
-            }
-            if (name == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "name");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -3282,7 +2977,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -3359,11 +3054,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
     /// </summary>
     public partial interface IMenu
     {
-        /// <summary>
-        /// Get menu link lists
-        /// </summary>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -3381,13 +3072,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// Thrown when a required parameter is null
         /// </exception>
         Task<HttpOperationResponse<IList<MenuLinkList>>> GetListsWithHttpMessagesAsync(string storeId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Update menu link list
-        /// </summary>
+        /// <param name='storeId'>
+        /// </param>
         /// <param name='list'>
-        /// Menu link list
-        /// </param>
-        /// <param name='storeId'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -3401,14 +3088,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse> UpdateWithHttpMessagesAsync(MenuLinkList list, string storeId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Delete menu link list
-        /// </summary>
+        Task<HttpOperationResponse> UpdateMenuLinkListWithHttpMessagesAsync(string storeId, MenuLinkList list = default(MenuLinkList), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <param name='storeId'>
+        /// </param>
         /// <param name='listIds'>
-        /// Menu link list id
-        /// </param>
-        /// <param name='storeId'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -3422,15 +3105,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse> DeleteWithHttpMessagesAsync(IList<string> listIds, string storeId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Get menu link list by id
-        /// </summary>
+        Task<HttpOperationResponse> DeleteMenuLinkListsWithHttpMessagesAsync(string storeId, IList<string> listIds = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='listId'>
-        /// List id
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -3448,24 +3126,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// Thrown when a required parameter is null
         /// </exception>
         Task<HttpOperationResponse<MenuLinkList>> GetListWithHttpMessagesAsync(string storeId, string listId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Checking name of menu link list
-        /// </summary>
-        /// <remarks>
-        /// Checking pair of name+language of menu link list for unique, if
-        /// checking result - false saving unavailable
-        /// </remarks>
         /// <param name='storeId'>
-        /// Store id
         /// </param>
         /// <param name='name'>
-        /// Name of menu link list
         /// </param>
         /// <param name='language'>
-        /// Language of menu link list
         /// </param>
         /// <param name='id'>
-        /// Menu link list id
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -3482,7 +3149,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<bool?>> CheckNameWithHttpMessagesAsync(string storeId, string name, string language = default(string), string id = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<bool?>> CheckNameWithHttpMessagesAsync(string storeId, string name = default(string), string language = "", string id = "", Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -3509,28 +3176,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
     /// </summary>
     public static partial class MenuExtensions
     {
-            /// <summary>
-            /// Get menu link lists
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             public static IList<MenuLinkList> GetLists(this IMenu operations, string storeId)
             {
                 return operations.GetListsAsync(storeId).GetAwaiter().GetResult();
             }
 
-            /// <summary>
-            /// Get menu link lists
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
@@ -3543,104 +3202,78 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
                 }
             }
 
-            /// <summary>
-            /// Update menu link list
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='list'>
-            /// Menu link list
-            /// </param>
             /// <param name='storeId'>
             /// </param>
-            public static void Update(this IMenu operations, MenuLinkList list, string storeId)
+            /// <param name='list'>
+            /// </param>
+            public static void UpdateMenuLinkList(this IMenu operations, string storeId, MenuLinkList list = default(MenuLinkList))
             {
-                operations.UpdateAsync(list, storeId).GetAwaiter().GetResult();
+                operations.UpdateMenuLinkListAsync(storeId, list).GetAwaiter().GetResult();
             }
 
-            /// <summary>
-            /// Update menu link list
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='list'>
-            /// Menu link list
-            /// </param>
             /// <param name='storeId'>
+            /// </param>
+            /// <param name='list'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task UpdateAsync(this IMenu operations, MenuLinkList list, string storeId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task UpdateMenuLinkListAsync(this IMenu operations, string storeId, MenuLinkList list = default(MenuLinkList), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.UpdateWithHttpMessagesAsync(list, storeId, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.UpdateMenuLinkListWithHttpMessagesAsync(storeId, list, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
-            /// <summary>
-            /// Delete menu link list
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='listIds'>
-            /// Menu link list id
-            /// </param>
             /// <param name='storeId'>
             /// </param>
-            public static void Delete(this IMenu operations, IList<string> listIds, string storeId)
+            /// <param name='listIds'>
+            /// </param>
+            public static void DeleteMenuLinkLists(this IMenu operations, string storeId, IList<string> listIds = default(IList<string>))
             {
-                operations.DeleteAsync(listIds, storeId).GetAwaiter().GetResult();
+                operations.DeleteMenuLinkListsAsync(storeId, listIds).GetAwaiter().GetResult();
             }
 
-            /// <summary>
-            /// Delete menu link list
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='listIds'>
-            /// Menu link list id
-            /// </param>
             /// <param name='storeId'>
+            /// </param>
+            /// <param name='listIds'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DeleteAsync(this IMenu operations, IList<string> listIds, string storeId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task DeleteMenuLinkListsAsync(this IMenu operations, string storeId, IList<string> listIds = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.DeleteWithHttpMessagesAsync(listIds, storeId, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.DeleteMenuLinkListsWithHttpMessagesAsync(storeId, listIds, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
-            /// <summary>
-            /// Get menu link list by id
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='listId'>
-            /// List id
             /// </param>
             public static MenuLinkList GetList(this IMenu operations, string storeId, string listId)
             {
                 return operations.GetListAsync(storeId, listId).GetAwaiter().GetResult();
             }
 
-            /// <summary>
-            /// Get menu link list by id
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='listId'>
-            /// List id
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
@@ -3653,59 +3286,37 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
                 }
             }
 
-            /// <summary>
-            /// Checking name of menu link list
-            /// </summary>
-            /// <remarks>
-            /// Checking pair of name+language of menu link list for unique, if checking
-            /// result - false saving unavailable
-            /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='name'>
-            /// Name of menu link list
             /// </param>
             /// <param name='language'>
-            /// Language of menu link list
             /// </param>
             /// <param name='id'>
-            /// Menu link list id
             /// </param>
-            public static bool? CheckName(this IMenu operations, string storeId, string name, string language = default(string), string id = default(string))
+            public static bool? CheckName(this IMenu operations, string storeId, string name = default(string), string language = "", string id = "")
             {
                 return operations.CheckNameAsync(storeId, name, language, id).GetAwaiter().GetResult();
             }
 
-            /// <summary>
-            /// Checking name of menu link list
-            /// </summary>
-            /// <remarks>
-            /// Checking pair of name+language of menu link list for unique, if checking
-            /// result - false saving unavailable
-            /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='storeId'>
-            /// Store id
             /// </param>
             /// <param name='name'>
-            /// Name of menu link list
             /// </param>
             /// <param name='language'>
-            /// Language of menu link list
             /// </param>
             /// <param name='id'>
-            /// Menu link list id
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<bool?> CheckNameAsync(this IMenu operations, string storeId, string name, string language = default(string), string id = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<bool?> CheckNameAsync(this IMenu operations, string storeId, string name = default(string), string language = "", string id = "", CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.CheckNameWithHttpMessagesAsync(storeId, name, language, id, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -3734,9 +3345,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    /// <summary>
-    /// Represent a summary content statistics
-    /// </summary>
     public partial class ContentStatistic
     {
         /// <summary>
@@ -3805,9 +3413,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    /// <summary>
-    /// Base class for content items
-    /// </summary>
     public partial class ContentItem
     {
         /// <summary>
@@ -3821,13 +3426,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the ContentItem class.
         /// </summary>
-        /// <param name="type">content item type (ContentFile, ContentFolder
-        /// etc)</param>
-        /// <param name="url">Absolute url (which may be used to acccess or
-        /// download content item directly)</param>
-        /// <param name="relativeUrl">Relative content item url for access only
-        /// through provider</param>
-        /// <param name="parentUrl">Parent folder url</param>
         public ContentItem(string name = default(string), string type = default(string), string url = default(string), string relativeUrl = default(string), string parentUrl = default(string), System.DateTime? modifiedDate = default(System.DateTime?), System.DateTime? createdDate = default(System.DateTime?))
         {
             Name = name;
@@ -3851,27 +3449,21 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets content item type (ContentFile, ContentFolder etc)
         /// </summary>
         [JsonProperty(PropertyName = "type")]
         public string Type { get; set; }
 
         /// <summary>
-        /// Gets or sets absolute url (which may be used to acccess or download
-        /// content item directly)
         /// </summary>
         [JsonProperty(PropertyName = "url")]
         public string Url { get; set; }
 
         /// <summary>
-        /// Gets or sets relative content item url for access only through
-        /// provider
         /// </summary>
         [JsonProperty(PropertyName = "relativeUrl")]
         public string RelativeUrl { get; set; }
 
         /// <summary>
-        /// Gets or sets parent folder url
         /// </summary>
         [JsonProperty(PropertyName = "parentUrl")]
         public string ParentUrl { get; set; }
@@ -3907,9 +3499,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    /// <summary>
-    /// Represent content folder
-    /// </summary>
     public partial class ContentFolder
     {
         /// <summary>
@@ -3923,13 +3512,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the ContentFolder class.
         /// </summary>
-        /// <param name="type">content item type (ContentFile, ContentFolder
-        /// etc)</param>
-        /// <param name="url">Absolute url (which may be used to acccess or
-        /// download content item directly)</param>
-        /// <param name="relativeUrl">Relative content item url for access only
-        /// through provider</param>
-        /// <param name="parentUrl">Parent folder url</param>
         public ContentFolder(string name = default(string), string type = default(string), string url = default(string), string relativeUrl = default(string), string parentUrl = default(string), System.DateTime? modifiedDate = default(System.DateTime?), System.DateTime? createdDate = default(System.DateTime?))
         {
             Name = name;
@@ -3953,27 +3535,21 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets content item type (ContentFile, ContentFolder etc)
         /// </summary>
         [JsonProperty(PropertyName = "type")]
         public string Type { get; set; }
 
         /// <summary>
-        /// Gets or sets absolute url (which may be used to acccess or download
-        /// content item directly)
         /// </summary>
         [JsonProperty(PropertyName = "url")]
         public string Url { get; set; }
 
         /// <summary>
-        /// Gets or sets relative content item url for access only through
-        /// provider
         /// </summary>
         [JsonProperty(PropertyName = "relativeUrl")]
         public string RelativeUrl { get; set; }
 
         /// <summary>
-        /// Gets or sets parent folder url
         /// </summary>
         [JsonProperty(PropertyName = "parentUrl")]
         public string ParentUrl { get; set; }
@@ -4022,21 +3598,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the MenuLink class.
         /// </summary>
-        /// <param name="title">Title of menu link element, displayed as link
-        /// text or link title</param>
-        /// <param name="url">Url of menu link element, inserts in href
-        /// attribute of link</param>
-        /// <param name="priority">Priority of menu link element, the higher
-        /// the value, the higher in the list</param>
-        /// <param name="associatedObjectId">Each link element can have an
-        /// associated object like Product, Category, Promotion, etc.
-        /// Is a primary key of associated object</param>
-        /// <param name="associatedObjectName">Display name for associated
-        /// object</param>
-        /// <param name="associatedObjectType">Associated object type</param>
-        public MenuLink(string id = default(string), string title = default(string), string url = default(string), int? priority = default(int?), string menuLinkListId = default(string), string associatedObjectId = default(string), string associatedObjectName = default(string), string associatedObjectType = default(string), IList<string> securityScopes = default(IList<string>))
+        public MenuLink(string title = default(string), string url = default(string), int? priority = default(int?), string menuLinkListId = default(string), string associatedObjectId = default(string), string associatedObjectName = default(string), string associatedObjectType = default(string), IList<string> securityScopes = default(IList<string>), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
-            Id = id;
             Title = title;
             Url = url;
             Priority = priority;
@@ -4045,6 +3608,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
             AssociatedObjectName = associatedObjectName;
             AssociatedObjectType = associatedObjectType;
             SecurityScopes = securityScopes;
+            OuterId = outerId;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Id = id;
             CustomInit();
         }
 
@@ -4055,26 +3624,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets title of menu link element, displayed as link text or
-        /// link title
-        /// </summary>
         [JsonProperty(PropertyName = "title")]
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets or sets url of menu link element, inserts in href attribute of
-        /// link
         /// </summary>
         [JsonProperty(PropertyName = "url")]
         public string Url { get; set; }
 
         /// <summary>
-        /// Gets or sets priority of menu link element, the higher the value,
-        /// the higher in the list
         /// </summary>
         [JsonProperty(PropertyName = "priority")]
         public int? Priority { get; set; }
@@ -4085,21 +3643,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
         public string MenuLinkListId { get; set; }
 
         /// <summary>
-        /// Gets or sets each link element can have an associated object like
-        /// Product, Category, Promotion, etc.
-        /// Is a primary key of associated object
         /// </summary>
         [JsonProperty(PropertyName = "associatedObjectId")]
         public string AssociatedObjectId { get; set; }
 
         /// <summary>
-        /// Gets or sets display name for associated object
         /// </summary>
         [JsonProperty(PropertyName = "associatedObjectName")]
         public string AssociatedObjectName { get; set; }
 
         /// <summary>
-        /// Gets or sets associated object type
         /// </summary>
         [JsonProperty(PropertyName = "associatedObjectType")]
         public string AssociatedObjectType { get; set; }
@@ -4109,6 +3662,67 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
         [JsonProperty(PropertyName = "securityScopes")]
         public IList<string> SecurityScopes { get; set; }
 
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (CreatedBy != null)
+            {
+                if (CreatedBy.Length > 64)
+                {
+                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
+                }
+                if (CreatedBy.Length < 0)
+                {
+                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
+                }
+            }
+            if (ModifiedBy != null)
+            {
+                if (ModifiedBy.Length > 64)
+                {
+                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
+                }
+                if (ModifiedBy.Length < 0)
+                {
+                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
+                }
+            }
+        }
     }
 }
 // <auto-generated>
@@ -4143,19 +3757,19 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the MenuLinkList class.
         /// </summary>
-        /// <param name="name">Name of menu link list, can be used as title of
-        /// list in frontend</param>
-        /// <param name="storeId">Store identifier, for which the list
-        /// belongs</param>
-        /// <param name="language">Locale of this menu link list</param>
-        public MenuLinkList(string id = default(string), string name = default(string), string storeId = default(string), string language = default(string), IList<MenuLink> menuLinks = default(IList<MenuLink>), IList<string> securityScopes = default(IList<string>))
+        public MenuLinkList(string name = default(string), string storeId = default(string), string language = default(string), IList<MenuLink> menuLinks = default(IList<MenuLink>), IList<string> securityScopes = default(IList<string>), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
-            Id = id;
             Name = name;
             StoreId = storeId;
             Language = language;
             MenuLinks = menuLinks;
             SecurityScopes = securityScopes;
+            OuterId = outerId;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Id = id;
             CustomInit();
         }
 
@@ -4166,24 +3780,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets name of menu link list, can be used as title of list
-        /// in frontend
-        /// </summary>
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets store identifier, for which the list belongs
         /// </summary>
         [JsonProperty(PropertyName = "storeId")]
         public string StoreId { get; set; }
 
         /// <summary>
-        /// Gets or sets locale of this menu link list
         /// </summary>
         [JsonProperty(PropertyName = "language")]
         public string Language { get; set; }
@@ -4198,5 +3803,76 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
         [JsonProperty(PropertyName = "securityScopes")]
         public IList<string> SecurityScopes { get; set; }
 
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (MenuLinks != null)
+            {
+                foreach (var element in MenuLinks)
+                {
+                    if (element != null)
+                    {
+                        element.Validate();
+                    }
+                }
+            }
+            if (CreatedBy != null)
+            {
+                if (CreatedBy.Length > 64)
+                {
+                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
+                }
+                if (CreatedBy.Length < 0)
+                {
+                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
+                }
+            }
+            if (ModifiedBy != null)
+            {
+                if (ModifiedBy.Length > 64)
+                {
+                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
+                }
+                if (ModifiedBy.Length < 0)
+                {
+                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
+                }
+            }
+        }
     }
 }

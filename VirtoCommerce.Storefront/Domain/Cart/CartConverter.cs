@@ -39,7 +39,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         public static DynamicProperty ToDynamicProperty(this cartDto.DynamicObjectProperty propertyDto)
         {
-            return propertyDto.JsonConvert<coreDto.DynamicObjectProperty>().ToDynamicProperty();
+            return propertyDto.JsonConvert<platformDto.DynamicObjectProperty>().ToDynamicProperty();
         }
 
         public static cartDto.DynamicObjectProperty ToCartDynamicPropertyDto(this DynamicProperty property)
@@ -88,7 +88,6 @@ namespace VirtoCommerce.Storefront.Domain
             }
 
             var result = new ShippingMethod(currency);
-            result.OptionDescription = shippingRate.OptionDescription;
             result.OptionName = shippingRate.OptionName;
 
             result.Price = ratePrice;
@@ -105,7 +104,7 @@ namespace VirtoCommerce.Storefront.Domain
                 if (shippingRate.ShippingMethod.Settings != null)
                 {
                     result.Settings = shippingRate.ShippingMethod.Settings.Where(x => !x.ValueType.EqualsInvariant("SecureString"))
-                                                                          .Select(x => x.JsonConvert<platformDto.Setting>().ToSettingEntry()).ToList();
+                                                                          .Select(x => x.JsonConvert<platformDto.ObjectSettingEntry>().ToSettingEntry()).ToList();
                 }
             }
 
@@ -157,7 +156,7 @@ namespace VirtoCommerce.Storefront.Domain
             return retVal.ToArray();
         }
 
-        public static CartShipmentItem ToShipmentItem(this cartDto.ShipmentItem shipmentItemDto, ShoppingCart cart)
+        public static CartShipmentItem ToShipmentItem(this cartDto.CartShipmentItem shipmentItemDto, ShoppingCart cart)
         {
             var result = new CartShipmentItem
             {
@@ -169,9 +168,9 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static cartDto.ShipmentItem ToShipmentItemDto(this CartShipmentItem shipmentItem)
+        public static cartDto.CartShipmentItem ToShipmentItemDto(this CartShipmentItem shipmentItem)
         {
-            var result = new cartDto.ShipmentItem
+            var result = new cartDto.CartShipmentItem
             {
                 Id = shipmentItem.Id,
                 Quantity = shipmentItem.Quantity,
@@ -182,7 +181,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static Shipment ToShipment(this cartDto.Shipment shipmentDto, ShoppingCart cart)
+        public static Shipment ToShipment(this cartDto.CartShipment shipmentDto, ShoppingCart cart)
         {
             var retVal = new Shipment(cart.Currency)
             {
@@ -228,9 +227,9 @@ namespace VirtoCommerce.Storefront.Domain
             return retVal;
         }
 
-        public static cartDto.Shipment ToShipmentDto(this Shipment shipment)
+        public static cartDto.CartShipment ToShipmentDto(this Shipment shipment)
         {
-            var retVal = new cartDto.Shipment
+            var retVal = new cartDto.CartShipment
             {
                 Id = shipment.Id,
                 MeasureUnit = shipment.MeasureUnit,
@@ -276,7 +275,6 @@ namespace VirtoCommerce.Storefront.Domain
             var retVal = new PaymentMethod(cart.Currency)
             {
                 Code = paymentMethodDto.Code,
-                Description = paymentMethodDto.Description,
                 LogoUrl = paymentMethodDto.LogoUrl,
                 Name = paymentMethodDto.Name,
                 PaymentMethodGroupType = paymentMethodDto.PaymentMethodGroupType,
@@ -288,7 +286,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (paymentMethodDto.Settings != null)
             {
-                retVal.Settings = paymentMethodDto.Settings.Where(x => !x.ValueType.EqualsInvariant("SecureString")).Select(x => x.JsonConvert<platformDto.Setting>().ToSettingEntry()).ToList();
+                retVal.Settings = paymentMethodDto.Settings.Where(x => !x.ValueType.EqualsInvariant("SecureString")).Select(x => x.JsonConvert<platformDto.ObjectSettingEntry>().ToSettingEntry()).ToList();
             }
 
             retVal.Currency = cart.Currency;
@@ -389,12 +387,12 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static cartDto.Address ToCartAddressDto(this Address address)
+        public static cartDto.CartAddress ToCartAddressDto(this Address address)
         {
-            return address.ToCoreAddressDto().JsonConvert<cartDto.Address>();
+            return address.ToCoreAddressDto().JsonConvert<cartDto.CartAddress>();
         }
 
-        public static Address ToAddress(this cartDto.Address addressDto)
+        public static Address ToAddress(this cartDto.CartAddress addressDto)
         {
             return addressDto.JsonConvert<coreDto.Address>().ToAddress();
         }
@@ -508,7 +506,6 @@ namespace VirtoCommerce.Storefront.Domain
                 CustomerName = cart.CustomerName,
                 Id = cart.Id,
                 Name = cart.Name,
-                ObjectType = cart.ObjectType,
                 OrganizationId = cart.OrganizationId,
                 Status = cart.Status,
                 StoreId = cart.StoreId,
@@ -657,7 +654,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static LineItem ToLineItem(this cartDto.LineItem lineItemDto, Currency currency, Language language)
+        public static LineItem ToLineItem(this cartDto.CartLineItem lineItemDto, Currency currency, Language language)
         {
             var result = new LineItem(currency, language)
             {
@@ -730,9 +727,9 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static cartDto.LineItem ToLineItemDto(this LineItem lineItem)
+        public static cartDto.CartLineItem ToLineItemDto(this LineItem lineItem)
         {
-            var retVal = new cartDto.LineItem
+            var retVal = new cartDto.CartLineItem
             {
                 Id = lineItem.Id,
                 IsReadOnly = lineItem.IsReadOnly,
@@ -740,7 +737,6 @@ namespace VirtoCommerce.Storefront.Domain
                 CategoryId = lineItem.CategoryId,
                 ImageUrl = lineItem.ImageUrl,
                 Name = lineItem.Name,
-                ObjectType = lineItem.ObjectType,
                 ProductId = lineItem.ProductId,
                 ProductType = lineItem.ProductType,
                 Quantity = lineItem.Quantity,

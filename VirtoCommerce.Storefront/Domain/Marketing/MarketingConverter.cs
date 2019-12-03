@@ -6,19 +6,16 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Marketing;
-using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
+using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using marketingDto = VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
-
-
-
     public static partial class MarketingConverter
     {
         public static DynamicProperty ToDynamicProperty(this marketingDto.DynamicObjectProperty propertyDto)
         {
-            return propertyDto.JsonConvert<coreDto.DynamicObjectProperty>().ToDynamicProperty();
+            return propertyDto.JsonConvert<platformDto.DynamicObjectProperty>().ToDynamicProperty();
         }
 
         public static marketingDto.DynamicObjectProperty ToMarketingDynamicPropertyDto(this DynamicProperty property)

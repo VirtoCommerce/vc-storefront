@@ -17,7 +17,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class TaxModule : ServiceClient<TaxModule>, ITaxModule
+    public partial class TaxModuleClient : ServiceClient<TaxModuleClient>, ITaxModuleClient
     {
         /// <summary>
         /// The base URI of the service.
@@ -40,31 +40,36 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         public ServiceClientCredentials Credentials { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the TaxModule class.
+        /// Gets the ITaxModule.
+        /// </summary>
+        public virtual ITaxModule TaxModule { get; private set; }
+
+        /// <summary>
+        /// Initializes a new instance of the TaxModuleClient class.
         /// </summary>
         /// <param name='httpClient'>
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling TaxModule.Dispose(). False: will not dispose provided httpClient</param>
-        protected TaxModule(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
+        /// True: will dispose the provided httpClient on calling TaxModuleClient.Dispose(). False: will not dispose provided httpClient</param>
+        protected TaxModuleClient(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the TaxModule class.
+        /// Initializes a new instance of the TaxModuleClient class.
         /// </summary>
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected TaxModule(params DelegatingHandler[] handlers) : base(handlers)
+        protected TaxModuleClient(params DelegatingHandler[] handlers) : base(handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the TaxModule class.
+        /// Initializes a new instance of the TaxModuleClient class.
         /// </summary>
         /// <param name='rootHandler'>
         /// Optional. The http client handler used to handle http transport.
@@ -72,13 +77,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected TaxModule(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
+        protected TaxModuleClient(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the TaxModule class.
+        /// Initializes a new instance of the TaxModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -89,7 +94,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected TaxModule(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
+        protected TaxModuleClient(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -99,7 +104,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the TaxModule class.
+        /// Initializes a new instance of the TaxModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -113,7 +118,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected TaxModule(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        protected TaxModuleClient(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -123,7 +128,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the TaxModule class.
+        /// Initializes a new instance of the TaxModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -134,7 +139,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public TaxModule(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public TaxModuleClient(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (credentials == null)
             {
@@ -148,7 +153,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the TaxModule class.
+        /// Initializes a new instance of the TaxModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -157,11 +162,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling TaxModule.Dispose(). False: will not dispose provided httpClient</param>
+        /// True: will dispose the provided httpClient on calling TaxModuleClient.Dispose(). False: will not dispose provided httpClient</param>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public TaxModule(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
+        public TaxModuleClient(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
         {
             if (credentials == null)
             {
@@ -175,7 +180,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the TaxModule class.
+        /// Initializes a new instance of the TaxModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -189,7 +194,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public TaxModule(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public TaxModuleClient(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (credentials == null)
             {
@@ -203,7 +208,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the TaxModule class.
+        /// Initializes a new instance of the TaxModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -217,7 +222,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public TaxModule(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public TaxModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -236,7 +241,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the TaxModule class.
+        /// Initializes a new instance of the TaxModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -253,7 +258,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public TaxModule(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public TaxModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -280,6 +285,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// </summary>
         private void Initialize()
         {
+            TaxModule = new TaxModule(this);
             BaseUri = new System.Uri("http://localhost");
             SerializationSettings = new JsonSerializerSettings
             {
@@ -308,6 +314,109 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
             };
             CustomInitialize();
         }
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Models;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// </summary>
+    public partial interface ITaxModuleClient : System.IDisposable
+    {
+        /// <summary>
+        /// The base URI of the service.
+        /// </summary>
+        System.Uri BaseUri { get; set; }
+
+        /// <summary>
+        /// Gets or sets json serialization settings.
+        /// </summary>
+        JsonSerializerSettings SerializationSettings { get; }
+
+        /// <summary>
+        /// Gets or sets json deserialization settings.
+        /// </summary>
+        JsonSerializerSettings DeserializationSettings { get; }
+
+        /// <summary>
+        /// Subscription credentials which uniquely identify client
+        /// subscription.
+        /// </summary>
+        ServiceClientCredentials Credentials { get; }
+
+
+        /// <summary>
+        /// Gets the ITaxModule.
+        /// </summary>
+        ITaxModule TaxModule { get; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Models;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// TaxModule operations.
+    /// </summary>
+    public partial class TaxModule : IServiceOperations<TaxModuleClient>, ITaxModule
+    {
+        /// <summary>
+        /// Initializes a new instance of the TaxModule class.
+        /// </summary>
+        /// <param name='client'>
+        /// Reference to the service client.
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        public TaxModule(TaxModuleClient client)
+        {
+            if (client == null)
+            {
+                throw new System.ArgumentNullException("client");
+            }
+            Client = client;
+        }
+
+        /// <summary>
+        /// Gets a reference to the TaxModuleClient
+        /// </summary>
+        public TaxModuleClient Client { get; private set; }
+
         /// <param name='criteria'>
         /// </param>
         /// <param name='customHeaders'>
@@ -339,7 +448,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
                 ServiceClientTracing.Enter(_invocationId, this, "SearchTaxProviders", tracingParameters);
             }
             // Construct URL
-            var _baseUrl = BaseUri.AbsoluteUri;
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
             var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/taxes/search").ToString();
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
@@ -365,15 +474,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
             string _requestContent = null;
             if(criteria != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
-            if (Credentials != null)
+            if (Client.Credentials != null)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             }
             // Send Request
             if (_shouldTrace)
@@ -381,7 +490,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
                 ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
             }
             cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             if (_shouldTrace)
             {
                 ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
@@ -421,7 +530,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<TaxProviderSearchResult>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<TaxProviderSearchResult>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -481,7 +590,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
                 ServiceClientTracing.Enter(_invocationId, this, "GetTaxProviderById", tracingParameters);
             }
             // Construct URL
-            var _baseUrl = BaseUri.AbsoluteUri;
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
             var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/taxes/{id}").ToString();
             _url = _url.Replace("{id}", System.Uri.EscapeDataString(id));
             // Create HTTP transport objects
@@ -507,10 +616,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
             // Serialize Request
             string _requestContent = null;
             // Set Credentials
-            if (Credentials != null)
+            if (Client.Credentials != null)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             }
             // Send Request
             if (_shouldTrace)
@@ -518,7 +627,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
                 ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
             }
             cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             if (_shouldTrace)
             {
                 ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
@@ -558,7 +667,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<TaxProviderSearchResult>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<TaxProviderSearchResult>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -608,7 +717,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
                 ServiceClientTracing.Enter(_invocationId, this, "UpdateTaxProvider", tracingParameters);
             }
             // Construct URL
-            var _baseUrl = BaseUri.AbsoluteUri;
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
             var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/taxes").ToString();
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
@@ -634,15 +743,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
             string _requestContent = null;
             if(taxProvider != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(taxProvider, SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(taxProvider, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
-            if (Credentials != null)
+            if (Client.Credentials != null)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             }
             // Send Request
             if (_shouldTrace)
@@ -650,7 +759,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
                 ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
             }
             cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             if (_shouldTrace)
             {
                 ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
@@ -690,7 +799,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<TaxProvider>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<TaxProvider>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -757,7 +866,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
                 ServiceClientTracing.Enter(_invocationId, this, "EvaluateTaxes", tracingParameters);
             }
             // Construct URL
-            var _baseUrl = BaseUri.AbsoluteUri;
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
             var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/taxes/{storeId}/evaluate").ToString();
             _url = _url.Replace("{storeId}", System.Uri.EscapeDataString(storeId));
             // Create HTTP transport objects
@@ -784,15 +893,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
             string _requestContent = null;
             if(evalContext != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(evalContext, SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(evalContext, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
-            if (Credentials != null)
+            if (Client.Credentials != null)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             }
             // Send Request
             if (_shouldTrace)
@@ -800,7 +909,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
                 ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
             }
             cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             if (_shouldTrace)
             {
                 ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
@@ -840,7 +949,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IList<TaxRate>>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<TaxRate>>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -881,31 +990,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
     using System.Threading.Tasks;
 
     /// <summary>
+    /// TaxModule operations.
     /// </summary>
-    public partial interface ITaxModule : System.IDisposable
+    public partial interface ITaxModule
     {
-        /// <summary>
-        /// The base URI of the service.
-        /// </summary>
-        System.Uri BaseUri { get; set; }
-
-        /// <summary>
-        /// Gets or sets json serialization settings.
-        /// </summary>
-        JsonSerializerSettings SerializationSettings { get; }
-
-        /// <summary>
-        /// Gets or sets json deserialization settings.
-        /// </summary>
-        JsonSerializerSettings DeserializationSettings { get; }
-
-        /// <summary>
-        /// Subscription credentials which uniquely identify client
-        /// subscription.
-        /// </summary>
-        ServiceClientCredentials Credentials { get; }
-
-
         /// <param name='criteria'>
         /// </param>
         /// <param name='customHeaders'>
@@ -914,8 +1002,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
         Task<HttpOperationResponse<TaxProviderSearchResult>> SearchTaxProvidersWithHttpMessagesAsync(TaxProviderSearchCriteria criteria = default(TaxProviderSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
         /// <param name='id'>
         /// </param>
         /// <param name='customHeaders'>
@@ -924,8 +1017,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
         Task<HttpOperationResponse<TaxProviderSearchResult>> GetTaxProviderByIdWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
         /// <param name='taxProvider'>
         /// </param>
         /// <param name='customHeaders'>
@@ -934,8 +1035,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
         Task<HttpOperationResponse<TaxProvider>> UpdateTaxProviderWithHttpMessagesAsync(TaxProvider taxProvider = default(TaxProvider), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
         /// <summary>
         /// Evaluate and return all tax rates for specified store and
         /// evaluation context
@@ -950,8 +1056,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
         Task<HttpOperationResponse<IList<TaxRate>>> EvaluateTaxesWithHttpMessagesAsync(string storeId, TaxEvaluationContext evalContext = default(TaxEvaluationContext), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
     }
 }
 // <auto-generated>
@@ -1187,17 +1301,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the TaxProviderSearchCriteria class.
         /// </summary>
-        /// <param name="objectType">Search object type</param>
-        /// <param name="keyword">Search phrase</param>
-        /// <param name="languageCode">Search phrase language</param>
-        public TaxProviderSearchCriteria(string storeId = default(string), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public TaxProviderSearchCriteria(string storeId = default(string), IList<string> storeIds = default(IList<string>), bool? withoutTransient = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
             StoreId = storeId;
+            StoreIds = storeIds;
+            WithoutTransient = withoutTransient;
             ResponseGroup = responseGroup;
             ObjectType = objectType;
             ObjectTypes = objectTypes;
             ObjectIds = objectIds;
             Keyword = keyword;
+            SearchPhrase = searchPhrase;
             LanguageCode = languageCode;
             Sort = sort;
             SortInfos = sortInfos;
@@ -1218,11 +1332,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "storeIds")]
+        public IList<string> StoreIds { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "withoutTransient")]
+        public bool? WithoutTransient { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "responseGroup")]
         public string ResponseGroup { get; set; }
 
         /// <summary>
-        /// Gets or sets search object type
         /// </summary>
         [JsonProperty(PropertyName = "objectType")]
         public string ObjectType { get; set; }
@@ -1238,13 +1361,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
         public IList<string> ObjectIds { get; set; }
 
         /// <summary>
-        /// Gets or sets search phrase
         /// </summary>
         [JsonProperty(PropertyName = "keyword")]
         public string Keyword { get; set; }
 
         /// <summary>
-        /// Gets or sets search phrase language
+        /// </summary>
+        [JsonProperty(PropertyName = "searchPhrase")]
+        public string SearchPhrase { get; set; }
+
+        /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "languageCode")]
         public string LanguageCode { get; set; }
@@ -1303,19 +1429,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the ObjectSettingEntry class.
         /// </summary>
-        /// <param name="objectId">Setting may belong to any object in
-        /// system</param>
-        /// <param name="restartRequired">The flag indicates that you need to
-        /// restart the application to apply this setting changes.</param>
-        /// <param name="moduleId">The module id which setting belong
-        /// to</param>
-        /// <param name="groupName">Setting group name</param>
-        /// <param name="name">Setting name</param>
         /// <param name="valueType">Possible values include: 'ShortText',
         /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean',
         /// 'SecureString', 'Json'</param>
-        /// <param name="isDictionary">The flag indicates what current setting
-        /// is just editable dictionary and hasn't any concrete value</param>
         public ObjectSettingEntry(bool? itHasValues = default(bool?), string objectId = default(string), string objectType = default(string), object value = default(object), bool? restartRequired = default(bool?), string moduleId = default(string), string groupName = default(string), string name = default(string), string valueType = default(string), IList<object> allowedValues = default(IList<object>), object defaultValue = default(object), bool? isDictionary = default(bool?))
         {
             ItHasValues = itHasValues;
@@ -1344,7 +1460,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
         public bool? ItHasValues { get; private set; }
 
         /// <summary>
-        /// Gets or sets setting may belong to any object in system
         /// </summary>
         [JsonProperty(PropertyName = "objectId")]
         public string ObjectId { get; set; }
@@ -1360,26 +1475,21 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
         public object Value { get; set; }
 
         /// <summary>
-        /// Gets or sets the flag indicates that you need to restart the
-        /// application to apply this setting changes.
         /// </summary>
         [JsonProperty(PropertyName = "restartRequired")]
         public bool? RestartRequired { get; set; }
 
         /// <summary>
-        /// Gets or sets the module id which setting belong to
         /// </summary>
         [JsonProperty(PropertyName = "moduleId")]
         public string ModuleId { get; set; }
 
         /// <summary>
-        /// Gets or sets setting group name
         /// </summary>
         [JsonProperty(PropertyName = "groupName")]
         public string GroupName { get; set; }
 
         /// <summary>
-        /// Gets or sets setting name
         /// </summary>
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
@@ -1402,8 +1512,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
         public object DefaultValue { get; set; }
 
         /// <summary>
-        /// Gets or sets the flag indicates what current setting is just
-        /// editable dictionary and hasn't any concrete value
         /// </summary>
         [JsonProperty(PropertyName = "isDictionary")]
         public bool? IsDictionary { get; set; }
@@ -1442,10 +1550,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the TaxProvider class.
         /// </summary>
-        public TaxProvider(string storeId = default(string), string code = default(string), string logoUrl = default(string), bool? isActive = default(bool?), int? priority = default(int?), string typeName = default(string), IList<ObjectSettingEntry> settings = default(IList<ObjectSettingEntry>), string id = default(string))
+        public TaxProvider(string code = default(string), string storeId = default(string), string logoUrl = default(string), bool? isActive = default(bool?), int? priority = default(int?), string typeName = default(string), IList<ObjectSettingEntry> settings = default(IList<ObjectSettingEntry>), string id = default(string))
         {
-            StoreId = storeId;
             Code = code;
+            StoreId = storeId;
             LogoUrl = logoUrl;
             IsActive = isActive;
             Priority = priority;
@@ -1462,13 +1570,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "storeId")]
-        public string StoreId { get; set; }
+        [JsonProperty(PropertyName = "code")]
+        public string Code { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "code")]
-        public string Code { get; set; }
+        [JsonProperty(PropertyName = "storeId")]
+        public string StoreId { get; set; }
 
         /// <summary>
         /// </summary>
@@ -1577,22 +1685,114 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class Address
+    public partial class TaxStore
     {
         /// <summary>
-        /// Initializes a new instance of the Address class.
+        /// Initializes a new instance of the TaxStore class.
         /// </summary>
-        public Address()
+        public TaxStore()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the Address class.
+        /// Initializes a new instance of the TaxStore class.
+        /// </summary>
+        public TaxStore(string name = default(string), string outerId = default(string), string timeZone = default(string), string country = default(string), string region = default(string), string defaultLanguage = default(string), string defaultCurrency = default(string), string id = default(string))
+        {
+            Name = name;
+            OuterId = outerId;
+            TimeZone = timeZone;
+            Country = country;
+            Region = region;
+            DefaultLanguage = defaultLanguage;
+            DefaultCurrency = defaultCurrency;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "timeZone")]
+        public string TimeZone { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "country")]
+        public string Country { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "region")]
+        public string Region { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "defaultLanguage")]
+        public string DefaultLanguage { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "defaultCurrency")]
+        public string DefaultCurrency { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class TaxAddress
+    {
+        /// <summary>
+        /// Initializes a new instance of the TaxAddress class.
+        /// </summary>
+        public TaxAddress()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the TaxAddress class.
         /// </summary>
         /// <param name="addressType">Possible values include: 'Billing',
         /// 'Shipping', 'Pickup', 'BillingAndShipping'</param>
-        public Address(string addressType = default(string), string key = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
+        public TaxAddress(string addressType = default(string), string key = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
         {
             AddressType = addressType;
             Key = key;
@@ -1733,6 +1933,140 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
+    public partial class TaxCustomer
+    {
+        /// <summary>
+        /// Initializes a new instance of the TaxCustomer class.
+        /// </summary>
+        public TaxCustomer()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the TaxCustomer class.
+        /// </summary>
+        public TaxCustomer(string name = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string outerId = default(string), IList<TaxAddress> addresses = default(IList<TaxAddress>), IList<string> phones = default(IList<string>), IList<string> emails = default(IList<string>), IList<string> groups = default(IList<string>), System.DateTime? birthDate = default(System.DateTime?), string defaultLanguage = default(string), string timeZone = default(string), IList<string> organizations = default(IList<string>), string taxPayerId = default(string), string id = default(string))
+        {
+            Name = name;
+            FirstName = firstName;
+            MiddleName = middleName;
+            LastName = lastName;
+            OuterId = outerId;
+            Addresses = addresses;
+            Phones = phones;
+            Emails = emails;
+            Groups = groups;
+            BirthDate = birthDate;
+            DefaultLanguage = defaultLanguage;
+            TimeZone = timeZone;
+            Organizations = organizations;
+            TaxPayerId = taxPayerId;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "firstName")]
+        public string FirstName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "middleName")]
+        public string MiddleName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "lastName")]
+        public string LastName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "addresses")]
+        public IList<TaxAddress> Addresses { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "phones")]
+        public IList<string> Phones { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "emails")]
+        public IList<string> Emails { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "groups")]
+        public IList<string> Groups { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "birthDate")]
+        public System.DateTime? BirthDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "defaultLanguage")]
+        public string DefaultLanguage { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "timeZone")]
+        public string TimeZone { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "organizations")]
+        public IList<string> Organizations { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxPayerId")]
+        public string TaxPayerId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public partial class TaxLine
     {
         /// <summary>
@@ -1746,10 +2080,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the TaxLine class.
         /// </summary>
-        public TaxLine(string code = default(string), string name = default(string), double? amount = default(double?), int? quantity = default(int?), double? price = default(double?), string taxType = default(string), string id = default(string))
+        public TaxLine(string code = default(string), string name = default(string), string typeName = default(string), double? amount = default(double?), int? quantity = default(int?), double? price = default(double?), string taxType = default(string), string id = default(string))
         {
             Code = code;
             Name = name;
+            TypeName = typeName;
             Amount = amount;
             Quantity = quantity;
             Price = price;
@@ -1772,6 +2107,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "typeName")]
+        public string TypeName { get; set; }
 
         /// <summary>
         /// </summary>
@@ -1832,12 +2172,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the TaxEvaluationContext class.
         /// </summary>
-        public TaxEvaluationContext(string storeId = default(string), string code = default(string), string type = default(string), string customerId = default(string), string organizationId = default(string), Address address = default(Address), string currency = default(string), IList<TaxLine> lines = default(IList<TaxLine>), string id = default(string))
+        public TaxEvaluationContext(string storeId = default(string), TaxStore store = default(TaxStore), string code = default(string), string type = default(string), string customerId = default(string), TaxCustomer customer = default(TaxCustomer), string organizationId = default(string), TaxAddress address = default(TaxAddress), string currency = default(string), IList<TaxLine> lines = default(IList<TaxLine>), string id = default(string))
         {
             StoreId = storeId;
+            Store = store;
             Code = code;
             Type = type;
             CustomerId = customerId;
+            Customer = customer;
             OrganizationId = organizationId;
             Address = address;
             Currency = currency;
@@ -1858,6 +2200,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "store")]
+        public TaxStore Store { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "code")]
         public string Code { get; set; }
 
@@ -1873,13 +2220,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "customer")]
+        public TaxCustomer Customer { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "organizationId")]
         public string OrganizationId { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "address")]
-        public Address Address { get; set; }
+        public TaxAddress Address { get; set; }
 
         /// <summary>
         /// </summary>
@@ -1917,25 +2269,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class TaxRate
+    public partial class TaxDetail
     {
         /// <summary>
-        /// Initializes a new instance of the TaxRate class.
+        /// Initializes a new instance of the TaxDetail class.
         /// </summary>
-        public TaxRate()
+        public TaxDetail()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the TaxRate class.
+        /// Initializes a new instance of the TaxDetail class.
         /// </summary>
-        public TaxRate(double? rate = default(double?), string currency = default(string), TaxLine line = default(TaxLine), TaxProvider taxProvider = default(TaxProvider))
+        public TaxDetail(double? rate = default(double?), double? amount = default(double?), string name = default(string))
         {
             Rate = rate;
-            Currency = currency;
-            Line = line;
-            TaxProvider = taxProvider;
+            Amount = amount;
+            Name = name;
             CustomInit();
         }
 
@@ -1951,6 +2302,76 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "amount")]
+        public double? Amount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class TaxRate
+    {
+        /// <summary>
+        /// Initializes a new instance of the TaxRate class.
+        /// </summary>
+        public TaxRate()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the TaxRate class.
+        /// </summary>
+        public TaxRate(double? rate = default(double?), double? percentRate = default(double?), string currency = default(string), TaxLine line = default(TaxLine), string taxProviderCode = default(string), IList<TaxDetail> taxDetails = default(IList<TaxDetail>))
+        {
+            Rate = rate;
+            PercentRate = percentRate;
+            Currency = currency;
+            Line = line;
+            TaxProviderCode = taxProviderCode;
+            TaxDetails = taxDetails;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "rate")]
+        public double? Rate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "percentRate")]
+        public double? PercentRate { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "currency")]
         public string Currency { get; set; }
 
@@ -1961,8 +2382,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "taxProvider")]
-        public TaxProvider TaxProvider { get; set; }
+        [JsonProperty(PropertyName = "taxProviderCode")]
+        public string TaxProviderCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxDetails")]
+        public IList<TaxDetail> TaxDetails { get; set; }
 
     }
 }

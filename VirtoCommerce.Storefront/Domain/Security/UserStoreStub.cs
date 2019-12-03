@@ -52,13 +52,13 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 user.Contact = await _memberService.CreateContactAsync(user.Contact);
             }
             var dtoUser = user.ToUserDto();
-            var resultDto = await _platformSecurityApi.CreateAsyncAsync(dtoUser);
+            var resultDto = await _platformSecurityApi.CreateAsync(dtoUser);
             return resultDto.ToIdentityResult();
         }
 
         public async Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
         {
-            await _platformSecurityApi.DeleteAsyncAsync(new[] { user.UserName });
+            await _platformSecurityApi.DeleteAsync(new[] { user.UserName });
             //Evict user from the cache
             SecurityCacheRegion.ExpireUser(user.Id);
             return IdentityResult.Success;
@@ -142,7 +142,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             }
 
             var dtoUser = user.ToUserDto();
-            var resultDto = await _platformSecurityApi.UpdateAsyncAsync(dtoUser);
+            var resultDto = await _platformSecurityApi.UpdateAsync(dtoUser);
 
             //Evict user from the cache
             SecurityCacheRegion.ExpireUser(user.Id);
@@ -503,7 +503,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             // Cleanup
         }
 
-        private User PrepareUserResult(MemoryCacheEntryOptions options, AutoRestClients.PlatformModuleApi.Models.ApplicationUserExtended userDto)
+        private User PrepareUserResult(MemoryCacheEntryOptions options, AutoRestClients.PlatformModuleApi.Models.ApplicationUser userDto)
         {
             if (userDto != null)
             {

@@ -17,7 +17,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class PaymentModule : ServiceClient<PaymentModule>, IPaymentModule
+    public partial class PaymentModuleClient : ServiceClient<PaymentModuleClient>, IPaymentModuleClient
     {
         /// <summary>
         /// The base URI of the service.
@@ -40,31 +40,36 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         public ServiceClientCredentials Credentials { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the PaymentModule class.
+        /// Gets the IPaymentModule.
+        /// </summary>
+        public virtual IPaymentModule PaymentModule { get; private set; }
+
+        /// <summary>
+        /// Initializes a new instance of the PaymentModuleClient class.
         /// </summary>
         /// <param name='httpClient'>
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling PaymentModule.Dispose(). False: will not dispose provided httpClient</param>
-        protected PaymentModule(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
+        /// True: will dispose the provided httpClient on calling PaymentModuleClient.Dispose(). False: will not dispose provided httpClient</param>
+        protected PaymentModuleClient(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the PaymentModule class.
+        /// Initializes a new instance of the PaymentModuleClient class.
         /// </summary>
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected PaymentModule(params DelegatingHandler[] handlers) : base(handlers)
+        protected PaymentModuleClient(params DelegatingHandler[] handlers) : base(handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the PaymentModule class.
+        /// Initializes a new instance of the PaymentModuleClient class.
         /// </summary>
         /// <param name='rootHandler'>
         /// Optional. The http client handler used to handle http transport.
@@ -72,13 +77,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected PaymentModule(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
+        protected PaymentModuleClient(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the PaymentModule class.
+        /// Initializes a new instance of the PaymentModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -89,7 +94,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected PaymentModule(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
+        protected PaymentModuleClient(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -99,7 +104,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the PaymentModule class.
+        /// Initializes a new instance of the PaymentModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -113,7 +118,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected PaymentModule(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        protected PaymentModuleClient(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -123,7 +128,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the PaymentModule class.
+        /// Initializes a new instance of the PaymentModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -134,7 +139,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public PaymentModule(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public PaymentModuleClient(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (credentials == null)
             {
@@ -148,7 +153,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the PaymentModule class.
+        /// Initializes a new instance of the PaymentModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -157,11 +162,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling PaymentModule.Dispose(). False: will not dispose provided httpClient</param>
+        /// True: will dispose the provided httpClient on calling PaymentModuleClient.Dispose(). False: will not dispose provided httpClient</param>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public PaymentModule(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
+        public PaymentModuleClient(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
         {
             if (credentials == null)
             {
@@ -175,7 +180,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the PaymentModule class.
+        /// Initializes a new instance of the PaymentModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -189,7 +194,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public PaymentModule(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public PaymentModuleClient(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (credentials == null)
             {
@@ -203,7 +208,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the PaymentModule class.
+        /// Initializes a new instance of the PaymentModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -217,7 +222,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public PaymentModule(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public PaymentModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -236,7 +241,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the PaymentModule class.
+        /// Initializes a new instance of the PaymentModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -253,7 +258,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public PaymentModule(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public PaymentModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -280,6 +285,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// </summary>
         private void Initialize()
         {
+            PaymentModule = new PaymentModule(this);
             BaseUri = new System.Uri("http://localhost");
             SerializationSettings = new JsonSerializerSettings
             {
@@ -308,6 +314,109 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
             };
             CustomInitialize();
         }
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Models;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// </summary>
+    public partial interface IPaymentModuleClient : System.IDisposable
+    {
+        /// <summary>
+        /// The base URI of the service.
+        /// </summary>
+        System.Uri BaseUri { get; set; }
+
+        /// <summary>
+        /// Gets or sets json serialization settings.
+        /// </summary>
+        JsonSerializerSettings SerializationSettings { get; }
+
+        /// <summary>
+        /// Gets or sets json deserialization settings.
+        /// </summary>
+        JsonSerializerSettings DeserializationSettings { get; }
+
+        /// <summary>
+        /// Subscription credentials which uniquely identify client
+        /// subscription.
+        /// </summary>
+        ServiceClientCredentials Credentials { get; }
+
+
+        /// <summary>
+        /// Gets the IPaymentModule.
+        /// </summary>
+        IPaymentModule PaymentModule { get; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Models;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// PaymentModule operations.
+    /// </summary>
+    public partial class PaymentModule : IServiceOperations<PaymentModuleClient>, IPaymentModule
+    {
+        /// <summary>
+        /// Initializes a new instance of the PaymentModule class.
+        /// </summary>
+        /// <param name='client'>
+        /// Reference to the service client.
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        public PaymentModule(PaymentModuleClient client)
+        {
+            if (client == null)
+            {
+                throw new System.ArgumentNullException("client");
+            }
+            Client = client;
+        }
+
+        /// <summary>
+        /// Gets a reference to the PaymentModuleClient
+        /// </summary>
+        public PaymentModuleClient Client { get; private set; }
+
         /// <param name='criteria'>
         /// </param>
         /// <param name='customHeaders'>
@@ -339,7 +448,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
                 ServiceClientTracing.Enter(_invocationId, this, "SearchPaymentMethods", tracingParameters);
             }
             // Construct URL
-            var _baseUrl = BaseUri.AbsoluteUri;
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
             var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/payment/search").ToString();
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
@@ -365,15 +474,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
             string _requestContent = null;
             if(criteria != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
-            if (Credentials != null)
+            if (Client.Credentials != null)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             }
             // Send Request
             if (_shouldTrace)
@@ -381,7 +490,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
                 ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
             }
             cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             if (_shouldTrace)
             {
                 ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
@@ -421,7 +530,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<PaymentMethodsSearchResult>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<PaymentMethodsSearchResult>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -481,7 +590,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
                 ServiceClientTracing.Enter(_invocationId, this, "GetPaymentMethodById", tracingParameters);
             }
             // Construct URL
-            var _baseUrl = BaseUri.AbsoluteUri;
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
             var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/payment/{id}").ToString();
             _url = _url.Replace("{id}", System.Uri.EscapeDataString(id));
             // Create HTTP transport objects
@@ -507,10 +616,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
             // Serialize Request
             string _requestContent = null;
             // Set Credentials
-            if (Credentials != null)
+            if (Client.Credentials != null)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             }
             // Send Request
             if (_shouldTrace)
@@ -518,7 +627,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
                 ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
             }
             cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             if (_shouldTrace)
             {
                 ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
@@ -558,7 +667,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<PaymentMethod>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<PaymentMethod>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -608,7 +717,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
                 ServiceClientTracing.Enter(_invocationId, this, "UpdatePaymentMethod", tracingParameters);
             }
             // Construct URL
-            var _baseUrl = BaseUri.AbsoluteUri;
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
             var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/payment").ToString();
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
@@ -634,15 +743,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
             string _requestContent = null;
             if(paymentMethod != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(paymentMethod, SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(paymentMethod, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
-            if (Credentials != null)
+            if (Client.Credentials != null)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             }
             // Send Request
             if (_shouldTrace)
@@ -650,7 +759,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
                 ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
             }
             cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             if (_shouldTrace)
             {
                 ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
@@ -690,7 +799,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<PaymentMethod>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<PaymentMethod>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -731,31 +840,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
     using System.Threading.Tasks;
 
     /// <summary>
+    /// PaymentModule operations.
     /// </summary>
-    public partial interface IPaymentModule : System.IDisposable
+    public partial interface IPaymentModule
     {
-        /// <summary>
-        /// The base URI of the service.
-        /// </summary>
-        System.Uri BaseUri { get; set; }
-
-        /// <summary>
-        /// Gets or sets json serialization settings.
-        /// </summary>
-        JsonSerializerSettings SerializationSettings { get; }
-
-        /// <summary>
-        /// Gets or sets json deserialization settings.
-        /// </summary>
-        JsonSerializerSettings DeserializationSettings { get; }
-
-        /// <summary>
-        /// Subscription credentials which uniquely identify client
-        /// subscription.
-        /// </summary>
-        ServiceClientCredentials Credentials { get; }
-
-
         /// <param name='criteria'>
         /// </param>
         /// <param name='customHeaders'>
@@ -764,8 +852,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
         Task<HttpOperationResponse<PaymentMethodsSearchResult>> SearchPaymentMethodsWithHttpMessagesAsync(PaymentMethodsSearchCriteria criteria = default(PaymentMethodsSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
         /// <param name='id'>
         /// </param>
         /// <param name='customHeaders'>
@@ -774,8 +867,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
         Task<HttpOperationResponse<PaymentMethod>> GetPaymentMethodByIdWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
         /// <param name='paymentMethod'>
         /// </param>
         /// <param name='customHeaders'>
@@ -784,8 +885,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
         Task<HttpOperationResponse<PaymentMethod>> UpdatePaymentMethodWithHttpMessagesAsync(PaymentMethod paymentMethod = default(PaymentMethod), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
     }
 }
 // <auto-generated>
@@ -985,10 +1091,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models
         /// Initializes a new instance of the PaymentMethodsSearchCriteria
         /// class.
         /// </summary>
-        /// <param name="objectType">Search object type</param>
-        /// <param name="keyword">Search phrase</param>
-        /// <param name="languageCode">Search phrase language</param>
-        public PaymentMethodsSearchCriteria(string storeId = default(string), IList<string> codes = default(IList<string>), bool? isActive = default(bool?), bool? withoutTransient = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public PaymentMethodsSearchCriteria(string storeId = default(string), IList<string> codes = default(IList<string>), bool? isActive = default(bool?), bool? withoutTransient = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
             StoreId = storeId;
             Codes = codes;
@@ -999,6 +1102,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models
             ObjectTypes = objectTypes;
             ObjectIds = objectIds;
             Keyword = keyword;
+            SearchPhrase = searchPhrase;
             LanguageCode = languageCode;
             Sort = sort;
             SortInfos = sortInfos;
@@ -1038,7 +1142,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models
         public string ResponseGroup { get; set; }
 
         /// <summary>
-        /// Gets or sets search object type
         /// </summary>
         [JsonProperty(PropertyName = "objectType")]
         public string ObjectType { get; set; }
@@ -1054,13 +1157,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models
         public IList<string> ObjectIds { get; set; }
 
         /// <summary>
-        /// Gets or sets search phrase
         /// </summary>
         [JsonProperty(PropertyName = "keyword")]
         public string Keyword { get; set; }
 
         /// <summary>
-        /// Gets or sets search phrase language
+        /// </summary>
+        [JsonProperty(PropertyName = "searchPhrase")]
+        public string SearchPhrase { get; set; }
+
+        /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "languageCode")]
         public string LanguageCode { get; set; }
@@ -1119,19 +1225,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the ObjectSettingEntry class.
         /// </summary>
-        /// <param name="objectId">Setting may belong to any object in
-        /// system</param>
-        /// <param name="restartRequired">The flag indicates that you need to
-        /// restart the application to apply this setting changes.</param>
-        /// <param name="moduleId">The module id which setting belong
-        /// to</param>
-        /// <param name="groupName">Setting group name</param>
-        /// <param name="name">Setting name</param>
         /// <param name="valueType">Possible values include: 'ShortText',
         /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean',
         /// 'SecureString', 'Json'</param>
-        /// <param name="isDictionary">The flag indicates what current setting
-        /// is just editable dictionary and hasn't any concrete value</param>
         public ObjectSettingEntry(bool? itHasValues = default(bool?), string objectId = default(string), string objectType = default(string), object value = default(object), bool? restartRequired = default(bool?), string moduleId = default(string), string groupName = default(string), string name = default(string), string valueType = default(string), IList<object> allowedValues = default(IList<object>), object defaultValue = default(object), bool? isDictionary = default(bool?))
         {
             ItHasValues = itHasValues;
@@ -1160,7 +1256,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models
         public bool? ItHasValues { get; private set; }
 
         /// <summary>
-        /// Gets or sets setting may belong to any object in system
         /// </summary>
         [JsonProperty(PropertyName = "objectId")]
         public string ObjectId { get; set; }
@@ -1176,26 +1271,21 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models
         public object Value { get; set; }
 
         /// <summary>
-        /// Gets or sets the flag indicates that you need to restart the
-        /// application to apply this setting changes.
         /// </summary>
         [JsonProperty(PropertyName = "restartRequired")]
         public bool? RestartRequired { get; set; }
 
         /// <summary>
-        /// Gets or sets the module id which setting belong to
         /// </summary>
         [JsonProperty(PropertyName = "moduleId")]
         public string ModuleId { get; set; }
 
         /// <summary>
-        /// Gets or sets setting group name
         /// </summary>
         [JsonProperty(PropertyName = "groupName")]
         public string GroupName { get; set; }
 
         /// <summary>
-        /// Gets or sets setting name
         /// </summary>
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
@@ -1218,8 +1308,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models
         public object DefaultValue { get; set; }
 
         /// <summary>
-        /// Gets or sets the flag indicates what current setting is just
-        /// editable dictionary and hasn't any concrete value
         /// </summary>
         [JsonProperty(PropertyName = "isDictionary")]
         public bool? IsDictionary { get; set; }
@@ -1324,9 +1412,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models
         /// 'Standard', 'Redirection', 'PreparedForm'</param>
         /// <param name="paymentMethodGroupType">Possible values include:
         /// 'Paypal', 'BankCard', 'Alternative', 'Manual'</param>
-        public PaymentMethod(string code = default(string), string logoUrl = default(string), bool? isActive = default(bool?), int? priority = default(int?), bool? isAvailableForPartial = default(bool?), string currency = default(string), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), string storeId = default(string), string typeName = default(string), IList<ObjectSettingEntry> settings = default(IList<ObjectSettingEntry>), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), string paymentMethodType = default(string), string paymentMethodGroupType = default(string), string id = default(string))
+        public PaymentMethod(string code = default(string), string name = default(string), string logoUrl = default(string), bool? isActive = default(bool?), int? priority = default(int?), bool? isAvailableForPartial = default(bool?), string currency = default(string), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), string storeId = default(string), string typeName = default(string), IList<ObjectSettingEntry> settings = default(IList<ObjectSettingEntry>), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), string paymentMethodType = default(string), string paymentMethodGroupType = default(string), string id = default(string))
         {
             Code = code;
+            Name = name;
             LogoUrl = logoUrl;
             IsActive = isActive;
             Priority = priority;
@@ -1360,6 +1449,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "code")]
         public string Code { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; private set; }
 
         /// <summary>
         /// </summary>

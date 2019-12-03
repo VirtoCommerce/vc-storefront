@@ -210,7 +210,7 @@ namespace VirtoCommerce.Storefront.Domain
                 SearchPhrase = criteria.SearchPhrase
             };
 
-            var searchResult = await _customerApi.SearchAsync(criteriaDto);
+            var searchResult = await _customerApi.SearchMemberAsync(criteriaDto);
             var contacts = _customerApi.GetContactsByIds(searchResult.Results.Select(x => x.Id).ToList()).Select(x => x.ToContact()).ToList();
 
             return new StaticPagedList<Contact>(contacts, criteria.PageNumber, criteria.PageSize, searchResult.TotalCount.Value);
