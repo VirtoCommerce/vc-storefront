@@ -316,6 +316,8 @@ namespace VirtoCommerce.Storefront.Controllers
                 else
                 {
                     WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserCannotLoginInStore());
+                    await _signInManager.SignOutAsync();
+                    loginResult = Microsoft.AspNetCore.Identity.SignInResult.NotAllowed;
                 }
             }
 
