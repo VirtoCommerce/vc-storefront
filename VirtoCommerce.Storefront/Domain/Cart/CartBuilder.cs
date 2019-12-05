@@ -632,7 +632,7 @@ namespace VirtoCommerce.Storefront.Domain
             if (cart.Items.Any())
             {
                 var productIds = cart.Items.Select(i => i.ProductId).ToArray();
-                var products = await _catalogService.GetProductsAsync(productIds, ItemResponseGroup.ItemWithPrices | ItemResponseGroup.ItemWithDiscounts | ItemResponseGroup.Inventory);
+                var products = await _catalogService.GetProductsAsync(productIds, ItemResponseGroup.ItemWithPrices | ItemResponseGroup.ItemWithDiscounts | ItemResponseGroup.Inventory | ItemResponseGroup.Outlines);
                 foreach (var item in cart.Items)
                 {
                     item.Product = products.FirstOrDefault(x => x.Id.EqualsInvariant(item.ProductId));

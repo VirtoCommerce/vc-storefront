@@ -797,6 +797,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Price = (double)lineItem.SalePrice.Amount,
                 Quantity = lineItem.Quantity,
                 InStockQuantity = lineItem.InStockQuantity,
+                Outline = lineItem.Product.Outline,
                 Variations = null // TODO
             };
 
