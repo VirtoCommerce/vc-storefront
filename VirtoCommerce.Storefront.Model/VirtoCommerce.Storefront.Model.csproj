@@ -12,9 +12,9 @@
     <PackageProjectUrl>https://github.com/VirtoCommerce/vc-storefront-core</PackageProjectUrl>
     <PackageIconUrl>https://virtocommerce.com/themes/assets/logo.jpg</PackageIconUrl>
     <RepositoryUrl>https://github.com/VirtoCommerce/vc-storefront-core</RepositoryUrl>
-    <AssemblyVersion>4.1.3.0</AssemblyVersion>
-    <FileVersion>4.1.3.0</FileVersion>
-    <Version>4.1.3</Version>
+    <AssemblyVersion>4.1.4.0</AssemblyVersion>
+    <FileVersion>4.1.4.0</FileVersion>
+    <Version>4.1.4</Version>
     <Authors>Virto Commerce</Authors>
     <Company>Virto Commerce</Company>
     <Product>Virto Commerce</Product>
