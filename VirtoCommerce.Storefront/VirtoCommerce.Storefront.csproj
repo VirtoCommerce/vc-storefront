@@ -42,7 +42,7 @@
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="2.2.0" />
     <PackageReference Include="AspNet.Security.OAuth.StackExchange" Version="2.2.0" />
-    <PackageReference Include="IdentityModel" Version="3.10.10" />
+    <PackageReference Include="IdentityModel" Version="4.1.1" />
     <PackageReference Include="Markdig" Version="0.18.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.2" />
     <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.11.2" />
