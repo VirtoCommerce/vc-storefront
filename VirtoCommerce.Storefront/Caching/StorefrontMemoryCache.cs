@@ -14,11 +14,11 @@ namespace VirtoCommerce.Storefront.Caching
         private bool _disposed;
         private readonly ILogger _log;
 
-        public StorefrontMemoryCache(IMemoryCache memoryCache, IOptions<StorefrontOptions> storefrontOptions, ILogger<StorefrontMemoryCache> log)
+        public StorefrontMemoryCache(IMemoryCache memoryCache, IOptions<StorefrontOptions> storefrontOptions, ILoggerFactory loggerFactory)
         {
             _memoryCache = memoryCache;
             _storefrontOptions = storefrontOptions.Value;
-            _log = log;
+            _log = loggerFactory?.CreateLogger<StorefrontMemoryCache>();
         }
 
         public MemoryCacheEntryOptions GetDefaultCacheEntryOptions()
