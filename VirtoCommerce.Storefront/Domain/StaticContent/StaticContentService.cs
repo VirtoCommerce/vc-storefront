@@ -103,7 +103,7 @@ namespace VirtoCommerce.Storefront.Domain
             }
             catch (Exception ex) // NOTE: Exception must have a specific type!
             {
-                var error = $"Failed to parse YAML header from \"{contentItem.StoragePath}\"<br/>{ex.Message}";
+                var error = $"Failed to parse metadata from \"{contentItem.StoragePath}\"<br/>{ex.Message}";
                 content = $"{error}<br/>{content}";
             }
 
