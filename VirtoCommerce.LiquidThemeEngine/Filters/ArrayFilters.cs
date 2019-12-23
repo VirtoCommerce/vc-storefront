@@ -157,7 +157,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <param name="input"></param>
         /// <param name="sort"></param>
         /// <returns></returns>
-        public static object Sort(object input, string sort)
+        public static object SortList(object input, string sort)
         {
             var retVal = input;
             IEnumerable enumerable = retVal as IEnumerable;
