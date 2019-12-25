@@ -66,7 +66,7 @@ namespace VirtoCommerce.Storefront.DependencyInjection
                       httpClient.BaseAddress = platformEndpointOptions.Url;
                       httpClient.Timeout = platformEndpointOptions.RequestTimeout;
                   })
-                   .ConfigurePrimaryHttpMessageHandler(x => new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate })
+                   .ConfigurePrimaryHttpMessageHandler(x => new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate, UseCookies = false })
                    .AddHttpMessageHandler(sp => sp.GetService<AuthenticationHandlerFactory>().CreateAuthHandler());
 
 
