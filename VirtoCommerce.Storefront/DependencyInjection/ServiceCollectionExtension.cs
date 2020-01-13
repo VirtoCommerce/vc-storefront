@@ -17,6 +17,7 @@ using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.CustomerReviewsModule.WebModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
@@ -148,6 +149,9 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddSingleton<IShippingModule>(sp => sp.GetRequiredService<ShippingModule>());
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new TaxModule(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
             services.AddSingleton<ITaxModule>(sp => sp.GetRequiredService<TaxModule>());
+
+            services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new CustomerReviewsModuleWebRESTAPIdocumentation(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
+            services.AddSingleton<ICustomerReviewsModule>(sp => new CustomerReviewsModule(sp.GetRequiredService<CustomerReviewsModuleWebRESTAPIdocumentation>()));
 
             if (setupAction != null)
             {

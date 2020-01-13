@@ -128,6 +128,11 @@ namespace VirtoCommerce.Storefront.Model.Stores
         public bool AnonymousUsersAllowed { get; set; }
 
         /// <summary>
+        /// Enable customer reviews access
+        /// </summary>
+        public bool CustomerReviewsEnabled => Settings.GetSettingValue("CustomerReviews.CustomerReviewsEnabled", false);
+
+        /// <summary>
         /// This flag enables the SPA fallback routing for a store
         /// </summary>
         public bool IsSpa { get; set; }

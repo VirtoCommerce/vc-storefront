@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using PagedList.Core;
 using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
@@ -12,6 +13,7 @@ using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Customer.Services;
+using VirtoCommerce.Storefront.Model.CustomerReviews;
 using VirtoCommerce.Storefront.Model.Inventory.Services;
 using VirtoCommerce.Storefront.Model.Pricing.Services;
 using VirtoCommerce.Storefront.Model.Services;
@@ -32,12 +34,13 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IInventoryService _inventoryService;
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
+        private readonly ICustomerReviewService _customerReviewService;
 
         public CatalogService(IWorkContextAccessor workContextAccessor, ICatalogModuleCategories categoriesApi,
             ICatalogModuleProducts productsApi,
             ICatalogModuleSearch searchApi, IPricingService pricingService, IMemberService customerService,
-            ISubscriptionService subscriptionService,
-            IInventoryService inventoryService, IStorefrontMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
+            ISubscriptionService subscriptionService, IInventoryService inventoryService,
+            IStorefrontMemoryCache memoryCache, IApiChangesWatcher changesWatcher, ICustomerReviewService customerReviewService)
         {
             _workContextAccessor = workContextAccessor;
             _categoriesApi = categoriesApi;
@@ -50,6 +53,7 @@ namespace VirtoCommerce.Storefront.Domain
             _subscriptionService = subscriptionService;
             _memoryCache = memoryCache;
             _apiChangesWatcher = changesWatcher;
+            _customerReviewService = customerReviewService;
         }
 
         #region ICatalogSearchService Members
@@ -181,43 +185,32 @@ namespace VirtoCommerce.Storefront.Domain
 
         protected virtual async Task LoadProductDependencies(List<Product> products, ItemResponseGroup responseGroup, WorkContext workContext)
         {
-            if (!products.IsNullOrEmpty())
+            if (products.IsNullOrEmpty())
+                return;
+
+            var taskList = new List<Task>();
+            taskList
+                .AddIf(responseGroup.HasFlag(ItemResponseGroup.Inventory),
+                    LoadProductInventoriesAsync(products, workContext))
+                .AddIf(responseGroup.HasFlag(ItemResponseGroup.ItemAssociations),
+                    LoadProductsAssociationsAsync(products, workContext))
+                .AddIf(responseGroup.HasFlag(ItemResponseGroup.ItemWithPrices),
+                    _pricingService.EvaluateProductPricesAsync(products, workContext))
+                .AddIf(responseGroup.HasFlag(ItemResponseGroup.ItemWithVendor),
+                    LoadProductVendorsAsync(products, workContext))
+                .AddIf(workContext.CurrentStore.SubscriptionEnabled
+                        && responseGroup.HasFlag(ItemResponseGroup.ItemWithPaymentPlan),
+                    LoadProductPaymentPlanAsync(products, workContext))
+                .AddIf(workContext.CurrentStore.CustomerReviewsEnabled,
+                    LoadProductCustomerReviewsAsync(products, workContext));
+
+            await Task.WhenAll(taskList);
+
+            foreach (var product in products)
             {
-                var taskList = new List<Task>();
-
-                if (responseGroup.HasFlag(ItemResponseGroup.Inventory))
-                {
-                    taskList.Add(LoadProductInventoriesAsync(products, workContext));
-                }
-
-                if (responseGroup.HasFlag(ItemResponseGroup.ItemAssociations))
-                {
-                    taskList.Add(LoadProductsAssociationsAsync(products, workContext));
-                }
-
-                if (responseGroup.HasFlag(ItemResponseGroup.ItemWithPrices))
-                {
-                    taskList.Add(_pricingService.EvaluateProductPricesAsync(products, workContext));
-                }
-
-                if (responseGroup.HasFlag(ItemResponseGroup.ItemWithVendor))
-                {
-                    taskList.Add(LoadProductVendorsAsync(products, workContext));
-                }
-
-                if (workContext.CurrentStore.SubscriptionEnabled && responseGroup.HasFlag(ItemResponseGroup.ItemWithPaymentPlan))
-                {
-                    taskList.Add(LoadProductPaymentPlanAsync(products, workContext));
-                }
-
-                await Task.WhenAll(taskList.ToArray());
-
-                foreach (var product in products)
-                {
-                    product.IsBuyable = new ProductIsBuyableSpecification().IsSatisfiedBy(product);
-                    product.IsAvailable = new ProductIsAvailableSpecification(product).IsSatisfiedBy(1);
-                    product.IsInStock = new ProductIsInStockSpecification().IsSatisfiedBy(product);
-                }
+                product.IsBuyable = new ProductIsBuyableSpecification().IsSatisfiedBy(product);
+                product.IsAvailable = new ProductIsAvailableSpecification(product).IsSatisfiedBy(1);
+                product.IsInStock = new ProductIsInStockSpecification().IsSatisfiedBy(product);
             }
         }
 
@@ -342,6 +335,31 @@ namespace VirtoCommerce.Storefront.Domain
                     }
                     return new StaticPagedList<ProductAssociation>(result, pageNumber, pageSize, searchResult.TotalCount ?? 0);
                 }, 1, ProductSearchCriteria.DefaultPageSize);
+            }
+            return Task.CompletedTask;
+        }
+
+        protected virtual Task LoadProductCustomerReviewsAsync(List<Product> products, WorkContext workContext)
+        {
+            if (products == null)
+            {
+                throw new ArgumentNullException(nameof(products));
+            }
+
+            foreach (var product in products)
+            {
+                //Lazy loading for customer reviews
+                product.CustomerReviews = new MutablePagedList<Model.CustomerReviews.CustomerReview>((pageNumber, pageSize, sortInfos) =>
+                {
+                    var criteria = new CustomerReviewSearchCriteria
+                    {
+                        ProductIds = new[] { product.Id },
+                        PageNumber = pageNumber,
+                        PageSize = pageSize,
+                        Sort = SortInfo.ToString(sortInfos),
+                    };
+                    return _customerReviewService.SearchReviews(criteria);
+                }, 1, CustomerReviewSearchCriteria.DefaultPageSize);
             }
             return Task.CompletedTask;
         }

@@ -1,0 +1,267 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "CustomerReviewsModule.Web REST API documentation"
+  },
+  "host": "localhost",
+  "basePath": "/admin",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api/customerReviews/search": {
+      "post": {
+        "tags": [
+          "CustomerReviewsModule.Web"
+        ],
+        "operationId": "CustomerReviewsModule_SearchCustomerReviews",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "criteria",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CustomerReviewSearchCriteria"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GenericSearchResult[CustomerReview]"
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "security:call_api",
+              "CustomerReviewsModule:read"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/customerReviews": {
+      "post": {
+        "tags": [
+          "CustomerReviewsModule.Web"
+        ],
+        "operationId": "CustomerReviewsModule_Update",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "customerReviews",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CustomerReview"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "security:call_api",
+              "CustomerReviewsModule:update"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "CustomerReviewsModule.Web"
+        ],
+        "operationId": "CustomerReviewsModule_Delete",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "security:call_api",
+              "CustomerReviewsModule:delete"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CustomerReviewSearchCriteria": {
+      "type": "object",
+      "properties": {
+        "productIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "responseGroup": {
+          "type": "string"
+        },
+        "objectType": {
+          "type": "string"
+        },
+        "objectTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "objectIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "searchPhrase": {
+          "type": "string"
+        },
+        "languageCode": {
+          "type": "string"
+        },
+        "sort": {
+          "type": "string"
+        },
+        "sortInfos": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SortInfo"
+          },
+          "readOnly": true
+        },
+        "skip": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "take": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "SortInfo": {
+      "type": "object",
+      "properties": {
+        "sortColumn": {
+          "type": "string"
+        },
+        "sortDirection": {
+          "enum": [
+            "Ascending",
+            "Descending"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "GenericSearchResult[CustomerReview]": {
+      "type": "object",
+      "properties": {
+        "totalCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CustomerReview"
+          }
+        }
+      }
+    },
+    "CustomerReview": {
+      "type": "object",
+      "properties": {
+        "authorNickname": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "productId": {
+          "type": "string"
+        },
+        "createdDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "modifiedDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "modifiedBy": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "OAuth2": {
+      "type": "oauth2",
+      "description": "OAuth2 Resource Owner Password Grant flow",
+      "flow": "password",
+      "tokenUrl": "/admin/token",
+      "scopes": {}
+    }
+  }
+}
