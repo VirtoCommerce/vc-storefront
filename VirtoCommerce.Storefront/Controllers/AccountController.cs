@@ -58,7 +58,7 @@ namespace VirtoCommerce.Storefront.Controllers
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
             {
-                return StoreFrontRedirect("~/account/login");
+                return Challenge();
             }
 
             // Customer should be already populated in WorkContext middle-ware
@@ -71,7 +71,7 @@ namespace VirtoCommerce.Storefront.Controllers
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
             {
-                return StoreFrontRedirect("~/account/login");
+                return Challenge();
             }
 
             var order = WorkContext.CurrentUser?.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(number));
@@ -89,7 +89,7 @@ namespace VirtoCommerce.Storefront.Controllers
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
             {
-                return StoreFrontRedirect("~/account/login");
+                return Challenge();
             }
 
             return View("customers/addresses", WorkContext);
@@ -288,7 +288,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpPost("login")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login([FromForm] Login login, string returnUrl)
+        public async Task<ActionResult> Login([FromForm] Login login, [FromQuery]string returnUrl)
         {
             TryValidateModel(login);
 
