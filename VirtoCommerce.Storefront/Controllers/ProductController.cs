@@ -56,6 +56,7 @@ namespace VirtoCommerce.Storefront.Controllers
                             criteria.Outline = product.GetCategoryOutline();
                             criteria.PageNumber = pageNumber;
                             criteria.PageSize = pageSize;
+                            criteria.ResponseGroup = criteria.ResponseGroup | ItemResponseGroup.ItemProperties;
                             if (string.IsNullOrEmpty(criteria.SortBy) && !sortInfos.IsNullOrEmpty())
                             {
                                 criteria.SortBy = SortInfo.ToString(sortInfos);
