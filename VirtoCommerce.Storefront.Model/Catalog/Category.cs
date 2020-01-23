@@ -71,10 +71,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             return SeoPath ?? base.ToString();
         }
 
-        #region IHasProperties Members
         public IMutablePagedList<CatalogProperty> Properties { get; set; }
-        #endregion
-
         public string Handle => SeoInfo?.Slug ?? Id;
         public string IndexKey => Handle;
     }
