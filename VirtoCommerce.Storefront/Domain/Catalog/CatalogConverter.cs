@@ -270,10 +270,9 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (categoryDto.Properties != null)
             {
-                result.Properties = categoryDto.Properties
+                result.Properties = new MutablePagedList<CatalogProperty>(categoryDto.Properties
                     .Where(x => string.Equals(x.Type, "Category", StringComparison.OrdinalIgnoreCase))
-                    .Select(p => ToProperty(p, currentLanguage))
-                    .ToList();
+                    .Select(p => ToProperty(p, currentLanguage)));
             }
 
             return result;
