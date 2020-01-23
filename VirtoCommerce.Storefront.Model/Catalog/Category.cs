@@ -5,12 +5,12 @@ using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Catalog
 {
-    public partial class Category : Entity, IHasProperties, IAccessibleByIndexKey
+    public partial class Category : Entity, IAccessibleByIndexKey
     {
         public Category()
         {
             Images = new List<Image>();
-            Properties = new List<CatalogProperty>();
+            Properties = MutablePagedList<CatalogProperty>.Empty;
         }
 
         public string CatalogId { get; set; }
@@ -71,10 +71,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             return SeoPath ?? base.ToString();
         }
 
-        #region IHasProperties Members
-        public IList<CatalogProperty> Properties { get; set; }
-        #endregion
-
+        public IMutablePagedList<CatalogProperty> Properties { get; set; }
         public string Handle => SeoInfo?.Slug ?? Id;
         public string IndexKey => Handle;
     }
