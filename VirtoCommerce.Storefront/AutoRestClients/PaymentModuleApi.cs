@@ -417,7 +417,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// </summary>
         public PaymentModuleClient Client { get; private set; }
 
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -434,7 +434,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<PaymentMethodsSearchResult>> SearchPaymentMethodsWithHttpMessagesAsync(PaymentMethodsSearchCriteria criteria = default(PaymentMethodsSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<PaymentMethodsSearchResult>> SearchPaymentMethodsWithHttpMessagesAsync(PaymentMethodsSearchCriteria body = default(PaymentMethodsSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -443,7 +443,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "SearchPaymentMethods", tracingParameters);
             }
@@ -472,9 +472,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -686,7 +686,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
             return _result;
         }
 
-        /// <param name='paymentMethod'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -703,7 +703,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<PaymentMethod>> UpdatePaymentMethodWithHttpMessagesAsync(PaymentMethod paymentMethod = default(PaymentMethod), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<PaymentMethod>> UpdatePaymentMethodWithHttpMessagesAsync(PaymentMethod body = default(PaymentMethod), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -712,7 +712,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("paymentMethod", paymentMethod);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "UpdatePaymentMethod", tracingParameters);
             }
@@ -741,9 +741,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(paymentMethod != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(paymentMethod, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -844,7 +844,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
     /// </summary>
     public partial interface IPaymentModule
     {
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -858,7 +858,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<PaymentMethodsSearchResult>> SearchPaymentMethodsWithHttpMessagesAsync(PaymentMethodsSearchCriteria criteria = default(PaymentMethodsSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<PaymentMethodsSearchResult>> SearchPaymentMethodsWithHttpMessagesAsync(PaymentMethodsSearchCriteria body = default(PaymentMethodsSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='id'>
         /// </param>
         /// <param name='customHeaders'>
@@ -877,7 +877,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// Thrown when a required parameter is null
         /// </exception>
         Task<HttpOperationResponse<PaymentMethod>> GetPaymentMethodByIdWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='paymentMethod'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -891,7 +891,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<PaymentMethod>> UpdatePaymentMethodWithHttpMessagesAsync(PaymentMethod paymentMethod = default(PaymentMethod), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<PaymentMethod>> UpdatePaymentMethodWithHttpMessagesAsync(PaymentMethod body = default(PaymentMethod), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -921,24 +921,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
-            public static PaymentMethodsSearchResult SearchPaymentMethods(this IPaymentModule operations, PaymentMethodsSearchCriteria criteria = default(PaymentMethodsSearchCriteria))
+            public static PaymentMethodsSearchResult SearchPaymentMethods(this IPaymentModule operations, PaymentMethodsSearchCriteria body = default(PaymentMethodsSearchCriteria))
             {
-                return operations.SearchPaymentMethodsAsync(criteria).GetAwaiter().GetResult();
+                return operations.SearchPaymentMethodsAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<PaymentMethodsSearchResult> SearchPaymentMethodsAsync(this IPaymentModule operations, PaymentMethodsSearchCriteria criteria = default(PaymentMethodsSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<PaymentMethodsSearchResult> SearchPaymentMethodsAsync(this IPaymentModule operations, PaymentMethodsSearchCriteria body = default(PaymentMethodsSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SearchPaymentMethodsWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SearchPaymentMethodsWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -973,24 +973,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='paymentMethod'>
+            /// <param name='body'>
             /// </param>
-            public static PaymentMethod UpdatePaymentMethod(this IPaymentModule operations, PaymentMethod paymentMethod = default(PaymentMethod))
+            public static PaymentMethod UpdatePaymentMethod(this IPaymentModule operations, PaymentMethod body = default(PaymentMethod))
             {
-                return operations.UpdatePaymentMethodAsync(paymentMethod).GetAwaiter().GetResult();
+                return operations.UpdatePaymentMethodAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='paymentMethod'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<PaymentMethod> UpdatePaymentMethodAsync(this IPaymentModule operations, PaymentMethod paymentMethod = default(PaymentMethod), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<PaymentMethod> UpdatePaymentMethodAsync(this IPaymentModule operations, PaymentMethod body = default(PaymentMethod), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.UpdatePaymentMethodWithHttpMessagesAsync(paymentMethod, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.UpdatePaymentMethodWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -1546,18 +1546,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models
         public IList<TaxDetail> TaxDetails { get; set; }
 
         /// <summary>
-        /// Gets possible values include: 'Unknown', 'Standard', 'Redirection',
-        /// 'PreparedForm'
+        /// Gets or sets possible values include: 'Unknown', 'Standard',
+        /// 'Redirection', 'PreparedForm'
         /// </summary>
         [JsonProperty(PropertyName = "paymentMethodType")]
-        public string PaymentMethodType { get; private set; }
+        public string PaymentMethodType { get; set; }
 
         /// <summary>
-        /// Gets possible values include: 'Paypal', 'BankCard', 'Alternative',
-        /// 'Manual'
+        /// Gets or sets possible values include: 'Paypal', 'BankCard',
+        /// 'Alternative', 'Manual'
         /// </summary>
         [JsonProperty(PropertyName = "paymentMethodGroupType")]
-        public string PaymentMethodGroupType { get; private set; }
+        public string PaymentMethodGroupType { get; set; }
 
         /// <summary>
         /// </summary>

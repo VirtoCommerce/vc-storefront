@@ -417,7 +417,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// </summary>
         public TaxModuleClient Client { get; private set; }
 
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -434,7 +434,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<TaxProviderSearchResult>> SearchTaxProvidersWithHttpMessagesAsync(TaxProviderSearchCriteria criteria = default(TaxProviderSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<TaxProviderSearchResult>> SearchTaxProvidersWithHttpMessagesAsync(TaxProviderSearchCriteria body = default(TaxProviderSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -443,7 +443,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "SearchTaxProviders", tracingParameters);
             }
@@ -472,9 +472,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -686,7 +686,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
             return _result;
         }
 
-        /// <param name='taxProvider'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -703,7 +703,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<TaxProvider>> UpdateTaxProviderWithHttpMessagesAsync(TaxProvider taxProvider = default(TaxProvider), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<TaxProvider>> UpdateTaxProviderWithHttpMessagesAsync(TaxProvider body = default(TaxProvider), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -712,7 +712,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("taxProvider", taxProvider);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "UpdateTaxProvider", tracingParameters);
             }
@@ -741,9 +741,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(taxProvider != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(taxProvider, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -824,7 +824,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// </summary>
         /// <param name='storeId'>
         /// </param>
-        /// <param name='evalContext'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -847,7 +847,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<TaxRate>>> EvaluateTaxesWithHttpMessagesAsync(string storeId, TaxEvaluationContext evalContext = default(TaxEvaluationContext), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<TaxRate>>> EvaluateTaxesWithHttpMessagesAsync(string storeId, TaxEvaluationContext body = default(TaxEvaluationContext), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (storeId == null)
             {
@@ -860,8 +860,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("storeId", storeId);
-                tracingParameters.Add("evalContext", evalContext);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "EvaluateTaxes", tracingParameters);
             }
@@ -891,9 +891,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(evalContext != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(evalContext, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -994,7 +994,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
     /// </summary>
     public partial interface ITaxModule
     {
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1008,7 +1008,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<TaxProviderSearchResult>> SearchTaxProvidersWithHttpMessagesAsync(TaxProviderSearchCriteria criteria = default(TaxProviderSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<TaxProviderSearchResult>> SearchTaxProvidersWithHttpMessagesAsync(TaxProviderSearchCriteria body = default(TaxProviderSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='id'>
         /// </param>
         /// <param name='customHeaders'>
@@ -1027,7 +1027,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// Thrown when a required parameter is null
         /// </exception>
         Task<HttpOperationResponse<TaxProviderSearchResult>> GetTaxProviderByIdWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='taxProvider'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1041,14 +1041,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<TaxProvider>> UpdateTaxProviderWithHttpMessagesAsync(TaxProvider taxProvider = default(TaxProvider), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<TaxProvider>> UpdateTaxProviderWithHttpMessagesAsync(TaxProvider body = default(TaxProvider), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Evaluate and return all tax rates for specified store and
         /// evaluation context
         /// </summary>
         /// <param name='storeId'>
         /// </param>
-        /// <param name='evalContext'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1065,7 +1065,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<IList<TaxRate>>> EvaluateTaxesWithHttpMessagesAsync(string storeId, TaxEvaluationContext evalContext = default(TaxEvaluationContext), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<TaxRate>>> EvaluateTaxesWithHttpMessagesAsync(string storeId, TaxEvaluationContext body = default(TaxEvaluationContext), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -1095,24 +1095,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
-            public static TaxProviderSearchResult SearchTaxProviders(this ITaxModule operations, TaxProviderSearchCriteria criteria = default(TaxProviderSearchCriteria))
+            public static TaxProviderSearchResult SearchTaxProviders(this ITaxModule operations, TaxProviderSearchCriteria body = default(TaxProviderSearchCriteria))
             {
-                return operations.SearchTaxProvidersAsync(criteria).GetAwaiter().GetResult();
+                return operations.SearchTaxProvidersAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<TaxProviderSearchResult> SearchTaxProvidersAsync(this ITaxModule operations, TaxProviderSearchCriteria criteria = default(TaxProviderSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<TaxProviderSearchResult> SearchTaxProvidersAsync(this ITaxModule operations, TaxProviderSearchCriteria body = default(TaxProviderSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SearchTaxProvidersWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SearchTaxProvidersWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -1147,24 +1147,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='taxProvider'>
+            /// <param name='body'>
             /// </param>
-            public static TaxProvider UpdateTaxProvider(this ITaxModule operations, TaxProvider taxProvider = default(TaxProvider))
+            public static TaxProvider UpdateTaxProvider(this ITaxModule operations, TaxProvider body = default(TaxProvider))
             {
-                return operations.UpdateTaxProviderAsync(taxProvider).GetAwaiter().GetResult();
+                return operations.UpdateTaxProviderAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='taxProvider'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<TaxProvider> UpdateTaxProviderAsync(this ITaxModule operations, TaxProvider taxProvider = default(TaxProvider), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<TaxProvider> UpdateTaxProviderAsync(this ITaxModule operations, TaxProvider body = default(TaxProvider), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.UpdateTaxProviderWithHttpMessagesAsync(taxProvider, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.UpdateTaxProviderWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -1179,11 +1179,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
             /// </param>
             /// <param name='storeId'>
             /// </param>
-            /// <param name='evalContext'>
+            /// <param name='body'>
             /// </param>
-            public static IList<TaxRate> EvaluateTaxes(this ITaxModule operations, string storeId, TaxEvaluationContext evalContext = default(TaxEvaluationContext))
+            public static IList<TaxRate> EvaluateTaxes(this ITaxModule operations, string storeId, TaxEvaluationContext body = default(TaxEvaluationContext))
             {
-                return operations.EvaluateTaxesAsync(storeId, evalContext).GetAwaiter().GetResult();
+                return operations.EvaluateTaxesAsync(storeId, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -1195,18 +1195,471 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi
             /// </param>
             /// <param name='storeId'>
             /// </param>
-            /// <param name='evalContext'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<TaxRate>> EvaluateTaxesAsync(this ITaxModule operations, string storeId, TaxEvaluationContext evalContext = default(TaxEvaluationContext), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<TaxRate>> EvaluateTaxesAsync(this ITaxModule operations, string storeId, TaxEvaluationContext body = default(TaxEvaluationContext), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.EvaluateTaxesWithHttpMessagesAsync(storeId, evalContext, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.EvaluateTaxesWithHttpMessagesAsync(storeId, body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class TaxLine
+    {
+        /// <summary>
+        /// Initializes a new instance of the TaxLine class.
+        /// </summary>
+        public TaxLine()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the TaxLine class.
+        /// </summary>
+        public TaxLine(string code = default(string), string name = default(string), string typeName = default(string), double? amount = default(double?), int? quantity = default(int?), double? price = default(double?), string taxType = default(string), string id = default(string))
+        {
+            Code = code;
+            Name = name;
+            TypeName = typeName;
+            Amount = amount;
+            Quantity = quantity;
+            Price = price;
+            TaxType = taxType;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "code")]
+        public string Code { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "typeName")]
+        public string TypeName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "amount")]
+        public double? Amount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "quantity")]
+        public int? Quantity { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "price")]
+        public double? Price { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxType")]
+        public string TaxType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class ObjectSettingEntry
+    {
+        /// <summary>
+        /// Initializes a new instance of the ObjectSettingEntry class.
+        /// </summary>
+        public ObjectSettingEntry()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ObjectSettingEntry class.
+        /// </summary>
+        /// <param name="valueType">Possible values include: 'ShortText',
+        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean',
+        /// 'SecureString', 'Json'</param>
+        public ObjectSettingEntry(bool? itHasValues = default(bool?), string objectId = default(string), string objectType = default(string), object value = default(object), bool? restartRequired = default(bool?), string moduleId = default(string), string groupName = default(string), string name = default(string), string valueType = default(string), IList<object> allowedValues = default(IList<object>), object defaultValue = default(object), bool? isDictionary = default(bool?))
+        {
+            ItHasValues = itHasValues;
+            ObjectId = objectId;
+            ObjectType = objectType;
+            Value = value;
+            RestartRequired = restartRequired;
+            ModuleId = moduleId;
+            GroupName = groupName;
+            Name = name;
+            ValueType = valueType;
+            AllowedValues = allowedValues;
+            DefaultValue = defaultValue;
+            IsDictionary = isDictionary;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "itHasValues")]
+        public bool? ItHasValues { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectId")]
+        public string ObjectId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "value")]
+        public object Value { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "restartRequired")]
+        public bool? RestartRequired { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "moduleId")]
+        public string ModuleId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "groupName")]
+        public string GroupName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'ShortText', 'LongText',
+        /// 'Integer', 'Decimal', 'DateTime', 'Boolean', 'SecureString', 'Json'
+        /// </summary>
+        [JsonProperty(PropertyName = "valueType")]
+        public string ValueType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "allowedValues")]
+        public IList<object> AllowedValues { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "defaultValue")]
+        public object DefaultValue { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isDictionary")]
+        public bool? IsDictionary { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class TaxProvider
+    {
+        /// <summary>
+        /// Initializes a new instance of the TaxProvider class.
+        /// </summary>
+        public TaxProvider()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the TaxProvider class.
+        /// </summary>
+        public TaxProvider(string storeId = default(string), string code = default(string), string logoUrl = default(string), bool? isActive = default(bool?), int? priority = default(int?), string typeName = default(string), IList<ObjectSettingEntry> settings = default(IList<ObjectSettingEntry>), string id = default(string))
+        {
+            StoreId = storeId;
+            Code = code;
+            LogoUrl = logoUrl;
+            IsActive = isActive;
+            Priority = priority;
+            TypeName = typeName;
+            Settings = settings;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "storeId")]
+        public string StoreId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "code")]
+        public string Code { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "logoUrl")]
+        public string LogoUrl { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isActive")]
+        public bool? IsActive { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "priority")]
+        public int? Priority { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "typeName")]
+        public string TypeName { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "settings")]
+        public IList<ObjectSettingEntry> Settings { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class TaxDetail
+    {
+        /// <summary>
+        /// Initializes a new instance of the TaxDetail class.
+        /// </summary>
+        public TaxDetail()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the TaxDetail class.
+        /// </summary>
+        public TaxDetail(double? rate = default(double?), double? amount = default(double?), string name = default(string))
+        {
+            Rate = rate;
+            Amount = amount;
+            Name = name;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "rate")]
+        public double? Rate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "amount")]
+        public double? Amount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class TaxRate
+    {
+        /// <summary>
+        /// Initializes a new instance of the TaxRate class.
+        /// </summary>
+        public TaxRate()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the TaxRate class.
+        /// </summary>
+        public TaxRate(double? rate = default(double?), double? percentRate = default(double?), string currency = default(string), TaxLine line = default(TaxLine), TaxProvider taxProvider = default(TaxProvider), string taxProviderCode = default(string), IList<TaxDetail> taxDetails = default(IList<TaxDetail>))
+        {
+            Rate = rate;
+            PercentRate = percentRate;
+            Currency = currency;
+            Line = line;
+            TaxProvider = taxProvider;
+            TaxProviderCode = taxProviderCode;
+            TaxDetails = taxDetails;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "rate")]
+        public double? Rate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "percentRate")]
+        public double? PercentRate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "currency")]
+        public string Currency { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "line")]
+        public TaxLine Line { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxProvider")]
+        public TaxProvider TaxProvider { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxProviderCode")]
+        public string TaxProviderCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxDetails")]
+        public IList<TaxDetail> TaxDetails { get; set; }
 
     }
 }
@@ -1394,219 +1847,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "take")]
         public int? Take { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class ObjectSettingEntry
-    {
-        /// <summary>
-        /// Initializes a new instance of the ObjectSettingEntry class.
-        /// </summary>
-        public ObjectSettingEntry()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ObjectSettingEntry class.
-        /// </summary>
-        /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean',
-        /// 'SecureString', 'Json'</param>
-        public ObjectSettingEntry(bool? itHasValues = default(bool?), string objectId = default(string), string objectType = default(string), object value = default(object), bool? restartRequired = default(bool?), string moduleId = default(string), string groupName = default(string), string name = default(string), string valueType = default(string), IList<object> allowedValues = default(IList<object>), object defaultValue = default(object), bool? isDictionary = default(bool?))
-        {
-            ItHasValues = itHasValues;
-            ObjectId = objectId;
-            ObjectType = objectType;
-            Value = value;
-            RestartRequired = restartRequired;
-            ModuleId = moduleId;
-            GroupName = groupName;
-            Name = name;
-            ValueType = valueType;
-            AllowedValues = allowedValues;
-            DefaultValue = defaultValue;
-            IsDictionary = isDictionary;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "itHasValues")]
-        public bool? ItHasValues { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectId")]
-        public string ObjectId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "value")]
-        public object Value { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "restartRequired")]
-        public bool? RestartRequired { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "moduleId")]
-        public string ModuleId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "groupName")]
-        public string GroupName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Integer', 'Decimal', 'DateTime', 'Boolean', 'SecureString', 'Json'
-        /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "allowedValues")]
-        public IList<object> AllowedValues { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "defaultValue")]
-        public object DefaultValue { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isDictionary")]
-        public bool? IsDictionary { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class TaxProvider
-    {
-        /// <summary>
-        /// Initializes a new instance of the TaxProvider class.
-        /// </summary>
-        public TaxProvider()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the TaxProvider class.
-        /// </summary>
-        public TaxProvider(string code = default(string), string storeId = default(string), string logoUrl = default(string), bool? isActive = default(bool?), int? priority = default(int?), string typeName = default(string), IList<ObjectSettingEntry> settings = default(IList<ObjectSettingEntry>), string id = default(string))
-        {
-            Code = code;
-            StoreId = storeId;
-            LogoUrl = logoUrl;
-            IsActive = isActive;
-            Priority = priority;
-            TypeName = typeName;
-            Settings = settings;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "code")]
-        public string Code { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "storeId")]
-        public string StoreId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "logoUrl")]
-        public string LogoUrl { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isActive")]
-        public bool? IsActive { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "priority")]
-        public int? Priority { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "typeName")]
-        public string TypeName { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "settings")]
-        public IList<ObjectSettingEntry> Settings { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
 
     }
 }
@@ -2067,98 +2307,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class TaxLine
-    {
-        /// <summary>
-        /// Initializes a new instance of the TaxLine class.
-        /// </summary>
-        public TaxLine()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the TaxLine class.
-        /// </summary>
-        public TaxLine(string code = default(string), string name = default(string), string typeName = default(string), double? amount = default(double?), int? quantity = default(int?), double? price = default(double?), string taxType = default(string), string id = default(string))
-        {
-            Code = code;
-            Name = name;
-            TypeName = typeName;
-            Amount = amount;
-            Quantity = quantity;
-            Price = price;
-            TaxType = taxType;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "code")]
-        public string Code { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "typeName")]
-        public string TypeName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "amount")]
-        public double? Amount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "quantity")]
-        public int? Quantity { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "price")]
-        public double? Price { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "taxType")]
-        public string TaxType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public partial class TaxEvaluationContext
     {
         /// <summary>
@@ -2247,148 +2395,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class TaxDetail
-    {
-        /// <summary>
-        /// Initializes a new instance of the TaxDetail class.
-        /// </summary>
-        public TaxDetail()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the TaxDetail class.
-        /// </summary>
-        public TaxDetail(double? rate = default(double?), double? amount = default(double?), string name = default(string))
-        {
-            Rate = rate;
-            Amount = amount;
-            Name = name;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "rate")]
-        public double? Rate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "amount")]
-        public double? Amount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class TaxRate
-    {
-        /// <summary>
-        /// Initializes a new instance of the TaxRate class.
-        /// </summary>
-        public TaxRate()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the TaxRate class.
-        /// </summary>
-        public TaxRate(double? rate = default(double?), double? percentRate = default(double?), string currency = default(string), TaxLine line = default(TaxLine), string taxProviderCode = default(string), IList<TaxDetail> taxDetails = default(IList<TaxDetail>))
-        {
-            Rate = rate;
-            PercentRate = percentRate;
-            Currency = currency;
-            Line = line;
-            TaxProviderCode = taxProviderCode;
-            TaxDetails = taxDetails;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "rate")]
-        public double? Rate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "percentRate")]
-        public double? PercentRate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "currency")]
-        public string Currency { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "line")]
-        public TaxLine Line { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "taxProviderCode")]
-        public string TaxProviderCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "taxDetails")]
-        public IList<TaxDetail> TaxDetails { get; set; }
 
     }
 }

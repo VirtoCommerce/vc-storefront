@@ -569,6 +569,142 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// </param>
         /// <param name='storeId'>
         /// </param>
+        /// <param name='urls'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> DeleteContentWithHttpMessagesAsync(string contentType, string storeId, IList<string> urls = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (contentType == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "contentType");
+            }
+            if (storeId == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "storeId");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("contentType", contentType);
+                tracingParameters.Add("storeId", storeId);
+                tracingParameters.Add("urls", urls);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "DeleteContent", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/content/{contentType}/{storeId}").ToString();
+            _url = _url.Replace("{contentType}", System.Uri.EscapeDataString(contentType));
+            _url = _url.Replace("{storeId}", System.Uri.EscapeDataString(storeId));
+            List<string> _queryParameters = new List<string>();
+            if (urls != null)
+            {
+                _queryParameters.Add(string.Format("urls={0}", System.Uri.EscapeDataString(string.Join(",", urls))));
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("DELETE");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <param name='contentType'>
+        /// </param>
+        /// <param name='storeId'>
+        /// </param>
         /// <param name='relativeUrl'>
         /// </param>
         /// <param name='customHeaders'>
@@ -879,152 +1015,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
                     throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
                 }
             }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <param name='contentType'>
-        /// </param>
-        /// <param name='storeId'>
-        /// </param>
-        /// <param name='urls'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> DeleteContentWithHttpMessagesAsync(string contentType, string storeId, IList<string> urls = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (contentType == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "contentType");
-            }
-            if (storeId == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "storeId");
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("contentType", contentType);
-                tracingParameters.Add("storeId", storeId);
-                tracingParameters.Add("urls", urls);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "DeleteContent", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/content/{contentType}/{storeId}").ToString();
-            _url = _url.Replace("{contentType}", System.Uri.EscapeDataString(contentType));
-            _url = _url.Replace("{storeId}", System.Uri.EscapeDataString(storeId));
-            List<string> _queryParameters = new List<string>();
-            if (urls != null)
-            {
-                if (urls.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("urls={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in urls)
-                    {
-                        _queryParameters.Add(string.Format("urls={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
-            }
-            if (_queryParameters.Count > 0)
-            {
-                _url += "?" + string.Join("&", _queryParameters);
-            }
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("DELETE");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
             if (_shouldTrace)
             {
                 ServiceClientTracing.Exit(_invocationId, _result);
@@ -1486,7 +1476,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> UnpackWithHttpMessagesAsync(string contentType, string storeId, string archivePath = default(string), string destPath = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> UnpackWithHttpMessagesAsync(string contentType, string storeId, string archivePath = default(string), string destPath = "default", Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (contentType == null)
             {
@@ -1607,7 +1597,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// </param>
         /// <param name='storeId'>
         /// </param>
-        /// <param name='folder'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1627,7 +1617,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> CreateContentFolderWithHttpMessagesAsync(string contentType, string storeId, ContentFolder folder = default(ContentFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> CreateContentFolderWithHttpMessagesAsync(string contentType, string storeId, ContentFolder body = default(ContentFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (contentType == null)
             {
@@ -1644,9 +1634,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("contentType", contentType);
                 tracingParameters.Add("storeId", storeId);
-                tracingParameters.Add("folder", folder);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "CreateContentFolder", tracingParameters);
             }
@@ -1677,9 +1667,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(folder != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(folder, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -1784,6 +1774,25 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// </param>
         /// <param name='storeId'>
         /// </param>
+        /// <param name='urls'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse> DeleteContentWithHttpMessagesAsync(string contentType, string storeId, IList<string> urls = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <param name='contentType'>
+        /// </param>
+        /// <param name='storeId'>
+        /// </param>
         /// <param name='relativeUrl'>
         /// </param>
         /// <param name='customHeaders'>
@@ -1826,25 +1835,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// Thrown when a required parameter is null
         /// </exception>
         Task<HttpOperationResponse<IList<ContentItem>>> UploadContentWithHttpMessagesAsync(string contentType, string storeId, string folderUrl = default(string), string url = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='contentType'>
-        /// </param>
-        /// <param name='storeId'>
-        /// </param>
-        /// <param name='urls'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse> DeleteContentWithHttpMessagesAsync(string contentType, string storeId, IList<string> urls = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='contentType'>
         /// </param>
         /// <param name='storeId'>
@@ -1924,12 +1914,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse> UnpackWithHttpMessagesAsync(string contentType, string storeId, string archivePath = default(string), string destPath = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> UnpackWithHttpMessagesAsync(string contentType, string storeId, string archivePath = default(string), string destPath = "default", Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='contentType'>
         /// </param>
         /// <param name='storeId'>
         /// </param>
-        /// <param name='folder'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1943,7 +1933,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse> CreateContentFolderWithHttpMessagesAsync(string contentType, string storeId, ContentFolder folder = default(ContentFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> CreateContentFolderWithHttpMessagesAsync(string contentType, string storeId, ContentFolder body = default(ContentFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -1994,6 +1984,37 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
                 {
                     return _result.Body;
                 }
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='contentType'>
+            /// </param>
+            /// <param name='storeId'>
+            /// </param>
+            /// <param name='urls'>
+            /// </param>
+            public static void DeleteContent(this IContent operations, string contentType, string storeId, IList<string> urls = default(IList<string>))
+            {
+                operations.DeleteContentAsync(contentType, storeId, urls).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='contentType'>
+            /// </param>
+            /// <param name='storeId'>
+            /// </param>
+            /// <param name='urls'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task DeleteContentAsync(this IContent operations, string contentType, string storeId, IList<string> urls = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.DeleteContentWithHttpMessagesAsync(contentType, storeId, urls, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <param name='operations'>
@@ -2066,37 +2087,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
                 {
                     return _result.Body;
                 }
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='contentType'>
-            /// </param>
-            /// <param name='storeId'>
-            /// </param>
-            /// <param name='urls'>
-            /// </param>
-            public static void DeleteContent(this IContent operations, string contentType, string storeId, IList<string> urls = default(IList<string>))
-            {
-                operations.DeleteContentAsync(contentType, storeId, urls).GetAwaiter().GetResult();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='contentType'>
-            /// </param>
-            /// <param name='storeId'>
-            /// </param>
-            /// <param name='urls'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task DeleteContentAsync(this IContent operations, string contentType, string storeId, IList<string> urls = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.DeleteContentWithHttpMessagesAsync(contentType, storeId, urls, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <param name='operations'>
@@ -2210,7 +2200,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             /// </param>
             /// <param name='destPath'>
             /// </param>
-            public static void Unpack(this IContent operations, string contentType, string storeId, string archivePath = default(string), string destPath = default(string))
+            public static void Unpack(this IContent operations, string contentType, string storeId, string archivePath = default(string), string destPath = "default")
             {
                 operations.UnpackAsync(contentType, storeId, archivePath, destPath).GetAwaiter().GetResult();
             }
@@ -2229,7 +2219,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task UnpackAsync(this IContent operations, string contentType, string storeId, string archivePath = default(string), string destPath = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task UnpackAsync(this IContent operations, string contentType, string storeId, string archivePath = default(string), string destPath = "default", CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.UnpackWithHttpMessagesAsync(contentType, storeId, archivePath, destPath, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
@@ -2241,11 +2231,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             /// </param>
             /// <param name='storeId'>
             /// </param>
-            /// <param name='folder'>
+            /// <param name='body'>
             /// </param>
-            public static void CreateContentFolder(this IContent operations, string contentType, string storeId, ContentFolder folder = default(ContentFolder))
+            public static void CreateContentFolder(this IContent operations, string contentType, string storeId, ContentFolder body = default(ContentFolder))
             {
-                operations.CreateContentFolderAsync(contentType, storeId, folder).GetAwaiter().GetResult();
+                operations.CreateContentFolderAsync(contentType, storeId, body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
@@ -2255,14 +2245,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             /// </param>
             /// <param name='storeId'>
             /// </param>
-            /// <param name='folder'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task CreateContentFolderAsync(this IContent operations, string contentType, string storeId, ContentFolder folder = default(ContentFolder), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task CreateContentFolderAsync(this IContent operations, string contentType, string storeId, ContentFolder body = default(ContentFolder), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.CreateContentFolderWithHttpMessagesAsync(contentType, storeId, folder, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.CreateContentFolderWithHttpMessagesAsync(contentType, storeId, body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
     }
@@ -2455,7 +2445,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
 
         /// <param name='storeId'>
         /// </param>
-        /// <param name='list'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -2475,12 +2465,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> UpdateMenuLinkListWithHttpMessagesAsync(string storeId, MenuLinkList list = default(MenuLinkList), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> UpdateMenuLinkListWithHttpMessagesAsync(string storeId, MenuLinkList body = default(MenuLinkList), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (list != null)
-            {
-                list.Validate();
-            }
             if (storeId == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "storeId");
@@ -2492,7 +2478,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("list", list);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("storeId", storeId);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "UpdateMenuLinkList", tracingParameters);
@@ -2523,9 +2509,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(list != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(list, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -2629,17 +2615,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             List<string> _queryParameters = new List<string>();
             if (listIds != null)
             {
-                if (listIds.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("listIds={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in listIds)
-                    {
-                        _queryParameters.Add(string.Format("listIds={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("listIds={0}", System.Uri.EscapeDataString(string.Join(",", listIds))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -3074,7 +3050,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         Task<HttpOperationResponse<IList<MenuLinkList>>> GetListsWithHttpMessagesAsync(string storeId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='storeId'>
         /// </param>
-        /// <param name='list'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -3088,7 +3064,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse> UpdateMenuLinkListWithHttpMessagesAsync(string storeId, MenuLinkList list = default(MenuLinkList), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> UpdateMenuLinkListWithHttpMessagesAsync(string storeId, MenuLinkList body = default(MenuLinkList), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='storeId'>
         /// </param>
         /// <param name='listIds'>
@@ -3207,11 +3183,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             /// </param>
             /// <param name='storeId'>
             /// </param>
-            /// <param name='list'>
+            /// <param name='body'>
             /// </param>
-            public static void UpdateMenuLinkList(this IMenu operations, string storeId, MenuLinkList list = default(MenuLinkList))
+            public static void UpdateMenuLinkList(this IMenu operations, string storeId, MenuLinkList body = default(MenuLinkList))
             {
-                operations.UpdateMenuLinkListAsync(storeId, list).GetAwaiter().GetResult();
+                operations.UpdateMenuLinkListAsync(storeId, body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
@@ -3219,14 +3195,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi
             /// </param>
             /// <param name='storeId'>
             /// </param>
-            /// <param name='list'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task UpdateMenuLinkListAsync(this IMenu operations, string storeId, MenuLinkList list = default(MenuLinkList), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task UpdateMenuLinkListAsync(this IMenu operations, string storeId, MenuLinkList body = default(MenuLinkList), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.UpdateMenuLinkListWithHttpMessagesAsync(storeId, list, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.UpdateMenuLinkListWithHttpMessagesAsync(storeId, body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <param name='operations'>
@@ -3345,74 +3321,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class ContentStatistic
-    {
-        /// <summary>
-        /// Initializes a new instance of the ContentStatistic class.
-        /// </summary>
-        public ContentStatistic()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ContentStatistic class.
-        /// </summary>
-        public ContentStatistic(string activeThemeName = default(string), int? themesCount = default(int?), int? pagesCount = default(int?), int? blogsCount = default(int?))
-        {
-            ActiveThemeName = activeThemeName;
-            ThemesCount = themesCount;
-            PagesCount = pagesCount;
-            BlogsCount = blogsCount;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "activeThemeName")]
-        public string ActiveThemeName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "themesCount")]
-        public int? ThemesCount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "pagesCount")]
-        public int? PagesCount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "blogsCount")]
-        public int? BlogsCount { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public partial class ContentItem
     {
         /// <summary>
@@ -3477,6 +3385,324 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "createdDate")]
         public System.DateTime? CreatedDate { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class MenuLink
+    {
+        /// <summary>
+        /// Initializes a new instance of the MenuLink class.
+        /// </summary>
+        public MenuLink()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the MenuLink class.
+        /// </summary>
+        public MenuLink(string title = default(string), string url = default(string), int? priority = default(int?), string menuLinkListId = default(string), string associatedObjectId = default(string), string associatedObjectName = default(string), string associatedObjectType = default(string), IList<string> securityScopes = default(IList<string>), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        {
+            Title = title;
+            Url = url;
+            Priority = priority;
+            MenuLinkListId = menuLinkListId;
+            AssociatedObjectId = associatedObjectId;
+            AssociatedObjectName = associatedObjectName;
+            AssociatedObjectType = associatedObjectType;
+            SecurityScopes = securityScopes;
+            OuterId = outerId;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "title")]
+        public string Title { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "url")]
+        public string Url { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "priority")]
+        public int? Priority { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "menuLinkListId")]
+        public string MenuLinkListId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "associatedObjectId")]
+        public string AssociatedObjectId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "associatedObjectName")]
+        public string AssociatedObjectName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "associatedObjectType")]
+        public string AssociatedObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "securityScopes")]
+        public IList<string> SecurityScopes { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class MenuLinkList
+    {
+        /// <summary>
+        /// Initializes a new instance of the MenuLinkList class.
+        /// </summary>
+        public MenuLinkList()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the MenuLinkList class.
+        /// </summary>
+        public MenuLinkList(string name = default(string), string storeId = default(string), string language = default(string), IList<MenuLink> menuLinks = default(IList<MenuLink>), IList<string> securityScopes = default(IList<string>), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        {
+            Name = name;
+            StoreId = storeId;
+            Language = language;
+            MenuLinks = menuLinks;
+            SecurityScopes = securityScopes;
+            OuterId = outerId;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "storeId")]
+        public string StoreId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "language")]
+        public string Language { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "menuLinks")]
+        public IList<MenuLink> MenuLinks { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "securityScopes")]
+        public IList<string> SecurityScopes { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class ContentStatistic
+    {
+        /// <summary>
+        /// Initializes a new instance of the ContentStatistic class.
+        /// </summary>
+        public ContentStatistic()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ContentStatistic class.
+        /// </summary>
+        public ContentStatistic(string activeThemeName = default(string), int? themesCount = default(int?), int? pagesCount = default(int?), int? blogsCount = default(int?))
+        {
+            ActiveThemeName = activeThemeName;
+            ThemesCount = themesCount;
+            PagesCount = pagesCount;
+            BlogsCount = blogsCount;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "activeThemeName")]
+        public string ActiveThemeName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "themesCount")]
+        public int? ThemesCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "pagesCount")]
+        public int? PagesCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "blogsCount")]
+        public int? BlogsCount { get; set; }
 
     }
 }
@@ -3564,315 +3790,5 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
         [JsonProperty(PropertyName = "createdDate")]
         public System.DateTime? CreatedDate { get; set; }
 
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class MenuLink
-    {
-        /// <summary>
-        /// Initializes a new instance of the MenuLink class.
-        /// </summary>
-        public MenuLink()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the MenuLink class.
-        /// </summary>
-        public MenuLink(string title = default(string), string url = default(string), int? priority = default(int?), string menuLinkListId = default(string), string associatedObjectId = default(string), string associatedObjectName = default(string), string associatedObjectType = default(string), IList<string> securityScopes = default(IList<string>), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            Title = title;
-            Url = url;
-            Priority = priority;
-            MenuLinkListId = menuLinkListId;
-            AssociatedObjectId = associatedObjectId;
-            AssociatedObjectName = associatedObjectName;
-            AssociatedObjectType = associatedObjectType;
-            SecurityScopes = securityScopes;
-            OuterId = outerId;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "title")]
-        public string Title { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "url")]
-        public string Url { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "priority")]
-        public int? Priority { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "menuLinkListId")]
-        public string MenuLinkListId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "associatedObjectId")]
-        public string AssociatedObjectId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "associatedObjectName")]
-        public string AssociatedObjectName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "associatedObjectType")]
-        public string AssociatedObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "securityScopes")]
-        public IList<string> SecurityScopes { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "outerId")]
-        public string OuterId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class MenuLinkList
-    {
-        /// <summary>
-        /// Initializes a new instance of the MenuLinkList class.
-        /// </summary>
-        public MenuLinkList()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the MenuLinkList class.
-        /// </summary>
-        public MenuLinkList(string name = default(string), string storeId = default(string), string language = default(string), IList<MenuLink> menuLinks = default(IList<MenuLink>), IList<string> securityScopes = default(IList<string>), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            Name = name;
-            StoreId = storeId;
-            Language = language;
-            MenuLinks = menuLinks;
-            SecurityScopes = securityScopes;
-            OuterId = outerId;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "storeId")]
-        public string StoreId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "language")]
-        public string Language { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "menuLinks")]
-        public IList<MenuLink> MenuLinks { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "securityScopes")]
-        public IList<string> SecurityScopes { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "outerId")]
-        public string OuterId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (MenuLinks != null)
-            {
-                foreach (var element in MenuLinks)
-                {
-                    if (element != null)
-                    {
-                        element.Validate();
-                    }
-                }
-            }
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
     }
 }

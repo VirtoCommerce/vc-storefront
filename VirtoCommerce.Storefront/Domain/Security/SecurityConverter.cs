@@ -9,13 +9,13 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
     public static class SecurityConverter
     {
-        public static IdentityResult ToIdentityResult(this dto.IdentityResult resultDto)
+        public static IdentityResult ToIdentityResult(this dto.SecurityResult resultDto)
         {
             if (resultDto.Succeeded == true)
             {
                 return IdentityResult.Success;
             }
-            return IdentityResult.Failed(resultDto.Errors.Select(x => new IdentityError { Description = x.Description }).ToArray());
+            return IdentityResult.Failed(resultDto.Errors.Select(x => new IdentityError { Description = x }).ToArray());
         }
 
         public static dto.Role ToRoleDto(this Role role)

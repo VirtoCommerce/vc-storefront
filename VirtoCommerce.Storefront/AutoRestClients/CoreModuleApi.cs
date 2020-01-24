@@ -420,7 +420,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// <summary>
         /// Batch create or update seo infos
         /// </summary>
-        /// <param name='seoInfos'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -434,18 +434,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> BatchUpdateSeoInfosWithHttpMessagesAsync(IList<SeoInfo> seoInfos = default(IList<SeoInfo>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> BatchUpdateSeoInfosWithHttpMessagesAsync(IList<SeoInfo> body = default(IList<SeoInfo>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (seoInfos != null)
-            {
-                foreach (var element in seoInfos)
-                {
-                    if (element != null)
-                    {
-                        element.Validate();
-                    }
-                }
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -453,7 +443,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("seoInfos", seoInfos);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "BatchUpdateSeoInfos", tracingParameters);
             }
@@ -482,9 +472,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(seoInfos != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(seoInfos, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -951,9 +941,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         }
 
         /// <summary>
-        /// Update a existing currency
+        /// Create a existing currency
         /// </summary>
-        /// <param name='currency'>
+        /// <param name='body'>
         /// currency
         /// </param>
         /// <param name='customHeaders'>
@@ -968,7 +958,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> UpdateCurrencyWithHttpMessagesAsync(Currency currency = default(Currency), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> CreateCurrencyWithHttpMessagesAsync(Currency body = default(Currency), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -977,9 +967,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("currency", currency);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "UpdateCurrency", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "CreateCurrency", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
@@ -987,7 +977,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("PUT");
+            _httpRequest.Method = new HttpMethod("POST");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
 
@@ -1006,9 +996,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(currency != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(currency, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -1066,9 +1056,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         }
 
         /// <summary>
-        /// Create a existing currency
+        /// Update a existing currency
         /// </summary>
-        /// <param name='currency'>
+        /// <param name='body'>
         /// currency
         /// </param>
         /// <param name='customHeaders'>
@@ -1083,7 +1073,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> CreateCurrencyWithHttpMessagesAsync(Currency currency = default(Currency), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> UpdateCurrencyWithHttpMessagesAsync(Currency body = default(Currency), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1092,9 +1082,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("currency", currency);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "CreateCurrency", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdateCurrency", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
@@ -1102,7 +1092,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.Method = new HttpMethod("PUT");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
 
@@ -1121,9 +1111,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(currency != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(currency, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -1217,17 +1207,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             List<string> _queryParameters = new List<string>();
             if (codes != null)
             {
-                if (codes.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("codes={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in codes)
-                    {
-                        _queryParameters.Add(string.Format("codes={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("codes={0}", System.Uri.EscapeDataString(string.Join(",", codes))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -1437,7 +1417,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// <summary>
         /// Update a existing package type
         /// </summary>
-        /// <param name='packageType'>
+        /// <param name='body'>
         /// package type
         /// </param>
         /// <param name='customHeaders'>
@@ -1452,7 +1432,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> UpdatePackageTypeWithHttpMessagesAsync(PackageType packageType = default(PackageType), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> UpdatePackageTypeWithHttpMessagesAsync(PackageType body = default(PackageType), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1461,7 +1441,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("packageType", packageType);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "UpdatePackageType", tracingParameters);
             }
@@ -1490,9 +1470,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(packageType != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(packageType, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -1552,7 +1532,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// <summary>
         /// Create new package type
         /// </summary>
-        /// <param name='packageType'>
+        /// <param name='body'>
         /// package type
         /// </param>
         /// <param name='customHeaders'>
@@ -1567,7 +1547,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> CreatePackageTypeWithHttpMessagesAsync(PackageType packageType = default(PackageType), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> CreatePackageTypeWithHttpMessagesAsync(PackageType body = default(PackageType), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1576,7 +1556,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("packageType", packageType);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "CreatePackageType", tracingParameters);
             }
@@ -1605,9 +1585,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(packageType != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(packageType, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -1701,17 +1681,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             List<string> _queryParameters = new List<string>();
             if (ids != null)
             {
-                if (ids.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in ids)
-                    {
-                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Join(",", ids))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -1793,8 +1763,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         }
 
         /// <summary>
-        /// Does nothing. Just a way to expose Address thru Swagger.
+        /// Validate address (reserved for future) and also required for expose Address
+        /// in OpenAPI swagger docs
         /// </summary>
+        /// <param name='body'>
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -1810,7 +1783,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Address>> ExposeAddressWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<bool?>> ValidateAddressWithHttpMessagesAsync(Address body = default(Address), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1819,8 +1792,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "ExposeAddress", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "ValidateAddress", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
@@ -1847,6 +1821,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
 
             // Serialize Request
             string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
             // Set Credentials
             if (Client.Credentials != null)
             {
@@ -1867,7 +1847,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200 && (int)_statusCode != 204)
+            if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1890,7 +1870,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<Address>();
+            var _result = new HttpOperationResponse<bool?>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -1899,7 +1879,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<Address>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<bool?>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -1947,7 +1927,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// <summary>
         /// Batch create or update seo infos
         /// </summary>
-        /// <param name='seoInfos'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1958,7 +1938,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// <exception cref="Microsoft.Rest.HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        Task<HttpOperationResponse> BatchUpdateSeoInfosWithHttpMessagesAsync(IList<SeoInfo> seoInfos = default(IList<SeoInfo>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> BatchUpdateSeoInfosWithHttpMessagesAsync(IList<SeoInfo> body = default(IList<SeoInfo>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='objectId'>
         /// </param>
         /// <param name='objectType'>
@@ -2015,25 +1995,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// </exception>
         Task<HttpOperationResponse<IList<Currency>>> GetAllCurrenciesWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
-        /// Update a existing currency
-        /// </summary>
-        /// <param name='currency'>
-        /// currency
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        Task<HttpOperationResponse> UpdateCurrencyWithHttpMessagesAsync(Currency currency = default(Currency), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
         /// Create a existing currency
         /// </summary>
-        /// <param name='currency'>
+        /// <param name='body'>
         /// currency
         /// </param>
         /// <param name='customHeaders'>
@@ -2045,7 +2009,23 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// <exception cref="Microsoft.Rest.HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        Task<HttpOperationResponse> CreateCurrencyWithHttpMessagesAsync(Currency currency = default(Currency), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> CreateCurrencyWithHttpMessagesAsync(Currency body = default(Currency), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Update a existing currency
+        /// </summary>
+        /// <param name='body'>
+        /// currency
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        Task<HttpOperationResponse> UpdateCurrencyWithHttpMessagesAsync(Currency body = default(Currency), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Delete currencies
         /// </summary>
@@ -2081,7 +2061,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// <summary>
         /// Update a existing package type
         /// </summary>
-        /// <param name='packageType'>
+        /// <param name='body'>
         /// package type
         /// </param>
         /// <param name='customHeaders'>
@@ -2093,11 +2073,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// <exception cref="Microsoft.Rest.HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        Task<HttpOperationResponse> UpdatePackageTypeWithHttpMessagesAsync(PackageType packageType = default(PackageType), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> UpdatePackageTypeWithHttpMessagesAsync(PackageType body = default(PackageType), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Create new package type
         /// </summary>
-        /// <param name='packageType'>
+        /// <param name='body'>
         /// package type
         /// </param>
         /// <param name='customHeaders'>
@@ -2109,7 +2089,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// <exception cref="Microsoft.Rest.HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        Task<HttpOperationResponse> CreatePackageTypeWithHttpMessagesAsync(PackageType packageType = default(PackageType), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> CreatePackageTypeWithHttpMessagesAsync(PackageType body = default(PackageType), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Delete package types
         /// </summary>
@@ -2127,8 +2107,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// </exception>
         Task<HttpOperationResponse> DeletePackageTypesWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
-        /// Does nothing. Just a way to expose Address thru Swagger.
+        /// Validate address (reserved for future) and also required for expose
+        /// Address in OpenAPI swagger docs
         /// </summary>
+        /// <param name='body'>
+        /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
         /// </param>
@@ -2141,7 +2124,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<Address>> ExposeAddressWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<bool?>> ValidateAddressWithHttpMessagesAsync(Address body = default(Address), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -2174,11 +2157,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='seoInfos'>
+            /// <param name='body'>
             /// </param>
-            public static void BatchUpdateSeoInfos(this ICommerce operations, IList<SeoInfo> seoInfos = default(IList<SeoInfo>))
+            public static void BatchUpdateSeoInfos(this ICommerce operations, IList<SeoInfo> body = default(IList<SeoInfo>))
             {
-                operations.BatchUpdateSeoInfosAsync(seoInfos).GetAwaiter().GetResult();
+                operations.BatchUpdateSeoInfosAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -2187,14 +2170,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='seoInfos'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task BatchUpdateSeoInfosAsync(this ICommerce operations, IList<SeoInfo> seoInfos = default(IList<SeoInfo>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task BatchUpdateSeoInfosAsync(this ICommerce operations, IList<SeoInfo> body = default(IList<SeoInfo>), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.BatchUpdateSeoInfosWithHttpMessagesAsync(seoInfos, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.BatchUpdateSeoInfosWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <param name='operations'>
@@ -2290,34 +2273,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             }
 
             /// <summary>
-            /// Update a existing currency
+            /// Create a existing currency
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='currency'>
+            /// <param name='body'>
             /// currency
             /// </param>
-            public static void UpdateCurrency(this ICommerce operations, Currency currency = default(Currency))
+            public static void CreateCurrency(this ICommerce operations, Currency body = default(Currency))
             {
-                operations.UpdateCurrencyAsync(currency).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Update a existing currency
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='currency'>
-            /// currency
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task UpdateCurrencyAsync(this ICommerce operations, Currency currency = default(Currency), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.UpdateCurrencyWithHttpMessagesAsync(currency, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                operations.CreateCurrencyAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -2326,29 +2292,46 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='currency'>
-            /// currency
-            /// </param>
-            public static void CreateCurrency(this ICommerce operations, Currency currency = default(Currency))
-            {
-                operations.CreateCurrencyAsync(currency).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Create a existing currency
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='currency'>
+            /// <param name='body'>
             /// currency
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task CreateCurrencyAsync(this ICommerce operations, Currency currency = default(Currency), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task CreateCurrencyAsync(this ICommerce operations, Currency body = default(Currency), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.CreateCurrencyWithHttpMessagesAsync(currency, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.CreateCurrencyWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
+            /// <summary>
+            /// Update a existing currency
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// currency
+            /// </param>
+            public static void UpdateCurrency(this ICommerce operations, Currency body = default(Currency))
+            {
+                operations.UpdateCurrencyAsync(body).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Update a existing currency
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// currency
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task UpdateCurrencyAsync(this ICommerce operations, Currency body = default(Currency), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.UpdateCurrencyWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -2416,12 +2399,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='packageType'>
+            /// <param name='body'>
             /// package type
             /// </param>
-            public static void UpdatePackageType(this ICommerce operations, PackageType packageType = default(PackageType))
+            public static void UpdatePackageType(this ICommerce operations, PackageType body = default(PackageType))
             {
-                operations.UpdatePackageTypeAsync(packageType).GetAwaiter().GetResult();
+                operations.UpdatePackageTypeAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -2430,15 +2413,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='packageType'>
+            /// <param name='body'>
             /// package type
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task UpdatePackageTypeAsync(this ICommerce operations, PackageType packageType = default(PackageType), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task UpdatePackageTypeAsync(this ICommerce operations, PackageType body = default(PackageType), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.UpdatePackageTypeWithHttpMessagesAsync(packageType, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.UpdatePackageTypeWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -2447,12 +2430,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='packageType'>
+            /// <param name='body'>
             /// package type
             /// </param>
-            public static void CreatePackageType(this ICommerce operations, PackageType packageType = default(PackageType))
+            public static void CreatePackageType(this ICommerce operations, PackageType body = default(PackageType))
             {
-                operations.CreatePackageTypeAsync(packageType).GetAwaiter().GetResult();
+                operations.CreatePackageTypeAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -2461,15 +2444,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='packageType'>
+            /// <param name='body'>
             /// package type
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task CreatePackageTypeAsync(this ICommerce operations, PackageType packageType = default(PackageType), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task CreatePackageTypeAsync(this ICommerce operations, PackageType body = default(PackageType), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.CreatePackageTypeWithHttpMessagesAsync(packageType, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.CreatePackageTypeWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -2504,28 +2487,34 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi
             }
 
             /// <summary>
-            /// Does nothing. Just a way to expose Address thru Swagger.
+            /// Validate address (reserved for future) and also required for expose Address
+            /// in OpenAPI swagger docs
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            public static Address ExposeAddress(this ICommerce operations)
+            /// <param name='body'>
+            /// </param>
+            public static bool? ValidateAddress(this ICommerce operations, Address body = default(Address))
             {
-                return operations.ExposeAddressAsync().GetAwaiter().GetResult();
+                return operations.ValidateAddressAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Does nothing. Just a way to expose Address thru Swagger.
+            /// Validate address (reserved for future) and also required for expose Address
+            /// in OpenAPI swagger docs
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Address> ExposeAddressAsync(this ICommerce operations, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<bool?> ValidateAddressAsync(this ICommerce operations, Address body = default(Address), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.ExposeAddressWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.ValidateAddressWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -2574,7 +2563,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// <param name="objectId">SEO related object id</param>
         /// <param name="objectType">SEO related object type name</param>
         /// <param name="isActive">Active/Inactive</param>
-        public SeoInfo(string name = default(string), string semanticUrl = default(string), string pageTitle = default(string), string metaDescription = default(string), string imageAltDescription = default(string), string metaKeywords = default(string), string storeId = default(string), string objectId = default(string), string objectType = default(string), bool? isActive = default(bool?), string languageCode = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public SeoInfo(string name = default(string), string semanticUrl = default(string), string pageTitle = default(string), string metaDescription = default(string), string imageAltDescription = default(string), string metaKeywords = default(string), string storeId = default(string), string objectId = default(string), string objectType = default(string), bool? isActive = default(bool?), string languageCode = default(string), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             SemanticUrl = semanticUrl;
@@ -2587,6 +2576,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
             ObjectType = objectType;
             IsActive = isActive;
             LanguageCode = languageCode;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
@@ -2665,6 +2655,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "createdDate")]
         public System.DateTime? CreatedDate { get; set; }
 
@@ -2688,37 +2683,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
     }
 }
 // <auto-generated>

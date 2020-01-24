@@ -420,7 +420,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// <summary>
         /// Get all registered notification types by criteria
         /// </summary>
-        /// <param name='searchCriteria'>
+        /// <param name='body'>
         /// criteria for search(keyword, skip, take and etc.)
         /// </param>
         /// <param name='customHeaders'>
@@ -438,7 +438,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<NotificationSearchResult>> GetNotificationsWithHttpMessagesAsync(NotificationSearchCriteria searchCriteria = default(NotificationSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<NotificationSearchResult>> GetNotificationsWithHttpMessagesAsync(NotificationSearchCriteria body = default(NotificationSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -447,7 +447,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("searchCriteria", searchCriteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetNotifications", tracingParameters);
             }
@@ -476,9 +476,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(searchCriteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(searchCriteria, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -728,7 +728,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// </summary>
         /// <param name='type'>
         /// </param>
-        /// <param name='notification'>
+        /// <param name='body'>
         /// Notification
         /// </param>
         /// <param name='customHeaders'>
@@ -749,12 +749,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> UpdateNotificationWithHttpMessagesAsync(string type, Notification notification = default(Notification), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> UpdateNotificationWithHttpMessagesAsync(string type, Notification body = default(Notification), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (notification != null)
-            {
-                notification.Validate();
-            }
             if (type == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "type");
@@ -766,7 +762,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("notification", notification);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("type", type);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "UpdateNotification", tracingParameters);
@@ -797,9 +793,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(notification != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(notification, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -863,7 +859,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// </param>
         /// <param name='type'>
         /// </param>
-        /// <param name='request'>
+        /// <param name='body'>
         /// request of Notification Template with text and data
         /// </param>
         /// <param name='customHeaders'>
@@ -884,12 +880,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> RenderingTemplateWithHttpMessagesAsync(string language, string type, NotificationTemplateRequest request = default(NotificationTemplateRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> RenderingTemplateWithHttpMessagesAsync(string language, string type, NotificationTemplateRequest body = default(NotificationTemplateRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (request != null)
-            {
-                request.Validate();
-            }
             if (language == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "language");
@@ -905,7 +897,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("request", request);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("language", language);
                 tracingParameters.Add("type", type);
                 tracingParameters.Add("cancellationToken", cancellationToken);
@@ -938,9 +930,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(request != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(request, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -1000,7 +992,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// <summary>
         /// Sending notification
         /// </summary>
-        /// <param name='notificationRequest'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1017,12 +1009,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<NotificationSendResult>> SendNotificationWithHttpMessagesAsync(Notification notificationRequest = default(Notification), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<NotificationSendResult>> SendNotificationWithHttpMessagesAsync(Notification body = default(Notification), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (notificationRequest != null)
-            {
-                notificationRequest.Validate();
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -1030,7 +1018,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("notificationRequest", notificationRequest);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "SendNotification", tracingParameters);
             }
@@ -1059,9 +1047,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(notificationRequest != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(notificationRequest, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -1085,7 +1073,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1147,7 +1135,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// success status
         /// this string is empty, otherwise string contains error message.
         /// </remarks>
-        /// <param name='request'>
+        /// <param name='body'>
         /// Notification request
         /// </param>
         /// <param name='customHeaders'>
@@ -1165,7 +1153,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<NotificationSendResult>> SendNotificationByRequestWithHttpMessagesAsync(NotificationRequest request = default(NotificationRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<NotificationSendResult>> SendNotificationByRequestWithHttpMessagesAsync(NotificationRequest body = default(NotificationRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1174,7 +1162,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("request", request);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "SendNotificationByRequest", tracingParameters);
             }
@@ -1203,9 +1191,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(request != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(request, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -1229,7 +1217,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1289,7 +1277,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// that can be used
         /// for paging.
         /// </remarks>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1306,7 +1294,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<NotificationMessageSearchResult>> GetNotificationJournalWithHttpMessagesAsync(NotificationMessageSearchCriteria criteria = default(NotificationMessageSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<NotificationMessageSearchResult>> GetNotificationJournalWithHttpMessagesAsync(NotificationMessageSearchCriteria body = default(NotificationMessageSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1315,7 +1303,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetNotificationJournal", tracingParameters);
             }
@@ -1344,9 +1332,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -1370,7 +1358,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1507,7 +1495,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1587,7 +1575,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// <summary>
         /// Get all registered notification types by criteria
         /// </summary>
-        /// <param name='searchCriteria'>
+        /// <param name='body'>
         /// criteria for search(keyword, skip, take and etc.)
         /// </param>
         /// <param name='customHeaders'>
@@ -1602,7 +1590,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<NotificationSearchResult>> GetNotificationsWithHttpMessagesAsync(NotificationSearchCriteria searchCriteria = default(NotificationSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<NotificationSearchResult>> GetNotificationsWithHttpMessagesAsync(NotificationSearchCriteria body = default(NotificationSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Get notification by type
         /// </summary>
@@ -1644,7 +1632,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// </summary>
         /// <param name='type'>
         /// </param>
-        /// <param name='notification'>
+        /// <param name='body'>
         /// Notification
         /// </param>
         /// <param name='customHeaders'>
@@ -1659,7 +1647,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse> UpdateNotificationWithHttpMessagesAsync(string type, Notification notification = default(Notification), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> UpdateNotificationWithHttpMessagesAsync(string type, Notification body = default(Notification), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Render content
         /// </summary>
@@ -1667,7 +1655,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// </param>
         /// <param name='type'>
         /// </param>
-        /// <param name='request'>
+        /// <param name='body'>
         /// request of Notification Template with text and data
         /// </param>
         /// <param name='customHeaders'>
@@ -1682,11 +1670,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse> RenderingTemplateWithHttpMessagesAsync(string language, string type, NotificationTemplateRequest request = default(NotificationTemplateRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> RenderingTemplateWithHttpMessagesAsync(string language, string type, NotificationTemplateRequest body = default(NotificationTemplateRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Sending notification
         /// </summary>
-        /// <param name='notificationRequest'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1700,7 +1688,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<NotificationSendResult>> SendNotificationWithHttpMessagesAsync(Notification notificationRequest = default(Notification), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<NotificationSendResult>> SendNotificationWithHttpMessagesAsync(Notification body = default(Notification), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Sending notification
         /// </summary>
@@ -1713,7 +1701,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// with success status
         /// this string is empty, otherwise string contains error message.
         /// </remarks>
-        /// <param name='request'>
+        /// <param name='body'>
         /// Notification request
         /// </param>
         /// <param name='customHeaders'>
@@ -1728,7 +1716,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<NotificationSendResult>> SendNotificationByRequestWithHttpMessagesAsync(NotificationRequest request = default(NotificationRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<NotificationSendResult>> SendNotificationByRequestWithHttpMessagesAsync(NotificationRequest body = default(NotificationRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Get all notification journal
         /// </summary>
@@ -1738,7 +1726,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// Result contains total count, that can be used
         /// for paging.
         /// </remarks>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1752,7 +1740,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<NotificationMessageSearchResult>> GetNotificationJournalWithHttpMessagesAsync(NotificationMessageSearchCriteria criteria = default(NotificationMessageSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<NotificationMessageSearchResult>> GetNotificationJournalWithHttpMessagesAsync(NotificationMessageSearchCriteria body = default(NotificationMessageSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='id'>
         /// </param>
         /// <param name='customHeaders'>
@@ -1803,12 +1791,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='searchCriteria'>
+            /// <param name='body'>
             /// criteria for search(keyword, skip, take and etc.)
             /// </param>
-            public static NotificationSearchResult GetNotifications(this INotifications operations, NotificationSearchCriteria searchCriteria = default(NotificationSearchCriteria))
+            public static NotificationSearchResult GetNotifications(this INotifications operations, NotificationSearchCriteria body = default(NotificationSearchCriteria))
             {
-                return operations.GetNotificationsAsync(searchCriteria).GetAwaiter().GetResult();
+                return operations.GetNotificationsAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -1817,15 +1805,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='searchCriteria'>
+            /// <param name='body'>
             /// criteria for search(keyword, skip, take and etc.)
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<NotificationSearchResult> GetNotificationsAsync(this INotifications operations, NotificationSearchCriteria searchCriteria = default(NotificationSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<NotificationSearchResult> GetNotificationsAsync(this INotifications operations, NotificationSearchCriteria body = default(NotificationSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetNotificationsWithHttpMessagesAsync(searchCriteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetNotificationsWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -1901,12 +1889,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             /// </param>
             /// <param name='type'>
             /// </param>
-            /// <param name='notification'>
+            /// <param name='body'>
             /// Notification
             /// </param>
-            public static void UpdateNotification(this INotifications operations, string type, Notification notification = default(Notification))
+            public static void UpdateNotification(this INotifications operations, string type, Notification body = default(Notification))
             {
-                operations.UpdateNotificationAsync(type, notification).GetAwaiter().GetResult();
+                operations.UpdateNotificationAsync(type, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -1917,15 +1905,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             /// </param>
             /// <param name='type'>
             /// </param>
-            /// <param name='notification'>
+            /// <param name='body'>
             /// Notification
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task UpdateNotificationAsync(this INotifications operations, string type, Notification notification = default(Notification), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task UpdateNotificationAsync(this INotifications operations, string type, Notification body = default(Notification), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.UpdateNotificationWithHttpMessagesAsync(type, notification, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.UpdateNotificationWithHttpMessagesAsync(type, body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -1938,12 +1926,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             /// </param>
             /// <param name='type'>
             /// </param>
-            /// <param name='request'>
+            /// <param name='body'>
             /// request of Notification Template with text and data
             /// </param>
-            public static void RenderingTemplate(this INotifications operations, string language, string type, NotificationTemplateRequest request = default(NotificationTemplateRequest))
+            public static void RenderingTemplate(this INotifications operations, string language, string type, NotificationTemplateRequest body = default(NotificationTemplateRequest))
             {
-                operations.RenderingTemplateAsync(language, type, request).GetAwaiter().GetResult();
+                operations.RenderingTemplateAsync(language, type, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -1956,15 +1944,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             /// </param>
             /// <param name='type'>
             /// </param>
-            /// <param name='request'>
+            /// <param name='body'>
             /// request of Notification Template with text and data
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task RenderingTemplateAsync(this INotifications operations, string language, string type, NotificationTemplateRequest request = default(NotificationTemplateRequest), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task RenderingTemplateAsync(this INotifications operations, string language, string type, NotificationTemplateRequest body = default(NotificationTemplateRequest), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.RenderingTemplateWithHttpMessagesAsync(language, type, request, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.RenderingTemplateWithHttpMessagesAsync(language, type, body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -1973,11 +1961,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='notificationRequest'>
+            /// <param name='body'>
             /// </param>
-            public static NotificationSendResult SendNotification(this INotifications operations, Notification notificationRequest = default(Notification))
+            public static NotificationSendResult SendNotification(this INotifications operations, Notification body = default(Notification))
             {
-                return operations.SendNotificationAsync(notificationRequest).GetAwaiter().GetResult();
+                return operations.SendNotificationAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -1986,14 +1974,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='notificationRequest'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<NotificationSendResult> SendNotificationAsync(this INotifications operations, Notification notificationRequest = default(Notification), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<NotificationSendResult> SendNotificationAsync(this INotifications operations, Notification body = default(Notification), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SendNotificationWithHttpMessagesAsync(notificationRequest, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SendNotificationWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -2013,12 +2001,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='request'>
+            /// <param name='body'>
             /// Notification request
             /// </param>
-            public static NotificationSendResult SendNotificationByRequest(this INotifications operations, NotificationRequest request = default(NotificationRequest))
+            public static NotificationSendResult SendNotificationByRequest(this INotifications operations, NotificationRequest body = default(NotificationRequest))
             {
-                return operations.SendNotificationByRequestAsync(request).GetAwaiter().GetResult();
+                return operations.SendNotificationByRequestAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -2035,15 +2023,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='request'>
+            /// <param name='body'>
             /// Notification request
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<NotificationSendResult> SendNotificationByRequestAsync(this INotifications operations, NotificationRequest request = default(NotificationRequest), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<NotificationSendResult> SendNotificationByRequestAsync(this INotifications operations, NotificationRequest body = default(NotificationRequest), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SendNotificationByRequestWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SendNotificationByRequestWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -2061,11 +2049,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
-            public static NotificationMessageSearchResult GetNotificationJournal(this INotifications operations, NotificationMessageSearchCriteria criteria = default(NotificationMessageSearchCriteria))
+            public static NotificationMessageSearchResult GetNotificationJournal(this INotifications operations, NotificationMessageSearchCriteria body = default(NotificationMessageSearchCriteria))
             {
-                return operations.GetNotificationJournalAsync(criteria).GetAwaiter().GetResult();
+                return operations.GetNotificationJournalAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -2080,14 +2068,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<NotificationMessageSearchResult> GetNotificationJournalAsync(this INotifications operations, NotificationMessageSearchCriteria criteria = default(NotificationMessageSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<NotificationMessageSearchResult> GetNotificationJournalAsync(this INotifications operations, NotificationMessageSearchCriteria body = default(NotificationMessageSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetNotificationJournalWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetNotificationJournalWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -2218,10 +2206,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         /// <param name="tenantId">Owner Id of Notification</param>
         /// <param name="tenantType">Owner Type of Notification</param>
         /// <param name="isActive">only active notification</param>
-        public NotificationSearchCriteria(string notificationType = default(string), IList<string> notificationTypes = default(IList<string>), string tenantId = default(string), string tenantType = default(string), bool? isActive = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public NotificationSearchCriteria(string notificationType = default(string), string tenantId = default(string), string tenantType = default(string), bool? isActive = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
             NotificationType = notificationType;
-            NotificationTypes = notificationTypes;
             TenantId = tenantId;
             TenantType = tenantType;
             IsActive = isActive;
@@ -2248,11 +2235,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "notificationType")]
         public string NotificationType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "notificationTypes")]
-        public IList<string> NotificationTypes { get; set; }
 
         /// <summary>
         /// Gets or sets owner Id of Notification
@@ -2435,7 +2417,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         /// <param name="languageCode">Code of Language</param>
         /// <param name="kind">For detecting kind of notifications (email, sms
         /// and etc.)</param>
-        public NotificationTemplate(string languageCode = default(string), string kind = default(string), bool? isReadonly = default(bool?), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public NotificationTemplate(string languageCode = default(string), string kind = default(string), bool? isReadonly = default(bool?), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             LanguageCode = languageCode;
             Kind = kind;
@@ -2445,6 +2427,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -2498,40 +2481,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
     }
 }
 // <auto-generated>
@@ -2569,10 +2526,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the Notification class.
         /// </summary>
-        /// <param name="tenantIdentity">For detecting owner</param>
+        /// <param name="alias">This field represents an alias for the
+        /// notification type
+        /// and is used only for backward compatibility with old notification
+        /// names
+        /// that are stored and used by API clients.</param>
         /// <param name="kind">For detecting kind of notifications (email, sms
         /// and etc.)</param>
-        public Notification(TenantIdentity tenantIdentity = default(TenantIdentity), bool? isActive = default(bool?), string languageCode = default(string), string alias = default(string), string type = default(string), string kind = default(string), string outerId = default(string), IList<NotificationTemplate> templates = default(IList<NotificationTemplate>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Notification(TenantIdentity tenantIdentity = default(TenantIdentity), bool? isActive = default(bool?), string languageCode = default(string), string alias = default(string), string type = default(string), string kind = default(string), string outerId = default(string), IList<NotificationTemplate> templates = default(IList<NotificationTemplate>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             TenantIdentity = tenantIdentity;
             IsActive = isActive;
@@ -2586,6 +2547,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -2596,7 +2558,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets for detecting owner
         /// </summary>
         [JsonProperty(PropertyName = "tenantIdentity")]
         public TenantIdentity TenantIdentity { get; set; }
@@ -2612,6 +2573,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         public string LanguageCode { get; set; }
 
         /// <summary>
+        /// Gets or sets this field represents an alias for the notification
+        /// type
+        /// and is used only for backward compatibility with old notification
+        /// names
+        /// that are stored and used by API clients.
         /// </summary>
         [JsonProperty(PropertyName = "alias")]
         public string Alias { get; set; }
@@ -2659,50 +2625,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (Templates != null)
-            {
-                foreach (var element in Templates)
-                {
-                    if (element != null)
-                    {
-                        element.Validate();
-                    }
-                }
-            }
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
     }
 }
 // <auto-generated>
@@ -2817,19 +2747,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         [JsonProperty(PropertyName = "data")]
         public Notification Data { get; set; }
 
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (Data != null)
-            {
-                Data.Validate();
-            }
-        }
     }
 }
 // <auto-generated>
@@ -3208,7 +3125,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the NotificationMessage class.
         /// </summary>
-        /// <param name="tenantIdentity">For detecting owner</param>
         /// <param name="notificationId">Id of Notification</param>
         /// <param name="notificationType">Type of Notification</param>
         /// <param name="sendAttemptCount">Count of sending attempt</param>
@@ -3219,7 +3135,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         /// attempt</param>
         /// <param name="sendDate">Date of sending</param>
         /// <param name="languageCode">Code of language</param>
-        public NotificationMessage(string kind = default(string), TenantIdentity tenantIdentity = default(TenantIdentity), string notificationId = default(string), string notificationType = default(string), int? sendAttemptCount = default(int?), int? maxSendAttemptCount = default(int?), string lastSendError = default(string), System.DateTime? lastSendAttemptDate = default(System.DateTime?), System.DateTime? sendDate = default(System.DateTime?), string languageCode = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public NotificationMessage(string kind = default(string), TenantIdentity tenantIdentity = default(TenantIdentity), string notificationId = default(string), string notificationType = default(string), int? sendAttemptCount = default(int?), int? maxSendAttemptCount = default(int?), string lastSendError = default(string), System.DateTime? lastSendAttemptDate = default(System.DateTime?), System.DateTime? sendDate = default(System.DateTime?), string languageCode = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             Kind = kind;
             TenantIdentity = tenantIdentity;
@@ -3235,6 +3151,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -3250,7 +3167,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         public string Kind { get; private set; }
 
         /// <summary>
-        /// Gets or sets for detecting owner
         /// </summary>
         [JsonProperty(PropertyName = "tenantIdentity")]
         public TenantIdentity TenantIdentity { get; set; }
@@ -3325,40 +3241,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
     }
 }
 // <auto-generated>

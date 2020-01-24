@@ -431,7 +431,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <summary>
         /// Search content places list entries by given criteria
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// criteria
         /// </param>
         /// <param name='customHeaders'>
@@ -449,7 +449,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<DynamicContentListEntrySearchResult>> DynamicContentPlaceListEntriesSearchWithHttpMessagesAsync(DynamicContentPlaceSearchCriteria criteria = default(DynamicContentPlaceSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<DynamicContentListEntrySearchResult>> DynamicContentPlaceListEntriesSearchWithHttpMessagesAsync(DynamicContentPlaceSearchCriteria body = default(DynamicContentPlaceSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -458,7 +458,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "DynamicContentPlaceListEntriesSearch", tracingParameters);
             }
@@ -487,9 +487,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -567,7 +567,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <summary>
         /// Search dynamic content places by given criteria
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// criteria
         /// </param>
         /// <param name='customHeaders'>
@@ -585,7 +585,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<DynamicContentPlaceSearchResult>> DynamicContentPlacesSearchWithHttpMessagesAsync(DynamicContentPlaceSearchCriteria criteria = default(DynamicContentPlaceSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<DynamicContentPlaceSearchResult>> DynamicContentPlacesSearchWithHttpMessagesAsync(DynamicContentPlaceSearchCriteria body = default(DynamicContentPlaceSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -594,7 +594,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "DynamicContentPlacesSearch", tracingParameters);
             }
@@ -623,9 +623,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -703,7 +703,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <summary>
         /// Search content places list entries by given criteria
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// criteria
         /// </param>
         /// <param name='customHeaders'>
@@ -721,7 +721,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<DynamicContentListEntrySearchResult>> DynamicContentItemsEntriesSearchWithHttpMessagesAsync(DynamicContentItemSearchCriteria criteria = default(DynamicContentItemSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<DynamicContentListEntrySearchResult>> DynamicContentItemsEntriesSearchWithHttpMessagesAsync(DynamicContentItemSearchCriteria body = default(DynamicContentItemSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -730,7 +730,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "DynamicContentItemsEntriesSearch", tracingParameters);
             }
@@ -759,9 +759,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -839,7 +839,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <summary>
         /// Search dynamic content items by given criteria
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// criteria
         /// </param>
         /// <param name='customHeaders'>
@@ -857,7 +857,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<DynamicContentItemSearchResult>> DynamicContentItemsSearchWithHttpMessagesAsync(DynamicContentItemSearchCriteria criteria = default(DynamicContentItemSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<DynamicContentItemSearchResult>> DynamicContentItemsSearchWithHttpMessagesAsync(DynamicContentItemSearchCriteria body = default(DynamicContentItemSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -866,7 +866,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "DynamicContentItemsSearch", tracingParameters);
             }
@@ -895,9 +895,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -975,7 +975,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <summary>
         /// Search dynamic content items by given criteria
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// criteria
         /// </param>
         /// <param name='customHeaders'>
@@ -993,7 +993,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<DynamicContentPublicationSearchResult>> DynamicContentPublicationsSearchWithHttpMessagesAsync(DynamicContentPublicationSearchCriteria criteria = default(DynamicContentPublicationSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<DynamicContentPublicationSearchResult>> DynamicContentPublicationsSearchWithHttpMessagesAsync(DynamicContentPublicationSearchCriteria body = default(DynamicContentPublicationSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1002,7 +1002,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "DynamicContentPublicationsSearch", tracingParameters);
             }
@@ -1031,9 +1031,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -1111,7 +1111,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <summary>
         /// Get dynamic content for given placeholders
         /// </summary>
-        /// <param name='evalContext'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1128,7 +1128,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<DynamicContentItem>>> EvaluateDynamicContentWithHttpMessagesAsync(DynamicContentEvaluationContext evalContext = default(DynamicContentEvaluationContext), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<DynamicContentItem>>> EvaluateDynamicContentWithHttpMessagesAsync(DynamicContentEvaluationContext body = default(DynamicContentEvaluationContext), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1137,7 +1137,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("evalContext", evalContext);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "EvaluateDynamicContent", tracingParameters);
             }
@@ -1166,9 +1166,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(evalContext != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(evalContext, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -1388,129 +1388,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         }
 
         /// <summary>
-        /// Update a existing dynamic content item object
-        /// </summary>
-        /// <param name='contentItem'>
-        /// dynamic content object that needs to be updated in the dynamic content
-        /// system
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> UpdateDynamicContentWithHttpMessagesAsync(DynamicContentItem contentItem = default(DynamicContentItem), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (contentItem != null)
-            {
-                contentItem.Validate();
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("contentItem", contentItem);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "UpdateDynamicContent", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/marketing/contentitems").ToString();
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("PUT");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if(contentItem != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(contentItem, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
         /// Add new dynamic content item object to marketing system
         /// </summary>
-        /// <param name='contentItem'>
+        /// <param name='body'>
         /// dynamic content object that needs to be added to the dynamic content system
         /// </param>
         /// <param name='customHeaders'>
@@ -1528,12 +1408,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<DynamicContentItem>> CreateDynamicContentWithHttpMessagesAsync(DynamicContentItem contentItem = default(DynamicContentItem), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<DynamicContentItem>> CreateDynamicContentWithHttpMessagesAsync(DynamicContentItem body = default(DynamicContentItem), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (contentItem != null)
-            {
-                contentItem.Validate();
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -1541,7 +1417,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("contentItem", contentItem);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "CreateDynamicContent", tracingParameters);
             }
@@ -1570,9 +1446,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(contentItem != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(contentItem, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -1648,6 +1524,122 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         }
 
         /// <summary>
+        /// Update a existing dynamic content item object
+        /// </summary>
+        /// <param name='body'>
+        /// dynamic content object that needs to be updated in the dynamic content
+        /// system
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> UpdateDynamicContentWithHttpMessagesAsync(DynamicContentItem body = default(DynamicContentItem), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdateDynamicContent", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/marketing/contentitems").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("PUT");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
         /// Delete a dynamic content item objects
         /// </summary>
         /// <param name='ids'>
@@ -1684,17 +1676,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             List<string> _queryParameters = new List<string>();
             if (ids != null)
             {
-                if (ids.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in ids)
-                    {
-                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Join(",", ids))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -1920,129 +1902,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         }
 
         /// <summary>
-        /// Update a existing dynamic content place object
-        /// </summary>
-        /// <param name='contentPlace'>
-        /// dynamic content place object that needs to be updated in the dynamic
-        /// content system
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> UpdateDynamicContentPlaceWithHttpMessagesAsync(DynamicContentPlace contentPlace = default(DynamicContentPlace), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (contentPlace != null)
-            {
-                contentPlace.Validate();
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("contentPlace", contentPlace);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "UpdateDynamicContentPlace", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/marketing/contentplaces").ToString();
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("PUT");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if(contentPlace != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(contentPlace, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
         /// Add new dynamic content place object to marketing system
         /// </summary>
-        /// <param name='contentPlace'>
+        /// <param name='body'>
         /// dynamic content place object that needs to be added to the dynamic content
         /// system
         /// </param>
@@ -2061,12 +1923,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<DynamicContentPlace>> CreateDynamicContentPlaceWithHttpMessagesAsync(DynamicContentPlace contentPlace = default(DynamicContentPlace), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<DynamicContentPlace>> CreateDynamicContentPlaceWithHttpMessagesAsync(DynamicContentPlace body = default(DynamicContentPlace), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (contentPlace != null)
-            {
-                contentPlace.Validate();
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -2074,7 +1932,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("contentPlace", contentPlace);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "CreateDynamicContentPlace", tracingParameters);
             }
@@ -2103,9 +1961,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(contentPlace != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(contentPlace, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -2181,6 +2039,122 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         }
 
         /// <summary>
+        /// Update a existing dynamic content place object
+        /// </summary>
+        /// <param name='body'>
+        /// dynamic content place object that needs to be updated in the dynamic
+        /// content system
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> UpdateDynamicContentPlaceWithHttpMessagesAsync(DynamicContentPlace body = default(DynamicContentPlace), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdateDynamicContentPlace", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/marketing/contentplaces").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("PUT");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
         /// Delete a dynamic content place objects
         /// </summary>
         /// <param name='ids'>
@@ -2217,17 +2191,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             List<string> _queryParameters = new List<string>();
             if (ids != null)
             {
-                if (ids.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in ids)
-                    {
-                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Join(",", ids))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -2579,129 +2543,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         }
 
         /// <summary>
-        /// Update a existing dynamic content publication object
-        /// </summary>
-        /// <param name='publication'>
-        /// dynamic content publication object that needs to be updated in the dynamic
-        /// content system
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> UpdateDynamicContentPublicationWithHttpMessagesAsync(DynamicContentPublication publication = default(DynamicContentPublication), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (publication != null)
-            {
-                publication.Validate();
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("publication", publication);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "UpdateDynamicContentPublication", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/marketing/contentpublications").ToString();
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("PUT");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if(publication != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(publication, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
         /// Add new dynamic content publication object to marketing system
         /// </summary>
-        /// <param name='publication'>
+        /// <param name='body'>
         /// dynamic content publication object that needs to be added to the dynamic
         /// content system
         /// </param>
@@ -2720,12 +2564,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<DynamicContentPublication>> CreateDynamicContentPublicationWithHttpMessagesAsync(DynamicContentPublication publication = default(DynamicContentPublication), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<DynamicContentPublication>> CreateDynamicContentPublicationWithHttpMessagesAsync(DynamicContentPublication body = default(DynamicContentPublication), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (publication != null)
-            {
-                publication.Validate();
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -2733,7 +2573,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("publication", publication);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "CreateDynamicContentPublication", tracingParameters);
             }
@@ -2762,9 +2602,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(publication != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(publication, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -2840,6 +2680,122 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         }
 
         /// <summary>
+        /// Update a existing dynamic content publication object
+        /// </summary>
+        /// <param name='body'>
+        /// dynamic content publication object that needs to be updated in the dynamic
+        /// content system
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> UpdateDynamicContentPublicationWithHttpMessagesAsync(DynamicContentPublication body = default(DynamicContentPublication), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdateDynamicContentPublication", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/marketing/contentpublications").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("PUT");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
         /// Delete a dynamic content publication objects
         /// </summary>
         /// <param name='ids'>
@@ -2876,17 +2832,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             List<string> _queryParameters = new List<string>();
             if (ids != null)
             {
-                if (ids.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in ids)
-                    {
-                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Join(",", ids))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -3112,128 +3058,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         }
 
         /// <summary>
-        /// Update a existing dynamic content folder
-        /// </summary>
-        /// <param name='folder'>
-        /// dynamic content folder that needs to be updated
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> UpdateDynamicContentFolderWithHttpMessagesAsync(DynamicContentFolder folder = default(DynamicContentFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (folder != null)
-            {
-                folder.Validate();
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("folder", folder);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "UpdateDynamicContentFolder", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/marketing/contentfolders").ToString();
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("PUT");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if(folder != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(folder, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
         /// Add new dynamic content folder
         /// </summary>
-        /// <param name='folder'>
+        /// <param name='body'>
         /// dynamic content folder that needs to be added
         /// </param>
         /// <param name='customHeaders'>
@@ -3251,12 +3078,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<DynamicContentFolder>> CreateDynamicContentFolderWithHttpMessagesAsync(DynamicContentFolder folder = default(DynamicContentFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<DynamicContentFolder>> CreateDynamicContentFolderWithHttpMessagesAsync(DynamicContentFolder body = default(DynamicContentFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (folder != null)
-            {
-                folder.Validate();
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -3264,7 +3087,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("folder", folder);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "CreateDynamicContentFolder", tracingParameters);
             }
@@ -3293,9 +3116,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(folder != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(folder, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -3371,6 +3194,121 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         }
 
         /// <summary>
+        /// Update a existing dynamic content folder
+        /// </summary>
+        /// <param name='body'>
+        /// dynamic content folder that needs to be updated
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> UpdateDynamicContentFolderWithHttpMessagesAsync(DynamicContentFolder body = default(DynamicContentFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdateDynamicContentFolder", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/marketing/contentfolders").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("PUT");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
         /// Delete a dynamic content folders
         /// </summary>
         /// <param name='ids'>
@@ -3407,17 +3345,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             List<string> _queryParameters = new List<string>();
             if (ids != null)
             {
-                if (ids.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in ids)
-                    {
-                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Join(",", ids))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -3527,7 +3455,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <summary>
         /// Search content places list entries by given criteria
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// criteria
         /// </param>
         /// <param name='customHeaders'>
@@ -3542,11 +3470,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<DynamicContentListEntrySearchResult>> DynamicContentPlaceListEntriesSearchWithHttpMessagesAsync(DynamicContentPlaceSearchCriteria criteria = default(DynamicContentPlaceSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<DynamicContentListEntrySearchResult>> DynamicContentPlaceListEntriesSearchWithHttpMessagesAsync(DynamicContentPlaceSearchCriteria body = default(DynamicContentPlaceSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Search dynamic content places by given criteria
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// criteria
         /// </param>
         /// <param name='customHeaders'>
@@ -3561,11 +3489,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<DynamicContentPlaceSearchResult>> DynamicContentPlacesSearchWithHttpMessagesAsync(DynamicContentPlaceSearchCriteria criteria = default(DynamicContentPlaceSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<DynamicContentPlaceSearchResult>> DynamicContentPlacesSearchWithHttpMessagesAsync(DynamicContentPlaceSearchCriteria body = default(DynamicContentPlaceSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Search content places list entries by given criteria
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// criteria
         /// </param>
         /// <param name='customHeaders'>
@@ -3580,11 +3508,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<DynamicContentListEntrySearchResult>> DynamicContentItemsEntriesSearchWithHttpMessagesAsync(DynamicContentItemSearchCriteria criteria = default(DynamicContentItemSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<DynamicContentListEntrySearchResult>> DynamicContentItemsEntriesSearchWithHttpMessagesAsync(DynamicContentItemSearchCriteria body = default(DynamicContentItemSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Search dynamic content items by given criteria
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// criteria
         /// </param>
         /// <param name='customHeaders'>
@@ -3599,11 +3527,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<DynamicContentItemSearchResult>> DynamicContentItemsSearchWithHttpMessagesAsync(DynamicContentItemSearchCriteria criteria = default(DynamicContentItemSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<DynamicContentItemSearchResult>> DynamicContentItemsSearchWithHttpMessagesAsync(DynamicContentItemSearchCriteria body = default(DynamicContentItemSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Search dynamic content items by given criteria
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// criteria
         /// </param>
         /// <param name='customHeaders'>
@@ -3618,11 +3546,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<DynamicContentPublicationSearchResult>> DynamicContentPublicationsSearchWithHttpMessagesAsync(DynamicContentPublicationSearchCriteria criteria = default(DynamicContentPublicationSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<DynamicContentPublicationSearchResult>> DynamicContentPublicationsSearchWithHttpMessagesAsync(DynamicContentPublicationSearchCriteria body = default(DynamicContentPublicationSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Get dynamic content for given placeholders
         /// </summary>
-        /// <param name='evalContext'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -3636,7 +3564,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<IList<DynamicContentItem>>> EvaluateDynamicContentWithHttpMessagesAsync(DynamicContentEvaluationContext evalContext = default(DynamicContentEvaluationContext), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<DynamicContentItem>>> EvaluateDynamicContentWithHttpMessagesAsync(DynamicContentEvaluationContext body = default(DynamicContentEvaluationContext), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Find dynamic content item object by id
         /// </summary>
@@ -3663,26 +3591,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// </exception>
         Task<HttpOperationResponse<DynamicContentItem>> GetDynamicContentByIdWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
-        /// Update a existing dynamic content item object
-        /// </summary>
-        /// <param name='contentItem'>
-        /// dynamic content object that needs to be updated in the dynamic
-        /// content system
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        Task<HttpOperationResponse> UpdateDynamicContentWithHttpMessagesAsync(DynamicContentItem contentItem = default(DynamicContentItem), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
         /// Add new dynamic content item object to marketing system
         /// </summary>
-        /// <param name='contentItem'>
+        /// <param name='body'>
         /// dynamic content object that needs to be added to the dynamic
         /// content system
         /// </param>
@@ -3698,7 +3609,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<DynamicContentItem>> CreateDynamicContentWithHttpMessagesAsync(DynamicContentItem contentItem = default(DynamicContentItem), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<DynamicContentItem>> CreateDynamicContentWithHttpMessagesAsync(DynamicContentItem body = default(DynamicContentItem), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Update a existing dynamic content item object
+        /// </summary>
+        /// <param name='body'>
+        /// dynamic content object that needs to be updated in the dynamic
+        /// content system
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        Task<HttpOperationResponse> UpdateDynamicContentWithHttpMessagesAsync(DynamicContentItem body = default(DynamicContentItem), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Delete a dynamic content item objects
         /// </summary>
@@ -3741,26 +3669,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// </exception>
         Task<HttpOperationResponse<DynamicContentPlace>> GetDynamicContentPlaceByIdWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
-        /// Update a existing dynamic content place object
-        /// </summary>
-        /// <param name='contentPlace'>
-        /// dynamic content place object that needs to be updated in the
-        /// dynamic content system
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        Task<HttpOperationResponse> UpdateDynamicContentPlaceWithHttpMessagesAsync(DynamicContentPlace contentPlace = default(DynamicContentPlace), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
         /// Add new dynamic content place object to marketing system
         /// </summary>
-        /// <param name='contentPlace'>
+        /// <param name='body'>
         /// dynamic content place object that needs to be added to the dynamic
         /// content system
         /// </param>
@@ -3776,7 +3687,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<DynamicContentPlace>> CreateDynamicContentPlaceWithHttpMessagesAsync(DynamicContentPlace contentPlace = default(DynamicContentPlace), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<DynamicContentPlace>> CreateDynamicContentPlaceWithHttpMessagesAsync(DynamicContentPlace body = default(DynamicContentPlace), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Update a existing dynamic content place object
+        /// </summary>
+        /// <param name='body'>
+        /// dynamic content place object that needs to be updated in the
+        /// dynamic content system
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        Task<HttpOperationResponse> UpdateDynamicContentPlaceWithHttpMessagesAsync(DynamicContentPlace body = default(DynamicContentPlace), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Delete a dynamic content place objects
         /// </summary>
@@ -3835,26 +3763,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// </exception>
         Task<HttpOperationResponse<DynamicContentPublication>> GetDynamicContentPublicationByIdWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
-        /// Update a existing dynamic content publication object
-        /// </summary>
-        /// <param name='publication'>
-        /// dynamic content publication object that needs to be updated in the
-        /// dynamic content system
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        Task<HttpOperationResponse> UpdateDynamicContentPublicationWithHttpMessagesAsync(DynamicContentPublication publication = default(DynamicContentPublication), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
         /// Add new dynamic content publication object to marketing system
         /// </summary>
-        /// <param name='publication'>
+        /// <param name='body'>
         /// dynamic content publication object that needs to be added to the
         /// dynamic content system
         /// </param>
@@ -3870,7 +3781,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<DynamicContentPublication>> CreateDynamicContentPublicationWithHttpMessagesAsync(DynamicContentPublication publication = default(DynamicContentPublication), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<DynamicContentPublication>> CreateDynamicContentPublicationWithHttpMessagesAsync(DynamicContentPublication body = default(DynamicContentPublication), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Update a existing dynamic content publication object
+        /// </summary>
+        /// <param name='body'>
+        /// dynamic content publication object that needs to be updated in the
+        /// dynamic content system
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        Task<HttpOperationResponse> UpdateDynamicContentPublicationWithHttpMessagesAsync(DynamicContentPublication body = default(DynamicContentPublication), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Delete a dynamic content publication objects
         /// </summary>
@@ -3914,25 +3842,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// </exception>
         Task<HttpOperationResponse<DynamicContentFolder>> GetDynamicContentFolderByIdWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
-        /// Update a existing dynamic content folder
-        /// </summary>
-        /// <param name='folder'>
-        /// dynamic content folder that needs to be updated
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        Task<HttpOperationResponse> UpdateDynamicContentFolderWithHttpMessagesAsync(DynamicContentFolder folder = default(DynamicContentFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
         /// Add new dynamic content folder
         /// </summary>
-        /// <param name='folder'>
+        /// <param name='body'>
         /// dynamic content folder that needs to be added
         /// </param>
         /// <param name='customHeaders'>
@@ -3947,7 +3859,23 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<DynamicContentFolder>> CreateDynamicContentFolderWithHttpMessagesAsync(DynamicContentFolder folder = default(DynamicContentFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<DynamicContentFolder>> CreateDynamicContentFolderWithHttpMessagesAsync(DynamicContentFolder body = default(DynamicContentFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Update a existing dynamic content folder
+        /// </summary>
+        /// <param name='body'>
+        /// dynamic content folder that needs to be updated
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        Task<HttpOperationResponse> UpdateDynamicContentFolderWithHttpMessagesAsync(DynamicContentFolder body = default(DynamicContentFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Delete a dynamic content folders
         /// </summary>
@@ -3996,12 +3924,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// criteria
             /// </param>
-            public static DynamicContentListEntrySearchResult DynamicContentPlaceListEntriesSearch(this IMarketingModuleDynamicContent operations, DynamicContentPlaceSearchCriteria criteria = default(DynamicContentPlaceSearchCriteria))
+            public static DynamicContentListEntrySearchResult DynamicContentPlaceListEntriesSearch(this IMarketingModuleDynamicContent operations, DynamicContentPlaceSearchCriteria body = default(DynamicContentPlaceSearchCriteria))
             {
-                return operations.DynamicContentPlaceListEntriesSearchAsync(criteria).GetAwaiter().GetResult();
+                return operations.DynamicContentPlaceListEntriesSearchAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -4010,15 +3938,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// criteria
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<DynamicContentListEntrySearchResult> DynamicContentPlaceListEntriesSearchAsync(this IMarketingModuleDynamicContent operations, DynamicContentPlaceSearchCriteria criteria = default(DynamicContentPlaceSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<DynamicContentListEntrySearchResult> DynamicContentPlaceListEntriesSearchAsync(this IMarketingModuleDynamicContent operations, DynamicContentPlaceSearchCriteria body = default(DynamicContentPlaceSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.DynamicContentPlaceListEntriesSearchWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.DynamicContentPlaceListEntriesSearchWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -4030,12 +3958,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// criteria
             /// </param>
-            public static DynamicContentPlaceSearchResult DynamicContentPlacesSearch(this IMarketingModuleDynamicContent operations, DynamicContentPlaceSearchCriteria criteria = default(DynamicContentPlaceSearchCriteria))
+            public static DynamicContentPlaceSearchResult DynamicContentPlacesSearch(this IMarketingModuleDynamicContent operations, DynamicContentPlaceSearchCriteria body = default(DynamicContentPlaceSearchCriteria))
             {
-                return operations.DynamicContentPlacesSearchAsync(criteria).GetAwaiter().GetResult();
+                return operations.DynamicContentPlacesSearchAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -4044,15 +3972,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// criteria
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<DynamicContentPlaceSearchResult> DynamicContentPlacesSearchAsync(this IMarketingModuleDynamicContent operations, DynamicContentPlaceSearchCriteria criteria = default(DynamicContentPlaceSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<DynamicContentPlaceSearchResult> DynamicContentPlacesSearchAsync(this IMarketingModuleDynamicContent operations, DynamicContentPlaceSearchCriteria body = default(DynamicContentPlaceSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.DynamicContentPlacesSearchWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.DynamicContentPlacesSearchWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -4064,12 +3992,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// criteria
             /// </param>
-            public static DynamicContentListEntrySearchResult DynamicContentItemsEntriesSearch(this IMarketingModuleDynamicContent operations, DynamicContentItemSearchCriteria criteria = default(DynamicContentItemSearchCriteria))
+            public static DynamicContentListEntrySearchResult DynamicContentItemsEntriesSearch(this IMarketingModuleDynamicContent operations, DynamicContentItemSearchCriteria body = default(DynamicContentItemSearchCriteria))
             {
-                return operations.DynamicContentItemsEntriesSearchAsync(criteria).GetAwaiter().GetResult();
+                return operations.DynamicContentItemsEntriesSearchAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -4078,15 +4006,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// criteria
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<DynamicContentListEntrySearchResult> DynamicContentItemsEntriesSearchAsync(this IMarketingModuleDynamicContent operations, DynamicContentItemSearchCriteria criteria = default(DynamicContentItemSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<DynamicContentListEntrySearchResult> DynamicContentItemsEntriesSearchAsync(this IMarketingModuleDynamicContent operations, DynamicContentItemSearchCriteria body = default(DynamicContentItemSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.DynamicContentItemsEntriesSearchWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.DynamicContentItemsEntriesSearchWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -4098,12 +4026,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// criteria
             /// </param>
-            public static DynamicContentItemSearchResult DynamicContentItemsSearch(this IMarketingModuleDynamicContent operations, DynamicContentItemSearchCriteria criteria = default(DynamicContentItemSearchCriteria))
+            public static DynamicContentItemSearchResult DynamicContentItemsSearch(this IMarketingModuleDynamicContent operations, DynamicContentItemSearchCriteria body = default(DynamicContentItemSearchCriteria))
             {
-                return operations.DynamicContentItemsSearchAsync(criteria).GetAwaiter().GetResult();
+                return operations.DynamicContentItemsSearchAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -4112,15 +4040,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// criteria
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<DynamicContentItemSearchResult> DynamicContentItemsSearchAsync(this IMarketingModuleDynamicContent operations, DynamicContentItemSearchCriteria criteria = default(DynamicContentItemSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<DynamicContentItemSearchResult> DynamicContentItemsSearchAsync(this IMarketingModuleDynamicContent operations, DynamicContentItemSearchCriteria body = default(DynamicContentItemSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.DynamicContentItemsSearchWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.DynamicContentItemsSearchWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -4132,12 +4060,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// criteria
             /// </param>
-            public static DynamicContentPublicationSearchResult DynamicContentPublicationsSearch(this IMarketingModuleDynamicContent operations, DynamicContentPublicationSearchCriteria criteria = default(DynamicContentPublicationSearchCriteria))
+            public static DynamicContentPublicationSearchResult DynamicContentPublicationsSearch(this IMarketingModuleDynamicContent operations, DynamicContentPublicationSearchCriteria body = default(DynamicContentPublicationSearchCriteria))
             {
-                return operations.DynamicContentPublicationsSearchAsync(criteria).GetAwaiter().GetResult();
+                return operations.DynamicContentPublicationsSearchAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -4146,15 +4074,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// criteria
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<DynamicContentPublicationSearchResult> DynamicContentPublicationsSearchAsync(this IMarketingModuleDynamicContent operations, DynamicContentPublicationSearchCriteria criteria = default(DynamicContentPublicationSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<DynamicContentPublicationSearchResult> DynamicContentPublicationsSearchAsync(this IMarketingModuleDynamicContent operations, DynamicContentPublicationSearchCriteria body = default(DynamicContentPublicationSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.DynamicContentPublicationsSearchWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.DynamicContentPublicationsSearchWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -4166,11 +4094,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='evalContext'>
+            /// <param name='body'>
             /// </param>
-            public static IList<DynamicContentItem> EvaluateDynamicContent(this IMarketingModuleDynamicContent operations, DynamicContentEvaluationContext evalContext = default(DynamicContentEvaluationContext))
+            public static IList<DynamicContentItem> EvaluateDynamicContent(this IMarketingModuleDynamicContent operations, DynamicContentEvaluationContext body = default(DynamicContentEvaluationContext))
             {
-                return operations.EvaluateDynamicContentAsync(evalContext).GetAwaiter().GetResult();
+                return operations.EvaluateDynamicContentAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -4179,14 +4107,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='evalContext'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<DynamicContentItem>> EvaluateDynamicContentAsync(this IMarketingModuleDynamicContent operations, DynamicContentEvaluationContext evalContext = default(DynamicContentEvaluationContext), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<DynamicContentItem>> EvaluateDynamicContentAsync(this IMarketingModuleDynamicContent operations, DynamicContentEvaluationContext body = default(DynamicContentEvaluationContext), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.EvaluateDynamicContentWithHttpMessagesAsync(evalContext, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.EvaluateDynamicContentWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -4233,36 +4161,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             }
 
             /// <summary>
-            /// Update a existing dynamic content item object
+            /// Add new dynamic content item object to marketing system
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='contentItem'>
-            /// dynamic content object that needs to be updated in the dynamic content
-            /// system
+            /// <param name='body'>
+            /// dynamic content object that needs to be added to the dynamic content system
             /// </param>
-            public static void UpdateDynamicContent(this IMarketingModuleDynamicContent operations, DynamicContentItem contentItem = default(DynamicContentItem))
+            public static DynamicContentItem CreateDynamicContent(this IMarketingModuleDynamicContent operations, DynamicContentItem body = default(DynamicContentItem))
             {
-                operations.UpdateDynamicContentAsync(contentItem).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Update a existing dynamic content item object
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='contentItem'>
-            /// dynamic content object that needs to be updated in the dynamic content
-            /// system
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task UpdateDynamicContentAsync(this IMarketingModuleDynamicContent operations, DynamicContentItem contentItem = default(DynamicContentItem), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.UpdateDynamicContentWithHttpMessagesAsync(contentItem, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                return operations.CreateDynamicContentAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -4271,32 +4180,51 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='contentItem'>
-            /// dynamic content object that needs to be added to the dynamic content system
-            /// </param>
-            public static DynamicContentItem CreateDynamicContent(this IMarketingModuleDynamicContent operations, DynamicContentItem contentItem = default(DynamicContentItem))
-            {
-                return operations.CreateDynamicContentAsync(contentItem).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Add new dynamic content item object to marketing system
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='contentItem'>
+            /// <param name='body'>
             /// dynamic content object that needs to be added to the dynamic content system
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<DynamicContentItem> CreateDynamicContentAsync(this IMarketingModuleDynamicContent operations, DynamicContentItem contentItem = default(DynamicContentItem), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<DynamicContentItem> CreateDynamicContentAsync(this IMarketingModuleDynamicContent operations, DynamicContentItem body = default(DynamicContentItem), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.CreateDynamicContentWithHttpMessagesAsync(contentItem, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.CreateDynamicContentWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
+            }
+
+            /// <summary>
+            /// Update a existing dynamic content item object
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// dynamic content object that needs to be updated in the dynamic content
+            /// system
+            /// </param>
+            public static void UpdateDynamicContent(this IMarketingModuleDynamicContent operations, DynamicContentItem body = default(DynamicContentItem))
+            {
+                operations.UpdateDynamicContentAsync(body).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Update a existing dynamic content item object
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// dynamic content object that needs to be updated in the dynamic content
+            /// system
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task UpdateDynamicContentAsync(this IMarketingModuleDynamicContent operations, DynamicContentItem body = default(DynamicContentItem), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.UpdateDynamicContentWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -4371,36 +4299,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             }
 
             /// <summary>
-            /// Update a existing dynamic content place object
+            /// Add new dynamic content place object to marketing system
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='contentPlace'>
-            /// dynamic content place object that needs to be updated in the dynamic
-            /// content system
+            /// <param name='body'>
+            /// dynamic content place object that needs to be added to the dynamic content
+            /// system
             /// </param>
-            public static void UpdateDynamicContentPlace(this IMarketingModuleDynamicContent operations, DynamicContentPlace contentPlace = default(DynamicContentPlace))
+            public static DynamicContentPlace CreateDynamicContentPlace(this IMarketingModuleDynamicContent operations, DynamicContentPlace body = default(DynamicContentPlace))
             {
-                operations.UpdateDynamicContentPlaceAsync(contentPlace).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Update a existing dynamic content place object
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='contentPlace'>
-            /// dynamic content place object that needs to be updated in the dynamic
-            /// content system
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task UpdateDynamicContentPlaceAsync(this IMarketingModuleDynamicContent operations, DynamicContentPlace contentPlace = default(DynamicContentPlace), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.UpdateDynamicContentPlaceWithHttpMessagesAsync(contentPlace, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                return operations.CreateDynamicContentPlaceAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -4409,34 +4319,52 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='contentPlace'>
-            /// dynamic content place object that needs to be added to the dynamic content
-            /// system
-            /// </param>
-            public static DynamicContentPlace CreateDynamicContentPlace(this IMarketingModuleDynamicContent operations, DynamicContentPlace contentPlace = default(DynamicContentPlace))
-            {
-                return operations.CreateDynamicContentPlaceAsync(contentPlace).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Add new dynamic content place object to marketing system
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='contentPlace'>
+            /// <param name='body'>
             /// dynamic content place object that needs to be added to the dynamic content
             /// system
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<DynamicContentPlace> CreateDynamicContentPlaceAsync(this IMarketingModuleDynamicContent operations, DynamicContentPlace contentPlace = default(DynamicContentPlace), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<DynamicContentPlace> CreateDynamicContentPlaceAsync(this IMarketingModuleDynamicContent operations, DynamicContentPlace body = default(DynamicContentPlace), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.CreateDynamicContentPlaceWithHttpMessagesAsync(contentPlace, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.CreateDynamicContentPlaceWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
+            }
+
+            /// <summary>
+            /// Update a existing dynamic content place object
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// dynamic content place object that needs to be updated in the dynamic
+            /// content system
+            /// </param>
+            public static void UpdateDynamicContentPlace(this IMarketingModuleDynamicContent operations, DynamicContentPlace body = default(DynamicContentPlace))
+            {
+                operations.UpdateDynamicContentPlaceAsync(body).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Update a existing dynamic content place object
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// dynamic content place object that needs to be updated in the dynamic
+            /// content system
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task UpdateDynamicContentPlaceAsync(this IMarketingModuleDynamicContent operations, DynamicContentPlace body = default(DynamicContentPlace), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.UpdateDynamicContentPlaceWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -4539,36 +4467,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             }
 
             /// <summary>
-            /// Update a existing dynamic content publication object
+            /// Add new dynamic content publication object to marketing system
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='publication'>
-            /// dynamic content publication object that needs to be updated in the dynamic
+            /// <param name='body'>
+            /// dynamic content publication object that needs to be added to the dynamic
             /// content system
             /// </param>
-            public static void UpdateDynamicContentPublication(this IMarketingModuleDynamicContent operations, DynamicContentPublication publication = default(DynamicContentPublication))
+            public static DynamicContentPublication CreateDynamicContentPublication(this IMarketingModuleDynamicContent operations, DynamicContentPublication body = default(DynamicContentPublication))
             {
-                operations.UpdateDynamicContentPublicationAsync(publication).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Update a existing dynamic content publication object
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='publication'>
-            /// dynamic content publication object that needs to be updated in the dynamic
-            /// content system
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task UpdateDynamicContentPublicationAsync(this IMarketingModuleDynamicContent operations, DynamicContentPublication publication = default(DynamicContentPublication), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.UpdateDynamicContentPublicationWithHttpMessagesAsync(publication, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                return operations.CreateDynamicContentPublicationAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -4577,34 +4487,52 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='publication'>
-            /// dynamic content publication object that needs to be added to the dynamic
-            /// content system
-            /// </param>
-            public static DynamicContentPublication CreateDynamicContentPublication(this IMarketingModuleDynamicContent operations, DynamicContentPublication publication = default(DynamicContentPublication))
-            {
-                return operations.CreateDynamicContentPublicationAsync(publication).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Add new dynamic content publication object to marketing system
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='publication'>
+            /// <param name='body'>
             /// dynamic content publication object that needs to be added to the dynamic
             /// content system
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<DynamicContentPublication> CreateDynamicContentPublicationAsync(this IMarketingModuleDynamicContent operations, DynamicContentPublication publication = default(DynamicContentPublication), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<DynamicContentPublication> CreateDynamicContentPublicationAsync(this IMarketingModuleDynamicContent operations, DynamicContentPublication body = default(DynamicContentPublication), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.CreateDynamicContentPublicationWithHttpMessagesAsync(publication, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.CreateDynamicContentPublicationWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
+            }
+
+            /// <summary>
+            /// Update a existing dynamic content publication object
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// dynamic content publication object that needs to be updated in the dynamic
+            /// content system
+            /// </param>
+            public static void UpdateDynamicContentPublication(this IMarketingModuleDynamicContent operations, DynamicContentPublication body = default(DynamicContentPublication))
+            {
+                operations.UpdateDynamicContentPublicationAsync(body).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Update a existing dynamic content publication object
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// dynamic content publication object that needs to be updated in the dynamic
+            /// content system
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task UpdateDynamicContentPublicationAsync(this IMarketingModuleDynamicContent operations, DynamicContentPublication body = default(DynamicContentPublication), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.UpdateDynamicContentPublicationWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -4679,34 +4607,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             }
 
             /// <summary>
-            /// Update a existing dynamic content folder
+            /// Add new dynamic content folder
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='folder'>
-            /// dynamic content folder that needs to be updated
+            /// <param name='body'>
+            /// dynamic content folder that needs to be added
             /// </param>
-            public static void UpdateDynamicContentFolder(this IMarketingModuleDynamicContent operations, DynamicContentFolder folder = default(DynamicContentFolder))
+            public static DynamicContentFolder CreateDynamicContentFolder(this IMarketingModuleDynamicContent operations, DynamicContentFolder body = default(DynamicContentFolder))
             {
-                operations.UpdateDynamicContentFolderAsync(folder).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Update a existing dynamic content folder
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='folder'>
-            /// dynamic content folder that needs to be updated
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task UpdateDynamicContentFolderAsync(this IMarketingModuleDynamicContent operations, DynamicContentFolder folder = default(DynamicContentFolder), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.UpdateDynamicContentFolderWithHttpMessagesAsync(folder, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                return operations.CreateDynamicContentFolderAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -4715,32 +4626,49 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='folder'>
-            /// dynamic content folder that needs to be added
-            /// </param>
-            public static DynamicContentFolder CreateDynamicContentFolder(this IMarketingModuleDynamicContent operations, DynamicContentFolder folder = default(DynamicContentFolder))
-            {
-                return operations.CreateDynamicContentFolderAsync(folder).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Add new dynamic content folder
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='folder'>
+            /// <param name='body'>
             /// dynamic content folder that needs to be added
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<DynamicContentFolder> CreateDynamicContentFolderAsync(this IMarketingModuleDynamicContent operations, DynamicContentFolder folder = default(DynamicContentFolder), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<DynamicContentFolder> CreateDynamicContentFolderAsync(this IMarketingModuleDynamicContent operations, DynamicContentFolder body = default(DynamicContentFolder), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.CreateDynamicContentFolderWithHttpMessagesAsync(folder, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.CreateDynamicContentFolderWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
+            }
+
+            /// <summary>
+            /// Update a existing dynamic content folder
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// dynamic content folder that needs to be updated
+            /// </param>
+            public static void UpdateDynamicContentFolder(this IMarketingModuleDynamicContent operations, DynamicContentFolder body = default(DynamicContentFolder))
+            {
+                operations.UpdateDynamicContentFolderAsync(body).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Update a existing dynamic content folder
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// dynamic content folder that needs to be updated
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task UpdateDynamicContentFolderAsync(this IMarketingModuleDynamicContent operations, DynamicContentFolder body = default(DynamicContentFolder), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.UpdateDynamicContentFolderWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -4828,7 +4756,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <summary>
         /// Search dynamic content places by given criteria
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// criteria
         /// </param>
         /// <param name='customHeaders'>
@@ -4846,7 +4774,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<PromotionSearchResult>> PromotionsSearchWithHttpMessagesAsync(PromotionSearchCriteria criteria = default(PromotionSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<PromotionSearchResult>> PromotionsSearchWithHttpMessagesAsync(PromotionSearchCriteria body = default(PromotionSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -4855,7 +4783,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "PromotionsSearch", tracingParameters);
             }
@@ -4884,9 +4812,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -4964,7 +4892,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <summary>
         /// Evaluate promotions
         /// </summary>
-        /// <param name='context'>
+        /// <param name='body'>
         /// Promotion evaluation context
         /// </param>
         /// <param name='customHeaders'>
@@ -4982,7 +4910,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<PromotionReward>>> EvaluatePromotionsWithHttpMessagesAsync(PromotionEvaluationContext context = default(PromotionEvaluationContext), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<PromotionReward>>> EvaluatePromotionsWithHttpMessagesAsync(PromotionEvaluationContext body = default(PromotionEvaluationContext), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -4991,7 +4919,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("context", context);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "EvaluatePromotions", tracingParameters);
             }
@@ -5020,9 +4948,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(context != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(context, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -5372,129 +5300,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         }
 
         /// <summary>
-        /// Update a existing dynamic promotion object in marketing system
-        /// </summary>
-        /// <param name='promotion'>
-        /// &amp;gt;dynamic promotion object that needs to be updated in the marketing
-        /// system
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> UpdatePromotionsWithHttpMessagesAsync(Promotion promotion = default(Promotion), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (promotion != null)
-            {
-                promotion.Validate();
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("promotion", promotion);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "UpdatePromotions", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/marketing/promotions").ToString();
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("PUT");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if(promotion != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(promotion, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
         /// Add new dynamic promotion object to marketing system
         /// </summary>
-        /// <param name='promotion'>
+        /// <param name='body'>
         /// dynamic promotion object that needs to be added to the marketing system
         /// </param>
         /// <param name='customHeaders'>
@@ -5512,12 +5320,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Promotion>> CreatePromotionWithHttpMessagesAsync(Promotion promotion = default(Promotion), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Promotion>> CreatePromotionWithHttpMessagesAsync(Promotion body = default(Promotion), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (promotion != null)
-            {
-                promotion.Validate();
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -5525,7 +5329,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("promotion", promotion);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "CreatePromotion", tracingParameters);
             }
@@ -5554,9 +5358,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(promotion != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(promotion, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -5632,6 +5436,122 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         }
 
         /// <summary>
+        /// Update a existing dynamic promotion object in marketing system
+        /// </summary>
+        /// <param name='body'>
+        /// &gt;dynamic promotion object that needs to be updated in the marketing
+        /// system
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> UpdatePromotionsWithHttpMessagesAsync(Promotion body = default(Promotion), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdatePromotions", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/marketing/promotions").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("PUT");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
         /// Delete promotions objects
         /// </summary>
         /// <param name='ids'>
@@ -5668,17 +5588,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             List<string> _queryParameters = new List<string>();
             if (ids != null)
             {
-                if (ids.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in ids)
-                    {
-                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Join(",", ids))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -5759,7 +5669,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             return _result;
         }
 
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -5776,7 +5686,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<CouponSearchResult>> SearchCouponsWithHttpMessagesAsync(CouponSearchCriteria criteria = default(CouponSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<CouponSearchResult>> SearchCouponsWithHttpMessagesAsync(CouponSearchCriteria body = default(CouponSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -5785,7 +5695,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "SearchCoupons", tracingParameters);
             }
@@ -5814,9 +5724,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -6028,7 +5938,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             return _result;
         }
 
-        /// <param name='coupons'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -6042,18 +5952,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> AddCouponsWithHttpMessagesAsync(IList<Coupon> coupons = default(IList<Coupon>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> AddCouponsWithHttpMessagesAsync(IList<Coupon> body = default(IList<Coupon>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (coupons != null)
-            {
-                foreach (var element in coupons)
-                {
-                    if (element != null)
-                    {
-                        element.Validate();
-                    }
-                }
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -6061,7 +5961,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("coupons", coupons);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "AddCoupons", tracingParameters);
             }
@@ -6090,9 +5990,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(coupons != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(coupons, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -6182,17 +6082,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             List<string> _queryParameters = new List<string>();
             if (ids != null)
             {
-                if (ids.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in ids)
-                    {
-                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Join(",", ids))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -6273,7 +6163,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             return _result;
         }
 
-        /// <param name='request'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -6290,7 +6180,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ImportNotification>> ImportCouponsAsyncWithHttpMessagesAsync(ImportRequest request = default(ImportRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ImportNotification>> ImportCouponsAsyncWithHttpMessagesAsync(ImportRequest body = default(ImportRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -6299,7 +6189,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("request", request);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "ImportCouponsAsync", tracingParameters);
             }
@@ -6328,9 +6218,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(request != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(request, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
@@ -6434,7 +6324,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <summary>
         /// Search dynamic content places by given criteria
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// criteria
         /// </param>
         /// <param name='customHeaders'>
@@ -6449,11 +6339,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<PromotionSearchResult>> PromotionsSearchWithHttpMessagesAsync(PromotionSearchCriteria criteria = default(PromotionSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<PromotionSearchResult>> PromotionsSearchWithHttpMessagesAsync(PromotionSearchCriteria body = default(PromotionSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Evaluate promotions
         /// </summary>
-        /// <param name='context'>
+        /// <param name='body'>
         /// Promotion evaluation context
         /// </param>
         /// <param name='customHeaders'>
@@ -6468,7 +6358,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<IList<PromotionReward>>> EvaluatePromotionsWithHttpMessagesAsync(PromotionEvaluationContext context = default(PromotionEvaluationContext), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<PromotionReward>>> EvaluatePromotionsWithHttpMessagesAsync(PromotionEvaluationContext body = default(PromotionEvaluationContext), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Find promotion object by id
         /// </summary>
@@ -6515,26 +6405,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// </exception>
         Task<HttpOperationResponse<Promotion>> GetNewDynamicPromotionWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
-        /// Update a existing dynamic promotion object in marketing system
-        /// </summary>
-        /// <param name='promotion'>
-        /// &amp;gt;dynamic promotion object that needs to be updated in the
-        /// marketing system
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        Task<HttpOperationResponse> UpdatePromotionsWithHttpMessagesAsync(Promotion promotion = default(Promotion), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
         /// Add new dynamic promotion object to marketing system
         /// </summary>
-        /// <param name='promotion'>
+        /// <param name='body'>
         /// dynamic promotion object that needs to be added to the marketing
         /// system
         /// </param>
@@ -6550,7 +6423,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<Promotion>> CreatePromotionWithHttpMessagesAsync(Promotion promotion = default(Promotion), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Promotion>> CreatePromotionWithHttpMessagesAsync(Promotion body = default(Promotion), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Update a existing dynamic promotion object in marketing system
+        /// </summary>
+        /// <param name='body'>
+        /// &gt;dynamic promotion object that needs to be updated in the
+        /// marketing system
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        Task<HttpOperationResponse> UpdatePromotionsWithHttpMessagesAsync(Promotion body = default(Promotion), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Delete promotions objects
         /// </summary>
@@ -6567,7 +6457,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// Thrown when the operation returned an invalid status code
         /// </exception>
         Task<HttpOperationResponse> DeletePromotionsWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -6581,7 +6471,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<CouponSearchResult>> SearchCouponsWithHttpMessagesAsync(CouponSearchCriteria criteria = default(CouponSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<CouponSearchResult>> SearchCouponsWithHttpMessagesAsync(CouponSearchCriteria body = default(CouponSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='id'>
         /// </param>
         /// <param name='customHeaders'>
@@ -6600,7 +6490,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// Thrown when a required parameter is null
         /// </exception>
         Task<HttpOperationResponse<Coupon>> GetCouponWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='coupons'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -6611,7 +6501,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <exception cref="Microsoft.Rest.HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        Task<HttpOperationResponse> AddCouponsWithHttpMessagesAsync(IList<Coupon> coupons = default(IList<Coupon>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> AddCouponsWithHttpMessagesAsync(IList<Coupon> body = default(IList<Coupon>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='ids'>
         /// </param>
         /// <param name='customHeaders'>
@@ -6624,7 +6514,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// Thrown when the operation returned an invalid status code
         /// </exception>
         Task<HttpOperationResponse> DeleteCouponsWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='request'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -6638,7 +6528,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<ImportNotification>> ImportCouponsAsyncWithHttpMessagesAsync(ImportRequest request = default(ImportRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ImportNotification>> ImportCouponsAsyncWithHttpMessagesAsync(ImportRequest body = default(ImportRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -6671,12 +6561,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// criteria
             /// </param>
-            public static PromotionSearchResult PromotionsSearch(this IMarketingModulePromotion operations, PromotionSearchCriteria criteria = default(PromotionSearchCriteria))
+            public static PromotionSearchResult PromotionsSearch(this IMarketingModulePromotion operations, PromotionSearchCriteria body = default(PromotionSearchCriteria))
             {
-                return operations.PromotionsSearchAsync(criteria).GetAwaiter().GetResult();
+                return operations.PromotionsSearchAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -6685,15 +6575,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// criteria
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<PromotionSearchResult> PromotionsSearchAsync(this IMarketingModulePromotion operations, PromotionSearchCriteria criteria = default(PromotionSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<PromotionSearchResult> PromotionsSearchAsync(this IMarketingModulePromotion operations, PromotionSearchCriteria body = default(PromotionSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.PromotionsSearchWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.PromotionsSearchWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -6705,12 +6595,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='context'>
+            /// <param name='body'>
             /// Promotion evaluation context
             /// </param>
-            public static IList<PromotionReward> EvaluatePromotions(this IMarketingModulePromotion operations, PromotionEvaluationContext context = default(PromotionEvaluationContext))
+            public static IList<PromotionReward> EvaluatePromotions(this IMarketingModulePromotion operations, PromotionEvaluationContext body = default(PromotionEvaluationContext))
             {
-                return operations.EvaluatePromotionsAsync(context).GetAwaiter().GetResult();
+                return operations.EvaluatePromotionsAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -6719,15 +6609,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='context'>
+            /// <param name='body'>
             /// Promotion evaluation context
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<PromotionReward>> EvaluatePromotionsAsync(this IMarketingModulePromotion operations, PromotionEvaluationContext context = default(PromotionEvaluationContext), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<PromotionReward>> EvaluatePromotionsAsync(this IMarketingModulePromotion operations, PromotionEvaluationContext body = default(PromotionEvaluationContext), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.EvaluatePromotionsWithHttpMessagesAsync(context, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.EvaluatePromotionsWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -6810,36 +6700,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             }
 
             /// <summary>
-            /// Update a existing dynamic promotion object in marketing system
+            /// Add new dynamic promotion object to marketing system
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='promotion'>
-            /// &amp;gt;dynamic promotion object that needs to be updated in the marketing
-            /// system
+            /// <param name='body'>
+            /// dynamic promotion object that needs to be added to the marketing system
             /// </param>
-            public static void UpdatePromotions(this IMarketingModulePromotion operations, Promotion promotion = default(Promotion))
+            public static Promotion CreatePromotion(this IMarketingModulePromotion operations, Promotion body = default(Promotion))
             {
-                operations.UpdatePromotionsAsync(promotion).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Update a existing dynamic promotion object in marketing system
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='promotion'>
-            /// &amp;gt;dynamic promotion object that needs to be updated in the marketing
-            /// system
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task UpdatePromotionsAsync(this IMarketingModulePromotion operations, Promotion promotion = default(Promotion), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.UpdatePromotionsWithHttpMessagesAsync(promotion, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                return operations.CreatePromotionAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -6848,32 +6719,51 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='promotion'>
-            /// dynamic promotion object that needs to be added to the marketing system
-            /// </param>
-            public static Promotion CreatePromotion(this IMarketingModulePromotion operations, Promotion promotion = default(Promotion))
-            {
-                return operations.CreatePromotionAsync(promotion).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Add new dynamic promotion object to marketing system
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='promotion'>
+            /// <param name='body'>
             /// dynamic promotion object that needs to be added to the marketing system
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Promotion> CreatePromotionAsync(this IMarketingModulePromotion operations, Promotion promotion = default(Promotion), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Promotion> CreatePromotionAsync(this IMarketingModulePromotion operations, Promotion body = default(Promotion), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.CreatePromotionWithHttpMessagesAsync(promotion, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.CreatePromotionWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
+            }
+
+            /// <summary>
+            /// Update a existing dynamic promotion object in marketing system
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// &gt;dynamic promotion object that needs to be updated in the marketing
+            /// system
+            /// </param>
+            public static void UpdatePromotions(this IMarketingModulePromotion operations, Promotion body = default(Promotion))
+            {
+                operations.UpdatePromotionsAsync(body).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Update a existing dynamic promotion object in marketing system
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// &gt;dynamic promotion object that needs to be updated in the marketing
+            /// system
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task UpdatePromotionsAsync(this IMarketingModulePromotion operations, Promotion body = default(Promotion), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.UpdatePromotionsWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -6910,24 +6800,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
-            public static CouponSearchResult SearchCoupons(this IMarketingModulePromotion operations, CouponSearchCriteria criteria = default(CouponSearchCriteria))
+            public static CouponSearchResult SearchCoupons(this IMarketingModulePromotion operations, CouponSearchCriteria body = default(CouponSearchCriteria))
             {
-                return operations.SearchCouponsAsync(criteria).GetAwaiter().GetResult();
+                return operations.SearchCouponsAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<CouponSearchResult> SearchCouponsAsync(this IMarketingModulePromotion operations, CouponSearchCriteria criteria = default(CouponSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<CouponSearchResult> SearchCouponsAsync(this IMarketingModulePromotion operations, CouponSearchCriteria body = default(CouponSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SearchCouponsWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SearchCouponsWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -6962,24 +6852,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='coupons'>
+            /// <param name='body'>
             /// </param>
-            public static void AddCoupons(this IMarketingModulePromotion operations, IList<Coupon> coupons = default(IList<Coupon>))
+            public static void AddCoupons(this IMarketingModulePromotion operations, IList<Coupon> body = default(IList<Coupon>))
             {
-                operations.AddCouponsAsync(coupons).GetAwaiter().GetResult();
+                operations.AddCouponsAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='coupons'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task AddCouponsAsync(this IMarketingModulePromotion operations, IList<Coupon> coupons = default(IList<Coupon>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task AddCouponsAsync(this IMarketingModulePromotion operations, IList<Coupon> body = default(IList<Coupon>), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.AddCouponsWithHttpMessagesAsync(coupons, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.AddCouponsWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <param name='operations'>
@@ -7008,28 +6898,1195 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='request'>
+            /// <param name='body'>
             /// </param>
-            public static ImportNotification ImportCouponsAsync(this IMarketingModulePromotion operations, ImportRequest request = default(ImportRequest))
+            public static ImportNotification ImportCouponsAsync(this IMarketingModulePromotion operations, ImportRequest body = default(ImportRequest))
             {
-                return operations.ImportCouponsAsyncAsync(request).GetAwaiter().GetResult();
+                return operations.ImportCouponsAsyncAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='request'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ImportNotification> ImportCouponsAsyncAsync(this IMarketingModulePromotion operations, ImportRequest request = default(ImportRequest), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ImportNotification> ImportCouponsAsyncAsync(this IMarketingModulePromotion operations, ImportRequest body = default(ImportRequest), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.ImportCouponsAsyncWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.ImportCouponsAsyncWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class DynamicContentFolder
+    {
+        /// <summary>
+        /// Initializes a new instance of the DynamicContentFolder class.
+        /// </summary>
+        public DynamicContentFolder()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DynamicContentFolder class.
+        /// </summary>
+        /// <param name="path">all parent folders names concatenated
+        /// (Root\Child\Child2)</param>
+        /// <param name="outline">all parent folders ids concatenated
+        /// (1;21;344)</param>
+        /// <param name="imageUrl">Gets or sets the image URL.</param>
+        /// <param name="name">Gets or sets the name.</param>
+        public DynamicContentFolder(string path = default(string), string outline = default(string), string parentFolderId = default(string), DynamicContentFolder parentFolder = default(DynamicContentFolder), string objectType = default(string), string imageUrl = default(string), string name = default(string), string description = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        {
+            Path = path;
+            Outline = outline;
+            ParentFolderId = parentFolderId;
+            ParentFolder = parentFolder;
+            ObjectType = objectType;
+            ImageUrl = imageUrl;
+            Name = name;
+            Description = description;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// Gets all parent folders names concatenated (Root\Child\Child2)
+        /// </summary>
+        [JsonProperty(PropertyName = "path")]
+        public string Path { get; private set; }
+
+        /// <summary>
+        /// Gets all parent folders ids concatenated (1;21;344)
+        /// </summary>
+        [JsonProperty(PropertyName = "outline")]
+        public string Outline { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "parentFolderId")]
+        public string ParentFolderId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "parentFolder")]
+        public DynamicContentFolder ParentFolder { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the image URL.
+        /// </summary>
+        [JsonProperty(PropertyName = "imageUrl")]
+        public string ImageUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class DynamicPropertyObjectValue
+    {
+        /// <summary>
+        /// Initializes a new instance of the DynamicPropertyObjectValue class.
+        /// </summary>
+        public DynamicPropertyObjectValue()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DynamicPropertyObjectValue class.
+        /// </summary>
+        /// <param name="valueType">Possible values include: 'Undefined',
+        /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
+        /// 'Boolean', 'Html', 'Image'</param>
+        public DynamicPropertyObjectValue(string objectType = default(string), string objectId = default(string), string locale = default(string), object value = default(object), string valueId = default(string), string valueType = default(string), string propertyId = default(string), string propertyName = default(string))
+        {
+            ObjectType = objectType;
+            ObjectId = objectId;
+            Locale = locale;
+            Value = value;
+            ValueId = valueId;
+            ValueType = valueType;
+            PropertyId = propertyId;
+            PropertyName = propertyName;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectId")]
+        public string ObjectId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "locale")]
+        public string Locale { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "value")]
+        public object Value { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "valueId")]
+        public string ValueId { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Undefined', 'ShortText',
+        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html',
+        /// 'Image'
+        /// </summary>
+        [JsonProperty(PropertyName = "valueType")]
+        public string ValueType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "propertyId")]
+        public string PropertyId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "propertyName")]
+        public string PropertyName { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class DynamicPropertyName
+    {
+        /// <summary>
+        /// Initializes a new instance of the DynamicPropertyName class.
+        /// </summary>
+        public DynamicPropertyName()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DynamicPropertyName class.
+        /// </summary>
+        public DynamicPropertyName(string locale = default(string), string name = default(string))
+        {
+            Locale = locale;
+            Name = name;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "locale")]
+        public string Locale { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class DynamicObjectProperty
+    {
+        /// <summary>
+        /// Initializes a new instance of the DynamicObjectProperty class.
+        /// </summary>
+        public DynamicObjectProperty()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DynamicObjectProperty class.
+        /// </summary>
+        /// <param name="valueType">Possible values include: 'Undefined',
+        /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
+        /// 'Boolean', 'Html', 'Image'</param>
+        public DynamicObjectProperty(string objectId = default(string), IList<DynamicPropertyObjectValue> values = default(IList<DynamicPropertyObjectValue>), string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        {
+            ObjectId = objectId;
+            Values = values;
+            Name = name;
+            Description = description;
+            ObjectType = objectType;
+            IsArray = isArray;
+            IsDictionary = isDictionary;
+            IsMultilingual = isMultilingual;
+            IsRequired = isRequired;
+            DisplayOrder = displayOrder;
+            ValueType = valueType;
+            DisplayNames = displayNames;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectId")]
+        public string ObjectId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "values")]
+        public IList<DynamicPropertyObjectValue> Values { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isArray")]
+        public bool? IsArray { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isDictionary")]
+        public bool? IsDictionary { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isMultilingual")]
+        public bool? IsMultilingual { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isRequired")]
+        public bool? IsRequired { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "displayOrder")]
+        public int? DisplayOrder { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Undefined', 'ShortText',
+        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html',
+        /// 'Image'
+        /// </summary>
+        [JsonProperty(PropertyName = "valueType")]
+        public string ValueType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "displayNames")]
+        public IList<DynamicPropertyName> DisplayNames { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class DynamicContentItem
+    {
+        /// <summary>
+        /// Initializes a new instance of the DynamicContentItem class.
+        /// </summary>
+        public DynamicContentItem()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DynamicContentItem class.
+        /// </summary>
+        /// <param name="outline">all parent folders ids concatenated
+        /// (1;21;344)</param>
+        /// <param name="path">all parent folders names concatenated
+        /// (Root\Child\Child2)</param>
+        /// <param name="imageUrl">Gets or sets the image URL.</param>
+        /// <param name="name">Gets or sets the name.</param>
+        public DynamicContentItem(string contentType = default(string), int? priority = default(int?), string outline = default(string), string path = default(string), string folderId = default(string), DynamicContentFolder folder = default(DynamicContentFolder), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), string imageUrl = default(string), string name = default(string), string description = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        {
+            ContentType = contentType;
+            Priority = priority;
+            Outline = outline;
+            Path = path;
+            FolderId = folderId;
+            Folder = folder;
+            ObjectType = objectType;
+            DynamicProperties = dynamicProperties;
+            ImageUrl = imageUrl;
+            Name = name;
+            Description = description;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "contentType")]
+        public string ContentType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "priority")]
+        public int? Priority { get; set; }
+
+        /// <summary>
+        /// Gets all parent folders ids concatenated (1;21;344)
+        /// </summary>
+        [JsonProperty(PropertyName = "outline")]
+        public string Outline { get; private set; }
+
+        /// <summary>
+        /// Gets all parent folders names concatenated (Root\Child\Child2)
+        /// </summary>
+        [JsonProperty(PropertyName = "path")]
+        public string Path { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "folderId")]
+        public string FolderId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "folder")]
+        public DynamicContentFolder Folder { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "dynamicProperties")]
+        public IList<DynamicObjectProperty> DynamicProperties { get; set; }
+
+        /// <summary>
+        /// Gets or sets the image URL.
+        /// </summary>
+        [JsonProperty(PropertyName = "imageUrl")]
+        public string ImageUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class Promotion
+    {
+        /// <summary>
+        /// Initializes a new instance of the Promotion class.
+        /// </summary>
+        public Promotion()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Promotion class.
+        /// </summary>
+        /// <param name="name">Promotion name</param>
+        /// <param name="type">Required for UI. TODO: remove later</param>
+        /// <param name="priority">Represents a promotion priority, for
+        /// combination policies when it is necessary to select a promotion
+        /// with a higher priority</param>
+        /// <param name="isExclusive">If a promotion with this setting is
+        /// applied, no other promotions can be applied to the order.</param>
+        /// <param name="maxUsageCount">Maximum redemptions for this
+        /// promotion</param>
+        /// <param name="maxUsageOnOrder">Maximum redemptions on a single
+        /// order</param>
+        /// <param name="maxPersonalUsageCount">Maximum redemptions by a single
+        /// customer</param>
+        public Promotion(string store = default(string), IList<string> storeIds = default(IList<string>), string name = default(string), string type = default(string), bool? isActive = default(bool?), int? priority = default(int?), bool? isExclusive = default(bool?), bool? hasCoupons = default(bool?), string description = default(string), int? maxUsageCount = default(int?), int? maxUsageOnOrder = default(int?), int? maxPersonalUsageCount = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        {
+            Store = store;
+            StoreIds = storeIds;
+            Name = name;
+            Type = type;
+            IsActive = isActive;
+            Priority = priority;
+            IsExclusive = isExclusive;
+            HasCoupons = hasCoupons;
+            Description = description;
+            MaxUsageCount = maxUsageCount;
+            MaxUsageOnOrder = maxUsageOnOrder;
+            MaxPersonalUsageCount = maxPersonalUsageCount;
+            StartDate = startDate;
+            EndDate = endDate;
+            OuterId = outerId;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "store")]
+        public string Store { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "storeIds")]
+        public IList<string> StoreIds { get; set; }
+
+        /// <summary>
+        /// Gets or sets promotion name
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets required for UI. TODO: remove later
+        /// </summary>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isActive")]
+        public bool? IsActive { get; set; }
+
+        /// <summary>
+        /// Gets or sets represents a promotion priority, for combination
+        /// policies when it is necessary to select a promotion with a higher
+        /// priority
+        /// </summary>
+        [JsonProperty(PropertyName = "priority")]
+        public int? Priority { get; set; }
+
+        /// <summary>
+        /// Gets or sets if a promotion with this setting is applied, no other
+        /// promotions can be applied to the order.
+        /// </summary>
+        [JsonProperty(PropertyName = "isExclusive")]
+        public bool? IsExclusive { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "hasCoupons")]
+        public bool? HasCoupons { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets maximum redemptions for this promotion
+        /// </summary>
+        [JsonProperty(PropertyName = "maxUsageCount")]
+        public int? MaxUsageCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets maximum redemptions on a single order
+        /// </summary>
+        [JsonProperty(PropertyName = "maxUsageOnOrder")]
+        public int? MaxUsageOnOrder { get; set; }
+
+        /// <summary>
+        /// Gets or sets maximum redemptions by a single customer
+        /// </summary>
+        [JsonProperty(PropertyName = "maxPersonalUsageCount")]
+        public int? MaxPersonalUsageCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "startDate")]
+        public System.DateTime? StartDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "endDate")]
+        public System.DateTime? EndDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// need to backward compatibility with v.2
+    /// </summary>
+    public partial class PromotionReward
+    {
+        /// <summary>
+        /// Initializes a new instance of the PromotionReward class.
+        /// </summary>
+        public PromotionReward()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the PromotionReward class.
+        /// </summary>
+        /// <param name="isValid">Gets or sets the flag of promotion reward is
+        /// valid. Also used as a flag for applicability (applied or
+        /// potential)</param>
+        /// <param name="description">Gets or sets the value of promotion
+        /// reward description</param>
+        /// <param name="couponAmount">Gets or sets the value of coupon
+        /// amount</param>
+        /// <param name="coupon">Gets or sets the value of coupon code</param>
+        /// <param name="couponMinOrderAmount">Gets or sets the value of
+        /// minimum order total cost for applying coupon</param>
+        /// <param name="promotionId">Gets or sets the value of promotion
+        /// id</param>
+        /// <param name="rewardType">Gets or sets the value of promotion reward
+        /// type</param>
+        /// <param name="amountType">Possible values include: 'Absolute',
+        /// 'Relative'</param>
+        /// <param name="amount">Gets or sets the value of promotion reward
+        /// amount</param>
+        /// <param name="quantity">Gets or sets the value of line item quantity
+        /// for applying promotion reward</param>
+        /// <param name="lineItemId">Gets or sets the value of line item
+        /// id</param>
+        /// <param name="productId">Gets or sets the value of product
+        /// id</param>
+        /// <param name="conditionalProductId">Conditional product
+        /// For N items of entry ProductId  in every Y items of entry
+        /// ConditionalProductId get %X off</param>
+        /// <param name="categoryId">Gets or sets the value of category
+        /// id</param>
+        /// <param name="measureUnit">Gets or sets the value of measurement
+        /// unit</param>
+        /// <param name="imageUrl">Gets or sets the value of promotion reward
+        /// logo absolute URL</param>
+        /// <param name="shippingMethod">Gets or sets the value of reward
+        /// shipping method code</param>
+        /// <param name="maxLimit">Gets or sets the max limit for relative
+        /// rewards</param>
+        public PromotionReward(bool? isValid = default(bool?), string description = default(string), double? couponAmount = default(double?), string coupon = default(string), double? couponMinOrderAmount = default(double?), string promotionId = default(string), Promotion promotion = default(Promotion), string rewardType = default(string), string amountType = default(string), double? amount = default(double?), int? quantity = default(int?), string lineItemId = default(string), string productId = default(string), string conditionalProductId = default(string), string categoryId = default(string), string measureUnit = default(string), string imageUrl = default(string), string shippingMethod = default(string), double? maxLimit = default(double?), int? forNthQuantity = default(int?), int? inEveryNthQuantity = default(int?))
+        {
+            IsValid = isValid;
+            Description = description;
+            CouponAmount = couponAmount;
+            Coupon = coupon;
+            CouponMinOrderAmount = couponMinOrderAmount;
+            PromotionId = promotionId;
+            Promotion = promotion;
+            RewardType = rewardType;
+            AmountType = amountType;
+            Amount = amount;
+            Quantity = quantity;
+            LineItemId = lineItemId;
+            ProductId = productId;
+            ConditionalProductId = conditionalProductId;
+            CategoryId = categoryId;
+            MeasureUnit = measureUnit;
+            ImageUrl = imageUrl;
+            ShippingMethod = shippingMethod;
+            MaxLimit = maxLimit;
+            ForNthQuantity = forNthQuantity;
+            InEveryNthQuantity = inEveryNthQuantity;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// Gets or sets the flag of promotion reward is valid. Also used as a
+        /// flag for applicability (applied or potential)
+        /// </summary>
+        [JsonProperty(PropertyName = "isValid")]
+        public bool? IsValid { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of promotion reward description
+        /// </summary>
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of coupon amount
+        /// </summary>
+        [JsonProperty(PropertyName = "couponAmount")]
+        public double? CouponAmount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of coupon code
+        /// </summary>
+        [JsonProperty(PropertyName = "coupon")]
+        public string Coupon { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of minimum order total cost for applying
+        /// coupon
+        /// </summary>
+        [JsonProperty(PropertyName = "couponMinOrderAmount")]
+        public double? CouponMinOrderAmount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of promotion id
+        /// </summary>
+        [JsonProperty(PropertyName = "promotionId")]
+        public string PromotionId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "promotion")]
+        public Promotion Promotion { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of promotion reward type
+        /// </summary>
+        [JsonProperty(PropertyName = "rewardType")]
+        public string RewardType { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Absolute', 'Relative'
+        /// </summary>
+        [JsonProperty(PropertyName = "amountType")]
+        public string AmountType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of promotion reward amount
+        /// </summary>
+        [JsonProperty(PropertyName = "amount")]
+        public double? Amount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of line item quantity for applying promotion
+        /// reward
+        /// </summary>
+        [JsonProperty(PropertyName = "quantity")]
+        public int? Quantity { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of line item id
+        /// </summary>
+        [JsonProperty(PropertyName = "lineItemId")]
+        public string LineItemId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of product id
+        /// </summary>
+        [JsonProperty(PropertyName = "productId")]
+        public string ProductId { get; set; }
+
+        /// <summary>
+        /// Gets or sets conditional product
+        /// For N items of entry ProductId  in every Y items of entry
+        /// ConditionalProductId get %X off
+        /// </summary>
+        [JsonProperty(PropertyName = "conditionalProductId")]
+        public string ConditionalProductId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of category id
+        /// </summary>
+        [JsonProperty(PropertyName = "categoryId")]
+        public string CategoryId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of measurement unit
+        /// </summary>
+        [JsonProperty(PropertyName = "measureUnit")]
+        public string MeasureUnit { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of promotion reward logo absolute URL
+        /// </summary>
+        [JsonProperty(PropertyName = "imageUrl")]
+        public string ImageUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of reward shipping method code
+        /// </summary>
+        [JsonProperty(PropertyName = "shippingMethod")]
+        public string ShippingMethod { get; set; }
+
+        /// <summary>
+        /// Gets or sets the max limit for relative rewards
+        /// </summary>
+        [JsonProperty(PropertyName = "maxLimit")]
+        public double? MaxLimit { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "forNthQuantity")]
+        public int? ForNthQuantity { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "inEveryNthQuantity")]
+        public int? InEveryNthQuantity { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class Coupon
+    {
+        /// <summary>
+        /// Initializes a new instance of the Coupon class.
+        /// </summary>
+        public Coupon()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Coupon class.
+        /// </summary>
+        /// <param name="maxUsesNumber">Restriction of total coupon usages
+        /// 0 infinitive</param>
+        /// <param name="maxUsesPerUser">Maximum number of uses per registered
+        /// user
+        /// 0 infinitive</param>
+        /// <param name="code">coupon code</param>
+        /// <param name="totalUsesCount">Total number of uses</param>
+        public Coupon(int? maxUsesNumber = default(int?), int? maxUsesPerUser = default(int?), System.DateTime? expirationDate = default(System.DateTime?), string code = default(string), string promotionId = default(string), long? totalUsesCount = default(long?), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        {
+            MaxUsesNumber = maxUsesNumber;
+            MaxUsesPerUser = maxUsesPerUser;
+            ExpirationDate = expirationDate;
+            Code = code;
+            PromotionId = promotionId;
+            TotalUsesCount = totalUsesCount;
+            OuterId = outerId;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// Gets or sets restriction of total coupon usages
+        /// 0 infinitive
+        /// </summary>
+        [JsonProperty(PropertyName = "maxUsesNumber")]
+        public int? MaxUsesNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets maximum number of uses per registered user
+        /// 0 infinitive
+        /// </summary>
+        [JsonProperty(PropertyName = "maxUsesPerUser")]
+        public int? MaxUsesPerUser { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "expirationDate")]
+        public System.DateTime? ExpirationDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets coupon code
+        /// </summary>
+        [JsonProperty(PropertyName = "code")]
+        public string Code { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "promotionId")]
+        public string PromotionId { get; set; }
+
+        /// <summary>
+        /// Gets or sets total number of uses
+        /// </summary>
+        [JsonProperty(PropertyName = "totalUsesCount")]
+        public long? TotalUsesCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
     }
 }
@@ -7246,7 +8303,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// "content-item", "content-place"</param>
         /// <param name="imageUrl">Gets or sets the image URL.</param>
         /// <param name="name">Gets or sets the name.</param>
-        public DynamicContentListEntry(string objectType = default(string), string imageUrl = default(string), string name = default(string), string description = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public DynamicContentListEntry(string objectType = default(string), string imageUrl = default(string), string name = default(string), string description = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             ObjectType = objectType;
             ImageUrl = imageUrl;
@@ -7256,6 +8313,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -7311,40 +8369,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
     }
 }
 // <auto-generated>
@@ -7424,173 +8456,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class DynamicContentFolder
-    {
-        /// <summary>
-        /// Initializes a new instance of the DynamicContentFolder class.
-        /// </summary>
-        public DynamicContentFolder()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DynamicContentFolder class.
-        /// </summary>
-        /// <param name="path">all parent folders names concatenated
-        /// (Root\Child\Child2)</param>
-        /// <param name="outline">all parent folders ids concatenated
-        /// (1;21;344)</param>
-        /// <param name="imageUrl">Gets or sets the image URL.</param>
-        /// <param name="name">Gets or sets the name.</param>
-        public DynamicContentFolder(string path = default(string), string outline = default(string), string parentFolderId = default(string), DynamicContentFolder parentFolder = default(DynamicContentFolder), string objectType = default(string), string imageUrl = default(string), string name = default(string), string description = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            Path = path;
-            Outline = outline;
-            ParentFolderId = parentFolderId;
-            ParentFolder = parentFolder;
-            ObjectType = objectType;
-            ImageUrl = imageUrl;
-            Name = name;
-            Description = description;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// Gets all parent folders names concatenated (Root\Child\Child2)
-        /// </summary>
-        [JsonProperty(PropertyName = "path")]
-        public string Path { get; private set; }
-
-        /// <summary>
-        /// Gets all parent folders ids concatenated (1;21;344)
-        /// </summary>
-        [JsonProperty(PropertyName = "outline")]
-        public string Outline { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "parentFolderId")]
-        public string ParentFolderId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "parentFolder")]
-        public DynamicContentFolder ParentFolder { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the image URL.
-        /// </summary>
-        [JsonProperty(PropertyName = "imageUrl")]
-        public string ImageUrl { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (ParentFolder != null)
-            {
-                ParentFolder.Validate();
-            }
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public partial class DynamicContentPlace
     {
         /// <summary>
@@ -7612,7 +8477,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// "content-item", "content-place"</param>
         /// <param name="imageUrl">Gets or sets the image URL.</param>
         /// <param name="name">Gets or sets the name.</param>
-        public DynamicContentPlace(string outline = default(string), string path = default(string), string folderId = default(string), DynamicContentFolder folder = default(DynamicContentFolder), string objectType = default(string), string imageUrl = default(string), string name = default(string), string description = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public DynamicContentPlace(string outline = default(string), string path = default(string), string folderId = default(string), DynamicContentFolder folder = default(DynamicContentFolder), string objectType = default(string), string imageUrl = default(string), string name = default(string), string description = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             Outline = outline;
             Path = path;
@@ -7626,6 +8491,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -7703,44 +8569,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (Folder != null)
-            {
-                Folder.Validate();
-            }
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
     }
 }
 // <auto-generated>
@@ -7917,532 +8753,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         [JsonProperty(PropertyName = "take")]
         public int? Take { get; set; }
 
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class DynamicPropertyObjectValue
-    {
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertyObjectValue class.
-        /// </summary>
-        public DynamicPropertyObjectValue()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertyObjectValue class.
-        /// </summary>
-        /// <param name="valueType">Possible values include: 'Undefined',
-        /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
-        /// 'Boolean', 'Html', 'Image'</param>
-        public DynamicPropertyObjectValue(string objectType = default(string), string objectId = default(string), string locale = default(string), object value = default(object), string valueId = default(string), string valueType = default(string), string propertyId = default(string), string propertyName = default(string))
-        {
-            ObjectType = objectType;
-            ObjectId = objectId;
-            Locale = locale;
-            Value = value;
-            ValueId = valueId;
-            ValueType = valueType;
-            PropertyId = propertyId;
-            PropertyName = propertyName;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectId")]
-        public string ObjectId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "locale")]
-        public string Locale { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "value")]
-        public object Value { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "valueId")]
-        public string ValueId { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Undefined', 'ShortText',
-        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html',
-        /// 'Image'
-        /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyId")]
-        public string PropertyId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyName")]
-        public string PropertyName { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class DynamicPropertyName
-    {
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertyName class.
-        /// </summary>
-        public DynamicPropertyName()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertyName class.
-        /// </summary>
-        public DynamicPropertyName(string locale = default(string), string name = default(string))
-        {
-            Locale = locale;
-            Name = name;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "locale")]
-        public string Locale { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class DynamicObjectProperty
-    {
-        /// <summary>
-        /// Initializes a new instance of the DynamicObjectProperty class.
-        /// </summary>
-        public DynamicObjectProperty()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DynamicObjectProperty class.
-        /// </summary>
-        /// <param name="valueType">Possible values include: 'Undefined',
-        /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
-        /// 'Boolean', 'Html', 'Image'</param>
-        public DynamicObjectProperty(string objectId = default(string), IList<DynamicPropertyObjectValue> values = default(IList<DynamicPropertyObjectValue>), string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            ObjectId = objectId;
-            Values = values;
-            Name = name;
-            Description = description;
-            ObjectType = objectType;
-            IsArray = isArray;
-            IsDictionary = isDictionary;
-            IsMultilingual = isMultilingual;
-            IsRequired = isRequired;
-            DisplayOrder = displayOrder;
-            ValueType = valueType;
-            DisplayNames = displayNames;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectId")]
-        public string ObjectId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "values")]
-        public IList<DynamicPropertyObjectValue> Values { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isArray")]
-        public bool? IsArray { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isDictionary")]
-        public bool? IsDictionary { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isMultilingual")]
-        public bool? IsMultilingual { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isRequired")]
-        public bool? IsRequired { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "displayOrder")]
-        public int? DisplayOrder { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Undefined', 'ShortText',
-        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html',
-        /// 'Image'
-        /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "displayNames")]
-        public IList<DynamicPropertyName> DisplayNames { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class DynamicContentItem
-    {
-        /// <summary>
-        /// Initializes a new instance of the DynamicContentItem class.
-        /// </summary>
-        public DynamicContentItem()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DynamicContentItem class.
-        /// </summary>
-        /// <param name="outline">all parent folders ids concatenated
-        /// (1;21;344)</param>
-        /// <param name="path">all parent folders names concatenated
-        /// (Root\Child\Child2)</param>
-        /// <param name="imageUrl">Gets or sets the image URL.</param>
-        /// <param name="name">Gets or sets the name.</param>
-        public DynamicContentItem(string contentType = default(string), string outline = default(string), string path = default(string), string folderId = default(string), DynamicContentFolder folder = default(DynamicContentFolder), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), string imageUrl = default(string), string name = default(string), string description = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            ContentType = contentType;
-            Outline = outline;
-            Path = path;
-            FolderId = folderId;
-            Folder = folder;
-            ObjectType = objectType;
-            DynamicProperties = dynamicProperties;
-            ImageUrl = imageUrl;
-            Name = name;
-            Description = description;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "contentType")]
-        public string ContentType { get; set; }
-
-        /// <summary>
-        /// Gets all parent folders ids concatenated (1;21;344)
-        /// </summary>
-        [JsonProperty(PropertyName = "outline")]
-        public string Outline { get; private set; }
-
-        /// <summary>
-        /// Gets all parent folders names concatenated (Root\Child\Child2)
-        /// </summary>
-        [JsonProperty(PropertyName = "path")]
-        public string Path { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "folderId")]
-        public string FolderId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "folder")]
-        public DynamicContentFolder Folder { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "dynamicProperties")]
-        public IList<DynamicObjectProperty> DynamicProperties { get; set; }
-
-        /// <summary>
-        /// Gets or sets the image URL.
-        /// </summary>
-        [JsonProperty(PropertyName = "imageUrl")]
-        public string ImageUrl { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (Folder != null)
-            {
-                Folder.Validate();
-            }
-            if (DynamicProperties != null)
-            {
-                foreach (var element in DynamicProperties)
-                {
-                    if (element != null)
-                    {
-                        element.Validate();
-                    }
-                }
-            }
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
     }
 }
 // <auto-generated>
@@ -8825,7 +9135,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the DynamicContentPublication class.
         /// </summary>
-        public DynamicContentPublication(string name = default(string), string description = default(string), int? priority = default(int?), bool? isActive = default(bool?), string storeId = default(string), DynamicContentConditionTree dynamicExpression = default(DynamicContentConditionTree), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string outerId = default(string), IList<DynamicContentItem> contentItems = default(IList<DynamicContentItem>), IList<DynamicContentPlace> contentPlaces = default(IList<DynamicContentPlace>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public DynamicContentPublication(string name = default(string), string description = default(string), int? priority = default(int?), bool? isActive = default(bool?), string storeId = default(string), DynamicContentConditionTree dynamicExpression = default(DynamicContentConditionTree), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string outerId = default(string), IList<DynamicContentItem> contentItems = default(IList<DynamicContentItem>), IList<DynamicContentPlace> contentPlaces = default(IList<DynamicContentPlace>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             Name = name;
             Description = description;
@@ -8842,6 +9152,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -8928,60 +9239,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (ContentItems != null)
-            {
-                foreach (var element in ContentItems)
-                {
-                    if (element != null)
-                    {
-                        element.Validate();
-                    }
-                }
-            }
-            if (ContentPlaces != null)
-            {
-                foreach (var element1 in ContentPlaces)
-                {
-                    if (element1 != null)
-                    {
-                        element1.Validate();
-                    }
-                }
-            }
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
     }
 }
 // <auto-generated>
@@ -9377,320 +9642,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class PromotionConditionAndRewardTree
-    {
-        /// <summary>
-        /// Initializes a new instance of the PromotionConditionAndRewardTree
-        /// class.
-        /// </summary>
-        public PromotionConditionAndRewardTree()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PromotionConditionAndRewardTree
-        /// class.
-        /// </summary>
-        public PromotionConditionAndRewardTree(bool? all = default(bool?), bool? not = default(bool?), string id = default(string), IList<IConditionTree> availableChildren = default(IList<IConditionTree>), IList<IConditionTree> children = default(IList<IConditionTree>))
-        {
-            All = all;
-            Not = not;
-            Id = id;
-            AvailableChildren = availableChildren;
-            Children = children;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "all")]
-        public bool? All { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "not")]
-        public bool? Not { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "availableChildren")]
-        public IList<IConditionTree> AvailableChildren { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "children")]
-        public IList<IConditionTree> Children { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Promotion
-    {
-        /// <summary>
-        /// Initializes a new instance of the Promotion class.
-        /// </summary>
-        public Promotion()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Promotion class.
-        /// </summary>
-        /// <param name="isAllowCombiningWithSelf">If this flag is set to true,
-        /// it allows this promotion to combine with itself.
-        /// Special for case when need to return same promotion rewards for
-        /// multiple coupons</param>
-        /// <param name="name">Promotion name</param>
-        /// <param name="type">Required for UI. TODO: remove later</param>
-        /// <param name="priority">Represents a promotion priority, for
-        /// combination policies when it is necessary to select a promotion
-        /// with a higher priority</param>
-        /// <param name="isExclusive">If a promotion with this setting is
-        /// applied, no other promotions can be applied to the order.</param>
-        /// <param name="maxUsageCount">Maximum redemptions for this
-        /// promotion</param>
-        /// <param name="maxUsageOnOrder">Maximum redemptions on a single
-        /// order</param>
-        /// <param name="maxPersonalUsageCount">Maximum redemptions by a single
-        /// customer</param>
-        public Promotion(bool? isAllowCombiningWithSelf = default(bool?), PromotionConditionAndRewardTree dynamicExpression = default(PromotionConditionAndRewardTree), string store = default(string), IList<string> storeIds = default(IList<string>), string name = default(string), string type = default(string), bool? isActive = default(bool?), int? priority = default(int?), bool? isExclusive = default(bool?), bool? hasCoupons = default(bool?), string description = default(string), int? maxUsageCount = default(int?), int? maxUsageOnOrder = default(int?), int? maxPersonalUsageCount = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            IsAllowCombiningWithSelf = isAllowCombiningWithSelf;
-            DynamicExpression = dynamicExpression;
-            Store = store;
-            StoreIds = storeIds;
-            Name = name;
-            Type = type;
-            IsActive = isActive;
-            Priority = priority;
-            IsExclusive = isExclusive;
-            HasCoupons = hasCoupons;
-            Description = description;
-            MaxUsageCount = maxUsageCount;
-            MaxUsageOnOrder = maxUsageOnOrder;
-            MaxPersonalUsageCount = maxPersonalUsageCount;
-            StartDate = startDate;
-            EndDate = endDate;
-            OuterId = outerId;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// Gets or sets if this flag is set to true, it allows this promotion
-        /// to combine with itself.
-        /// Special for case when need to return same promotion rewards for
-        /// multiple coupons
-        /// </summary>
-        [JsonProperty(PropertyName = "isAllowCombiningWithSelf")]
-        public bool? IsAllowCombiningWithSelf { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "dynamicExpression")]
-        public PromotionConditionAndRewardTree DynamicExpression { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "store")]
-        public string Store { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "storeIds")]
-        public IList<string> StoreIds { get; set; }
-
-        /// <summary>
-        /// Gets or sets promotion name
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets required for UI. TODO: remove later
-        /// </summary>
-        [JsonProperty(PropertyName = "type")]
-        public string Type { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isActive")]
-        public bool? IsActive { get; set; }
-
-        /// <summary>
-        /// Gets or sets represents a promotion priority, for combination
-        /// policies when it is necessary to select a promotion with a higher
-        /// priority
-        /// </summary>
-        [JsonProperty(PropertyName = "priority")]
-        public int? Priority { get; set; }
-
-        /// <summary>
-        /// Gets or sets if a promotion with this setting is applied, no other
-        /// promotions can be applied to the order.
-        /// </summary>
-        [JsonProperty(PropertyName = "isExclusive")]
-        public bool? IsExclusive { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "hasCoupons")]
-        public bool? HasCoupons { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Gets or sets maximum redemptions for this promotion
-        /// </summary>
-        [JsonProperty(PropertyName = "maxUsageCount")]
-        public int? MaxUsageCount { get; set; }
-
-        /// <summary>
-        /// Gets or sets maximum redemptions on a single order
-        /// </summary>
-        [JsonProperty(PropertyName = "maxUsageOnOrder")]
-        public int? MaxUsageOnOrder { get; set; }
-
-        /// <summary>
-        /// Gets or sets maximum redemptions by a single customer
-        /// </summary>
-        [JsonProperty(PropertyName = "maxPersonalUsageCount")]
-        public int? MaxPersonalUsageCount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "startDate")]
-        public System.DateTime? StartDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "endDate")]
-        public System.DateTime? EndDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "outerId")]
-        public string OuterId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public partial class PromotionSearchResult
     {
         /// <summary>
@@ -9885,7 +9836,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// cart</param>
         /// <param name="promoEntries">List of products for promo
         /// evaluation</param>
-        /// <param name="promoEntry">Single catalog product promo entry</param>
         /// <param name="userGroups">Any tags or groups belongs to user such as
         /// VIP, Wholesaler etc</param>
         public PromotionEvaluationContext(IList<string> refusedGiftIds = default(IList<string>), string storeId = default(string), string currency = default(string), string customerId = default(string), bool? isRegisteredUser = default(bool?), bool? isFirstTimeBuyer = default(bool?), bool? isEveryone = default(bool?), double? cartTotal = default(double?), string shipmentMethodCode = default(string), string shipmentMethodOption = default(string), double? shipmentMethodPrice = default(double?), IList<string> availableShipmentMethodCodes = default(IList<string>), string paymentMethodCode = default(string), double? paymentMethodPrice = default(double?), IList<string> availablePaymentMethodCodes = default(IList<string>), string coupon = default(string), IList<string> coupons = default(IList<string>), IList<ProductPromoEntry> cartPromoEntries = default(IList<ProductPromoEntry>), IList<ProductPromoEntry> promoEntries = default(IList<ProductPromoEntry>), ProductPromoEntry promoEntry = default(ProductPromoEntry), object contextObject = default(object), string geoCity = default(string), string geoState = default(string), string geoCountry = default(string), string geoContinent = default(string), string geoZipCode = default(string), string geoConnectionType = default(string), string geoTimeZone = default(string), string geoIpRoutingType = default(string), string geoIspSecondLevel = default(string), string geoIspTopLevel = default(string), int? shopperAge = default(int?), string shopperGender = default(string), string language = default(string), IList<string> userGroups = default(IList<string>), string shopperSearchedPhraseInStore = default(string), string shopperSearchedPhraseOnInternet = default(string), string currentUrl = default(string), string referredUrl = default(string))
@@ -10040,7 +9990,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         public IList<ProductPromoEntry> PromoEntries { get; set; }
 
         /// <summary>
-        /// Gets or sets single catalog product promo entry
         /// </summary>
         [JsonProperty(PropertyName = "promoEntry")]
         public ProductPromoEntry PromoEntry { get; set; }
@@ -10142,256 +10091,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         [JsonProperty(PropertyName = "referredUrl")]
         public string ReferredUrl { get; set; }
 
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    /// <summary>
-    /// need to backward compatibility with v.2
-    /// </summary>
-    public partial class PromotionReward
-    {
-        /// <summary>
-        /// Initializes a new instance of the PromotionReward class.
-        /// </summary>
-        public PromotionReward()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PromotionReward class.
-        /// </summary>
-        /// <param name="isValid">Gets or sets the flag of promotion reward is
-        /// valid. Also used as a flag for applicability (applied or
-        /// potential)</param>
-        /// <param name="description">Gets or sets the value of promotion
-        /// reward description</param>
-        /// <param name="couponAmount">Gets or sets the value of coupon
-        /// amount</param>
-        /// <param name="coupon">Gets or sets the value of coupon code</param>
-        /// <param name="couponMinOrderAmount">Gets or sets the value of
-        /// minimum order total cost for applying coupon</param>
-        /// <param name="promotionId">Gets or sets the value of promotion
-        /// id</param>
-        /// <param name="promotion">Gets or sets the promotion</param>
-        /// <param name="rewardType">Gets or sets the value of promotion reward
-        /// type</param>
-        /// <param name="amountType">Gets or sets the value of promotion reward
-        /// amount type. Possible values include: 'Absolute',
-        /// 'Relative'</param>
-        /// <param name="amount">Gets or sets the value of promotion reward
-        /// amount</param>
-        /// <param name="quantity">Gets or sets the value of line item quantity
-        /// for applying promotion reward</param>
-        /// <param name="lineItemId">Gets or sets the value of line item
-        /// id</param>
-        /// <param name="productId">Gets or sets the value of product
-        /// id</param>
-        /// <param name="conditionalProductId">Conditional product
-        /// For N items of entry ProductId  in every Y items of entry
-        /// ConditionalProductId get %X off</param>
-        /// <param name="categoryId">Gets or sets the value of category
-        /// id</param>
-        /// <param name="measureUnit">Gets or sets the value of measurement
-        /// unit</param>
-        /// <param name="imageUrl">Gets or sets the value of promotion reward
-        /// logo absolute URL</param>
-        /// <param name="shippingMethod">Gets or sets the value of reward
-        /// shipping method code</param>
-        /// <param name="maxLimit">Gets or sets the max limit for relative
-        /// rewards</param>
-        public PromotionReward(bool? isValid = default(bool?), string description = default(string), double? couponAmount = default(double?), string coupon = default(string), double? couponMinOrderAmount = default(double?), string promotionId = default(string), Promotion promotion = default(Promotion), string rewardType = default(string), string amountType = default(string), double? amount = default(double?), int? quantity = default(int?), string lineItemId = default(string), string productId = default(string), string conditionalProductId = default(string), string categoryId = default(string), string measureUnit = default(string), string imageUrl = default(string), string shippingMethod = default(string), double? maxLimit = default(double?), int? forNthQuantity = default(int?), int? inEveryNthQuantity = default(int?))
-        {
-            IsValid = isValid;
-            Description = description;
-            CouponAmount = couponAmount;
-            Coupon = coupon;
-            CouponMinOrderAmount = couponMinOrderAmount;
-            PromotionId = promotionId;
-            Promotion = promotion;
-            RewardType = rewardType;
-            AmountType = amountType;
-            Amount = amount;
-            Quantity = quantity;
-            LineItemId = lineItemId;
-            ProductId = productId;
-            ConditionalProductId = conditionalProductId;
-            CategoryId = categoryId;
-            MeasureUnit = measureUnit;
-            ImageUrl = imageUrl;
-            ShippingMethod = shippingMethod;
-            MaxLimit = maxLimit;
-            ForNthQuantity = forNthQuantity;
-            InEveryNthQuantity = inEveryNthQuantity;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// Gets or sets the flag of promotion reward is valid. Also used as a
-        /// flag for applicability (applied or potential)
-        /// </summary>
-        [JsonProperty(PropertyName = "isValid")]
-        public bool? IsValid { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value of promotion reward description
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value of coupon amount
-        /// </summary>
-        [JsonProperty(PropertyName = "couponAmount")]
-        public double? CouponAmount { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value of coupon code
-        /// </summary>
-        [JsonProperty(PropertyName = "coupon")]
-        public string Coupon { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value of minimum order total cost for applying
-        /// coupon
-        /// </summary>
-        [JsonProperty(PropertyName = "couponMinOrderAmount")]
-        public double? CouponMinOrderAmount { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value of promotion id
-        /// </summary>
-        [JsonProperty(PropertyName = "promotionId")]
-        public string PromotionId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the promotion
-        /// </summary>
-        [JsonProperty(PropertyName = "promotion")]
-        public Promotion Promotion { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value of promotion reward type
-        /// </summary>
-        [JsonProperty(PropertyName = "rewardType")]
-        public string RewardType { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value of promotion reward amount type. Possible
-        /// values include: 'Absolute', 'Relative'
-        /// </summary>
-        [JsonProperty(PropertyName = "amountType")]
-        public string AmountType { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value of promotion reward amount
-        /// </summary>
-        [JsonProperty(PropertyName = "amount")]
-        public double? Amount { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value of line item quantity for applying promotion
-        /// reward
-        /// </summary>
-        [JsonProperty(PropertyName = "quantity")]
-        public int? Quantity { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value of line item id
-        /// </summary>
-        [JsonProperty(PropertyName = "lineItemId")]
-        public string LineItemId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value of product id
-        /// </summary>
-        [JsonProperty(PropertyName = "productId")]
-        public string ProductId { get; set; }
-
-        /// <summary>
-        /// Gets or sets conditional product
-        /// For N items of entry ProductId  in every Y items of entry
-        /// ConditionalProductId get %X off
-        /// </summary>
-        [JsonProperty(PropertyName = "conditionalProductId")]
-        public string ConditionalProductId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value of category id
-        /// </summary>
-        [JsonProperty(PropertyName = "categoryId")]
-        public string CategoryId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value of measurement unit
-        /// </summary>
-        [JsonProperty(PropertyName = "measureUnit")]
-        public string MeasureUnit { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value of promotion reward logo absolute URL
-        /// </summary>
-        [JsonProperty(PropertyName = "imageUrl")]
-        public string ImageUrl { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value of reward shipping method code
-        /// </summary>
-        [JsonProperty(PropertyName = "shippingMethod")]
-        public string ShippingMethod { get; set; }
-
-        /// <summary>
-        /// Gets or sets the max limit for relative rewards
-        /// </summary>
-        [JsonProperty(PropertyName = "maxLimit")]
-        public double? MaxLimit { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "forNthQuantity")]
-        public int? ForNthQuantity { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "inEveryNthQuantity")]
-        public int? InEveryNthQuantity { get; set; }
-
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (Promotion != null)
-            {
-                Promotion.Validate();
-            }
-        }
     }
 }
 // <auto-generated>
@@ -10520,166 +10219,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         [JsonProperty(PropertyName = "take")]
         public int? Take { get; set; }
 
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Coupon
-    {
-        /// <summary>
-        /// Initializes a new instance of the Coupon class.
-        /// </summary>
-        public Coupon()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Coupon class.
-        /// </summary>
-        /// <param name="maxUsesNumber">Restriction of total coupon usages
-        /// 0 infinitive</param>
-        /// <param name="maxUsesPerUser">Maximum number of uses per registered
-        /// user
-        /// 0 infinitive</param>
-        /// <param name="code">coupon code</param>
-        /// <param name="totalUsesCount">Total number of uses</param>
-        public Coupon(int? maxUsesNumber = default(int?), int? maxUsesPerUser = default(int?), System.DateTime? expirationDate = default(System.DateTime?), string code = default(string), string promotionId = default(string), long? totalUsesCount = default(long?), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            MaxUsesNumber = maxUsesNumber;
-            MaxUsesPerUser = maxUsesPerUser;
-            ExpirationDate = expirationDate;
-            Code = code;
-            PromotionId = promotionId;
-            TotalUsesCount = totalUsesCount;
-            OuterId = outerId;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// Gets or sets restriction of total coupon usages
-        /// 0 infinitive
-        /// </summary>
-        [JsonProperty(PropertyName = "maxUsesNumber")]
-        public int? MaxUsesNumber { get; set; }
-
-        /// <summary>
-        /// Gets or sets maximum number of uses per registered user
-        /// 0 infinitive
-        /// </summary>
-        [JsonProperty(PropertyName = "maxUsesPerUser")]
-        public int? MaxUsesPerUser { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "expirationDate")]
-        public System.DateTime? ExpirationDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets coupon code
-        /// </summary>
-        [JsonProperty(PropertyName = "code")]
-        public string Code { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "promotionId")]
-        public string PromotionId { get; set; }
-
-        /// <summary>
-        /// Gets or sets total number of uses
-        /// </summary>
-        [JsonProperty(PropertyName = "totalUsesCount")]
-        public long? TotalUsesCount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "outerId")]
-        public string OuterId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
     }
 }
 // <auto-generated>

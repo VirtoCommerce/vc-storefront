@@ -91,7 +91,7 @@ namespace VirtoCommerce.Storefront.Domain
             var existContact = await GetContactByIdAsync(contactId);
             if (existContact != null)
             {
-                await _customerApi.UpdateAddessesAsync(contactId, addresses.Select(x => x.ToCustomerAddressDto()).ToList());
+                await _customerApi.UpdateAddessesAsync(addresses.Select(x => x.ToCustomerAddressDto()).ToList(), contactId);
 
                 //Invalidate cache
                 CustomerCacheRegion.ExpireMember(existContact.Id);

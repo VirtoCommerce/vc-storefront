@@ -12,15 +12,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
-    /// For this sample, you can use the
+    /// For this sample, you can use the key to satisfy the authorization
+    /// filters.
     /// </summary>
     public partial class PlatformModuleClient : ServiceClient<PlatformModuleClient>, IPlatformModuleClient
     {
@@ -70,6 +69,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         public virtual IChangeLog ChangeLog { get; private set; }
 
         /// <summary>
+        /// Gets the IDiagnostics.
+        /// </summary>
+        public virtual IDiagnostics Diagnostics { get; private set; }
+
+        /// <summary>
         /// Gets the IDynamicProperties.
         /// </summary>
         public virtual IDynamicProperties DynamicProperties { get; private set; }
@@ -83,6 +87,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// Gets the IModules.
         /// </summary>
         public virtual IModules Modules { get; private set; }
+
+        /// <summary>
+        /// Gets the IOAuthApps.
+        /// </summary>
+        public virtual IOAuthApps OAuthApps { get; private set; }
 
         /// <summary>
         /// Gets the IPushNotificationOperations.
@@ -345,9 +354,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             AssetEntry = new AssetEntryOperations(this);
             Assets = new Assets(this);
             ChangeLog = new ChangeLog(this);
+            Diagnostics = new Diagnostics(this);
             DynamicProperties = new DynamicProperties(this);
             Jobs = new Jobs(this);
             Modules = new Modules(this);
+            OAuthApps = new OAuthApps(this);
             PushNotification = new PushNotificationOperations(this);
             Security = new Security(this);
             Setting = new Setting(this);
@@ -395,15 +406,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
-    /// For this sample, you can use the
+    /// For this sample, you can use the key to satisfy the authorization
+    /// filters.
     /// </summary>
     public partial interface IPlatformModuleClient : System.IDisposable
     {
@@ -455,6 +465,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         IChangeLog ChangeLog { get; }
 
         /// <summary>
+        /// Gets the IDiagnostics.
+        /// </summary>
+        IDiagnostics Diagnostics { get; }
+
+        /// <summary>
         /// Gets the IDynamicProperties.
         /// </summary>
         IDynamicProperties DynamicProperties { get; }
@@ -468,6 +483,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// Gets the IModules.
         /// </summary>
         IModules Modules { get; }
+
+        /// <summary>
+        /// Gets the IOAuthApps.
+        /// </summary>
+        IOAuthApps OAuthApps { get; }
 
         /// <summary>
         /// Gets the IPushNotificationOperations.
@@ -504,7 +524,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -654,10 +673,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -692,10 +709,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -743,7 +758,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -1121,10 +1135,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -1183,10 +1195,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -1280,7 +1290,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -1315,7 +1324,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// SearchAsync for AssetEntries by AssetEntrySearchCriteria
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1332,7 +1341,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<AssetEntrySearchResult>> SearchWithHttpMessagesAsync(AssetEntrySearchCriteria criteria = default(AssetEntrySearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<AssetEntrySearchResult>> SearchWithHttpMessagesAsync(AssetEntrySearchCriteria body = default(AssetEntrySearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1341,7 +1350,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "Search", tracingParameters);
             }
@@ -1370,11 +1379,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -1450,9 +1459,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// Get asset details by id
         /// </summary>
-        /// <param name='id'>
-        /// </param>
         /// <param name='id1'>
+        /// </param>
+        /// <param name='id'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1475,12 +1484,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<AssetEntry>> GetWithHttpMessagesAsync(string id, string id1, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<AssetEntry>> GetWithHttpMessagesAsync(string id1, string id = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (id == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "id");
-            }
             if (id1 == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "id1");
@@ -1606,7 +1611,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// Create / Update asset entry
         /// </summary>
-        /// <param name='item'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1620,12 +1625,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> UpdateWithHttpMessagesAsync(AssetEntry item = default(AssetEntry), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> UpdateWithHttpMessagesAsync(AssetEntry body = default(AssetEntry), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (item != null)
-            {
-                item.Validate();
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -1633,7 +1634,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("item", item);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "Update", tracingParameters);
             }
@@ -1662,11 +1663,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(item != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(item, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -1757,17 +1758,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             List<string> _queryParameters = new List<string>();
             if (ids != null)
             {
-                if (ids.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in ids)
-                    {
-                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Join(",", ids))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -1864,10 +1855,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -1879,7 +1868,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// SearchAsync for AssetEntries by AssetEntrySearchCriteria
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1893,13 +1882,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<AssetEntrySearchResult>> SearchWithHttpMessagesAsync(AssetEntrySearchCriteria criteria = default(AssetEntrySearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<AssetEntrySearchResult>> SearchWithHttpMessagesAsync(AssetEntrySearchCriteria body = default(AssetEntrySearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Get asset details by id
         /// </summary>
-        /// <param name='id'>
-        /// </param>
         /// <param name='id1'>
+        /// </param>
+        /// <param name='id'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1916,11 +1905,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<AssetEntry>> GetWithHttpMessagesAsync(string id, string id1, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<AssetEntry>> GetWithHttpMessagesAsync(string id1, string id = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Create / Update asset entry
         /// </summary>
-        /// <param name='item'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1931,7 +1920,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        Task<HttpOperationResponse> UpdateWithHttpMessagesAsync(AssetEntry item = default(AssetEntry), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> UpdateWithHttpMessagesAsync(AssetEntry body = default(AssetEntry), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Delete asset entries by ids
         /// </summary>
@@ -1963,10 +1952,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -1981,11 +1968,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
-            public static AssetEntrySearchResult Search(this IAssetEntryOperations operations, AssetEntrySearchCriteria criteria = default(AssetEntrySearchCriteria))
+            public static AssetEntrySearchResult Search(this IAssetEntryOperations operations, AssetEntrySearchCriteria body = default(AssetEntrySearchCriteria))
             {
-                return operations.SearchAsync(criteria).GetAwaiter().GetResult();
+                return operations.SearchAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -1994,14 +1981,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<AssetEntrySearchResult> SearchAsync(this IAssetEntryOperations operations, AssetEntrySearchCriteria criteria = default(AssetEntrySearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<AssetEntrySearchResult> SearchAsync(this IAssetEntryOperations operations, AssetEntrySearchCriteria body = default(AssetEntrySearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SearchWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SearchWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -2013,13 +2000,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='id'>
-            /// </param>
             /// <param name='id1'>
             /// </param>
-            public static AssetEntry Get(this IAssetEntryOperations operations, string id, string id1)
+            /// <param name='id'>
+            /// </param>
+            public static AssetEntry Get(this IAssetEntryOperations operations, string id1, string id = default(string))
             {
-                return operations.GetAsync(id, id1).GetAwaiter().GetResult();
+                return operations.GetAsync(id1, id).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -2028,16 +2015,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='id'>
-            /// </param>
             /// <param name='id1'>
+            /// </param>
+            /// <param name='id'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<AssetEntry> GetAsync(this IAssetEntryOperations operations, string id, string id1, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<AssetEntry> GetAsync(this IAssetEntryOperations operations, string id1, string id = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetWithHttpMessagesAsync(id, id1, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetWithHttpMessagesAsync(id1, id, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -2049,11 +2036,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='item'>
+            /// <param name='body'>
             /// </param>
-            public static void Update(this IAssetEntryOperations operations, AssetEntry item = default(AssetEntry))
+            public static void Update(this IAssetEntryOperations operations, AssetEntry body = default(AssetEntry))
             {
-                operations.UpdateAsync(item).GetAwaiter().GetResult();
+                operations.UpdateAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -2062,14 +2049,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='item'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task UpdateAsync(this IAssetEntryOperations operations, AssetEntry item = default(AssetEntry), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task UpdateAsync(this IAssetEntryOperations operations, AssetEntry body = default(AssetEntry), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.UpdateWithHttpMessagesAsync(item, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.UpdateWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -2121,7 +2108,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -2281,6 +2267,289 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         }
 
         /// <summary>
+        /// Upload assets to the folder
+        /// </summary>
+        /// <remarks>
+        /// Request body can contain multiple files.
+        /// </remarks>
+        /// <param name='folderUrl'>
+        /// Parent folder url (relative or absolute).
+        /// </param>
+        /// <param name='url'>
+        /// Url for uploaded remote resource (optional)
+        /// </param>
+        /// <param name='name'>
+        /// File name
+        /// </param>
+        /// <param name='uploadedFile'>
+        /// Upload File
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<IList<BlobInfo>>> UploadAssetAsyncWithHttpMessagesAsync(string folderUrl = default(string), string url = default(string), string name = default(string), string uploadedFile = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("folderUrl", folderUrl);
+                tracingParameters.Add("url", url);
+                tracingParameters.Add("name", name);
+                tracingParameters.Add("uploadedFile", uploadedFile);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "UploadAssetAsync", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/assets").ToString();
+            List<string> _queryParameters = new List<string>();
+            if (folderUrl != null)
+            {
+                _queryParameters.Add(string.Format("folderUrl={0}", System.Uri.EscapeDataString(folderUrl)));
+            }
+            if (url != null)
+            {
+                _queryParameters.Add(string.Format("url={0}", System.Uri.EscapeDataString(url)));
+            }
+            if (name != null)
+            {
+                _queryParameters.Add(string.Format("name={0}", System.Uri.EscapeDataString(name)));
+            }
+            if (uploadedFile != null)
+            {
+                _queryParameters.Add(string.Format("uploadedFile={0}", System.Uri.EscapeDataString(uploadedFile)));
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<IList<BlobInfo>>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<BlobInfo>>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Delete blobs by urls
+        /// </summary>
+        /// <param name='urls'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> DeleteBlobsAsyncWithHttpMessagesAsync(IList<string> urls = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("urls", urls);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "DeleteBlobsAsync", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/assets").ToString();
+            List<string> _queryParameters = new List<string>();
+            if (urls != null)
+            {
+                _queryParameters.Add(string.Format("urls={0}", System.Uri.EscapeDataString(string.Join(",", urls))));
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("DELETE");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
         /// SearchAsync asset folders and blobs
         /// </summary>
         /// <param name='folderUrl'>
@@ -2426,322 +2695,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         }
 
         /// <summary>
-        /// Upload assets to the folder
-        /// </summary>
-        /// <remarks>
-        /// Request body can contain multiple files.
-        /// </remarks>
-        /// <param name='folderUrl'>
-        /// Parent folder url (relative or absolute).
-        /// </param>
-        /// <param name='url'>
-        /// Url for uploaded remote resource (optional)
-        /// </param>
-        /// <param name='name'>
-        /// File name
-        /// </param>
-        /// <param name='uploadedFile'>
-        /// Upload File
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse<IList<BlobInfo>>> UploadAssetAsyncWithHttpMessagesAsync(string folderUrl = default(string), string url = default(string), string name = default(string), Stream uploadedFile = default(Stream), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("folderUrl", folderUrl);
-                tracingParameters.Add("url", url);
-                tracingParameters.Add("name", name);
-                tracingParameters.Add("uploadedFile", uploadedFile);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "UploadAssetAsync", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/assets").ToString();
-            List<string> _queryParameters = new List<string>();
-            if (folderUrl != null)
-            {
-                _queryParameters.Add(string.Format("folderUrl={0}", System.Uri.EscapeDataString(folderUrl)));
-            }
-            if (url != null)
-            {
-                _queryParameters.Add(string.Format("url={0}", System.Uri.EscapeDataString(url)));
-            }
-            if (name != null)
-            {
-                _queryParameters.Add(string.Format("name={0}", System.Uri.EscapeDataString(name)));
-            }
-            if (_queryParameters.Count > 0)
-            {
-                _url += "?" + string.Join("&", _queryParameters);
-            }
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("POST");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            MultipartFormDataContent _multiPartContent = new MultipartFormDataContent();
-            if (uploadedFile != null)
-            {
-                StreamContent _uploadedFile = new StreamContent(uploadedFile);
-                _uploadedFile.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                ContentDispositionHeaderValue _contentDispositionHeaderValue = new ContentDispositionHeaderValue("form-data");
-                _contentDispositionHeaderValue.Name = "uploadedFile";
-                // get filename from stream if it's a file otherwise, just use  'unknown'
-                var _fileStream = uploadedFile as FileStream;
-                var _fileName = (_fileStream != null ? _fileStream.Name : null) ?? "unknown";
-                if(System.Linq.Enumerable.Any(_fileName, c => c > 127) )
-                {
-                    // non ASCII chars detected, need UTF encoding:
-                    _contentDispositionHeaderValue.FileNameStar = _fileName;
-                }
-                else
-                {
-                    // ASCII only
-                    _contentDispositionHeaderValue.FileName = _fileName;
-                }
-                _uploadedFile.Headers.ContentDisposition = _contentDispositionHeaderValue;
-                _multiPartContent.Add(_uploadedFile, "uploadedFile");
-            }
-            _httpRequest.Content = _multiPartContent;
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<IList<BlobInfo>>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IList<BlobInfo>>(_responseContent, Client.DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
-        /// Delete blobs by urls
-        /// </summary>
-        /// <param name='urls'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> DeleteBlobsAsyncWithHttpMessagesAsync(IList<string> urls = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("urls", urls);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "DeleteBlobsAsync", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/assets").ToString();
-            List<string> _queryParameters = new List<string>();
-            if (urls != null)
-            {
-                if (urls.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("urls={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in urls)
-                    {
-                        _queryParameters.Add(string.Format("urls={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
-            }
-            if (_queryParameters.Count > 0)
-            {
-                _url += "?" + string.Join("&", _queryParameters);
-            }
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("DELETE");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
         /// Create new blob folder
         /// </summary>
-        /// <param name='folder'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -2755,12 +2711,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> CreateBlobFolderAsyncWithHttpMessagesAsync(BlobFolder folder = default(BlobFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> CreateBlobFolderAsyncWithHttpMessagesAsync(BlobFolder body = default(BlobFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (folder != null)
-            {
-                folder.Validate();
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -2768,7 +2720,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("folder", folder);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "CreateBlobFolderAsync", tracingParameters);
             }
@@ -2797,11 +2749,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(folder != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(folder, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -2872,10 +2824,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -2901,26 +2851,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// Thrown when unable to deserialize the response
         /// </exception>
         Task<HttpOperationResponse<IList<BlobInfo>>> UploadAssetToLocalFileSystemAsyncWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// SearchAsync asset folders and blobs
-        /// </summary>
-        /// <param name='folderUrl'>
-        /// </param>
-        /// <param name='keyword'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        Task<HttpOperationResponse<BlobEntrySearchResult>> SearchAssetItemsAsyncWithHttpMessagesAsync(string folderUrl = default(string), string keyword = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Upload assets to the folder
         /// </summary>
@@ -2951,7 +2881,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<IList<BlobInfo>>> UploadAssetAsyncWithHttpMessagesAsync(string folderUrl = default(string), string url = default(string), string name = default(string), Stream uploadedFile = default(Stream), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<BlobInfo>>> UploadAssetAsyncWithHttpMessagesAsync(string folderUrl = default(string), string url = default(string), string name = default(string), string uploadedFile = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Delete blobs by urls
         /// </summary>
@@ -2968,9 +2898,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// </exception>
         Task<HttpOperationResponse> DeleteBlobsAsyncWithHttpMessagesAsync(IList<string> urls = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
-        /// Create new blob folder
+        /// SearchAsync asset folders and blobs
         /// </summary>
-        /// <param name='folder'>
+        /// <param name='folderUrl'>
+        /// </param>
+        /// <param name='keyword'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2981,7 +2913,25 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        Task<HttpOperationResponse> CreateBlobFolderAsyncWithHttpMessagesAsync(BlobFolder folder = default(BlobFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        Task<HttpOperationResponse<BlobEntrySearchResult>> SearchAssetItemsAsyncWithHttpMessagesAsync(string folderUrl = default(string), string keyword = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Create new blob folder
+        /// </summary>
+        /// <param name='body'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        Task<HttpOperationResponse> CreateBlobFolderAsyncWithHttpMessagesAsync(BlobFolder body = default(BlobFolder), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -2998,10 +2948,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -3041,42 +2989,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             }
 
             /// <summary>
-            /// SearchAsync asset folders and blobs
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='folderUrl'>
-            /// </param>
-            /// <param name='keyword'>
-            /// </param>
-            public static BlobEntrySearchResult SearchAssetItemsAsync(this IAssets operations, string folderUrl = default(string), string keyword = default(string))
-            {
-                return operations.SearchAssetItemsAsyncAsync(folderUrl, keyword).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// SearchAsync asset folders and blobs
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='folderUrl'>
-            /// </param>
-            /// <param name='keyword'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<BlobEntrySearchResult> SearchAssetItemsAsyncAsync(this IAssets operations, string folderUrl = default(string), string keyword = default(string), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.SearchAssetItemsAsyncWithHttpMessagesAsync(folderUrl, keyword, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <summary>
             /// Upload assets to the folder
             /// </summary>
             /// <remarks>
@@ -3097,7 +3009,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='uploadedFile'>
             /// Upload File
             /// </param>
-            public static IList<BlobInfo> UploadAssetAsync(this IAssets operations, string folderUrl = default(string), string url = default(string), string name = default(string), Stream uploadedFile = default(Stream))
+            public static IList<BlobInfo> UploadAssetAsync(this IAssets operations, string folderUrl = default(string), string url = default(string), string name = default(string), string uploadedFile = default(string))
             {
                 return operations.UploadAssetAsyncAsync(folderUrl, url, name, uploadedFile).GetAwaiter().GetResult();
             }
@@ -3126,7 +3038,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<BlobInfo>> UploadAssetAsyncAsync(this IAssets operations, string folderUrl = default(string), string url = default(string), string name = default(string), Stream uploadedFile = default(Stream), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<BlobInfo>> UploadAssetAsyncAsync(this IAssets operations, string folderUrl = default(string), string url = default(string), string name = default(string), string uploadedFile = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.UploadAssetAsyncWithHttpMessagesAsync(folderUrl, url, name, uploadedFile, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -3164,16 +3076,39 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             }
 
             /// <summary>
-            /// Create new blob folder
+            /// SearchAsync asset folders and blobs
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='folder'>
+            /// <param name='folderUrl'>
             /// </param>
-            public static void CreateBlobFolderAsync(this IAssets operations, BlobFolder folder = default(BlobFolder))
+            /// <param name='keyword'>
+            /// </param>
+            public static BlobEntrySearchResult SearchAssetItemsAsync(this IAssets operations, string folderUrl = default(string), string keyword = default(string))
             {
-                operations.CreateBlobFolderAsyncAsync(folder).GetAwaiter().GetResult();
+                return operations.SearchAssetItemsAsyncAsync(folderUrl, keyword).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// SearchAsync asset folders and blobs
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='folderUrl'>
+            /// </param>
+            /// <param name='keyword'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<BlobEntrySearchResult> SearchAssetItemsAsyncAsync(this IAssets operations, string folderUrl = default(string), string keyword = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.SearchAssetItemsAsyncWithHttpMessagesAsync(folderUrl, keyword, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
 
             /// <summary>
@@ -3182,14 +3117,27 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='folder'>
+            /// <param name='body'>
+            /// </param>
+            public static void CreateBlobFolderAsync(this IAssets operations, BlobFolder body = default(BlobFolder))
+            {
+                operations.CreateBlobFolderAsyncAsync(body).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Create new blob folder
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task CreateBlobFolderAsyncAsync(this IAssets operations, BlobFolder folder = default(BlobFolder), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task CreateBlobFolderAsyncAsync(this IAssets operations, BlobFolder body = default(BlobFolder), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.CreateBlobFolderAsyncWithHttpMessagesAsync(folder, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.CreateBlobFolderAsyncWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
     }
@@ -3212,7 +3160,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -3501,7 +3448,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             return _result;
         }
 
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -3518,7 +3465,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ChangeLogSearchResult>> SearchChangesWithHttpMessagesAsync(ChangeLogSearchCriteria criteria = default(ChangeLogSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ChangeLogSearchResult>> SearchChangesWithHttpMessagesAsync(ChangeLogSearchCriteria body = default(ChangeLogSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -3527,7 +3474,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "SearchChanges", tracingParameters);
             }
@@ -3556,11 +3503,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -3805,10 +3752,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -3852,7 +3797,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// Thrown when unable to deserialize the response
         /// </exception>
         Task<HttpOperationResponse<LastModifiedResponse>> GetLastModifiedDateWithHttpMessagesAsync(string scope = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -3866,7 +3811,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<ChangeLogSearchResult>> SearchChangesWithHttpMessagesAsync(ChangeLogSearchCriteria criteria = default(ChangeLogSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ChangeLogSearchResult>> SearchChangesWithHttpMessagesAsync(ChangeLogSearchCriteria body = default(ChangeLogSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='type'>
         /// </param>
         /// <param name='start'>
@@ -3905,10 +3850,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -3985,24 +3928,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
-            public static ChangeLogSearchResult SearchChanges(this IChangeLog operations, ChangeLogSearchCriteria criteria = default(ChangeLogSearchCriteria))
+            public static ChangeLogSearchResult SearchChanges(this IChangeLog operations, ChangeLogSearchCriteria body = default(ChangeLogSearchCriteria))
             {
-                return operations.SearchChangesAsync(criteria).GetAwaiter().GetResult();
+                return operations.SearchChangesAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ChangeLogSearchResult> SearchChangesAsync(this IChangeLog operations, ChangeLogSearchCriteria criteria = default(ChangeLogSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ChangeLogSearchResult> SearchChangesAsync(this IChangeLog operations, ChangeLogSearchCriteria body = default(ChangeLogSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SearchChangesWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SearchChangesWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -4062,7 +4005,267 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// Diagnostics operations.
+    /// </summary>
+    public partial class Diagnostics : IServiceOperations<PlatformModuleClient>, IDiagnostics
+    {
+        /// <summary>
+        /// Initializes a new instance of the Diagnostics class.
+        /// </summary>
+        /// <param name='client'>
+        /// Reference to the service client.
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        public Diagnostics(PlatformModuleClient client)
+        {
+            if (client == null)
+            {
+                throw new System.ArgumentNullException("client");
+            }
+            Client = client;
+        }
+
+        /// <summary>
+        /// Gets a reference to the PlatformModuleClient
+        /// </summary>
+        public PlatformModuleClient Client { get; private set; }
+
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<License>> GetSystemInfoWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "GetSystemInfo", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/diagnostics/systeminfo").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("GET");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<License>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<License>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Models;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// Diagnostics operations.
+    /// </summary>
+    public partial interface IDiagnostics
+    {
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        Task<HttpOperationResponse<License>> GetSystemInfoWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Models;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// Extension methods for Diagnostics.
+    /// </summary>
+    public static partial class DiagnosticsExtensions
+    {
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            public static License GetSystemInfo(this IDiagnostics operations)
+            {
+                return operations.GetSystemInfoAsync().GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<License> GetSystemInfoAsync(this IDiagnostics operations, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.GetSystemInfoWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Models;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -4169,7 +4372,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -4223,7 +4426,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// Get dynamic properties registered for object type
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -4240,7 +4443,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<DynamicPropertySearchResult>> SearchDynamicPropertiesWithHttpMessagesAsync(DynamicPropertySearchCriteria criteria = default(DynamicPropertySearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<DynamicPropertySearchResult>> SearchDynamicPropertiesWithHttpMessagesAsync(DynamicPropertySearchCriteria body = default(DynamicPropertySearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -4249,7 +4452,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "SearchDynamicProperties", tracingParameters);
             }
@@ -4278,11 +4481,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -4304,7 +4507,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -4356,127 +4559,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         }
 
         /// <summary>
-        /// Update existing dynamic property
-        /// </summary>
-        /// <param name='property'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> UpdatePropertyAsyncWithHttpMessagesAsync(DynamicProperty property = default(DynamicProperty), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (property != null)
-            {
-                property.Validate();
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("property", property);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "UpdatePropertyAsync", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/dynamic/properties").ToString();
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("PUT");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if(property != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(property, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
         /// Add new dynamic property
         /// </summary>
-        /// <param name='property'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -4493,12 +4578,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<DynamicProperty>> CreatePropertyAsyncWithHttpMessagesAsync(DynamicProperty property = default(DynamicProperty), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<DynamicProperty>> CreatePropertyAsyncWithHttpMessagesAsync(DynamicProperty body = default(DynamicProperty), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (property != null)
-            {
-                property.Validate();
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -4506,7 +4587,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("property", property);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "CreatePropertyAsync", tracingParameters);
             }
@@ -4535,11 +4616,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(property != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(property, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -4613,6 +4694,120 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         }
 
         /// <summary>
+        /// Update existing dynamic property
+        /// </summary>
+        /// <param name='body'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> UpdatePropertyAsyncWithHttpMessagesAsync(DynamicProperty body = default(DynamicProperty), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdatePropertyAsync", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/dynamic/properties").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("PUT");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
         /// Delete dynamic property
         /// </summary>
         /// <param name='propertyIds'>
@@ -4648,17 +4843,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             List<string> _queryParameters = new List<string>();
             if (propertyIds != null)
             {
-                if (propertyIds.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("propertyIds={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in propertyIds)
-                    {
-                        _queryParameters.Add(string.Format("propertyIds={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("propertyIds={0}", System.Uri.EscapeDataString(string.Join(",", propertyIds))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -4814,7 +4999,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200 && (int)_statusCode != 204)
+            if ((int)_statusCode != 200 && (int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -4868,7 +5053,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// Get dictionary items
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -4885,7 +5070,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<DynamicPropertyDictionaryItemSearchResult>> SearchDictionaryItemsWithHttpMessagesAsync(DynamicPropertyDictionaryItemSearchCriteria criteria = default(DynamicPropertyDictionaryItemSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<DynamicPropertyDictionaryItemSearchResult>> SearchDictionaryItemsWithHttpMessagesAsync(DynamicPropertyDictionaryItemSearchCriteria body = default(DynamicPropertyDictionaryItemSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -4894,7 +5079,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "SearchDictionaryItems", tracingParameters);
             }
@@ -4923,11 +5108,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -4949,7 +5134,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -5007,7 +5192,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// Fill item ID to update existing item or leave it empty to create a new
         /// item.
         /// </remarks>
-        /// <param name='items'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -5021,18 +5206,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> SaveDictionaryItemsAsyncWithHttpMessagesAsync(IList<DynamicPropertyDictionaryItem> items = default(IList<DynamicPropertyDictionaryItem>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> SaveDictionaryItemsAsyncWithHttpMessagesAsync(IList<DynamicPropertyDictionaryItem> body = default(IList<DynamicPropertyDictionaryItem>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (items != null)
-            {
-                foreach (var element in items)
-                {
-                    if (element != null)
-                    {
-                        element.Validate();
-                    }
-                }
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -5040,7 +5215,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("items", items);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "SaveDictionaryItemsAsync", tracingParameters);
             }
@@ -5069,11 +5244,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(items != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(items, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -5165,17 +5340,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             List<string> _queryParameters = new List<string>();
             if (ids != null)
             {
-                if (ids.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in ids)
-                    {
-                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Join(",", ids))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -5272,10 +5437,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -5303,7 +5466,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// Get dynamic properties registered for object type
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -5317,26 +5480,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<DynamicPropertySearchResult>> SearchDynamicPropertiesWithHttpMessagesAsync(DynamicPropertySearchCriteria criteria = default(DynamicPropertySearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Update existing dynamic property
-        /// </summary>
-        /// <param name='property'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        Task<HttpOperationResponse> UpdatePropertyAsyncWithHttpMessagesAsync(DynamicProperty property = default(DynamicProperty), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<DynamicPropertySearchResult>> SearchDynamicPropertiesWithHttpMessagesAsync(DynamicPropertySearchCriteria body = default(DynamicPropertySearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Add new dynamic property
         /// </summary>
-        /// <param name='property'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -5350,7 +5498,22 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<DynamicProperty>> CreatePropertyAsyncWithHttpMessagesAsync(DynamicProperty property = default(DynamicProperty), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<DynamicProperty>> CreatePropertyAsyncWithHttpMessagesAsync(DynamicProperty body = default(DynamicProperty), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Update existing dynamic property
+        /// </summary>
+        /// <param name='body'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        Task<HttpOperationResponse> UpdatePropertyAsyncWithHttpMessagesAsync(DynamicProperty body = default(DynamicProperty), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Delete dynamic property
         /// </summary>
@@ -5386,7 +5549,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// Get dictionary items
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -5400,7 +5563,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<DynamicPropertyDictionaryItemSearchResult>> SearchDictionaryItemsWithHttpMessagesAsync(DynamicPropertyDictionaryItemSearchCriteria criteria = default(DynamicPropertyDictionaryItemSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<DynamicPropertyDictionaryItemSearchResult>> SearchDictionaryItemsWithHttpMessagesAsync(DynamicPropertyDictionaryItemSearchCriteria body = default(DynamicPropertyDictionaryItemSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Add or update dictionary items
         /// </summary>
@@ -5408,7 +5571,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// Fill item ID to update existing item or leave it empty to create a
         /// new item.
         /// </remarks>
-        /// <param name='items'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -5419,7 +5582,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        Task<HttpOperationResponse> SaveDictionaryItemsAsyncWithHttpMessagesAsync(IList<DynamicPropertyDictionaryItem> items = default(IList<DynamicPropertyDictionaryItem>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> SaveDictionaryItemsAsyncWithHttpMessagesAsync(IList<DynamicPropertyDictionaryItem> body = default(IList<DynamicPropertyDictionaryItem>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Delete dictionary items
         /// </summary>
@@ -5452,10 +5615,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -5498,11 +5659,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
-            public static DynamicPropertySearchResult SearchDynamicProperties(this IDynamicProperties operations, DynamicPropertySearchCriteria criteria = default(DynamicPropertySearchCriteria))
+            public static DynamicPropertySearchResult SearchDynamicProperties(this IDynamicProperties operations, DynamicPropertySearchCriteria body = default(DynamicPropertySearchCriteria))
             {
-                return operations.SearchDynamicPropertiesAsync(criteria).GetAwaiter().GetResult();
+                return operations.SearchDynamicPropertiesAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -5511,14 +5672,46 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<DynamicPropertySearchResult> SearchDynamicPropertiesAsync(this IDynamicProperties operations, DynamicPropertySearchCriteria criteria = default(DynamicPropertySearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<DynamicPropertySearchResult> SearchDynamicPropertiesAsync(this IDynamicProperties operations, DynamicPropertySearchCriteria body = default(DynamicPropertySearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SearchDynamicPropertiesWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SearchDynamicPropertiesWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Add new dynamic property
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// </param>
+            public static DynamicProperty CreatePropertyAsync(this IDynamicProperties operations, DynamicProperty body = default(DynamicProperty))
+            {
+                return operations.CreatePropertyAsyncAsync(body).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Add new dynamic property
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<DynamicProperty> CreatePropertyAsyncAsync(this IDynamicProperties operations, DynamicProperty body = default(DynamicProperty), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.CreatePropertyAsyncWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -5530,11 +5723,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='property'>
+            /// <param name='body'>
             /// </param>
-            public static void UpdatePropertyAsync(this IDynamicProperties operations, DynamicProperty property = default(DynamicProperty))
+            public static void UpdatePropertyAsync(this IDynamicProperties operations, DynamicProperty body = default(DynamicProperty))
             {
-                operations.UpdatePropertyAsyncAsync(property).GetAwaiter().GetResult();
+                operations.UpdatePropertyAsyncAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -5543,46 +5736,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='property'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task UpdatePropertyAsyncAsync(this IDynamicProperties operations, DynamicProperty property = default(DynamicProperty), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task UpdatePropertyAsyncAsync(this IDynamicProperties operations, DynamicProperty body = default(DynamicProperty), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.UpdatePropertyAsyncWithHttpMessagesAsync(property, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
-
-            /// <summary>
-            /// Add new dynamic property
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='property'>
-            /// </param>
-            public static DynamicProperty CreatePropertyAsync(this IDynamicProperties operations, DynamicProperty property = default(DynamicProperty))
-            {
-                return operations.CreatePropertyAsyncAsync(property).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Add new dynamic property
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='property'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<DynamicProperty> CreatePropertyAsyncAsync(this IDynamicProperties operations, DynamicProperty property = default(DynamicProperty), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.CreatePropertyAsyncWithHttpMessagesAsync(property, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                (await operations.UpdatePropertyAsyncWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -5648,11 +5809,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
-            public static DynamicPropertyDictionaryItemSearchResult SearchDictionaryItems(this IDynamicProperties operations, DynamicPropertyDictionaryItemSearchCriteria criteria = default(DynamicPropertyDictionaryItemSearchCriteria))
+            public static DynamicPropertyDictionaryItemSearchResult SearchDictionaryItems(this IDynamicProperties operations, DynamicPropertyDictionaryItemSearchCriteria body = default(DynamicPropertyDictionaryItemSearchCriteria))
             {
-                return operations.SearchDictionaryItemsAsync(criteria).GetAwaiter().GetResult();
+                return operations.SearchDictionaryItemsAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -5661,14 +5822,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<DynamicPropertyDictionaryItemSearchResult> SearchDictionaryItemsAsync(this IDynamicProperties operations, DynamicPropertyDictionaryItemSearchCriteria criteria = default(DynamicPropertyDictionaryItemSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<DynamicPropertyDictionaryItemSearchResult> SearchDictionaryItemsAsync(this IDynamicProperties operations, DynamicPropertyDictionaryItemSearchCriteria body = default(DynamicPropertyDictionaryItemSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SearchDictionaryItemsWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SearchDictionaryItemsWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -5684,11 +5845,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='items'>
+            /// <param name='body'>
             /// </param>
-            public static void SaveDictionaryItemsAsync(this IDynamicProperties operations, IList<DynamicPropertyDictionaryItem> items = default(IList<DynamicPropertyDictionaryItem>))
+            public static void SaveDictionaryItemsAsync(this IDynamicProperties operations, IList<DynamicPropertyDictionaryItem> body = default(IList<DynamicPropertyDictionaryItem>))
             {
-                operations.SaveDictionaryItemsAsyncAsync(items).GetAwaiter().GetResult();
+                operations.SaveDictionaryItemsAsyncAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -5701,14 +5862,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='items'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task SaveDictionaryItemsAsyncAsync(this IDynamicProperties operations, IList<DynamicPropertyDictionaryItem> items = default(IList<DynamicPropertyDictionaryItem>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task SaveDictionaryItemsAsyncAsync(this IDynamicProperties operations, IList<DynamicPropertyDictionaryItem> body = default(IList<DynamicPropertyDictionaryItem>), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.SaveDictionaryItemsAsyncWithHttpMessagesAsync(items, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.SaveDictionaryItemsAsyncWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -5762,7 +5923,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -5884,7 +6044,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -5951,10 +6111,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -6001,10 +6159,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -6067,7 +6223,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -6333,7 +6488,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// Get all dependent modules for module
         /// </summary>
-        /// <param name='moduleDescriptors'>
+        /// <param name='body'>
         /// modules descriptors
         /// </param>
         /// <param name='customHeaders'>
@@ -6351,7 +6506,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<ModuleDescriptor>>> GetDependingModulesWithHttpMessagesAsync(IList<ModuleDescriptor> moduleDescriptors = default(IList<ModuleDescriptor>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<ModuleDescriptor>>> GetDependingModulesWithHttpMessagesAsync(IList<ModuleDescriptor> body = default(IList<ModuleDescriptor>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -6360,7 +6515,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("moduleDescriptors", moduleDescriptors);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetDependingModules", tracingParameters);
             }
@@ -6389,11 +6544,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(moduleDescriptors != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(moduleDescriptors, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -6469,7 +6624,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// Returns a flat expanded  list of modules that depend on passed modules
         /// </summary>
-        /// <param name='moduleDescriptors'>
+        /// <param name='body'>
         /// modules descriptors
         /// </param>
         /// <param name='customHeaders'>
@@ -6487,7 +6642,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<ModuleDescriptor>>> GetMissingDependenciesWithHttpMessagesAsync(IList<ModuleDescriptor> moduleDescriptors = default(IList<ModuleDescriptor>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<ModuleDescriptor>>> GetMissingDependenciesWithHttpMessagesAsync(IList<ModuleDescriptor> body = default(IList<ModuleDescriptor>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -6496,7 +6651,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("moduleDescriptors", moduleDescriptors);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetMissingDependencies", tracingParameters);
             }
@@ -6525,11 +6680,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(moduleDescriptors != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(moduleDescriptors, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -6731,7 +6886,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// Install modules
         /// </summary>
-        /// <param name='modules'>
+        /// <param name='body'>
         /// modules for install
         /// </param>
         /// <param name='customHeaders'>
@@ -6749,7 +6904,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ModulePushNotification>> InstallModulesWithHttpMessagesAsync(IList<ModuleDescriptor> modules = default(IList<ModuleDescriptor>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ModulePushNotification>> InstallModulesWithHttpMessagesAsync(IList<ModuleDescriptor> body = default(IList<ModuleDescriptor>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -6758,7 +6913,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("modules", modules);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "InstallModules", tracingParameters);
             }
@@ -6787,11 +6942,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(modules != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(modules, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -6867,7 +7022,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// Uninstall module
         /// </summary>
-        /// <param name='modules'>
+        /// <param name='body'>
         /// modules
         /// </param>
         /// <param name='customHeaders'>
@@ -6885,7 +7040,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ModulePushNotification>> UninstallModuleWithHttpMessagesAsync(IList<ModuleDescriptor> modules = default(IList<ModuleDescriptor>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ModulePushNotification>> UninstallModuleWithHttpMessagesAsync(IList<ModuleDescriptor> body = default(IList<ModuleDescriptor>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -6894,7 +7049,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("modules", modules);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "UninstallModule", tracingParameters);
             }
@@ -6923,11 +7078,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(modules != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(modules, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -7247,10 +7402,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -7291,7 +7444,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// Get all dependent modules for module
         /// </summary>
-        /// <param name='moduleDescriptors'>
+        /// <param name='body'>
         /// modules descriptors
         /// </param>
         /// <param name='customHeaders'>
@@ -7306,12 +7459,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<IList<ModuleDescriptor>>> GetDependingModulesWithHttpMessagesAsync(IList<ModuleDescriptor> moduleDescriptors = default(IList<ModuleDescriptor>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<ModuleDescriptor>>> GetDependingModulesWithHttpMessagesAsync(IList<ModuleDescriptor> body = default(IList<ModuleDescriptor>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Returns a flat expanded  list of modules that depend on passed
         /// modules
         /// </summary>
-        /// <param name='moduleDescriptors'>
+        /// <param name='body'>
         /// modules descriptors
         /// </param>
         /// <param name='customHeaders'>
@@ -7326,7 +7479,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<IList<ModuleDescriptor>>> GetMissingDependenciesWithHttpMessagesAsync(IList<ModuleDescriptor> moduleDescriptors = default(IList<ModuleDescriptor>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<ModuleDescriptor>>> GetMissingDependenciesWithHttpMessagesAsync(IList<ModuleDescriptor> body = default(IList<ModuleDescriptor>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Upload module package for installation or update
         /// </summary>
@@ -7346,7 +7499,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// Install modules
         /// </summary>
-        /// <param name='modules'>
+        /// <param name='body'>
         /// modules for install
         /// </param>
         /// <param name='customHeaders'>
@@ -7361,11 +7514,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<ModulePushNotification>> InstallModulesWithHttpMessagesAsync(IList<ModuleDescriptor> modules = default(IList<ModuleDescriptor>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ModulePushNotification>> InstallModulesWithHttpMessagesAsync(IList<ModuleDescriptor> body = default(IList<ModuleDescriptor>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Uninstall module
         /// </summary>
-        /// <param name='modules'>
+        /// <param name='body'>
         /// modules
         /// </param>
         /// <param name='customHeaders'>
@@ -7380,7 +7533,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<ModulePushNotification>> UninstallModuleWithHttpMessagesAsync(IList<ModuleDescriptor> modules = default(IList<ModuleDescriptor>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ModulePushNotification>> UninstallModuleWithHttpMessagesAsync(IList<ModuleDescriptor> body = default(IList<ModuleDescriptor>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Restart web application
         /// </summary>
@@ -7426,10 +7579,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -7497,12 +7648,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='moduleDescriptors'>
+            /// <param name='body'>
             /// modules descriptors
             /// </param>
-            public static IList<ModuleDescriptor> GetDependingModules(this IModules operations, IList<ModuleDescriptor> moduleDescriptors = default(IList<ModuleDescriptor>))
+            public static IList<ModuleDescriptor> GetDependingModules(this IModules operations, IList<ModuleDescriptor> body = default(IList<ModuleDescriptor>))
             {
-                return operations.GetDependingModulesAsync(moduleDescriptors).GetAwaiter().GetResult();
+                return operations.GetDependingModulesAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -7511,15 +7662,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='moduleDescriptors'>
+            /// <param name='body'>
             /// modules descriptors
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<ModuleDescriptor>> GetDependingModulesAsync(this IModules operations, IList<ModuleDescriptor> moduleDescriptors = default(IList<ModuleDescriptor>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<ModuleDescriptor>> GetDependingModulesAsync(this IModules operations, IList<ModuleDescriptor> body = default(IList<ModuleDescriptor>), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetDependingModulesWithHttpMessagesAsync(moduleDescriptors, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetDependingModulesWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -7531,12 +7682,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='moduleDescriptors'>
+            /// <param name='body'>
             /// modules descriptors
             /// </param>
-            public static IList<ModuleDescriptor> GetMissingDependencies(this IModules operations, IList<ModuleDescriptor> moduleDescriptors = default(IList<ModuleDescriptor>))
+            public static IList<ModuleDescriptor> GetMissingDependencies(this IModules operations, IList<ModuleDescriptor> body = default(IList<ModuleDescriptor>))
             {
-                return operations.GetMissingDependenciesAsync(moduleDescriptors).GetAwaiter().GetResult();
+                return operations.GetMissingDependenciesAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -7545,15 +7696,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='moduleDescriptors'>
+            /// <param name='body'>
             /// modules descriptors
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<ModuleDescriptor>> GetMissingDependenciesAsync(this IModules operations, IList<ModuleDescriptor> moduleDescriptors = default(IList<ModuleDescriptor>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<ModuleDescriptor>> GetMissingDependenciesAsync(this IModules operations, IList<ModuleDescriptor> body = default(IList<ModuleDescriptor>), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetMissingDependenciesWithHttpMessagesAsync(moduleDescriptors, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetMissingDependenciesWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -7593,12 +7744,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='modules'>
+            /// <param name='body'>
             /// modules for install
             /// </param>
-            public static ModulePushNotification InstallModules(this IModules operations, IList<ModuleDescriptor> modules = default(IList<ModuleDescriptor>))
+            public static ModulePushNotification InstallModules(this IModules operations, IList<ModuleDescriptor> body = default(IList<ModuleDescriptor>))
             {
-                return operations.InstallModulesAsync(modules).GetAwaiter().GetResult();
+                return operations.InstallModulesAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -7607,15 +7758,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='modules'>
+            /// <param name='body'>
             /// modules for install
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ModulePushNotification> InstallModulesAsync(this IModules operations, IList<ModuleDescriptor> modules = default(IList<ModuleDescriptor>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ModulePushNotification> InstallModulesAsync(this IModules operations, IList<ModuleDescriptor> body = default(IList<ModuleDescriptor>), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.InstallModulesWithHttpMessagesAsync(modules, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.InstallModulesWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -7627,12 +7778,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='modules'>
+            /// <param name='body'>
             /// modules
             /// </param>
-            public static ModulePushNotification UninstallModule(this IModules operations, IList<ModuleDescriptor> modules = default(IList<ModuleDescriptor>))
+            public static ModulePushNotification UninstallModule(this IModules operations, IList<ModuleDescriptor> body = default(IList<ModuleDescriptor>))
             {
-                return operations.UninstallModuleAsync(modules).GetAwaiter().GetResult();
+                return operations.UninstallModuleAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -7641,15 +7792,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='modules'>
+            /// <param name='body'>
             /// modules
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ModulePushNotification> UninstallModuleAsync(this IModules operations, IList<ModuleDescriptor> modules = default(IList<ModuleDescriptor>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ModulePushNotification> UninstallModuleAsync(this IModules operations, IList<ModuleDescriptor> body = default(IList<ModuleDescriptor>), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.UninstallModuleWithHttpMessagesAsync(modules, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.UninstallModuleWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -7728,7 +7879,762 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// OAuthApps operations.
+    /// </summary>
+    public partial class OAuthApps : IServiceOperations<PlatformModuleClient>, IOAuthApps
+    {
+        /// <summary>
+        /// Initializes a new instance of the OAuthApps class.
+        /// </summary>
+        /// <param name='client'>
+        /// Reference to the service client.
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        public OAuthApps(PlatformModuleClient client)
+        {
+            if (client == null)
+            {
+                throw new System.ArgumentNullException("client");
+            }
+            Client = client;
+        }
+
+        /// <summary>
+        /// Gets a reference to the PlatformModuleClient
+        /// </summary>
+        public PlatformModuleClient Client { get; private set; }
+
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<OpenIddictApplicationDescriptor>> NewOperationWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "NewOperation", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/oauthapps/new").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("GET");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<OpenIddictApplicationDescriptor>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<OpenIddictApplicationDescriptor>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <param name='body'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<OpenIddictApplicationDescriptor>> SaveAsyncWithHttpMessagesAsync(OpenIddictApplicationDescriptor body = default(OpenIddictApplicationDescriptor), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "SaveAsync", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/oauthapps").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<OpenIddictApplicationDescriptor>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<OpenIddictApplicationDescriptor>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <param name='clientIds'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> DeleteAsyncWithHttpMessagesAsync(IList<string> clientIds = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("clientIds", clientIds);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "DeleteAsync", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/oauthapps").ToString();
+            List<string> _queryParameters = new List<string>();
+            if (clientIds != null)
+            {
+                _queryParameters.Add(string.Format("clientIds={0}", System.Uri.EscapeDataString(string.Join(",", clientIds))));
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("DELETE");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <param name='body'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<OAuthAppSearchResult>> SearchAsyncWithHttpMessagesAsync(OAuthAppSearchCriteria body = default(OAuthAppSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "SearchAsync", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/oauthapps/search").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<OAuthAppSearchResult>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<OAuthAppSearchResult>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Models;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// OAuthApps operations.
+    /// </summary>
+    public partial interface IOAuthApps
+    {
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        Task<HttpOperationResponse<OpenIddictApplicationDescriptor>> NewOperationWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <param name='body'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        Task<HttpOperationResponse<OpenIddictApplicationDescriptor>> SaveAsyncWithHttpMessagesAsync(OpenIddictApplicationDescriptor body = default(OpenIddictApplicationDescriptor), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <param name='clientIds'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        Task<HttpOperationResponse> DeleteAsyncWithHttpMessagesAsync(IList<string> clientIds = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <param name='body'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        Task<HttpOperationResponse<OAuthAppSearchResult>> SearchAsyncWithHttpMessagesAsync(OAuthAppSearchCriteria body = default(OAuthAppSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Models;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// Extension methods for OAuthApps.
+    /// </summary>
+    public static partial class OAuthAppsExtensions
+    {
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            public static OpenIddictApplicationDescriptor NewOperation(this IOAuthApps operations)
+            {
+                return operations.NewOperationAsync().GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<OpenIddictApplicationDescriptor> NewOperationAsync(this IOAuthApps operations, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.NewOperationWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// </param>
+            public static OpenIddictApplicationDescriptor SaveAsync(this IOAuthApps operations, OpenIddictApplicationDescriptor body = default(OpenIddictApplicationDescriptor))
+            {
+                return operations.SaveAsyncAsync(body).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<OpenIddictApplicationDescriptor> SaveAsyncAsync(this IOAuthApps operations, OpenIddictApplicationDescriptor body = default(OpenIddictApplicationDescriptor), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.SaveAsyncWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='clientIds'>
+            /// </param>
+            public static void DeleteAsync(this IOAuthApps operations, IList<string> clientIds = default(IList<string>))
+            {
+                operations.DeleteAsyncAsync(clientIds).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='clientIds'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task DeleteAsyncAsync(this IOAuthApps operations, IList<string> clientIds = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.DeleteAsyncWithHttpMessagesAsync(clientIds, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// </param>
+            public static OAuthAppSearchResult SearchAsync(this IOAuthApps operations, OAuthAppSearchCriteria body = default(OAuthAppSearchCriteria))
+            {
+                return operations.SearchAsyncAsync(body).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<OAuthAppSearchResult> SearchAsyncAsync(this IOAuthApps operations, OAuthAppSearchCriteria body = default(OAuthAppSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.SearchAsyncWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Models;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -7808,7 +8714,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<PushNotificationSearchResult>> SearchPushNotificationWithHttpMessagesAsync(IList<string> ids = default(IList<string>), bool? onlyNew = default(bool?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<object> sortInfos = default(IList<object>), int? skip = default(int?), int? take = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<PushNotificationSearchResult>> SearchPushNotificationWithHttpMessagesAsync(IList<string> ids = default(IList<string>), bool? onlyNew = default(bool?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -7841,17 +8747,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             List<string> _queryParameters = new List<string>();
             if (ids != null)
             {
-                if (ids.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("Ids={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in ids)
-                    {
-                        _queryParameters.Add(string.Format("Ids={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("Ids={0}", System.Uri.EscapeDataString(string.Join(",", ids))));
             }
             if (onlyNew != null)
             {
@@ -7875,31 +8771,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             }
             if (objectTypes != null)
             {
-                if (objectTypes.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("ObjectTypes={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in objectTypes)
-                    {
-                        _queryParameters.Add(string.Format("ObjectTypes={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("ObjectTypes={0}", System.Uri.EscapeDataString(string.Join(",", objectTypes))));
             }
             if (objectIds != null)
             {
-                if (objectIds.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("ObjectIds={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in objectIds)
-                    {
-                        _queryParameters.Add(string.Format("ObjectIds={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("ObjectIds={0}", System.Uri.EscapeDataString(string.Join(",", objectIds))));
             }
             if (keyword != null)
             {
@@ -7919,17 +8795,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             }
             if (sortInfos != null)
             {
-                if (sortInfos.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("SortInfos={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in sortInfos)
-                    {
-                        _queryParameters.Add(string.Format("SortInfos={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("SortInfos={0}", System.Uri.EscapeDataString(string.Join(",", sortInfos))));
             }
             if (skip != null)
             {
@@ -8178,10 +9044,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -8235,7 +9099,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<PushNotificationSearchResult>> SearchPushNotificationWithHttpMessagesAsync(IList<string> ids = default(IList<string>), bool? onlyNew = default(bool?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<object> sortInfos = default(IList<object>), int? skip = default(int?), int? take = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<PushNotificationSearchResult>> SearchPushNotificationWithHttpMessagesAsync(IList<string> ids = default(IList<string>), bool? onlyNew = default(bool?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Mark all notifications as read
         /// </summary>
@@ -8268,10 +9132,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -8316,7 +9178,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// </param>
             /// <param name='take'>
             /// </param>
-            public static PushNotificationSearchResult SearchPushNotification(this IPushNotificationOperations operations, IList<string> ids = default(IList<string>), bool? onlyNew = default(bool?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<object> sortInfos = default(IList<object>), int? skip = default(int?), int? take = default(int?))
+            public static PushNotificationSearchResult SearchPushNotification(this IPushNotificationOperations operations, IList<string> ids = default(IList<string>), bool? onlyNew = default(bool?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
             {
                 return operations.SearchPushNotificationAsync(ids, onlyNew, startDate, endDate, responseGroup, objectType, objectTypes, objectIds, keyword, searchPhrase, languageCode, sort, sortInfos, skip, take).GetAwaiter().GetResult();
             }
@@ -8360,7 +9222,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<PushNotificationSearchResult> SearchPushNotificationAsync(this IPushNotificationOperations operations, IList<string> ids = default(IList<string>), bool? onlyNew = default(bool?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<object> sortInfos = default(IList<object>), int? skip = default(int?), int? take = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<PushNotificationSearchResult> SearchPushNotificationAsync(this IPushNotificationOperations operations, IList<string> ids = default(IList<string>), bool? onlyNew = default(bool?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.SearchPushNotificationWithHttpMessagesAsync(ids, onlyNew, startDate, endDate, responseGroup, objectType, objectTypes, objectIds, keyword, searchPhrase, languageCode, sort, sortInfos, skip, take, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -8416,7 +9278,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -8455,7 +9316,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// Verifies provided credentials and if succeeded returns full user details,
         /// otherwise returns 401 Unauthorized.
         /// </remarks>
-        /// <param name='request'>
+        /// <param name='body'>
         /// Login request.
         /// </param>
         /// <param name='customHeaders'>
@@ -8473,7 +9334,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<SignInResult>> LoginWithHttpMessagesAsync(LoginRequest request = default(LoginRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<SignInResult>> LoginWithHttpMessagesAsync(LoginRequest body = default(LoginRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -8482,7 +9343,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("request", request);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "Login", tracingParameters);
             }
@@ -8511,11 +9372,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(request != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(request, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -8660,7 +9521,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 204)
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -8768,7 +9629,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -8891,7 +9752,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -9071,7 +9932,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// SearchAsync roles by keyword
         /// </summary>
-        /// <param name='request'>
+        /// <param name='body'>
         /// SearchAsync parameters.
         /// </param>
         /// <param name='customHeaders'>
@@ -9089,7 +9950,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<RoleSearchResult>> SearchRolesWithHttpMessagesAsync(RoleSearchCriteria request = default(RoleSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<RoleSearchResult>> SearchRolesWithHttpMessagesAsync(RoleSearchCriteria body = default(RoleSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -9098,7 +9959,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("request", request);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "SearchRoles", tracingParameters);
             }
@@ -9127,11 +9988,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(request != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(request, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -9345,141 +10206,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         }
 
         /// <summary>
-        /// Update an existing role or create new
-        /// </summary>
-        /// <param name='role'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse<IdentityResult>> UpdateRoleWithHttpMessagesAsync(Role role = default(Role), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("role", role);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "UpdateRole", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/security/roles").ToString();
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("PUT");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if(role != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(role, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<IdentityResult>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IdentityResult>(_responseContent, Client.DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
         /// Delete roles by ID
         /// </summary>
         /// <param name='ids'>
@@ -9516,17 +10242,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             List<string> _queryParameters = new List<string>();
             if (ids != null)
             {
-                if (ids.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in ids)
-                    {
-                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Join(",", ids))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -9608,10 +10324,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         }
 
         /// <summary>
-        /// Update user details by user ID
+        /// Update an existing role or create new
         /// </summary>
-        /// <param name='user'>
-        /// User details.
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -9628,7 +10343,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IdentityResult>> UpdateWithHttpMessagesAsync(ApplicationUser user = default(ApplicationUser), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<SecurityResult>> UpdateRoleWithHttpMessagesAsync(Role body = default(Role), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -9637,13 +10352,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("user", user);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "Update", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdateRole", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/security/users").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/security/roles").ToString();
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -9666,11 +10381,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(user != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(user, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -9715,7 +10430,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IdentityResult>();
+            var _result = new HttpOperationResponse<SecurityResult>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -9724,7 +10439,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IdentityResult>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<SecurityResult>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -9746,7 +10461,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// SearchAsync users by keyword
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// Search criteria.
         /// </param>
         /// <param name='customHeaders'>
@@ -9764,7 +10479,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<UserSearchResult>> SearchUsersWithHttpMessagesAsync(UserSearchCriteria criteria = default(UserSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<UserSearchResult>> SearchUsersWithHttpMessagesAsync(UserSearchCriteria body = default(UserSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -9773,7 +10488,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "SearchUsers", tracingParameters);
             }
@@ -9802,11 +10517,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -9880,6 +10595,142 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         }
 
         /// <summary>
+        /// Update user details by user ID
+        /// </summary>
+        /// <param name='body'>
+        /// User details.
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<SecurityResult>> UpdateWithHttpMessagesAsync(ApplicationUser body = default(ApplicationUser), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "Update", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/security/users").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("PUT");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<SecurityResult>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<SecurityResult>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
         /// Delete users by name
         /// </summary>
         /// <param name='names'>
@@ -9916,17 +10767,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             List<string> _queryParameters = new List<string>();
             if (names != null)
             {
-                if (names.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("names={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in names)
-                    {
-                        _queryParameters.Add(string.Format("names={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("names={0}", System.Uri.EscapeDataString(string.Join(",", names))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -10578,7 +11419,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// Create new user
         /// </summary>
-        /// <param name='newUser'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -10595,7 +11436,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IdentityResult>> CreateWithHttpMessagesAsync(ApplicationUser newUser = default(ApplicationUser), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<SecurityResult>> CreateWithHttpMessagesAsync(ApplicationUser body = default(ApplicationUser), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -10604,7 +11445,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("newUser", newUser);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "Create", tracingParameters);
             }
@@ -10633,11 +11474,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(newUser != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(newUser, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -10682,7 +11523,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IdentityResult>();
+            var _result = new HttpOperationResponse<SecurityResult>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -10691,7 +11532,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IdentityResult>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<SecurityResult>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -10715,7 +11556,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// </summary>
         /// <param name='userName'>
         /// </param>
-        /// <param name='changePassword'>
+        /// <param name='body'>
         /// Old and new passwords.
         /// </param>
         /// <param name='customHeaders'>
@@ -10736,7 +11577,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> ChangePasswordWithHttpMessagesAsync(string userName, ChangePasswordRequest changePassword = default(ChangePasswordRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> ChangePasswordWithHttpMessagesAsync(string userName, ChangePasswordRequest body = default(ChangePasswordRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (userName == null)
             {
@@ -10749,8 +11590,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("userName", userName);
-                tracingParameters.Add("changePassword", changePassword);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "ChangePassword", tracingParameters);
             }
@@ -10780,11 +11621,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(changePassword != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(changePassword, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -10842,7 +11683,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// Resets password for current user.
         /// </summary>
-        /// <param name='resetPassword'>
+        /// <param name='body'>
         /// Password reset information containing new password.
         /// </param>
         /// <param name='customHeaders'>
@@ -10860,7 +11701,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IdentityResult>> ResetCurrentUserPasswordWithHttpMessagesAsync(ResetPasswordConfirmRequest resetPassword = default(ResetPasswordConfirmRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<SecurityResult>> ResetCurrentUserPasswordWithHttpMessagesAsync(ResetPasswordConfirmRequest body = default(ResetPasswordConfirmRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -10869,7 +11710,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("resetPassword", resetPassword);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "ResetCurrentUserPassword", tracingParameters);
             }
@@ -10898,11 +11739,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(resetPassword != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(resetPassword, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -10947,7 +11788,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IdentityResult>();
+            var _result = new HttpOperationResponse<SecurityResult>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -10956,7 +11797,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IdentityResult>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<SecurityResult>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -10980,7 +11821,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// </summary>
         /// <param name='userName'>
         /// </param>
-        /// <param name='resetPasswordConfirm'>
+        /// <param name='body'>
         /// New password.
         /// </param>
         /// <param name='customHeaders'>
@@ -11004,7 +11845,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IdentityResult>> ResetPasswordWithHttpMessagesAsync(string userName, ResetPasswordConfirmRequest resetPasswordConfirm = default(ResetPasswordConfirmRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<SecurityResult>> ResetPasswordWithHttpMessagesAsync(string userName, ResetPasswordConfirmRequest body = default(ResetPasswordConfirmRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (userName == null)
             {
@@ -11017,8 +11858,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("userName", userName);
-                tracingParameters.Add("resetPasswordConfirm", resetPasswordConfirm);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "ResetPassword", tracingParameters);
             }
@@ -11048,11 +11889,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(resetPasswordConfirm != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(resetPasswordConfirm, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -11097,7 +11938,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IdentityResult>();
+            var _result = new HttpOperationResponse<SecurityResult>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -11106,7 +11947,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IdentityResult>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<SecurityResult>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -11130,7 +11971,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// </summary>
         /// <param name='userId'>
         /// </param>
-        /// <param name='resetPasswordConfirm'>
+        /// <param name='body'>
         /// New password.
         /// </param>
         /// <param name='customHeaders'>
@@ -11154,7 +11995,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IdentityResult>> ResetPasswordByTokenWithHttpMessagesAsync(string userId, ResetPasswordConfirmRequest resetPasswordConfirm = default(ResetPasswordConfirmRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<SecurityResult>> ResetPasswordByTokenWithHttpMessagesAsync(string userId, ResetPasswordConfirmRequest body = default(ResetPasswordConfirmRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (userId == null)
             {
@@ -11167,8 +12008,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("userId", userId);
-                tracingParameters.Add("resetPasswordConfirm", resetPasswordConfirm);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "ResetPasswordByToken", tracingParameters);
             }
@@ -11198,11 +12039,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(resetPasswordConfirm != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(resetPasswordConfirm, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -11247,7 +12088,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IdentityResult>();
+            var _result = new HttpOperationResponse<SecurityResult>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -11256,7 +12097,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IdentityResult>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<SecurityResult>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -11280,7 +12121,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// </summary>
         /// <param name='userId'>
         /// </param>
-        /// <param name='resetPasswordToken'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -11303,7 +12144,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<bool?>> ValidatePasswordResetTokenWithHttpMessagesAsync(string userId, ValidatePasswordResetTokenRequest resetPasswordToken = default(ValidatePasswordResetTokenRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<bool?>> ValidatePasswordResetTokenWithHttpMessagesAsync(string userId, ValidatePasswordResetTokenRequest body = default(ValidatePasswordResetTokenRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (userId == null)
             {
@@ -11316,8 +12157,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("userId", userId);
-                tracingParameters.Add("resetPasswordToken", resetPasswordToken);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "ValidatePasswordResetToken", tracingParameters);
             }
@@ -11347,11 +12188,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(resetPasswordToken != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(resetPasswordToken, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -11546,7 +12387,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             return _result;
         }
 
-        /// <param name='password'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -11563,7 +12404,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<PasswordValidationResult>> ValidatePasswordWithHttpMessagesAsync(string password = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<PasswordValidationResult>> ValidatePasswordWithHttpMessagesAsync(string body = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -11572,7 +12413,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("password", password);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "ValidatePassword", tracingParameters);
             }
@@ -11601,11 +12442,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(password != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(password, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -11823,7 +12664,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// Unlock user
         /// </summary>
         /// <param name='id'>
-        /// &amp;gt;User id
+        /// &gt;User id
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -11846,7 +12687,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IdentityResult>> UnlockUserWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<SecurityResult>> UnlockUserWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (id == null)
             {
@@ -11932,7 +12773,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IdentityResult>();
+            var _result = new HttpOperationResponse<SecurityResult>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -11941,7 +12782,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IdentityResult>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<SecurityResult>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -11976,10 +12817,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -11995,7 +12834,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// Verifies provided credentials and if succeeded returns full user
         /// details, otherwise returns 401 Unauthorized.
         /// </remarks>
-        /// <param name='request'>
+        /// <param name='body'>
         /// Login request.
         /// </param>
         /// <param name='customHeaders'>
@@ -12010,7 +12849,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<SignInResult>> LoginWithHttpMessagesAsync(LoginRequest request = default(LoginRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<SignInResult>> LoginWithHttpMessagesAsync(LoginRequest body = default(LoginRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Sign out
         /// </summary>
@@ -12072,7 +12911,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// SearchAsync roles by keyword
         /// </summary>
-        /// <param name='request'>
+        /// <param name='body'>
         /// SearchAsync parameters.
         /// </param>
         /// <param name='customHeaders'>
@@ -12087,7 +12926,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<RoleSearchResult>> SearchRolesWithHttpMessagesAsync(RoleSearchCriteria request = default(RoleSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<RoleSearchResult>> SearchRolesWithHttpMessagesAsync(RoleSearchCriteria body = default(RoleSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Get role by ID
         /// </summary>
@@ -12110,24 +12949,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// </exception>
         Task<HttpOperationResponse<Role>> GetRoleWithHttpMessagesAsync(string roleName, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
-        /// Update an existing role or create new
-        /// </summary>
-        /// <param name='role'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        Task<HttpOperationResponse<IdentityResult>> UpdateRoleWithHttpMessagesAsync(Role role = default(Role), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
         /// Delete roles by ID
         /// </summary>
         /// <param name='ids'>
@@ -12144,10 +12965,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// </exception>
         Task<HttpOperationResponse> DeleteRolesWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
-        /// Update user details by user ID
+        /// Update an existing role or create new
         /// </summary>
-        /// <param name='user'>
-        /// User details.
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -12161,11 +12981,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<IdentityResult>> UpdateWithHttpMessagesAsync(ApplicationUser user = default(ApplicationUser), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<SecurityResult>> UpdateRoleWithHttpMessagesAsync(Role body = default(Role), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// SearchAsync users by keyword
         /// </summary>
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// Search criteria.
         /// </param>
         /// <param name='customHeaders'>
@@ -12180,7 +13000,26 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<UserSearchResult>> SearchUsersWithHttpMessagesAsync(UserSearchCriteria criteria = default(UserSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<UserSearchResult>> SearchUsersWithHttpMessagesAsync(UserSearchCriteria body = default(UserSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Update user details by user ID
+        /// </summary>
+        /// <param name='body'>
+        /// User details.
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        Task<HttpOperationResponse<SecurityResult>> UpdateWithHttpMessagesAsync(ApplicationUser body = default(ApplicationUser), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Delete users by name
         /// </summary>
@@ -12286,7 +13125,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// Create new user
         /// </summary>
-        /// <param name='newUser'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -12300,13 +13139,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<IdentityResult>> CreateWithHttpMessagesAsync(ApplicationUser newUser = default(ApplicationUser), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<SecurityResult>> CreateWithHttpMessagesAsync(ApplicationUser body = default(ApplicationUser), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Change password
         /// </summary>
         /// <param name='userName'>
         /// </param>
-        /// <param name='changePassword'>
+        /// <param name='body'>
         /// Old and new passwords.
         /// </param>
         /// <param name='customHeaders'>
@@ -12321,11 +13160,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse> ChangePasswordWithHttpMessagesAsync(string userName, ChangePasswordRequest changePassword = default(ChangePasswordRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> ChangePasswordWithHttpMessagesAsync(string userName, ChangePasswordRequest body = default(ChangePasswordRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Resets password for current user.
         /// </summary>
-        /// <param name='resetPassword'>
+        /// <param name='body'>
         /// Password reset information containing new password.
         /// </param>
         /// <param name='customHeaders'>
@@ -12340,13 +13179,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<IdentityResult>> ResetCurrentUserPasswordWithHttpMessagesAsync(ResetPasswordConfirmRequest resetPassword = default(ResetPasswordConfirmRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<SecurityResult>> ResetCurrentUserPasswordWithHttpMessagesAsync(ResetPasswordConfirmRequest body = default(ResetPasswordConfirmRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Reset password confirmation
         /// </summary>
         /// <param name='userName'>
         /// </param>
-        /// <param name='resetPasswordConfirm'>
+        /// <param name='body'>
         /// New password.
         /// </param>
         /// <param name='customHeaders'>
@@ -12364,13 +13203,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<IdentityResult>> ResetPasswordWithHttpMessagesAsync(string userName, ResetPasswordConfirmRequest resetPasswordConfirm = default(ResetPasswordConfirmRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<SecurityResult>> ResetPasswordWithHttpMessagesAsync(string userName, ResetPasswordConfirmRequest body = default(ResetPasswordConfirmRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Reset password confirmation
         /// </summary>
         /// <param name='userId'>
         /// </param>
-        /// <param name='resetPasswordConfirm'>
+        /// <param name='body'>
         /// New password.
         /// </param>
         /// <param name='customHeaders'>
@@ -12388,13 +13227,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<IdentityResult>> ResetPasswordByTokenWithHttpMessagesAsync(string userId, ResetPasswordConfirmRequest resetPasswordConfirm = default(ResetPasswordConfirmRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<SecurityResult>> ResetPasswordByTokenWithHttpMessagesAsync(string userId, ResetPasswordConfirmRequest body = default(ResetPasswordConfirmRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Validate password reset token
         /// </summary>
         /// <param name='userId'>
         /// </param>
-        /// <param name='resetPasswordToken'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -12411,7 +13250,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<bool?>> ValidatePasswordResetTokenWithHttpMessagesAsync(string userId, ValidatePasswordResetTokenRequest resetPasswordToken = default(ValidatePasswordResetTokenRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<bool?>> ValidatePasswordResetTokenWithHttpMessagesAsync(string userId, ValidatePasswordResetTokenRequest body = default(ValidatePasswordResetTokenRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Send email with instructions on how to reset user password.
         /// </summary>
@@ -12433,7 +13272,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// Thrown when a required parameter is null
         /// </exception>
         Task<HttpOperationResponse> RequestPasswordResetWithHttpMessagesAsync(string loginOrEmail, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='password'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -12447,7 +13286,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<PasswordValidationResult>> ValidatePasswordWithHttpMessagesAsync(string password = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<PasswordValidationResult>> ValidatePasswordWithHttpMessagesAsync(string body = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Checks if user locked
         /// </summary>
@@ -12474,7 +13313,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// Unlock user
         /// </summary>
         /// <param name='id'>
-        /// &amp;gt;User id
+        /// &gt;User id
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -12491,7 +13330,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<IdentityResult>> UnlockUserWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<SecurityResult>> UnlockUserWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -12508,10 +13347,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -12530,12 +13367,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='request'>
+            /// <param name='body'>
             /// Login request.
             /// </param>
-            public static SignInResult Login(this ISecurity operations, LoginRequest request = default(LoginRequest))
+            public static SignInResult Login(this ISecurity operations, LoginRequest body = default(LoginRequest))
             {
-                return operations.LoginAsync(request).GetAwaiter().GetResult();
+                return operations.LoginAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -12548,15 +13385,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='request'>
+            /// <param name='body'>
             /// Login request.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<SignInResult> LoginAsync(this ISecurity operations, LoginRequest request = default(LoginRequest), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<SignInResult> LoginAsync(this ISecurity operations, LoginRequest body = default(LoginRequest), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.LoginWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.LoginWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -12671,12 +13508,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='request'>
+            /// <param name='body'>
             /// SearchAsync parameters.
             /// </param>
-            public static RoleSearchResult SearchRoles(this ISecurity operations, RoleSearchCriteria request = default(RoleSearchCriteria))
+            public static RoleSearchResult SearchRoles(this ISecurity operations, RoleSearchCriteria body = default(RoleSearchCriteria))
             {
-                return operations.SearchRolesAsync(request).GetAwaiter().GetResult();
+                return operations.SearchRolesAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -12685,15 +13522,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='request'>
+            /// <param name='body'>
             /// SearchAsync parameters.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<RoleSearchResult> SearchRolesAsync(this ISecurity operations, RoleSearchCriteria request = default(RoleSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<RoleSearchResult> SearchRolesAsync(this ISecurity operations, RoleSearchCriteria body = default(RoleSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SearchRolesWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SearchRolesWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -12732,38 +13569,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             }
 
             /// <summary>
-            /// Update an existing role or create new
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='role'>
-            /// </param>
-            public static IdentityResult UpdateRole(this ISecurity operations, Role role = default(Role))
-            {
-                return operations.UpdateRoleAsync(role).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Update an existing role or create new
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='role'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<IdentityResult> UpdateRoleAsync(this ISecurity operations, Role role = default(Role), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.UpdateRoleWithHttpMessagesAsync(role, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <summary>
             /// Delete roles by ID
             /// </summary>
             /// <param name='operations'>
@@ -12795,34 +13600,32 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             }
 
             /// <summary>
-            /// Update user details by user ID
+            /// Update an existing role or create new
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='user'>
-            /// User details.
+            /// <param name='body'>
             /// </param>
-            public static IdentityResult Update(this ISecurity operations, ApplicationUser user = default(ApplicationUser))
+            public static SecurityResult UpdateRole(this ISecurity operations, Role body = default(Role))
             {
-                return operations.UpdateAsync(user).GetAwaiter().GetResult();
+                return operations.UpdateRoleAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Update user details by user ID
+            /// Update an existing role or create new
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='user'>
-            /// User details.
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IdentityResult> UpdateAsync(this ISecurity operations, ApplicationUser user = default(ApplicationUser), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<SecurityResult> UpdateRoleAsync(this ISecurity operations, Role body = default(Role), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.UpdateWithHttpMessagesAsync(user, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.UpdateRoleWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -12834,12 +13637,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// Search criteria.
             /// </param>
-            public static UserSearchResult SearchUsers(this ISecurity operations, UserSearchCriteria criteria = default(UserSearchCriteria))
+            public static UserSearchResult SearchUsers(this ISecurity operations, UserSearchCriteria body = default(UserSearchCriteria))
             {
-                return operations.SearchUsersAsync(criteria).GetAwaiter().GetResult();
+                return operations.SearchUsersAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -12848,15 +13651,49 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// Search criteria.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<UserSearchResult> SearchUsersAsync(this ISecurity operations, UserSearchCriteria criteria = default(UserSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<UserSearchResult> SearchUsersAsync(this ISecurity operations, UserSearchCriteria body = default(UserSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SearchUsersWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SearchUsersWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Update user details by user ID
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// User details.
+            /// </param>
+            public static SecurityResult Update(this ISecurity operations, ApplicationUser body = default(ApplicationUser))
+            {
+                return operations.UpdateAsync(body).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Update user details by user ID
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// User details.
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<SecurityResult> UpdateAsync(this ISecurity operations, ApplicationUser body = default(ApplicationUser), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.UpdateWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -13031,11 +13868,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='newUser'>
+            /// <param name='body'>
             /// </param>
-            public static IdentityResult Create(this ISecurity operations, ApplicationUser newUser = default(ApplicationUser))
+            public static SecurityResult Create(this ISecurity operations, ApplicationUser body = default(ApplicationUser))
             {
-                return operations.CreateAsync(newUser).GetAwaiter().GetResult();
+                return operations.CreateAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -13044,14 +13881,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='newUser'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IdentityResult> CreateAsync(this ISecurity operations, ApplicationUser newUser = default(ApplicationUser), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<SecurityResult> CreateAsync(this ISecurity operations, ApplicationUser body = default(ApplicationUser), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.CreateWithHttpMessagesAsync(newUser, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.CreateWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -13065,12 +13902,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// </param>
             /// <param name='userName'>
             /// </param>
-            /// <param name='changePassword'>
+            /// <param name='body'>
             /// Old and new passwords.
             /// </param>
-            public static void ChangePassword(this ISecurity operations, string userName, ChangePasswordRequest changePassword = default(ChangePasswordRequest))
+            public static void ChangePassword(this ISecurity operations, string userName, ChangePasswordRequest body = default(ChangePasswordRequest))
             {
-                operations.ChangePasswordAsync(userName, changePassword).GetAwaiter().GetResult();
+                operations.ChangePasswordAsync(userName, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -13081,15 +13918,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// </param>
             /// <param name='userName'>
             /// </param>
-            /// <param name='changePassword'>
+            /// <param name='body'>
             /// Old and new passwords.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task ChangePasswordAsync(this ISecurity operations, string userName, ChangePasswordRequest changePassword = default(ChangePasswordRequest), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task ChangePasswordAsync(this ISecurity operations, string userName, ChangePasswordRequest body = default(ChangePasswordRequest), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.ChangePasswordWithHttpMessagesAsync(userName, changePassword, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.ChangePasswordWithHttpMessagesAsync(userName, body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -13098,12 +13935,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='resetPassword'>
+            /// <param name='body'>
             /// Password reset information containing new password.
             /// </param>
-            public static IdentityResult ResetCurrentUserPassword(this ISecurity operations, ResetPasswordConfirmRequest resetPassword = default(ResetPasswordConfirmRequest))
+            public static SecurityResult ResetCurrentUserPassword(this ISecurity operations, ResetPasswordConfirmRequest body = default(ResetPasswordConfirmRequest))
             {
-                return operations.ResetCurrentUserPasswordAsync(resetPassword).GetAwaiter().GetResult();
+                return operations.ResetCurrentUserPasswordAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -13112,15 +13949,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='resetPassword'>
+            /// <param name='body'>
             /// Password reset information containing new password.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IdentityResult> ResetCurrentUserPasswordAsync(this ISecurity operations, ResetPasswordConfirmRequest resetPassword = default(ResetPasswordConfirmRequest), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<SecurityResult> ResetCurrentUserPasswordAsync(this ISecurity operations, ResetPasswordConfirmRequest body = default(ResetPasswordConfirmRequest), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.ResetCurrentUserPasswordWithHttpMessagesAsync(resetPassword, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.ResetCurrentUserPasswordWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -13134,12 +13971,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// </param>
             /// <param name='userName'>
             /// </param>
-            /// <param name='resetPasswordConfirm'>
+            /// <param name='body'>
             /// New password.
             /// </param>
-            public static IdentityResult ResetPassword(this ISecurity operations, string userName, ResetPasswordConfirmRequest resetPasswordConfirm = default(ResetPasswordConfirmRequest))
+            public static SecurityResult ResetPassword(this ISecurity operations, string userName, ResetPasswordConfirmRequest body = default(ResetPasswordConfirmRequest))
             {
-                return operations.ResetPasswordAsync(userName, resetPasswordConfirm).GetAwaiter().GetResult();
+                return operations.ResetPasswordAsync(userName, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -13150,15 +13987,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// </param>
             /// <param name='userName'>
             /// </param>
-            /// <param name='resetPasswordConfirm'>
+            /// <param name='body'>
             /// New password.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IdentityResult> ResetPasswordAsync(this ISecurity operations, string userName, ResetPasswordConfirmRequest resetPasswordConfirm = default(ResetPasswordConfirmRequest), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<SecurityResult> ResetPasswordAsync(this ISecurity operations, string userName, ResetPasswordConfirmRequest body = default(ResetPasswordConfirmRequest), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.ResetPasswordWithHttpMessagesAsync(userName, resetPasswordConfirm, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.ResetPasswordWithHttpMessagesAsync(userName, body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -13172,12 +14009,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// </param>
             /// <param name='userId'>
             /// </param>
-            /// <param name='resetPasswordConfirm'>
+            /// <param name='body'>
             /// New password.
             /// </param>
-            public static IdentityResult ResetPasswordByToken(this ISecurity operations, string userId, ResetPasswordConfirmRequest resetPasswordConfirm = default(ResetPasswordConfirmRequest))
+            public static SecurityResult ResetPasswordByToken(this ISecurity operations, string userId, ResetPasswordConfirmRequest body = default(ResetPasswordConfirmRequest))
             {
-                return operations.ResetPasswordByTokenAsync(userId, resetPasswordConfirm).GetAwaiter().GetResult();
+                return operations.ResetPasswordByTokenAsync(userId, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -13188,15 +14025,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// </param>
             /// <param name='userId'>
             /// </param>
-            /// <param name='resetPasswordConfirm'>
+            /// <param name='body'>
             /// New password.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IdentityResult> ResetPasswordByTokenAsync(this ISecurity operations, string userId, ResetPasswordConfirmRequest resetPasswordConfirm = default(ResetPasswordConfirmRequest), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<SecurityResult> ResetPasswordByTokenAsync(this ISecurity operations, string userId, ResetPasswordConfirmRequest body = default(ResetPasswordConfirmRequest), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.ResetPasswordByTokenWithHttpMessagesAsync(userId, resetPasswordConfirm, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.ResetPasswordByTokenWithHttpMessagesAsync(userId, body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -13210,11 +14047,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// </param>
             /// <param name='userId'>
             /// </param>
-            /// <param name='resetPasswordToken'>
+            /// <param name='body'>
             /// </param>
-            public static bool? ValidatePasswordResetToken(this ISecurity operations, string userId, ValidatePasswordResetTokenRequest resetPasswordToken = default(ValidatePasswordResetTokenRequest))
+            public static bool? ValidatePasswordResetToken(this ISecurity operations, string userId, ValidatePasswordResetTokenRequest body = default(ValidatePasswordResetTokenRequest))
             {
-                return operations.ValidatePasswordResetTokenAsync(userId, resetPasswordToken).GetAwaiter().GetResult();
+                return operations.ValidatePasswordResetTokenAsync(userId, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -13225,14 +14062,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// </param>
             /// <param name='userId'>
             /// </param>
-            /// <param name='resetPasswordToken'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<bool?> ValidatePasswordResetTokenAsync(this ISecurity operations, string userId, ValidatePasswordResetTokenRequest resetPasswordToken = default(ValidatePasswordResetTokenRequest), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<bool?> ValidatePasswordResetTokenAsync(this ISecurity operations, string userId, ValidatePasswordResetTokenRequest body = default(ValidatePasswordResetTokenRequest), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.ValidatePasswordResetTokenWithHttpMessagesAsync(userId, resetPasswordToken, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.ValidatePasswordResetTokenWithHttpMessagesAsync(userId, body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -13276,24 +14113,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='password'>
+            /// <param name='body'>
             /// </param>
-            public static PasswordValidationResult ValidatePassword(this ISecurity operations, string password = default(string))
+            public static PasswordValidationResult ValidatePassword(this ISecurity operations, string body = default(string))
             {
-                return operations.ValidatePasswordAsync(password).GetAwaiter().GetResult();
+                return operations.ValidatePasswordAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='password'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<PasswordValidationResult> ValidatePasswordAsync(this ISecurity operations, string password = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<PasswordValidationResult> ValidatePasswordAsync(this ISecurity operations, string body = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.ValidatePasswordWithHttpMessagesAsync(password, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.ValidatePasswordWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -13340,9 +14177,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// The operations group for this extension method.
             /// </param>
             /// <param name='id'>
-            /// &amp;gt;User id
+            /// &gt;User id
             /// </param>
-            public static IdentityResult UnlockUser(this ISecurity operations, string id)
+            public static SecurityResult UnlockUser(this ISecurity operations, string id)
             {
                 return operations.UnlockUserAsync(id).GetAwaiter().GetResult();
             }
@@ -13354,12 +14191,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// The operations group for this extension method.
             /// </param>
             /// <param name='id'>
-            /// &amp;gt;User id
+            /// &gt;User id
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IdentityResult> UnlockUserAsync(this ISecurity operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<SecurityResult> UnlockUserAsync(this ISecurity operations, string id, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.UnlockUserWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -13387,7 +14224,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -13548,7 +14384,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// Update settings values
         /// </summary>
-        /// <param name='objectSettings'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -13562,7 +14398,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> UpdateAsyncWithHttpMessagesAsync(IList<ObjectSettingEntry> objectSettings = default(IList<ObjectSettingEntry>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> UpdateAsyncWithHttpMessagesAsync(IList<ObjectSettingEntry> body = default(IList<ObjectSettingEntry>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -13571,7 +14407,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("objectSettings", objectSettings);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "UpdateAsync", tracingParameters);
             }
@@ -13600,11 +14436,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(objectSettings != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(objectSettings, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -14083,10 +14919,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -14114,7 +14948,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <summary>
         /// Update settings values
         /// </summary>
-        /// <param name='objectSettings'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -14125,7 +14959,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        Task<HttpOperationResponse> UpdateAsyncWithHttpMessagesAsync(IList<ObjectSettingEntry> objectSettings = default(IList<ObjectSettingEntry>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> UpdateAsyncWithHttpMessagesAsync(IList<ObjectSettingEntry> body = default(IList<ObjectSettingEntry>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Get settings registered by specific module
         /// </summary>
@@ -14202,10 +15036,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -14248,11 +15080,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='objectSettings'>
+            /// <param name='body'>
             /// </param>
-            public static void UpdateAsync(this ISetting operations, IList<ObjectSettingEntry> objectSettings = default(IList<ObjectSettingEntry>))
+            public static void UpdateAsync(this ISetting operations, IList<ObjectSettingEntry> body = default(IList<ObjectSettingEntry>))
             {
-                operations.UpdateAsyncAsync(objectSettings).GetAwaiter().GetResult();
+                operations.UpdateAsyncAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -14261,14 +15093,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='objectSettings'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task UpdateAsyncAsync(this ISetting operations, IList<ObjectSettingEntry> objectSettings = default(IList<ObjectSettingEntry>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task UpdateAsyncAsync(this ISetting operations, IList<ObjectSettingEntry> body = default(IList<ObjectSettingEntry>), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.UpdateAsyncWithHttpMessagesAsync(objectSettings, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.UpdateAsyncWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -14382,11 +15214,1295 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class DynamicPropertyObjectValue
+    {
+        /// <summary>
+        /// Initializes a new instance of the DynamicPropertyObjectValue class.
+        /// </summary>
+        public DynamicPropertyObjectValue()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DynamicPropertyObjectValue class.
+        /// </summary>
+        /// <param name="valueType">Possible values include: 'Undefined',
+        /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
+        /// 'Boolean', 'Html', 'Image'</param>
+        public DynamicPropertyObjectValue(string objectType = default(string), string objectId = default(string), string locale = default(string), object value = default(object), string valueId = default(string), string valueType = default(string), string propertyId = default(string), string propertyName = default(string))
+        {
+            ObjectType = objectType;
+            ObjectId = objectId;
+            Locale = locale;
+            Value = value;
+            ValueId = valueId;
+            ValueType = valueType;
+            PropertyId = propertyId;
+            PropertyName = propertyName;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectId")]
+        public string ObjectId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "locale")]
+        public string Locale { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "value")]
+        public object Value { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "valueId")]
+        public string ValueId { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Undefined', 'ShortText',
+        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html',
+        /// 'Image'
+        /// </summary>
+        [JsonProperty(PropertyName = "valueType")]
+        public string ValueType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "propertyId")]
+        public string PropertyId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "propertyName")]
+        public string PropertyName { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class BlobInfo
+    {
+        /// <summary>
+        /// Initializes a new instance of the BlobInfo class.
+        /// </summary>
+        public BlobInfo()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the BlobInfo class.
+        /// </summary>
+        public BlobInfo(string key = default(string), long? size = default(long?), string contentType = default(string), string type = default(string), string name = default(string), string url = default(string), string relativeUrl = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        {
+            Key = key;
+            Size = size;
+            ContentType = contentType;
+            Type = type;
+            Name = name;
+            Url = url;
+            RelativeUrl = relativeUrl;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "key")]
+        public string Key { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "size")]
+        public long? Size { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "contentType")]
+        public string ContentType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "url")]
+        public string Url { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "relativeUrl")]
+        public string RelativeUrl { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class OperationLog
+    {
+        /// <summary>
+        /// Initializes a new instance of the OperationLog class.
+        /// </summary>
+        public OperationLog()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the OperationLog class.
+        /// </summary>
+        /// <param name="operationType">Possible values include: 'Detached',
+        /// 'Unchanged', 'Added', 'Deleted', 'Modified'</param>
+        public OperationLog(string objectType = default(string), string objectId = default(string), string operationType = default(string), string detail = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        {
+            ObjectType = objectType;
+            ObjectId = objectId;
+            OperationType = operationType;
+            Detail = detail;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectId")]
+        public string ObjectId { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Detached', 'Unchanged',
+        /// 'Added', 'Deleted', 'Modified'
+        /// </summary>
+        [JsonProperty(PropertyName = "operationType")]
+        public string OperationType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "detail")]
+        public string Detail { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class DynamicPropertyDictionaryItemName
+    {
+        /// <summary>
+        /// Initializes a new instance of the DynamicPropertyDictionaryItemName
+        /// class.
+        /// </summary>
+        public DynamicPropertyDictionaryItemName()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DynamicPropertyDictionaryItemName
+        /// class.
+        /// </summary>
+        public DynamicPropertyDictionaryItemName(string locale = default(string), string name = default(string))
+        {
+            Locale = locale;
+            Name = name;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "locale")]
+        public string Locale { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class DynamicPropertyDictionaryItem
+    {
+        /// <summary>
+        /// Initializes a new instance of the DynamicPropertyDictionaryItem
+        /// class.
+        /// </summary>
+        public DynamicPropertyDictionaryItem()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DynamicPropertyDictionaryItem
+        /// class.
+        /// </summary>
+        public DynamicPropertyDictionaryItem(string propertyId = default(string), string name = default(string), IList<DynamicPropertyDictionaryItemName> displayNames = default(IList<DynamicPropertyDictionaryItemName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        {
+            PropertyId = propertyId;
+            Name = name;
+            DisplayNames = displayNames;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "propertyId")]
+        public string PropertyId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "displayNames")]
+        public IList<DynamicPropertyDictionaryItemName> DisplayNames { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class SemanticVersion
+    {
+        /// <summary>
+        /// Initializes a new instance of the SemanticVersion class.
+        /// </summary>
+        public SemanticVersion()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the SemanticVersion class.
+        /// </summary>
+        public SemanticVersion(int? major = default(int?), int? minor = default(int?), int? patch = default(int?), string prerelease = default(string))
+        {
+            Major = major;
+            Minor = minor;
+            Patch = patch;
+            Prerelease = prerelease;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "major")]
+        public int? Major { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "minor")]
+        public int? Minor { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "patch")]
+        public int? Patch { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "prerelease")]
+        public string Prerelease { get; private set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class ModuleIdentity
+    {
+        /// <summary>
+        /// Initializes a new instance of the ModuleIdentity class.
+        /// </summary>
+        public ModuleIdentity()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ModuleIdentity class.
+        /// </summary>
+        public ModuleIdentity(string id = default(string), SemanticVersion version = default(SemanticVersion))
+        {
+            Id = id;
+            Version = version;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "version")]
+        public SemanticVersion Version { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class ModuleDescriptor
+    {
+        /// <summary>
+        /// Initializes a new instance of the ModuleDescriptor class.
+        /// </summary>
+        public ModuleDescriptor()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ModuleDescriptor class.
+        /// </summary>
+        public ModuleDescriptor(ModuleIdentity identity = default(ModuleIdentity), string version = default(string), string platformVersion = default(string), string title = default(string), string description = default(string), IList<string> authors = default(IList<string>), IList<string> owners = default(IList<string>), string licenseUrl = default(string), string projectUrl = default(string), string iconUrl = default(string), bool? requireLicenseAcceptance = default(bool?), string releaseNotes = default(string), string copyright = default(string), string tags = default(string), IList<string> groups = default(IList<string>), IList<ModuleIdentity> dependencies = default(IList<ModuleIdentity>), IList<string> validationErrors = default(IList<string>), bool? isRemovable = default(bool?), bool? isInstalled = default(bool?), ModuleIdentity installedVersion = default(ModuleIdentity), string id = default(string))
+        {
+            Identity = identity;
+            Version = version;
+            PlatformVersion = platformVersion;
+            Title = title;
+            Description = description;
+            Authors = authors;
+            Owners = owners;
+            LicenseUrl = licenseUrl;
+            ProjectUrl = projectUrl;
+            IconUrl = iconUrl;
+            RequireLicenseAcceptance = requireLicenseAcceptance;
+            ReleaseNotes = releaseNotes;
+            Copyright = copyright;
+            Tags = tags;
+            Groups = groups;
+            Dependencies = dependencies;
+            ValidationErrors = validationErrors;
+            IsRemovable = isRemovable;
+            IsInstalled = isInstalled;
+            InstalledVersion = installedVersion;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "identity")]
+        public ModuleIdentity Identity { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "version")]
+        public string Version { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "platformVersion")]
+        public string PlatformVersion { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "title")]
+        public string Title { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "authors")]
+        public IList<string> Authors { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "owners")]
+        public IList<string> Owners { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "licenseUrl")]
+        public string LicenseUrl { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "projectUrl")]
+        public string ProjectUrl { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "iconUrl")]
+        public string IconUrl { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "requireLicenseAcceptance")]
+        public bool? RequireLicenseAcceptance { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "releaseNotes")]
+        public string ReleaseNotes { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "copyright")]
+        public string Copyright { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "tags")]
+        public string Tags { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "groups")]
+        public IList<string> Groups { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "dependencies")]
+        public IList<ModuleIdentity> Dependencies { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "validationErrors")]
+        public IList<string> ValidationErrors { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isRemovable")]
+        public bool? IsRemovable { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isInstalled")]
+        public bool? IsInstalled { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "installedVersion")]
+        public ModuleIdentity InstalledVersion { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class SortInfo
+    {
+        /// <summary>
+        /// Initializes a new instance of the SortInfo class.
+        /// </summary>
+        public SortInfo()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the SortInfo class.
+        /// </summary>
+        /// <param name="sortDirection">Possible values include: 'Ascending',
+        /// 'Descending'</param>
+        public SortInfo(string sortColumn = default(string), string sortDirection = default(string))
+        {
+            SortColumn = sortColumn;
+            SortDirection = sortDirection;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sortColumn")]
+        public string SortColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Ascending', 'Descending'
+        /// </summary>
+        [JsonProperty(PropertyName = "sortDirection")]
+        public string SortDirection { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class ClaimsIdentity
+    {
+        /// <summary>
+        /// Initializes a new instance of the ClaimsIdentity class.
+        /// </summary>
+        public ClaimsIdentity()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ClaimsIdentity class.
+        /// </summary>
+        public ClaimsIdentity(string authenticationType = default(string), bool? isAuthenticated = default(bool?), ClaimsIdentity actor = default(ClaimsIdentity), object bootstrapContext = default(object), IList<Claim> claims = default(IList<Claim>), string label = default(string), string name = default(string), string nameClaimType = default(string), string roleClaimType = default(string))
+        {
+            AuthenticationType = authenticationType;
+            IsAuthenticated = isAuthenticated;
+            Actor = actor;
+            BootstrapContext = bootstrapContext;
+            Claims = claims;
+            Label = label;
+            Name = name;
+            NameClaimType = nameClaimType;
+            RoleClaimType = roleClaimType;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "authenticationType")]
+        public string AuthenticationType { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isAuthenticated")]
+        public bool? IsAuthenticated { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "actor")]
+        public ClaimsIdentity Actor { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "bootstrapContext")]
+        public object BootstrapContext { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "claims")]
+        public IList<Claim> Claims { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "label")]
+        public string Label { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "nameClaimType")]
+        public string NameClaimType { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "roleClaimType")]
+        public string RoleClaimType { get; private set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class Claim
+    {
+        /// <summary>
+        /// Initializes a new instance of the Claim class.
+        /// </summary>
+        public Claim()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Claim class.
+        /// </summary>
+        public Claim(string issuer = default(string), string originalIssuer = default(string), IDictionary<string, string> properties = default(IDictionary<string, string>), ClaimsIdentity subject = default(ClaimsIdentity), string type = default(string), string value = default(string), string valueType = default(string))
+        {
+            Issuer = issuer;
+            OriginalIssuer = originalIssuer;
+            Properties = properties;
+            Subject = subject;
+            Type = type;
+            Value = value;
+            ValueType = valueType;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "issuer")]
+        public string Issuer { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "originalIssuer")]
+        public string OriginalIssuer { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "properties")]
+        public IDictionary<string, string> Properties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "subject")]
+        public ClaimsIdentity Subject { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "value")]
+        public string Value { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "valueType")]
+        public string ValueType { get; private set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class PermissionScope
+    {
+        /// <summary>
+        /// Initializes a new instance of the PermissionScope class.
+        /// </summary>
+        public PermissionScope()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the PermissionScope class.
+        /// </summary>
+        public PermissionScope(string type = default(string), string label = default(string), string scope = default(string))
+        {
+            Type = type;
+            Label = label;
+            Scope = scope;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "label")]
+        public string Label { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "scope")]
+        public string Scope { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class Permission
+    {
+        /// <summary>
+        /// Initializes a new instance of the Permission class.
+        /// </summary>
+        public Permission()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Permission class.
+        /// </summary>
+        public Permission(string id = default(string), string name = default(string), string moduleId = default(string), string groupName = default(string), IList<PermissionScope> assignedScopes = default(IList<PermissionScope>), IList<PermissionScope> availableScopes = default(IList<PermissionScope>))
+        {
+            Id = id;
+            Name = name;
+            ModuleId = moduleId;
+            GroupName = groupName;
+            AssignedScopes = assignedScopes;
+            AvailableScopes = availableScopes;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "moduleId")]
+        public string ModuleId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "groupName")]
+        public string GroupName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "assignedScopes")]
+        public IList<PermissionScope> AssignedScopes { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "availableScopes")]
+        public IList<PermissionScope> AvailableScopes { get; private set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class ObjectSettingEntry
+    {
+        /// <summary>
+        /// Initializes a new instance of the ObjectSettingEntry class.
+        /// </summary>
+        public ObjectSettingEntry()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ObjectSettingEntry class.
+        /// </summary>
+        /// <param name="valueType">Possible values include: 'ShortText',
+        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean',
+        /// 'SecureString', 'Json'</param>
+        public ObjectSettingEntry(bool? itHasValues = default(bool?), string objectId = default(string), string objectType = default(string), object value = default(object), bool? restartRequired = default(bool?), string moduleId = default(string), string groupName = default(string), string name = default(string), string valueType = default(string), IList<object> allowedValues = default(IList<object>), object defaultValue = default(object), bool? isDictionary = default(bool?))
+        {
+            ItHasValues = itHasValues;
+            ObjectId = objectId;
+            ObjectType = objectType;
+            Value = value;
+            RestartRequired = restartRequired;
+            ModuleId = moduleId;
+            GroupName = groupName;
+            Name = name;
+            ValueType = valueType;
+            AllowedValues = allowedValues;
+            DefaultValue = defaultValue;
+            IsDictionary = isDictionary;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "itHasValues")]
+        public bool? ItHasValues { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectId")]
+        public string ObjectId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "value")]
+        public object Value { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "restartRequired")]
+        public bool? RestartRequired { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "moduleId")]
+        public string ModuleId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "groupName")]
+        public string GroupName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'ShortText', 'LongText',
+        /// 'Integer', 'Decimal', 'DateTime', 'Boolean', 'SecureString', 'Json'
+        /// </summary>
+        [JsonProperty(PropertyName = "valueType")]
+        public string ValueType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "allowedValues")]
+        public IList<object> AllowedValues { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "defaultValue")]
+        public object DefaultValue { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isDictionary")]
+        public bool? IsDictionary { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -14452,72 +16568,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class SortInfo
-    {
-        /// <summary>
-        /// Initializes a new instance of the SortInfo class.
-        /// </summary>
-        public SortInfo()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the SortInfo class.
-        /// </summary>
-        /// <param name="sortDirection">Possible values include: 'Ascending',
-        /// 'Descending'</param>
-        public SortInfo(string sortColumn = default(string), string sortDirection = default(string))
-        {
-            SortColumn = sortColumn;
-            SortDirection = sortDirection;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "sortColumn")]
-        public string SortColumn { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Ascending', 'Descending'
-        /// </summary>
-        [JsonProperty(PropertyName = "sortDirection")]
-        public string SortDirection { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -14637,160 +16690,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class BlobInfo
-    {
-        /// <summary>
-        /// Initializes a new instance of the BlobInfo class.
-        /// </summary>
-        public BlobInfo()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the BlobInfo class.
-        /// </summary>
-        public BlobInfo(string key = default(string), long? size = default(long?), string contentType = default(string), string type = default(string), string name = default(string), string url = default(string), string relativeUrl = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            Key = key;
-            Size = size;
-            ContentType = contentType;
-            Type = type;
-            Name = name;
-            Url = url;
-            RelativeUrl = relativeUrl;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "key")]
-        public string Key { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "size")]
-        public long? Size { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "contentType")]
-        public string ContentType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "type")]
-        public string Type { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "url")]
-        public string Url { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "relativeUrl")]
-        public string RelativeUrl { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -14807,7 +16709,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the AssetEntry class.
         /// </summary>
-        public AssetEntry(string languageCode = default(string), TenantIdentity tenant = default(TenantIdentity), BlobInfo blobInfo = default(BlobInfo), string group = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public AssetEntry(string languageCode = default(string), TenantIdentity tenant = default(TenantIdentity), BlobInfo blobInfo = default(BlobInfo), string group = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             LanguageCode = languageCode;
             Tenant = tenant;
@@ -14817,6 +16719,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -14868,44 +16771,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (BlobInfo != null)
-            {
-                BlobInfo.Validate();
-            }
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
     }
 }
 // <auto-generated>
@@ -14921,11 +16794,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -14979,11 +16850,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -15000,7 +16869,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the BlobEntry class.
         /// </summary>
-        public BlobEntry(string type = default(string), string name = default(string), string url = default(string), string relativeUrl = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public BlobEntry(string type = default(string), string name = default(string), string url = default(string), string relativeUrl = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             Type = type;
             Name = name;
@@ -15010,6 +16879,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -15061,40 +16931,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
     }
 }
 // <auto-generated>
@@ -15110,11 +16954,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -15168,11 +17010,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -15189,7 +17029,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the BlobFolder class.
         /// </summary>
-        public BlobFolder(string parentUrl = default(string), string type = default(string), string name = default(string), string url = default(string), string relativeUrl = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public BlobFolder(string parentUrl = default(string), string type = default(string), string name = default(string), string url = default(string), string relativeUrl = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             ParentUrl = parentUrl;
             Type = type;
@@ -15200,6 +17040,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -15256,40 +17097,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
     }
 }
 // <auto-generated>
@@ -15305,11 +17120,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -15363,11 +17176,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -15487,146 +17298,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class OperationLog
-    {
-        /// <summary>
-        /// Initializes a new instance of the OperationLog class.
-        /// </summary>
-        public OperationLog()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the OperationLog class.
-        /// </summary>
-        /// <param name="operationType">Possible values include: 'Detached',
-        /// 'Unchanged', 'Added', 'Deleted', 'Modified'</param>
-        public OperationLog(string objectType = default(string), string objectId = default(string), string operationType = default(string), string detail = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            ObjectType = objectType;
-            ObjectId = objectId;
-            OperationType = operationType;
-            Detail = detail;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectId")]
-        public string ObjectId { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Detached', 'Unchanged',
-        /// 'Added', 'Deleted', 'Modified'
-        /// </summary>
-        [JsonProperty(PropertyName = "operationType")]
-        public string OperationType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "detail")]
-        public string Detail { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -15680,11 +17354,83 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class License
+    {
+        /// <summary>
+        /// Initializes a new instance of the License class.
+        /// </summary>
+        public License()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the License class.
+        /// </summary>
+        public License(string type = default(string), string customerName = default(string), string customerEmail = default(string), System.DateTime? expirationDate = default(System.DateTime?), string rawLicense = default(string))
+        {
+            Type = type;
+            CustomerName = customerName;
+            CustomerEmail = customerEmail;
+            ExpirationDate = expirationDate;
+            RawLicense = rawLicense;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "customerName")]
+        public string CustomerName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "customerEmail")]
+        public string CustomerEmail { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "expirationDate")]
+        public System.DateTime? ExpirationDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "rawLicense")]
+        public string RawLicense { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -15800,11 +17546,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -15858,11 +17602,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -15882,7 +17624,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <param name="valueType">Possible values include: 'Undefined',
         /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
         /// 'Boolean', 'Html', 'Image'</param>
-        public DynamicProperty(string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public DynamicProperty(string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             Name = name;
             Description = description;
@@ -15898,6 +17640,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -15982,40 +17725,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
     }
 }
 // <auto-generated>
@@ -16031,11 +17748,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -16091,111 +17806,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class DynamicPropertyObjectValue
-    {
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertyObjectValue class.
-        /// </summary>
-        public DynamicPropertyObjectValue()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertyObjectValue class.
-        /// </summary>
-        /// <param name="valueType">Possible values include: 'Undefined',
-        /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
-        /// 'Boolean', 'Html', 'Image'</param>
-        public DynamicPropertyObjectValue(string objectType = default(string), string objectId = default(string), string locale = default(string), object value = default(object), string valueId = default(string), string valueType = default(string), string propertyId = default(string), string propertyName = default(string))
-        {
-            ObjectType = objectType;
-            ObjectId = objectId;
-            Locale = locale;
-            Value = value;
-            ValueId = valueId;
-            ValueType = valueType;
-            PropertyId = propertyId;
-            PropertyName = propertyName;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectId")]
-        public string ObjectId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "locale")]
-        public string Locale { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "value")]
-        public object Value { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "valueId")]
-        public string ValueId { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Undefined', 'ShortText',
-        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html',
-        /// 'Image'
-        /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyId")]
-        public string PropertyId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyName")]
-        public string PropertyName { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -16215,7 +17828,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <param name="valueType">Possible values include: 'Undefined',
         /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
         /// 'Boolean', 'Html', 'Image'</param>
-        public DynamicObjectProperty(string objectId = default(string), IList<DynamicPropertyObjectValue> values = default(IList<DynamicPropertyObjectValue>), string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public DynamicObjectProperty(string objectId = default(string), IList<DynamicPropertyObjectValue> values = default(IList<DynamicPropertyObjectValue>), string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             ObjectId = objectId;
             Values = values;
@@ -16233,6 +17846,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -16327,40 +17941,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
     }
 }
 // <auto-generated>
@@ -16376,11 +17964,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -16496,198 +18082,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class DynamicPropertyDictionaryItemName
-    {
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertyDictionaryItemName
-        /// class.
-        /// </summary>
-        public DynamicPropertyDictionaryItemName()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertyDictionaryItemName
-        /// class.
-        /// </summary>
-        public DynamicPropertyDictionaryItemName(string locale = default(string), string name = default(string))
-        {
-            Locale = locale;
-            Name = name;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "locale")]
-        public string Locale { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class DynamicPropertyDictionaryItem
-    {
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertyDictionaryItem
-        /// class.
-        /// </summary>
-        public DynamicPropertyDictionaryItem()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertyDictionaryItem
-        /// class.
-        /// </summary>
-        public DynamicPropertyDictionaryItem(string propertyId = default(string), string name = default(string), IList<DynamicPropertyDictionaryItemName> displayNames = default(IList<DynamicPropertyDictionaryItemName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            PropertyId = propertyId;
-            Name = name;
-            DisplayNames = displayNames;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyId")]
-        public string PropertyId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "displayNames")]
-        public IList<DynamicPropertyDictionaryItemName> DisplayNames { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (CreatedBy != null)
-            {
-                if (CreatedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "CreatedBy", 64);
-                }
-                if (CreatedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "CreatedBy", 0);
-                }
-            }
-            if (ModifiedBy != null)
-            {
-                if (ModifiedBy.Length > 64)
-                {
-                    throw new ValidationException(ValidationRules.MaxLength, "ModifiedBy", 64);
-                }
-                if (ModifiedBy.Length < 0)
-                {
-                    throw new ValidationException(ValidationRules.MinLength, "ModifiedBy", 0);
-                }
-            }
-        }
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -16743,11 +18140,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -16807,299 +18202,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class SemanticVersion
-    {
-        /// <summary>
-        /// Initializes a new instance of the SemanticVersion class.
-        /// </summary>
-        public SemanticVersion()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the SemanticVersion class.
-        /// </summary>
-        public SemanticVersion(int? major = default(int?), int? minor = default(int?), int? patch = default(int?))
-        {
-            Major = major;
-            Minor = minor;
-            Patch = patch;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "major")]
-        public int? Major { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "minor")]
-        public int? Minor { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "patch")]
-        public int? Patch { get; private set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class ModuleIdentity
-    {
-        /// <summary>
-        /// Initializes a new instance of the ModuleIdentity class.
-        /// </summary>
-        public ModuleIdentity()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ModuleIdentity class.
-        /// </summary>
-        public ModuleIdentity(string id = default(string), SemanticVersion version = default(SemanticVersion))
-        {
-            Id = id;
-            Version = version;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "version")]
-        public SemanticVersion Version { get; private set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class ModuleDescriptor
-    {
-        /// <summary>
-        /// Initializes a new instance of the ModuleDescriptor class.
-        /// </summary>
-        public ModuleDescriptor()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ModuleDescriptor class.
-        /// </summary>
-        public ModuleDescriptor(string version = default(string), string platformVersion = default(string), string title = default(string), string description = default(string), IList<string> authors = default(IList<string>), IList<string> owners = default(IList<string>), string licenseUrl = default(string), string projectUrl = default(string), string iconUrl = default(string), bool? requireLicenseAcceptance = default(bool?), string releaseNotes = default(string), string copyright = default(string), string tags = default(string), IList<string> groups = default(IList<string>), IList<ModuleIdentity> dependencies = default(IList<ModuleIdentity>), IList<string> validationErrors = default(IList<string>), bool? isRemovable = default(bool?), bool? isInstalled = default(bool?), ModuleIdentity installedVersion = default(ModuleIdentity), string id = default(string))
-        {
-            Version = version;
-            PlatformVersion = platformVersion;
-            Title = title;
-            Description = description;
-            Authors = authors;
-            Owners = owners;
-            LicenseUrl = licenseUrl;
-            ProjectUrl = projectUrl;
-            IconUrl = iconUrl;
-            RequireLicenseAcceptance = requireLicenseAcceptance;
-            ReleaseNotes = releaseNotes;
-            Copyright = copyright;
-            Tags = tags;
-            Groups = groups;
-            Dependencies = dependencies;
-            ValidationErrors = validationErrors;
-            IsRemovable = isRemovable;
-            IsInstalled = isInstalled;
-            InstalledVersion = installedVersion;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "version")]
-        public string Version { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "platformVersion")]
-        public string PlatformVersion { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "title")]
-        public string Title { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "authors")]
-        public IList<string> Authors { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "owners")]
-        public IList<string> Owners { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "licenseUrl")]
-        public string LicenseUrl { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "projectUrl")]
-        public string ProjectUrl { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "iconUrl")]
-        public string IconUrl { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "requireLicenseAcceptance")]
-        public bool? RequireLicenseAcceptance { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "releaseNotes")]
-        public string ReleaseNotes { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "copyright")]
-        public string Copyright { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "tags")]
-        public string Tags { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "groups")]
-        public IList<string> Groups { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "dependencies")]
-        public IList<ModuleIdentity> Dependencies { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "validationErrors")]
-        public IList<string> ValidationErrors { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isRemovable")]
-        public bool? IsRemovable { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isInstalled")]
-        public bool? IsInstalled { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "installedVersion")]
-        public ModuleIdentity InstalledVersion { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -17157,11 +18262,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -17269,11 +18372,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -17383,11 +18484,269 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class OpenIddictApplicationDescriptor
+    {
+        /// <summary>
+        /// Initializes a new instance of the OpenIddictApplicationDescriptor
+        /// class.
+        /// </summary>
+        public OpenIddictApplicationDescriptor()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the OpenIddictApplicationDescriptor
+        /// class.
+        /// </summary>
+        public OpenIddictApplicationDescriptor(string clientId = default(string), string clientSecret = default(string), string consentType = default(string), string displayName = default(string), IList<string> permissions = default(IList<string>), IList<string> postLogoutRedirectUris = default(IList<string>), IList<string> redirectUris = default(IList<string>), string type = default(string))
+        {
+            ClientId = clientId;
+            ClientSecret = clientSecret;
+            ConsentType = consentType;
+            DisplayName = displayName;
+            Permissions = permissions;
+            PostLogoutRedirectUris = postLogoutRedirectUris;
+            RedirectUris = redirectUris;
+            Type = type;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "clientId")]
+        public string ClientId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "clientSecret")]
+        public string ClientSecret { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "consentType")]
+        public string ConsentType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "displayName")]
+        public string DisplayName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "permissions")]
+        public IList<string> Permissions { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "postLogoutRedirectUris")]
+        public IList<string> PostLogoutRedirectUris { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "redirectUris")]
+        public IList<string> RedirectUris { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class OAuthAppSearchCriteria
+    {
+        /// <summary>
+        /// Initializes a new instance of the OAuthAppSearchCriteria class.
+        /// </summary>
+        public OAuthAppSearchCriteria()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the OAuthAppSearchCriteria class.
+        /// </summary>
+        public OAuthAppSearchCriteria(string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        {
+            ResponseGroup = responseGroup;
+            ObjectType = objectType;
+            ObjectTypes = objectTypes;
+            ObjectIds = objectIds;
+            Keyword = keyword;
+            SearchPhrase = searchPhrase;
+            LanguageCode = languageCode;
+            Sort = sort;
+            SortInfos = sortInfos;
+            Skip = skip;
+            Take = take;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "responseGroup")]
+        public string ResponseGroup { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectTypes")]
+        public IList<string> ObjectTypes { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectIds")]
+        public IList<string> ObjectIds { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "keyword")]
+        public string Keyword { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "searchPhrase")]
+        public string SearchPhrase { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "languageCode")]
+        public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sort")]
+        public string Sort { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sortInfos")]
+        public IList<SortInfo> SortInfos { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "skip")]
+        public int? Skip { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "take")]
+        public int? Take { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class OAuthAppSearchResult
+    {
+        /// <summary>
+        /// Initializes a new instance of the OAuthAppSearchResult class.
+        /// </summary>
+        public OAuthAppSearchResult()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the OAuthAppSearchResult class.
+        /// </summary>
+        public OAuthAppSearchResult(int? totalCount = default(int?), IList<OpenIddictApplicationDescriptor> results = default(IList<OpenIddictApplicationDescriptor>))
+        {
+            TotalCount = totalCount;
+            Results = results;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "totalCount")]
+        public int? TotalCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "results")]
+        public IList<OpenIddictApplicationDescriptor> Results { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -17477,11 +18836,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -17543,11 +18900,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -17607,11 +18962,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -17677,11 +19030,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -17753,345 +19104,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class ClaimsIdentity
-    {
-        /// <summary>
-        /// Initializes a new instance of the ClaimsIdentity class.
-        /// </summary>
-        public ClaimsIdentity()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ClaimsIdentity class.
-        /// </summary>
-        public ClaimsIdentity(string authenticationType = default(string), bool? isAuthenticated = default(bool?), ClaimsIdentity actor = default(ClaimsIdentity), object bootstrapContext = default(object), IList<Claim> claims = default(IList<Claim>), string label = default(string), string name = default(string), string nameClaimType = default(string), string roleClaimType = default(string))
-        {
-            AuthenticationType = authenticationType;
-            IsAuthenticated = isAuthenticated;
-            Actor = actor;
-            BootstrapContext = bootstrapContext;
-            Claims = claims;
-            Label = label;
-            Name = name;
-            NameClaimType = nameClaimType;
-            RoleClaimType = roleClaimType;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "authenticationType")]
-        public string AuthenticationType { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isAuthenticated")]
-        public bool? IsAuthenticated { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "actor")]
-        public ClaimsIdentity Actor { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "bootstrapContext")]
-        public object BootstrapContext { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "claims")]
-        public IList<Claim> Claims { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "label")]
-        public string Label { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "nameClaimType")]
-        public string NameClaimType { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "roleClaimType")]
-        public string RoleClaimType { get; private set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Claim
-    {
-        /// <summary>
-        /// Initializes a new instance of the Claim class.
-        /// </summary>
-        public Claim()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Claim class.
-        /// </summary>
-        public Claim(string issuer = default(string), string originalIssuer = default(string), IDictionary<string, string> properties = default(IDictionary<string, string>), ClaimsIdentity subject = default(ClaimsIdentity), string type = default(string), string value = default(string), string valueType = default(string))
-        {
-            Issuer = issuer;
-            OriginalIssuer = originalIssuer;
-            Properties = properties;
-            Subject = subject;
-            Type = type;
-            Value = value;
-            ValueType = valueType;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "issuer")]
-        public string Issuer { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "originalIssuer")]
-        public string OriginalIssuer { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "properties")]
-        public IDictionary<string, string> Properties { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "subject")]
-        public ClaimsIdentity Subject { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "type")]
-        public string Type { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "value")]
-        public string Value { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; private set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class PermissionScope
-    {
-        /// <summary>
-        /// Initializes a new instance of the PermissionScope class.
-        /// </summary>
-        public PermissionScope()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PermissionScope class.
-        /// </summary>
-        public PermissionScope(string type = default(string), string label = default(string), string scope = default(string))
-        {
-            Type = type;
-            Label = label;
-            Scope = scope;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "type")]
-        public string Type { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "label")]
-        public string Label { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "scope")]
-        public string Scope { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Permission
-    {
-        /// <summary>
-        /// Initializes a new instance of the Permission class.
-        /// </summary>
-        public Permission()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Permission class.
-        /// </summary>
-        public Permission(string id = default(string), string name = default(string), string moduleId = default(string), string groupName = default(string), IList<PermissionScope> assignedScopes = default(IList<PermissionScope>), IList<PermissionScope> availableScopes = default(IList<PermissionScope>))
-        {
-            Id = id;
-            Name = name;
-            ModuleId = moduleId;
-            GroupName = groupName;
-            AssignedScopes = assignedScopes;
-            AvailableScopes = availableScopes;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "moduleId")]
-        public string ModuleId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "groupName")]
-        public string GroupName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "assignedScopes")]
-        public IList<PermissionScope> AssignedScopes { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "availableScopes")]
-        public IList<PermissionScope> AvailableScopes { get; private set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -18199,11 +19214,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -18281,11 +19294,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -18345,86 +19356,26 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class IdentityError
+    public partial class SecurityResult
     {
         /// <summary>
-        /// Initializes a new instance of the IdentityError class.
+        /// Initializes a new instance of the SecurityResult class.
         /// </summary>
-        public IdentityError()
+        public SecurityResult()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the IdentityError class.
+        /// Initializes a new instance of the SecurityResult class.
         /// </summary>
-        public IdentityError(string code = default(string), string description = default(string))
-        {
-            Code = code;
-            Description = description;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "code")]
-        public string Code { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class IdentityResult
-    {
-        /// <summary>
-        /// Initializes a new instance of the IdentityResult class.
-        /// </summary>
-        public IdentityResult()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the IdentityResult class.
-        /// </summary>
-        public IdentityResult(bool? succeeded = default(bool?), IList<IdentityError> errors = default(IList<IdentityError>))
+        public SecurityResult(bool? succeeded = default(bool?), IList<string> errors = default(IList<string>))
         {
             Succeeded = succeeded;
             Errors = errors;
@@ -18439,12 +19390,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "succeeded")]
-        public bool? Succeeded { get; private set; }
+        public bool? Succeeded { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "errors")]
-        public IList<IdentityError> Errors { get; private set; }
+        public IList<string> Errors { get; set; }
 
     }
 }
@@ -18461,11 +19412,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -18591,11 +19540,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -18649,11 +19596,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -18885,11 +19830,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -18949,11 +19892,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -19013,11 +19954,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -19079,11 +20018,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -19133,11 +20070,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -19221,11 +20156,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -19257,129 +20190,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "locked")]
         public bool? Locked { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class ObjectSettingEntry
-    {
-        /// <summary>
-        /// Initializes a new instance of the ObjectSettingEntry class.
-        /// </summary>
-        public ObjectSettingEntry()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ObjectSettingEntry class.
-        /// </summary>
-        /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean',
-        /// 'SecureString', 'Json'</param>
-        public ObjectSettingEntry(bool? itHasValues = default(bool?), string objectId = default(string), string objectType = default(string), object value = default(object), bool? restartRequired = default(bool?), string moduleId = default(string), string groupName = default(string), string name = default(string), string valueType = default(string), IList<object> allowedValues = default(IList<object>), object defaultValue = default(object), bool? isDictionary = default(bool?))
-        {
-            ItHasValues = itHasValues;
-            ObjectId = objectId;
-            ObjectType = objectType;
-            Value = value;
-            RestartRequired = restartRequired;
-            ModuleId = moduleId;
-            GroupName = groupName;
-            Name = name;
-            ValueType = valueType;
-            AllowedValues = allowedValues;
-            DefaultValue = defaultValue;
-            IsDictionary = isDictionary;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "itHasValues")]
-        public bool? ItHasValues { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectId")]
-        public string ObjectId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "value")]
-        public object Value { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "restartRequired")]
-        public bool? RestartRequired { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "moduleId")]
-        public string ModuleId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "groupName")]
-        public string GroupName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Integer', 'Decimal', 'DateTime', 'Boolean', 'SecureString', 'Json'
-        /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "allowedValues")]
-        public IList<object> AllowedValues { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "defaultValue")]
-        public object DefaultValue { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isDictionary")]
-        public bool? IsDictionary { get; set; }
 
     }
 }
