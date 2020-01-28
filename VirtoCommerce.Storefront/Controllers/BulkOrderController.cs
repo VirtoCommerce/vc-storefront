@@ -120,7 +120,7 @@ namespace VirtoCommerce.Storefront.Controllers
             //TODO: Need to replace from indexed search to special method GetProductByCodes when it will be presents in the catalog API
             var productSearchResult = await _catalogService.SearchProductsAsync(new ProductSearchCriteria
             {
-                PageSize = skus.Count(),
+                PageSize = skus.Count,
                 ResponseGroup = ItemResponseGroup.Variations | ItemResponseGroup.ItemWithPrices | ItemResponseGroup.Inventory | ItemResponseGroup.ItemProperties,
                 Terms = filter.ToTerms().ToList()
             });
