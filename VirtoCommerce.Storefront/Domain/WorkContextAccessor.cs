@@ -16,7 +16,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             get
             {
-                return _httpContextAccessor.HttpContext.Items["WorkContext"] as WorkContext;
+                return _httpContextAccessor.HttpContext?.Items["WorkContext"] as WorkContext;
             }
             set
             {
