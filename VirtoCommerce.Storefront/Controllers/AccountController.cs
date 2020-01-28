@@ -301,100 +301,99 @@ namespace VirtoCommerce.Storefront.Controllers
             }
             login.UserName = login.UserName?.Trim();
 
-            var loginResult = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, login.RememberMe, lockoutOnFailure: true);
+            var user = await _signInManager.UserManager.FindByNameAsync(login.UserName);
 
-            if (loginResult.Succeeded)
+            if (user != null)
             {
-                var user = await _signInManager.UserManager.FindByNameAsync(login.UserName);
-
-                // Check that current user can sing in to current store
                 if (new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore) && new IsUserSuspendedSpecification().IsSatisfiedBy(user) == false)
                 {
-                    await _publisher.Publish(new UserLoginEvent(WorkContext, user));
-                    return StoreFrontRedirect(returnUrl);
+                    var loginResult = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, login.RememberMe, lockoutOnFailure: true);
+
+                    if (loginResult.Succeeded)
+                    {
+                        await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                        return StoreFrontRedirect(returnUrl);
+                    }
+
+                    if (loginResult.RequiresTwoFactor)
+                    {
+
+                        var selectedProvider = _options.TwoFactorAuthenticationNotificationGateway;
+
+                        var userManager = _signInManager.UserManager;
+                        var code = await userManager.GenerateTwoFactorTokenAsync(user, selectedProvider);
+
+                        if (string.IsNullOrWhiteSpace(code))
+                        {
+                            WorkContext.Form.Errors.Add(SecurityErrorDescriber.OperationFailed());
+                            return View("customers/login", WorkContext);
+                        }
+
+                        NotificationBase twoFactorNotification = null;
+                        var veryfyCodeViewModel = new VerifyCodeViewModel { Provider = selectedProvider, ReturnUrl = returnUrl, RememberMe = login.RememberMe, Username = login.UserName };
+
+                        if (veryfyCodeViewModel.Provider.EqualsInvariant("Phone"))
+                        {
+                            var phoneNumber = await userManager.GetPhoneNumberAsync(user);
+
+                            if (string.IsNullOrEmpty(phoneNumber))
+                            {
+                                // Do not tell we have this user without phone
+                                WorkContext.Form.Errors.Add(SecurityErrorDescriber.OperationFailed());
+                                return View("customers/login", WorkContext);
+                            }
+
+                            twoFactorNotification = new TwoFactorSmsNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                            {
+                                Token = code,
+                                Recipient = phoneNumber,
+                            };
+
+                        }
+                        else // "Email"
+                        {
+                            twoFactorNotification = new TwoFactorEmailNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                            {
+                                Token = code,
+                                Sender = WorkContext.CurrentStore.Email,
+                                Recipient = GetUserEmail(user)
+                            };
+                        }
+                        var sendingResult = await SendNotificationAsync(twoFactorNotification);
+
+                        if (sendingResult.IsSuccess != true)
+                        {
+                            WorkContext.Form.Errors.Add(SecurityErrorDescriber.ErrorSendNotification(sendingResult.ErrorMessage));
+                            return View("customers/login", WorkContext);
+                        }
+
+                        WorkContext.Form = Form.FromObject(veryfyCodeViewModel);
+
+                        return View("customers/verify_code", WorkContext);
+                    }
+
+                    if (loginResult.IsLockedOut)
+                    {
+                        return View("lockedout", WorkContext);
+                    }
+
+                    if (loginResult is CustomSignInResult signInResult && signInResult.IsRejected)
+                    {
+                        WorkContext.Form.Errors.Add(SecurityErrorDescriber.AccountIsBlocked());
+                    }
+
                 }
                 else
                 {
                     WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserCannotLoginInStore());
-                    await _signInManager.SignOutAsync();
-                    loginResult = Microsoft.AspNetCore.Identity.SignInResult.NotAllowed;
                 }
-            }
 
-            if (loginResult.RequiresTwoFactor)
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.LoginFailed());
+            }
+            else
             {
-                var user = await _signInManager.UserManager.FindByNameAsync(login.UserName);
-                if (user == null)
-                {
-                    WorkContext.Form.Errors.Add(SecurityErrorDescriber.OperationFailed());
-                    return View("customers/login", WorkContext);
-                }
-
-                var selectedProvider = _options.TwoFactorAuthenticationNotificationGateway;
-
-                var userManager = _signInManager.UserManager;
-                var code = await userManager.GenerateTwoFactorTokenAsync(user, selectedProvider);
-
-                if (string.IsNullOrWhiteSpace(code))
-                {
-                    WorkContext.Form.Errors.Add(SecurityErrorDescriber.OperationFailed());
-                    return View("customers/login", WorkContext);
-                }
-
-                NotificationBase twoFactorNotification = null;
-                var veryfyCodeViewModel = new VerifyCodeViewModel { Provider = selectedProvider, ReturnUrl = returnUrl, RememberMe = login.RememberMe, Username = login.UserName };
-
-                if (veryfyCodeViewModel.Provider.EqualsInvariant("Phone"))
-                {
-                    var phoneNumber = await userManager.GetPhoneNumberAsync(user);
-
-                    if (string.IsNullOrEmpty(phoneNumber))
-                    {
-                        // Do not tell we have this user without phone
-                        WorkContext.Form.Errors.Add(SecurityErrorDescriber.OperationFailed());
-                        return View("customers/login", WorkContext);
-                    }
-
-                    twoFactorNotification = new TwoFactorSmsNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
-                    {
-                        Token = code,
-                        Recipient = phoneNumber,
-                    };
-
-                }
-                else // "Email"
-                {
-                    twoFactorNotification = new TwoFactorEmailNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
-                    {
-                        Token = code,
-                        Sender = WorkContext.CurrentStore.Email,
-                        Recipient = GetUserEmail(user)
-                    };
-                }
-                var sendingResult = await SendNotificationAsync(twoFactorNotification);
-
-                if (sendingResult.IsSuccess != true)
-                {
-                    WorkContext.Form.Errors.Add(SecurityErrorDescriber.ErrorSendNotification(sendingResult.ErrorMessage));
-                    return View("customers/login", WorkContext);
-                }
-
-                WorkContext.Form = Form.FromObject(veryfyCodeViewModel);
-
-                return View("customers/verify_code", WorkContext);
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.OperationFailed());
             }
-
-            if (loginResult.IsLockedOut)
-            {
-                return View("lockedout", WorkContext);
-            }
-
-            if (loginResult is CustomSignInResult signInResult && signInResult.IsRejected)
-            {
-                WorkContext.Form.Errors.Add(SecurityErrorDescriber.AccountIsBlocked());
-            }
-
-            WorkContext.Form.Errors.Add(SecurityErrorDescriber.LoginFailed());
 
             return View("customers/login", WorkContext);
         }
