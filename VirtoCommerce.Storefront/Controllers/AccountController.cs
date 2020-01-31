@@ -312,7 +312,6 @@ namespace VirtoCommerce.Storefront.Controllers
             if (!new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore) || new IsUserSuspendedSpecification().IsSatisfiedBy(user))
             {
                 WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserCannotLoginInStore());
-                WorkContext.Form.Errors.Add(SecurityErrorDescriber.LoginFailed());
                 return View("customers/login", WorkContext);
             }
 
