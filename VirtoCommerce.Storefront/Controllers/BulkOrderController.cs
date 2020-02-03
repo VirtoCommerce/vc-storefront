@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -117,12 +116,13 @@ namespace VirtoCommerce.Storefront.Controllers
         private async Task<string[]> TryAddItemsToCartAsync(BulkOrderItem[] bulkOrderItems)
         {
             var skus = bulkOrderItems.Select(i => i.Sku).ToList();
+            var filter = $"code:{string.Join(",", skus)}";
             //TODO: Need to replace from indexed search to special method GetProductByCodes when it will be presents in the catalog API
             var productSearchResult = await _catalogService.SearchProductsAsync(new ProductSearchCriteria
             {
-                PageSize = skus.Count(),
+                PageSize = skus.Count,
                 ResponseGroup = ItemResponseGroup.Variations | ItemResponseGroup.ItemWithPrices | ItemResponseGroup.Inventory | ItemResponseGroup.ItemProperties,
-                Terms = new[] { new Term { Name = "code", Value = string.Join(",", skus) } }
+                Terms = filter.ToTerms().ToList()
             });
             //Because product stores in index all codes of it variations and the catalog  search returns only main product we need to this concat with variations
             var foundSkusProductsWithVariationsMap = productSearchResult.Products.Concat(productSearchResult.Products.SelectMany(x => x.Variations))
