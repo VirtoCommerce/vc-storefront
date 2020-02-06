@@ -34,7 +34,7 @@ namespace VirtoCommerce.LiquidThemeEngine
 
         public bool IsAbsolutePath(string path)
         {
-            return =Path.GetDirectoryName(path).StartsWith(CurrentDirectory);
+            return Path.GetDirectoryName(path).StartsWith(CurrentDirectory);
         }
 
         public string ToAbsolutePath(string path)
