@@ -186,7 +186,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 try
                 {
                     //handle scss resources
-                    _sassFileManager.CurrentPath = filePath;
+                    _sassFileManager.CurrentDirectory = Path.GetDirectoryName(filePath);
                     var result = SassCompiler.Compile(content);
                     content = result.CompiledContent;
 

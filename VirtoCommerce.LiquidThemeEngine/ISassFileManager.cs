@@ -4,6 +4,6 @@ namespace VirtoCommerce.LiquidThemeEngine
 {
     public interface ISassFileManager: IFileManager
     {
-        string CurrentPath { get; set; }
+        string CurrentDirectory { get; set; }
     }
 }

@@ -13,26 +13,28 @@ namespace VirtoCommerce.LiquidThemeEngine
 
         public bool SupportsConversionToAbsolutePath { get; } = false;
 
-        public string CurrentPath { get; set; }
+        public string CurrentDirectory { get; set; }
 
         public SassFileManager(IContentBlobProvider contentBlobProvider)
         {
             _contentBlobProvider = contentBlobProvider;
         }
 
-        public string GetCurrentDirectory()
-        {
-            return Path.GetDirectoryName(CurrentPath);
-        }
+        public string GetCurrentDirectory() => CurrentDirectory;
 
         public bool FileExists(string path)
         {
+            // Workaround for directories
+            if (string.IsNullOrEmpty(Path.GetExtension(path)))
+            {
+                return false;
+            }
             return _contentBlobProvider.PathExists(path);
         }
 
         public bool IsAbsolutePath(string path)
         {
-            return false;
+            return =Path.GetDirectoryName(path).StartsWith(CurrentDirectory);
         }
 
         public string ToAbsolutePath(string path)
