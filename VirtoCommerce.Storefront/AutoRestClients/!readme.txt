@@ -9,7 +9,14 @@ $modules = @('Cache','Cart','Catalog','Content','Core','Customer','Inventory','M
 $modules.ForEach( { autoRest -Input http://localhost/admin/docs/VirtoCommerce.$_/v1  -OutputFileName $_`ModuleApi.cs -Namespace VirtoCommerce.Storefront.AutoRestClients.$_`ModuleApi -ClientName $_`ModuleApiClient -OutputDirectory VirtoCommerce.Storefront\AutoRestClients -AddCredentials true -UseDateTimeOffset false })
 
 
-Troubleshooting
+Troubleshooting:
+To fix error reading from url 'Could not read 'http://...'' it's recommended to create swagger file manually,
+and then use it as parameter in -Input, e.g.:
+
+1. iwr http://localhost/admin/docs/CustomerReviewsModule.Web/v1 -outfile swagger.CustomerReviewsModule.Web.json
+2. $modules = @('CustomerReviewsModule.Web')
+   $modules.ForEach( { autoRest -Input swagger.$_.json  -OutputFileName $_`ModuleApi.cs -Namespace VirtoCommerce.Storefront.AutoRestClients.$_`ModuleApi -ClientName $_`ModuleApiClient -OutputDirectory VirtoCommerce.Storefront\AutoRestClients -AddCredentials true -UseDateTimeOffset false })
+
 
 See AutoRest guide here:
 https://github.com/Azure/autorest/blob/master/docs/developer/guide/building-code.md#strong-name-validation-errors
