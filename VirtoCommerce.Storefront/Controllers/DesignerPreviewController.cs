@@ -22,7 +22,8 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         [HttpPost("designer-preview/block")]
-        [ValidateAntiForgeryToken]
+        //We can't use AntiForgery check here due to IFrame limitations. Browsers don't send cookies from IFrames.
+        //[ValidateAntiForgeryToken]
         public IActionResult Block([FromBody]dynamic data)
         {
             var page = new ContentPage
