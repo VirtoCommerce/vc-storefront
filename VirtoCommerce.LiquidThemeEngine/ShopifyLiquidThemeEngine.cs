@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DotLiquid.ViewEngine.Exceptions;
 using LibSassHost;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Caching.Memory;
@@ -49,7 +50,8 @@ namespace VirtoCommerce.LiquidThemeEngine
         private readonly ISassFileManager _sassFileManager;
 
         public ShopifyLiquidThemeEngine(IStorefrontMemoryCache memoryCache, IWorkContextAccessor workContextAccessor, IHttpContextAccessor httpContextAccessor,
-                                        IStorefrontUrlBuilder storeFrontUrlBuilder, IContentBlobProvider contentBlobProvider, ISassFileManager sassFileManager, IOptions<LiquidThemeEngineOptions> options)
+                                        IStorefrontUrlBuilder storeFrontUrlBuilder, IContentBlobProvider contentBlobProvider, ISassFileManager sassFileManager,
+                                        IOptions<LiquidThemeEngineOptions> options)
         {
             _workContextAccessor = workContextAccessor;
             _httpContextAccessor = httpContextAccessor;
@@ -144,7 +146,9 @@ namespace VirtoCommerce.LiquidThemeEngine
         public async Task<Stream> GetAssetStreamAsync(string filePath)
         {
             Stream retVal = null;
-            var filePathWithoutExtension = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
+            var isSourceMap = Path.GetExtension(filePath) == ".map";
+            var originalFilePath = filePath;
+            var filePathWithoutExtension = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(isSourceMap ? Path.GetFileNameWithoutExtension(filePath) : filePath));
             //file.ext => file.ext || file.liquid || file.ext.liquid || file     
             var searchPatterns = new[] { filePath, string.Format(_liquidTemplateFormat, filePathWithoutExtension), string.Format(_liquidTemplateFormat, filePath), filePathWithoutExtension };
 
@@ -187,8 +191,15 @@ namespace VirtoCommerce.LiquidThemeEngine
                 {
                     //handle scss resources
                     _sassFileManager.CurrentDirectory = Path.GetDirectoryName(filePath);
-                    var result = SassCompiler.Compile(content);
-                    content = result.CompiledContent;
+                    // Content, paths: .scss, .scss.css, .scss.css.map; options
+                    var result = SassCompiler.Compile(content, Path.GetFileNameWithoutExtension(originalFilePath), originalFilePath, originalFilePath + ".map", new CompilationOptions
+                    {
+                        OutputStyle = OutputStyle.Compressed,
+                        SourceMap = true,
+                        SourceMapFileUrls = true,
+                        SourceMapIncludeContents = true
+                    });
+                    content = isSourceMap ? result.SourceMap : result.CompiledContent;
 
                     retVal = new MemoryStream(Encoding.UTF8.GetBytes(content));
                 }
