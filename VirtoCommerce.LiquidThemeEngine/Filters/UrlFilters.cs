@@ -248,6 +248,19 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static string AbsoluteUrl(TemplateContext context, string input, string storeId = null, string languageCode = null)
         {
+            var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
+            return themeAdaptor.UrlBuilder.ToAppAbsolute(RelativeUrl(context, input, storeId, languageCode));
+        }
+
+        /// <summary>
+        /// Get app relative storefront url with specified store and language
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="storeId"></param>
+        /// <param name="languageCode"></param>
+        /// <returns></returns>
+        public static string RelativeUrl(TemplateContext context, string input, string storeId = null, string languageCode = null)
+        {
             if (input == null)
             {
                 return string.Empty;
@@ -268,7 +281,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }
             language = language ?? themeAdaptor.WorkContext.CurrentLanguage;
 
-            var retVal = themeAdaptor.UrlBuilder.ToAppAbsolute(input, store, language);
+            var retVal = themeAdaptor.UrlBuilder.ToAppRelative(input, store, language);
             return retVal;
         }
 
