@@ -6,6 +6,7 @@ using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
+using System.Collections.Specialized;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -31,6 +32,9 @@ namespace VirtoCommerce.Storefront.Domain
                 pageSize = options.PageSizeMaxValue;
             }
             WorkContext.PageSize = pageSize;
+            //To interpret as true the value of preview_mode from the query string according to its actual presence, since another value of this parameter can be passed.
+            WorkContext.IsPreviewMode = !string.IsNullOrEmpty(WorkContext.QueryString.Get("preview_mode"));
+
         }
 
         public HttpContext HttpContext { get; }
