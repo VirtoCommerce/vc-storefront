@@ -45,7 +45,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         /// <summary>
-        /// GET: /themes/localization.json
+        /// GET: /themes/settings.json
         /// Return settings for current theme
         /// </summary>
         /// <returns></returns>
