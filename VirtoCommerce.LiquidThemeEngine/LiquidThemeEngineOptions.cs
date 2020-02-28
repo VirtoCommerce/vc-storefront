@@ -24,7 +24,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// Original description:
         /// The name of the base theme that will be used to discover the theme resources not found by the path of theme for current store.
         /// This parameter can be used for theme inheritance logic.
-        /// Example values: default_theme -> wwwroot/cms-content/Themes/default_theme/default
+        /// Example values: default_theme -> wwwroot/cms-content/default_theme
         ///
         /// How it actually worked:
         /// Storefront used this parameter as a store name, i.e. Electronics -> wwwroot/cms-content/Themes/Electronics/default

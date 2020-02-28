@@ -493,6 +493,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <returns></returns>
         private static JObject GetCurrentPreset(JObject allSettings)
         {
+            var result = allSettings;
             var currentPreset = allSettings.GetValue("current");
             if (currentPreset is JValue currentPresetValue)
             {
@@ -503,18 +504,18 @@ namespace VirtoCommerce.LiquidThemeEngine
                 }
 
                 IList<JProperty> allPresets = presets.Children().Cast<JProperty>().ToList();
-                allSettings = allPresets.FirstOrDefault(p => p.Name == currentPresetName)?.Value as JObject;
-                if (allSettings == null)
+                result = allPresets.FirstOrDefault(p => p.Name == currentPresetName)?.Value as JObject;
+                if (result == null)
                 {
                     throw new StorefrontException($"Setting preset with name '{currentPresetName}' not found");
                 }
             }
             if (currentPreset is JObject preset)
             {
-                allSettings = preset;
+                result = preset;
             }
 
-            return allSettings;
+            return result;
         }
 
         private string ReadTemplateByPath(string templatePath)
