@@ -12,7 +12,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
 {
     public class CustomCookieAuthenticationEvents : CookieAuthenticationEvents
     {
-        private static readonly string[] _urlContainingQueryParameters = new string[] { "ReturnUrl " };
+        private static readonly string[] _urlContainingQueryParameters = new string[] { "ReturnUrl", };
 
         private readonly IStorefrontUrlBuilder _storefrontUrlBuilder;
 
