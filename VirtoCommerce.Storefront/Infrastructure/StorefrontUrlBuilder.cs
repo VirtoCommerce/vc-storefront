@@ -77,13 +77,20 @@ namespace VirtoCommerce.Storefront.Infrastructure
 
             if (!string.IsNullOrWhiteSpace(storeUrl) && !Uri.TryCreate(virtualPath, UriKind.Absolute, out var _))
             {
-                var storeUri = new UriBuilder(storeUrl);
-                var storeUriPath = storeUri.Path;
-
-                // Uri.Path by default is "/" - no need to remove starting "/"
-                if (!string.IsNullOrWhiteSpace(storeUriPath) && !storeUriPath.EqualsInvariant("/"))
+                try
                 {
-                    result = RemoveUrlPartFromBeginning(result, storeUri.Path);
+                    var storeUri = new UriBuilder(storeUrl);
+                    var storeUriPath = storeUri.Path;
+
+                    // Uri.Path by default is "/" - no need to remove starting "/"
+                    if (!string.IsNullOrWhiteSpace(storeUriPath) && !storeUriPath.EqualsInvariant("/"))
+                    {
+                        result = RemoveUrlPartFromBeginning(result, storeUri.Path);
+                    }
+                }
+                catch (UriFormatException)
+                {
+                    // No need to handle
                 }
             }
 
