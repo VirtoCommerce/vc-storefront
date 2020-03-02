@@ -12,7 +12,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
     public class CustomSignInManager : SignInManager<User>
     {
         public CustomSignInManager(UserManager<User> userManager, IHttpContextAccessor contextAccessor, IUserClaimsPrincipalFactory<User> claimsFactory, IOptions<IdentityOptions> optionsAccessor,
-            ILogger<SignInManager<User>> logger, IAuthenticationSchemeProvider schemes) : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes)
+            ILogger<SignInManager<User>> logger, IAuthenticationSchemeProvider schemes, IUserConfirmation<User> userConfirmation)
+            : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes, userConfirmation)
         {
         }
         protected override async Task<SignInResult> PreSignInCheck(User user)

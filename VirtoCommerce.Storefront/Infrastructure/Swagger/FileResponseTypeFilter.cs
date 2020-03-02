@@ -1,26 +1,33 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace VirtoCommerce.Storefront.Infrastructure.Swagger
 {
     public class FileResponseTypeFilter : IOperationFilter
     {
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             if (IsFileResponse(context.ApiDescription))
             {
-                var responseSchema = new Schema { Format = "byte", Type = "file" };
+                var responseSchema = new OpenApiSchema { Format = "byte", Type = "file" };
 
                 var okStatusString = ((int)HttpStatusCode.OK).ToString();
-                var okStatusResponse = new Response
+                var okStatusResponse = new OpenApiResponse
                 {
                     Description = "OK",
-                    Schema = responseSchema
+                    Content = new Dictionary<string, OpenApiMediaType>
+                    {
+                        ["application/json"] = new OpenApiMediaType
+                        {
+                            Schema = responseSchema
+                        }
+                    }
                 };
                 if (operation.Responses.Any(x => x.Key == okStatusString))
                 {
