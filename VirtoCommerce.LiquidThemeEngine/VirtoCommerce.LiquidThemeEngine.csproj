@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -14,11 +14,12 @@
     <RepositoryUrl>https://github.com/VirtoCommerce/vc-storefront-core</RepositoryUrl>
     <AssemblyVersion>4.1.7.0</AssemblyVersion>
     <FileVersion>4.1.7.0</FileVersion>
+    <IsPackable>False</IsPackable>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
 
   <ItemGroup>
-	<FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="LibSassHost" Version="1.2.10" />
     <PackageReference Include="LibSassHost.Native.linux-x64" Version="1.2.10" />
     <PackageReference Include="LibSassHost.Native.win-x64" Version="1.2.10" />
