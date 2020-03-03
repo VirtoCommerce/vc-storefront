@@ -356,19 +356,21 @@ namespace VirtoCommerce.LiquidThemeEngine
             {
                 cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeSettingPath) }));
 
+                JObject result;
                 var baseThemeSettings = new JObject();
-                JObject result, currentThemeSettings;
-                currentThemeSettings = result = GetCurrentSettingsPreset(InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath));
-                //Try to load localization resources from base theme path and merge them with resources for local theme
-                if (!string.IsNullOrEmpty(BaseThemeLocalePath))
+                var currentThemeSettings = result = GetCurrentSettingsPreset(InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath));
+
+                //Try to load settings from base theme path and merge them with resources for local theme
+                if ((_options.MergeBaseSettings || currentThemeSettings == null) && !string.IsNullOrEmpty(BaseThemeSettingPath))
                 {
                     cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(BaseThemeSettingPath) }));
                     result = baseThemeSettings = GetCurrentSettingsPreset(InnerGetAllSettings(_themeBlobProvider, BaseThemeSettingPath));
                 }
+
                 if (_options.MergeBaseSettings)
                 {
-                    result = currentThemeSettings;
-                    result.Merge(baseThemeSettings ?? new JObject(), new JsonMergeSettings { MergeArrayHandling = MergeArrayHandling.Merge });
+                    result = baseThemeSettings;
+                    result.Merge(currentThemeSettings ?? new JObject(), new JsonMergeSettings { MergeArrayHandling = MergeArrayHandling.Merge });
                 }
 
                 return result.ToObject<Dictionary<string, object>>().ToDictionary(x => x.Key, x => x.Value).WithDefaultValue(defaultValue);
