@@ -355,33 +355,20 @@ namespace VirtoCommerce.LiquidThemeEngine
             return _memoryCache.GetOrCreateExclusive(cacheKey, cacheItem =>
             {
                 cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeSettingPath) }));
-                var result = new JObject();
+
+                var baseThemeSettings = new JObject();
+                JObject result, currentThemeSettings;
+                currentThemeSettings = result = GetCurrentSettingsPreset(InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath));
+                //Try to load localization resources from base theme path and merge them with resources for local theme
+                if (!string.IsNullOrEmpty(BaseThemeLocalePath))
+                {
+                    cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(BaseThemeSettingPath) }));
+                    result = baseThemeSettings = GetCurrentSettingsPreset(InnerGetAllSettings(_themeBlobProvider, BaseThemeSettingPath));
+                }
                 if (_options.MergeBaseSettings)
                 {
-                    //Try to load settings from base theme path and merge them with resources for local theme
-                    if (BaseThemeSettingPath != null)
-                    {
-                        cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(BaseThemeSettingPath) }));
-                        result = GetCurrentPreset(InnerGetAllSettings(_themeBlobProvider, BaseThemeSettingPath));
-                    }
-
-                    var currentSettings = GetCurrentPreset(InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath));
-                    result.Merge(currentSettings ?? new JObject(), new JsonMergeSettings { MergeArrayHandling = MergeArrayHandling.Merge });
-                }
-                else
-                {
-                    //Load all data from current theme config
-                    var currentSettings = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
-                    if (currentSettings == null && BaseThemeSettingPath != null)
-                    {
-                        //Fallback load data from base theme config
-                        cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(BaseThemeSettingPath) }));
-                        currentSettings = InnerGetAllSettings(_themeBlobProvider, BaseThemeSettingPath);
-                    }
-                    if (currentSettings != null)
-                    {
-                        result = GetCurrentPreset(currentSettings);
-                    }
+                    result = currentThemeSettings;
+                    result.Merge(baseThemeSettings ?? new JObject(), new JsonMergeSettings { MergeArrayHandling = MergeArrayHandling.Merge });
                 }
 
                 return result.ToObject<Dictionary<string, object>>().ToDictionary(x => x.Key, x => x.Value).WithDefaultValue(defaultValue);
@@ -475,23 +462,23 @@ namespace VirtoCommerce.LiquidThemeEngine
                 throw new ArgumentNullException(nameof(settingsPath));
             }
 
-            JObject retVal = null;
+            var result = new JObject();
 
             if (themeBlobProvider.PathExists(settingsPath))
             {
                 using (var stream = themeBlobProvider.OpenRead(settingsPath))
                 {
-                    retVal = JsonConvert.DeserializeObject<JObject>(stream.ReadToString());
+                    result = JsonConvert.DeserializeObject<JObject>(stream.ReadToString());
                 }
             }
-            return retVal;
+            return result;
         }
 
         /// <summary>
         /// Get actual preset from config
         /// </summary>
         /// <returns></returns>
-        private static JObject GetCurrentPreset(JObject allSettings)
+        private static JObject GetCurrentSettingsPreset(JObject allSettings)
         {
             var result = allSettings;
             var currentPreset = allSettings.GetValue("current");
