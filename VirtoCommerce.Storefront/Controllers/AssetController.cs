@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using VirtoCommerce.LiquidThemeEngine;
+using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
@@ -40,6 +41,19 @@ namespace VirtoCommerce.Storefront.Controllers
         public ActionResult GetThemeLocalizationJson()
         {
             var retVal = _themeEngine.ReadLocalization();
+            return Json(retVal);
+        }
+
+        /// <summary>
+        /// GET: /themes/settings.json
+        /// Return settings for current theme
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("themes/settings.json")]
+        [ResponseCache(CacheProfileName = "Default")]
+        public ActionResult GetThemeSettingsJson()
+        {
+            var retVal = _themeEngine.GetSettings();
             return Json(retVal);
         }
 
