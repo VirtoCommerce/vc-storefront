@@ -64,7 +64,7 @@ namespace VirtoCommerce.Storefront.Tests.Routing
         [InlineData("/Electronics", "/Electronics")]
         [InlineData("/store/store/Electronics", "/store/Electronics")]
         [InlineData("/account/store/Electronics", "/account/store/Electronics")]
-        public void TrimStorePath_PathInStoreUrl_TrimsFirstOccurenceFromBeginning(string pathToHandle, string expectedPath)
+        public void TrimStorePath_PathInStoreUrl_TrimsFirstOccurrenceFromBeginning(string pathToHandle, string expectedPath)
         {
             // Arrange
             var storeStub = new Store() { Url = "http://localhost/store" };
@@ -81,7 +81,7 @@ namespace VirtoCommerce.Storefront.Tests.Routing
         [InlineData("/Electronics", "/Electronics")]
         [InlineData("/store/store/Electronics", "/store/Electronics")]
         [InlineData("/account/store/Electronics", "/account/store/Electronics")]
-        public void TrimStorePath_PathInStoreSecureUrl_TrimsFirstOccurenceFromBeginning(string pathToHandle, string expectedPath)
+        public void TrimStorePath_PathInStoreSecureUrl_TrimsFirstOccurrenceFromBeginning(string pathToHandle, string expectedPath)
         {
             // Arrange
             var storeStub = new Store() { SecureUrl = "http://localhost/store" };

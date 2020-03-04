@@ -62,7 +62,7 @@ namespace VirtoCommerce.Storefront.Extensions
         }
 
         /// <summary>
-        /// Trims store path ("/store" for "http://localhost/store") from the beginning of the url. Does nothing in case of empty store.Url.
+        /// Trims first occurrence of store path ("/store" for "http://localhost/store") from the beginning of the url. Does nothing in case of empty store.Url.
         /// </summary>
         /// <param name="path">Path to trim store path from.</param>
         /// <param name="store">Store which path to trim.</param>
