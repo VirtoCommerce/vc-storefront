@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using VirtoCommerce.Storefront.Domain;
@@ -23,6 +22,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
         {
             _urlBuilder = urlBuilder;
             _workContextAccessor = workContextAccessor;
+            //_urlBuilderContext = workContext.ToToolsContext();
             _hostEnv = hostEnv;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -63,50 +63,5 @@ namespace VirtoCommerce.Storefront.Infrastructure
             return _hostEnv.MapPath(virtualPath);
         }
         #endregion
-
-        public string ToStoreRelativeUrl(string virtualPath)
-        {
-            var workContext = _workContextAccessor.WorkContext;
-            return ToStoreRelativeUrl(virtualPath, workContext.CurrentStore);
-        }
-
-        public string ToStoreRelativeUrl(string virtualPath, Store store)
-        {
-            var result = virtualPath;
-            var storeUrl = !string.IsNullOrWhiteSpace(store.Url) ? store.Url : store.SecureUrl;
-
-            if (!string.IsNullOrWhiteSpace(storeUrl) && !Uri.TryCreate(virtualPath, UriKind.Absolute, out var _))
-            {
-                try
-                {
-                    var storeUri = new UriBuilder(storeUrl);
-                    var storeUriPath = storeUri.Path;
-
-                    // Uri.Path by default is "/" - no need to remove starting "/"
-                    if (!string.IsNullOrWhiteSpace(storeUriPath) && !storeUriPath.EqualsInvariant("/"))
-                    {
-                        result = RemoveUrlPartFromBeginning(result, storeUri.Path);
-                    }
-                }
-                catch (UriFormatException)
-                {
-                    // No need to handle
-                }
-            }
-
-            return result;
-        }
-
-        private static string RemoveUrlPartFromBeginning(string url, string urlPartToRemove)
-        {
-            var result = url;
-
-            if (!string.IsNullOrWhiteSpace(urlPartToRemove))
-            {
-                result = url.IndexOf(urlPartToRemove, StringComparison.OrdinalIgnoreCase) == 0 ? url.Remove(0, urlPartToRemove.Length) : url;
-            }
-
-            return result;
-        }
     }
 }
