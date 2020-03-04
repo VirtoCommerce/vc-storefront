@@ -59,13 +59,13 @@ namespace VirtoCommerce.Storefront.Domain.Security
             // http://localhost/Account/Login -> http://localhost/{store}/{lang}/Account/Login
 
             // Need to be able to properly handle the following case:
-            // http://localhost/store/Account/Login?ReturnUrl=%2Fstore%2FElectronics%2Fen-US%2Faccount
-            // 1. Should properly handle store path in its url (remove storeUrlPath "/store" for the "http://localhost/store")
-            // 2. Check for url params (e.g. ReturnUrl) in query string and trim store url here too
+            // http://localhost/store/Account/Login?ReturnUrl=%2Fstore%2FElectronics%2Fen-US%2Faccount, storeUrl = "http://localhost/store"
+            // 1. Should trim store path "/store" from the url path "/store/Account/Login" => path should become "/Account/Login"
+            // 2. Check for url params (e.g. ReturnUrl) in query string and trim store url for them too. ReturnUrl=%2Fstore%2FElectronics%2Fen-US%2Faccount => ReturnUrl=%2FElectronics%2Fen-US%2Faccount
 
             var redirectUri = new UriBuilder(uri);
-            var storeRelativeUrl = TrimStorePathFromPath(redirectUri.Path, _workContextAccessor?.WorkContext?.CurrentStore);
-            var storeBasedRedirectPath = _storefrontUrlBuilder.ToAppAbsolute(storeRelativeUrl);
+            var pathWithTrimmedStorePath = TrimStorePathFromPath(redirectUri.Path, _workContextAccessor?.WorkContext?.CurrentStore);
+            var storeBasedRedirectPath = _storefrontUrlBuilder.ToAppAbsolute(pathWithTrimmedStorePath);
 
             ConvertParamsUrlsToStoreRelative(redirectUri);
 
@@ -81,7 +81,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         }
 
         /// <summary>
-        /// Trim store path from known params containng url values. Encoding/Decoding is handled by HttpUtility.ParseQueryString.
+        /// Trims store path for known url containing params. Encoding/Decoding is handled by HttpUtility.ParseQueryString.
         /// </summary>
         /// <param name="redirectUri">Uri which query params need to be converted.</param>
         private void ConvertParamsUrlsToStoreRelative(UriBuilder redirectUri)
@@ -96,9 +96,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 if (paramKey != null)
                 {
                     var paramValue = queryParams[paramKey];
-                    var storeRelativeUrl = TrimStorePathFromPath(paramValue, _workContextAccessor?.WorkContext?.CurrentStore);
+                    var urlWithTrimmedStorePath = TrimStorePathFromPath(paramValue, _workContextAccessor?.WorkContext?.CurrentStore);
 
-                    queryParams[paramKey] = storeRelativeUrl;
+                    queryParams[paramKey] = urlWithTrimmedStorePath;
                 }
             }
 
