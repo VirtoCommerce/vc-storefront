@@ -1,15 +1,14 @@
 using System;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Stores;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
@@ -64,7 +63,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             // 2. Check for url params (e.g. ReturnUrl) in query string and trim store url for them too. ReturnUrl=%2Fstore%2FElectronics%2Fen-US%2Faccount => ReturnUrl=%2FElectronics%2Fen-US%2Faccount
 
             var redirectUri = new UriBuilder(uri);
-            var pathWithTrimmedStorePath = TrimStorePathFromPath(redirectUri.Path, _workContextAccessor?.WorkContext?.CurrentStore);
+            var pathWithTrimmedStorePath = new PathString(redirectUri.Path).TrimStorePath(_workContextAccessor?.WorkContext?.CurrentStore);
             var storeBasedRedirectPath = _storefrontUrlBuilder.ToAppAbsolute(pathWithTrimmedStorePath);
 
             ConvertParamsUrlsToStoreRelative(redirectUri);
@@ -92,48 +91,16 @@ namespace VirtoCommerce.Storefront.Domain.Security
             foreach (var paramName in _urlContainingQueryParameters)
             {
                 var paramKey = allParamKeys.FirstOrDefault(x => x.EqualsInvariant(paramName));
+                var paramValue = paramKey != null ? queryParams[paramKey] : null;
 
-                if (paramKey != null)
+                // Need to check that param value is a valid relative url to avoid exception at PathString creation 
+                if (paramKey != null && Uri.TryCreate(paramValue, UriKind.Relative, out var _))
                 {
-                    var paramValue = queryParams[paramKey];
-                    var urlWithTrimmedStorePath = TrimStorePathFromPath(paramValue, _workContextAccessor?.WorkContext?.CurrentStore);
-
-                    queryParams[paramKey] = urlWithTrimmedStorePath;
+                    queryParams[paramKey] = new PathString(paramValue).TrimStorePath(_workContextAccessor?.WorkContext?.CurrentStore);
                 }
             }
 
             redirectUri.Query = queryParams.ToString();
-        }
-
-        /// <summary>
-        /// Trims store path ("/store" for "http://localhost/store") from the beginning of the url. Does nothing in case of empty store.Url.
-        /// </summary>
-        /// <param name="path">Path to trim store path from.</param>
-        /// <param name="store">Store which path to trim.</param>
-        /// <returns></returns>
-        private string TrimStorePathFromPath(string path, Store store)
-        {
-            if (store == null)
-            {
-                throw new ArgumentNullException(nameof(store));
-            }
-
-            // Need to remove store path only if store has url
-            var storeUrl = !string.IsNullOrWhiteSpace(store.Url) ? store.Url : store.SecureUrl;
-
-            if (!string.IsNullOrWhiteSpace(storeUrl) && Uri.TryCreate(storeUrl, UriKind.Absolute, out var storeUri))
-            {
-                var storeUriPath = storeUri.AbsolutePath.Trim('/');
-
-                // Uri.AbsolutePath by default is "/" - no need to trim it
-                if (!string.IsNullOrWhiteSpace(storeUriPath) && !storeUriPath.Equals("/"))
-                {
-                    // Removing store url path from the beginning of path
-                    path = Regex.Replace(path, @"^/\b" + storeUriPath + @"\b/", "/", RegexOptions.IgnoreCase);
-                }
-            }
-
-            return path;
         }
     }
 }
