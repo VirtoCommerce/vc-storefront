@@ -18,6 +18,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var result = new orderDto.CustomerOrderSearchCriteria
             {
+                Keyword = criteria.Keyword,
                 CustomerId = criteria.CustomerId,
                 StartDate = criteria.StartDate,
                 EndDate = criteria.EndDate,
