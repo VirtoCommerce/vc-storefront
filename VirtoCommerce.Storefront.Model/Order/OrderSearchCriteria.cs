@@ -25,7 +25,7 @@ namespace VirtoCommerce.Storefront.Model.Order
         }
 
         public string Sort { get; set; }
-
+        public string Keyword { get; set; }
         public string CustomerId { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
