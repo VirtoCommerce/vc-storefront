@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
-using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
@@ -36,12 +37,19 @@ namespace VirtoCommerce.Storefront.Domain.Security
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IMemberService _memberService;
         private readonly StorefrontOptions _options;
-        public UserStoreStub(ISecurity platformSecurityApi, IMemberService memberService, IStorefrontMemoryCache memoryCache, IOptions<StorefrontOptions> options)
+        private readonly IOrderModule _orderModule;
+
+        public UserStoreStub(ISecurity platformSecurityApi,
+            IMemberService memberService,
+            IStorefrontMemoryCache memoryCache,
+            IOptions<StorefrontOptions> options,
+            IOrderModule orderModule)
         {
             _platformSecurityApi = platformSecurityApi;
             _memoryCache = memoryCache;
             _memberService = memberService;
             _options = options.Value;
+            _orderModule = orderModule;
         }
 
         #region IUserStore<User> members
@@ -71,7 +79,11 @@ namespace VirtoCommerce.Storefront.Domain.Security
             {
                 var userDto = await _platformSecurityApi.GetUserByIdAsync(userId);
 
-                return PrepareUserResult(cacheEntry, userDto);
+                var user = PrepareUserResult(cacheEntry, userDto);
+
+                await FillIsFirstTimeBuyer(user);
+
+                return user;
             }, cacheNullValue: false);
 
             //Load user associated contact
@@ -89,7 +101,11 @@ namespace VirtoCommerce.Storefront.Domain.Security
             {
                 var userDto = await _platformSecurityApi.GetUserByNameAsync(normalizedUserName);
 
-                return PrepareUserResult(cacheEntry, userDto);
+                var user = PrepareUserResult(cacheEntry, userDto);
+
+                await FillIsFirstTimeBuyer(user);
+
+                return user;
             }, cacheNullValue: false);
 
             //Load user associated contact
@@ -515,5 +531,19 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return null;
         }
 
+        private async Task FillIsFirstTimeBuyer(User user)
+        {
+            if (user != null)
+            {
+                var orderSearchResult = await _orderModule.SearchAsync(new CustomerOrderSearchCriteria()
+                {
+                    CustomerId = user.Id,
+                    Take = 0,
+                    Skip = 0,
+                });
+
+                user.IsFirstTimeBuyer = orderSearchResult.TotalCount == 0;
+            }
+        }
     }
 }
