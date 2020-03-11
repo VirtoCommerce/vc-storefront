@@ -80,7 +80,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
             get
             {
                 Part retVal = null;
-                if (!_pagedList.IsFirstPage)
+                if (!_pagedList.IsFirstPage && Parts.Count > CurrentPage - 2 && CurrentPage - 2 >= 0)
                 {
                     retVal = Parts[CurrentPage - 2];
                 }
