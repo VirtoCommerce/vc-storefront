@@ -83,8 +83,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
                 Part retVal = null;
                 if (!_pagedList.IsFirstPage)
                 {
-                    var idx = Math.Min(Parts.Count - 1, Math.Max(0, CurrentPage - 2));
-                    retVal = Parts[idx];
+                    retVal = Parts[Math.Min(Parts.Count - 1, Math.Max(0, CurrentPage - 2))];
                 }
                 return retVal;
             }
