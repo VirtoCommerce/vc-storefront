@@ -79,11 +79,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             {
                 var userDto = await _platformSecurityApi.GetUserByIdAsync(userId);
 
-                var user = PrepareUserResult(cacheEntry, userDto);
-
-                await FillIsFirstTimeBuyer(user);
-
-                return user;
+                return await PrepareUserResultAsync(cacheEntry, userDto);
             }, cacheNullValue: false);
 
             //Load user associated contact
@@ -101,11 +97,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             {
                 var userDto = await _platformSecurityApi.GetUserByNameAsync(normalizedUserName);
 
-                var user = PrepareUserResult(cacheEntry, userDto);
-
-                await FillIsFirstTimeBuyer(user);
-
-                return user;
+                return await PrepareUserResultAsync(cacheEntry, userDto);
             }, cacheNullValue: false);
 
             //Load user associated contact
@@ -216,7 +208,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             {
                 var userDto = await _platformSecurityApi.GetUserByEmailAsync(normalizedEmail);
 
-                return PrepareUserResult(cacheEntry, userDto);
+                return await PrepareUserResultAsync(cacheEntry, userDto);
             }, cacheNullValue: false);
 
             //Load user associated contact
@@ -282,7 +274,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             {
                 var userDto = await _platformSecurityApi.GetUserByLoginAsync(loginProvider, providerKey);
 
-                return PrepareUserResult(cacheEntry, userDto);
+                return await PrepareUserResultAsync(cacheEntry, userDto);
             }, cacheNullValue: false);
 
 
@@ -519,22 +511,11 @@ namespace VirtoCommerce.Storefront.Domain.Security
             // Cleanup
         }
 
-        private User PrepareUserResult(MemoryCacheEntryOptions options, AutoRestClients.PlatformModuleApi.Models.ApplicationUserExtended userDto)
+        private async Task<User> PrepareUserResultAsync(MemoryCacheEntryOptions options, AutoRestClients.PlatformModuleApi.Models.ApplicationUserExtended userDto)
         {
             if (userDto != null)
             {
                 var user = userDto.ToUser();
-                options.AddExpirationToken(new PollingApiUserChangeToken(_platformSecurityApi, _options.ChangesPollingInterval));
-                options.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
-                return user;
-            }
-            return null;
-        }
-
-        private async Task FillIsFirstTimeBuyer(User user)
-        {
-            if (user != null)
-            {
                 var orderSearchResult = await _orderModule.SearchAsync(new CustomerOrderSearchCriteria()
                 {
                     CustomerId = user.Id,
@@ -543,7 +524,13 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 });
 
                 user.IsFirstTimeBuyer = orderSearchResult.TotalCount == 0;
+
+                options.AddExpirationToken(new PollingApiUserChangeToken(_platformSecurityApi, _options.ChangesPollingInterval));
+                options.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
+
+                return user;
             }
+            return null;
         }
     }
 }

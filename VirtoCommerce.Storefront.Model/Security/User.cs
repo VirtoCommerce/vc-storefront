@@ -153,7 +153,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         public Address DefaultShippingAddress => Contact?.DefaultShippingAddress;
         public IList<Address> Addresses => Contact?.Addresses;
         /// <summary>
-        /// Indicates if user already has orders
+        /// Indicates if user has no orders
         /// </summary>
         public bool IsFirstTimeBuyer { get; set; }
     }

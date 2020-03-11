@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
 using VirtoCommerce.Storefront.Domain;
-using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
@@ -384,12 +383,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     taskList.Add(processPaymentTask);
                 }
                 await Task.WhenAll(taskList.ToArray());
-
-                // Need to expire cache for resetting 'IsFirstTimeBuyer' after order creation
-                if (WorkContext.CurrentUser.IsFirstTimeBuyer)
-                {
-                    SecurityCacheRegion.ExpireUser(WorkContext.CurrentUser.Id);
-                }
 
                 return new OrderCreatedInfo
                 {
