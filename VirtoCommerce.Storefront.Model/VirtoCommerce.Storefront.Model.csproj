@@ -12,16 +12,16 @@
     <PackageProjectUrl>https://github.com/VirtoCommerce/vc-storefront-core</PackageProjectUrl>
     <PackageIconUrl>https://virtocommerce.com/themes/assets/logo.jpg</PackageIconUrl>
     <RepositoryUrl>https://github.com/VirtoCommerce/vc-storefront-core</RepositoryUrl>
-    <AssemblyVersion>4.1.8.0</AssemblyVersion>
-    <FileVersion>4.1.8.0</FileVersion>
-    <Version>4.1.8</Version>
+    <AssemblyVersion>4.1.9.0</AssemblyVersion>
+    <FileVersion>4.1.9.0</FileVersion>
+    <Version>4.1.9</Version>
     <Authors>Virto Commerce</Authors>
     <Company>Virto Commerce</Company>
     <Product>Virto Commerce</Product>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="8.6.1" />
+    <PackageReference Include="FluentValidation" Version="8.6.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Nito.AsyncEx" Version="5.0.0" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
