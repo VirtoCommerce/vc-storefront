@@ -367,6 +367,8 @@ namespace VirtoCommerce.LiquidThemeEngine
                 catch (StorefrontException) when (_options.MergeBaseSettings)
                 {
                     // Do not throw exception of missed presets or current preset if we merge settings
+                    // Instead treat current settings as json object ("flat" settings) and merge them
+                    currentThemeSettings = allCurrentThemeSettings;
                 }
 
                 //Try to load settings from base theme path and merge them with resources for local theme
