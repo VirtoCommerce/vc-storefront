@@ -358,13 +358,26 @@ namespace VirtoCommerce.LiquidThemeEngine
 
                 JObject result;
                 var baseThemeSettings = new JObject();
-                var currentThemeSettings = result = GetCurrentSettingsPreset(InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath));
+                var allCurrentThemeSettings = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
+                var currentThemeSettings = result = null;
+                try
+                {
+                    currentThemeSettings = result = GetCurrentSettingsPreset(allCurrentThemeSettings);
+                }
+                catch (StorefrontException) when (_options.MergeBaseSettings)
+                {
+                    // Do not throw exception of missed presets or current preset if we merge settings
+                }
 
                 //Try to load settings from base theme path and merge them with resources for local theme
                 if ((_options.MergeBaseSettings || currentThemeSettings == null) && !string.IsNullOrEmpty(BaseThemeSettingPath))
                 {
                     cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(BaseThemeSettingPath) }));
-                    result = baseThemeSettings = GetCurrentSettingsPreset(InnerGetAllSettings(_themeBlobProvider, BaseThemeSettingPath));
+                    var allBaseThemeSettings = InnerGetAllSettings(_themeBlobProvider, BaseThemeSettingPath);
+                    result = baseThemeSettings = GetCurrentSettingsPreset(allBaseThemeSettings,
+                        _options.MergeBaseSettings && currentThemeSettings == null
+                            ? allCurrentThemeSettings
+                            : null);
                 }
 
                 if (_options.MergeBaseSettings)
@@ -480,23 +493,27 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// Get actual preset from config
         /// </summary>
         /// <returns></returns>
-        private static JObject GetCurrentSettingsPreset(JObject allSettings)
+        private static JObject GetCurrentSettingsPreset(JObject allSettings, JObject baseSettings = null)
         {
             var result = allSettings;
-            var currentPreset = allSettings.GetValue("current");
+            var currentPreset = (baseSettings ?? allSettings).GetValue("current");
             if (currentPreset is JValue currentPresetValue)
             {
                 var currentPresetName = currentPresetValue.Value.ToString();
-                if (!(allSettings.GetValue("presets") is JObject presets) || !presets.Children().Any())
+                if (!string.IsNullOrEmpty(currentPresetName))
                 {
-                    throw new StorefrontException("Setting presets not defined");
-                }
+                    if (!(allSettings.GetValue("presets") is JObject presets) ||
+                        !presets.Children().Any())
+                    {
+                        throw new StorefrontException("Setting presets not defined");
+                    }
 
-                IList<JProperty> allPresets = presets.Children().Cast<JProperty>().ToList();
-                result = allPresets.FirstOrDefault(p => p.Name == currentPresetName)?.Value as JObject;
-                if (result == null)
-                {
-                    throw new StorefrontException($"Setting preset with name '{currentPresetName}' not found");
+                    IList<JProperty> allPresets = presets.Children().Cast<JProperty>().ToList();
+                    result = allPresets.FirstOrDefault(p => p.Name == currentPresetName)?.Value as JObject;
+                    if (result == null)
+                    {
+                        throw new StorefrontException($"Setting preset with name '{currentPresetName}' not found");
+                    }
                 }
             }
             if (currentPreset is JObject preset)
