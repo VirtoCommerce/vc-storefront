@@ -8,9 +8,9 @@ namespace VirtoCommerce.LiquidThemeEngine
 {
     public static class SettingJsonOverlayMerger
     {
-        internal class JsonPresetsDoc
+        internal class JsonSettingDoc
         {
-            public JsonPreset Current { get; set; }
+            public JsonPreset CurrentPreset { get; set; }
             public IList<JsonPreset> Presets { get; set; } = new List<JsonPreset>();
         }
 
@@ -32,23 +32,23 @@ namespace VirtoCommerce.LiquidThemeEngine
                 throw new ArgumentNullException(nameof(headJson));
             }
 
-            var basePresetsDoc = ReadPresets(baseJson);
-            var headPresetsDoc = ReadPresets(headJson);
+            var baseSettingDoc = ReadSettingDoc(baseJson);
+            var headSettingDoc = ReadSettingDoc(headJson);
             //Change the current preset for base doc according to head preset value if it specified
-            if (headPresetsDoc.Current.NameIsSet)
+            if (headSettingDoc.CurrentPreset.NameIsSet)
             {
-                basePresetsDoc.Current = basePresetsDoc.Presets.FirstOrDefault(x => x.Name == headPresetsDoc.Current.Name);
+                baseSettingDoc.CurrentPreset = baseSettingDoc.Presets.FirstOrDefault(x => x.Name == headSettingDoc.CurrentPreset.Name);
             }
-            var result = basePresetsDoc.Current.Json;
-            result.Merge(headPresetsDoc.Current.Json, new JsonMergeSettings { MergeArrayHandling = MergeArrayHandling.Merge });
+            var result = baseSettingDoc.CurrentPreset.Json;
+            result.Merge(headSettingDoc.CurrentPreset.Json, new JsonMergeSettings { MergeArrayHandling = MergeArrayHandling.Merge });
             return result;
         }
 
-        private static JsonPresetsDoc ReadPresets(JObject json)
+        private static JsonSettingDoc ReadSettingDoc(JObject json)
         {
-            var result = new JsonPresetsDoc
+            var result = new JsonSettingDoc
             {
-                Current = new JsonPreset
+                CurrentPreset = new JsonPreset
                 {
                     Json = json
                 }
@@ -77,11 +77,11 @@ namespace VirtoCommerce.LiquidThemeEngine
                 {
                     throw new StorefrontException($"Setting preset with name '{presetName}' not found");
                 }
-                result.Current = new JsonPreset { Name = presetName, Json = currentJson ?? json };
+                result.CurrentPreset = new JsonPreset { Name = presetName, Json = currentJson ?? json };
             }
             if (currentPreset is JObject preset)
             {
-                result.Current.Json = preset;
+                result.CurrentPreset.Json = preset;
             }
 
             return result;
