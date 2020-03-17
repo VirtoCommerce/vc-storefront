@@ -4111,6 +4111,25 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         [JsonProperty(PropertyName = "endDate")]
         public System.DateTime? EndDate { get; set; }
 
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "capturedStartDate")]
+        public System.DateTime? CapturedStartDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "capturedEndDate")]
+        public System.DateTime? CapturedEndDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "authorizedStartDate")]
+        public System.DateTime? AuthorizedStartDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "authorizedEndDate")]
+        public System.DateTime? AuthorizedEndDate { get; set; }
 
     }
 }

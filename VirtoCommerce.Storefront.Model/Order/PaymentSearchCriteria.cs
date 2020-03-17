@@ -25,8 +25,15 @@ namespace VirtoCommerce.Storefront.Model.Order
         public string[] StoreIds { get; set; }
         public string OrderId { get; set; }
         public string OrderNumber { get; set; }
+
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+
+        public DateTime? CapturedStartDate { get; set; }
+        public DateTime? CapturedEndDate { get; set; }
+
+        public DateTime? AuthorizedStartDate { get; set; }
+        public DateTime? AuthorizedEndDate { get; set; }
 
     }
 }

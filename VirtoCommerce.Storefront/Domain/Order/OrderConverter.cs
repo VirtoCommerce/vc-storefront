@@ -46,7 +46,10 @@ namespace VirtoCommerce.Storefront.Domain
                 StoreIds = criteria.StoreIds,
                 StartDate = criteria.StartDate,
                 EndDate = criteria.EndDate,
-
+                CapturedStartDate = criteria.CapturedStartDate,
+                CapturedEndDate = criteria.CapturedEndDate,
+                AuthorizedStartDate = criteria.AuthorizedStartDate,
+                AuthorizedEndDate = criteria.AuthorizedEndDate,
                 Skip = criteria.Start,
                 Take = criteria.PageSize,
                 Sort = criteria.Sort
@@ -291,6 +294,9 @@ namespace VirtoCommerce.Storefront.Domain
             retVal.ParentOperationId = paymentIn.ParentOperationId;
             retVal.Purpose = paymentIn.Purpose;
             retVal.Status = paymentIn.Status;
+            retVal.CapturedDate = paymentIn.CapturedDate;
+            retVal.AuthorizedDate = paymentIn.AuthorizedDate;
+            retVal.VoidedDate = paymentIn.VoidedDate;
 
 
             if (paymentIn.BillingAddress != null)
