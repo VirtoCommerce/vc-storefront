@@ -235,12 +235,17 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 // otherwise try to find order using orderNumber as id
                 order = await _orderApi.GetByIdAsync(orderNumber);
             }
+            if (order == null)
+            {
+                return NotFound($"order not found");
+            }
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, order, CanAccessOrderAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
             {
                 return Unauthorized();
             }
-            var stream = await _orderApi.GetInvoicePdfAsync(orderNumber);
+
+            var stream = await _orderApi.GetInvoicePdfAsync(order.Number);
             return File(stream, "application/pdf");
         }
 
