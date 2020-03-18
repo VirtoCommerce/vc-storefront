@@ -6,16 +6,16 @@ using VirtoCommerce.Storefront.Model.Common.Exceptions;
 
 namespace VirtoCommerce.LiquidThemeEngine
 {
-    public static class SettingsMerger
+    public static class SettingsManager
     {
-        internal class Settings
+        public class Settings
         {
             public Preset CurrentPreset { get; set; }
 
             public IList<Preset> Presets { get; set; } = new List<Preset>();
         }
 
-        internal class Preset
+        public class Preset
         {
             public string Name { get; set; }
 
@@ -45,7 +45,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             return result;
         }
 
-        private static Settings ReadSettings(JObject json)
+        public static Settings ReadSettings(JObject json)
         {
             var result = new Settings
             {
