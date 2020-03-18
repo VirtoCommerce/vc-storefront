@@ -356,10 +356,10 @@ namespace VirtoCommerce.LiquidThemeEngine
             {
                 cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeSettingPath) }));
 
-                JObject result;
+                JObject result = null;
                 var baseThemeSettings = new JObject();
                 var allCurrentThemeSettings = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
-                JObject currentThemeSettings;
+                JObject currentThemeSettings = null;
                 try
                 {
                     currentThemeSettings = result = GetCurrentSettingsPreset(allCurrentThemeSettings);
@@ -367,8 +367,6 @@ namespace VirtoCommerce.LiquidThemeEngine
                 catch (StorefrontException) when (_options.MergeBaseSettings)
                 {
                     // Do not throw exception of missed presets or current preset if we merge settings
-                    // Instead treat current settings as json object ("flat" settings) and merge them
-                    currentThemeSettings = result = allCurrentThemeSettings;
                 }
 
                 //Try to load settings from base theme path and merge them with resources for local theme
@@ -385,10 +383,14 @@ namespace VirtoCommerce.LiquidThemeEngine
                 if (_options.MergeBaseSettings)
                 {
                     result = baseThemeSettings;
+                    if (currentThemeSettings == null)
+                    {
+                        currentThemeSettings = allCurrentThemeSettings;
+                    }
                     result.Merge(currentThemeSettings ?? new JObject(), new JsonMergeSettings { MergeArrayHandling = MergeArrayHandling.Merge });
                 }
 
-                return result.ToObject<Dictionary<string, object>>().ToDictionary(x => x.Key, x => x.Value).WithDefaultValue(defaultValue);
+                return result?.ToObject<Dictionary<string, object>>().ToDictionary(x => x.Key, x => x.Value).WithDefaultValue(defaultValue);
             });
         }
 

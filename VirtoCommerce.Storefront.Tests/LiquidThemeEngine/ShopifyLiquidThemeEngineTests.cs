@@ -55,7 +55,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
 
         private static JObject CurrentSettingsWithSelectedPreset => JObject.Parse(@"
         {
-            'current': 'Light',
+            'current': 'Dark',
             'foreground_color': '#333'
         }
         ");
@@ -140,10 +140,10 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
         public void Settings_Inheritance_Current_Select_Preset_From_Base()
         {
             InitializeStreams(true, true);
-            Check_Colors_In_Merged_Settings();
+            Check_Colors_In_Merged_Settings(true);
         }
 
-        private void Check_Colors_In_Merged_Settings()
+        private void Check_Colors_In_Merged_Settings(bool isDarkPreset = false)
         {
             var options = new LiquidThemeEngineOptions()
             {
@@ -152,7 +152,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
             };
             var shopifyLiquidThemeEngine = GetThemeEngine(true, options);
             var settings = shopifyLiquidThemeEngine.GetSettings();
-            Assert.Equal("#fff", settings["background_color"]);
+            Assert.Equal(isDarkPreset ? "#000" : "#fff", settings["background_color"]);
             Assert.Equal("#333", settings["foreground_color"]);
         }
 
