@@ -364,18 +364,12 @@ namespace VirtoCommerce.LiquidThemeEngine
                 if ((_options.MergeBaseSettings || currentThemeSettings == null) && !string.IsNullOrEmpty(BaseThemeSettingPath))
                 {
                     cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(BaseThemeSettingPath) }));
-                    result = baseThemeSettings = InnerGetAllSettings(_themeBlobProvider, BaseThemeSettingPath);
+                    baseThemeSettings = InnerGetAllSettings(_themeBlobProvider, BaseThemeSettingPath);
                 }
 
-                if (_options.MergeBaseSettings)
-                {
-                    result = baseThemeSettings;
-                    result = SettingsManager.Merge(result, currentThemeSettings ?? new JObject());
-                }
-                else
-                {
-                    result = SettingsManager.ReadSettings(currentThemeSettings ?? new JObject()).CurrentPreset.Json;
-                }
+                result = _options.MergeBaseSettings
+                    ? SettingsManager.Merge(baseThemeSettings, currentThemeSettings ?? new JObject())
+                    : SettingsManager.ReadSettings(currentThemeSettings ?? new JObject()).CurrentPreset.Json;
 
                 return result.ToObject<Dictionary<string, object>>().ToDictionary(x => x.Key, x => x.Value).WithDefaultValue(defaultValue);
             });
