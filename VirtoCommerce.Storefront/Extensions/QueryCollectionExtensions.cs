@@ -1,16 +1,12 @@
-using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace VirtoCommerce.Storefront.Extensions
 {
     public static class QueryCollectionExtensions
     {
-        public static NameValueCollection ToNameValueCollection(this IQueryCollection queryCollection, HtmlEncoder htmlEncoder)
+        public static NameValueCollection ToNameValueCollection(this IQueryCollection queryCollection)
         {
             if (queryCollection == null)
             {
@@ -19,7 +15,7 @@ namespace VirtoCommerce.Storefront.Extensions
             var result = new NameValueCollection();
             foreach (var pair in queryCollection)
             {
-                result.Add(htmlEncoder.Encode(pair.Key), htmlEncoder.Encode(pair.Value));
+                result.Add(pair.Key, pair.Value);
             }
             return result;
         }

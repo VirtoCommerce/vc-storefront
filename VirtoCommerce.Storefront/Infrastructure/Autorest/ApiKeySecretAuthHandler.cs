@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.Model;
 
@@ -12,11 +13,13 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
     {
         private readonly PlatformEndpointOptions _options;
         private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ApiKeySecretAuthHandler(IOptions<PlatformEndpointOptions> options, IWorkContextAccessor workContextAccessor)
+        public ApiKeySecretAuthHandler(IOptions<PlatformEndpointOptions> options, IWorkContextAccessor workContextAccessor, IHttpContextAccessor httpContextAccessor)
         {
             _options = options.Value;
             _workContextAccessor = workContextAccessor;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -31,6 +34,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         {
             AddAuthorization(request);
             AddCurrentUser(request);
+            AddUserIp(request);
 
             return await base.SendAsync(request, cancellationToken);
         }
@@ -74,6 +78,16 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
                         request.Headers.Add("VirtoCommerce-User-Name", userName);
                     }
                 }
+            }
+        }
+
+        private void AddUserIp(HttpRequestMessage request)
+        {
+            var userIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
+
+            if (!string.IsNullOrEmpty(userIp))
+            {
+                request.Headers.Add("True-Client-IP", userIp);
             }
         }
     }

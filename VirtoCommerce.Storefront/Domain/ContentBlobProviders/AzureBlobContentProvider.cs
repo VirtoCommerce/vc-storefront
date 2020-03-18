@@ -16,6 +16,7 @@ using VirtoCommerce.Storefront.Model.Common.Exceptions;
 using VirtoCommerce.Storefront.Model.StaticContent;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Caching;
+using System.Linq;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -64,7 +65,7 @@ namespace VirtoCommerce.Storefront.Domain
             Stream result = null;
             try
             {
-                result =  await _container.GetBlobReference(path).OpenReadAsync();
+                result = await _container.GetBlobReference(path).OpenReadAsync();
             }
             catch (Exception)
             {
@@ -116,13 +117,23 @@ namespace VirtoCommerce.Storefront.Domain
            {
                cacheEntry.AddExpirationToken(ContentBlobCacheRegion.CreateChangeToken());
 
-               // If requested path is a directory we should always return true because Azure blob storage does not support checking if directories exist
-               var result = string.IsNullOrEmpty(Path.GetExtension(path));
-               if (!result)
+               var isDirectory = string.IsNullOrEmpty(Path.GetExtension(path));
+               var result = false;
+
+               if (isDirectory)
                {
-                   var url = GetAbsoluteUrl(path);
+                   //There is only one way to check if the blob directory exists is to request its contents.
+                   BlobContinuationToken token = null;
+                   var operationContext = new OperationContext();
+                   var directory = GetCloudBlobDirectory(path);
+                   var resultSegment = await directory.ListBlobsSegmentedAsync(true, BlobListingDetails.Metadata, 1, token, _options.BlobRequestOptions, operationContext);
+                   result = resultSegment.Results.Any();
+               }
+               else
+               {
                    try
                    {
+                       var url = GetAbsoluteUrl(path);
                        result = await (await _cloudBlobClient.GetBlobReferenceFromServerAsync(new Uri(url))).ExistsAsync();
                    }
                    catch (Exception)
@@ -130,6 +141,7 @@ namespace VirtoCommerce.Storefront.Domain
                        //Azure blob storage client does not provide method to check blob url exist without throwing exception
                    }
                }
+
                return result;
            });
         }
