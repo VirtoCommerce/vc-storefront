@@ -358,20 +358,18 @@ namespace VirtoCommerce.LiquidThemeEngine
 
                 JObject result;
                 var baseThemeSettings = new JObject();
-                var currentThemeSettings = result = GetCurrentSettingsPreset(InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath));
+                var currentThemeSettings = result = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
 
                 //Try to load settings from base theme path and merge them with resources for local theme
                 if ((_options.MergeBaseSettings || currentThemeSettings == null) && !string.IsNullOrEmpty(BaseThemeSettingPath))
                 {
                     cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(BaseThemeSettingPath) }));
-                    result = baseThemeSettings = GetCurrentSettingsPreset(InnerGetAllSettings(_themeBlobProvider, BaseThemeSettingPath));
+                    baseThemeSettings = InnerGetAllSettings(_themeBlobProvider, BaseThemeSettingPath);
                 }
 
-                if (_options.MergeBaseSettings)
-                {
-                    result = baseThemeSettings;
-                    result.Merge(currentThemeSettings ?? new JObject(), new JsonMergeSettings { MergeArrayHandling = MergeArrayHandling.Merge });
-                }
+                result = _options.MergeBaseSettings
+                    ? SettingsManager.Merge(baseThemeSettings, currentThemeSettings ?? new JObject())
+                    : SettingsManager.ReadSettings(currentThemeSettings ?? new JObject()).CurrentPreset.Json;
 
                 return result.ToObject<Dictionary<string, object>>().ToDictionary(x => x.Key, x => x.Value).WithDefaultValue(defaultValue);
             });
@@ -393,7 +391,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 if (BaseThemeLocalePath != null)
                 {
                     cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(BaseThemeLocalePath + "/*") }));
-                    result = InnerReadLocalization(_themeBlobProvider, BaseThemeLocalePath, WorkContext.CurrentLanguage);
+                    result = InnerReadLocalization(_themeBlobProvider, BaseThemeLocalePath, WorkContext.CurrentLanguage) ?? new JObject();
                 }
                 result.Merge(InnerReadLocalization(_themeBlobProvider, CurrentThemeLocalePath, WorkContext.CurrentLanguage) ?? new JObject(), new JsonMergeSettings { MergeArrayHandling = MergeArrayHandling.Merge });
                 return result;
@@ -476,36 +474,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             return result;
         }
 
-        /// <summary>
-        /// Get actual preset from config
-        /// </summary>
-        /// <returns></returns>
-        private static JObject GetCurrentSettingsPreset(JObject allSettings)
-        {
-            var result = allSettings;
-            var currentPreset = allSettings.GetValue("current");
-            if (currentPreset is JValue currentPresetValue)
-            {
-                var currentPresetName = currentPresetValue.Value.ToString();
-                if (!(allSettings.GetValue("presets") is JObject presets) || !presets.Children().Any())
-                {
-                    throw new StorefrontException("Setting presets not defined");
-                }
-
-                IList<JProperty> allPresets = presets.Children().Cast<JProperty>().ToList();
-                result = allPresets.FirstOrDefault(p => p.Name == currentPresetName)?.Value as JObject;
-                if (result == null)
-                {
-                    throw new StorefrontException($"Setting preset with name '{currentPresetName}' not found");
-                }
-            }
-            if (currentPreset is JObject preset)
-            {
-                result = preset;
-            }
-
-            return result;
-        }
+      
 
         private string ReadTemplateByPath(string templatePath)
         {
