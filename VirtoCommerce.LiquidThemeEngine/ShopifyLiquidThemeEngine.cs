@@ -370,7 +370,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 if (_options.MergeBaseSettings)
                 {
                     result = baseThemeSettings;
-                    result = SettingJsonOverlayMerger.Merge(result, currentThemeSettings ?? new JObject());
+                    result = SettingsMerger.Merge(result, currentThemeSettings ?? new JObject());
                 }
 
                 return result.ToObject<Dictionary<string, object>>().ToDictionary(x => x.Key, x => x.Value).WithDefaultValue(defaultValue);
