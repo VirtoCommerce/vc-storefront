@@ -41,7 +41,6 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         public bool UseRelevanceSorting { get; set; }
 
-
         private void Parse(NameValueCollection queryString)
         {
             IsFuzzySearch = queryString.Get("fuzzy").EqualsInvariant(bool.TrueString);
