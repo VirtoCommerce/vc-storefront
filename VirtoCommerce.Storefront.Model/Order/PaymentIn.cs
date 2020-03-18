@@ -183,6 +183,7 @@ namespace VirtoCommerce.Storefront.Model.Order
 
         public DateTime? VoidedDate { get; set; }
 
+        public string OrderId { get; set; }
 
         /// <summary>
         /// Gets or Sets Id

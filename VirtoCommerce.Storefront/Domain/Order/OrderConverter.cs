@@ -297,6 +297,7 @@ namespace VirtoCommerce.Storefront.Domain
             retVal.CapturedDate = paymentIn.CapturedDate;
             retVal.AuthorizedDate = paymentIn.AuthorizedDate;
             retVal.VoidedDate = paymentIn.VoidedDate;
+            retVal.OrderId = paymentIn.OrderId;
 
 
             if (paymentIn.BillingAddress != null)

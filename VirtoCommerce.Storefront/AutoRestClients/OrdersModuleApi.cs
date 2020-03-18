@@ -5624,6 +5624,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "orderId")]
+        public string OrderId { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "purpose")]
         public string Purpose { get; set; }
 
