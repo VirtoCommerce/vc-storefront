@@ -39,6 +39,8 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         public bool IsFuzzySearch { get; set; }
 
+        public bool UseRelevanceSorting { get; set; }
+
 
         private void Parse(NameValueCollection queryString)
         {

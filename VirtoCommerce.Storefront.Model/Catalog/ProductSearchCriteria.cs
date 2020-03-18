@@ -53,6 +53,8 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         public bool IsFuzzySearch { get; set; }
 
+        public bool UseRelevanceSorting { get; set; }
+
         public override object Clone()
         {
             var result = base.Clone() as ProductSearchCriteria;
@@ -65,7 +67,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         }
         public override IEnumerable<KeyValuePair<string, string>> GetKeyValues()
         {
-			 foreach (var basePair in base.GetKeyValues())
+            foreach (var basePair in base.GetKeyValues())
             {
                 yield return basePair;
             }
@@ -86,7 +88,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         }
 
         private void Parse(NameValueCollection queryString)
-        {        
+        {
             IsFuzzySearch = queryString.Get("fuzzy").EqualsInvariant(bool.TrueString);
             Keyword = queryString.Get("q") ?? queryString.Get("keyword");
             SortBy = queryString.Get("sort_by");
