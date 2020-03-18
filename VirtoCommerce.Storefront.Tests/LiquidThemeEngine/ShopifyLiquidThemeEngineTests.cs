@@ -19,6 +19,13 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
 {
     public class ShopifyLiquidThemeEngineTests: IDisposable
     {
+        private enum DefaultThemeType
+        {
+            WithoutPresets,
+            WithPresets,
+            WithPresetsAndCurrentObject
+        }
+
         private static readonly string ThemesPath = "Themes";
         private static readonly string BaseThemePath = "odt\\default";
         private static readonly string CurrentThemePath = "odt\\current";
@@ -34,6 +41,25 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
         private static JObject DefaultSettingsWithPresets => JObject.Parse(@"
         {
             'current': 'Light',
+            'presets': {
+                'Dark': {
+                    'background_color': '#000',
+                    'foreground_color': '#fff'
+                },
+                'Light': {
+                    'background_color': '#fff',
+                    'foreground_color': '#000'
+                }
+            }
+        }
+        ");
+
+        private static JObject DefaultSettingsWithPresetsAndCurrentObject => JObject.Parse(@"
+        {
+            'current': {
+                'background_color': '#fff',
+                'foreground_color': '#000'
+            },
             'presets': {
                 'Dark': {
                     'background_color': '#000',
@@ -69,14 +95,21 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
         [Fact]
         public void Settings_Without_Inheritance_Flat()
         {
-            InitializeStreams(false, false);
+            InitializeStreams(DefaultThemeType.WithoutPresets, false);
             Check_Without_Inheritance();
         }
 
         [Fact]
         public void Settings_Without_Inheritance_Presets()
         {
-            InitializeStreams(true, false);
+            InitializeStreams(DefaultThemeType.WithPresets, false);
+            Check_Without_Inheritance();
+        }
+
+        [Fact]
+        public void Settings_Without_Inheritance_Presets_And_Current_Object()
+        {
+            InitializeStreams(DefaultThemeType.WithPresetsAndCurrentObject, false);
             Check_Without_Inheritance();
         }
 
@@ -116,7 +149,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
         private void Check_Inheritance_Backward_Compatibility(LiquidThemeEngineOptions options)
         {
             var shopifyLiquidThemeEngine = GetThemeEngine(true, options);
-            InitializeStreams(false, false);
+            InitializeStreams(DefaultThemeType.WithoutPresets, false);
             var settings = shopifyLiquidThemeEngine.GetSettings();
             Assert.False(settings.ContainsKey("background_color"));
             Assert.Equal("#333", settings["foreground_color"]);
@@ -125,21 +158,21 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
         [Fact]
         public void Settings_Inheritance_Both_Are_Flat()
         {
-            InitializeStreams(false, false);
+            InitializeStreams(DefaultThemeType.WithoutPresets, false);
             Check_Colors_In_Merged_Settings();
         }
 
         [Fact]
         public void Settings_Inheritance_Base_Has_Preset_Current_Is_Flat()
         {
-            InitializeStreams(true, false);
+            InitializeStreams(DefaultThemeType.WithPresets, false);
             Check_Colors_In_Merged_Settings();
         }
 
         [Fact]
         public void Settings_Inheritance_Current_Select_Preset_From_Base()
         {
-            InitializeStreams(true, true);
+            InitializeStreams(DefaultThemeType.WithPresets, true);
             Check_Colors_In_Merged_Settings(true);
         }
 
@@ -156,9 +189,25 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
             Assert.Equal("#333", settings["foreground_color"]);
         }
 
-        private void InitializeStreams(bool defaultThemeHasPresets, bool currentThemeHasSelectedPreset)
+        private void InitializeStreams(DefaultThemeType defaultThemeType, bool currentThemeHasSelectedPreset)
         {
-            InitializeStream(_defaultThemeStreamWriter, out var defaultThemeStream, defaultThemeHasPresets ? DefaultSettingsWithPresets : DefaultSettingsWithoutPresets);
+            JObject defaultThemeJson;
+            switch (defaultThemeType)
+            {
+                case DefaultThemeType.WithoutPresets:
+                    defaultThemeJson = DefaultSettingsWithoutPresets;
+                    break;
+                case DefaultThemeType.WithPresets:
+                    defaultThemeJson = DefaultSettingsWithPresets;
+                    break;
+                case DefaultThemeType.WithPresetsAndCurrentObject:
+                    defaultThemeJson = DefaultSettingsWithPresetsAndCurrentObject;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(defaultThemeType), defaultThemeType, null);
+            }
+
+            InitializeStream(_defaultThemeStreamWriter, out var defaultThemeStream, defaultThemeJson);
             DefaultThemeStream = defaultThemeStream;
 
             InitializeStream(_currentThemeStreamWriter, out var currentThemeStream, currentThemeHasSelectedPreset ? CurrentSettingsWithSelectedPreset : CurrentSettingsWithoutSelectedPreset);
