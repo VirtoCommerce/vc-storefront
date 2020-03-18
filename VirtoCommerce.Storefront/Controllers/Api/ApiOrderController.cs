@@ -35,7 +35,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             _storeService = storeService;
             _authorizationService = authorizationService;
             _paymentSearchService = paymentSearchService;
-    }
+        }
 
 
         // POST: storefrontapi/orders/payments/search
@@ -230,6 +230,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         {
             // Current user access to order checking. If order not belong current user StorefrontException will be thrown
             var order = await _orderApi.GetByNumberAsync(orderNumber);
+            if (order == null)
+            {
+                // otherwise try to find order using orderNumber as id
+                order = await _orderApi.GetByIdAsync(orderNumber);
+            }
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, order, CanAccessOrderAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
             {
@@ -265,7 +270,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Ok();
         }
 
-       
+
         private static string GetAsyncLockKey(string orderNumber, WorkContext ctx)
         {
             return string.Join(":", "Order", orderNumber, ctx.CurrentStore.Id, ctx.CurrentUser.Id);
