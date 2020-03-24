@@ -1,14 +1,13 @@
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using VirtoCommerce.Storefront.Caching;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -16,7 +15,7 @@ using VirtoCommerce.Storefront.Model.Common.Exceptions;
 
 namespace VirtoCommerce.Storefront.Domain
 {
-    public class FileSystemCountriesService: ICountriesService
+    public class FileSystemCountriesService : ICountriesService
     {
         private readonly FileSystemCountriesOptions _options;
         private readonly IStorefrontMemoryCache _memoryCache;
@@ -50,7 +49,7 @@ namespace VirtoCommerce.Storefront.Domain
 
                     result = countriesDict
                         .Select(kvp => ParseCountry(kvp, regions))
-                        .Where(c => c.Code3 != null)
+                        .Where(c => !string.IsNullOrEmpty(c.Code3))
                         .ToList();
                 }
                 return result;
