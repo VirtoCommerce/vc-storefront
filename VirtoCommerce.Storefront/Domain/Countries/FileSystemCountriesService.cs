@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -48,25 +47,8 @@ namespace VirtoCommerce.Storefront.Domain
                 }
                 return result;
             });
-
         }
         #endregion
-
-        protected static RegionInfo GetRegionInfo(CultureInfo culture)
-        {
-            RegionInfo result = null;
-
-            try
-            {
-                result = new RegionInfo(culture.LCID);
-            }
-            catch
-            {
-                // ignored
-            }
-
-            return result;
-        }
 
         protected static Country ParseCountry(KeyValuePair<string, JObject> pair)
         {
