@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,12 +33,7 @@ namespace VirtoCommerce.Storefront.Domain
             var cacheKey = CacheKey.With(GetType(), "GetCountries");
             return await _memoryCache.GetOrCreateAsync(cacheKey, async (cacheEntry) =>
             {
-                List<Country> result = new List<Country>();
-
-                var regions = CultureInfo.GetCultures(CultureTypes.SpecificCultures)
-                    .Select(GetRegionInfo)
-                    .Where(r => r != null)
-                    .ToList();
+                var result = new List<Country>();
 
                 if (_options != null)
                 {
@@ -48,41 +41,22 @@ namespace VirtoCommerce.Storefront.Domain
                     var countriesDict = JsonConvert.DeserializeObject<Dictionary<string, JObject>>(countriesJson);
 
                     result = countriesDict
-                        .Select(kvp => ParseCountry(kvp, regions))
+                        .Select(ParseCountry)
                         .Where(c => !string.IsNullOrEmpty(c.Code3))
                         .ToList();
                 }
                 return result;
             });
-
         }
         #endregion
 
-        protected static RegionInfo GetRegionInfo(CultureInfo culture)
+        protected static Country ParseCountry(KeyValuePair<string, JObject> pair)
         {
-            RegionInfo result = null;
-
-            try
-            {
-                result = new RegionInfo(culture.LCID);
-            }
-            catch
-            {
-                // ignored
-            }
-
-            return result;
-        }
-
-        protected static Country ParseCountry(KeyValuePair<string, JObject> pair, List<RegionInfo> regions)
-        {
-            var region = regions.FirstOrDefault(r => string.Equals(r.EnglishName, pair.Key, StringComparison.OrdinalIgnoreCase));
-
             var country = new Country
             {
                 Name = pair.Key,
-                Code2 = region?.TwoLetterISORegionName ?? string.Empty,
-                Code3 = region?.ThreeLetterISORegionName ?? string.Empty,
+                Code2 = pair.Value["Code2"]?.ToString(),
+                Code3 = pair.Value["Code3"]?.ToString(),
                 RegionType = pair.Value["label"]?.ToString()
             };
 
