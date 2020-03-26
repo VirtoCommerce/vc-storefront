@@ -2383,8 +2383,8 @@
     "provinces": null,
     "province_labels": null,
     "province_codes": {},
-    "Code2": "",
-    "Code3": ""
+    "Code2": "XK",
+    "Code3": "XKX"
   },
   "Kuwait": {
     "label": "Region",
@@ -2871,8 +2871,8 @@
     "provinces": null,
     "province_labels": null,
     "province_codes": {},
-    "Code2": "",
-    "Code3": ""
+    "Code2": "AN",
+    "Code3": "ANT"
   },
   "Netherlands": {
     "label": "Region",
@@ -3219,8 +3219,8 @@
     "provinces": null,
     "province_labels": null,
     "province_codes": {},
-    "Code2": "",
-    "Code3": ""
+    "Code2": "RE",
+    "Code3": "REU"
   },
   "Romania": {
     "label": "Region",
@@ -3543,7 +3543,7 @@
     "provinces": null,
     "province_labels": null,
     "province_codes": {},
-    "Code2": "MA",
+    "Code2": "MF",
     "Code3": "MAF"
   },
   "Sao Tome And Principe": {
@@ -3729,7 +3729,7 @@
     "provinces": null,
     "province_labels": null,
     "province_codes": {},
-    "Code2": "KO",
+    "Code2": "KR",
     "Code3": "KOR"
   },
   "Spain": {
@@ -4588,7 +4588,7 @@
     "provinces": null,
     "province_labels": null,
     "province_codes": {},
-    "Code2": "GN",
+    "Code2": "GW",
     "Code3": "GNB"
   },
   "Heard Island And Mcdonald Islands": {
@@ -4666,8 +4666,8 @@
     "provinces": null,
     "province_labels": null,
     "province_codes": {},
-    "Code2": "KO",
-    "Code3": "KOR"
+    "Code2": "KP",
+    "Code3": "PRK"
   },
   "Lao People's Democratic Republic": {
     "label": "Region",
@@ -4705,8 +4705,8 @@
     "provinces": null,
     "province_labels": null,
     "province_codes": {},
-    "Code2": "",
-    "Code3": ""
+    "Code2": "LY",
+    "Code3": "LBY"
   },
   "Malawi": {
     "label": "Region",
@@ -4991,8 +4991,8 @@
     "provinces": null,
     "province_labels": null,
     "province_codes": {},
-    "Code2": "",
-    "Code3": ""
+    "Code2": "SZ",
+    "Code3": "SWZ"
   },
   "Tajikistan": {
     "label": "Region",
