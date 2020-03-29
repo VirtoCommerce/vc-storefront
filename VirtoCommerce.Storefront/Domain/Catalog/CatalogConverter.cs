@@ -15,12 +15,8 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public static partial class CatalogConverter
     {
-        private static MarkdownPipeline _markdownPipeline;
-        static CatalogConverter()
-        {
-            _markdownPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-        }
-
+        private static MarkdownPipeline _markdownPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+    
         public static SeoInfo ToSeoInfo(this catalogDto.SeoInfo seoDto)
         {
             return seoDto.JsonConvert<coreDto.SeoInfo>().ToSeoInfo();

@@ -25,5 +25,10 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public object Value { get; set; }
         public string Lower { get; set; }
         public string Upper { get; set; }
+
+        public bool TermEquals(Term term)
+        {
+            return Group.Field.EqualsInvariant(term.Name) && Value.ToString().EqualsInvariant(term.Value);
+        }
     }
 }

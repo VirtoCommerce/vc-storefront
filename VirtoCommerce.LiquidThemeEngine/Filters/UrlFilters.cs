@@ -151,6 +151,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return BuildTagLink(context, TagAction.Remove, tag, input);
         }
 
+
+        public static string SortLinkUrlLinkToRemoveTag(TemplateContext context, object input, object tag)
+        {
+            return BuildTagLink(context, TagAction.Remove, tag, input);
+        }
         /// <summary>
         /// Returns the URL of a file in the "assets" folder of a theme.
         /// {{ 'shop.css' | asset_url }}
@@ -193,6 +198,22 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string FileUrl(TemplateContext context, string input)
         {
             return AssetUrl(context, input);
+        }
+
+        /// <summary>
+        /// Adds to the current request  query string the sort_by parameter with passed sortBy expression 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="sortBy">sort expression e.g popularity:desc </param>
+        /// <returns></returns>
+        public static string SortByUrl(TemplateContext context, string sortBy)
+        {
+            var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
+            var workContext = themeAdaptor.WorkContext;
+            var criteria = workContext.CurrentProductSearchCriteria.Clone() as ProductSearchCriteria;
+            criteria.SortBy = sortBy;
+            var result =  workContext.RequestUrl.SetQueryParameters(criteria);
+            return result.PathAndQuery;
         }
 
         /// <summary>
@@ -384,34 +405,26 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
             var workContext = themeAdaptor.WorkContext;
 
-            var terms = workContext.CurrentProductSearchCriteria.Terms
-                .Select(t => new Term { Name = t.Name, Value = t.Value })
-                .ToList();
-
+            var criteria = workContext.CurrentProductSearchCriteria.Clone() as ProductSearchCriteria;
+            var term = new Term { Name = groupName, Value = value };
             switch (action)
             {
                 case TagAction.Add:
-                    terms.Add(new Term { Name = groupName, Value = value });
+                    criteria.Terms.Add(term);
                     break;
                 case TagAction.Remove:
-                    terms.RemoveAll(t =>
-                        string.Equals(t.Name, groupName, StringComparison.OrdinalIgnoreCase) &&
-                        string.Equals(t.Value, value, StringComparison.OrdinalIgnoreCase));
+                    criteria.Terms.Remove(term);
                     break;
                 case TagAction.Replace:
-                    terms.Clear();
-
+                    criteria.Terms.Clear();
                     if (!string.IsNullOrEmpty(groupName))
                     {
-                        terms.Add(new Term { Name = groupName, Value = value });
+                        criteria.Terms.Add(term);
                     }
                     break;
             }
-
-            var termsString = terms.Any() ? string.Join(";", terms.ToStrings()) : null;
-            var url = workContext.RequestUrl.SetQueryParameter("terms", termsString);
-
-            return url.AbsoluteUri;
+            var result = workContext.RequestUrl.SetQueryParameters(criteria);
+            return result.PathAndQuery;
         }
 
 
