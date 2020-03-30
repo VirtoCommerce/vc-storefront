@@ -208,13 +208,49 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static string SortByUrl(TemplateContext context, string sortBy)
         {
-            var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
-            var workContext = themeAdaptor.WorkContext;
-            var criteria = workContext.CurrentProductSearchCriteria.Clone() as ProductSearchCriteria;
-            criteria.SortBy = sortBy;
-            var result =  workContext.RequestUrl.SetQueryParameters(criteria);
-            return result.PathAndQuery;
+            return BuildUriWithSearchQueryString(context, criteria =>
+            {
+                criteria.SortBy = sortBy;
+            }).PathAndQuery;
         }
+
+        public static string SearchByKeywordUrl (TemplateContext context, string keyword)
+        {
+            return BuildUriWithSearchQueryString(context, criteria =>
+            {
+                criteria.Keyword = keyword;
+            }).PathAndQuery;
+        }
+
+        public static string UrlToAddTag(TemplateContext context, object targetObj)
+        {
+            Uri result = null;
+            if (targetObj is AggregationItem aggregationItem)
+            {
+                result = BuildUriWithSearchQueryString(context, criteria =>
+                {
+                    var term = new Term { Name = aggregationItem.GroupLabel, Value = aggregationItem.Value.ToString() };
+                    criteria.Terms.Add(term);
+                });
+            }
+            return result?.PathAndQuery;
+        }
+
+        public static string UrlToRemoveTag(TemplateContext context, object targetObj)
+        {
+            Uri result = null;
+            if (targetObj is AggregationItem aggregationItem)
+            {
+                result = BuildUriWithSearchQueryString(context, criteria =>
+                {
+                    var term = new Term { Name = aggregationItem.GroupLabel, Value = aggregationItem.Value.ToString() };
+                    criteria.Terms.Remove(term);
+                });
+            }
+            return result?.PathAndQuery;
+        }
+
+       
 
         /// <summary>
         /// Method for switching between multiple stores
@@ -427,6 +463,16 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return result.PathAndQuery;
         }
 
+
+        private static Uri BuildUriWithSearchQueryString(TemplateContext context, Action<ProductSearchCriteria> criteriaAction)
+        {
+            var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
+            var workContext = themeAdaptor.WorkContext;
+
+            var criteria = workContext.CurrentProductSearchCriteria.Clone() as ProductSearchCriteria;
+            criteriaAction(criteria);
+            return workContext.RequestUrl.SetQueryParameters(criteria);
+        }
 
         private static string BuildAbsoluteUrl(TemplateContext context, string virtualUrl)
         {

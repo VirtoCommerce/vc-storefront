@@ -5,6 +5,7 @@ using Markdig;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
+using VirtoCommerce.Storefront.Model.Catalog.Specifications;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Stores;
 using catalogDto = VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models;
@@ -30,16 +31,13 @@ namespace VirtoCommerce.Storefront.Domain
                 Field = aggregationDto.Field
             };
 
+            var aggrItemIsVisbileSpec = new AggregationItemIsVisibleSpecification();
             if (aggregationDto.Items != null)
             {
-                result.Items = aggregationDto.Items.Select(i => i.ToAggregationItem(currentLanguage))
-                                             .ToArray();
-                foreach (var aggregationItem in result.Items)
-                {
-                    aggregationItem.Group = result;
-                }
+                result.Items = aggregationDto.Items.Select(i => i.ToAggregationItem(result, currentLanguage))
+                                                   .Where(x => aggrItemIsVisbileSpec.IsSatisfiedBy(x))
+                                                   .ToArray();
             }
-
             if (aggregationDto.Labels != null)
             {
                 result.Label =
@@ -56,10 +54,11 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static AggregationItem ToAggregationItem(this catalogDto.AggregationItem itemDto, string currentLanguage)
+        public static AggregationItem ToAggregationItem(this catalogDto.AggregationItem itemDto, Aggregation aggregationGroup, string currentLanguage)
         {
             var result = new AggregationItem
             {
+                Group = aggregationGroup,
                 Value = itemDto.Value,
                 IsApplied = itemDto.IsApplied ?? false,
                 Count = itemDto.Count ?? 0,
@@ -78,6 +77,11 @@ namespace VirtoCommerce.Storefront.Domain
             if (string.IsNullOrEmpty(result.Label) && itemDto.Value != null)
             {
                 result.Label = itemDto.Value.ToString();
+            }
+
+            if (aggregationGroup.Field.EqualsInvariant("__outline"))
+            {
+                result = CategoryAggregationItem.FromAggregationItem(result);
             }
 
             return result;

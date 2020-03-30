@@ -25,20 +25,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public IMutablePagedList<Product> Products { get; set; }
         // Represent bucket, aggregated data based on a search query resulted by current search criteria CurrentCatalogSearchCriteria(example color 33, gr
         public IList<Aggregation> Aggregations { get; set; } = new List<Aggregation>();
-
-        public void DetectAppliedAggregationItems(ProductSearchCriteria criteria)
-        {
-            if (criteria == null)
-            {
-                throw new ArgumentNullException(nameof(criteria));
-            }
-            foreach (var aggregationItem in Aggregations.SelectMany(x => x.Items))
-            {
-                aggregationItem.IsApplied = criteria.Terms.Any(x => aggregationItem.TermEquals(x));
-            }
-
-        }
-
+    
         public IEnumerable<Breadcrumb> GetBreadcrumbs()
         {
             if (Category != null)

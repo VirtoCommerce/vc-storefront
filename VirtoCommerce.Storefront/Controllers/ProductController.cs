@@ -47,8 +47,8 @@ namespace VirtoCommerce.Storefront.Controllers
                 //Lazy initialize product breadcrumbs
                 WorkContext.Breadcrumbs = new MutablePagedList<Breadcrumb>((pageNumber, pageSize, sortInfos, @params) =>
                 {
-                    var breadcrumbs = product.GetBreadcrumbs();
-                    return new StaticPagedList<Breadcrumb>(breadcrumbs, pageNumber, pageSize, breadcrumbs.Count());
+                    var breadcrumbs = product.GetBreadcrumbs().ToList();
+                    return new StaticPagedList<Breadcrumb>(breadcrumbs, pageNumber, pageSize, breadcrumbs.Count);
                 }, 1, int.MaxValue);
 
                 if (product.CategoryId != null)

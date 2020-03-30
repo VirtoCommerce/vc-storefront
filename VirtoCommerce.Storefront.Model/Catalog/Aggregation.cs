@@ -1,3 +1,5 @@
+using System;
+
 namespace VirtoCommerce.Storefront.Model.Catalog
 {
     public partial class Aggregation
@@ -15,5 +17,20 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// </summary>
         public string Label { get; set; }
         public AggregationItem[] Items { get; set; }
+
+        public virtual void PostLoadInit(AggregationPostLoadContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            if (Items != null)
+            {
+                foreach (var aggrItem in Items)
+                {
+                    aggrItem.PostLoadInit(context);
+                }
+            }
+        }
     }
 }
