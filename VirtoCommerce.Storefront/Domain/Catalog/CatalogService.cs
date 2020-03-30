@@ -129,7 +129,7 @@ namespace VirtoCommerce.Storefront.Domain
         public virtual async Task<IPagedList<Category>> SearchCategoriesAsync(CategorySearchCriteria criteria)
         {
             var workContext = _workContextAccessor.WorkContext;
-            var cacheKey = CacheKey.With(GetType(), "SearchCategoriesAsync", criteria.GetCacheKey(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
+            var cacheKey = CacheKey.With(GetType(), nameof(SearchCategoriesAsync), criteria.GetCacheKey(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
             var searchResult = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
@@ -185,8 +185,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 Products = new MutablePagedList<Product>(products, criteria.PageNumber, criteria.PageSize, (int?)result.TotalCount ?? 0),
                 Aggregations = !result.Aggregations.IsNullOrEmpty() ? result.Aggregations.Select(x => x.ToAggregation(workContext.CurrentLanguage.CultureName))
-                                                                                         .Where(x => aggrIsVisbileSpec.IsSatisfiedBy(x))
-                                                                                         .Distinct()
+                                                                                         .Where(x => aggrIsVisbileSpec.IsSatisfiedBy(x))                                                                                         
                                                                                          .ToArray() : new Aggregation[] { }
             };
             //Post loading initialization of the resulting aggregations
@@ -250,7 +249,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         protected virtual async Task<Product[]> GetProductsAsync(IList<string> ids, ItemResponseGroup responseGroup, WorkContext workContext)
         {
-            var cacheKey = CacheKey.With(GetType(), "GetProductsAsync", string.Join("-", ids.OrderBy(x => x)), responseGroup.ToString());
+            var cacheKey = CacheKey.With(GetType(), nameof(GetProductsAsync), string.Join("-", ids.OrderBy(x => x)), responseGroup.ToString());
             var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
@@ -263,7 +262,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         protected virtual async Task<catalogDto.ProductSearchResult> SearchProductsAsync(ProductSearchCriteria criteria, WorkContext workContext)
         {
-            var cacheKey = CacheKey.With(GetType(), "SearchProductsAsync", criteria.GetCacheKey(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
+            var cacheKey = CacheKey.With(GetType(), nameof(SearchProductsAsync), criteria.GetCacheKey(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
 
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
@@ -352,7 +351,7 @@ namespace VirtoCommerce.Storefront.Domain
                     {
                         criteria.CopyFrom(@params);
                     }
-                    var cacheKey = CacheKey.With(GetType(), "SearchProductAssociations", criteria.GetCacheKey());
+                    var cacheKey = CacheKey.With(GetType(), nameof(LoadProductsAssociationsAsync), criteria.GetCacheKey());
                     var searchResult = _memoryCache.GetOrCreateExclusive(cacheKey, cacheEntry =>
                        {
                            cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
@@ -386,7 +385,7 @@ namespace VirtoCommerce.Storefront.Domain
                 //Lazy loading for parents categories
                 category.Parents = new MutablePagedList<Category>((pageNumber, pageSize, sortInfos) =>
                 {
-                    var catIds = category.Outline.Split('/');
+                    var catIds = category.Outline.Split('/').Where(x =>  x != null && !x.EqualsInvariant(category.Id)).ToArray();
                     return new StaticPagedList<Category>(GetCategories(catIds, CategoryResponseGroup.Small), pageNumber, pageSize, catIds.Length);
                 }, 1, CategorySearchCriteria.DefaultPageSize);
 

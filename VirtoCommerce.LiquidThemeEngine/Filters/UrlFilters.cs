@@ -201,11 +201,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         }
 
         /// <summary>
-        /// Adds to the current request  query string the sort_by parameter with passed sortBy expression 
-        /// </summary>
+        /// Generates an relative url with query string that contains serialized ProductSearchCriteria as parameters
+        /// and adds to it sort_by expression with given sortBy value
         /// <param name="context"></param>
         /// <param name="sortBy">sort expression e.g popularity:desc </param>
-        /// <returns></returns>
+        /// <returns>example: /collection?sort_by=popularity:desc</returns>
         public static string SortByUrl(TemplateContext context, string sortBy)
         {
             return BuildUriWithSearchQueryString(context, criteria =>
@@ -214,7 +214,30 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }).PathAndQuery;
         }
 
-        public static string SearchByKeywordUrl (TemplateContext context, string keyword)
+        /// <summary>
+        ///  Generates an relative url with query string that contains serialized ProductSearchCriteria as parameters
+        ///  and adds to it page_size parameter with  given  value
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="pageSize">a new page size</param>
+        /// <returns>example: /collection?page_szie=20</returns>
+        public static string PageSizeUrl(TemplateContext context, int pageSize)
+        {
+            return BuildUriWithSearchQueryString(context, criteria =>
+            {
+                criteria.PageSize = pageSize;
+            }).PathAndQuery;
+        }
+
+
+        /// <summary>
+        ///  Generates an relative url with query string that contains serialized ProductSearchCriteria as parameters
+        ///  and adds to it q parameter with  given keyword value
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="keyword">search keyword</param>
+        /// <returns>example: /collection?q=foo</returns>
+        public static string AddSearchByKeywordUrl (TemplateContext context, string keyword)
         {
             return BuildUriWithSearchQueryString(context, criteria =>
             {
@@ -222,35 +245,60 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }).PathAndQuery;
         }
 
-        public static string UrlToAddTag(TemplateContext context, object targetObj)
+        /// <summary>
+        ///  Generates an relative url with query string that contains serialized ProductSearchCriteria as parameters
+        ///  and remove  q parameter from  resulting query string
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="keyword">search keyword</param>
+        /// <returns>example: /collection</returns>
+        public static string RemoveSearchByKeywordUrl(TemplateContext context)
+        {
+            return BuildUriWithSearchQueryString(context, criteria =>
+            {
+                criteria.Keyword = null;
+            }).PathAndQuery;
+        }
+
+        /// <summary>
+        ///  Generates an relative url with query string that contains serialized ProductSearchCriteria as parameters
+        ///  and add a new given aggregation item value  to  terms parameter
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="aggregationItem">aggregation item</param>
+        /// <returns>example: /collection?terms=color:Red</returns>
+        public static string AddTermUrl(TemplateContext context, AggregationItem aggregationItem)
         {
             Uri result = null;
-            if (targetObj is AggregationItem aggregationItem)
+            result = BuildUriWithSearchQueryString(context, criteria =>
             {
-                result = BuildUriWithSearchQueryString(context, criteria =>
-                {
-                    var term = new Term { Name = aggregationItem.GroupLabel, Value = aggregationItem.Value.ToString() };
-                    criteria.Terms.Add(term);
-                });
-            }
+                var term = new Term { Name = aggregationItem.GroupLabel, Value = aggregationItem.Value.ToString() };
+                criteria.Terms.Add(term);
+            });
+
             return result?.PathAndQuery;
         }
 
-        public static string UrlToRemoveTag(TemplateContext context, object targetObj)
+        /// <summary>
+        ///  Generates an relative url with query string that contains serialized ProductSearchCriteria as parameters
+        ///  and remove a given aggregation item value  from  terms parameter
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="aggregationItem">aggregation item</param>
+        /// <returns>example: /collection</returns>
+        public static string RemoveTermUrl(TemplateContext context, AggregationItem aggregationItem)
         {
             Uri result = null;
-            if (targetObj is AggregationItem aggregationItem)
+
+            result = BuildUriWithSearchQueryString(context, criteria =>
             {
-                result = BuildUriWithSearchQueryString(context, criteria =>
-                {
-                    var term = new Term { Name = aggregationItem.GroupLabel, Value = aggregationItem.Value.ToString() };
-                    criteria.Terms.Remove(term);
-                });
-            }
+                var term = new Term { Name = aggregationItem.GroupLabel, Value = aggregationItem.Value.ToString() };
+                criteria.Terms.Remove(term);
+            });
             return result?.PathAndQuery;
         }
 
-       
+
 
         /// <summary>
         /// Method for switching between multiple stores

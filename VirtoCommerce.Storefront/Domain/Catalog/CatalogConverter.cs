@@ -36,7 +36,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 result.Items = aggregationDto.Items.Select(i => i.ToAggregationItem(result, currentLanguage))
                                                    .Where(x => aggrItemIsVisbileSpec.IsSatisfiedBy(x))
-                                                   .ToArray();
+                                                   .Distinct().ToArray();
             }
             if (aggregationDto.Labels != null)
             {
