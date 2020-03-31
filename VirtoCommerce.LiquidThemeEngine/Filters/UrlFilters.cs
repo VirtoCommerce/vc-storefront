@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
@@ -198,6 +199,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string FileUrl(TemplateContext context, string input)
         {
             return AssetUrl(context, input);
+        }
+
+
+        public static string TermsToString(TemplateContext context, IList<Term> terms)
+        {
+            return string.Join(";", terms.ToStrings() ?? new List<string> { });          
         }
 
         /// <summary>

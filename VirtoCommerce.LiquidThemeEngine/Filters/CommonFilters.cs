@@ -111,6 +111,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             var pagedList = source as IPagedList;
             var requestUrl = context.GetValue(new ScriptVariableGlobal("request_url")) as Uri;
             var pageNumber = (int)(context.GetValue(new ScriptVariableGlobal("page_number")) ?? 1);
+            pageSize = (int)(context.GetValue(new ScriptVariableGlobal("page_size")) ?? pageSize);
             var @params = new NameValueCollection();
 
             if (!string.IsNullOrEmpty(filterJson))
