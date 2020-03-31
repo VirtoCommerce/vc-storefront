@@ -284,6 +284,13 @@ namespace VirtoCommerce.Storefront.Model
         /// </summary>
         public bool IsDevelopment { get; set; }
 
+        /// <summary>
+        /// The flag that indicates that themes resources won't use cache to be able to preview changes frequently during development and designing.
+        /// This setting will be helpful especially when the AzureBlobStorage provider is used because of unable to monitor blob changes as well as for file system
+        /// </summary>
+        public bool IsPreviewMode { get; set; }
+
+
         #region IDisposable Implementation
 
         public void Dispose()

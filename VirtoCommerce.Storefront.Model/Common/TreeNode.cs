@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
-    public partial class TreeNode : ValueObject
+    public partial class TreeNode
     {
         public string Path { get; set; }
 
@@ -35,5 +35,6 @@ namespace VirtoCommerce.Storefront.Model.Common
         }
 
         public IList<TreeNode> AllChildren { get; set; } = new List<TreeNode>();
+
     }
 }

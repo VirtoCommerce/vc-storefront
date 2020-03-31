@@ -7,6 +7,7 @@ using Polly;
 using Polly.Retry;
 using StackExchange.Redis;
 using VirtoCommerce.Storefront.Infrastructure;
+using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Caching.Redis
@@ -23,14 +24,14 @@ namespace VirtoCommerce.Storefront.Caching.Redis
         public RedisStorefrontMemoryCache(IMemoryCache memoryCache, IOptions<StorefrontOptions> options
             , ISubscriber bus
             , IOptions<RedisCachingOptions> redisCachingOptions
-            , ILogger<RedisStorefrontMemoryCache> log
-            ) : base(memoryCache, options, log)
+            , ILoggerFactory loggerFactory
+            , IWorkContextAccessor workContextAccessor
+            ) : base(memoryCache, options, loggerFactory, workContextAccessor)
         {
-            _log = log;
+            _log = loggerFactory?.CreateLogger<RedisStorefrontMemoryCache>();
             _bus = bus;
 
             _redisCachingOptions = redisCachingOptions.Value;
-            _bus.Unsubscribe(_redisCachingOptions.ChannelName);
             _bus.Subscribe(_redisCachingOptions.ChannelName, OnMessage);
 
             _retryPolicy = Policy.Handle<Exception>().WaitAndRetry(

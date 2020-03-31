@@ -42,7 +42,7 @@ namespace VirtoCommerce.Storefront.Domain
                 TimeZone = storeDto.TimeZone,
                 Url = storeDto.Url,
                 DefaultFulfillmentCenterId = storeDto.MainFulfillmentCenterId,
-                AvailFulfillmentCenterIds = storeDto.AdditionalFulfillmentCenterIds ?? Array.Empty<string>()
+                AvailFulfillmentCenterIds = (storeDto.AdditionalFulfillmentCenterIds ?? Array.Empty<string>()).ToList(),
             };
 
             if (result.DefaultFulfillmentCenterId != null)

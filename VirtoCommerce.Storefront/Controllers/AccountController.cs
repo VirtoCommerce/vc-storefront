@@ -58,7 +58,7 @@ namespace VirtoCommerce.Storefront.Controllers
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
             {
-                return StoreFrontRedirect("~/account/login");
+                return Challenge();
             }
 
             // Customer should be already populated in WorkContext middle-ware
@@ -71,7 +71,7 @@ namespace VirtoCommerce.Storefront.Controllers
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
             {
-                return StoreFrontRedirect("~/account/login");
+                return Challenge();
             }
 
             var order = WorkContext.CurrentUser?.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(number));
@@ -89,7 +89,7 @@ namespace VirtoCommerce.Storefront.Controllers
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
             {
-                return StoreFrontRedirect("~/account/login");
+                return Challenge();
             }
 
             return View("customers/addresses", WorkContext);
@@ -288,7 +288,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpPost("login")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login([FromForm] Login login, string returnUrl)
+        public async Task<ActionResult> Login([FromForm] Login login, [FromQuery]string returnUrl)
         {
             TryValidateModel(login);
 
@@ -301,33 +301,30 @@ namespace VirtoCommerce.Storefront.Controllers
             }
             login.UserName = login.UserName?.Trim();
 
+            var user = await _signInManager.UserManager.FindByNameAsync(login.UserName);
+
+            if (user == null)
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.LoginFailed());
+                return View("customers/login", WorkContext);
+            }
+
+            if (!new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore) || new IsUserSuspendedSpecification().IsSatisfiedBy(user))
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserCannotLoginInStore());
+                return View("customers/login", WorkContext);
+            }
+
             var loginResult = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, login.RememberMe, lockoutOnFailure: true);
 
             if (loginResult.Succeeded)
             {
-                var user = await _signInManager.UserManager.FindByNameAsync(login.UserName);
-
-                // Check that current user can sing in to current store
-                if (new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore) && new IsUserSuspendedSpecification().IsSatisfiedBy(user) == false)
-                {
-                    await _publisher.Publish(new UserLoginEvent(WorkContext, user));
-                    return StoreFrontRedirect(returnUrl);
-                }
-                else
-                {
-                    WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserCannotLoginInStore());
-                }
+                await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                return StoreFrontRedirect(returnUrl);
             }
 
             if (loginResult.RequiresTwoFactor)
             {
-                var user = await _signInManager.UserManager.FindByNameAsync(login.UserName);
-                if (user == null)
-                {
-                    WorkContext.Form.Errors.Add(SecurityErrorDescriber.OperationFailed());
-                    return View("customers/login", WorkContext);
-                }
-
                 var selectedProvider = _options.TwoFactorAuthenticationNotificationGateway;
 
                 var userManager = _signInManager.UserManager;
@@ -353,12 +350,7 @@ namespace VirtoCommerce.Storefront.Controllers
                         return View("customers/login", WorkContext);
                     }
 
-                    twoFactorNotification = new TwoFactorSmsNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
-                    {
-                        Token = code,
-                        Recipient = phoneNumber,
-                    };
-
+                    twoFactorNotification = new TwoFactorSmsNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage) { Token = code, Recipient = phoneNumber, };
                 }
                 else // "Email"
                 {
@@ -369,6 +361,7 @@ namespace VirtoCommerce.Storefront.Controllers
                         Recipient = GetUserEmail(user)
                     };
                 }
+
                 var sendingResult = await SendNotificationAsync(twoFactorNotification);
 
                 if (sendingResult.IsSuccess != true)

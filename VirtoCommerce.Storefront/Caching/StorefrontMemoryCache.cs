@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.Infrastructure;
+using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 
 namespace VirtoCommerce.Storefront.Caching
@@ -13,12 +14,14 @@ namespace VirtoCommerce.Storefront.Caching
         private readonly IMemoryCache _memoryCache;
         private bool _disposed;
         private readonly ILogger _log;
+        private readonly IWorkContextAccessor _workContextAccessor;
 
-        public StorefrontMemoryCache(IMemoryCache memoryCache, IOptions<StorefrontOptions> storefrontOptions, ILogger<StorefrontMemoryCache> log)
+        public StorefrontMemoryCache(IMemoryCache memoryCache, IOptions<StorefrontOptions> storefrontOptions, ILoggerFactory loggerFactory, IWorkContextAccessor workContextAccessor)
         {
+            _workContextAccessor = workContextAccessor;
             _memoryCache = memoryCache;
             _storefrontOptions = storefrontOptions.Value;
-            _log = log;
+            _log = loggerFactory?.CreateLogger<StorefrontMemoryCache>();
         }
 
         public MemoryCacheEntryOptions GetDefaultCacheEntryOptions()
@@ -62,7 +65,13 @@ namespace VirtoCommerce.Storefront.Caching
 
         public virtual bool TryGetValue(object key, out object value)
         {
-            return _memoryCache.TryGetValue(key, out value);
+            var result = _memoryCache.TryGetValue(key, out value);
+            //Do not use value from cache for preview mode
+            if(_workContextAccessor.WorkContext != null && _workContextAccessor.WorkContext.IsPreviewMode)
+            {
+                result = false;
+            }
+            return result;
         }
 
         protected TimeSpan? AbsoluteExpiration => _storefrontOptions.CacheAbsoluteExpiration;

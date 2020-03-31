@@ -202,7 +202,8 @@ namespace VirtoCommerce.Storefront.Domain
                 TotalWithTax = new Money(shipmentDto.TotalWithTax ?? 0, cart.Currency),
                 DiscountAmountWithTax = new Money(shipmentDto.DiscountAmountWithTax ?? 0, cart.Currency),
                 TaxTotal = new Money(shipmentDto.TaxTotal ?? 0, cart.Currency),
-                TaxPercentRate = (decimal?)shipmentDto.TaxPercentRate ?? 0m
+                TaxPercentRate = (decimal?)shipmentDto.TaxPercentRate ?? 0m,
+                TaxType = shipmentDto.TaxType
             };
 
             if (shipmentDto.DeliveryAddress != null)
@@ -244,7 +245,8 @@ namespace VirtoCommerce.Storefront.Domain
                 Currency = shipment.Currency != null ? shipment.Currency.Code : null,
                 DiscountAmount = shipment.DiscountAmount != null ? (double?)shipment.DiscountAmount.InternalAmount : null,
                 Price = shipment.Price != null ? (double?)shipment.Price.InternalAmount : null,
-                TaxPercentRate = (double)shipment.TaxPercentRate
+                TaxPercentRate = (double)shipment.TaxPercentRate,
+                TaxType = shipment.TaxType
             };
 
             if (shipment.DeliveryAddress != null)
@@ -793,6 +795,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Price = (double)lineItem.SalePrice.Amount,
                 Quantity = lineItem.Quantity,
                 InStockQuantity = lineItem.InStockQuantity,
+                Outline = lineItem.Product.Outline,
                 Variations = null // TODO
             };
 

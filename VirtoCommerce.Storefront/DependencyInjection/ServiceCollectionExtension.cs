@@ -67,7 +67,7 @@ namespace VirtoCommerce.Storefront.DependencyInjection
                       httpClient.BaseAddress = platformEndpointOptions.Url;
                       httpClient.Timeout = platformEndpointOptions.RequestTimeout;
                   })
-                   .ConfigurePrimaryHttpMessageHandler(x => new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate })
+                   .ConfigurePrimaryHttpMessageHandler(x => new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate, UseCookies = false })
                    .AddHttpMessageHandler(sp => sp.GetService<AuthenticationHandlerFactory>().CreateAuthHandler());
 
 
@@ -180,7 +180,8 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             {
                 throw new ArgumentNullException(nameof(services));
             }
-
+            
+            services.AddSingleton<ISassFileManager, SassFileManager>();
             services.AddSingleton<ILiquidThemeEngine, ShopifyLiquidThemeEngine>();
             services.AddSingleton<ILiquidViewEngine, LiquidThemedViewEngine>();
             if (setupAction != null)
