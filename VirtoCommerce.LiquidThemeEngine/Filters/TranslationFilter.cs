@@ -21,7 +21,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
             if (localization != null)
             {
-                //Backward compatibility "" | t returns whole localization JSON
+                //Backward compatibility "" | t returns entire localization JSON
                 //TODO: remove later
                 if (string.IsNullOrEmpty(key))
                 {
