@@ -123,6 +123,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <param name="input"></param>
         /// <param name="tag"></param>
         /// <returns></returns>
+        [Obsolete("Left for backward compatibility with Shopify syntax. Need to use AddTermUrl instead")]
         public static string LinkToTag(TemplateContext context, object input, object tag)
         {
             return BuildTagLink(context, TagAction.Replace, tag, input);
@@ -135,6 +136,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <param name="input"></param>
         /// <param name="tag"></param>
         /// <returns></returns>
+        [Obsolete("Left for backward compatibility with Shopify syntax. Need to use AddTermUrl instead")]
         public static string LinkToAddTag(TemplateContext context, object input, object tag)
         {
             return BuildTagLink(context, TagAction.Add, tag, input);
@@ -147,6 +149,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <param name="input"></param>
         /// <param name="tag"></param>
         /// <returns></returns>
+        [Obsolete("Left for backward compatibility with Shopify syntax. Need to use RemoveTermUrl instead")]
         public static string LinkToRemoveTag(TemplateContext context, object input, object tag)
         {
             return BuildTagLink(context, TagAction.Remove, tag, input);
@@ -249,6 +252,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return BuildUriWithSearchQueryString(context, criteria =>
             {
                 criteria.Keyword = keyword;
+                //Need to reset page number every time when criteria changed
+                criteria.PageNumber = 1;
             }).PathAndQuery;
         }
 
@@ -264,6 +269,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return BuildUriWithSearchQueryString(context, criteria =>
             {
                 criteria.Keyword = null;
+                //Need to reset page number every time when criteria changed
+                criteria.PageNumber = 1;
             }).PathAndQuery;
         }
 
@@ -281,6 +288,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             {
                 var term = new Term { Name = aggregationItem.GroupLabel, Value = aggregationItem.Value.ToString() };
                 criteria.Terms.Add(term);
+                //Need to reset page number every time when criteria changed
+                criteria.PageNumber = 1;
             });
 
             return result?.PathAndQuery;
@@ -301,6 +310,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             {
                 var term = new Term { Name = aggregationItem.GroupLabel, Value = aggregationItem.Value.ToString() };
                 criteria.Terms.Remove(term);
+                //Need to reset page number every time when criteria changed
+                criteria.PageNumber = 1;
             });
             return result?.PathAndQuery;
         }
