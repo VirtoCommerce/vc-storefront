@@ -1,9 +1,12 @@
+the Platform v.3
+
 How to generate AutoRest-generated clients with the Platform v.3
 read the documentation in 'docs' folder of vc-platform v.3
 https://github.com/VirtoCommerce/vc-platform/blob/release/3.0.0/docs/using-autorest-with-v3.md
 
 ----------------------------------------------------------------------------------------------
 
+the Platform v.2
 Install Node.js v4.0.0 or above (we recommend latest LTS version https://nodejs.org/en/)
 Install latest AutoRest globally via 'npm install -g autorest' command (2.0.4283 was used last time)
  
