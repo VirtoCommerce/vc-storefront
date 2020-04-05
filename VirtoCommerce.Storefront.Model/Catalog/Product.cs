@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.CustomerReviews;
 using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Subscriptions;
 
@@ -29,6 +30,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             Currency = currency;
             Price = new ProductPrice(currency);
         }
+
         public string Handle => SeoInfo?.Slug ?? Id;
 
         public string IndexKey => Id;
@@ -52,6 +54,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// Name of this product
         /// </summary>
         public string Name { get; set; }
+
         public string Title => Name;
 
         /// <summary>
@@ -68,14 +71,17 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// All parent categories ids concatenated with "/". E.g. (1/21/344)
         /// </summary>
         public string Outline { get; set; }
+
         /// <summary>
         /// Slug path e.g /camcorders/blue-win-camera
         /// </summary>
         public string SeoPath { get; set; }
+
         /// <summary>
         /// Application relative url e.g ~/camcorders/blue-win-camera
         /// </summary>
         public string Url { get; set; }
+
         /// <summary>
         /// Date of last indexing of product, if null - product never was indexed
         /// </summary>
@@ -90,12 +96,14 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// Indicating whether this product is buyable
         /// </summary>
         public bool IsBuyable { get; set; }
+
         public bool Buyable => IsBuyable;
 
         /// <summary>
         /// Indicating whether this product is instock
         /// </summary>
         public bool IsInStock { get; set; }
+
         public bool InStock => IsInStock;
 
         /// <summary>
@@ -137,6 +145,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// Package type
         /// </summary>
         public string PackageType { get; set; }
+
         /// <summary>
         /// Dimensions measure unit of size (for physical product only)
         /// </summary>
@@ -208,6 +217,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// List of product variations
         /// </summary>
         public IList<Product> Variations { get; set; }
+
         [JsonIgnore]
         public IEnumerable<Product> Variants => new[] { this }.Concat(Variations ?? Array.Empty<Product>());
 
@@ -221,6 +231,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// Product description in current language
         /// </summary>
         public string Description { get; set; }
+
         [JsonIgnore]
         public string Content => Description;
 
@@ -229,25 +240,36 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// </summary>
         public IMutablePagedList<EditorialReview> Descriptions { get; set; }
 
+        public IMutablePagedList<CustomerReview> CustomerReviews { get; set; }
+
         /// <summary>
         /// Current product price
         /// </summary>
         public ProductPrice Price { get; set; }
+
         public Money PriceWithTax => Price?.ActualPriceWithTax;
+
         [JsonIgnore]
         public Money CompareAtPriceMax => (Variations ?? Enumerable.Empty<Product>()).Concat(new[] { this }).Select(x => x.CompareAtPrice).Max();
+
         [JsonIgnore]
         public Money CompareAtPriceMin => (Variations ?? Enumerable.Empty<Product>()).Concat(new[] { this }).Select(x => x.CompareAtPrice).Min();
+
         [JsonIgnore]
         public bool CompareAtPriceVaries => CompareAtPriceMax != CompareAtPriceMin;
+
         [JsonIgnore]
         public Money CompareAtPrice => Price?.ListPrice;
+
         [JsonIgnore]
         public Money CompareAtPriceWithTax => Price?.ListPriceWithTax;
+
         [JsonIgnore]
         public Money PriceMax => (Variations ?? Enumerable.Empty<Product>()).Concat(new[] { this }).Where(x => x.Price != null).Select(x => x.Price?.ActualPrice).Max();
+
         [JsonIgnore]
         public Money PriceMin => (Variations ?? Enumerable.Empty<Product>()).Concat(new[] { this }).Where(x => x.Price != null).Select(x => x.Price?.ActualPrice).Min();
+
         [JsonIgnore]
         public bool PriceVaries => PriceMax != PriceMin;
 
@@ -292,6 +314,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// Product main image
         /// </summary>
         public Image PrimaryImage { get; set; }
+
         [JsonIgnore]
         public Image FeaturedImage => PrimaryImage;
 
@@ -337,7 +360,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
                 var nominalPrice = orderedPrices.FirstOrDefault();
                 //and add to nominal price other prices as tier prices
                 nominalPrice.TierPrices.AddRange(orderedPrices.Select(x => new TierPrice(x.SalePrice, x.MinQuantity ?? 1)));
-                //Add nominal price to product prices list 
+                //Add nominal price to product prices list
                 Prices.Add(nominalPrice);
             }
 
@@ -409,9 +432,10 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             Price.ApplyTaxRates(productTaxRates);
         }
 
-        #endregion
+        #endregion ITaxable Members
 
         #region IDiscountable Members
+
         public IList<Discount> Discounts { get; private set; }
 
         public Currency Currency { get; set; }
@@ -454,9 +478,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             }
         }
 
-        #endregion
-
-
+        #endregion IDiscountable Members
 
         public override string ToString()
         {

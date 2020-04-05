@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Rest;
@@ -17,6 +16,7 @@ using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.CustomerReviewsModuleModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
@@ -40,7 +40,6 @@ using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.DependencyInjection
 {
-
     public static class PollyPolicyName
     {
         public const string HttpCircuitBreaker = nameof(HttpCircuitBreaker);
@@ -50,7 +49,6 @@ namespace VirtoCommerce.Storefront.DependencyInjection
     public static class ServiceCollectionExtension
     {
         private const string PlatformEndpointHttpClientName = "PlatformEndpoint";
-
 
         /// <summary>
         /// Add common http clients handlers and pollicy that will be used to communicate with platform
@@ -69,9 +67,9 @@ namespace VirtoCommerce.Storefront.DependencyInjection
                    .ConfigurePrimaryHttpMessageHandler(x => new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate, UseCookies = false })
                    .AddHttpMessageHandler(sp => sp.GetService<AuthenticationHandlerFactory>().CreateAuthHandler());
 
-
             return services;
         }
+
         /// <summary>
         ///  init autorest generated ServiceClient instance with platform enpoint HttpClient and add it into DI services as singlton
         /// </summary>
@@ -148,6 +146,8 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddSingleton<IShippingModule>(sp => sp.GetRequiredService<ShippingModule>());
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new TaxModule(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
             services.AddSingleton<ITaxModule>(sp => sp.GetRequiredService<TaxModule>());
+            services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new CustomerReviewsModuleRESTAPIdocumentation(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
+            services.AddSingleton<ICustomerReviewsModule>(sp => new CustomerReviewsModule(sp.GetRequiredService<CustomerReviewsModuleRESTAPIdocumentation>()));
 
             if (setupAction != null)
             {
@@ -179,7 +179,7 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             {
                 throw new ArgumentNullException(nameof(services));
             }
-            
+
             services.AddSingleton<ISassFileManager, SassFileManager>();
             services.AddSingleton<ILiquidThemeEngine, ShopifyLiquidThemeEngine>();
             services.AddSingleton<ILiquidViewEngine, LiquidThemedViewEngine>();

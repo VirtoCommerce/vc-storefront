@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.WebEncoders;
 using Newtonsoft.Json;
@@ -44,6 +43,7 @@ using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Bus;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer.Services;
+using VirtoCommerce.Storefront.Model.CustomerReviews;
 using VirtoCommerce.Storefront.Model.Inventory.Services;
 using VirtoCommerce.Storefront.Model.LinkList.Services;
 using VirtoCommerce.Storefront.Model.Marketing.Services;
@@ -94,6 +94,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<ISlugRouteService, SlugRouteService>();
             services.AddSingleton<IMemberService, MemberService>();
             services.AddSingleton<ICustomerOrderService, CustomerOrderService>();
+            services.AddSingleton<ICustomerReviewService, CustomerReviewService>();
             services.AddSingleton<IQuoteService, QuoteService>();
             services.AddSingleton<ISubscriptionService, SubscriptionService>();
             services.AddSingleton<ICatalogService, CatalogService>();
@@ -144,7 +145,6 @@ namespace VirtoCommerce.Storefront
                 Configuration.GetSection("VirtoCommerce:Endpoint").Bind(options);
             });
 
-
             services.AddSingleton<ICountriesService, FileSystemCountriesService>();
             services.Configure<FileSystemCountriesOptions>(options =>
             {
@@ -186,9 +186,9 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IAuthorizationHandler, CanReadContentItemAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, OnlyRegisteredUserAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, AnonymousUserForStoreAuthorizationHandler>();
-            // register the AuthorizationPolicyProvider which dynamically registers authorization policies for each permission defined in the platform 
+            // register the AuthorizationPolicyProvider which dynamically registers authorization policies for each permission defined in the platform
             services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
-            //Storefront authorization handler for policy based on permissions 
+            //Storefront authorization handler for policy based on permissions
             services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, CanEditOrganizationResourceAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, CanAccessOrderAuthorizationHandler>();
@@ -324,13 +324,11 @@ namespace VirtoCommerce.Storefront
                 options.SerializerSettings.Converters.Add(new UserBackwardCompatibilityJsonConverter(options.SerializerSettings));
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-
             // Register event handlers via reflection
             services.RegisterAssembliesEventHandlers(typeof(Startup));
 
             services.AddApplicationInsightsTelemetry();
             services.AddApplicationInsightsExtensions(Configuration);
-
 
             // https://github.com/aspnet/HttpAbstractions/issues/315
             // Changing the default html encoding options, to not encode non-Latin characters
@@ -361,7 +359,6 @@ namespace VirtoCommerce.Storefront
             });
 
             services.AddResponseCompression();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -376,7 +373,7 @@ namespace VirtoCommerce.Storefront
                 app.UseExceptionHandler("/error/500");
                 app.UseHsts();
             }
-            // Do not write telemetry to debug output 
+            // Do not write telemetry to debug output
             TelemetryDebugWriter.IsTracingDisabled = true;
 
             app.UseResponseCaching();

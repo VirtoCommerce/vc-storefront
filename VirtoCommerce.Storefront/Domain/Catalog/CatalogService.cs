@@ -12,6 +12,7 @@ using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Customer.Services;
+using VirtoCommerce.Storefront.Model.CustomerReviews;
 using VirtoCommerce.Storefront.Model.Inventory.Services;
 using VirtoCommerce.Storefront.Model.Pricing.Services;
 using VirtoCommerce.Storefront.Model.Services;
@@ -30,13 +31,14 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IMemberService _customerService;
         private readonly ISubscriptionService _subscriptionService;
         private readonly IInventoryService _inventoryService;
+        private readonly ICustomerReviewService _customerReviewService;
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
 
         public CatalogService(IWorkContextAccessor workContextAccessor, ICatalogModuleCategories categoriesApi,
             ICatalogModuleProducts productsApi,
             ICatalogModuleSearch searchApi, IPricingService pricingService, IMemberService customerService,
-            ISubscriptionService subscriptionService,
+            ISubscriptionService subscriptionService, ICustomerReviewService customerReviewService,
             IInventoryService inventoryService, IStorefrontMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
         {
             _workContextAccessor = workContextAccessor;
@@ -46,6 +48,7 @@ namespace VirtoCommerce.Storefront.Domain
             _categoriesApi = categoriesApi;
             _pricingService = pricingService;
             _inventoryService = inventoryService;
+            _customerReviewService = customerReviewService;
             _customerService = customerService;
             _subscriptionService = subscriptionService;
             _memoryCache = memoryCache;
@@ -97,13 +100,13 @@ namespace VirtoCommerce.Storefront.Domain
                 return await _categoriesApi.GetCategoriesByPlentyIdsAsync(ids.ToList(), ((int)responseGroup).ToString());
             });
             var result = categoriesDto.Select(x => x.ToCategory(workContext.CurrentLanguage, workContext.CurrentStore)).ToArray();
-            //Set  lazy loading for child categories 
+            //Set  lazy loading for child categories
             EstablishLazyDependenciesForCategories(result);
             return result;
         }
 
         /// <summary>
-        /// Search categories by given criteria 
+        /// Search categories by given criteria
         /// </summary>
         /// <param name="criteria"></param>
         /// <returns></returns>
@@ -114,7 +117,7 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
         /// <summary>
-        /// Async search categories by given criteria 
+        /// Async search categories by given criteria
         /// </summary>
         /// <param name="criteria"></param>
         /// <returns></returns>
@@ -130,21 +133,19 @@ namespace VirtoCommerce.Storefront.Domain
                 criteria = criteria.Clone() as CategorySearchCriteria;
                 var searchCriteria = criteria.ToCategorySearchCriteriaDto(workContext);
                 return await _searchApi.SearchCategoriesAsync(searchCriteria);
-
-
             });
             var result = new PagedList<Category>(new List<Category>().AsQueryable(), 1, 1);
             if (searchResult.Items != null)
             {
                 result = new PagedList<Category>(searchResult.Items.Select(x => x.ToCategory(workContext.CurrentLanguage, workContext.CurrentStore)).AsQueryable(), criteria.PageNumber, criteria.PageSize);
             }
-            //Set  lazy loading for child categories 
+            //Set  lazy loading for child categories
             EstablishLazyDependenciesForCategories(result.ToArray());
             return result;
         }
 
         /// <summary>
-        /// Search products by given criteria 
+        /// Search products by given criteria
         /// </summary>
         /// <param name="criteria"></param>
         /// <returns></returns>
@@ -154,7 +155,7 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
         /// <summary>
-        /// Async search products by given criteria 
+        /// Async search products by given criteria
         /// </summary>
         /// <param name="criteria"></param>
         /// <returns></returns>
@@ -177,7 +178,8 @@ namespace VirtoCommerce.Storefront.Domain
                 Aggregations = !result.Aggregations.IsNullOrEmpty() ? result.Aggregations.Select(x => x.ToAggregation(workContext.CurrentLanguage.CultureName)).ToArray() : new Aggregation[] { }
             };
         }
-        #endregion
+
+        #endregion ICatalogSearchService Members
 
         protected virtual async Task LoadProductDependencies(List<Product> products, ItemResponseGroup responseGroup, WorkContext workContext)
         {
@@ -209,6 +211,8 @@ namespace VirtoCommerce.Storefront.Domain
                 {
                     taskList.Add(LoadProductPaymentPlanAsync(products, workContext));
                 }
+
+                taskList.Add(LoadProductCustomerReviewsAsync(products, workContext));
 
                 await Task.WhenAll(taskList.ToArray());
 
@@ -306,7 +310,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             foreach (var product in products)
             {
-                //Associations 
+                //Associations
                 product.Associations = new MutablePagedList<ProductAssociation>((pageNumber, pageSize, sortInfos, @params) =>
                 {
                     var criteria = new ProductAssociationSearchCriteria
@@ -326,11 +330,11 @@ namespace VirtoCommerce.Storefront.Domain
                     }
                     var cacheKey = CacheKey.With(GetType(), "SearchProductAssociations", criteria.GetCacheKey());
                     var searchResult = _memoryCache.GetOrCreateExclusive(cacheKey, cacheEntry =>
-                       {
-                           cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
-                           cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
-                           return _productsApi.SearchProductAssociations(criteria.ToProductAssociationSearchCriteriaDto());
-                       });
+                    {
+                        cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
+                        cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
+                        return _productsApi.SearchProductAssociations(criteria.ToProductAssociationSearchCriteriaDto());
+                    });
                     //Load products for resulting associations
                     var associatedProducts = GetProductsAsync(searchResult.Results.Select(x => x.AssociatedObjectId).ToArray(), criteria.ResponseGroup).GetAwaiter().GetResult();
                     var result = new List<ProductAssociation>();
@@ -342,6 +346,31 @@ namespace VirtoCommerce.Storefront.Domain
                     }
                     return new StaticPagedList<ProductAssociation>(result, pageNumber, pageSize, searchResult.TotalCount ?? 0);
                 }, 1, ProductSearchCriteria.DefaultPageSize);
+            }
+            return Task.CompletedTask;
+        }
+
+        protected virtual Task LoadProductCustomerReviewsAsync(List<Product> products, WorkContext workContext)
+        {
+            if (products == null)
+            {
+                throw new ArgumentNullException(nameof(products));
+            }
+
+            foreach (var product in products)
+            {
+                //Lazy loading for customer reviews
+                product.CustomerReviews = new MutablePagedList<Model.CustomerReviews.CustomerReview>((pageNumber, pageSize, sortInfos) =>
+                {
+                    var criteria = new CustomerReviewSearchCriteria
+                    {
+                        ProductIds = new[] { product.Id },
+                        PageNumber = pageNumber,
+                        PageSize = pageSize,
+                        Sort = SortInfo.ToString(sortInfos),
+                    };
+                    return _customerReviewService.SearchReviews(criteria);
+                }, 1, CustomerReviewSearchCriteria.DefaultPageSize);
             }
             return Task.CompletedTask;
         }
@@ -384,6 +413,5 @@ namespace VirtoCommerce.Storefront.Domain
                 }, 1, CategorySearchCriteria.DefaultPageSize);
             }
         }
-
     }
 }
