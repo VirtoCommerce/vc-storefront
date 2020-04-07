@@ -29,6 +29,21 @@ namespace VirtoCommerce.Storefront.Model.CustomerReviews
         public string ProductId { get; set; }
 
         /// <summary>
+        /// Raiting for product
+        /// </summary>
+        public int Raiting { get; set; }
+
+        /// <summary>
+        /// Likes of customer review
+        /// </summary>
+        public int Likes { get; set; }
+
+        /// <summary>
+        /// Dislikes of customer review
+        /// </summary>
+        public int Dislikes { get; set; }
+
+        /// <summary>
         /// Date when review created
         /// </summary>
         public DateTime? CreatedDate { get; set; }

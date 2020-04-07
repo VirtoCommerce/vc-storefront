@@ -866,12 +866,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviewsModuleModuleAp
         /// <summary>
         /// Initializes a new instance of the CustomerReview class.
         /// </summary>
-        public CustomerReview(string authorNickname = default(string), string content = default(string), bool? isActive = default(bool?), string productId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public CustomerReview(string authorNickname = default(string), string content = default(string), bool? isActive = default(bool?), string productId = default(string), int raiting = default(int), int likes = default(int), int dislikes = default(int), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             AuthorNickname = authorNickname;
             Content = content;
             IsActive = isActive;
             ProductId = productId;
+            Raiting = raiting;
+            Likes = likes;
+            Dislikes = dislikes;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
@@ -904,6 +907,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviewsModuleModuleAp
         /// </summary>
         [JsonProperty(PropertyName = "productId")]
         public string ProductId { get; set; }
+
+        /// <summary>
+        /// Raiting for product
+        /// </summary>
+        [JsonProperty(PropertyName = "raiting")]
+        public int Raiting { get; set; }
+
+        /// <summary>
+        /// Likes of customer review
+        /// </summary>
+        [JsonProperty(PropertyName = "likes")]
+        public int Likes { get; set; }
+
+        /// <summary>
+        /// Dislikes of customer review
+        /// </summary>
+        [JsonProperty(PropertyName = "dislikes")]
+        public int Dislikes { get; set; }
 
         /// <summary>
         /// </summary>

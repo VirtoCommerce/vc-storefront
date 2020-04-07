@@ -17,7 +17,10 @@ namespace VirtoCommerce.Storefront.Domain.CustomerReview
                 IsActive = itemDto.IsActive,
                 ModifiedBy = itemDto.ModifiedBy,
                 ModifiedDate = itemDto.ModifiedDate,
-                ProductId = itemDto.ProductId
+                ProductId = itemDto.ProductId,
+                Raiting = itemDto.Raiting,
+                Likes = itemDto.Likes,
+                Dislikes = itemDto.Dislikes
             };
 
             return result;
