@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using PagedList.Core;
+using VirtoCommerce.Storefront.Model.Catalog;
 
 namespace VirtoCommerce.Storefront.Model.CustomerReviews
 {
@@ -21,5 +22,7 @@ namespace VirtoCommerce.Storefront.Model.CustomerReviews
         /// <param name="criteria">Search criteria</param>
         /// <returns>Pagebale collection of customer reviews</returns>
         Task<IPagedList<CustomerReview>> SearchReviewsAsync(CustomerReviewSearchCriteria criteria);
+
+        Task CreateReviewAsync(CreateCustomerReviewRequest request, ItemResponseGroup responseGroup);
     }
 }

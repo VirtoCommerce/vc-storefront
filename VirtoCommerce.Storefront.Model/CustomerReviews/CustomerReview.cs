@@ -63,4 +63,30 @@ namespace VirtoCommerce.Storefront.Model.CustomerReviews
         /// </summary>
         public string ModifiedBy { get; set; }
     }
+
+    /// <summary>
+    /// Request model for creating new customer review
+    /// </summary>
+    public partial class CreateCustomerReviewRequest
+    {
+        /// <summary>
+        /// Nickname of review owner
+        /// </summary>
+        public string AuthorNickname { get; set; }
+
+        /// <summary>
+        /// Text of review
+        /// </summary>
+        public string Content { get; set; }
+
+        /// <summary>
+        /// Id of reviewed product
+        /// </summary>
+        public string ProductId { get; set; }
+
+        /// <summary>
+        /// Raiting for product
+        /// </summary>
+        public int Raiting { get; set; }
+    }
 }

@@ -18,9 +18,22 @@ namespace VirtoCommerce.Storefront.Domain.CustomerReview
                 ModifiedBy = itemDto.ModifiedBy,
                 ModifiedDate = itemDto.ModifiedDate,
                 ProductId = itemDto.ProductId,
-                Raiting = itemDto.Raiting,
-                Likes = itemDto.Likes,
-                Dislikes = itemDto.Dislikes
+                Raiting = itemDto.Raiting ?? default,
+                Likes = itemDto.Likes ?? default,
+                Dislikes = itemDto.Dislikes ?? default
+            };
+
+            return result;
+        }
+
+        public static reviewDto.CreateCustomerReviewRequest ToApiModel(this CreateCustomerReviewRequest request)
+        {
+            var result = new reviewDto.CreateCustomerReviewRequest
+            {
+                AuthorNickname = request.AuthorNickname,
+                Content = request.Content,
+                ProductId = request.ProductId,
+                Raiting = request.Raiting,
             };
 
             return result;

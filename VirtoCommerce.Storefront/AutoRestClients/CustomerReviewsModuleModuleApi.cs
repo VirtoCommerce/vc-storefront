@@ -559,6 +559,127 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviewsModuleModuleAp
             return _result;
         }
 
+        /// <param name='request'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> PublishNewReviewWithHttpMessagesAsync(CreateCustomerReviewRequest request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (request == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "request");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("request", request);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "PublishNewReview", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/CustomerReviewsModule/publish").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(request != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(request, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 204)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
     }
 }
 // <auto-generated>
@@ -603,6 +724,21 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviewsModuleModuleAp
         /// Thrown when a required parameter is null
         /// </exception>
         Task<HttpOperationResponse<GenericSearchResultCustomerReview>> SearchCustomerReviewsWithHttpMessagesAsync(CustomerReviewSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <param name='request'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse> PublishNewReviewWithHttpMessagesAsync(CreateCustomerReviewRequest request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -653,6 +789,29 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviewsModuleModuleAp
                 {
                     return _result.Body;
                 }
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='request'>
+            /// </param>
+            public static void PublishNewReview(this ICustomerReviewsModule operations, CreateCustomerReviewRequest request)
+            {
+                operations.PublishNewReviewAsync(request).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='request'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task PublishNewReviewAsync(this ICustomerReviewsModule operations, CreateCustomerReviewRequest request, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.PublishNewReviewWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
     }
@@ -866,7 +1025,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviewsModuleModuleAp
         /// <summary>
         /// Initializes a new instance of the CustomerReview class.
         /// </summary>
-        public CustomerReview(string authorNickname = default(string), string content = default(string), bool? isActive = default(bool?), string productId = default(string), int raiting = default(int), int likes = default(int), int dislikes = default(int), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public CustomerReview(string authorNickname = default(string), string content = default(string), bool? isActive = default(bool?), string productId = default(string), int? raiting = default(int?), int? likes = default(int?), int? dislikes = default(int?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             AuthorNickname = authorNickname;
             Content = content;
@@ -909,22 +1068,19 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviewsModuleModuleAp
         public string ProductId { get; set; }
 
         /// <summary>
-        /// Raiting for product
         /// </summary>
         [JsonProperty(PropertyName = "raiting")]
-        public int Raiting { get; set; }
+        public int? Raiting { get; set; }
 
         /// <summary>
-        /// Likes of customer review
         /// </summary>
         [JsonProperty(PropertyName = "likes")]
-        public int Likes { get; set; }
+        public int? Likes { get; set; }
 
         /// <summary>
-        /// Dislikes of customer review
         /// </summary>
         [JsonProperty(PropertyName = "dislikes")]
-        public int Dislikes { get; set; }
+        public int? Dislikes { get; set; }
 
         /// <summary>
         /// </summary>
@@ -1008,6 +1164,76 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviewsModuleModuleAp
         /// </summary>
         [JsonProperty(PropertyName = "results")]
         public IList<CustomerReview> Results { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviewsModuleModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class CreateCustomerReviewRequest
+    {
+        /// <summary>
+        /// Initializes a new instance of the CreateCustomerReviewRequest
+        /// class.
+        /// </summary>
+        public CreateCustomerReviewRequest()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the CreateCustomerReviewRequest
+        /// class.
+        /// </summary>
+        public CreateCustomerReviewRequest(string authorNickname = default(string), string content = default(string), string productId = default(string), int? raiting = default(int?))
+        {
+            AuthorNickname = authorNickname;
+            Content = content;
+            ProductId = productId;
+            Raiting = raiting;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "authorNickname")]
+        public string AuthorNickname { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "content")]
+        public string Content { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "productId")]
+        public string ProductId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "raiting")]
+        public int? Raiting { get; set; }
 
     }
 }
