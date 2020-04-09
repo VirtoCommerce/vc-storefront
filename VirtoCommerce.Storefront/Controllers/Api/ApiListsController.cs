@@ -99,10 +99,10 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
         }
 
-        // PUT: storefrontapi/lists/{listName}/{type}/items/{lineItemId}?quantity=...
-        [HttpPut("{listName}/{type}/items/{lineItemId}")]
+        // PUT: storefrontapi/lists/{listName}/{type}/items
+        [HttpPut("{listName}/{type}/items")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangeListItem(string listName, string type, string lineItemId, int quantity)
+        public async Task<ActionResult> ChangeListItem(string listName, string type, [FromBody] ChangeCartItemQty changeQty)
         {
             var unescapedListName = Uri.UnescapeDataString(listName);
             //Need lock to prevent concurrent access to same list
@@ -110,10 +110,10 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 var cartBuilder = await LoadOrCreateCartAsync(unescapedListName, type);
 
-                var lineItem = cartBuilder.Cart.Items.FirstOrDefault(i => i.Id == lineItemId);
+                var lineItem = cartBuilder.Cart.Items.FirstOrDefault(i => i.Id == changeQty.LineItemId);
                 if (lineItem != null)
                 {
-                    await cartBuilder.ChangeItemQuantityAsync(lineItemId, quantity);
+                    await cartBuilder.ChangeItemQuantityAsync(changeQty.LineItemId, changeQty.Quantity);
                     await cartBuilder.SaveAsync();
                 }
             }
