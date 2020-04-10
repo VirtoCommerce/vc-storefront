@@ -386,7 +386,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                             return Unauthorized();
                         }
                         //Doesn't allow change self roles
-                        user.Roles = userUpdateInfo.Roles?.Select(x => new Model.Security.Role { Id = x });
+                        user.Roles = userUpdateInfo.Roles?.Select(x => new Model.Security.Role { Id = x, Name = x });
                     }
 
                     if (user.Contact != null)

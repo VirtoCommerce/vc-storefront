@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 using Scriban;
 using VirtoCommerce.Storefront.Model.Common;
 
@@ -10,10 +12,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
     /// </summary>
     public static partial class TranslationFilter
     {
-        private static string[] _countSuffixes = new[] { ".zero", ".one", ".two" };
-
-
-        #region Public Methods and Operators
         public static string T(TemplateContext context, string key, params object[] variables)
         {
             var result = key;
@@ -23,28 +21,23 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
             if (localization != null)
             {
-                result = (localization.SelectToken(key) ?? key).ToString();
-                if (!variables.IsNullOrEmpty())
+                //Backward compatibility "" | t returns entire localization JSON
+                //TODO: remove later
+                if (string.IsNullOrEmpty(key))
                 {
-                    result = string.Format(result, variables);
+                    result = localization.ToString();
+                }
+                else if (key.IsValidJsonPath())
+                {
+                    result = (localization.SelectToken(key, errorWhenNoMatch: false) ?? key).ToString();
+                    if (!variables.IsNullOrEmpty())
+                    {
+                        result = string.Format(result, variables);
+                    }
                 }
             }
 
             return result;
-        }
-        #endregion
-
-        private static string TryTransformKey(string input, Dictionary<string, object> variables)
-        {
-            var retVal = input;
-
-            object countValue;
-            if (variables.TryGetValue("count", out countValue) && countValue != null)
-            {
-                var count = Convert.ToUInt16(countValue);
-                retVal += count < 2 ? _countSuffixes[count] : ".other";
-            }
-            return retVal;
         }
     }
 

@@ -23,7 +23,7 @@ namespace VirtoCommerce.Storefront.Model.Common
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
 
-        public virtual IEnumerable<KeyValuePair<string, string>> GetKeyValues()
+        public virtual IEnumerable<KeyValuePair<string, string>> GetQueryKeyValues()
         {
             yield return new KeyValuePair<string, string>("page", PageNumber.ToString());
             yield return new KeyValuePair<string, string>("page_size", PageSize.ToString());
