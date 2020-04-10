@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
+using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common.Events;
+using VirtoCommerce.Storefront.Model.Order.Events;
 using VirtoCommerce.Storefront.Model.Services;
+using orderModel = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
@@ -18,6 +23,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
     {
         private readonly ICartService _cartService;
         private readonly ICartBuilder _cartBuilder;
+        private readonly IOrderModule _orderApi;
+        private readonly IEventPublisher _publisher;
         private readonly ICatalogService _catalogService;
 
         public ApiListsController(IWorkContextAccessor workContextAccessor, ICatalogService catalogService, ICartService cartService, ICartBuilder cartBuilder, IStorefrontUrlBuilder urlBuilder)
@@ -210,6 +217,46 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
                 await cartBuilder.SaveAsync();
                 return Ok();
+            }
+        }
+
+        // POST: storefrontapi/lists/{listName}/{type}/createorder
+        [HttpPost("{listName}/{type}/createorder")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult<OrderCreatedInfo>> CreateOrderFromList(string listName, string type, [FromBody] BankCardInfo bankCardInfo)
+        {
+            var unescapedListName = Uri.UnescapeDataString(listName);
+            //Need lock to prevent concurrent access to same list
+            using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, unescapedListName, type)).LockAsync())
+            {
+                var cartBuilder = await LoadOrCreateCartAsync(unescapedListName, type);
+
+                var orderDto = await _orderApi.CreateOrderFromCartAsync(cartBuilder.Cart.Id);
+                var order = orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
+
+                var taskList = new List<Task>
+                {
+                    //Raise domain event asynchronously
+                    _publisher.Publish(new OrderPlacedEvent(WorkContext, orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage), cartBuilder.Cart)),
+                    //Remove the cart asynchronously
+                    cartBuilder.RemoveCartAsync()
+                };
+                //Process order asynchronously
+                var incomingPaymentDto = orderDto.InPayments?.FirstOrDefault();
+                Task<orderModel.ProcessPaymentResult> processPaymentTask = null;
+                if (incomingPaymentDto != null)
+                {
+                    processPaymentTask = _orderApi.ProcessOrderPaymentsAsync(orderDto.Id, incomingPaymentDto.Id, bankCardInfo.ToBankCardInfoDto());
+                    taskList.Add(processPaymentTask);
+                }
+                await Task.WhenAll(taskList.ToArray());
+
+                return new OrderCreatedInfo
+                {
+                    Order = order,
+                    OrderProcessingResult = processPaymentTask != null ? (await processPaymentTask).ToProcessPaymentResult(order) : null,
+                    PaymentMethod = incomingPaymentDto?.PaymentMethod.ToPaymentMethod(order),
+                };
             }
         }
 
