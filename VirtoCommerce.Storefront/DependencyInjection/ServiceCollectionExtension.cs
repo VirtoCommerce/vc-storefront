@@ -124,9 +124,9 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddSingleton<ISubscriptionModule>(sp => new SubscriptionModule(sp.GetRequiredService<VirtoCommerceSubscriptionRESTAPIdocumentation>()));
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new VirtoCommerceInventoryRESTAPIdocumentation(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
             services.AddSingleton<IInventoryModule>(sp => new InventoryModule(sp.GetRequiredService<VirtoCommerceInventoryRESTAPIdocumentation>()));
-            services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new VirtoCommerceMarketingRESTAPIdocumentation(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
-            services.AddSingleton<IMarketingModulePromotion>(sp => new MarketingModulePromotion(sp.GetRequiredService<VirtoCommerceMarketingRESTAPIdocumentation>()));
-            services.AddSingleton<IMarketingModuleDynamicContent>(sp => new MarketingModuleDynamicContent(sp.GetRequiredService<VirtoCommerceMarketingRESTAPIdocumentation>()));
+            services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new MarketingModuleApi(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
+            services.AddSingleton<IMarketingModulePromotion>(sp => new MarketingModulePromotion(sp.GetRequiredService<MarketingModuleApi>()));
+            services.AddSingleton<IMarketingModuleDynamicContent>(sp => new MarketingModuleDynamicContent(sp.GetRequiredService<MarketingModuleApi>()));
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new VirtoCommercePricingRESTAPIdocumentation(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
             services.AddSingleton<IPricingModule>(sp => new PricingModule(sp.GetRequiredService<VirtoCommercePricingRESTAPIdocumentation>()));
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new VirtoCommerceCartRESTAPIdocumentation(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
