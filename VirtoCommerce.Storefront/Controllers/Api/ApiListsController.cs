@@ -27,12 +27,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private readonly IEventPublisher _publisher;
         private readonly ICatalogService _catalogService;
 
-        public ApiListsController(IWorkContextAccessor workContextAccessor, ICatalogService catalogService, ICartService cartService, ICartBuilder cartBuilder, IStorefrontUrlBuilder urlBuilder)
+        public ApiListsController(IWorkContextAccessor workContextAccessor, ICatalogService catalogService, ICartService cartService, ICartBuilder cartBuilder, IStorefrontUrlBuilder urlBuilder, IOrderModule orderApi, IEventPublisher publisher)
             : base(workContextAccessor, urlBuilder)
         {
             _cartBuilder = cartBuilder;
             _catalogService = catalogService;
             _cartService = cartService;
+            _publisher = publisher;
+            _orderApi = orderApi;
         }
 
         // GET: storefrontapi/lists/{listName}/{type}
