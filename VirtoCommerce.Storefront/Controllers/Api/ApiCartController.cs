@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -355,44 +356,66 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/cart/createorder
         [HttpPost("createorder")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<OrderCreatedInfo>> CreateOrder([FromBody] BankCardInfo bankCardInfo)
+        public async Task<ActionResult<OrderCreatedInfo>> CreateOrderFromDefaultCart([FromBody] BankCardInfo bankCardInfo)
         {
-            EnsureCartExists();
-
-            //Need lock to prevent concurrent access to same cart
-            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
+            var cartBuilder = await LoadOrCreateCartAsync();
+            if (cartBuilder.Cart.IsTransient())
             {
-                var cartBuilder = await LoadOrCreateCartAsync();
+                return BadRequest($"The default cart doesn't exist");
+            }
+            //Need lock to prevent concurrent access to same cart
+            using (await AsyncLock.GetLockByKey(cartBuilder.Cart.GetCacheKey()).LockAsync())
+            {
+                return await CreateOrderFromCartAsync(cartBuilder, bankCardInfo);
+            }
+        }
 
-                var orderDto = await _orderApi.CreateOrderFromCartAsync(cartBuilder.Cart.Id);
-                var order = orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
+        // POST: storefrontapi/cart/{name}/{type}/createorder
+        [HttpPost("{name}/{type}/createorder")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult<OrderCreatedInfo>> CreateOrderFromNamedCart([FromRoute] string name, [FromRoute] string type, [FromBody] BankCardInfo bankCardInfo)
+        {
+            var cartBuilder = await LoadOrCreateCartAsync(name, type);
+            if (cartBuilder.Cart.IsTransient())
+            {
+                return BadRequest($"The cart with name: {name} and type: {type} doesn't exist");
+            }
+            //Need lock to prevent concurrent access to same cart
+            using (await AsyncLock.GetLockByKey(cartBuilder.Cart.GetCacheKey()).LockAsync())
+            {
+                return await CreateOrderFromCartAsync(cartBuilder, bankCardInfo);
+            }
+        }
 
-                var taskList = new List<Task>
+        private async Task<OrderCreatedInfo> CreateOrderFromCartAsync(ICartBuilder cartBuilder, BankCardInfo bankCardInfo)
+        {
+            var orderDto = await _orderApi.CreateOrderFromCartAsync(cartBuilder.Cart.Id);
+            var order = orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
+
+            var taskList = new List<Task>
                 {
                     //Raise domain event asynchronously
                     _publisher.Publish(new OrderPlacedEvent(WorkContext, orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage), cartBuilder.Cart)),
                     //Remove the cart asynchronously
                     cartBuilder.RemoveCartAsync()
                 };
-                //Process order asynchronously
-                var incomingPaymentDto = orderDto.InPayments?.FirstOrDefault();
-                Task<orderModel.ProcessPaymentResult> processPaymentTask = null;
-                if (incomingPaymentDto != null)
-                {
-                    processPaymentTask = _orderApi.ProcessOrderPaymentsAsync(orderDto.Id, incomingPaymentDto.Id, bankCardInfo.ToBankCardInfoDto());
-                    taskList.Add(processPaymentTask);
-                }
-                await Task.WhenAll(taskList.ToArray());
-
-                return new OrderCreatedInfo
-                {
-                    Order = order,
-                    OrderProcessingResult = processPaymentTask != null ? (await processPaymentTask).ToProcessPaymentResult(order) : null,
-                    PaymentMethod = incomingPaymentDto?.PaymentMethod.ToPaymentMethod(order),
-                };
+            //Process order asynchronously
+            var incomingPaymentDto = orderDto.InPayments?.FirstOrDefault();
+            Task<orderModel.ProcessPaymentResult> processPaymentTask = null;
+            if (incomingPaymentDto != null)
+            {
+                processPaymentTask = _orderApi.ProcessOrderPaymentsAsync(orderDto.Id, incomingPaymentDto.Id, bankCardInfo?.ToBankCardInfoDto());
+                taskList.Add(processPaymentTask);
             }
-        }
+            await Task.WhenAll(taskList.ToArray());
 
+            return new OrderCreatedInfo
+            {
+                Order = order,
+                OrderProcessingResult = processPaymentTask != null ? (await processPaymentTask).ToProcessPaymentResult(order) : null,
+                PaymentMethod = incomingPaymentDto?.PaymentMethod.ToPaymentMethod(order),
+            };
+        }
 
         private void EnsureCartExists()
         {
@@ -401,12 +424,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 throw new StorefrontException("Cart not found");
             }
         }
-        private async Task<ICartBuilder> LoadOrCreateCartAsync()
+
+        private async Task<ICartBuilder> LoadOrCreateCartAsync(string cartName = null, string type = null)
         {
-            var cart = WorkContext.CurrentCart.Value;
             //Need to try load fresh cart from cache or service to prevent parallel update conflict
             //because WorkContext.CurrentCart may contains old cart
-            await _cartBuilder.LoadOrCreateNewTransientCartAsync(cart.Name, WorkContext.CurrentStore, cart.Customer, cart.Language, cart.Currency);
+            await _cartBuilder.LoadOrCreateNewTransientCartAsync(cartName ?? WorkContext.CurrentCart.Value.Name, WorkContext.CurrentStore, WorkContext.CurrentUser, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency, type);
             return _cartBuilder;
         }
     }
