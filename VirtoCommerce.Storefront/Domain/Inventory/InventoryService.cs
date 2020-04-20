@@ -51,9 +51,11 @@ namespace VirtoCommerce.Storefront.Domain
                 //TODO: Change these conditions to DDD specification
                 item.InventoryAll = inventories.Where(x => x.ProductId == item.Id).Select(x => x.ToInventory()).Where(x => availFullfilmentCentersIds.Contains(x.FulfillmentCenterId)).ToList();
                 item.Inventory = item.InventoryAll.OrderByDescending(x => Math.Max(0, (x.InStockQuantity ?? 0L) - (x.ReservedQuantity ?? 0L))).FirstOrDefault();
+
                 if (workContext.CurrentStore.DefaultFulfillmentCenterId != null)
                 {
-                    item.Inventory = item.InventoryAll.FirstOrDefault(x => x.FulfillmentCenterId == workContext.CurrentStore.DefaultFulfillmentCenterId);
+                    item.Inventory = item.InventoryAll.FirstOrDefault(x => x.FulfillmentCenterId == workContext.CurrentStore.DefaultFulfillmentCenterId)
+                        ?? item.Inventory;
                 }
             }
         }
