@@ -375,7 +375,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<OrderCreatedInfo>> CreateOrderFromNamedCart([FromRoute] string name, [FromRoute] string type, [FromBody] BankCardInfo bankCardInfo)
         {
-            var cartBuilder = await LoadOrCreateCartAsync(name, type);
+            var cartBuilder = await LoadOrCreateCartAsync(Uri.UnescapeDataString(name), type);
             if (cartBuilder.Cart.IsTransient())
             {
                 return BadRequest($"The cart with name: {name} and type: {type} doesn't exist");
