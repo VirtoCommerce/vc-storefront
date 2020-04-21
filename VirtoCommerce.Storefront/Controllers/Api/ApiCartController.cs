@@ -366,14 +366,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             //Need lock to prevent concurrent access to same cart
             using (await AsyncLock.GetLockByKey(cartBuilder.Cart.GetCacheKey()).LockAsync())
             {
-                return await CreateOrderFromCartAsync(cartBuilder, bankCardInfo);
+                return await CreateOrderFromCartAsync(cartBuilder, bankCardInfo, removeCart: true);
             }
         }
 
-        // POST: storefrontapi/cart/{name}/{type}/createorder
+        // POST: storefrontapi/cart/{name}/{type}/createorder?removeCart=true
         [HttpPost("{name}/{type}/createorder")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<OrderCreatedInfo>> CreateOrderFromNamedCart([FromRoute] string name, [FromRoute] string type, [FromBody] BankCardInfo bankCardInfo)
+        public async Task<ActionResult<OrderCreatedInfo>> CreateOrderFromNamedCart([FromRoute] string name, [FromRoute] string type, [FromBody] BankCardInfo bankCardInfo, [FromQuery]bool removeCart)
         {
             var cartBuilder = await LoadOrCreateCartAsync(Uri.UnescapeDataString(name), type);
             if (cartBuilder.Cart.IsTransient())
@@ -383,11 +383,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             //Need lock to prevent concurrent access to same cart
             using (await AsyncLock.GetLockByKey(cartBuilder.Cart.GetCacheKey()).LockAsync())
             {
-                return await CreateOrderFromCartAsync(cartBuilder, bankCardInfo);
+                return await CreateOrderFromCartAsync(cartBuilder, bankCardInfo, removeCart);
             }
         }
 
-        private async Task<OrderCreatedInfo> CreateOrderFromCartAsync(ICartBuilder cartBuilder, BankCardInfo bankCardInfo)
+        private async Task<OrderCreatedInfo> CreateOrderFromCartAsync(ICartBuilder cartBuilder, BankCardInfo bankCardInfo, bool removeCart)
         {
             var orderDto = await _orderApi.CreateOrderFromCartAsync(cartBuilder.Cart.Id);
             var order = orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
@@ -397,7 +397,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     //Raise domain event asynchronously
                     _publisher.Publish(new OrderPlacedEvent(WorkContext, orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage), cartBuilder.Cart)),
                     //Remove the cart asynchronously
-                    cartBuilder.RemoveCartAsync()
+                    removeCart ? cartBuilder.RemoveCartAsync() : Task.CompletedTask
                 };
             //Process order asynchronously
             var incomingPaymentDto = orderDto.InPayments?.FirstOrDefault();
