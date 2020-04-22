@@ -1,0 +1,156 @@
+{
+  "features": [
+    {
+      "Name": "OrdersBrowsing",
+      "IsActive": true,
+      "Requires": [],
+      "Replaces": [],
+      "Replaced": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "PaymentBrowsing",
+      "IsActive": true,
+      "Requires": [],
+      "Replaces": [],
+      "Replaced": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "InvoiceBrowsing",
+      "IsActive": true,
+      "Requires": [],
+      "Replaces": [],
+      "Replaced": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ManageUsers",
+      "IsActive": true,
+      "Requires": [],
+      "Replaces": [],
+      "Replaced": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ManageRoles",
+      "IsActive": true,
+      "Requires": [],
+      "Replaces": [],
+      "Replaced": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ContractsInfoBrowsing",
+      "IsActive": true,
+      "Requires": [],
+      "Replaces": [],
+      "Replaced": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "RetrieveReordering",
+      "IsActive": true,
+      "Requires": [],
+      "Replaces": [],
+      "Replaced": [ "OrderDraft" ],
+      "Conflicts": [ "SubmitOrder", "ProductInventoryBrowsing", "ManageShipmentDetails", "ManagePaymentDetails" ]
+    },
+    {
+      "Name": "OrderApproval",
+      "IsActive": true,
+      "Requires": [],
+      "Replaces": [],
+      "Replaced": [ "OrderDraft" ],
+      "Conflicts": [ "SubmitOrder", "ProductInventoryBrowsing", "ManageShipmentDetails", "ManagePaymentDetails" ]
+    },
+    {
+      "Name": "ProductTextSearch",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering" ],
+      "Replaces": [],
+      "Replaced": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ProductsFiltering",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering" ],
+      "Replaces": [],
+      "Replaced": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ProductDetailsBrowsing",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering" ],
+      "Replaces": [],
+      "Replaced": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ProductPriceBrowsing",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering", "ProductDetailsBrowsing" ],
+      "Replaces": [],
+      "Replaced": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ProductRecommendation",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering", "ProductDetailsBrowsing" ],
+      "Replaces": [],
+      "Replaced": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "OrderDraft",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering", "ProductDetailsBrowsing", "ProductPriceBrowsing" ],
+      "Replaces": [ "RetrieveReordering", "OrderApproval" ],
+      "Replaced": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "WishList",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering", "ProductDetailsBrowsing", "ProductPriceBrowsing" ],
+      "Replaces": [],
+      "Replaced": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "SubmitOrder",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering", "ProductDetailsBrowsing", "ProductPriceBrowsing", "OrderDraft", "ProductInventoryBrowsing" ],
+      "Replaces": [ "RetrieveReordering", "OrderApproval" ],
+      "Replaced": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ProductInventoryBrowsing",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering", "ProductDetailsBrowsing", "ProductPriceBrowsing", "OrderDraft", "SubmitOrder" ],
+      "Replaces": [],
+      "Replaced": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ManageShipmentDetails",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering", "ProductDetailsBrowsing", "ProductPriceBrowsing", "OrderDraft", "SubmitOrder" ],
+      "Replaces": [],
+      "Replaced": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ManagePaymentDetails",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering", "ProductDetailsBrowsing", "ProductPriceBrowsing", "OrderDraft", "SubmitOrder" ],
+      "Replaces": [],
+      "Replaced": [],
+      "Conflicts": []
+    }
+  ]
+}
