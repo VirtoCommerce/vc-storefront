@@ -11,9 +11,9 @@
     <PackageLicenseUrl>https://virtocommerce.com/open-source-license</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/VirtoCommerce/vc-storefront-core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/VirtoCommerce/vc-storefront-core</RepositoryUrl>
-    <AssemblyVersion>4.1.7.0</AssemblyVersion>
-    <FileVersion>4.1.7.0</FileVersion>
-    <Version>4.1.7</Version>
+    <AssemblyVersion>4.1.10.0</AssemblyVersion>
+    <FileVersion>4.1.10.0</FileVersion>
+    <Version>4.1.10</Version>
     <Copyright>Copyright © 2011-2019 Virto Commerce - an enterprise Microsoft ecommerce platform ©. All rights reserved</Copyright>
     <PackageIconUrl>https://virtocommerce.com/themes/assets/logo.jpg</PackageIconUrl>
     <PackageReleaseNotes></PackageReleaseNotes>
@@ -43,6 +43,7 @@
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="3.0.0" />
     <PackageReference Include="AspNet.Security.OAuth.StackExchange" Version="3.0.0" />
     <PackageReference Include="IdentityModel" Version="4.1.1" />
+    
     <PackageReference Include="Markdig" Version="0.18.3" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.13.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.13.1" />

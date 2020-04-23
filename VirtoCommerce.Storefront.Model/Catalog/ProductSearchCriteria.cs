@@ -7,7 +7,7 @@ using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Catalog
 {
-    public partial class ProductSearchCriteria : PagedSearchCriteria
+    public partial class ProductSearchCriteria : PagedSearchCriteria, IHasQueryKeyValues
     {
         public static int DefaultPageSize { get; set; } = 20;
 
@@ -58,31 +58,21 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             var result = base.Clone() as ProductSearchCriteria;
             if (Terms != null)
             {
-                result.Terms = Terms.Select(x => new Term { Name = x.Name, Value = x.Value }).ToArray();
+                result.Terms = Terms.Select(x => new Term { Name = x.Name, Value = x.Value }).ToList();
             }
 
             return result;
         }
-        public override IEnumerable<KeyValuePair<string, string>> GetKeyValues()
+        public override IEnumerable<KeyValuePair<string, string>> GetQueryKeyValues()
         {
-			 foreach (var basePair in base.GetKeyValues())
+            foreach (var basePair in base.GetQueryKeyValues())
             {
                 yield return basePair;
             }
-            if (!string.IsNullOrEmpty(Keyword))
-            {
-                yield return new KeyValuePair<string, string>("keyword", Keyword);
-            }
-            if (!string.IsNullOrEmpty(SortBy))
-            {
-                yield return new KeyValuePair<string, string>("sort_by", SortBy);
-            }
-            if (!Terms.IsNullOrEmpty())
-            {
-                var termsString = string.Join(";", Terms.ToStrings());
-                yield return new KeyValuePair<string, string>("terms", termsString);
-            }
-
+            //Need to return all keys even with null values in order to get known all keys and be able to remove them from the query string
+            yield return new KeyValuePair<string, string>("keyword", Keyword);
+            yield return new KeyValuePair<string, string>("sort_by", SortBy);
+            yield return new KeyValuePair<string, string>("terms", !Terms.IsNullOrEmpty() ? string.Join(";", Terms.ToStrings()) : null);
         }
 
         private void Parse(NameValueCollection queryString)

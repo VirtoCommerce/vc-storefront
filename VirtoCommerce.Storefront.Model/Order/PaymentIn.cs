@@ -177,6 +177,14 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// </summary>
         public string ModifiedBy { get; set; }
 
+        public DateTime? AuthorizedDate { get; set; }
+
+        public DateTime? CapturedDate { get; set; }
+
+        public DateTime? VoidedDate { get; set; }
+
+        public string OrderId { get; set; }
+
         /// <summary>
         /// Gets or Sets Id
         /// </summary>

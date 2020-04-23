@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
@@ -122,6 +123,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <param name="input"></param>
         /// <param name="tag"></param>
         /// <returns></returns>
+        [Obsolete("Left for backward compatibility with Shopify syntax. Need to use AddTermUrl instead")]
         public static string LinkToTag(TemplateContext context, object input, object tag)
         {
             return BuildTagLink(context, TagAction.Replace, tag, input);
@@ -134,6 +136,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <param name="input"></param>
         /// <param name="tag"></param>
         /// <returns></returns>
+        [Obsolete("Left for backward compatibility with Shopify syntax. Need to use AddTermUrl instead")]
         public static string LinkToAddTag(TemplateContext context, object input, object tag)
         {
             return BuildTagLink(context, TagAction.Add, tag, input);
@@ -146,11 +149,17 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <param name="input"></param>
         /// <param name="tag"></param>
         /// <returns></returns>
+        [Obsolete("Left for backward compatibility with Shopify syntax. Need to use RemoveTermUrl instead")]
         public static string LinkToRemoveTag(TemplateContext context, object input, object tag)
         {
             return BuildTagLink(context, TagAction.Remove, tag, input);
         }
 
+
+        public static string SortLinkUrlLinkToRemoveTag(TemplateContext context, object input, object tag)
+        {
+            return BuildTagLink(context, TagAction.Remove, tag, input);
+        }
         /// <summary>
         /// Returns the URL of a file in the "assets" folder of a theme.
         /// {{ 'shop.css' | asset_url }}
@@ -194,6 +203,120 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         {
             return AssetUrl(context, input);
         }
+
+
+        public static string TermsToString(TemplateContext context, IList<Term> terms)
+        {
+            return string.Join(";", terms.ToStrings() ?? new List<string> { });          
+        }
+
+        /// <summary>
+        /// Generates an relative url with query string that contains serialized ProductSearchCriteria as parameters
+        /// and adds to it sort_by expression with given sortBy value
+        /// <param name="context"></param>
+        /// <param name="sortBy">sort expression e.g popularity:desc </param>
+        /// <returns>example: /collection?sort_by=popularity:desc</returns>
+        public static string SortByUrl(TemplateContext context, string sortBy)
+        {
+            return BuildUriWithSearchQueryString(context, criteria =>
+            {
+                criteria.SortBy = sortBy;
+            }).PathAndQuery;
+        }
+
+        /// <summary>
+        ///  Generates an relative url with query string that contains serialized ProductSearchCriteria as parameters
+        ///  and adds to it page_size parameter with  given  value
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="pageSize">a new page size</param>
+        /// <returns>example: /collection?page_szie=20</returns>
+        public static string PageSizeUrl(TemplateContext context, int pageSize)
+        {
+            return BuildUriWithSearchQueryString(context, criteria =>
+            {
+                criteria.PageSize = pageSize;
+            }).PathAndQuery;
+        }
+
+
+        /// <summary>
+        ///  Generates an relative url with query string that contains serialized ProductSearchCriteria as parameters
+        ///  and adds to it q parameter with  given keyword value
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="keyword">search keyword</param>
+        /// <returns>example: /collection?q=foo</returns>
+        public static string AddSearchByKeywordUrl (TemplateContext context, string keyword)
+        {
+            return BuildUriWithSearchQueryString(context, criteria =>
+            {
+                criteria.Keyword = keyword;
+                //Need to reset page number every time when criteria changed
+                criteria.PageNumber = 1;
+            }).PathAndQuery;
+        }
+
+        /// <summary>
+        ///  Generates an relative url with query string that contains serialized ProductSearchCriteria as parameters
+        ///  and remove  q parameter from  resulting query string
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="keyword">search keyword</param>
+        /// <returns>example: /collection</returns>
+        public static string RemoveSearchByKeywordUrl(TemplateContext context)
+        {
+            return BuildUriWithSearchQueryString(context, criteria =>
+            {
+                criteria.Keyword = null;
+                //Need to reset page number every time when criteria changed
+                criteria.PageNumber = 1;
+            }).PathAndQuery;
+        }
+
+        /// <summary>
+        ///  Generates an relative url with query string that contains serialized ProductSearchCriteria as parameters
+        ///  and add a new given aggregation item value  to  terms parameter
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="aggregationItem">aggregation item</param>
+        /// <returns>example: /collection?terms=color:Red</returns>
+        public static string AddTermUrl(TemplateContext context, AggregationItem aggregationItem)
+        {
+            Uri result = null;
+            result = BuildUriWithSearchQueryString(context, criteria =>
+            {
+                var term = new Term { Name = aggregationItem.GroupLabel, Value = aggregationItem.Value.ToString() };
+                criteria.Terms.Add(term);
+                //Need to reset page number every time when criteria changed
+                criteria.PageNumber = 1;
+            });
+
+            return result?.PathAndQuery;
+        }
+
+        /// <summary>
+        ///  Generates an relative url with query string that contains serialized ProductSearchCriteria as parameters
+        ///  and remove a given aggregation item value  from  terms parameter
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="aggregationItem">aggregation item</param>
+        /// <returns>example: /collection</returns>
+        public static string RemoveTermUrl(TemplateContext context, AggregationItem aggregationItem)
+        {
+            Uri result = null;
+
+            result = BuildUriWithSearchQueryString(context, criteria =>
+            {
+                var term = new Term { Name = aggregationItem.GroupLabel, Value = aggregationItem.Value.ToString() };
+                criteria.Terms.Remove(term);
+                //Need to reset page number every time when criteria changed
+                criteria.PageNumber = 1;
+            });
+            return result?.PathAndQuery;
+        }
+
+
 
         /// <summary>
         /// Method for switching between multiple stores
@@ -384,36 +507,38 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
             var workContext = themeAdaptor.WorkContext;
 
-            var terms = workContext.CurrentProductSearchCriteria.Terms
-                .Select(t => new Term { Name = t.Name, Value = t.Value })
-                .ToList();
-
+            var criteria = workContext.CurrentProductSearchCriteria.Clone() as ProductSearchCriteria;
+            var term = new Term { Name = groupName, Value = value };
             switch (action)
             {
                 case TagAction.Add:
-                    terms.Add(new Term { Name = groupName, Value = value });
+                    criteria.Terms.Add(term);
                     break;
                 case TagAction.Remove:
-                    terms.RemoveAll(t =>
-                        string.Equals(t.Name, groupName, StringComparison.OrdinalIgnoreCase) &&
-                        string.Equals(t.Value, value, StringComparison.OrdinalIgnoreCase));
+                    criteria.Terms.Remove(term);
                     break;
                 case TagAction.Replace:
-                    terms.Clear();
-
+                    criteria.Terms.Clear();
                     if (!string.IsNullOrEmpty(groupName))
                     {
-                        terms.Add(new Term { Name = groupName, Value = value });
+                        criteria.Terms.Add(term);
                     }
                     break;
             }
-
-            var termsString = terms.Any() ? string.Join(";", terms.ToStrings()) : null;
-            var url = workContext.RequestUrl.SetQueryParameter("terms", termsString);
-
-            return url.AbsoluteUri;
+            var result = workContext.RequestUrl.SetQueryParameters(criteria);
+            return result.PathAndQuery;
         }
 
+
+        private static Uri BuildUriWithSearchQueryString(TemplateContext context, Action<ProductSearchCriteria> criteriaAction)
+        {
+            var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
+            var workContext = themeAdaptor.WorkContext;
+
+            var criteria = workContext.CurrentProductSearchCriteria.Clone() as ProductSearchCriteria;
+            criteriaAction(criteria);
+            return workContext.RequestUrl.SetQueryParameters(criteria);
+        }
 
         private static string BuildAbsoluteUrl(TemplateContext context, string virtualUrl)
         {

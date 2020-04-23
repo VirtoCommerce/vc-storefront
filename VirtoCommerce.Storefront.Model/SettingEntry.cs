@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model
 {
-    public partial class SettingEntry 
+    public partial class SettingEntry : IAccessibleByIndexKey
     {
         public SettingEntry()
         {
@@ -22,5 +19,7 @@ namespace VirtoCommerce.Storefront.Model
         public IList<string> ArrayValues { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+
+        public string IndexKey => Name;
     }
 }

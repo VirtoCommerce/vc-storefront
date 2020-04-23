@@ -9,6 +9,7 @@ using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Catalog;
+using VirtoCommerce.Storefront.Model.Catalog.Specifications;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Customer.Services;
@@ -23,6 +24,7 @@ namespace VirtoCommerce.Storefront.Domain
     public class CatalogService : ICatalogService
     {
         private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly IStorefrontUrlBuilder _storefrontUrlBuilder;
         private readonly ICatalogModuleCategories _categoriesApi;
         private readonly ICatalogModuleProducts _productsApi;
         private readonly ICatalogModuleSearch _searchApi;
@@ -33,11 +35,17 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
 
-        public CatalogService(IWorkContextAccessor workContextAccessor, ICatalogModuleCategories categoriesApi,
-            ICatalogModuleProducts productsApi,
-            ICatalogModuleSearch searchApi, IPricingService pricingService, IMemberService customerService,
-            ISubscriptionService subscriptionService,
-            IInventoryService inventoryService, IStorefrontMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
+        public CatalogService(IWorkContextAccessor workContextAccessor
+            , ICatalogModuleCategories categoriesApi
+            , ICatalogModuleProducts productsApi
+            , ICatalogModuleSearch searchApi
+            , IPricingService pricingService
+            , IMemberService customerService
+            , ISubscriptionService subscriptionService
+            , IInventoryService inventoryService
+            , IStorefrontMemoryCache memoryCache
+            , IApiChangesWatcher changesWatcher
+            , IStorefrontUrlBuilder storefrontUrlBuilder)
         {
             _workContextAccessor = workContextAccessor;
             _categoriesApi = categoriesApi;
@@ -50,6 +58,7 @@ namespace VirtoCommerce.Storefront.Domain
             _subscriptionService = subscriptionService;
             _memoryCache = memoryCache;
             _apiChangesWatcher = changesWatcher;
+            _storefrontUrlBuilder = storefrontUrlBuilder;
         }
 
         #region ICatalogSearchService Members
@@ -76,6 +85,7 @@ namespace VirtoCommerce.Storefront.Domain
                 var productsWithVariations = result.Concat(result.SelectMany(p => p.Variations)).ToList();
 
                 await LoadProductDependencies(productsWithVariations, responseGroup, workContext);
+                EstablishLazyDependenciesForProducts(result);
             }
 
             return result;
@@ -83,14 +93,13 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual Category[] GetCategories(string[] ids, CategoryResponseGroup responseGroup = CategoryResponseGroup.Info)
         {
-            var workContext = _workContextAccessor.WorkContext;
             return GetCategoriesAsync(ids, responseGroup).GetAwaiter().GetResult();
         }
 
         public virtual async Task<Category[]> GetCategoriesAsync(string[] ids, CategoryResponseGroup responseGroup = CategoryResponseGroup.Info)
         {
             var workContext = _workContextAccessor.WorkContext;
-            var cacheKey = CacheKey.With(GetType(), "GetCategoriesAsync", string.Join("-", ids.OrderBy(x => x)), responseGroup.ToString());
+            var cacheKey = CacheKey.With(GetType(), nameof(GetCategoriesAsync), string.Join("-", ids.OrderBy(x => x)), responseGroup.ToString());
             var categoriesDto = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
@@ -98,7 +107,7 @@ namespace VirtoCommerce.Storefront.Domain
             });
             var result = categoriesDto.Select(x => x.ToCategory(workContext.CurrentLanguage, workContext.CurrentStore)).ToArray();
             //Set  lazy loading for child categories 
-            EstablishLazyDependenciesForCategories(result);
+            EstablishLazyDependenciesForCategories(result);        
             return result;
         }
 
@@ -109,7 +118,6 @@ namespace VirtoCommerce.Storefront.Domain
         /// <returns></returns>
         public virtual IPagedList<Category> SearchCategories(CategorySearchCriteria criteria)
         {
-            var workContext = _workContextAccessor.WorkContext;
             return SearchCategoriesAsync(criteria).GetAwaiter().GetResult();
         }
 
@@ -121,7 +129,7 @@ namespace VirtoCommerce.Storefront.Domain
         public virtual async Task<IPagedList<Category>> SearchCategoriesAsync(CategorySearchCriteria criteria)
         {
             var workContext = _workContextAccessor.WorkContext;
-            var cacheKey = CacheKey.With(GetType(), "SearchCategoriesAsync", criteria.GetCacheKey(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
+            var cacheKey = CacheKey.With(GetType(), nameof(SearchCategoriesAsync), criteria.GetCacheKey(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
             var searchResult = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
@@ -169,13 +177,31 @@ namespace VirtoCommerce.Storefront.Domain
             if (productsWithVariations.Any())
             {
                 await LoadProductDependencies(productsWithVariations, criteria.ResponseGroup, workContext);
+                EstablishLazyDependenciesForProducts(productsWithVariations);
             }
 
-            return new CatalogSearchResult
+            var aggrIsVisbileSpec = new AggregationIsVisibleSpecification();
+            var searchResult = new CatalogSearchResult(criteria)
             {
                 Products = new MutablePagedList<Product>(products, criteria.PageNumber, criteria.PageSize, (int?)result.TotalCount ?? 0),
-                Aggregations = !result.Aggregations.IsNullOrEmpty() ? result.Aggregations.Select(x => x.ToAggregation(workContext.CurrentLanguage.CultureName)).ToArray() : new Aggregation[] { }
+                Aggregations = !result.Aggregations.IsNullOrEmpty() ? result.Aggregations.Select(x => x.ToAggregation(workContext.CurrentLanguage.CultureName))
+                                                                                         .Where(x => aggrIsVisbileSpec.IsSatisfiedBy(x))                                                                                         
+                                                                                         .ToArray() : new Aggregation[] { }
             };
+            //Post loading initialization of the resulting aggregations
+            var aggrContext = new AggregationPostLoadContext
+            {
+                ProductSearchCriteria = criteria
+            };
+            var aggrItemCatIds = searchResult.Aggregations.SelectMany(x => x.Items).OfType<CategoryAggregationItem>().Select(x => x.CategoryId).Distinct().ToArray();
+            if (aggrItemCatIds.Any())
+            {
+                aggrContext.CategoryByIdDict = (await GetCategoriesAsync(aggrItemCatIds, CategoryResponseGroup.Info))
+                                                            .Distinct().ToDictionary(x => x.Id)
+                                                            .WithDefaultValue(null);
+            }          
+            searchResult.Aggregations.Apply(x => x.PostLoadInit(aggrContext));
+            return searchResult;
         }
         #endregion
 
@@ -223,7 +249,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         protected virtual async Task<Product[]> GetProductsAsync(IList<string> ids, ItemResponseGroup responseGroup, WorkContext workContext)
         {
-            var cacheKey = CacheKey.With(GetType(), "GetProductsAsync", string.Join("-", ids.OrderBy(x => x)), responseGroup.ToString());
+            var cacheKey = CacheKey.With(GetType(), nameof(GetProductsAsync), string.Join("-", ids.OrderBy(x => x)), responseGroup.ToString());
             var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
@@ -236,7 +262,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         protected virtual async Task<catalogDto.ProductSearchResult> SearchProductsAsync(ProductSearchCriteria criteria, WorkContext workContext)
         {
-            var cacheKey = CacheKey.With(GetType(), "SearchProductsAsync", criteria.GetCacheKey(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
+            var cacheKey = CacheKey.With(GetType(), nameof(SearchProductsAsync), criteria.GetCacheKey(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
 
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
@@ -283,6 +309,7 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
+      
         protected virtual async Task LoadProductInventoriesAsync(List<Product> products, WorkContext workContext)
         {
             await _inventoryService.EvaluateProductInventoriesAsync(products, workContext);
@@ -324,7 +351,7 @@ namespace VirtoCommerce.Storefront.Domain
                     {
                         criteria.CopyFrom(@params);
                     }
-                    var cacheKey = CacheKey.With(GetType(), "SearchProductAssociations", criteria.GetCacheKey());
+                    var cacheKey = CacheKey.With(GetType(), nameof(LoadProductsAssociationsAsync), criteria.GetCacheKey());
                     var searchResult = _memoryCache.GetOrCreateExclusive(cacheKey, cacheEntry =>
                        {
                            cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
@@ -358,7 +385,7 @@ namespace VirtoCommerce.Storefront.Domain
                 //Lazy loading for parents categories
                 category.Parents = new MutablePagedList<Category>((pageNumber, pageSize, sortInfos) =>
                 {
-                    var catIds = category.Outline.Split('/');
+                    var catIds = category.Outline.Split('/').Where(x =>  x != null && !x.EqualsInvariant(category.Id)).ToArray();
                     return new StaticPagedList<Category>(GetCategories(catIds, CategoryResponseGroup.Small), pageNumber, pageSize, catIds.Length);
                 }, 1, CategorySearchCriteria.DefaultPageSize);
 
@@ -385,5 +412,16 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
+        protected virtual void EstablishLazyDependenciesForProducts(IEnumerable<Product> products)
+        {
+            if (products == null)
+            {
+                throw new ArgumentNullException(nameof(products));
+            }
+            foreach (var product in products.Where(x => !string.IsNullOrEmpty(x.CategoryId)))
+            {
+                product.Category = new Lazy<Category>(() => GetCategories(new[] { product.CategoryId }, CategoryResponseGroup.Small).FirstOrDefault());
+            }            
+        }
     }
 }

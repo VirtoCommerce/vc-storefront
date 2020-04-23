@@ -5,7 +5,7 @@ using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Catalog
 {
-    public partial class Category : Entity, IAccessibleByIndexKey
+    public partial class Category : Entity, IAccessibleByIndexKey, IHasBreadcrumbs
     {
         public Category()
         {
@@ -69,6 +69,31 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public override string ToString()
         {
             return SeoPath ?? base.ToString();
+        }
+
+        public IEnumerable<Breadcrumb> GetBreadcrumbs()
+        {
+            foreach (var parentCategory in Parents.Distinct())
+            {
+                if (!parentCategory.SeoPath.IsNullOrEmpty())
+                {
+                    yield return new CategoryBreadcrumb(parentCategory)
+                    {
+                        SeoPath = parentCategory.SeoPath,
+                        Url =  parentCategory.SeoPath,
+                        Title = parentCategory.Name,
+                    };
+                }
+            }
+            if (!SeoPath.IsNullOrEmpty())
+            {
+                yield return new CategoryBreadcrumb(this)
+                {
+                    Title = Title,
+                    SeoPath = SeoPath,
+                    Url = Url
+                };
+            }
         }
 
         public IMutablePagedList<CatalogProperty> Properties { get; set; }
