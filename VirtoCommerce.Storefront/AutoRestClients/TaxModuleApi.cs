@@ -1455,10 +1455,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the TaxProvider class.
         /// </summary>
-        public TaxProvider(string storeId = default(string), string code = default(string), string logoUrl = default(string), bool? isActive = default(bool?), int? priority = default(int?), string typeName = default(string), IList<ObjectSettingEntry> settings = default(IList<ObjectSettingEntry>), string id = default(string))
+        public TaxProvider(string code = default(string), string storeId = default(string), string logoUrl = default(string), bool? isActive = default(bool?), int? priority = default(int?), string typeName = default(string), IList<ObjectSettingEntry> settings = default(IList<ObjectSettingEntry>), string id = default(string))
         {
-            StoreId = storeId;
             Code = code;
+            StoreId = storeId;
             LogoUrl = logoUrl;
             IsActive = isActive;
             Priority = priority;
@@ -1475,13 +1475,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "storeId")]
-        public string StoreId { get; set; }
+        [JsonProperty(PropertyName = "code")]
+        public string Code { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "code")]
-        public string Code { get; set; }
+        [JsonProperty(PropertyName = "storeId")]
+        public string StoreId { get; set; }
 
         /// <summary>
         /// </summary>

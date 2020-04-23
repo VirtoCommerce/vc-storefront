@@ -20,6 +20,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var result = new orderDto.CustomerOrderSearchCriteria
             {
+                Keyword = criteria.Keyword,
                 CustomerId = criteria.CustomerId,
                 StartDate = criteria.StartDate,
                 EndDate = criteria.EndDate,
@@ -34,6 +35,31 @@ namespace VirtoCommerce.Storefront.Domain
 
             return result;
         }
+
+        public static orderDto.PaymentSearchCriteria ToPaymentSearchCriteriaDto(this PaymentSearchCriteria criteria)
+        {
+            var result = new orderDto.PaymentSearchCriteria
+            {
+                OrderId = criteria.OrderId,
+                OrderNumber = criteria.OrderNumber,
+                Keyword = criteria.Keyword,
+                Status = criteria.Status,
+                Statuses = criteria.Statuses,
+                StoreIds = criteria.StoreIds,
+                StartDate = criteria.StartDate,
+                EndDate = criteria.EndDate,
+                CapturedStartDate = criteria.CapturedStartDate,
+                CapturedEndDate = criteria.CapturedEndDate,
+                AuthorizedStartDate = criteria.AuthorizedStartDate,
+                AuthorizedEndDate = criteria.AuthorizedEndDate,
+                Skip = criteria.Start,
+                Take = criteria.PageSize,
+                Sort = criteria.Sort
+            };
+
+            return result;
+        }
+
 
         public static DynamicProperty ToDynamicProperty(this orderDto.DynamicObjectProperty propertyDto)
         {
@@ -270,6 +296,10 @@ namespace VirtoCommerce.Storefront.Domain
             retVal.ParentOperationId = paymentIn.ParentOperationId;
             retVal.Purpose = paymentIn.Purpose;
             retVal.Status = paymentIn.Status;
+            retVal.CapturedDate = paymentIn.CapturedDate;
+            retVal.AuthorizedDate = paymentIn.AuthorizedDate;
+            retVal.VoidedDate = paymentIn.VoidedDate;
+            retVal.OrderId = paymentIn.OrderId;
 
 
             if (paymentIn.BillingAddress != null)

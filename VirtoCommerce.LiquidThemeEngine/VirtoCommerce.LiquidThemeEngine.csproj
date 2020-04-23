@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Version>4.1.7</Version>
+    <Version>4.1.10</Version>
     <Description>The storefront implementation of the Virto Commerce platform.</Description>
     <Copyright>Copyright © 2011-2019 Virto Commerce - an enterprise Microsoft ecommerce platform ©. All rights reserved</Copyright>
     <Authors>Virto Commerce</Authors>
@@ -12,8 +12,8 @@
     <PackageProjectUrl>https://github.com/VirtoCommerce/vc-storefront-core</PackageProjectUrl>
     <PackageIconUrl>https://virtocommerce.com/themes/assets/logo.jpg</PackageIconUrl>
     <RepositoryUrl>https://github.com/VirtoCommerce/vc-storefront-core</RepositoryUrl>
-    <AssemblyVersion>4.1.7.0</AssemblyVersion>
-    <FileVersion>4.1.7.0</FileVersion>
+    <AssemblyVersion>4.1.10.0</AssemblyVersion>
+    <FileVersion>4.1.10.0</FileVersion>
   </PropertyGroup>
 
 
@@ -25,7 +25,7 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Nito.AsyncEx" Version="5.0.0" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
-    <PackageReference Include="Scriban" Version="2.1.1" />
+    <PackageReference Include="Scriban" Version="2.1.2" />
   </ItemGroup>
 
 

@@ -1576,7 +1576,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1711,7 +1711,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -2229,7 +2229,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -4404,8 +4404,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// 'Pending', 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded',
         /// 'Voided', 'Custom', 'Cancelled'</param>
         /// <param name="taxType">Tax category or type</param>
-        public PaymentIn(string purpose = default(string), string gatewayCode = default(string), PaymentMethod paymentMethod = default(PaymentMethod), string organizationId = default(string), string organizationName = default(string), string customerId = default(string), string customerName = default(string), System.DateTime? incomingDate = default(System.DateTime?), OrderAddress billingAddress = default(OrderAddress), string paymentStatus = default(string), System.DateTime? authorizedDate = default(System.DateTime?), System.DateTime? capturedDate = default(System.DateTime?), System.DateTime? voidedDate = default(System.DateTime?), ProcessPaymentRequestResult processPaymentResult = default(ProcessPaymentRequestResult), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), IList<Discount> discounts = default(IList<Discount>), IList<PaymentGatewayTransaction> transactions = default(IList<PaymentGatewayTransaction>), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), string outerId = default(string), IList<IOperation> childrenOperations = default(IList<IOperation>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public PaymentIn(string orderId = default(string), string purpose = default(string), string gatewayCode = default(string), PaymentMethod paymentMethod = default(PaymentMethod), string organizationId = default(string), string organizationName = default(string), string customerId = default(string), string customerName = default(string), System.DateTime? incomingDate = default(System.DateTime?), OrderAddress billingAddress = default(OrderAddress), string paymentStatus = default(string), System.DateTime? authorizedDate = default(System.DateTime?), System.DateTime? capturedDate = default(System.DateTime?), System.DateTime? voidedDate = default(System.DateTime?), ProcessPaymentRequestResult processPaymentResult = default(ProcessPaymentRequestResult), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), string objectType = default(string), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), IList<Discount> discounts = default(IList<Discount>), IList<PaymentGatewayTransaction> transactions = default(IList<PaymentGatewayTransaction>), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), string outerId = default(string), IList<IOperation> childrenOperations = default(IList<IOperation>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
+            OrderId = orderId;
             Purpose = purpose;
             GatewayCode = gatewayCode;
             PaymentMethod = paymentMethod;
@@ -4426,6 +4427,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             TotalWithTax = totalWithTax;
             DiscountAmount = discountAmount;
             DiscountAmountWithTax = discountAmountWithTax;
+            ObjectType = objectType;
             TaxType = taxType;
             TaxTotal = taxTotal;
             TaxPercentRate = taxPercentRate;
@@ -4445,7 +4447,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             IsCancelled = isCancelled;
             CancelledDate = cancelledDate;
             CancelReason = cancelReason;
-            ObjectType = objectType;
             DynamicProperties = dynamicProperties;
             OperationsLog = operationsLog;
             CreatedDate = createdDate;
@@ -4461,6 +4462,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "orderId")]
+        public string OrderId { get; set; }
 
         /// <summary>
         /// </summary>
@@ -4567,6 +4573,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public double? DiscountAmountWithTax { get; set; }
 
         /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
         /// Gets or sets tax category or type
         /// </summary>
         [JsonProperty(PropertyName = "taxType")]
@@ -4661,11 +4672,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "cancelReason")]
         public string CancelReason { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -5464,7 +5470,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <param name="shipmentMethodOption">Current shipment option
         /// code</param>
         /// <param name="taxType">Tax category or type</param>
-        public OrderShipment(string organizationId = default(string), string organizationName = default(string), string fulfillmentCenterId = default(string), string fulfillmentCenterName = default(string), string employeeId = default(string), string employeeName = default(string), string shipmentMethodCode = default(string), string shipmentMethodOption = default(string), ShippingMethod shippingMethod = default(ShippingMethod), string customerOrderId = default(string), CustomerOrder customerOrder = default(CustomerOrder), IList<OrderShipmentItem> items = default(IList<OrderShipmentItem>), IList<ShipmentPackage> packages = default(IList<ShipmentPackage>), IList<PaymentIn> inPayments = default(IList<PaymentIn>), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), IList<Discount> discounts = default(IList<Discount>), OrderAddress deliveryAddress = default(OrderAddress), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), string outerId = default(string), IList<IOperation> childrenOperations = default(IList<IOperation>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public OrderShipment(string organizationId = default(string), string organizationName = default(string), string fulfillmentCenterId = default(string), string fulfillmentCenterName = default(string), string employeeId = default(string), string employeeName = default(string), string shipmentMethodCode = default(string), string shipmentMethodOption = default(string), ShippingMethod shippingMethod = default(ShippingMethod), string customerOrderId = default(string), CustomerOrder customerOrder = default(CustomerOrder), IList<OrderShipmentItem> items = default(IList<OrderShipmentItem>), IList<ShipmentPackage> packages = default(IList<ShipmentPackage>), IList<PaymentIn> inPayments = default(IList<PaymentIn>), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), IList<Discount> discounts = default(IList<Discount>), OrderAddress deliveryAddress = default(OrderAddress), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), string objectType = default(string), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), string outerId = default(string), IList<IOperation> childrenOperations = default(IList<IOperation>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             OrganizationId = organizationId;
             OrganizationName = organizationName;
@@ -5496,6 +5502,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             DiscountAmountWithTax = discountAmountWithTax;
             Fee = fee;
             FeeWithTax = feeWithTax;
+            ObjectType = objectType;
             TaxType = taxType;
             TaxTotal = taxTotal;
             TaxPercentRate = taxPercentRate;
@@ -5513,7 +5520,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             IsCancelled = isCancelled;
             CancelledDate = cancelledDate;
             CancelReason = cancelReason;
-            ObjectType = objectType;
             DynamicProperties = dynamicProperties;
             OperationsLog = operationsLog;
             CreatedDate = createdDate;
@@ -5683,6 +5689,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public double? FeeWithTax { get; set; }
 
         /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
         /// Gets or sets tax category or type
         /// </summary>
         [JsonProperty(PropertyName = "taxType")]
@@ -5767,11 +5778,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "cancelReason")]
         public string CancelReason { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -5865,7 +5871,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// $100).</param>
         /// <param name="total">Grand order total</param>
         /// <param name="taxType">Tax category or type</param>
-        public CustomerOrder(string customerId = default(string), string customerName = default(string), string channelId = default(string), string storeId = default(string), string storeName = default(string), string organizationId = default(string), string organizationName = default(string), string employeeId = default(string), string employeeName = default(string), string shoppingCartId = default(string), bool? isPrototype = default(bool?), string subscriptionNumber = default(string), string subscriptionId = default(string), IList<OrderAddress> addresses = default(IList<OrderAddress>), IList<PaymentIn> inPayments = default(IList<PaymentIn>), IList<OrderLineItem> items = default(IList<OrderLineItem>), IList<OrderShipment> shipments = default(IList<OrderShipment>), IList<Discount> discounts = default(IList<Discount>), double? discountAmount = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), IList<string> scopes = default(IList<string>), double? total = default(double?), double? subTotal = default(double?), double? subTotalWithTax = default(double?), double? subTotalDiscount = default(double?), double? subTotalDiscountWithTax = default(double?), double? subTotalTaxTotal = default(double?), double? shippingTotal = default(double?), double? shippingTotalWithTax = default(double?), double? shippingSubTotal = default(double?), double? shippingSubTotalWithTax = default(double?), double? shippingDiscountTotal = default(double?), double? shippingDiscountTotalWithTax = default(double?), double? shippingTaxTotal = default(double?), double? paymentTotal = default(double?), double? paymentTotalWithTax = default(double?), double? paymentSubTotal = default(double?), double? paymentSubTotalWithTax = default(double?), double? paymentDiscountTotal = default(double?), double? paymentDiscountTotalWithTax = default(double?), double? paymentTaxTotal = default(double?), double? discountTotal = default(double?), double? discountTotalWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), double? feeTotal = default(double?), double? feeTotalWithTax = default(double?), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), string languageCode = default(string), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), string outerId = default(string), IList<IOperation> childrenOperations = default(IList<IOperation>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public CustomerOrder(string customerId = default(string), string customerName = default(string), string channelId = default(string), string storeId = default(string), string storeName = default(string), string organizationId = default(string), string organizationName = default(string), string employeeId = default(string), string employeeName = default(string), string shoppingCartId = default(string), bool? isPrototype = default(bool?), string subscriptionNumber = default(string), string subscriptionId = default(string), string objectType = default(string), IList<OrderAddress> addresses = default(IList<OrderAddress>), IList<PaymentIn> inPayments = default(IList<PaymentIn>), IList<OrderLineItem> items = default(IList<OrderLineItem>), IList<OrderShipment> shipments = default(IList<OrderShipment>), IList<Discount> discounts = default(IList<Discount>), double? discountAmount = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), IList<string> scopes = default(IList<string>), double? total = default(double?), double? subTotal = default(double?), double? subTotalWithTax = default(double?), double? subTotalDiscount = default(double?), double? subTotalDiscountWithTax = default(double?), double? subTotalTaxTotal = default(double?), double? shippingTotal = default(double?), double? shippingTotalWithTax = default(double?), double? shippingSubTotal = default(double?), double? shippingSubTotalWithTax = default(double?), double? shippingDiscountTotal = default(double?), double? shippingDiscountTotalWithTax = default(double?), double? shippingTaxTotal = default(double?), double? paymentTotal = default(double?), double? paymentTotalWithTax = default(double?), double? paymentSubTotal = default(double?), double? paymentSubTotalWithTax = default(double?), double? paymentDiscountTotal = default(double?), double? paymentDiscountTotalWithTax = default(double?), double? paymentTaxTotal = default(double?), double? discountTotal = default(double?), double? discountTotalWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), double? feeTotal = default(double?), double? feeTotalWithTax = default(double?), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), string languageCode = default(string), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), string outerId = default(string), IList<IOperation> childrenOperations = default(IList<IOperation>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             CustomerId = customerId;
             CustomerName = customerName;
@@ -5880,6 +5886,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             IsPrototype = isPrototype;
             SubscriptionNumber = subscriptionNumber;
             SubscriptionId = subscriptionId;
+            ObjectType = objectType;
             Addresses = addresses;
             InPayments = inPayments;
             Items = items;
@@ -5931,7 +5938,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             IsCancelled = isCancelled;
             CancelledDate = cancelledDate;
             CancelReason = cancelReason;
-            ObjectType = objectType;
             DynamicProperties = dynamicProperties;
             OperationsLog = operationsLog;
             CreatedDate = createdDate;
@@ -6018,6 +6024,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "subscriptionId")]
         public string SubscriptionId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
 
         /// <summary>
         /// </summary>
@@ -6281,11 +6292,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "cancelReason")]
         public string CancelReason { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; private set; }
 
         /// <summary>
         /// </summary>

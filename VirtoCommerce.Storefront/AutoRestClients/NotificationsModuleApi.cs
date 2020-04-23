@@ -2417,12 +2417,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         /// <param name="languageCode">Code of Language</param>
         /// <param name="kind">For detecting kind of notifications (email, sms
         /// and etc.)</param>
-        public NotificationTemplate(string languageCode = default(string), string kind = default(string), bool? isReadonly = default(bool?), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public NotificationTemplate(string languageCode = default(string), string kind = default(string), bool? isReadonly = default(bool?), string outerId = default(string), bool? isPredefined = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             LanguageCode = languageCode;
             Kind = kind;
             IsReadonly = isReadonly;
             OuterId = outerId;
+            IsPredefined = isPredefined;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
@@ -2458,6 +2459,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "outerId")]
         public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isPredefined")]
+        public bool? IsPredefined { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2531,6 +2537,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         /// and is used only for backward compatibility with old notification
         /// names
         /// that are stored and used by API clients.</param>
+        /// <param name="type">Type of notifications, like Identifier</param>
         /// <param name="kind">For detecting kind of notifications (email, sms
         /// and etc.)</param>
         public Notification(TenantIdentity tenantIdentity = default(TenantIdentity), bool? isActive = default(bool?), string languageCode = default(string), string alias = default(string), string type = default(string), string kind = default(string), string outerId = default(string), IList<NotificationTemplate> templates = default(IList<NotificationTemplate>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
@@ -2583,6 +2590,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         public string Alias { get; set; }
 
         /// <summary>
+        /// Gets or sets type of notifications, like Identifier
         /// </summary>
         [JsonProperty(PropertyName = "type")]
         public string Type { get; set; }

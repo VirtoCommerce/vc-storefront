@@ -501,7 +501,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -636,7 +636,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -771,7 +771,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -906,7 +906,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1041,7 +1041,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1182,7 +1182,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1318,7 +1318,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1974,7 +1974,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -2031,7 +2031,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <remarks>
         /// Get inventory of products for each fulfillment center.
         /// </remarks>
-        /// <param name='ids'>
+        /// <param name='body'>
         /// Products ids
         /// </param>
         /// <param name='fulfillmentCenterIds'>
@@ -2052,7 +2052,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<InventoryInfo>>> GetProductsInventoriesByPlentyIdsWithHttpMessagesAsync(IList<string> ids = default(IList<string>), IList<string> fulfillmentCenterIds = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<InventoryInfo>>> GetProductsInventoriesByPlentyIdsWithHttpMessagesAsync(IList<string> body = default(IList<string>), IList<string> fulfillmentCenterIds = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -2061,7 +2061,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("ids", ids);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("fulfillmentCenterIds", fulfillmentCenterIds);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetProductsInventoriesByPlentyIds", tracingParameters);
@@ -2070,10 +2070,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             var _baseUrl = Client.BaseUri.AbsoluteUri;
             var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/inventory/products/plenty").ToString();
             List<string> _queryParameters = new List<string>();
-            if (ids != null)
-            {
-                _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Join(",", ids))));
-            }
             if (fulfillmentCenterIds != null)
             {
                 _queryParameters.Add(string.Format("fulfillmentCenterIds={0}", System.Uri.EscapeDataString(string.Join(",", fulfillmentCenterIds))));
@@ -2104,6 +2100,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
 
             // Serialize Request
             string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
             // Set Credentials
             if (Client.Credentials != null)
             {
@@ -2124,7 +2126,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -2268,7 +2270,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -2729,7 +2731,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <remarks>
         /// Get inventory of products for each fulfillment center.
         /// </remarks>
-        /// <param name='ids'>
+        /// <param name='body'>
         /// Products ids
         /// </param>
         /// <param name='fulfillmentCenterIds'>
@@ -2748,7 +2750,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<IList<InventoryInfo>>> GetProductsInventoriesByPlentyIdsWithHttpMessagesAsync(IList<string> ids = default(IList<string>), IList<string> fulfillmentCenterIds = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<InventoryInfo>>> GetProductsInventoriesByPlentyIdsWithHttpMessagesAsync(IList<string> body = default(IList<string>), IList<string> fulfillmentCenterIds = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Get inventories of product
         /// </summary>
@@ -3236,15 +3238,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='ids'>
+            /// <param name='body'>
             /// Products ids
             /// </param>
             /// <param name='fulfillmentCenterIds'>
             /// The fulfillment centers that will be used to filter product inventories
             /// </param>
-            public static IList<InventoryInfo> GetProductsInventoriesByPlentyIds(this IInventoryModule operations, IList<string> ids = default(IList<string>), IList<string> fulfillmentCenterIds = default(IList<string>))
+            public static IList<InventoryInfo> GetProductsInventoriesByPlentyIds(this IInventoryModule operations, IList<string> body = default(IList<string>), IList<string> fulfillmentCenterIds = default(IList<string>))
             {
-                return operations.GetProductsInventoriesByPlentyIdsAsync(ids, fulfillmentCenterIds).GetAwaiter().GetResult();
+                return operations.GetProductsInventoriesByPlentyIdsAsync(body, fulfillmentCenterIds).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -3256,7 +3258,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='ids'>
+            /// <param name='body'>
             /// Products ids
             /// </param>
             /// <param name='fulfillmentCenterIds'>
@@ -3265,9 +3267,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<InventoryInfo>> GetProductsInventoriesByPlentyIdsAsync(this IInventoryModule operations, IList<string> ids = default(IList<string>), IList<string> fulfillmentCenterIds = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<InventoryInfo>> GetProductsInventoriesByPlentyIdsAsync(this IInventoryModule operations, IList<string> body = default(IList<string>), IList<string> fulfillmentCenterIds = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetProductsInventoriesByPlentyIdsWithHttpMessagesAsync(ids, fulfillmentCenterIds, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetProductsInventoriesByPlentyIdsWithHttpMessagesAsync(body, fulfillmentCenterIds, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }

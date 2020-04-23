@@ -99,7 +99,10 @@ namespace VirtoCommerce.Storefront.Domain
                 return result.Products;
             }, 1, ProductSearchCriteria.DefaultPageSize);
 
-            builder.WorkContext.ProductSearchResult.Products = builder.WorkContext.Products;
+            builder.WorkContext.ProductSearchResult = new CatalogSearchResult(productSearchcriteria)
+            {
+                Products = builder.WorkContext.Products
+            };
 
             return Task.CompletedTask;
         }

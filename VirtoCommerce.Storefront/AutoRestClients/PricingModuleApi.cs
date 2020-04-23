@@ -2207,7 +2207,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ProductPriceSearchResult>> SearchProductPricesWithHttpMessagesAsync(bool? groupByProducts = default(bool?), string priceListId = default(string), IList<string> priceListIds = default(IList<string>), string productId = default(string), IList<string> productIds = default(IList<string>), System.DateTime? modifiedSince = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ProductPriceSearchResult>> SearchProductPricesGetWithHttpMessagesAsync(bool? groupByProducts = default(bool?), string priceListId = default(string), IList<string> priceListIds = default(IList<string>), string productId = default(string), IList<string> productIds = default(IList<string>), System.DateTime? modifiedSince = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -2234,7 +2234,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
                 tracingParameters.Add("skip", skip);
                 tracingParameters.Add("take", take);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "SearchProductPrices", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "SearchProductPricesGet", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
@@ -2334,6 +2334,144 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<ProductPriceSearchResult>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<ProductPriceSearchResult>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Search product prices
+        /// </summary>
+        /// <remarks>
+        /// Search product prices
+        /// </remarks>
+        /// <param name='body'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<ProductPriceSearchResult>> SearchProductPricesPostWithHttpMessagesAsync(PricesSearchCriteria body = default(PricesSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "SearchProductPricesPost", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/catalog/products/prices/search").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
             // Set Credentials
             if (Client.Credentials != null)
             {
@@ -4036,7 +4174,28 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<ProductPriceSearchResult>> SearchProductPricesWithHttpMessagesAsync(bool? groupByProducts = default(bool?), string priceListId = default(string), IList<string> priceListIds = default(IList<string>), string productId = default(string), IList<string> productIds = default(IList<string>), System.DateTime? modifiedSince = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProductPriceSearchResult>> SearchProductPricesGetWithHttpMessagesAsync(bool? groupByProducts = default(bool?), string priceListId = default(string), IList<string> priceListIds = default(IList<string>), string productId = default(string), IList<string> productIds = default(IList<string>), System.DateTime? modifiedSince = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Search product prices
+        /// </summary>
+        /// <remarks>
+        /// Search product prices
+        /// </remarks>
+        /// <param name='body'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        Task<HttpOperationResponse<ProductPriceSearchResult>> SearchProductPricesPostWithHttpMessagesAsync(PricesSearchCriteria body = default(PricesSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Evaluate  product prices
         /// </summary>
@@ -4824,9 +4983,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             /// </param>
             /// <param name='take'>
             /// </param>
-            public static ProductPriceSearchResult SearchProductPrices(this IPricingModule operations, bool? groupByProducts = default(bool?), string priceListId = default(string), IList<string> priceListIds = default(IList<string>), string productId = default(string), IList<string> productIds = default(IList<string>), System.DateTime? modifiedSince = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+            public static ProductPriceSearchResult SearchProductPricesGet(this IPricingModule operations, bool? groupByProducts = default(bool?), string priceListId = default(string), IList<string> priceListIds = default(IList<string>), string productId = default(string), IList<string> productIds = default(IList<string>), System.DateTime? modifiedSince = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
             {
-                return operations.SearchProductPricesAsync(groupByProducts, priceListId, priceListIds, productId, productIds, modifiedSince, responseGroup, objectType, objectTypes, objectIds, keyword, searchPhrase, languageCode, sort, sortInfos, skip, take).GetAwaiter().GetResult();
+                return operations.SearchProductPricesGetAsync(groupByProducts, priceListId, priceListIds, productId, productIds, modifiedSince, responseGroup, objectType, objectTypes, objectIds, keyword, searchPhrase, languageCode, sort, sortInfos, skip, take).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -4875,9 +5034,47 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ProductPriceSearchResult> SearchProductPricesAsync(this IPricingModule operations, bool? groupByProducts = default(bool?), string priceListId = default(string), IList<string> priceListIds = default(IList<string>), string productId = default(string), IList<string> productIds = default(IList<string>), System.DateTime? modifiedSince = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProductPriceSearchResult> SearchProductPricesGetAsync(this IPricingModule operations, bool? groupByProducts = default(bool?), string priceListId = default(string), IList<string> priceListIds = default(IList<string>), string productId = default(string), IList<string> productIds = default(IList<string>), System.DateTime? modifiedSince = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SearchProductPricesWithHttpMessagesAsync(groupByProducts, priceListId, priceListIds, productId, productIds, modifiedSince, responseGroup, objectType, objectTypes, objectIds, keyword, searchPhrase, languageCode, sort, sortInfos, skip, take, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SearchProductPricesGetWithHttpMessagesAsync(groupByProducts, priceListId, priceListIds, productId, productIds, modifiedSince, responseGroup, objectType, objectTypes, objectIds, keyword, searchPhrase, languageCode, sort, sortInfos, skip, take, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Search product prices
+            /// </summary>
+            /// <remarks>
+            /// Search product prices
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// </param>
+            public static ProductPriceSearchResult SearchProductPricesPost(this IPricingModule operations, PricesSearchCriteria body = default(PricesSearchCriteria))
+            {
+                return operations.SearchProductPricesPostAsync(body).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Search product prices
+            /// </summary>
+            /// <remarks>
+            /// Search product prices
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<ProductPriceSearchResult> SearchProductPricesPostAsync(this IPricingModule operations, PricesSearchCriteria body = default(PricesSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.SearchProductPricesPostWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -6251,12 +6448,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <param name="languageCode">Gets or sets the asset language.</param>
         /// <param name="isInherited">System flag used to mark that object was
         /// inherited from other</param>
-        public Image(int? sortOrder = default(int?), byte[] binaryData = default(byte[]), string relativeUrl = default(string), string url = default(string), string typeId = default(string), string group = default(string), string name = default(string), string outerId = default(string), string languageCode = default(string), bool? isInherited = default(bool?), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Image(int? sortOrder = default(int?), byte[] binaryData = default(byte[]), string relativeUrl = default(string), string url = default(string), bool? hasExternalUrl = default(bool?), string typeId = default(string), string group = default(string), string name = default(string), string outerId = default(string), string languageCode = default(string), bool? isInherited = default(bool?), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             SortOrder = sortOrder;
             BinaryData = binaryData;
             RelativeUrl = relativeUrl;
             Url = url;
+            HasExternalUrl = hasExternalUrl;
             TypeId = typeId;
             Group = group;
             Name = name;
@@ -6298,6 +6496,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "url")]
         public string Url { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "hasExternalUrl")]
+        public bool? HasExternalUrl { get; private set; }
 
         /// <summary>
         /// Gets or sets the asset type identifier.
@@ -6639,11 +6842,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         public string Outline { get; private set; }
 
         /// <summary>
-        /// Gets category path in physical catalog (all parent categories names
-        /// concatenated. E.g. (parent1/parent2))
+        /// Gets or sets category path in physical catalog (all parent
+        /// categories names concatenated. E.g. (parent1/parent2))
         /// </summary>
         [JsonProperty(PropertyName = "path")]
-        public string Path { get; private set; }
+        public string Path { get; set; }
 
         /// <summary>
         /// </summary>
@@ -7580,7 +7783,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <param name="languageCode">Gets or sets the asset language.</param>
         /// <param name="isInherited">System flag used to mark that object was
         /// inherited from other</param>
-        public Asset(string mimeType = default(string), long? size = default(long?), string readableSize = default(string), byte[] binaryData = default(byte[]), string relativeUrl = default(string), string url = default(string), string typeId = default(string), string group = default(string), string name = default(string), string outerId = default(string), string languageCode = default(string), bool? isInherited = default(bool?), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Asset(string mimeType = default(string), long? size = default(long?), string readableSize = default(string), byte[] binaryData = default(byte[]), string relativeUrl = default(string), string url = default(string), bool? hasExternalUrl = default(bool?), string typeId = default(string), string group = default(string), string name = default(string), string outerId = default(string), string languageCode = default(string), bool? isInherited = default(bool?), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             MimeType = mimeType;
             Size = size;
@@ -7588,6 +7791,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             BinaryData = binaryData;
             RelativeUrl = relativeUrl;
             Url = url;
+            HasExternalUrl = hasExternalUrl;
             TypeId = typeId;
             Group = group;
             Name = name;
@@ -7639,6 +7843,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "url")]
         public string Url { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "hasExternalUrl")]
+        public bool? HasExternalUrl { get; private set; }
 
         /// <summary>
         /// Gets or sets the asset type identifier.
@@ -9330,6 +9539,152 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "results")]
         public IList<ProductPrice> Results { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class PricesSearchCriteria
+    {
+        /// <summary>
+        /// Initializes a new instance of the PricesSearchCriteria class.
+        /// </summary>
+        public PricesSearchCriteria()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the PricesSearchCriteria class.
+        /// </summary>
+        public PricesSearchCriteria(bool? groupByProducts = default(bool?), string priceListId = default(string), IList<string> priceListIds = default(IList<string>), string productId = default(string), IList<string> productIds = default(IList<string>), System.DateTime? modifiedSince = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        {
+            GroupByProducts = groupByProducts;
+            PriceListId = priceListId;
+            PriceListIds = priceListIds;
+            ProductId = productId;
+            ProductIds = productIds;
+            ModifiedSince = modifiedSince;
+            ResponseGroup = responseGroup;
+            ObjectType = objectType;
+            ObjectTypes = objectTypes;
+            ObjectIds = objectIds;
+            Keyword = keyword;
+            SearchPhrase = searchPhrase;
+            LanguageCode = languageCode;
+            Sort = sort;
+            SortInfos = sortInfos;
+            Skip = skip;
+            Take = take;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "groupByProducts")]
+        public bool? GroupByProducts { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "priceListId")]
+        public string PriceListId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "priceListIds")]
+        public IList<string> PriceListIds { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "productId")]
+        public string ProductId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "productIds")]
+        public IList<string> ProductIds { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedSince")]
+        public System.DateTime? ModifiedSince { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "responseGroup")]
+        public string ResponseGroup { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectTypes")]
+        public IList<string> ObjectTypes { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectIds")]
+        public IList<string> ObjectIds { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "keyword")]
+        public string Keyword { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "searchPhrase")]
+        public string SearchPhrase { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "languageCode")]
+        public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sort")]
+        public string Sort { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sortInfos")]
+        public IList<SortInfo> SortInfos { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "skip")]
+        public int? Skip { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "take")]
+        public int? Take { get; set; }
 
     }
 }

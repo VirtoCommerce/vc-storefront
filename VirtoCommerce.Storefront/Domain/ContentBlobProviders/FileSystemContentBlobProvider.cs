@@ -31,7 +31,7 @@ namespace VirtoCommerce.Storefront.Domain
             if (Directory.Exists(_options.Path))
             {
                 //It is very important to have rootPath with leading slash '\' without this any changes won't reflected
-                var rootPath = _options.Path.TrimEnd('\\') + '\\';
+                var rootPath = _options.Path.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
                 _fileSystemWatcher = new PhysicalFilesWatcher(rootPath, new FileSystemWatcher(rootPath), false);
             }
         }

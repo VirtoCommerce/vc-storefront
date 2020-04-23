@@ -4869,7 +4869,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
         /// Get all member organizations
         /// </summary>
         /// <param name='id1'>
-        /// member Id
         /// </param>
         /// <param name='id'>
         /// member Id
@@ -5710,7 +5709,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
         /// Get all member organizations
         /// </summary>
         /// <param name='id1'>
-        /// member Id
         /// </param>
         /// <param name='id'>
         /// member Id
@@ -6964,7 +6962,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
             /// The operations group for this extension method.
             /// </param>
             /// <param name='id1'>
-            /// member Id
             /// </param>
             /// <param name='id'>
             /// member Id
@@ -6981,7 +6978,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
             /// The operations group for this extension method.
             /// </param>
             /// <param name='id1'>
-            /// member Id
             /// </param>
             /// <param name='id'>
             /// member Id

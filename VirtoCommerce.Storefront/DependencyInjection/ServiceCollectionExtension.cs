@@ -121,6 +121,7 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddSingleton<ICustomerModule>(sp => new CustomerModule(sp.GetRequiredService<CustomerModuleClient>()));
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new OrdersModuleClient(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
             services.AddSingleton<IOrderModule>(sp => new OrderModule(sp.GetRequiredService<OrdersModuleClient>()));
+            services.AddSingleton<IOrderModulePayments>(sp => new OrderModulePayments(sp.GetRequiredService<OrdersModuleClient>()));
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new SubscriptionModuleClient(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
             services.AddSingleton<ISubscriptionModule>(sp => new SubscriptionModule(sp.GetRequiredService<SubscriptionModuleClient>()));
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new InventoryModuleClient(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
@@ -180,7 +181,7 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             {
                 throw new ArgumentNullException(nameof(services));
             }
-            
+
             services.AddSingleton<ISassFileManager, SassFileManager>();
             services.AddSingleton<ILiquidThemeEngine, ShopifyLiquidThemeEngine>();
             services.AddSingleton<ILiquidViewEngine, LiquidThemedViewEngine>();

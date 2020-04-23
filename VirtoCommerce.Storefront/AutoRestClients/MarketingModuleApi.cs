@@ -4838,7 +4838,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -4974,7 +4974,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -5118,7 +5118,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -5750,7 +5750,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -5887,7 +5887,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -7792,9 +7792,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// logo absolute URL</param>
         /// <param name="shippingMethod">Gets or sets the value of reward
         /// shipping method code</param>
+        /// <param name="paymentMethod">Gets or sets the value of reward
+        /// payment method code</param>
         /// <param name="maxLimit">Gets or sets the max limit for relative
         /// rewards</param>
-        public PromotionReward(bool? isValid = default(bool?), string description = default(string), double? couponAmount = default(double?), string coupon = default(string), double? couponMinOrderAmount = default(double?), string promotionId = default(string), Promotion promotion = default(Promotion), string rewardType = default(string), string amountType = default(string), double? amount = default(double?), int? quantity = default(int?), string lineItemId = default(string), string productId = default(string), string conditionalProductId = default(string), string categoryId = default(string), string measureUnit = default(string), string imageUrl = default(string), string shippingMethod = default(string), double? maxLimit = default(double?), int? forNthQuantity = default(int?), int? inEveryNthQuantity = default(int?))
+        public PromotionReward(bool? isValid = default(bool?), string description = default(string), double? couponAmount = default(double?), string coupon = default(string), double? couponMinOrderAmount = default(double?), string promotionId = default(string), Promotion promotion = default(Promotion), string rewardType = default(string), string amountType = default(string), double? amount = default(double?), int? quantity = default(int?), string lineItemId = default(string), string productId = default(string), string conditionalProductId = default(string), string categoryId = default(string), string measureUnit = default(string), string imageUrl = default(string), string shippingMethod = default(string), string paymentMethod = default(string), double? maxLimit = default(double?), int? forNthQuantity = default(int?), int? inEveryNthQuantity = default(int?))
         {
             IsValid = isValid;
             Description = description;
@@ -7814,6 +7816,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
             MeasureUnit = measureUnit;
             ImageUrl = imageUrl;
             ShippingMethod = shippingMethod;
+            PaymentMethod = paymentMethod;
             MaxLimit = maxLimit;
             ForNthQuantity = forNthQuantity;
             InEveryNthQuantity = inEveryNthQuantity;
@@ -7936,6 +7939,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "shippingMethod")]
         public string ShippingMethod { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of reward payment method code
+        /// </summary>
+        [JsonProperty(PropertyName = "paymentMethod")]
+        public string PaymentMethod { get; set; }
 
         /// <summary>
         /// Gets or sets the max limit for relative rewards
@@ -9711,12 +9720,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the ProductPromoEntry class.
         /// </summary>
-        public ProductPromoEntry(string code = default(string), int? quantity = default(int?), int? inStockQuantity = default(int?), double? price = default(double?), double? discount = default(double?), string catalogId = default(string), string categoryId = default(string), string productId = default(string), object owner = default(object), string outline = default(string), IList<ProductPromoEntry> variations = default(IList<ProductPromoEntry>), IDictionary<string, string> attributes = default(IDictionary<string, string>))
+        public ProductPromoEntry(string code = default(string), int? quantity = default(int?), int? inStockQuantity = default(int?), double? price = default(double?), double? listPrice = default(double?), double? discount = default(double?), string catalogId = default(string), string categoryId = default(string), string productId = default(string), object owner = default(object), string outline = default(string), IList<ProductPromoEntry> variations = default(IList<ProductPromoEntry>), IDictionary<string, string> attributes = default(IDictionary<string, string>))
         {
             Code = code;
             Quantity = quantity;
             InStockQuantity = inStockQuantity;
             Price = price;
+            ListPrice = listPrice;
             Discount = discount;
             CatalogId = catalogId;
             CategoryId = categoryId;
@@ -9752,6 +9762,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "price")]
         public double? Price { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "listPrice")]
+        public double? ListPrice { get; set; }
 
         /// <summary>
         /// </summary>
