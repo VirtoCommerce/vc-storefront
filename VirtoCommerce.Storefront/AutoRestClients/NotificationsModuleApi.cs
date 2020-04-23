@@ -4,7 +4,7 @@
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
@@ -17,7 +17,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class StoreModuleClient : ServiceClient<StoreModuleClient>, IStoreModuleClient
+    public partial class NotificationsModuleClient : ServiceClient<NotificationsModuleClient>, INotificationsModuleClient
     {
         /// <summary>
         /// The base URI of the service.
@@ -40,36 +40,36 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         public ServiceClientCredentials Credentials { get; private set; }
 
         /// <summary>
-        /// Gets the IStoreModule.
+        /// Gets the INotifications.
         /// </summary>
-        public virtual IStoreModule StoreModule { get; private set; }
+        public virtual INotifications Notifications { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the StoreModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='httpClient'>
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling StoreModuleClient.Dispose(). False: will not dispose provided httpClient</param>
-        protected StoreModuleClient(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
+        /// True: will dispose the provided httpClient on calling NotificationsModuleClient.Dispose(). False: will not dispose provided httpClient</param>
+        protected NotificationsModuleClient(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the StoreModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected StoreModuleClient(params DelegatingHandler[] handlers) : base(handlers)
+        protected NotificationsModuleClient(params DelegatingHandler[] handlers) : base(handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the StoreModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='rootHandler'>
         /// Optional. The http client handler used to handle http transport.
@@ -77,13 +77,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected StoreModuleClient(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
+        protected NotificationsModuleClient(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the StoreModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -94,7 +94,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected StoreModuleClient(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
+        protected NotificationsModuleClient(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -104,7 +104,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the StoreModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -118,7 +118,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected StoreModuleClient(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        protected NotificationsModuleClient(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -128,7 +128,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the StoreModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -139,7 +139,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public StoreModuleClient(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public NotificationsModuleClient(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (credentials == null)
             {
@@ -153,7 +153,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the StoreModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -162,11 +162,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling StoreModuleClient.Dispose(). False: will not dispose provided httpClient</param>
+        /// True: will dispose the provided httpClient on calling NotificationsModuleClient.Dispose(). False: will not dispose provided httpClient</param>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public StoreModuleClient(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
+        public NotificationsModuleClient(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
         {
             if (credentials == null)
             {
@@ -180,7 +180,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the StoreModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -194,7 +194,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public StoreModuleClient(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public NotificationsModuleClient(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (credentials == null)
             {
@@ -208,7 +208,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the StoreModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -222,7 +222,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public StoreModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public NotificationsModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -241,7 +241,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the StoreModuleClient class.
+        /// Initializes a new instance of the NotificationsModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -258,7 +258,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public StoreModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public NotificationsModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -285,7 +285,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// </summary>
         private void Initialize()
         {
-            StoreModule = new StoreModule(this);
+            Notifications = new Notifications(this);
             BaseUri = new System.Uri("http://localhost");
             SerializationSettings = new JsonSerializerSettings
             {
@@ -322,7 +322,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
@@ -337,7 +337,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
 
     /// <summary>
     /// </summary>
-    public partial interface IStoreModuleClient : System.IDisposable
+    public partial interface INotificationsModuleClient : System.IDisposable
     {
         /// <summary>
         /// The base URI of the service.
@@ -362,9 +362,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
 
 
         /// <summary>
-        /// Gets the IStoreModule.
+        /// Gets the INotifications.
         /// </summary>
-        IStoreModule StoreModule { get; }
+        INotifications Notifications { get; }
 
     }
 }
@@ -374,7 +374,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
@@ -390,12 +390,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
     using System.Threading.Tasks;
 
     /// <summary>
-    /// StoreModule operations.
+    /// Notifications operations.
     /// </summary>
-    public partial class StoreModule : IServiceOperations<StoreModuleClient>, IStoreModule
+    public partial class Notifications : IServiceOperations<NotificationsModuleClient>, INotifications
     {
         /// <summary>
-        /// Initializes a new instance of the StoreModule class.
+        /// Initializes a new instance of the Notifications class.
         /// </summary>
         /// <param name='client'>
         /// Reference to the service client.
@@ -403,7 +403,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public StoreModule(StoreModuleClient client)
+        public Notifications(NotificationsModuleClient client)
         {
             if (client == null)
             {
@@ -413,14 +413,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         }
 
         /// <summary>
-        /// Gets a reference to the StoreModuleClient
+        /// Gets a reference to the NotificationsModuleClient
         /// </summary>
-        public StoreModuleClient Client { get; private set; }
+        public NotificationsModuleClient Client { get; private set; }
 
         /// <summary>
-        /// Search stores
+        /// Get all registered notification types by criteria
         /// </summary>
         /// <param name='body'>
+        /// criteria for search(keyword, skip, take and etc.)
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -437,7 +438,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<StoreSearchResult>> SearchStoresWithHttpMessagesAsync(StoreSearchCriteria body = default(StoreSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<NotificationSearchResult>> GetNotificationsWithHttpMessagesAsync(NotificationSearchCriteria body = default(NotificationSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -448,11 +449,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "SearchStores", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "GetNotifications", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/stores/search").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/notifications").ToString();
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -524,7 +525,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<StoreSearchResult>();
+            var _result = new HttpOperationResponse<NotificationSearchResult>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -533,7 +534,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<StoreSearchResult>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<NotificationSearchResult>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -553,8 +554,25 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         }
 
         /// <summary>
-        /// Get all stores
+        /// Get notification by type
         /// </summary>
+        /// <remarks>
+        /// Get all notification templates by notification type, tenantId, teantTypeId.
+        /// Tenant id and tenant type id - params of tenant, that initialize creating
+        /// of
+        /// template. By default tenant id and tenant type id = "Platform". For example
+        /// for store with id = "SampleStore", tenantId = "SampleStore", tenantType =
+        /// "Store".
+        /// </remarks>
+        /// <param name='type'>
+        /// Notification type of template
+        /// </param>
+        /// <param name='tenantId'>
+        /// Tenant id of template
+        /// </param>
+        /// <param name='tenantType'>
+        /// Tenant type id of template
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -567,11 +585,21 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// <exception cref="SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<Store>>> GetStoresWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Notification>> GetNotificationByTypeIdWithHttpMessagesAsync(string type, string tenantId = default(string), string tenantType = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (type == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "type");
+            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -579,12 +607,29 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("type", type);
+                tracingParameters.Add("tenantId", tenantId);
+                tracingParameters.Add("tenantType", tenantType);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "GetStores", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "GetNotificationByTypeId", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/stores").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/notifications/{type}").ToString();
+            _url = _url.Replace("{type}", System.Uri.EscapeDataString(type));
+            List<string> _queryParameters = new List<string>();
+            if (tenantId != null)
+            {
+                _queryParameters.Add(string.Format("tenantId={0}", System.Uri.EscapeDataString(tenantId)));
+            }
+            if (tenantType != null)
+            {
+                _queryParameters.Add(string.Format("tenantType={0}", System.Uri.EscapeDataString(tenantType)));
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -650,7 +695,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IList<Store>>();
+            var _result = new HttpOperationResponse<Notification>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -659,7 +704,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IList<Store>>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<Notification>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -679,10 +724,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         }
 
         /// <summary>
-        /// Create store
+        /// Update notification with templates
         /// </summary>
+        /// <param name='type'>
+        /// </param>
         /// <param name='body'>
-        /// Store
+        /// Notification
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -693,14 +740,21 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// <exception cref="HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        /// <exception cref="SerializationException">
-        /// Thrown when unable to deserialize the response
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
         /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Store>> CreateStoreWithHttpMessagesAsync(Store body = default(Store), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> UpdateNotificationWithHttpMessagesAsync(string type, Notification body = default(Notification), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (type == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "type");
+            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -709,145 +763,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("body", body);
+                tracingParameters.Add("type", type);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "CreateStore", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdateNotification", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/stores").ToString();
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("POST");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if(body != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<Store>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<Store>(_responseContent, Client.DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
-        /// Update store
-        /// </summary>
-        /// <param name='body'>
-        /// Store
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> UpdateStoreWithHttpMessagesAsync(Store body = default(Store), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("body", body);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "UpdateStore", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/stores").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/notifications/{type}").ToString();
+            _url = _url.Replace("{type}", System.Uri.EscapeDataString(type));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -930,10 +853,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         }
 
         /// <summary>
-        /// Delete stores
+        /// Render content
         /// </summary>
-        /// <param name='ids'>
-        /// Ids of store that needed to delete
+        /// <param name='language'>
+        /// </param>
+        /// <param name='type'>
+        /// </param>
+        /// <param name='body'>
+        /// request of Notification Template with text and data
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -943,127 +870,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// </param>
         /// <exception cref="HttpOperationException">
         /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> DeleteStoreWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("ids", ids);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "DeleteStore", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/stores").ToString();
-            List<string> _queryParameters = new List<string>();
-            if (ids != null)
-            {
-                _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Join(",", ids))));
-            }
-            if (_queryParameters.Count > 0)
-            {
-                _url += "?" + string.Join("&", _queryParameters);
-            }
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("DELETE");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
-        /// Get store by id
-        /// </summary>
-        /// <param name='id'>
-        /// Store id
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="SerializationException">
-        /// Thrown when unable to deserialize the response
         /// </exception>
         /// <exception cref="ValidationException">
         /// Thrown when a required parameter is null
@@ -1074,140 +880,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Store>> GetStoreByIdWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> RenderingTemplateWithHttpMessagesAsync(string language, string type, NotificationTemplateRequest body = default(NotificationTemplateRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (id == null)
+            if (language == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "id");
+                throw new ValidationException(ValidationRules.CannotBeNull, "language");
             }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
+            if (type == null)
             {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("id", id);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "GetStoreById", tracingParameters);
+                throw new ValidationException(ValidationRules.CannotBeNull, "type");
             }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/stores/{id}").ToString();
-            _url = _url.Replace("{id}", System.Uri.EscapeDataString(id));
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("GET");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<Store>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<Store>(_responseContent, Client.DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
-        /// Send dynamic notification (contains custom list of properties) to store or
-        /// administrator email
-        /// </summary>
-        /// <param name='body'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> SendDynamicNotificationAnStoreEmailWithHttpMessagesAsync(SendDynamicNotificationRequest body = default(SendDynamicNotificationRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -1216,12 +898,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("body", body);
+                tracingParameters.Add("language", language);
+                tracingParameters.Add("type", type);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "SendDynamicNotificationAnStoreEmail", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "RenderingTemplate", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/stores/send/dynamicnotification").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/notifications/{type}/templates/{language}/rendercontent").ToString();
+            _url = _url.Replace("{language}", System.Uri.EscapeDataString(language));
+            _url = _url.Replace("{type}", System.Uri.EscapeDataString(type));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -1270,7 +956,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1304,13 +990,426 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         }
 
         /// <summary>
-        /// Check if given contact has login on behalf permission
+        /// Sending notification
         /// </summary>
-        /// <param name='storeId'>
-        /// Store ID
+        /// <param name='body'>
         /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<NotificationSendResult>> SendNotificationWithHttpMessagesAsync(Notification body = default(Notification), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "SendNotification", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/notifications/send").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<NotificationSendResult>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<NotificationSendResult>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Sending notification
+        /// </summary>
+        /// <remarks>
+        /// Method sending notification, that based on notification template. Template
+        /// for rendering chosen by type, objectId, objectTypeId, language.
+        /// Parameters for template may be prepared by the method of
+        /// getTestingParameters. Method returns string. If sending finished with
+        /// success status
+        /// this string is empty, otherwise string contains error message.
+        /// </remarks>
+        /// <param name='body'>
+        /// Notification request
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<NotificationSendResult>> SendNotificationByRequestWithHttpMessagesAsync(NotificationRequest body = default(NotificationRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "SendNotificationByRequest", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/notification/template/sendnotification").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<NotificationSendResult>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<NotificationSendResult>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Get all notification journal
+        /// </summary>
+        /// <remarks>
+        /// Method returns notification journal page with array of notification, that
+        /// was send, sending or will be send in future. Result contains total count,
+        /// that can be used
+        /// for paging.
+        /// </remarks>
+        /// <param name='body'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<NotificationMessageSearchResult>> GetNotificationJournalWithHttpMessagesAsync(NotificationMessageSearchCriteria body = default(NotificationMessageSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "GetNotificationJournal", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/notifications/journal").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<NotificationMessageSearchResult>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<NotificationMessageSearchResult>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
         /// <param name='id'>
-        /// Contact ID
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1333,12 +1432,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<LoginOnBehalfInfo>> GetLoginOnBehalfInfoWithHttpMessagesAsync(string storeId, string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<NotificationMessage>> GetObjectNotificationJournalWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (storeId == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "storeId");
-            }
             if (id == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "id");
@@ -1350,15 +1445,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("storeId", storeId);
                 tracingParameters.Add("id", id);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "GetLoginOnBehalfInfo", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "GetObjectNotificationJournal", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/stores/{storeId}/accounts/{id}/loginonbehalf").ToString();
-            _url = _url.Replace("{storeId}", System.Uri.EscapeDataString(storeId));
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/notifications/journal/{id}").ToString();
             _url = _url.Replace("{id}", System.Uri.EscapeDataString(id));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
@@ -1425,7 +1518,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<LoginOnBehalfInfo>();
+            var _result = new HttpOperationResponse<NotificationMessage>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -1434,147 +1527,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<LoginOnBehalfInfo>(_responseContent, Client.DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
-        /// Returns list of stores which user can sign in
-        /// </summary>
-        /// <param name='userId'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse<IList<Store>>> GetUserAllowedStoresWithHttpMessagesAsync(string userId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (userId == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "userId");
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("userId", userId);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "GetUserAllowedStores", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/stores/allowed/{userId}").ToString();
-            _url = _url.Replace("{userId}", System.Uri.EscapeDataString(userId));
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("GET");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<IList<Store>>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IList<Store>>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<NotificationMessage>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -1601,7 +1554,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
@@ -1615,12 +1568,111 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
     using System.Threading.Tasks;
 
     /// <summary>
-    /// StoreModule operations.
+    /// Notifications operations.
     /// </summary>
-    public partial interface IStoreModule
+    public partial interface INotifications
     {
         /// <summary>
-        /// Search stores
+        /// Get all registered notification types by criteria
+        /// </summary>
+        /// <param name='body'>
+        /// criteria for search(keyword, skip, take and etc.)
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        Task<HttpOperationResponse<NotificationSearchResult>> GetNotificationsWithHttpMessagesAsync(NotificationSearchCriteria body = default(NotificationSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Get notification by type
+        /// </summary>
+        /// <remarks>
+        /// Get all notification templates by notification type, tenantId,
+        /// teantTypeId. Tenant id and tenant type id - params of tenant, that
+        /// initialize creating of
+        /// template. By default tenant id and tenant type id = "Platform". For
+        /// example for store with id = "SampleStore", tenantId =
+        /// "SampleStore", tenantType = "Store".
+        /// </remarks>
+        /// <param name='type'>
+        /// Notification type of template
+        /// </param>
+        /// <param name='tenantId'>
+        /// Tenant id of template
+        /// </param>
+        /// <param name='tenantType'>
+        /// Tenant type id of template
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse<Notification>> GetNotificationByTypeIdWithHttpMessagesAsync(string type, string tenantId = default(string), string tenantType = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Update notification with templates
+        /// </summary>
+        /// <param name='type'>
+        /// </param>
+        /// <param name='body'>
+        /// Notification
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse> UpdateNotificationWithHttpMessagesAsync(string type, Notification body = default(Notification), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Render content
+        /// </summary>
+        /// <param name='language'>
+        /// </param>
+        /// <param name='type'>
+        /// </param>
+        /// <param name='body'>
+        /// request of Notification Template with text and data
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        Task<HttpOperationResponse> RenderingTemplateWithHttpMessagesAsync(string language, string type, NotificationTemplateRequest body = default(NotificationTemplateRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Sending notification
         /// </summary>
         /// <param name='body'>
         /// </param>
@@ -1636,28 +1688,21 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<StoreSearchResult>> SearchStoresWithHttpMessagesAsync(StoreSearchCriteria body = default(StoreSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<NotificationSendResult>> SendNotificationWithHttpMessagesAsync(Notification body = default(Notification), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
-        /// Get all stores
+        /// Sending notification
         /// </summary>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        Task<HttpOperationResponse<IList<Store>>> GetStoresWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Create store
-        /// </summary>
+        /// <remarks>
+        /// Method sending notification, that based on notification template.
+        /// Template for rendering chosen by type, objectId, objectTypeId,
+        /// language.
+        /// Parameters for template may be prepared by the method of
+        /// getTestingParameters. Method returns string. If sending finished
+        /// with success status
+        /// this string is empty, otherwise string contains error message.
+        /// </remarks>
         /// <param name='body'>
-        /// Store
+        /// Notification request
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1671,12 +1716,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<Store>> CreateStoreWithHttpMessagesAsync(Store body = default(Store), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<NotificationSendResult>> SendNotificationByRequestWithHttpMessagesAsync(NotificationRequest body = default(NotificationRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
-        /// Update store
+        /// Get all notification journal
         /// </summary>
+        /// <remarks>
+        /// Method returns notification journal page with array of
+        /// notification, that was send, sending or will be send in future.
+        /// Result contains total count, that can be used
+        /// for paging.
+        /// </remarks>
         /// <param name='body'>
-        /// Store
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1687,28 +1737,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// <exception cref="Microsoft.Rest.HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        Task<HttpOperationResponse> UpdateStoreWithHttpMessagesAsync(Store body = default(Store), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Delete stores
-        /// </summary>
-        /// <param name='ids'>
-        /// Ids of store that needed to delete
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse> DeleteStoreWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Get store by id
-        /// </summary>
+        Task<HttpOperationResponse<NotificationMessageSearchResult>> GetNotificationJournalWithHttpMessagesAsync(NotificationMessageSearchCriteria body = default(NotificationMessageSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='id'>
-        /// Store id
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -1725,69 +1758,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<Store>> GetStoreByIdWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Send dynamic notification (contains custom list of properties) to
-        /// store or administrator email
-        /// </summary>
-        /// <param name='body'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        Task<HttpOperationResponse> SendDynamicNotificationAnStoreEmailWithHttpMessagesAsync(SendDynamicNotificationRequest body = default(SendDynamicNotificationRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Check if given contact has login on behalf permission
-        /// </summary>
-        /// <param name='storeId'>
-        /// Store ID
-        /// </param>
-        /// <param name='id'>
-        /// Contact ID
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<LoginOnBehalfInfo>> GetLoginOnBehalfInfoWithHttpMessagesAsync(string storeId, string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Returns list of stores which user can sign in
-        /// </summary>
-        /// <param name='userId'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<IList<Store>>> GetUserAllowedStoresWithHttpMessagesAsync(string userId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<NotificationMessage>> GetObjectNotificationJournalWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -1796,7 +1767,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
@@ -1810,298 +1781,327 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Extension methods for StoreModule.
+    /// Extension methods for Notifications.
     /// </summary>
-    public static partial class StoreModuleExtensions
+    public static partial class NotificationsExtensions
     {
             /// <summary>
-            /// Search stores
+            /// Get all registered notification types by criteria
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='body'>
+            /// criteria for search(keyword, skip, take and etc.)
             /// </param>
-            public static StoreSearchResult SearchStores(this IStoreModule operations, StoreSearchCriteria body = default(StoreSearchCriteria))
+            public static NotificationSearchResult GetNotifications(this INotifications operations, NotificationSearchCriteria body = default(NotificationSearchCriteria))
             {
-                return operations.SearchStoresAsync(body).GetAwaiter().GetResult();
+                return operations.GetNotificationsAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Search stores
+            /// Get all registered notification types by criteria
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='body'>
+            /// criteria for search(keyword, skip, take and etc.)
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<StoreSearchResult> SearchStoresAsync(this IStoreModule operations, StoreSearchCriteria body = default(StoreSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<NotificationSearchResult> GetNotificationsAsync(this INotifications operations, NotificationSearchCriteria body = default(NotificationSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SearchStoresWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetNotificationsWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
 
             /// <summary>
-            /// Get all stores
+            /// Get notification by type
             /// </summary>
+            /// <remarks>
+            /// Get all notification templates by notification type, tenantId, teantTypeId.
+            /// Tenant id and tenant type id - params of tenant, that initialize creating
+            /// of
+            /// template. By default tenant id and tenant type id = "Platform". For example
+            /// for store with id = "SampleStore", tenantId = "SampleStore", tenantType =
+            /// "Store".
+            /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            public static IList<Store> GetStores(this IStoreModule operations)
+            /// <param name='type'>
+            /// Notification type of template
+            /// </param>
+            /// <param name='tenantId'>
+            /// Tenant id of template
+            /// </param>
+            /// <param name='tenantType'>
+            /// Tenant type id of template
+            /// </param>
+            public static Notification GetNotificationByTypeId(this INotifications operations, string type, string tenantId = default(string), string tenantType = default(string))
             {
-                return operations.GetStoresAsync().GetAwaiter().GetResult();
+                return operations.GetNotificationByTypeIdAsync(type, tenantId, tenantType).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Get all stores
+            /// Get notification by type
             /// </summary>
+            /// <remarks>
+            /// Get all notification templates by notification type, tenantId, teantTypeId.
+            /// Tenant id and tenant type id - params of tenant, that initialize creating
+            /// of
+            /// template. By default tenant id and tenant type id = "Platform". For example
+            /// for store with id = "SampleStore", tenantId = "SampleStore", tenantType =
+            /// "Store".
+            /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
+            /// </param>
+            /// <param name='type'>
+            /// Notification type of template
+            /// </param>
+            /// <param name='tenantId'>
+            /// Tenant id of template
+            /// </param>
+            /// <param name='tenantType'>
+            /// Tenant type id of template
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<Store>> GetStoresAsync(this IStoreModule operations, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Notification> GetNotificationByTypeIdAsync(this INotifications operations, string type, string tenantId = default(string), string tenantType = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetStoresWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetNotificationByTypeIdWithHttpMessagesAsync(type, tenantId, tenantType, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
 
             /// <summary>
-            /// Create store
+            /// Update notification with templates
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='body'>
-            /// Store
+            /// <param name='type'>
             /// </param>
-            public static Store CreateStore(this IStoreModule operations, Store body = default(Store))
+            /// <param name='body'>
+            /// Notification
+            /// </param>
+            public static void UpdateNotification(this INotifications operations, string type, Notification body = default(Notification))
             {
-                return operations.CreateStoreAsync(body).GetAwaiter().GetResult();
+                operations.UpdateNotificationAsync(type, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Create store
+            /// Update notification with templates
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
+            /// <param name='type'>
+            /// </param>
             /// <param name='body'>
-            /// Store
+            /// Notification
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Store> CreateStoreAsync(this IStoreModule operations, Store body = default(Store), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task UpdateNotificationAsync(this INotifications operations, string type, Notification body = default(Notification), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.CreateStoreWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
+                (await operations.UpdateNotificationWithHttpMessagesAsync(type, body, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
+            /// <summary>
+            /// Render content
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='language'>
+            /// </param>
+            /// <param name='type'>
+            /// </param>
+            /// <param name='body'>
+            /// request of Notification Template with text and data
+            /// </param>
+            public static void RenderingTemplate(this INotifications operations, string language, string type, NotificationTemplateRequest body = default(NotificationTemplateRequest))
+            {
+                operations.RenderingTemplateAsync(language, type, body).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Render content
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='language'>
+            /// </param>
+            /// <param name='type'>
+            /// </param>
+            /// <param name='body'>
+            /// request of Notification Template with text and data
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task RenderingTemplateAsync(this INotifications operations, string language, string type, NotificationTemplateRequest body = default(NotificationTemplateRequest), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.RenderingTemplateWithHttpMessagesAsync(language, type, body, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
+            /// <summary>
+            /// Sending notification
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// </param>
+            public static NotificationSendResult SendNotification(this INotifications operations, Notification body = default(Notification))
+            {
+                return operations.SendNotificationAsync(body).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Sending notification
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<NotificationSendResult> SendNotificationAsync(this INotifications operations, Notification body = default(Notification), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.SendNotificationWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
 
             /// <summary>
-            /// Update store
+            /// Sending notification
             /// </summary>
+            /// <remarks>
+            /// Method sending notification, that based on notification template. Template
+            /// for rendering chosen by type, objectId, objectTypeId, language.
+            /// Parameters for template may be prepared by the method of
+            /// getTestingParameters. Method returns string. If sending finished with
+            /// success status
+            /// this string is empty, otherwise string contains error message.
+            /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='body'>
-            /// Store
+            /// Notification request
             /// </param>
-            public static void UpdateStore(this IStoreModule operations, Store body = default(Store))
+            public static NotificationSendResult SendNotificationByRequest(this INotifications operations, NotificationRequest body = default(NotificationRequest))
             {
-                operations.UpdateStoreAsync(body).GetAwaiter().GetResult();
+                return operations.SendNotificationByRequestAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Update store
+            /// Sending notification
             /// </summary>
+            /// <remarks>
+            /// Method sending notification, that based on notification template. Template
+            /// for rendering chosen by type, objectId, objectTypeId, language.
+            /// Parameters for template may be prepared by the method of
+            /// getTestingParameters. Method returns string. If sending finished with
+            /// success status
+            /// this string is empty, otherwise string contains error message.
+            /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='body'>
-            /// Store
+            /// Notification request
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task UpdateStoreAsync(this IStoreModule operations, Store body = default(Store), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<NotificationSendResult> SendNotificationByRequestAsync(this INotifications operations, NotificationRequest body = default(NotificationRequest), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.UpdateStoreWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                using (var _result = await operations.SendNotificationByRequestWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
 
             /// <summary>
-            /// Delete stores
+            /// Get all notification journal
             /// </summary>
+            /// <remarks>
+            /// Method returns notification journal page with array of notification, that
+            /// was send, sending or will be send in future. Result contains total count,
+            /// that can be used
+            /// for paging.
+            /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='ids'>
-            /// Ids of store that needed to delete
+            /// <param name='body'>
             /// </param>
-            public static void DeleteStore(this IStoreModule operations, IList<string> ids = default(IList<string>))
+            public static NotificationMessageSearchResult GetNotificationJournal(this INotifications operations, NotificationMessageSearchCriteria body = default(NotificationMessageSearchCriteria))
             {
-                operations.DeleteStoreAsync(ids).GetAwaiter().GetResult();
+                return operations.GetNotificationJournalAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Delete stores
+            /// Get all notification journal
             /// </summary>
+            /// <remarks>
+            /// Method returns notification journal page with array of notification, that
+            /// was send, sending or will be send in future. Result contains total count,
+            /// that can be used
+            /// for paging.
+            /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='ids'>
-            /// Ids of store that needed to delete
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DeleteStoreAsync(this IStoreModule operations, IList<string> ids = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<NotificationMessageSearchResult> GetNotificationJournalAsync(this INotifications operations, NotificationMessageSearchCriteria body = default(NotificationMessageSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.DeleteStoreWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                using (var _result = await operations.GetNotificationJournalWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
 
-            /// <summary>
-            /// Get store by id
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='id'>
-            /// Store id
             /// </param>
-            public static Store GetStoreById(this IStoreModule operations, string id)
+            public static NotificationMessage GetObjectNotificationJournal(this INotifications operations, string id)
             {
-                return operations.GetStoreByIdAsync(id).GetAwaiter().GetResult();
+                return operations.GetObjectNotificationJournalAsync(id).GetAwaiter().GetResult();
             }
 
-            /// <summary>
-            /// Get store by id
-            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='id'>
-            /// Store id
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Store> GetStoreByIdAsync(this IStoreModule operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<NotificationMessage> GetObjectNotificationJournalAsync(this INotifications operations, string id, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetStoreByIdWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <summary>
-            /// Send dynamic notification (contains custom list of properties) to store or
-            /// administrator email
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='body'>
-            /// </param>
-            public static void SendDynamicNotificationAnStoreEmail(this IStoreModule operations, SendDynamicNotificationRequest body = default(SendDynamicNotificationRequest))
-            {
-                operations.SendDynamicNotificationAnStoreEmailAsync(body).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Send dynamic notification (contains custom list of properties) to store or
-            /// administrator email
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='body'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task SendDynamicNotificationAnStoreEmailAsync(this IStoreModule operations, SendDynamicNotificationRequest body = default(SendDynamicNotificationRequest), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.SendDynamicNotificationAnStoreEmailWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
-
-            /// <summary>
-            /// Check if given contact has login on behalf permission
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='storeId'>
-            /// Store ID
-            /// </param>
-            /// <param name='id'>
-            /// Contact ID
-            /// </param>
-            public static LoginOnBehalfInfo GetLoginOnBehalfInfo(this IStoreModule operations, string storeId, string id)
-            {
-                return operations.GetLoginOnBehalfInfoAsync(storeId, id).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Check if given contact has login on behalf permission
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='storeId'>
-            /// Store ID
-            /// </param>
-            /// <param name='id'>
-            /// Contact ID
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<LoginOnBehalfInfo> GetLoginOnBehalfInfoAsync(this IStoreModule operations, string storeId, string id, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.GetLoginOnBehalfInfoWithHttpMessagesAsync(storeId, id, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <summary>
-            /// Returns list of stores which user can sign in
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='userId'>
-            /// </param>
-            public static IList<Store> GetUserAllowedStores(this IStoreModule operations, string userId)
-            {
-                return operations.GetUserAllowedStoresAsync(userId).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Returns list of stores which user can sign in
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='userId'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<IList<Store>> GetUserAllowedStoresAsync(this IStoreModule operations, string userId, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.GetUserAllowedStoresWithHttpMessagesAsync(userId, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetObjectNotificationJournalWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -2115,898 +2115,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class DynamicPropertyName
-    {
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertyName class.
-        /// </summary>
-        public DynamicPropertyName()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertyName class.
-        /// </summary>
-        public DynamicPropertyName(string locale = default(string), string name = default(string))
-        {
-            Locale = locale;
-            Name = name;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "locale")]
-        public string Locale { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class SeoInfo
-    {
-        /// <summary>
-        /// Initializes a new instance of the SeoInfo class.
-        /// </summary>
-        public SeoInfo()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the SeoInfo class.
-        /// </summary>
-        /// <param name="semanticUrl">Slug</param>
-        /// <param name="pageTitle">head title tag content</param>
-        /// <param name="metaDescription">&lt;meta name="description"
-        /// /&gt;</param>
-        /// <param name="metaKeywords">&lt;meta name="keywords" /&gt;</param>
-        /// <param name="storeId">Tenant StoreId which SEO defined</param>
-        /// <param name="objectId">SEO related object id</param>
-        /// <param name="objectType">SEO related object type name</param>
-        /// <param name="isActive">Active/Inactive</param>
-        public SeoInfo(string name = default(string), string semanticUrl = default(string), string pageTitle = default(string), string metaDescription = default(string), string imageAltDescription = default(string), string metaKeywords = default(string), string storeId = default(string), string objectId = default(string), string objectType = default(string), bool? isActive = default(bool?), string languageCode = default(string), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            Name = name;
-            SemanticUrl = semanticUrl;
-            PageTitle = pageTitle;
-            MetaDescription = metaDescription;
-            ImageAltDescription = imageAltDescription;
-            MetaKeywords = metaKeywords;
-            StoreId = storeId;
-            ObjectId = objectId;
-            ObjectType = objectType;
-            IsActive = isActive;
-            LanguageCode = languageCode;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets slug
-        /// </summary>
-        [JsonProperty(PropertyName = "semanticUrl")]
-        public string SemanticUrl { get; set; }
-
-        /// <summary>
-        /// Gets or sets head title tag content
-        /// </summary>
-        [JsonProperty(PropertyName = "pageTitle")]
-        public string PageTitle { get; set; }
-
-        /// <summary>
-        /// Gets or sets &amp;lt;meta name="description" /&amp;gt;
-        /// </summary>
-        [JsonProperty(PropertyName = "metaDescription")]
-        public string MetaDescription { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "imageAltDescription")]
-        public string ImageAltDescription { get; set; }
-
-        /// <summary>
-        /// Gets or sets &amp;lt;meta name="keywords" /&amp;gt;
-        /// </summary>
-        [JsonProperty(PropertyName = "metaKeywords")]
-        public string MetaKeywords { get; set; }
-
-        /// <summary>
-        /// Gets or sets tenant StoreId which SEO defined
-        /// </summary>
-        [JsonProperty(PropertyName = "storeId")]
-        public string StoreId { get; set; }
-
-        /// <summary>
-        /// Gets or sets SEO related object id
-        /// </summary>
-        [JsonProperty(PropertyName = "objectId")]
-        public string ObjectId { get; set; }
-
-        /// <summary>
-        /// Gets or sets SEO related object type name
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// Gets or sets active/Inactive
-        /// </summary>
-        [JsonProperty(PropertyName = "isActive")]
-        public bool? IsActive { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "languageCode")]
-        public string LanguageCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class DynamicPropertyObjectValue
-    {
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertyObjectValue class.
-        /// </summary>
-        public DynamicPropertyObjectValue()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertyObjectValue class.
-        /// </summary>
-        /// <param name="valueType">Possible values include: 'Undefined',
-        /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
-        /// 'Boolean', 'Html', 'Image'</param>
-        public DynamicPropertyObjectValue(string objectType = default(string), string objectId = default(string), string locale = default(string), object value = default(object), string valueId = default(string), string valueType = default(string), string propertyId = default(string), string propertyName = default(string))
-        {
-            ObjectType = objectType;
-            ObjectId = objectId;
-            Locale = locale;
-            Value = value;
-            ValueId = valueId;
-            ValueType = valueType;
-            PropertyId = propertyId;
-            PropertyName = propertyName;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectId")]
-        public string ObjectId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "locale")]
-        public string Locale { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "value")]
-        public object Value { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "valueId")]
-        public string ValueId { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Undefined', 'ShortText',
-        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html',
-        /// 'Image'
-        /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyId")]
-        public string PropertyId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyName")]
-        public string PropertyName { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class DynamicObjectProperty
-    {
-        /// <summary>
-        /// Initializes a new instance of the DynamicObjectProperty class.
-        /// </summary>
-        public DynamicObjectProperty()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DynamicObjectProperty class.
-        /// </summary>
-        /// <param name="valueType">Possible values include: 'Undefined',
-        /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
-        /// 'Boolean', 'Html', 'Image'</param>
-        public DynamicObjectProperty(string objectId = default(string), IList<DynamicPropertyObjectValue> values = default(IList<DynamicPropertyObjectValue>), string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
-        {
-            ObjectId = objectId;
-            Values = values;
-            Name = name;
-            Description = description;
-            ObjectType = objectType;
-            IsArray = isArray;
-            IsDictionary = isDictionary;
-            IsMultilingual = isMultilingual;
-            IsRequired = isRequired;
-            DisplayOrder = displayOrder;
-            ValueType = valueType;
-            DisplayNames = displayNames;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectId")]
-        public string ObjectId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "values")]
-        public IList<DynamicPropertyObjectValue> Values { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isArray")]
-        public bool? IsArray { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isDictionary")]
-        public bool? IsDictionary { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isMultilingual")]
-        public bool? IsMultilingual { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isRequired")]
-        public bool? IsRequired { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "displayOrder")]
-        public int? DisplayOrder { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Undefined', 'ShortText',
-        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html',
-        /// 'Image'
-        /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "displayNames")]
-        public IList<DynamicPropertyName> DisplayNames { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class ObjectSettingEntry
-    {
-        /// <summary>
-        /// Initializes a new instance of the ObjectSettingEntry class.
-        /// </summary>
-        public ObjectSettingEntry()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ObjectSettingEntry class.
-        /// </summary>
-        /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean',
-        /// 'SecureString', 'Json'</param>
-        public ObjectSettingEntry(bool? itHasValues = default(bool?), string objectId = default(string), string objectType = default(string), object value = default(object), bool? restartRequired = default(bool?), string moduleId = default(string), string groupName = default(string), string name = default(string), string valueType = default(string), IList<object> allowedValues = default(IList<object>), object defaultValue = default(object), bool? isDictionary = default(bool?))
-        {
-            ItHasValues = itHasValues;
-            ObjectId = objectId;
-            ObjectType = objectType;
-            Value = value;
-            RestartRequired = restartRequired;
-            ModuleId = moduleId;
-            GroupName = groupName;
-            Name = name;
-            ValueType = valueType;
-            AllowedValues = allowedValues;
-            DefaultValue = defaultValue;
-            IsDictionary = isDictionary;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "itHasValues")]
-        public bool? ItHasValues { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectId")]
-        public string ObjectId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "value")]
-        public object Value { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "restartRequired")]
-        public bool? RestartRequired { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "moduleId")]
-        public string ModuleId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "groupName")]
-        public string GroupName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Integer', 'Decimal', 'DateTime', 'Boolean', 'SecureString', 'Json'
-        /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "allowedValues")]
-        public IList<object> AllowedValues { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "defaultValue")]
-        public object DefaultValue { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isDictionary")]
-        public bool? IsDictionary { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Store
-    {
-        /// <summary>
-        /// Initializes a new instance of the Store class.
-        /// </summary>
-        public Store()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Store class.
-        /// </summary>
-        /// <param name="storeState">Possible values include: 'Open', 'Closed',
-        /// 'RestrictedAccess'</param>
-        /// <param name="catalog">Catalog id used as primary store
-        /// catalog</param>
-        /// <param name="url">Store storefront url</param>
-        /// <param name="secureUrl">Store storefront https url</param>
-        /// <param name="email">Primary store contact email can be used for
-        /// store event notifications and for feed back</param>
-        /// <param name="mainFulfillmentCenterId">Primary (default) fulfillment
-        /// center id</param>
-        /// <param name="additionalFulfillmentCenterIds">Alternate fulfillment
-        /// centers ids</param>
-        /// <param name="mainReturnsFulfillmentCenterId">Primary (default)
-        /// fulfillment center for order return</param>
-        /// <param name="returnsFulfillmentCenterIds">Alternate fulfillment
-        /// centers for order return</param>
-        /// <param name="languages">All store supported languages</param>
-        /// <param name="currencies">All store supported currencies</param>
-        /// <param name="trustedGroups">All store trusted groups (group of
-        /// stores that shared the user logins)</param>
-        public Store(string name = default(string), string description = default(string), string storeState = default(string), string timeZone = default(string), string country = default(string), string region = default(string), string defaultLanguage = default(string), string defaultCurrency = default(string), string catalog = default(string), bool? creditCardSavePolicy = default(bool?), string url = default(string), string secureUrl = default(string), string email = default(string), string adminEmail = default(string), bool? displayOutOfStock = default(bool?), string outerId = default(string), string mainFulfillmentCenterId = default(string), IList<string> additionalFulfillmentCenterIds = default(IList<string>), string mainReturnsFulfillmentCenterId = default(string), IList<string> returnsFulfillmentCenterIds = default(IList<string>), IList<string> languages = default(IList<string>), IList<string> currencies = default(IList<string>), IList<string> trustedGroups = default(IList<string>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<ObjectSettingEntry> settings = default(IList<ObjectSettingEntry>), string typeName = default(string), IList<string> scopes = default(IList<string>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
-        {
-            Name = name;
-            Description = description;
-            StoreState = storeState;
-            TimeZone = timeZone;
-            Country = country;
-            Region = region;
-            DefaultLanguage = defaultLanguage;
-            DefaultCurrency = defaultCurrency;
-            Catalog = catalog;
-            CreditCardSavePolicy = creditCardSavePolicy;
-            Url = url;
-            SecureUrl = secureUrl;
-            Email = email;
-            AdminEmail = adminEmail;
-            DisplayOutOfStock = displayOutOfStock;
-            OuterId = outerId;
-            MainFulfillmentCenterId = mainFulfillmentCenterId;
-            AdditionalFulfillmentCenterIds = additionalFulfillmentCenterIds;
-            MainReturnsFulfillmentCenterId = mainReturnsFulfillmentCenterId;
-            ReturnsFulfillmentCenterIds = returnsFulfillmentCenterIds;
-            Languages = languages;
-            Currencies = currencies;
-            TrustedGroups = trustedGroups;
-            SeoObjectType = seoObjectType;
-            SeoInfos = seoInfos;
-            ObjectType = objectType;
-            DynamicProperties = dynamicProperties;
-            Settings = settings;
-            TypeName = typeName;
-            Scopes = scopes;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Open', 'Closed',
-        /// 'RestrictedAccess'
-        /// </summary>
-        [JsonProperty(PropertyName = "storeState")]
-        public string StoreState { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "timeZone")]
-        public string TimeZone { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "country")]
-        public string Country { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "region")]
-        public string Region { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "defaultLanguage")]
-        public string DefaultLanguage { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "defaultCurrency")]
-        public string DefaultCurrency { get; set; }
-
-        /// <summary>
-        /// Gets or sets catalog id used as primary store catalog
-        /// </summary>
-        [JsonProperty(PropertyName = "catalog")]
-        public string Catalog { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "creditCardSavePolicy")]
-        public bool? CreditCardSavePolicy { get; set; }
-
-        /// <summary>
-        /// Gets or sets store storefront url
-        /// </summary>
-        [JsonProperty(PropertyName = "url")]
-        public string Url { get; set; }
-
-        /// <summary>
-        /// Gets or sets store storefront https url
-        /// </summary>
-        [JsonProperty(PropertyName = "secureUrl")]
-        public string SecureUrl { get; set; }
-
-        /// <summary>
-        /// Gets or sets primary store contact email can be used for store
-        /// event notifications and for feed back
-        /// </summary>
-        [JsonProperty(PropertyName = "email")]
-        public string Email { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "adminEmail")]
-        public string AdminEmail { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "displayOutOfStock")]
-        public bool? DisplayOutOfStock { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "outerId")]
-        public string OuterId { get; set; }
-
-        /// <summary>
-        /// Gets or sets primary (default) fulfillment center id
-        /// </summary>
-        [JsonProperty(PropertyName = "mainFulfillmentCenterId")]
-        public string MainFulfillmentCenterId { get; set; }
-
-        /// <summary>
-        /// Gets or sets alternate fulfillment centers ids
-        /// </summary>
-        [JsonProperty(PropertyName = "additionalFulfillmentCenterIds")]
-        public IList<string> AdditionalFulfillmentCenterIds { get; set; }
-
-        /// <summary>
-        /// Gets or sets primary (default) fulfillment center for order return
-        /// </summary>
-        [JsonProperty(PropertyName = "mainReturnsFulfillmentCenterId")]
-        public string MainReturnsFulfillmentCenterId { get; set; }
-
-        /// <summary>
-        /// Gets or sets alternate fulfillment centers for order return
-        /// </summary>
-        [JsonProperty(PropertyName = "returnsFulfillmentCenterIds")]
-        public IList<string> ReturnsFulfillmentCenterIds { get; set; }
-
-        /// <summary>
-        /// Gets or sets all store supported languages
-        /// </summary>
-        [JsonProperty(PropertyName = "languages")]
-        public IList<string> Languages { get; set; }
-
-        /// <summary>
-        /// Gets or sets all store supported currencies
-        /// </summary>
-        [JsonProperty(PropertyName = "currencies")]
-        public IList<string> Currencies { get; set; }
-
-        /// <summary>
-        /// Gets or sets all store trusted groups (group of stores that shared
-        /// the user logins)
-        /// </summary>
-        [JsonProperty(PropertyName = "trustedGroups")]
-        public IList<string> TrustedGroups { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "seoObjectType")]
-        public string SeoObjectType { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "seoInfos")]
-        public IList<SeoInfo> SeoInfos { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "dynamicProperties")]
-        public IList<DynamicObjectProperty> DynamicProperties { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "settings")]
-        public IList<ObjectSettingEntry> Settings { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "typeName")]
-        public string TypeName { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "scopes")]
-        public IList<string> Scopes { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
@@ -3065,7 +2174,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
@@ -3078,24 +2187,31 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class StoreSearchCriteria
+    /// <summary>
+    /// Criteria for searching
+    /// </summary>
+    public partial class NotificationSearchCriteria
     {
         /// <summary>
-        /// Initializes a new instance of the StoreSearchCriteria class.
+        /// Initializes a new instance of the NotificationSearchCriteria class.
         /// </summary>
-        public StoreSearchCriteria()
+        public NotificationSearchCriteria()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the StoreSearchCriteria class.
+        /// Initializes a new instance of the NotificationSearchCriteria class.
         /// </summary>
-        public StoreSearchCriteria(IList<string> storeIds = default(IList<string>), IList<string> storeStates = default(IList<string>), IList<string> fulfillmentCenterIds = default(IList<string>), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        /// <param name="tenantId">Owner Id of Notification</param>
+        /// <param name="tenantType">Owner Type of Notification</param>
+        /// <param name="isActive">only active notification</param>
+        public NotificationSearchCriteria(string notificationType = default(string), string tenantId = default(string), string tenantType = default(string), bool? isActive = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
-            StoreIds = storeIds;
-            StoreStates = storeStates;
-            FulfillmentCenterIds = fulfillmentCenterIds;
+            NotificationType = notificationType;
+            TenantId = tenantId;
+            TenantType = tenantType;
+            IsActive = isActive;
             ResponseGroup = responseGroup;
             ObjectType = objectType;
             ObjectTypes = objectTypes;
@@ -3117,18 +2233,26 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "storeIds")]
-        public IList<string> StoreIds { get; set; }
+        [JsonProperty(PropertyName = "notificationType")]
+        public string NotificationType { get; set; }
 
         /// <summary>
+        /// Gets or sets owner Id of Notification
         /// </summary>
-        [JsonProperty(PropertyName = "storeStates")]
-        public IList<string> StoreStates { get; set; }
+        [JsonProperty(PropertyName = "tenantId")]
+        public string TenantId { get; set; }
 
         /// <summary>
+        /// Gets or sets owner Type of Notification
         /// </summary>
-        [JsonProperty(PropertyName = "fulfillmentCenterIds")]
-        public IList<string> FulfillmentCenterIds { get; set; }
+        [JsonProperty(PropertyName = "tenantType")]
+        public string TenantType { get; set; }
+
+        /// <summary>
+        /// Gets or sets only active notification
+        /// </summary>
+        [JsonProperty(PropertyName = "isActive")]
+        public bool? IsActive { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3193,7 +2317,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
@@ -3206,89 +2330,25 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class StoreSearchResult
+    public partial class TenantIdentity
     {
         /// <summary>
-        /// Initializes a new instance of the StoreSearchResult class.
+        /// Initializes a new instance of the TenantIdentity class.
         /// </summary>
-        public StoreSearchResult()
+        public TenantIdentity()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the StoreSearchResult class.
+        /// Initializes a new instance of the TenantIdentity class.
         /// </summary>
-        public StoreSearchResult(IList<Store> stores = default(IList<Store>), int? totalCount = default(int?), IList<Store> results = default(IList<Store>))
+        public TenantIdentity(string id = default(string), string type = default(string), bool? isEmpty = default(bool?), bool? isValid = default(bool?))
         {
-            Stores = stores;
-            TotalCount = totalCount;
-            Results = results;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "stores")]
-        public IList<Store> Stores { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "totalCount")]
-        public int? TotalCount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "results")]
-        public IList<Store> Results { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class SendDynamicNotificationRequest
-    {
-        /// <summary>
-        /// Initializes a new instance of the SendDynamicNotificationRequest
-        /// class.
-        /// </summary>
-        public SendDynamicNotificationRequest()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the SendDynamicNotificationRequest
-        /// class.
-        /// </summary>
-        public SendDynamicNotificationRequest(string storeId = default(string), string type = default(string), IDictionary<string, string> fields = default(IDictionary<string, string>), string language = default(string))
-        {
-            StoreId = storeId;
+            Id = id;
             Type = type;
-            Fields = fields;
-            Language = language;
+            IsEmpty = isEmpty;
+            IsValid = isValid;
             CustomInit();
         }
 
@@ -3299,8 +2359,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "storeId")]
-        public string StoreId { get; set; }
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3309,13 +2369,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "fields")]
-        public IDictionary<string, string> Fields { get; set; }
+        [JsonProperty(PropertyName = "isEmpty")]
+        public bool? IsEmpty { get; private set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "language")]
-        public string Language { get; set; }
+        [JsonProperty(PropertyName = "isValid")]
+        public bool? IsValid { get; private set; }
 
     }
 }
@@ -3325,7 +2385,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
 // regenerated.
 // </auto-generated>
 
-namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
 {
     using Microsoft.Rest;
     using Microsoft.Rest.Serialization;
@@ -3339,25 +2399,163 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Represent result for checking of possibility login on behalf request
+    /// Template of Notification with a different language
     /// </summary>
-    public partial class LoginOnBehalfInfo
+    public partial class NotificationTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the LoginOnBehalfInfo class.
+        /// Initializes a new instance of the NotificationTemplate class.
         /// </summary>
-        public LoginOnBehalfInfo()
+        public NotificationTemplate()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the LoginOnBehalfInfo class.
+        /// Initializes a new instance of the NotificationTemplate class.
         /// </summary>
-        public LoginOnBehalfInfo(string userName = default(string), bool? canLoginOnBehalf = default(bool?))
+        /// <param name="languageCode">Code of Language</param>
+        /// <param name="kind">For detecting kind of notifications (email, sms
+        /// and etc.)</param>
+        public NotificationTemplate(string languageCode = default(string), string kind = default(string), bool? isReadonly = default(bool?), string outerId = default(string), bool? isPredefined = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
-            UserName = userName;
-            CanLoginOnBehalf = canLoginOnBehalf;
+            LanguageCode = languageCode;
+            Kind = kind;
+            IsReadonly = isReadonly;
+            OuterId = outerId;
+            IsPredefined = isPredefined;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// Gets or sets code of Language
+        /// </summary>
+        [JsonProperty(PropertyName = "languageCode")]
+        public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// Gets for detecting kind of notifications (email, sms and etc.)
+        /// </summary>
+        [JsonProperty(PropertyName = "kind")]
+        public string Kind { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isReadonly")]
+        public bool? IsReadonly { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isPredefined")]
+        public bool? IsPredefined { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// Base class for Notification
+    /// </summary>
+    public partial class Notification
+    {
+        /// <summary>
+        /// Initializes a new instance of the Notification class.
+        /// </summary>
+        public Notification()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Notification class.
+        /// </summary>
+        /// <param name="alias">This field represents an alias for the
+        /// notification type
+        /// and is used only for backward compatibility with old notification
+        /// names
+        /// that are stored and used by API clients.</param>
+        /// <param name="type">Type of notifications, like Identifier</param>
+        /// <param name="kind">For detecting kind of notifications (email, sms
+        /// and etc.)</param>
+        public Notification(TenantIdentity tenantIdentity = default(TenantIdentity), bool? isActive = default(bool?), string languageCode = default(string), string alias = default(string), string type = default(string), string kind = default(string), string outerId = default(string), IList<NotificationTemplate> templates = default(IList<NotificationTemplate>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        {
+            TenantIdentity = tenantIdentity;
+            IsActive = isActive;
+            LanguageCode = languageCode;
+            Alias = alias;
+            Type = type;
+            Kind = kind;
+            OuterId = outerId;
+            Templates = templates;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
+            Id = id;
             CustomInit();
         }
 
@@ -3368,13 +2566,754 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "userName")]
-        public string UserName { get; set; }
+        [JsonProperty(PropertyName = "tenantIdentity")]
+        public TenantIdentity TenantIdentity { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "canLoginOnBehalf")]
-        public bool? CanLoginOnBehalf { get; set; }
+        [JsonProperty(PropertyName = "isActive")]
+        public bool? IsActive { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "languageCode")]
+        public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets this field represents an alias for the notification
+        /// type
+        /// and is used only for backward compatibility with old notification
+        /// names
+        /// that are stored and used by API clients.
+        /// </summary>
+        [JsonProperty(PropertyName = "alias")]
+        public string Alias { get; set; }
+
+        /// <summary>
+        /// Gets or sets type of notifications, like Identifier
+        /// </summary>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        /// <summary>
+        /// Gets for detecting kind of notifications (email, sms and etc.)
+        /// </summary>
+        [JsonProperty(PropertyName = "kind")]
+        public string Kind { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "templates")]
+        public IList<NotificationTemplate> Templates { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class NotificationSearchResult
+    {
+        /// <summary>
+        /// Initializes a new instance of the NotificationSearchResult class.
+        /// </summary>
+        public NotificationSearchResult()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the NotificationSearchResult class.
+        /// </summary>
+        public NotificationSearchResult(int? totalCount = default(int?), IList<Notification> results = default(IList<Notification>))
+        {
+            TotalCount = totalCount;
+            Results = results;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "totalCount")]
+        public int? TotalCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "results")]
+        public IList<Notification> Results { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class NotificationTemplateRequest
+    {
+        /// <summary>
+        /// Initializes a new instance of the NotificationTemplateRequest
+        /// class.
+        /// </summary>
+        public NotificationTemplateRequest()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the NotificationTemplateRequest
+        /// class.
+        /// </summary>
+        public NotificationTemplateRequest(string text = default(string), Notification data = default(Notification))
+        {
+            Text = text;
+            Data = data;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "text")]
+        public string Text { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "data")]
+        public Notification Data { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// Result of notification sending
+    /// </summary>
+    public partial class NotificationSendResult
+    {
+        /// <summary>
+        /// Initializes a new instance of the NotificationSendResult class.
+        /// </summary>
+        public NotificationSendResult()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the NotificationSendResult class.
+        /// </summary>
+        public NotificationSendResult(string errorMessage = default(string), bool? isSuccess = default(bool?))
+        {
+            ErrorMessage = errorMessage;
+            IsSuccess = isSuccess;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "errorMessage")]
+        public string ErrorMessage { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isSuccess")]
+        public bool? IsSuccess { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class NotificationParameter
+    {
+        /// <summary>
+        /// Initializes a new instance of the NotificationParameter class.
+        /// </summary>
+        public NotificationParameter()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the NotificationParameter class.
+        /// </summary>
+        /// <param name="type">Possible values include: 'String', 'Integer',
+        /// 'Decimal', 'DateTime', 'Boolean'</param>
+        public NotificationParameter(string parameterName = default(string), string parameterDescription = default(string), string parameterCodeInView = default(string), bool? isDictionary = default(bool?), bool? isArray = default(bool?), string type = default(string), object value = default(object))
+        {
+            ParameterName = parameterName;
+            ParameterDescription = parameterDescription;
+            ParameterCodeInView = parameterCodeInView;
+            IsDictionary = isDictionary;
+            IsArray = isArray;
+            Type = type;
+            Value = value;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "parameterName")]
+        public string ParameterName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "parameterDescription")]
+        public string ParameterDescription { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "parameterCodeInView")]
+        public string ParameterCodeInView { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isDictionary")]
+        public bool? IsDictionary { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isArray")]
+        public bool? IsArray { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'String', 'Integer',
+        /// 'Decimal', 'DateTime', 'Boolean'
+        /// </summary>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "value")]
+        public object Value { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class NotificationRequest
+    {
+        /// <summary>
+        /// Initializes a new instance of the NotificationRequest class.
+        /// </summary>
+        public NotificationRequest()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the NotificationRequest class.
+        /// </summary>
+        public NotificationRequest(string type = default(string), string objectId = default(string), string objectTypeId = default(string), string language = default(string), IList<NotificationParameter> notificationParameters = default(IList<NotificationParameter>))
+        {
+            Type = type;
+            ObjectId = objectId;
+            ObjectTypeId = objectTypeId;
+            Language = language;
+            NotificationParameters = notificationParameters;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectId")]
+        public string ObjectId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectTypeId")]
+        public string ObjectTypeId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "language")]
+        public string Language { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "notificationParameters")]
+        public IList<NotificationParameter> NotificationParameters { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class NotificationMessageSearchCriteria
+    {
+        /// <summary>
+        /// Initializes a new instance of the NotificationMessageSearchCriteria
+        /// class.
+        /// </summary>
+        public NotificationMessageSearchCriteria()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the NotificationMessageSearchCriteria
+        /// class.
+        /// </summary>
+        public NotificationMessageSearchCriteria(string notificationType = default(string), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        {
+            NotificationType = notificationType;
+            ResponseGroup = responseGroup;
+            ObjectType = objectType;
+            ObjectTypes = objectTypes;
+            ObjectIds = objectIds;
+            Keyword = keyword;
+            SearchPhrase = searchPhrase;
+            LanguageCode = languageCode;
+            Sort = sort;
+            SortInfos = sortInfos;
+            Skip = skip;
+            Take = take;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "notificationType")]
+        public string NotificationType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "responseGroup")]
+        public string ResponseGroup { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectTypes")]
+        public IList<string> ObjectTypes { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectIds")]
+        public IList<string> ObjectIds { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "keyword")]
+        public string Keyword { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "searchPhrase")]
+        public string SearchPhrase { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "languageCode")]
+        public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sort")]
+        public string Sort { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sortInfos")]
+        public IList<SortInfo> SortInfos { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "skip")]
+        public int? Skip { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "take")]
+        public int? Take { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// Base class for message of a notification with information about sending
+    /// </summary>
+    public partial class NotificationMessage
+    {
+        /// <summary>
+        /// Initializes a new instance of the NotificationMessage class.
+        /// </summary>
+        public NotificationMessage()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the NotificationMessage class.
+        /// </summary>
+        /// <param name="notificationId">Id of Notification</param>
+        /// <param name="notificationType">Type of Notification</param>
+        /// <param name="sendAttemptCount">Count of sending attempt</param>
+        /// <param name="maxSendAttemptCount">Max count of sending
+        /// attempt</param>
+        /// <param name="lastSendError">The last error of sending</param>
+        /// <param name="lastSendAttemptDate">The last date of sending
+        /// attempt</param>
+        /// <param name="sendDate">Date of sending</param>
+        /// <param name="languageCode">Code of language</param>
+        public NotificationMessage(string kind = default(string), TenantIdentity tenantIdentity = default(TenantIdentity), string notificationId = default(string), string notificationType = default(string), int? sendAttemptCount = default(int?), int? maxSendAttemptCount = default(int?), string lastSendError = default(string), System.DateTime? lastSendAttemptDate = default(System.DateTime?), System.DateTime? sendDate = default(System.DateTime?), string languageCode = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        {
+            Kind = kind;
+            TenantIdentity = tenantIdentity;
+            NotificationId = notificationId;
+            NotificationType = notificationType;
+            SendAttemptCount = sendAttemptCount;
+            MaxSendAttemptCount = maxSendAttemptCount;
+            LastSendError = lastSendError;
+            LastSendAttemptDate = lastSendAttemptDate;
+            SendDate = sendDate;
+            LanguageCode = languageCode;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "kind")]
+        public string Kind { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "tenantIdentity")]
+        public TenantIdentity TenantIdentity { get; set; }
+
+        /// <summary>
+        /// Gets or sets id of Notification
+        /// </summary>
+        [JsonProperty(PropertyName = "notificationId")]
+        public string NotificationId { get; set; }
+
+        /// <summary>
+        /// Gets or sets type of Notification
+        /// </summary>
+        [JsonProperty(PropertyName = "notificationType")]
+        public string NotificationType { get; set; }
+
+        /// <summary>
+        /// Gets or sets count of sending attempt
+        /// </summary>
+        [JsonProperty(PropertyName = "sendAttemptCount")]
+        public int? SendAttemptCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets max count of sending attempt
+        /// </summary>
+        [JsonProperty(PropertyName = "maxSendAttemptCount")]
+        public int? MaxSendAttemptCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last error of sending
+        /// </summary>
+        [JsonProperty(PropertyName = "lastSendError")]
+        public string LastSendError { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last date of sending attempt
+        /// </summary>
+        [JsonProperty(PropertyName = "lastSendAttemptDate")]
+        public System.DateTime? LastSendAttemptDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets date of sending
+        /// </summary>
+        [JsonProperty(PropertyName = "sendDate")]
+        public System.DateTime? SendDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets code of language
+        /// </summary>
+        [JsonProperty(PropertyName = "languageCode")]
+        public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class NotificationMessageSearchResult
+    {
+        /// <summary>
+        /// Initializes a new instance of the NotificationMessageSearchResult
+        /// class.
+        /// </summary>
+        public NotificationMessageSearchResult()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the NotificationMessageSearchResult
+        /// class.
+        /// </summary>
+        public NotificationMessageSearchResult(int? totalCount = default(int?), IList<NotificationMessage> results = default(IList<NotificationMessage>))
+        {
+            TotalCount = totalCount;
+            Results = results;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "totalCount")]
+        public int? TotalCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "results")]
+        public IList<NotificationMessage> Results { get; set; }
 
     }
 }

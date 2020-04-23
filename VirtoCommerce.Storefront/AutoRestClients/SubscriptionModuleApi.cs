@@ -17,7 +17,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class VirtoCommerceSubscriptionRESTAPIdocumentation : ServiceClient<VirtoCommerceSubscriptionRESTAPIdocumentation>, IVirtoCommerceSubscriptionRESTAPIdocumentation
+    public partial class SubscriptionModuleClient : ServiceClient<SubscriptionModuleClient>, ISubscriptionModuleClient
     {
         /// <summary>
         /// The base URI of the service.
@@ -45,31 +45,31 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         public virtual ISubscriptionModule SubscriptionModule { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceSubscriptionRESTAPIdocumentation class.
+        /// Initializes a new instance of the SubscriptionModuleClient class.
         /// </summary>
         /// <param name='httpClient'>
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling VirtoCommerceSubscriptionRESTAPIdocumentation.Dispose(). False: will not dispose provided httpClient</param>
-        protected VirtoCommerceSubscriptionRESTAPIdocumentation(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
+        /// True: will dispose the provided httpClient on calling SubscriptionModuleClient.Dispose(). False: will not dispose provided httpClient</param>
+        protected SubscriptionModuleClient(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceSubscriptionRESTAPIdocumentation class.
+        /// Initializes a new instance of the SubscriptionModuleClient class.
         /// </summary>
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected VirtoCommerceSubscriptionRESTAPIdocumentation(params DelegatingHandler[] handlers) : base(handlers)
+        protected SubscriptionModuleClient(params DelegatingHandler[] handlers) : base(handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceSubscriptionRESTAPIdocumentation class.
+        /// Initializes a new instance of the SubscriptionModuleClient class.
         /// </summary>
         /// <param name='rootHandler'>
         /// Optional. The http client handler used to handle http transport.
@@ -77,13 +77,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected VirtoCommerceSubscriptionRESTAPIdocumentation(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
+        protected SubscriptionModuleClient(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceSubscriptionRESTAPIdocumentation class.
+        /// Initializes a new instance of the SubscriptionModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -94,7 +94,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected VirtoCommerceSubscriptionRESTAPIdocumentation(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
+        protected SubscriptionModuleClient(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -104,7 +104,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceSubscriptionRESTAPIdocumentation class.
+        /// Initializes a new instance of the SubscriptionModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -118,7 +118,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected VirtoCommerceSubscriptionRESTAPIdocumentation(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        protected SubscriptionModuleClient(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -128,7 +128,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceSubscriptionRESTAPIdocumentation class.
+        /// Initializes a new instance of the SubscriptionModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -139,7 +139,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public VirtoCommerceSubscriptionRESTAPIdocumentation(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public SubscriptionModuleClient(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (credentials == null)
             {
@@ -153,7 +153,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceSubscriptionRESTAPIdocumentation class.
+        /// Initializes a new instance of the SubscriptionModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -162,11 +162,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling VirtoCommerceSubscriptionRESTAPIdocumentation.Dispose(). False: will not dispose provided httpClient</param>
+        /// True: will dispose the provided httpClient on calling SubscriptionModuleClient.Dispose(). False: will not dispose provided httpClient</param>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public VirtoCommerceSubscriptionRESTAPIdocumentation(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
+        public SubscriptionModuleClient(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
         {
             if (credentials == null)
             {
@@ -180,7 +180,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceSubscriptionRESTAPIdocumentation class.
+        /// Initializes a new instance of the SubscriptionModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -194,7 +194,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public VirtoCommerceSubscriptionRESTAPIdocumentation(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public SubscriptionModuleClient(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (credentials == null)
             {
@@ -208,7 +208,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceSubscriptionRESTAPIdocumentation class.
+        /// Initializes a new instance of the SubscriptionModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -222,7 +222,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public VirtoCommerceSubscriptionRESTAPIdocumentation(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public SubscriptionModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -241,7 +241,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the VirtoCommerceSubscriptionRESTAPIdocumentation class.
+        /// Initializes a new instance of the SubscriptionModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -258,7 +258,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public VirtoCommerceSubscriptionRESTAPIdocumentation(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public SubscriptionModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -286,7 +286,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         private void Initialize()
         {
             SubscriptionModule = new SubscriptionModule(this);
-            BaseUri = new System.Uri("http://localhost/admin");
+            BaseUri = new System.Uri("http://localhost");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
@@ -337,7 +337,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
     /// <summary>
     /// </summary>
-    public partial interface IVirtoCommerceSubscriptionRESTAPIdocumentation : System.IDisposable
+    public partial interface ISubscriptionModuleClient : System.IDisposable
     {
         /// <summary>
         /// The base URI of the service.
@@ -392,7 +392,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
     /// <summary>
     /// SubscriptionModule operations.
     /// </summary>
-    public partial class SubscriptionModule : IServiceOperations<VirtoCommerceSubscriptionRESTAPIdocumentation>, ISubscriptionModule
+    public partial class SubscriptionModule : IServiceOperations<SubscriptionModuleClient>, ISubscriptionModule
     {
         /// <summary>
         /// Initializes a new instance of the SubscriptionModule class.
@@ -403,7 +403,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public SubscriptionModule(VirtoCommerceSubscriptionRESTAPIdocumentation client)
+        public SubscriptionModule(SubscriptionModuleClient client)
         {
             if (client == null)
             {
@@ -413,11 +413,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         }
 
         /// <summary>
-        /// Gets a reference to the VirtoCommerceSubscriptionRESTAPIdocumentation
+        /// Gets a reference to the SubscriptionModuleClient
         /// </summary>
-        public VirtoCommerceSubscriptionRESTAPIdocumentation Client { get; private set; }
+        public SubscriptionModuleClient Client { get; private set; }
 
-        /// <param name='criteria'>
+        /// <summary>
+        /// Search subscriptions by given criteria
+        /// </summary>
+        /// <param name='body'>
+        /// criteria
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -431,21 +435,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<SubscriptionSearchResult>> SearchSubscriptionsWithHttpMessagesAsync(SubscriptionSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<SubscriptionSearchResult>> SearchSubscriptionsWithHttpMessagesAsync(SubscriptionSearchCriteria body = default(SubscriptionSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (criteria == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "criteria");
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -453,7 +447,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "SearchSubscriptions", tracingParameters);
             }
@@ -482,11 +476,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -508,7 +502,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -657,7 +651,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -724,21 +718,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<Subscription>>> GetSubscriptionByIdsWithHttpMessagesAsync(IList<string> ids, string respGroup = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<Subscription>>> GetSubscriptionByIdsWithHttpMessagesAsync(IList<string> ids = default(IList<string>), string respGroup = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (ids == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "ids");
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -757,17 +741,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             List<string> _queryParameters = new List<string>();
             if (ids != null)
             {
-                if (ids.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in ids)
-                    {
-                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Join(",", ids))));
             }
             if (respGroup != null)
             {
@@ -819,7 +793,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -870,7 +844,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             return _result;
         }
 
-        /// <param name='subscription'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -884,21 +858,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Subscription>> UpdateSubscriptionWithHttpMessagesAsync(Subscription subscription, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Subscription>> CreateSubscriptionWithHttpMessagesAsync(Subscription body = default(Subscription), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (subscription == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "subscription");
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -906,149 +870,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("subscription", subscription);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "UpdateSubscription", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/subscriptions").ToString();
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("PUT");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if(subscription != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(subscription, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<Subscription>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<Subscription>(_responseContent, Client.DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <param name='subscription'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse<Subscription>> CreateSubscriptionWithHttpMessagesAsync(Subscription subscription, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (subscription == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "subscription");
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("subscription", subscription);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "CreateSubscription", tracingParameters);
             }
@@ -1077,11 +899,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(subscription != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(subscription, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -1103,7 +925,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1154,7 +976,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             return _result;
         }
 
-        /// <param name='ids'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1165,21 +987,147 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
         /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> DeleteSubscriptionsByIdsWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Subscription>> UpdateSubscriptionWithHttpMessagesAsync(Subscription body = default(Subscription), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (ids == null)
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "ids");
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdateSubscription", tracingParameters);
             }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/subscriptions").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("PUT");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<Subscription>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<Subscription>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Delete subscriptions
+        /// </summary>
+        /// <param name='ids'>
+        /// subscriptions' ids for delete
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> DeleteSubscriptionsByIdsWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -1197,17 +1145,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             List<string> _queryParameters = new List<string>();
             if (ids != null)
             {
-                if (ids.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in ids)
-                    {
-                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Join(",", ids))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -1255,7 +1193,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 204)
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1288,7 +1226,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             return _result;
         }
 
-        /// <param name='subscription'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1302,21 +1240,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<CustomerOrder>> CreateReccurentOrderForSubscriptionWithHttpMessagesAsync(Subscription subscription, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<CustomerOrder>> CreateReccurentOrderForSubscriptionWithHttpMessagesAsync(Subscription body = default(Subscription), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (subscription == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "subscription");
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -1324,7 +1252,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("subscription", subscription);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "CreateReccurentOrderForSubscription", tracingParameters);
             }
@@ -1353,11 +1281,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(subscription != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(subscription, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -1379,7 +1307,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1430,7 +1358,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             return _result;
         }
 
-        /// <param name='cancelRequest'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1444,21 +1372,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Subscription>> CancelSubscriptionWithHttpMessagesAsync(SubscriptionCancelRequest cancelRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Subscription>> CancelSubscriptionWithHttpMessagesAsync(SubscriptionCancelRequest body = default(SubscriptionCancelRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (cancelRequest == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "cancelRequest");
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -1466,7 +1384,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("cancelRequest", cancelRequest);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "CancelSubscription", tracingParameters);
             }
@@ -1495,11 +1413,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(cancelRequest != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(cancelRequest, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -1521,7 +1439,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1658,7 +1576,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1723,21 +1641,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<PaymentPlan>>> GetPaymentPlanByIdsWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<PaymentPlan>>> GetPaymentPlanByIdsWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (ids == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "ids");
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -1755,17 +1663,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             List<string> _queryParameters = new List<string>();
             if (ids != null)
             {
-                if (ids.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in ids)
-                    {
-                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Join(",", ids))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -1813,7 +1711,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1864,7 +1762,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             return _result;
         }
 
-        /// <param name='plan'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1878,21 +1776,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<PaymentPlan>> UpdatePaymentPlanWithHttpMessagesAsync(PaymentPlan plan, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<PaymentPlan>> CreatePaymentPlanWithHttpMessagesAsync(PaymentPlan body = default(PaymentPlan), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (plan == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "plan");
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -1900,149 +1788,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("plan", plan);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "UpdatePaymentPlan", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/subscriptions/plans").ToString();
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("PUT");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if(plan != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(plan, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<PaymentPlan>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<PaymentPlan>(_responseContent, Client.DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <param name='plan'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse<PaymentPlan>> CreatePaymentPlanWithHttpMessagesAsync(PaymentPlan plan, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (plan == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "plan");
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("plan", plan);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "CreatePaymentPlan", tracingParameters);
             }
@@ -2071,11 +1817,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(plan != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(plan, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -2097,7 +1843,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -2148,7 +1894,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             return _result;
         }
 
-        /// <param name='ids'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -2159,21 +1905,147 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
         /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> DeletePlansByIdsWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<PaymentPlan>> UpdatePaymentPlanWithHttpMessagesAsync(PaymentPlan body = default(PaymentPlan), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (ids == null)
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "ids");
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdatePaymentPlan", tracingParameters);
             }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/subscriptions/plans").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("PUT");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<PaymentPlan>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<PaymentPlan>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Delete payment plans
+        /// </summary>
+        /// <param name='ids'>
+        /// plans' ids for delete
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> DeletePlansByIdsWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -2191,17 +2063,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             List<string> _queryParameters = new List<string>();
             if (ids != null)
             {
-                if (ids.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in ids)
-                    {
-                        _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
+                _queryParameters.Add(string.Format("ids={0}", System.Uri.EscapeDataString(string.Join(",", ids))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -2249,7 +2111,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 204)
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -2282,7 +2144,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             return _result;
         }
 
-        /// <param name='ids'>
+        /// <summary>
+        /// Gets plans by plenty ids
+        /// </summary>
+        /// <param name='body'>
+        /// Item ids
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -2296,21 +2162,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<PaymentPlan>>> GetPaymentPlansByPlentyIdsWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<PaymentPlan>>> GetPaymentPlansByPlentyIdsWithHttpMessagesAsync(IList<string> body = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (ids == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "ids");
-            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -2318,7 +2174,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("ids", ids);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetPaymentPlansByPlentyIds", tracingParameters);
             }
@@ -2347,11 +2203,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(ids != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(ids, Client.SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
             if (Client.Credentials != null)
@@ -2373,7 +2229,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -2450,7 +2306,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
     /// </summary>
     public partial interface ISubscriptionModule
     {
-        /// <param name='criteria'>
+        /// <summary>
+        /// Search subscriptions by given criteria
+        /// </summary>
+        /// <param name='body'>
+        /// criteria
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2464,10 +2324,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<SubscriptionSearchResult>> SearchSubscriptionsWithHttpMessagesAsync(SubscriptionSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<SubscriptionSearchResult>> SearchSubscriptionsWithHttpMessagesAsync(SubscriptionSearchCriteria body = default(SubscriptionSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='id'>
         /// </param>
         /// <param name='respGroup'>
@@ -2504,11 +2361,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<IList<Subscription>>> GetSubscriptionByIdsWithHttpMessagesAsync(IList<string> ids, string respGroup = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='subscription'>
+        Task<HttpOperationResponse<IList<Subscription>>> GetSubscriptionByIdsWithHttpMessagesAsync(IList<string> ids = default(IList<string>), string respGroup = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2522,11 +2376,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<Subscription>> UpdateSubscriptionWithHttpMessagesAsync(Subscription subscription, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='subscription'>
+        Task<HttpOperationResponse<Subscription>> CreateSubscriptionWithHttpMessagesAsync(Subscription body = default(Subscription), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2540,11 +2391,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<Subscription>> CreateSubscriptionWithHttpMessagesAsync(Subscription subscription, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Subscription>> UpdateSubscriptionWithHttpMessagesAsync(Subscription body = default(Subscription), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Delete subscriptions
+        /// </summary>
         /// <param name='ids'>
+        /// subscriptions' ids for delete
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2555,29 +2407,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="Microsoft.Rest.HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse> DeleteSubscriptionsByIdsWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='subscription'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<CustomerOrder>> CreateReccurentOrderForSubscriptionWithHttpMessagesAsync(Subscription subscription, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='cancelRequest'>
+        Task<HttpOperationResponse> DeleteSubscriptionsByIdsWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2591,10 +2422,22 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
+        Task<HttpOperationResponse<CustomerOrder>> CreateReccurentOrderForSubscriptionWithHttpMessagesAsync(Subscription body = default(Subscription), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <param name='body'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
         /// </exception>
-        Task<HttpOperationResponse<Subscription>> CancelSubscriptionWithHttpMessagesAsync(SubscriptionCancelRequest cancelRequest, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        Task<HttpOperationResponse<Subscription>> CancelSubscriptionWithHttpMessagesAsync(SubscriptionCancelRequest body = default(SubscriptionCancelRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='id'>
         /// </param>
         /// <param name='customHeaders'>
@@ -2627,11 +2470,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<IList<PaymentPlan>>> GetPaymentPlanByIdsWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='plan'>
+        Task<HttpOperationResponse<IList<PaymentPlan>>> GetPaymentPlanByIdsWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2645,11 +2485,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<PaymentPlan>> UpdatePaymentPlanWithHttpMessagesAsync(PaymentPlan plan, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='plan'>
+        Task<HttpOperationResponse<PaymentPlan>> CreatePaymentPlanWithHttpMessagesAsync(PaymentPlan body = default(PaymentPlan), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2663,11 +2500,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<PaymentPlan>> CreatePaymentPlanWithHttpMessagesAsync(PaymentPlan plan, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<PaymentPlan>> UpdatePaymentPlanWithHttpMessagesAsync(PaymentPlan body = default(PaymentPlan), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Delete payment plans
+        /// </summary>
         /// <param name='ids'>
+        /// plans' ids for delete
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2678,11 +2516,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="Microsoft.Rest.HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse> DeletePlansByIdsWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <param name='ids'>
+        Task<HttpOperationResponse> DeletePlansByIdsWithHttpMessagesAsync(IList<string> ids = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Gets plans by plenty ids
+        /// </summary>
+        /// <param name='body'>
+        /// Item ids
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2696,10 +2535,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse<IList<PaymentPlan>>> GetPaymentPlansByPlentyIdsWithHttpMessagesAsync(IList<string> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<PaymentPlan>>> GetPaymentPlansByPlentyIdsWithHttpMessagesAsync(IList<string> body = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -2726,27 +2562,35 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
     /// </summary>
     public static partial class SubscriptionModuleExtensions
     {
+            /// <summary>
+            /// Search subscriptions by given criteria
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
+            /// criteria
             /// </param>
-            public static SubscriptionSearchResult SearchSubscriptions(this ISubscriptionModule operations, SubscriptionSearchCriteria criteria)
+            public static SubscriptionSearchResult SearchSubscriptions(this ISubscriptionModule operations, SubscriptionSearchCriteria body = default(SubscriptionSearchCriteria))
             {
-                return operations.SearchSubscriptionsAsync(criteria).GetAwaiter().GetResult();
+                return operations.SearchSubscriptionsAsync(body).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Search subscriptions by given criteria
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
+            /// criteria
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<SubscriptionSearchResult> SearchSubscriptionsAsync(this ISubscriptionModule operations, SubscriptionSearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<SubscriptionSearchResult> SearchSubscriptionsAsync(this ISubscriptionModule operations, SubscriptionSearchCriteria body = default(SubscriptionSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SearchSubscriptionsWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SearchSubscriptionsWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -2789,7 +2633,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             /// </param>
             /// <param name='respGroup'>
             /// </param>
-            public static IList<Subscription> GetSubscriptionByIds(this ISubscriptionModule operations, IList<string> ids, string respGroup = default(string))
+            public static IList<Subscription> GetSubscriptionByIds(this ISubscriptionModule operations, IList<string> ids = default(IList<string>), string respGroup = default(string))
             {
                 return operations.GetSubscriptionByIdsAsync(ids, respGroup).GetAwaiter().GetResult();
             }
@@ -2804,7 +2648,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<Subscription>> GetSubscriptionByIdsAsync(this ISubscriptionModule operations, IList<string> ids, string respGroup = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<Subscription>> GetSubscriptionByIdsAsync(this ISubscriptionModule operations, IList<string> ids = default(IList<string>), string respGroup = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetSubscriptionByIdsWithHttpMessagesAsync(ids, respGroup, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -2815,24 +2659,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='subscription'>
+            /// <param name='body'>
             /// </param>
-            public static Subscription UpdateSubscription(this ISubscriptionModule operations, Subscription subscription)
+            public static Subscription CreateSubscription(this ISubscriptionModule operations, Subscription body = default(Subscription))
             {
-                return operations.UpdateSubscriptionAsync(subscription).GetAwaiter().GetResult();
+                return operations.CreateSubscriptionAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='subscription'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Subscription> UpdateSubscriptionAsync(this ISubscriptionModule operations, Subscription subscription, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Subscription> CreateSubscriptionAsync(this ISubscriptionModule operations, Subscription body = default(Subscription), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.UpdateSubscriptionWithHttpMessagesAsync(subscription, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.CreateSubscriptionWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -2841,48 +2685,56 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='subscription'>
+            /// <param name='body'>
             /// </param>
-            public static Subscription CreateSubscription(this ISubscriptionModule operations, Subscription subscription)
+            public static Subscription UpdateSubscription(this ISubscriptionModule operations, Subscription body = default(Subscription))
             {
-                return operations.CreateSubscriptionAsync(subscription).GetAwaiter().GetResult();
+                return operations.UpdateSubscriptionAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='subscription'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Subscription> CreateSubscriptionAsync(this ISubscriptionModule operations, Subscription subscription, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Subscription> UpdateSubscriptionAsync(this ISubscriptionModule operations, Subscription body = default(Subscription), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.CreateSubscriptionWithHttpMessagesAsync(subscription, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.UpdateSubscriptionWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
 
+            /// <summary>
+            /// Delete subscriptions
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='ids'>
+            /// subscriptions' ids for delete
             /// </param>
-            public static void DeleteSubscriptionsByIds(this ISubscriptionModule operations, IList<string> ids)
+            public static void DeleteSubscriptionsByIds(this ISubscriptionModule operations, IList<string> ids = default(IList<string>))
             {
                 operations.DeleteSubscriptionsByIdsAsync(ids).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Delete subscriptions
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='ids'>
+            /// subscriptions' ids for delete
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DeleteSubscriptionsByIdsAsync(this ISubscriptionModule operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task DeleteSubscriptionsByIdsAsync(this ISubscriptionModule operations, IList<string> ids = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.DeleteSubscriptionsByIdsWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
@@ -2890,24 +2742,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='subscription'>
+            /// <param name='body'>
             /// </param>
-            public static CustomerOrder CreateReccurentOrderForSubscription(this ISubscriptionModule operations, Subscription subscription)
+            public static CustomerOrder CreateReccurentOrderForSubscription(this ISubscriptionModule operations, Subscription body = default(Subscription))
             {
-                return operations.CreateReccurentOrderForSubscriptionAsync(subscription).GetAwaiter().GetResult();
+                return operations.CreateReccurentOrderForSubscriptionAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='subscription'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<CustomerOrder> CreateReccurentOrderForSubscriptionAsync(this ISubscriptionModule operations, Subscription subscription, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<CustomerOrder> CreateReccurentOrderForSubscriptionAsync(this ISubscriptionModule operations, Subscription body = default(Subscription), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.CreateReccurentOrderForSubscriptionWithHttpMessagesAsync(subscription, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.CreateReccurentOrderForSubscriptionWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -2916,24 +2768,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='cancelRequest'>
+            /// <param name='body'>
             /// </param>
-            public static Subscription CancelSubscription(this ISubscriptionModule operations, SubscriptionCancelRequest cancelRequest)
+            public static Subscription CancelSubscription(this ISubscriptionModule operations, SubscriptionCancelRequest body = default(SubscriptionCancelRequest))
             {
-                return operations.CancelSubscriptionAsync(cancelRequest).GetAwaiter().GetResult();
+                return operations.CancelSubscriptionAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='cancelRequest'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Subscription> CancelSubscriptionAsync(this ISubscriptionModule operations, SubscriptionCancelRequest cancelRequest, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Subscription> CancelSubscriptionAsync(this ISubscriptionModule operations, SubscriptionCancelRequest body = default(SubscriptionCancelRequest), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.CancelSubscriptionWithHttpMessagesAsync(cancelRequest, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.CancelSubscriptionWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -2970,7 +2822,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             /// </param>
             /// <param name='ids'>
             /// </param>
-            public static IList<PaymentPlan> GetPaymentPlanByIds(this ISubscriptionModule operations, IList<string> ids)
+            public static IList<PaymentPlan> GetPaymentPlanByIds(this ISubscriptionModule operations, IList<string> ids = default(IList<string>))
             {
                 return operations.GetPaymentPlanByIdsAsync(ids).GetAwaiter().GetResult();
             }
@@ -2983,7 +2835,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<PaymentPlan>> GetPaymentPlanByIdsAsync(this ISubscriptionModule operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<PaymentPlan>> GetPaymentPlanByIdsAsync(this ISubscriptionModule operations, IList<string> ids = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetPaymentPlanByIdsWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -2994,24 +2846,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='plan'>
+            /// <param name='body'>
             /// </param>
-            public static PaymentPlan UpdatePaymentPlan(this ISubscriptionModule operations, PaymentPlan plan)
+            public static PaymentPlan CreatePaymentPlan(this ISubscriptionModule operations, PaymentPlan body = default(PaymentPlan))
             {
-                return operations.UpdatePaymentPlanAsync(plan).GetAwaiter().GetResult();
+                return operations.CreatePaymentPlanAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='plan'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<PaymentPlan> UpdatePaymentPlanAsync(this ISubscriptionModule operations, PaymentPlan plan, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<PaymentPlan> CreatePaymentPlanAsync(this ISubscriptionModule operations, PaymentPlan body = default(PaymentPlan), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.UpdatePaymentPlanWithHttpMessagesAsync(plan, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.CreatePaymentPlanWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -3020,73 +2872,89 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='plan'>
+            /// <param name='body'>
             /// </param>
-            public static PaymentPlan CreatePaymentPlan(this ISubscriptionModule operations, PaymentPlan plan)
+            public static PaymentPlan UpdatePaymentPlan(this ISubscriptionModule operations, PaymentPlan body = default(PaymentPlan))
             {
-                return operations.CreatePaymentPlanAsync(plan).GetAwaiter().GetResult();
+                return operations.UpdatePaymentPlanAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='plan'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<PaymentPlan> CreatePaymentPlanAsync(this ISubscriptionModule operations, PaymentPlan plan, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<PaymentPlan> UpdatePaymentPlanAsync(this ISubscriptionModule operations, PaymentPlan body = default(PaymentPlan), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.CreatePaymentPlanWithHttpMessagesAsync(plan, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.UpdatePaymentPlanWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
 
+            /// <summary>
+            /// Delete payment plans
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='ids'>
+            /// plans' ids for delete
             /// </param>
-            public static void DeletePlansByIds(this ISubscriptionModule operations, IList<string> ids)
+            public static void DeletePlansByIds(this ISubscriptionModule operations, IList<string> ids = default(IList<string>))
             {
                 operations.DeletePlansByIdsAsync(ids).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Delete payment plans
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='ids'>
+            /// plans' ids for delete
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DeletePlansByIdsAsync(this ISubscriptionModule operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task DeletePlansByIdsAsync(this ISubscriptionModule operations, IList<string> ids = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.DeletePlansByIdsWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// Gets plans by plenty ids
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='ids'>
+            /// <param name='body'>
+            /// Item ids
             /// </param>
-            public static IList<PaymentPlan> GetPaymentPlansByPlentyIds(this ISubscriptionModule operations, IList<string> ids)
+            public static IList<PaymentPlan> GetPaymentPlansByPlentyIds(this ISubscriptionModule operations, IList<string> body = default(IList<string>))
             {
-                return operations.GetPaymentPlansByPlentyIdsAsync(ids).GetAwaiter().GetResult();
+                return operations.GetPaymentPlansByPlentyIdsAsync(body).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Gets plans by plenty ids
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='ids'>
+            /// <param name='body'>
+            /// Item ids
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<PaymentPlan>> GetPaymentPlansByPlentyIdsAsync(this ISubscriptionModule operations, IList<string> ids, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<PaymentPlan>> GetPaymentPlansByPlentyIdsAsync(this ISubscriptionModule operations, IList<string> body = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetPaymentPlansByPlentyIdsWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetPaymentPlansByPlentyIdsWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -3113,248 +2981,25 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class SortInfo
+    public partial class OrderAddress
     {
         /// <summary>
-        /// Initializes a new instance of the SortInfo class.
+        /// Initializes a new instance of the OrderAddress class.
         /// </summary>
-        public SortInfo()
+        public OrderAddress()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the SortInfo class.
-        /// </summary>
-        /// <param name="sortDirection">Possible values include: 'Ascending',
-        /// 'Descending'</param>
-        public SortInfo(string sortColumn = default(string), string sortDirection = default(string))
-        {
-            SortColumn = sortColumn;
-            SortDirection = sortDirection;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "sortColumn")]
-        public string SortColumn { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Ascending', 'Descending'
-        /// </summary>
-        [JsonProperty(PropertyName = "sortDirection")]
-        public string SortDirection { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class SubscriptionSearchCriteria
-    {
-        /// <summary>
-        /// Initializes a new instance of the SubscriptionSearchCriteria class.
-        /// </summary>
-        public SubscriptionSearchCriteria()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the SubscriptionSearchCriteria class.
-        /// </summary>
-        public SubscriptionSearchCriteria(string storeId = default(string), string number = default(string), string keyword = default(string), string customerOrderId = default(string), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), System.DateTime? modifiedSinceDate = default(System.DateTime?), string customerId = default(string), IList<string> statuses = default(IList<string>), string outerId = default(string), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
-        {
-            StoreId = storeId;
-            Number = number;
-            Keyword = keyword;
-            CustomerOrderId = customerOrderId;
-            StartDate = startDate;
-            EndDate = endDate;
-            ModifiedSinceDate = modifiedSinceDate;
-            CustomerId = customerId;
-            Statuses = statuses;
-            OuterId = outerId;
-            ResponseGroup = responseGroup;
-            ObjectType = objectType;
-            ObjectTypes = objectTypes;
-            ObjectIds = objectIds;
-            SearchPhrase = searchPhrase;
-            LanguageCode = languageCode;
-            Sort = sort;
-            SortInfos = sortInfos;
-            Skip = skip;
-            Take = take;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "storeId")]
-        public string StoreId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "number")]
-        public string Number { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "keyword")]
-        public string Keyword { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "customerOrderId")]
-        public string CustomerOrderId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "startDate")]
-        public System.DateTime? StartDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "endDate")]
-        public System.DateTime? EndDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedSinceDate")]
-        public System.DateTime? ModifiedSinceDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "customerId")]
-        public string CustomerId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "statuses")]
-        public IList<string> Statuses { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "outerId")]
-        public string OuterId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "responseGroup")]
-        public string ResponseGroup { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectTypes")]
-        public IList<string> ObjectTypes { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectIds")]
-        public IList<string> ObjectIds { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "searchPhrase")]
-        public string SearchPhrase { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "languageCode")]
-        public string LanguageCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "sort")]
-        public string Sort { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "sortInfos")]
-        public IList<SortInfo> SortInfos { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "skip")]
-        public int? Skip { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "take")]
-        public int? Take { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Address
-    {
-        /// <summary>
-        /// Initializes a new instance of the Address class.
-        /// </summary>
-        public Address()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Address class.
+        /// Initializes a new instance of the OrderAddress class.
         /// </summary>
         /// <param name="addressType">Possible values include: 'Billing',
         /// 'Shipping', 'Pickup', 'BillingAndShipping'</param>
-        public Address(string key = default(string), string addressType = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
+        public OrderAddress(string addressType = default(string), string key = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
         {
-            Key = key;
             AddressType = addressType;
+            Key = key;
             Name = name;
             Organization = organization;
             CountryCode = countryCode;
@@ -3380,16 +3025,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         partial void CustomInit();
 
         /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "key")]
-        public string Key { get; set; }
-
-        /// <summary>
         /// Gets or sets possible values include: 'Billing', 'Shipping',
         /// 'Pickup', 'BillingAndShipping'
         /// </summary>
         [JsonProperty(PropertyName = "addressType")]
         public string AddressType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "key")]
+        public string Key { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3492,41 +3137,36 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class SettingEntry
+    public partial class ObjectSettingEntry
     {
         /// <summary>
-        /// Initializes a new instance of the SettingEntry class.
+        /// Initializes a new instance of the ObjectSettingEntry class.
         /// </summary>
-        public SettingEntry()
+        public ObjectSettingEntry()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the SettingEntry class.
+        /// Initializes a new instance of the ObjectSettingEntry class.
         /// </summary>
         /// <param name="valueType">Possible values include: 'ShortText',
         /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean',
         /// 'SecureString', 'Json'</param>
-        public SettingEntry(string moduleId = default(string), string objectId = default(string), string objectType = default(string), string groupName = default(string), string name = default(string), string value = default(string), object rawValue = default(object), string valueType = default(string), IList<string> allowedValues = default(IList<string>), string defaultValue = default(string), object rawDefaultValue = default(object), bool? isArray = default(bool?), IList<string> arrayValues = default(IList<string>), IList<object> rawArrayValues = default(IList<object>), string title = default(string), string description = default(string), bool? isRuntime = default(bool?))
+        public ObjectSettingEntry(bool? itHasValues = default(bool?), string objectId = default(string), string objectType = default(string), object value = default(object), bool? restartRequired = default(bool?), string moduleId = default(string), string groupName = default(string), string name = default(string), string valueType = default(string), IList<object> allowedValues = default(IList<object>), object defaultValue = default(object), bool? isDictionary = default(bool?))
         {
-            ModuleId = moduleId;
+            ItHasValues = itHasValues;
             ObjectId = objectId;
             ObjectType = objectType;
+            Value = value;
+            RestartRequired = restartRequired;
+            ModuleId = moduleId;
             GroupName = groupName;
             Name = name;
-            Value = value;
-            RawValue = rawValue;
             ValueType = valueType;
             AllowedValues = allowedValues;
             DefaultValue = defaultValue;
-            RawDefaultValue = rawDefaultValue;
-            IsArray = isArray;
-            ArrayValues = arrayValues;
-            RawArrayValues = rawArrayValues;
-            Title = title;
-            Description = description;
-            IsRuntime = isRuntime;
+            IsDictionary = isDictionary;
             CustomInit();
         }
 
@@ -3537,8 +3177,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "moduleId")]
-        public string ModuleId { get; set; }
+        [JsonProperty(PropertyName = "itHasValues")]
+        public bool? ItHasValues { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -3552,6 +3192,21 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "value")]
+        public object Value { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "restartRequired")]
+        public bool? RestartRequired { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "moduleId")]
+        public string ModuleId { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "groupName")]
         public string GroupName { get; set; }
 
@@ -3559,16 +3214,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "value")]
-        public string Value { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "rawValue")]
-        public object RawValue { get; set; }
 
         /// <summary>
         /// Gets or sets possible values include: 'ShortText', 'LongText',
@@ -3580,47 +3225,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "allowedValues")]
-        public IList<string> AllowedValues { get; set; }
+        public IList<object> AllowedValues { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "defaultValue")]
-        public string DefaultValue { get; set; }
+        public object DefaultValue { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "rawDefaultValue")]
-        public object RawDefaultValue { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isArray")]
-        public bool? IsArray { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "arrayValues")]
-        public IList<string> ArrayValues { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "rawArrayValues")]
-        public IList<object> RawArrayValues { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "title")]
-        public string Title { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isRuntime")]
-        public bool? IsRuntime { get; set; }
+        [JsonProperty(PropertyName = "isDictionary")]
+        public bool? IsDictionary { get; set; }
 
     }
 }
@@ -3722,11 +3337,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// 'Standard', 'Redirection', 'PreparedForm'</param>
         /// <param name="paymentMethodGroupType">Possible values include:
         /// 'Paypal', 'BankCard', 'Alternative', 'Manual'</param>
-        public PaymentMethod(string code = default(string), string name = default(string), string description = default(string), string logoUrl = default(string), bool? isActive = default(bool?), int? priority = default(int?), bool? isAvailableForPartial = default(bool?), string currency = default(string), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), IList<SettingEntry> settings = default(IList<SettingEntry>), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), string paymentMethodType = default(string), string paymentMethodGroupType = default(string), string id = default(string))
+        public PaymentMethod(string code = default(string), string name = default(string), string logoUrl = default(string), bool? isActive = default(bool?), int? priority = default(int?), bool? isAvailableForPartial = default(bool?), string currency = default(string), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), string storeId = default(string), string typeName = default(string), IList<ObjectSettingEntry> settings = default(IList<ObjectSettingEntry>), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), string paymentMethodType = default(string), string paymentMethodGroupType = default(string), string id = default(string))
         {
             Code = code;
             Name = name;
-            Description = description;
             LogoUrl = logoUrl;
             IsActive = isActive;
             Priority = priority;
@@ -3738,6 +3352,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             TotalWithTax = totalWithTax;
             DiscountAmount = discountAmount;
             DiscountAmountWithTax = discountAmountWithTax;
+            StoreId = storeId;
+            TypeName = typeName;
             Settings = settings;
             TaxType = taxType;
             TaxTotal = taxTotal;
@@ -3762,12 +3378,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -3826,8 +3437,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "storeId")]
+        public string StoreId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "typeName")]
+        public string TypeName { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "settings")]
-        public IList<SettingEntry> Settings { get; set; }
+        public IList<ObjectSettingEntry> Settings { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3850,18 +3471,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public IList<TaxDetail> TaxDetails { get; set; }
 
         /// <summary>
-        /// Gets possible values include: 'Unknown', 'Standard', 'Redirection',
-        /// 'PreparedForm'
+        /// Gets or sets possible values include: 'Unknown', 'Standard',
+        /// 'Redirection', 'PreparedForm'
         /// </summary>
         [JsonProperty(PropertyName = "paymentMethodType")]
-        public string PaymentMethodType { get; private set; }
+        public string PaymentMethodType { get; set; }
 
         /// <summary>
-        /// Gets possible values include: 'Paypal', 'BankCard', 'Alternative',
-        /// 'Manual'
+        /// Gets or sets possible values include: 'Paypal', 'BankCard',
+        /// 'Alternative', 'Manual'
         /// </summary>
         [JsonProperty(PropertyName = "paymentMethodGroupType")]
-        public string PaymentMethodGroupType { get; private set; }
+        public string PaymentMethodGroupType { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3889,31 +3510,33 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class ProcessPaymentResult
+    public partial class ProcessPaymentRequestResult
     {
         /// <summary>
-        /// Initializes a new instance of the ProcessPaymentResult class.
+        /// Initializes a new instance of the ProcessPaymentRequestResult
+        /// class.
         /// </summary>
-        public ProcessPaymentResult()
+        public ProcessPaymentRequestResult()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the ProcessPaymentResult class.
+        /// Initializes a new instance of the ProcessPaymentRequestResult
+        /// class.
         /// </summary>
         /// <param name="newPaymentStatus">Possible values include: 'New',
         /// 'Pending', 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded',
         /// 'Voided', 'Custom', 'Cancelled'</param>
-        public ProcessPaymentResult(PaymentMethod paymentMethod = default(PaymentMethod), string newPaymentStatus = default(string), string redirectUrl = default(string), string htmlForm = default(string), bool? isSuccess = default(bool?), string error = default(string), string outerId = default(string))
+        public ProcessPaymentRequestResult(string redirectUrl = default(string), string htmlForm = default(string), string outerId = default(string), PaymentMethod paymentMethod = default(PaymentMethod), bool? isSuccess = default(bool?), string errorMessage = default(string), string newPaymentStatus = default(string))
         {
-            PaymentMethod = paymentMethod;
-            NewPaymentStatus = newPaymentStatus;
             RedirectUrl = redirectUrl;
             HtmlForm = htmlForm;
-            IsSuccess = isSuccess;
-            Error = error;
             OuterId = outerId;
+            PaymentMethod = paymentMethod;
+            IsSuccess = isSuccess;
+            ErrorMessage = errorMessage;
+            NewPaymentStatus = newPaymentStatus;
             CustomInit();
         }
 
@@ -3921,19 +3544,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "paymentMethod")]
-        public PaymentMethod PaymentMethod { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'New', 'Pending',
-        /// 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded', 'Voided',
-        /// 'Custom', 'Cancelled'
-        /// </summary>
-        [JsonProperty(PropertyName = "newPaymentStatus")]
-        public string NewPaymentStatus { get; set; }
 
         /// <summary>
         /// </summary>
@@ -3947,18 +3557,31 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "paymentMethod")]
+        public PaymentMethod PaymentMethod { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "isSuccess")]
         public bool? IsSuccess { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "error")]
-        public string Error { get; set; }
+        [JsonProperty(PropertyName = "errorMessage")]
+        public string ErrorMessage { get; set; }
 
         /// <summary>
+        /// Gets or sets possible values include: 'New', 'Pending',
+        /// 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded', 'Voided',
+        /// 'Custom', 'Cancelled'
         /// </summary>
-        [JsonProperty(PropertyName = "outerId")]
-        public string OuterId { get; set; }
+        [JsonProperty(PropertyName = "newPaymentStatus")]
+        public string NewPaymentStatus { get; set; }
 
     }
 }
@@ -4080,7 +3703,22 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the PaymentGatewayTransaction class.
         /// </summary>
-        public PaymentGatewayTransaction(double? amount = default(double?), string currencyCode = default(string), bool? isProcessed = default(bool?), System.DateTime? processedDate = default(System.DateTime?), string processError = default(string), int? processAttemptCount = default(int?), string requestData = default(string), string responseData = default(string), string responseCode = default(string), double? refundAmount = default(double?), string gatewayIpAddress = default(string), string type = default(string), string status = default(string), string note = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        /// <param name="isProcessed">Flag represent that current transaction
+        /// is processed</param>
+        /// <param name="processedDate">Date when this transaction was
+        /// handled</param>
+        /// <param name="requestData">Raw request data</param>
+        /// <param name="responseData">Raw response data</param>
+        /// <param name="responseCode">Gateway or VC response status
+        /// code</param>
+        /// <param name="gatewayIpAddress">Gateway IP address</param>
+        /// <param name="type">The type of payment interaction.The payment can
+        /// be Capture or CheckReceived.
+        /// The value also includes customer payment interactions such as
+        /// Website, Call, Store, or Unknown.</param>
+        /// <param name="status">"Active", "Expired", and "Inactive" or
+        /// other</param>
+        public PaymentGatewayTransaction(double? amount = default(double?), string currencyCode = default(string), bool? isProcessed = default(bool?), System.DateTime? processedDate = default(System.DateTime?), string processError = default(string), int? processAttemptCount = default(int?), string requestData = default(string), string responseData = default(string), string responseCode = default(string), string gatewayIpAddress = default(string), string type = default(string), string status = default(string), string note = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             Amount = amount;
             CurrencyCode = currencyCode;
@@ -4091,7 +3729,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             RequestData = requestData;
             ResponseData = responseData;
             ResponseCode = responseCode;
-            RefundAmount = refundAmount;
             GatewayIpAddress = gatewayIpAddress;
             Type = type;
             Status = status;
@@ -4100,6 +3737,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -4120,11 +3758,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public string CurrencyCode { get; set; }
 
         /// <summary>
+        /// Gets or sets flag represent that current transaction is processed
         /// </summary>
         [JsonProperty(PropertyName = "isProcessed")]
         public bool? IsProcessed { get; set; }
 
         /// <summary>
+        /// Gets or sets date when this transaction was handled
         /// </summary>
         [JsonProperty(PropertyName = "processedDate")]
         public System.DateTime? ProcessedDate { get; set; }
@@ -4140,36 +3780,40 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public int? ProcessAttemptCount { get; set; }
 
         /// <summary>
+        /// Gets or sets raw request data
         /// </summary>
         [JsonProperty(PropertyName = "requestData")]
         public string RequestData { get; set; }
 
         /// <summary>
+        /// Gets or sets raw response data
         /// </summary>
         [JsonProperty(PropertyName = "responseData")]
         public string ResponseData { get; set; }
 
         /// <summary>
+        /// Gets or sets gateway or VC response status code
         /// </summary>
         [JsonProperty(PropertyName = "responseCode")]
         public string ResponseCode { get; set; }
 
         /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "refundAmount")]
-        public double? RefundAmount { get; set; }
-
-        /// <summary>
+        /// Gets or sets gateway IP address
         /// </summary>
         [JsonProperty(PropertyName = "gatewayIpAddress")]
         public string GatewayIpAddress { get; set; }
 
         /// <summary>
+        /// Gets or sets the type of payment interaction.The payment can be
+        /// Capture or CheckReceived.
+        /// The value also includes customer payment interactions such as
+        /// Website, Call, Store, or Unknown.
         /// </summary>
         [JsonProperty(PropertyName = "type")]
         public string Type { get; set; }
 
         /// <summary>
+        /// Gets or sets "Active", "Expired", and "Inactive" or other
         /// </summary>
         [JsonProperty(PropertyName = "status")]
         public string Status { get; set; }
@@ -4198,6 +3842,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -4238,7 +3887,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the IOperation class.
         /// </summary>
-        public IOperation(string operationType = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), string parentOperationId = default(string), IList<IOperation> childrenOperations = default(IList<IOperation>), string id = default(string))
+        public IOperation(string operationType = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), string parentOperationId = default(string), IList<IOperation> childrenOperations = default(IList<IOperation>))
         {
             OperationType = operationType;
             Number = number;
@@ -4248,7 +3897,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             Currency = currency;
             ParentOperationId = parentOperationId;
             ChildrenOperations = childrenOperations;
-            Id = id;
             CustomInit();
         }
 
@@ -4297,11 +3945,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         [JsonProperty(PropertyName = "childrenOperations")]
         public IList<IOperation> ChildrenOperations { get; set; }
 
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
     }
 }
 // <auto-generated>
@@ -4339,7 +3982,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <param name="valueType">Possible values include: 'Undefined',
         /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
         /// 'Boolean', 'Html', 'Image'</param>
-        public DynamicPropertyObjectValue(string objectType = default(string), string objectId = default(string), string locale = default(string), object value = default(object), string valueId = default(string), string valueType = default(string))
+        public DynamicPropertyObjectValue(string objectType = default(string), string objectId = default(string), string locale = default(string), object value = default(object), string valueId = default(string), string valueType = default(string), string propertyId = default(string), string propertyName = default(string))
         {
             ObjectType = objectType;
             ObjectId = objectId;
@@ -4347,6 +3990,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             Value = value;
             ValueId = valueId;
             ValueType = valueType;
+            PropertyId = propertyId;
+            PropertyName = propertyName;
             CustomInit();
         }
 
@@ -4387,6 +4032,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
         public string ValueType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "propertyId")]
+        public string PropertyId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "propertyName")]
+        public string PropertyName { get; set; }
 
     }
 }
@@ -4481,7 +4136,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <param name="valueType">Possible values include: 'Undefined',
         /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
         /// 'Boolean', 'Html', 'Image'</param>
-        public DynamicObjectProperty(string objectId = default(string), IList<DynamicPropertyObjectValue> values = default(IList<DynamicPropertyObjectValue>), string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public DynamicObjectProperty(string objectId = default(string), IList<DynamicPropertyObjectValue> values = default(IList<DynamicPropertyObjectValue>), string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             ObjectId = objectId;
             Values = values;
@@ -4499,6 +4154,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -4593,6 +4249,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
@@ -4632,7 +4293,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         /// <param name="operationType">Possible values include: 'Detached',
         /// 'Unchanged', 'Added', 'Deleted', 'Modified'</param>
-        public OperationLog(string objectType = default(string), string objectId = default(string), string operationType = default(string), string detail = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public OperationLog(string objectType = default(string), string objectId = default(string), string operationType = default(string), string detail = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             ObjectType = objectType;
             ObjectId = objectId;
@@ -4642,6 +4303,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -4695,6 +4357,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
@@ -4732,11 +4399,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the PaymentIn class.
         /// </summary>
+        /// <param name="gatewayCode">Payment method (gateway) code</param>
         /// <param name="paymentStatus">Possible values include: 'New',
         /// 'Pending', 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded',
         /// 'Voided', 'Custom', 'Cancelled'</param>
-        public PaymentIn(string purpose = default(string), string gatewayCode = default(string), PaymentMethod paymentMethod = default(PaymentMethod), string organizationId = default(string), string organizationName = default(string), string customerId = default(string), string customerName = default(string), System.DateTime? incomingDate = default(System.DateTime?), string outerId = default(string), Address billingAddress = default(Address), string paymentStatus = default(string), System.DateTime? authorizedDate = default(System.DateTime?), System.DateTime? capturedDate = default(System.DateTime?), System.DateTime? voidedDate = default(System.DateTime?), ProcessPaymentResult processPaymentResult = default(ProcessPaymentResult), double? amount = default(double?), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), IList<Discount> discounts = default(IList<Discount>), IList<PaymentGatewayTransaction> transactions = default(IList<PaymentGatewayTransaction>), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), IList<IOperation> childrenOperations = default(IList<IOperation>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        /// <param name="taxType">Tax category or type</param>
+        public PaymentIn(string orderId = default(string), string purpose = default(string), string gatewayCode = default(string), PaymentMethod paymentMethod = default(PaymentMethod), string organizationId = default(string), string organizationName = default(string), string customerId = default(string), string customerName = default(string), System.DateTime? incomingDate = default(System.DateTime?), OrderAddress billingAddress = default(OrderAddress), string paymentStatus = default(string), System.DateTime? authorizedDate = default(System.DateTime?), System.DateTime? capturedDate = default(System.DateTime?), System.DateTime? voidedDate = default(System.DateTime?), ProcessPaymentRequestResult processPaymentResult = default(ProcessPaymentRequestResult), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), string objectType = default(string), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), IList<Discount> discounts = default(IList<Discount>), IList<PaymentGatewayTransaction> transactions = default(IList<PaymentGatewayTransaction>), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), string outerId = default(string), IList<IOperation> childrenOperations = default(IList<IOperation>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
+            OrderId = orderId;
             Purpose = purpose;
             GatewayCode = gatewayCode;
             PaymentMethod = paymentMethod;
@@ -4745,20 +4415,19 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             CustomerId = customerId;
             CustomerName = customerName;
             IncomingDate = incomingDate;
-            OuterId = outerId;
             BillingAddress = billingAddress;
             PaymentStatus = paymentStatus;
             AuthorizedDate = authorizedDate;
             CapturedDate = capturedDate;
             VoidedDate = voidedDate;
             ProcessPaymentResult = processPaymentResult;
-            Amount = amount;
             Price = price;
             PriceWithTax = priceWithTax;
             Total = total;
             TotalWithTax = totalWithTax;
             DiscountAmount = discountAmount;
             DiscountAmountWithTax = discountAmountWithTax;
+            ObjectType = objectType;
             TaxType = taxType;
             TaxTotal = taxTotal;
             TaxPercentRate = taxPercentRate;
@@ -4773,17 +4442,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             Comment = comment;
             Currency = currency;
             Sum = sum;
+            OuterId = outerId;
             ChildrenOperations = childrenOperations;
             IsCancelled = isCancelled;
             CancelledDate = cancelledDate;
             CancelReason = cancelReason;
-            ObjectType = objectType;
             DynamicProperties = dynamicProperties;
             OperationsLog = operationsLog;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -4795,10 +4465,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "orderId")]
+        public string OrderId { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "purpose")]
         public string Purpose { get; set; }
 
         /// <summary>
+        /// Gets or sets payment method (gateway) code
         /// </summary>
         [JsonProperty(PropertyName = "gatewayCode")]
         public string GatewayCode { get; set; }
@@ -4835,13 +4511,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "outerId")]
-        public string OuterId { get; set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "billingAddress")]
-        public Address BillingAddress { get; set; }
+        public OrderAddress BillingAddress { get; set; }
 
         /// <summary>
         /// Gets or sets possible values include: 'New', 'Pending',
@@ -4869,12 +4540,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "processPaymentResult")]
-        public ProcessPaymentResult ProcessPaymentResult { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "amount")]
-        public double? Amount { get; set; }
+        public ProcessPaymentRequestResult ProcessPaymentResult { get; set; }
 
         /// <summary>
         /// </summary>
@@ -4907,6 +4573,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public double? DiscountAmountWithTax { get; set; }
 
         /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// Gets or sets tax category or type
         /// </summary>
         [JsonProperty(PropertyName = "taxType")]
         public string TaxType { get; set; }
@@ -4978,6 +4650,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "childrenOperations")]
         public IList<IOperation> ChildrenOperations { get; set; }
 
@@ -4995,11 +4672,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "cancelReason")]
         public string CancelReason { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
 
         /// <summary>
         /// </summary>
@@ -5033,77 +4705,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class CatalogLanguage
-    {
-        /// <summary>
-        /// Initializes a new instance of the CatalogLanguage class.
-        /// </summary>
-        public CatalogLanguage()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CatalogLanguage class.
-        /// </summary>
-        public CatalogLanguage(string catalogId = default(string), Catalog catalog = default(Catalog), bool? isDefault = default(bool?), string languageCode = default(string), string id = default(string))
-        {
-            CatalogId = catalogId;
-            Catalog = catalog;
-            IsDefault = isDefault;
-            LanguageCode = languageCode;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "catalogId")]
-        public string CatalogId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "catalog")]
-        public Catalog Catalog { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isDefault")]
-        public bool? IsDefault { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "languageCode")]
-        public string LanguageCode { get; set; }
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -5131,2804 +4734,28 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class PropertyValue
+    public partial class OrderLineItem
     {
         /// <summary>
-        /// Initializes a new instance of the PropertyValue class.
+        /// Initializes a new instance of the OrderLineItem class.
         /// </summary>
-        public PropertyValue()
+        public OrderLineItem()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the PropertyValue class.
-        /// </summary>
-        /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
-        /// 'GeoPoint'</param>
-        public PropertyValue(string propertyId = default(string), string propertyName = default(string), Property property = default(Property), string alias = default(string), string valueId = default(string), object value = default(object), string valueType = default(string), string languageCode = default(string), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            PropertyId = propertyId;
-            PropertyName = propertyName;
-            Property = property;
-            Alias = alias;
-            ValueId = valueId;
-            Value = value;
-            ValueType = valueType;
-            LanguageCode = languageCode;
-            IsInherited = isInherited;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyId")]
-        public string PropertyId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyName")]
-        public string PropertyName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "property")]
-        public Property Property { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "alias")]
-        public string Alias { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "valueId")]
-        public string ValueId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "value")]
-        public object Value { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
-        /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "languageCode")]
-        public string LanguageCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isInherited")]
-        public bool? IsInherited { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class CategoryLink
-    {
-        /// <summary>
-        /// Initializes a new instance of the CategoryLink class.
-        /// </summary>
-        public CategoryLink()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CategoryLink class.
-        /// </summary>
-        public CategoryLink(int? priority = default(int?), string catalogId = default(string), Catalog catalog = default(Catalog), string categoryId = default(string), Category category = default(Category))
-        {
-            Priority = priority;
-            CatalogId = catalogId;
-            Catalog = catalog;
-            CategoryId = categoryId;
-            Category = category;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "priority")]
-        public int? Priority { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "catalogId")]
-        public string CatalogId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "catalog")]
-        public Catalog Catalog { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "categoryId")]
-        public string CategoryId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "category")]
-        public Category Category { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class SeoInfo
-    {
-        /// <summary>
-        /// Initializes a new instance of the SeoInfo class.
-        /// </summary>
-        public SeoInfo()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the SeoInfo class.
-        /// </summary>
-        public SeoInfo(string name = default(string), string semanticUrl = default(string), string pageTitle = default(string), string metaDescription = default(string), string imageAltDescription = default(string), string metaKeywords = default(string), string storeId = default(string), string objectId = default(string), string objectType = default(string), bool? isActive = default(bool?), string languageCode = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            Name = name;
-            SemanticUrl = semanticUrl;
-            PageTitle = pageTitle;
-            MetaDescription = metaDescription;
-            ImageAltDescription = imageAltDescription;
-            MetaKeywords = metaKeywords;
-            StoreId = storeId;
-            ObjectId = objectId;
-            ObjectType = objectType;
-            IsActive = isActive;
-            LanguageCode = languageCode;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "semanticUrl")]
-        public string SemanticUrl { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "pageTitle")]
-        public string PageTitle { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "metaDescription")]
-        public string MetaDescription { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "imageAltDescription")]
-        public string ImageAltDescription { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "metaKeywords")]
-        public string MetaKeywords { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "storeId")]
-        public string StoreId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectId")]
-        public string ObjectId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isActive")]
-        public bool? IsActive { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "languageCode")]
-        public string LanguageCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Image
-    {
-        /// <summary>
-        /// Initializes a new instance of the Image class.
-        /// </summary>
-        public Image()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Image class.
-        /// </summary>
-        public Image(string name = default(string), string url = default(string), string group = default(string), int? sortOrder = default(int?), byte[] binaryData = default(byte[]), bool? isInherited = default(bool?), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), string languageCode = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            Name = name;
-            Url = url;
-            Group = group;
-            SortOrder = sortOrder;
-            BinaryData = binaryData;
-            IsInherited = isInherited;
-            SeoObjectType = seoObjectType;
-            SeoInfos = seoInfos;
-            LanguageCode = languageCode;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "url")]
-        public string Url { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "group")]
-        public string Group { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "sortOrder")]
-        public int? SortOrder { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "binaryData")]
-        public byte[] BinaryData { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isInherited")]
-        public bool? IsInherited { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "seoObjectType")]
-        public string SeoObjectType { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "seoInfos")]
-        public IList<SeoInfo> SeoInfos { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "languageCode")]
-        public string LanguageCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class OutlineItem
-    {
-        /// <summary>
-        /// Initializes a new instance of the OutlineItem class.
-        /// </summary>
-        public OutlineItem()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the OutlineItem class.
-        /// </summary>
-        public OutlineItem(string id = default(string), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), bool? hasVirtualParent = default(bool?))
-        {
-            Id = id;
-            SeoObjectType = seoObjectType;
-            SeoInfos = seoInfos;
-            HasVirtualParent = hasVirtualParent;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "seoObjectType")]
-        public string SeoObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "seoInfos")]
-        public IList<SeoInfo> SeoInfos { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "hasVirtualParent")]
-        public bool? HasVirtualParent { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Outline
-    {
-        /// <summary>
-        /// Initializes a new instance of the Outline class.
-        /// </summary>
-        public Outline()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Outline class.
-        /// </summary>
-        public Outline(IList<OutlineItem> items = default(IList<OutlineItem>))
-        {
-            Items = items;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "items")]
-        public IList<OutlineItem> Items { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Category
-    {
-        /// <summary>
-        /// Initializes a new instance of the Category class.
-        /// </summary>
-        public Category()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Category class.
-        /// </summary>
-        public Category(string catalogId = default(string), Catalog catalog = default(Catalog), string parentId = default(string), string code = default(string), string taxType = default(string), string name = default(string), string path = default(string), bool? isVirtual = default(bool?), int? level = default(int?), IList<Category> parents = default(IList<Category>), string packageType = default(string), int? priority = default(int?), bool? isActive = default(bool?), IList<Category> children = default(IList<Category>), IList<Property> properties = default(IList<Property>), IList<PropertyValue> propertyValues = default(IList<PropertyValue>), IList<CategoryLink> links = default(IList<CategoryLink>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), IList<Image> images = default(IList<Image>), IList<Outline> outlines = default(IList<Outline>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            CatalogId = catalogId;
-            Catalog = catalog;
-            ParentId = parentId;
-            Code = code;
-            TaxType = taxType;
-            Name = name;
-            Path = path;
-            IsVirtual = isVirtual;
-            Level = level;
-            Parents = parents;
-            PackageType = packageType;
-            Priority = priority;
-            IsActive = isActive;
-            Children = children;
-            Properties = properties;
-            PropertyValues = propertyValues;
-            Links = links;
-            SeoObjectType = seoObjectType;
-            SeoInfos = seoInfos;
-            Images = images;
-            Outlines = outlines;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "catalogId")]
-        public string CatalogId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "catalog")]
-        public Catalog Catalog { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "parentId")]
-        public string ParentId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "code")]
-        public string Code { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "taxType")]
-        public string TaxType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "path")]
-        public string Path { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isVirtual")]
-        public bool? IsVirtual { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "level")]
-        public int? Level { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "parents")]
-        public IList<Category> Parents { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "packageType")]
-        public string PackageType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "priority")]
-        public int? Priority { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isActive")]
-        public bool? IsActive { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "children")]
-        public IList<Category> Children { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "properties")]
-        public IList<Property> Properties { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyValues")]
-        public IList<PropertyValue> PropertyValues { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "links")]
-        public IList<CategoryLink> Links { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "seoObjectType")]
-        public string SeoObjectType { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "seoInfos")]
-        public IList<SeoInfo> SeoInfos { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "images")]
-        public IList<Image> Images { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "outlines")]
-        public IList<Outline> Outlines { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class PropertyAttribute
-    {
-        /// <summary>
-        /// Initializes a new instance of the PropertyAttribute class.
-        /// </summary>
-        public PropertyAttribute()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PropertyAttribute class.
-        /// </summary>
-        public PropertyAttribute(string propertyId = default(string), Property property = default(Property), string value = default(string), string name = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            PropertyId = propertyId;
-            Property = property;
-            Value = value;
-            Name = name;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyId")]
-        public string PropertyId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "property")]
-        public Property Property { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "value")]
-        public string Value { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class PropertyDisplayName
-    {
-        /// <summary>
-        /// Initializes a new instance of the PropertyDisplayName class.
-        /// </summary>
-        public PropertyDisplayName()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PropertyDisplayName class.
-        /// </summary>
-        public PropertyDisplayName(string name = default(string), string languageCode = default(string))
-        {
-            Name = name;
-            LanguageCode = languageCode;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "languageCode")]
-        public string LanguageCode { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class PropertyValidationRule
-    {
-        /// <summary>
-        /// Initializes a new instance of the PropertyValidationRule class.
-        /// </summary>
-        public PropertyValidationRule()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PropertyValidationRule class.
-        /// </summary>
-        public PropertyValidationRule(bool? isUnique = default(bool?), int? charCountMin = default(int?), int? charCountMax = default(int?), string regExp = default(string), string propertyId = default(string), Property property = default(Property), string id = default(string))
-        {
-            IsUnique = isUnique;
-            CharCountMin = charCountMin;
-            CharCountMax = charCountMax;
-            RegExp = regExp;
-            PropertyId = propertyId;
-            Property = property;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isUnique")]
-        public bool? IsUnique { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "charCountMin")]
-        public int? CharCountMin { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "charCountMax")]
-        public int? CharCountMax { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "regExp")]
-        public string RegExp { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyId")]
-        public string PropertyId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "property")]
-        public Property Property { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Property
-    {
-        /// <summary>
-        /// Initializes a new instance of the Property class.
-        /// </summary>
-        public Property()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Property class.
-        /// </summary>
-        /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
-        /// 'GeoPoint'</param>
-        /// <param name="type">Possible values include: 'Product', 'Variation',
-        /// 'Category', 'Catalog'</param>
-        public Property(string catalogId = default(string), Catalog catalog = default(Catalog), string categoryId = default(string), Category category = default(Category), string name = default(string), bool? required = default(bool?), bool? dictionary = default(bool?), bool? multivalue = default(bool?), bool? multilanguage = default(bool?), string valueType = default(string), string type = default(string), IList<PropertyAttribute> attributes = default(IList<PropertyAttribute>), IList<PropertyDisplayName> displayNames = default(IList<PropertyDisplayName>), IList<PropertyValidationRule> validationRules = default(IList<PropertyValidationRule>), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            CatalogId = catalogId;
-            Catalog = catalog;
-            CategoryId = categoryId;
-            Category = category;
-            Name = name;
-            Required = required;
-            Dictionary = dictionary;
-            Multivalue = multivalue;
-            Multilanguage = multilanguage;
-            ValueType = valueType;
-            Type = type;
-            Attributes = attributes;
-            DisplayNames = displayNames;
-            ValidationRules = validationRules;
-            IsInherited = isInherited;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "catalogId")]
-        public string CatalogId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "catalog")]
-        public Catalog Catalog { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "categoryId")]
-        public string CategoryId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "category")]
-        public Category Category { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "required")]
-        public bool? Required { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "dictionary")]
-        public bool? Dictionary { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "multivalue")]
-        public bool? Multivalue { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "multilanguage")]
-        public bool? Multilanguage { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
-        /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Product', 'Variation',
-        /// 'Category', 'Catalog'
-        /// </summary>
-        [JsonProperty(PropertyName = "type")]
-        public string Type { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "attributes")]
-        public IList<PropertyAttribute> Attributes { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "displayNames")]
-        public IList<PropertyDisplayName> DisplayNames { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "validationRules")]
-        public IList<PropertyValidationRule> ValidationRules { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isInherited")]
-        public bool? IsInherited { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Catalog
-    {
-        /// <summary>
-        /// Initializes a new instance of the Catalog class.
-        /// </summary>
-        public Catalog()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Catalog class.
-        /// </summary>
-        public Catalog(string name = default(string), bool? isVirtual = default(bool?), CatalogLanguage defaultLanguage = default(CatalogLanguage), IList<CatalogLanguage> languages = default(IList<CatalogLanguage>), IList<Property> properties = default(IList<Property>), IList<PropertyValue> propertyValues = default(IList<PropertyValue>), string id = default(string))
-        {
-            Name = name;
-            IsVirtual = isVirtual;
-            DefaultLanguage = defaultLanguage;
-            Languages = languages;
-            Properties = properties;
-            PropertyValues = propertyValues;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isVirtual")]
-        public bool? IsVirtual { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "defaultLanguage")]
-        public CatalogLanguage DefaultLanguage { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "languages")]
-        public IList<CatalogLanguage> Languages { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "properties")]
-        public IList<Property> Properties { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyValues")]
-        public IList<PropertyValue> PropertyValues { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Asset
-    {
-        /// <summary>
-        /// Initializes a new instance of the Asset class.
-        /// </summary>
-        public Asset()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Asset class.
-        /// </summary>
-        public Asset(string name = default(string), string url = default(string), string group = default(string), string mimeType = default(string), long? size = default(long?), byte[] binaryData = default(byte[]), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), string languageCode = default(string), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            Name = name;
-            Url = url;
-            Group = group;
-            MimeType = mimeType;
-            Size = size;
-            BinaryData = binaryData;
-            SeoObjectType = seoObjectType;
-            SeoInfos = seoInfos;
-            LanguageCode = languageCode;
-            IsInherited = isInherited;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "url")]
-        public string Url { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "group")]
-        public string Group { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "mimeType")]
-        public string MimeType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "size")]
-        public long? Size { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "binaryData")]
-        public byte[] BinaryData { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "seoObjectType")]
-        public string SeoObjectType { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "seoInfos")]
-        public IList<SeoInfo> SeoInfos { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "languageCode")]
-        public string LanguageCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isInherited")]
-        public bool? IsInherited { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class EditorialReview
-    {
-        /// <summary>
-        /// Initializes a new instance of the EditorialReview class.
-        /// </summary>
-        public EditorialReview()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EditorialReview class.
-        /// </summary>
-        public EditorialReview(string content = default(string), string reviewType = default(string), string languageCode = default(string), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            Content = content;
-            ReviewType = reviewType;
-            LanguageCode = languageCode;
-            IsInherited = isInherited;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "content")]
-        public string Content { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "reviewType")]
-        public string ReviewType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "languageCode")]
-        public string LanguageCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isInherited")]
-        public bool? IsInherited { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Entity
-    {
-        /// <summary>
-        /// Initializes a new instance of the Entity class.
-        /// </summary>
-        public Entity()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Entity class.
-        /// </summary>
-        public Entity(string id = default(string))
-        {
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class ProductAssociation
-    {
-        /// <summary>
-        /// Initializes a new instance of the ProductAssociation class.
-        /// </summary>
-        public ProductAssociation()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ProductAssociation class.
-        /// </summary>
-        public ProductAssociation(string type = default(string), int? priority = default(int?), int? quantity = default(int?), string associatedObjectId = default(string), string associatedObjectType = default(string), Entity associatedObject = default(Entity), IList<string> tags = default(IList<string>))
-        {
-            Type = type;
-            Priority = priority;
-            Quantity = quantity;
-            AssociatedObjectId = associatedObjectId;
-            AssociatedObjectType = associatedObjectType;
-            AssociatedObject = associatedObject;
-            Tags = tags;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "type")]
-        public string Type { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "priority")]
-        public int? Priority { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "quantity")]
-        public int? Quantity { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "associatedObjectId")]
-        public string AssociatedObjectId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "associatedObjectType")]
-        public string AssociatedObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "associatedObject")]
-        public Entity AssociatedObject { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "tags")]
-        public IList<string> Tags { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class DynamicExpression
-    {
-        /// <summary>
-        /// Initializes a new instance of the DynamicExpression class.
-        /// </summary>
-        public DynamicExpression()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DynamicExpression class.
-        /// </summary>
-        public DynamicExpression(string id = default(string), IList<DynamicExpression> availableChildren = default(IList<DynamicExpression>), IList<DynamicExpression> children = default(IList<DynamicExpression>))
-        {
-            Id = id;
-            AvailableChildren = availableChildren;
-            Children = children;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "availableChildren")]
-        public IList<DynamicExpression> AvailableChildren { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "children")]
-        public IList<DynamicExpression> Children { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class ConditionExpressionTree
-    {
-        /// <summary>
-        /// Initializes a new instance of the ConditionExpressionTree class.
-        /// </summary>
-        public ConditionExpressionTree()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ConditionExpressionTree class.
-        /// </summary>
-        public ConditionExpressionTree(string id = default(string), IList<DynamicExpression> availableChildren = default(IList<DynamicExpression>), IList<DynamicExpression> children = default(IList<DynamicExpression>))
-        {
-            Id = id;
-            AvailableChildren = availableChildren;
-            Children = children;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "availableChildren")]
-        public IList<DynamicExpression> AvailableChildren { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "children")]
-        public IList<DynamicExpression> Children { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class PricelistAssignment
-    {
-        /// <summary>
-        /// Initializes a new instance of the PricelistAssignment class.
-        /// </summary>
-        public PricelistAssignment()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PricelistAssignment class.
-        /// </summary>
-        public PricelistAssignment(string catalogId = default(string), string pricelistId = default(string), Pricelist pricelist = default(Pricelist), string name = default(string), string description = default(string), int? priority = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string conditionExpression = default(string), string predicateVisualTreeSerialized = default(string), ConditionExpressionTree dynamicExpression = default(ConditionExpressionTree), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            CatalogId = catalogId;
-            PricelistId = pricelistId;
-            Pricelist = pricelist;
-            Name = name;
-            Description = description;
-            Priority = priority;
-            StartDate = startDate;
-            EndDate = endDate;
-            ConditionExpression = conditionExpression;
-            PredicateVisualTreeSerialized = predicateVisualTreeSerialized;
-            DynamicExpression = dynamicExpression;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "catalogId")]
-        public string CatalogId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "pricelistId")]
-        public string PricelistId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "pricelist")]
-        public Pricelist Pricelist { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "priority")]
-        public int? Priority { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "startDate")]
-        public System.DateTime? StartDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "endDate")]
-        public System.DateTime? EndDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "conditionExpression")]
-        public string ConditionExpression { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "predicateVisualTreeSerialized")]
-        public string PredicateVisualTreeSerialized { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "dynamicExpression")]
-        public ConditionExpressionTree DynamicExpression { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Pricelist
-    {
-        /// <summary>
-        /// Initializes a new instance of the Pricelist class.
-        /// </summary>
-        public Pricelist()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Pricelist class.
-        /// </summary>
-        public Pricelist(string name = default(string), string description = default(string), string currency = default(string), IList<Price> prices = default(IList<Price>), IList<PricelistAssignment> assignments = default(IList<PricelistAssignment>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            Name = name;
-            Description = description;
-            Currency = currency;
-            Prices = prices;
-            Assignments = assignments;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "currency")]
-        public string Currency { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "prices")]
-        public IList<Price> Prices { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "assignments")]
-        public IList<PricelistAssignment> Assignments { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Price
-    {
-        /// <summary>
-        /// Initializes a new instance of the Price class.
-        /// </summary>
-        public Price()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Price class.
-        /// </summary>
-        public Price(string pricelistId = default(string), Pricelist pricelist = default(Pricelist), string currency = default(string), string productId = default(string), double? sale = default(double?), double? list = default(double?), int? minQuantity = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), double? effectiveValue = default(double?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            PricelistId = pricelistId;
-            Pricelist = pricelist;
-            Currency = currency;
-            ProductId = productId;
-            Sale = sale;
-            List = list;
-            MinQuantity = minQuantity;
-            StartDate = startDate;
-            EndDate = endDate;
-            EffectiveValue = effectiveValue;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "pricelistId")]
-        public string PricelistId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "pricelist")]
-        public Pricelist Pricelist { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "currency")]
-        public string Currency { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "productId")]
-        public string ProductId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "sale")]
-        public double? Sale { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "list")]
-        public double? List { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "minQuantity")]
-        public int? MinQuantity { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "startDate")]
-        public System.DateTime? StartDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "endDate")]
-        public System.DateTime? EndDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "effectiveValue")]
-        public double? EffectiveValue { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class FulfillmentCenter
-    {
-        /// <summary>
-        /// Initializes a new instance of the FulfillmentCenter class.
-        /// </summary>
-        public FulfillmentCenter()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the FulfillmentCenter class.
-        /// </summary>
-        public FulfillmentCenter(string name = default(string), string description = default(string), string geoLocation = default(string), Address address = default(Address), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            Name = name;
-            Description = description;
-            GeoLocation = geoLocation;
-            Address = address;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "geoLocation")]
-        public string GeoLocation { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "address")]
-        public Address Address { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class InventoryInfo
-    {
-        /// <summary>
-        /// Initializes a new instance of the InventoryInfo class.
-        /// </summary>
-        public InventoryInfo()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the InventoryInfo class.
-        /// </summary>
-        /// <param name="status">Possible values include: 'Disabled',
-        /// 'Enabled', 'Ignored'</param>
-        public InventoryInfo(System.DateTime? createdDate = default(System.DateTime?), string createdBy = default(string), System.DateTime? modifiedDate = default(System.DateTime?), string modifiedBy = default(string), string fulfillmentCenterId = default(string), FulfillmentCenter fulfillmentCenter = default(FulfillmentCenter), string productId = default(string), long? inStockQuantity = default(long?), long? reservedQuantity = default(long?), long? reorderMinQuantity = default(long?), long? preorderQuantity = default(long?), long? backorderQuantity = default(long?), bool? allowBackorder = default(bool?), bool? allowPreorder = default(bool?), long? inTransit = default(long?), System.DateTime? preorderAvailabilityDate = default(System.DateTime?), System.DateTime? backorderAvailabilityDate = default(System.DateTime?), string status = default(string))
-        {
-            CreatedDate = createdDate;
-            CreatedBy = createdBy;
-            ModifiedDate = modifiedDate;
-            ModifiedBy = modifiedBy;
-            FulfillmentCenterId = fulfillmentCenterId;
-            FulfillmentCenter = fulfillmentCenter;
-            ProductId = productId;
-            InStockQuantity = inStockQuantity;
-            ReservedQuantity = reservedQuantity;
-            ReorderMinQuantity = reorderMinQuantity;
-            PreorderQuantity = preorderQuantity;
-            BackorderQuantity = backorderQuantity;
-            AllowBackorder = allowBackorder;
-            AllowPreorder = allowPreorder;
-            InTransit = inTransit;
-            PreorderAvailabilityDate = preorderAvailabilityDate;
-            BackorderAvailabilityDate = backorderAvailabilityDate;
-            Status = status;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "fulfillmentCenterId")]
-        public string FulfillmentCenterId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "fulfillmentCenter")]
-        public FulfillmentCenter FulfillmentCenter { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "productId")]
-        public string ProductId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "inStockQuantity")]
-        public long? InStockQuantity { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "reservedQuantity")]
-        public long? ReservedQuantity { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "reorderMinQuantity")]
-        public long? ReorderMinQuantity { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "preorderQuantity")]
-        public long? PreorderQuantity { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "backorderQuantity")]
-        public long? BackorderQuantity { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "allowBackorder")]
-        public bool? AllowBackorder { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "allowPreorder")]
-        public bool? AllowPreorder { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "inTransit")]
-        public long? InTransit { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "preorderAvailabilityDate")]
-        public System.DateTime? PreorderAvailabilityDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "backorderAvailabilityDate")]
-        public System.DateTime? BackorderAvailabilityDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Disabled', 'Enabled',
-        /// 'Ignored'
-        /// </summary>
-        [JsonProperty(PropertyName = "status")]
-        public string Status { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class CatalogProduct
-    {
-        /// <summary>
-        /// Initializes a new instance of the CatalogProduct class.
-        /// </summary>
-        public CatalogProduct()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CatalogProduct class.
-        /// </summary>
-        public CatalogProduct(string code = default(string), string manufacturerPartNumber = default(string), string gtin = default(string), string name = default(string), string catalogId = default(string), Catalog catalog = default(Catalog), string categoryId = default(string), Category category = default(Category), string mainProductId = default(string), CatalogProduct mainProduct = default(CatalogProduct), bool? isBuyable = default(bool?), bool? isActive = default(bool?), bool? trackInventory = default(bool?), System.DateTime? indexingDate = default(System.DateTime?), int? maxQuantity = default(int?), int? minQuantity = default(int?), string productType = default(string), string packageType = default(string), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), bool? enableReview = default(bool?), int? maxNumberOfDownload = default(int?), System.DateTime? downloadExpiration = default(System.DateTime?), string downloadType = default(string), bool? hasUserAgreement = default(bool?), string shippingType = default(string), string taxType = default(string), string vendor = default(string), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), int? priority = default(int?), IList<Property> properties = default(IList<Property>), IList<PropertyValue> propertyValues = default(IList<PropertyValue>), IList<Image> images = default(IList<Image>), IList<Asset> assets = default(IList<Asset>), IList<CategoryLink> links = default(IList<CategoryLink>), IList<CatalogProduct> variations = default(IList<CatalogProduct>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), IList<EditorialReview> reviews = default(IList<EditorialReview>), IList<ProductAssociation> associations = default(IList<ProductAssociation>), IList<ProductAssociation> referencedAssociations = default(IList<ProductAssociation>), IList<Price> prices = default(IList<Price>), IList<InventoryInfo> inventories = default(IList<InventoryInfo>), IList<Outline> outlines = default(IList<Outline>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            Code = code;
-            ManufacturerPartNumber = manufacturerPartNumber;
-            Gtin = gtin;
-            Name = name;
-            CatalogId = catalogId;
-            Catalog = catalog;
-            CategoryId = categoryId;
-            Category = category;
-            MainProductId = mainProductId;
-            MainProduct = mainProduct;
-            IsBuyable = isBuyable;
-            IsActive = isActive;
-            TrackInventory = trackInventory;
-            IndexingDate = indexingDate;
-            MaxQuantity = maxQuantity;
-            MinQuantity = minQuantity;
-            ProductType = productType;
-            PackageType = packageType;
-            WeightUnit = weightUnit;
-            Weight = weight;
-            MeasureUnit = measureUnit;
-            Height = height;
-            Length = length;
-            Width = width;
-            EnableReview = enableReview;
-            MaxNumberOfDownload = maxNumberOfDownload;
-            DownloadExpiration = downloadExpiration;
-            DownloadType = downloadType;
-            HasUserAgreement = hasUserAgreement;
-            ShippingType = shippingType;
-            TaxType = taxType;
-            Vendor = vendor;
-            StartDate = startDate;
-            EndDate = endDate;
-            Priority = priority;
-            Properties = properties;
-            PropertyValues = propertyValues;
-            Images = images;
-            Assets = assets;
-            Links = links;
-            Variations = variations;
-            SeoObjectType = seoObjectType;
-            SeoInfos = seoInfos;
-            Reviews = reviews;
-            Associations = associations;
-            ReferencedAssociations = referencedAssociations;
-            Prices = prices;
-            Inventories = inventories;
-            Outlines = outlines;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "code")]
-        public string Code { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "manufacturerPartNumber")]
-        public string ManufacturerPartNumber { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "gtin")]
-        public string Gtin { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "catalogId")]
-        public string CatalogId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "catalog")]
-        public Catalog Catalog { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "categoryId")]
-        public string CategoryId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "category")]
-        public Category Category { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "mainProductId")]
-        public string MainProductId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "mainProduct")]
-        public CatalogProduct MainProduct { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isBuyable")]
-        public bool? IsBuyable { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isActive")]
-        public bool? IsActive { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "trackInventory")]
-        public bool? TrackInventory { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "indexingDate")]
-        public System.DateTime? IndexingDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "maxQuantity")]
-        public int? MaxQuantity { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "minQuantity")]
-        public int? MinQuantity { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "productType")]
-        public string ProductType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "packageType")]
-        public string PackageType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "weightUnit")]
-        public string WeightUnit { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "weight")]
-        public double? Weight { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "measureUnit")]
-        public string MeasureUnit { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "height")]
-        public double? Height { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "length")]
-        public double? Length { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "width")]
-        public double? Width { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "enableReview")]
-        public bool? EnableReview { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "maxNumberOfDownload")]
-        public int? MaxNumberOfDownload { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "downloadExpiration")]
-        public System.DateTime? DownloadExpiration { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "downloadType")]
-        public string DownloadType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "hasUserAgreement")]
-        public bool? HasUserAgreement { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shippingType")]
-        public string ShippingType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "taxType")]
-        public string TaxType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "vendor")]
-        public string Vendor { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "startDate")]
-        public System.DateTime? StartDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "endDate")]
-        public System.DateTime? EndDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "priority")]
-        public int? Priority { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "properties")]
-        public IList<Property> Properties { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyValues")]
-        public IList<PropertyValue> PropertyValues { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "images")]
-        public IList<Image> Images { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "assets")]
-        public IList<Asset> Assets { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "links")]
-        public IList<CategoryLink> Links { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "variations")]
-        public IList<CatalogProduct> Variations { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "seoObjectType")]
-        public string SeoObjectType { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "seoInfos")]
-        public IList<SeoInfo> SeoInfos { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "reviews")]
-        public IList<EditorialReview> Reviews { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "associations")]
-        public IList<ProductAssociation> Associations { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "referencedAssociations")]
-        public IList<ProductAssociation> ReferencedAssociations { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "prices")]
-        public IList<Price> Prices { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "inventories")]
-        public IList<InventoryInfo> Inventories { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "outlines")]
-        public IList<Outline> Outlines { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class LineItem
-    {
-        /// <summary>
-        /// Initializes a new instance of the LineItem class.
-        /// </summary>
-        public LineItem()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the LineItem class.
-        /// </summary>
-        public LineItem(string priceId = default(string), string currency = default(string), double? price = default(double?), double? priceWithTax = default(double?), double? placedPrice = default(double?), double? placedPriceWithTax = default(double?), double? extendedPrice = default(double?), double? extendedPriceWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), double? discountTotal = default(double?), double? discountTotalWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), int? reserveQuantity = default(int?), int? quantity = default(int?), string productId = default(string), CatalogProduct product = default(CatalogProduct), string sku = default(string), string productType = default(string), string catalogId = default(string), string categoryId = default(string), string name = default(string), string comment = default(string), string imageUrl = default(string), bool? isGift = default(bool?), string shippingMethodCode = default(string), string fulfillmentLocationCode = default(string), string fulfillmentCenterId = default(string), string fulfillmentCenterName = default(string), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<Discount> discounts = default(IList<Discount>), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        /// Initializes a new instance of the OrderLineItem class.
+        /// </summary>
+        /// <param name="priceId">Price id</param>
+        /// <param name="price">unit price without discount and tax</param>
+        /// <param name="placedPrice">Resulting price with discount for one
+        /// unit</param>
+        /// <param name="discountAmount">Gets the value of the single qty line
+        /// item discount amount</param>
+        /// <param name="taxType">Tax category or type</param>
+        /// <param name="reserveQuantity">Reserve quantity</param>
+        public OrderLineItem(string priceId = default(string), string currency = default(string), double? price = default(double?), double? priceWithTax = default(double?), double? placedPrice = default(double?), double? placedPriceWithTax = default(double?), double? extendedPrice = default(double?), double? extendedPriceWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), double? discountTotal = default(double?), double? discountTotalWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), int? reserveQuantity = default(int?), int? quantity = default(int?), string productId = default(string), string sku = default(string), string productType = default(string), string catalogId = default(string), string categoryId = default(string), string name = default(string), string comment = default(string), string imageUrl = default(string), bool? isGift = default(bool?), string shippingMethodCode = default(string), string fulfillmentLocationCode = default(string), string fulfillmentCenterId = default(string), string fulfillmentCenterName = default(string), string outerId = default(string), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<Discount> discounts = default(IList<Discount>), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             PriceId = priceId;
             Currency = currency;
@@ -7950,7 +4777,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             ReserveQuantity = reserveQuantity;
             Quantity = quantity;
             ProductId = productId;
-            Product = product;
             Sku = sku;
             ProductType = productType;
             CatalogId = catalogId;
@@ -7963,6 +4789,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             FulfillmentLocationCode = fulfillmentLocationCode;
             FulfillmentCenterId = fulfillmentCenterId;
             FulfillmentCenterName = fulfillmentCenterName;
+            OuterId = outerId;
             WeightUnit = weightUnit;
             Weight = weight;
             MeasureUnit = measureUnit;
@@ -7980,6 +4807,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -7990,6 +4818,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         partial void CustomInit();
 
         /// <summary>
+        /// Gets or sets price id
         /// </summary>
         [JsonProperty(PropertyName = "priceId")]
         public string PriceId { get; set; }
@@ -8000,6 +4829,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public string Currency { get; set; }
 
         /// <summary>
+        /// Gets or sets unit price without discount and tax
         /// </summary>
         [JsonProperty(PropertyName = "price")]
         public double? Price { get; set; }
@@ -8010,6 +4840,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public double? PriceWithTax { get; set; }
 
         /// <summary>
+        /// Gets or sets resulting price with discount for one unit
         /// </summary>
         [JsonProperty(PropertyName = "placedPrice")]
         public double? PlacedPrice { get; set; }
@@ -8030,6 +4861,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public double? ExtendedPriceWithTax { get; set; }
 
         /// <summary>
+        /// Gets the value of the single qty line item discount amount
         /// </summary>
         [JsonProperty(PropertyName = "discountAmount")]
         public double? DiscountAmount { get; set; }
@@ -8060,6 +4892,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public double? FeeWithTax { get; set; }
 
         /// <summary>
+        /// Gets or sets tax category or type
         /// </summary>
         [JsonProperty(PropertyName = "taxType")]
         public string TaxType { get; set; }
@@ -8075,6 +4908,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public double? TaxPercentRate { get; set; }
 
         /// <summary>
+        /// Gets or sets reserve quantity
         /// </summary>
         [JsonProperty(PropertyName = "reserveQuantity")]
         public int? ReserveQuantity { get; set; }
@@ -8088,11 +4922,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "productId")]
         public string ProductId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "product")]
-        public CatalogProduct Product { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8156,6 +4985,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "weightUnit")]
         public string WeightUnit { get; set; }
 
@@ -8202,7 +5036,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
+        public string ObjectType { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -8238,6 +5072,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -8278,16 +5117,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the ShippingMethod class.
         /// </summary>
-        public ShippingMethod(string code = default(string), string name = default(string), string description = default(string), string logoUrl = default(string), bool? isActive = default(bool?), int? priority = default(int?), string taxType = default(string), IList<SettingEntry> settings = default(IList<SettingEntry>), string id = default(string))
+        public ShippingMethod(string code = default(string), string name = default(string), string logoUrl = default(string), bool? isActive = default(bool?), int? priority = default(int?), string taxType = default(string), string storeId = default(string), IList<ObjectSettingEntry> settings = default(IList<ObjectSettingEntry>), string typeName = default(string), string id = default(string))
         {
             Code = code;
             Name = name;
-            Description = description;
             LogoUrl = logoUrl;
             IsActive = isActive;
             Priority = priority;
             TaxType = taxType;
+            StoreId = storeId;
             Settings = settings;
+            TypeName = typeName;
             Id = id;
             CustomInit();
         }
@@ -8305,12 +5145,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -8334,8 +5169,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "storeId")]
+        public string StoreId { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "settings")]
-        public IList<SettingEntry> Settings { get; set; }
+        public IList<ObjectSettingEntry> Settings { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "typeName")]
+        public string TypeName { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -8363,29 +5208,31 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class ShipmentItem
+    public partial class OrderShipmentItem
     {
         /// <summary>
-        /// Initializes a new instance of the ShipmentItem class.
+        /// Initializes a new instance of the OrderShipmentItem class.
         /// </summary>
-        public ShipmentItem()
+        public OrderShipmentItem()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the ShipmentItem class.
+        /// Initializes a new instance of the OrderShipmentItem class.
         /// </summary>
-        public ShipmentItem(string lineItemId = default(string), LineItem lineItem = default(LineItem), string barCode = default(string), int? quantity = default(int?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public OrderShipmentItem(string lineItemId = default(string), OrderLineItem lineItem = default(OrderLineItem), string barCode = default(string), int? quantity = default(int?), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             LineItemId = lineItemId;
             LineItem = lineItem;
             BarCode = barCode;
             Quantity = quantity;
+            OuterId = outerId;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -8403,7 +5250,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "lineItem")]
-        public LineItem LineItem { get; set; }
+        public OrderLineItem LineItem { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8414,6 +5261,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "quantity")]
         public int? Quantity { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8434,6 +5286,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -8474,7 +5331,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the ShipmentPackage class.
         /// </summary>
-        public ShipmentPackage(string barCode = default(string), string packageType = default(string), IList<ShipmentItem> items = default(IList<ShipmentItem>), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public ShipmentPackage(string barCode = default(string), string packageType = default(string), IList<OrderShipmentItem> items = default(IList<OrderShipmentItem>), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             BarCode = barCode;
             PackageType = packageType;
@@ -8489,6 +5346,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -8511,7 +5369,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "items")]
-        public IList<ShipmentItem> Items { get; set; }
+        public IList<OrderShipmentItem> Items { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8565,6 +5423,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
@@ -8589,20 +5452,25 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class Shipment
+    public partial class OrderShipment
     {
         /// <summary>
-        /// Initializes a new instance of the Shipment class.
+        /// Initializes a new instance of the OrderShipment class.
         /// </summary>
-        public Shipment()
+        public OrderShipment()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the Shipment class.
+        /// Initializes a new instance of the OrderShipment class.
         /// </summary>
-        public Shipment(string organizationId = default(string), string organizationName = default(string), string fulfillmentCenterId = default(string), string fulfillmentCenterName = default(string), string employeeId = default(string), string employeeName = default(string), string shipmentMethodCode = default(string), string shipmentMethodOption = default(string), ShippingMethod shippingMethod = default(ShippingMethod), string customerOrderId = default(string), CustomerOrder customerOrder = default(CustomerOrder), IList<ShipmentItem> items = default(IList<ShipmentItem>), IList<ShipmentPackage> packages = default(IList<ShipmentPackage>), IList<PaymentIn> inPayments = default(IList<PaymentIn>), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), IList<Discount> discounts = default(IList<Discount>), Address deliveryAddress = default(Address), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), IList<IOperation> childrenOperations = default(IList<IOperation>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        /// <param name="shipmentMethodCode">Current shipment method
+        /// code</param>
+        /// <param name="shipmentMethodOption">Current shipment option
+        /// code</param>
+        /// <param name="taxType">Tax category or type</param>
+        public OrderShipment(string organizationId = default(string), string organizationName = default(string), string fulfillmentCenterId = default(string), string fulfillmentCenterName = default(string), string employeeId = default(string), string employeeName = default(string), string shipmentMethodCode = default(string), string shipmentMethodOption = default(string), ShippingMethod shippingMethod = default(ShippingMethod), string customerOrderId = default(string), CustomerOrder customerOrder = default(CustomerOrder), IList<OrderShipmentItem> items = default(IList<OrderShipmentItem>), IList<ShipmentPackage> packages = default(IList<ShipmentPackage>), IList<PaymentIn> inPayments = default(IList<PaymentIn>), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), IList<Discount> discounts = default(IList<Discount>), OrderAddress deliveryAddress = default(OrderAddress), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), string objectType = default(string), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), string outerId = default(string), IList<IOperation> childrenOperations = default(IList<IOperation>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             OrganizationId = organizationId;
             OrganizationName = organizationName;
@@ -8634,6 +5502,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             DiscountAmountWithTax = discountAmountWithTax;
             Fee = fee;
             FeeWithTax = feeWithTax;
+            ObjectType = objectType;
             TaxType = taxType;
             TaxTotal = taxTotal;
             TaxPercentRate = taxPercentRate;
@@ -8646,17 +5515,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             Comment = comment;
             Currency = currency;
             Sum = sum;
+            OuterId = outerId;
             ChildrenOperations = childrenOperations;
             IsCancelled = isCancelled;
             CancelledDate = cancelledDate;
             CancelReason = cancelReason;
-            ObjectType = objectType;
             DynamicProperties = dynamicProperties;
             OperationsLog = operationsLog;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -8697,11 +5567,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public string EmployeeName { get; set; }
 
         /// <summary>
+        /// Gets or sets current shipment method code
         /// </summary>
         [JsonProperty(PropertyName = "shipmentMethodCode")]
         public string ShipmentMethodCode { get; set; }
 
         /// <summary>
+        /// Gets or sets current shipment option code
         /// </summary>
         [JsonProperty(PropertyName = "shipmentMethodOption")]
         public string ShipmentMethodOption { get; set; }
@@ -8724,7 +5596,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "items")]
-        public IList<ShipmentItem> Items { get; set; }
+        public IList<OrderShipmentItem> Items { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8774,7 +5646,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "deliveryAddress")]
-        public Address DeliveryAddress { get; set; }
+        public OrderAddress DeliveryAddress { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8817,6 +5689,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public double? FeeWithTax { get; set; }
 
         /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// Gets or sets tax category or type
         /// </summary>
         [JsonProperty(PropertyName = "taxType")]
         public string TaxType { get; set; }
@@ -8878,6 +5756,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "childrenOperations")]
         public IList<IOperation> ChildrenOperations { get; set; }
 
@@ -8895,11 +5778,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "cancelReason")]
         public string CancelReason { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8930,6 +5808,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -8970,7 +5853,25 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the CustomerOrder class.
         /// </summary>
-        public CustomerOrder(string customerId = default(string), string customerName = default(string), string channelId = default(string), string storeId = default(string), string storeName = default(string), string organizationId = default(string), string organizationName = default(string), string employeeId = default(string), string employeeName = default(string), string outerId = default(string), string shoppingCartId = default(string), bool? isPrototype = default(bool?), string subscriptionNumber = default(string), string subscriptionId = default(string), IList<Address> addresses = default(IList<Address>), IList<PaymentIn> inPayments = default(IList<PaymentIn>), IList<LineItem> items = default(IList<LineItem>), IList<Shipment> shipments = default(IList<Shipment>), IList<Discount> discounts = default(IList<Discount>), double? discountAmount = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), IList<string> scopes = default(IList<string>), double? total = default(double?), double? subTotal = default(double?), double? subTotalWithTax = default(double?), double? subTotalDiscount = default(double?), double? subTotalDiscountWithTax = default(double?), double? subTotalTaxTotal = default(double?), double? shippingTotal = default(double?), double? shippingTotalWithTax = default(double?), double? shippingSubTotal = default(double?), double? shippingSubTotalWithTax = default(double?), double? shippingDiscountTotal = default(double?), double? shippingDiscountTotalWithTax = default(double?), double? shippingTaxTotal = default(double?), double? paymentTotal = default(double?), double? paymentTotalWithTax = default(double?), double? paymentSubTotal = default(double?), double? paymentSubTotalWithTax = default(double?), double? paymentDiscountTotal = default(double?), double? paymentDiscountTotalWithTax = default(double?), double? paymentTaxTotal = default(double?), double? discountTotal = default(double?), double? discountTotalWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), double? feeTotal = default(double?), double? feeTotalWithTax = default(double?), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), string languageCode = default(string), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), IList<IOperation> childrenOperations = default(IList<IOperation>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        /// <param name="shoppingCartId">The basis shopping cart id of which
+        /// the order was created</param>
+        /// <param name="isPrototype">Flag determines that the order is the
+        /// prototype</param>
+        /// <param name="subscriptionNumber">Number for subscription
+        /// associated with this order</param>
+        /// <param name="subscriptionId">Identifier for subscription
+        /// associated with this order</param>
+        /// <param name="discountAmount">When a discount is applied to the
+        /// order, the tax calculation has already been applied, and is
+        /// reflected in the tax.
+        /// Therefore, a discount applying to the order  will occur after tax.
+        /// For instance, if the cart subtotal is $100, and $15 is the tax
+        /// subtotal, a cart-wide discount of 10% will yield a total of $105
+        /// ($100 subtotal – $10 discount + $15 tax on the original
+        /// $100).</param>
+        /// <param name="total">Grand order total</param>
+        /// <param name="taxType">Tax category or type</param>
+        public CustomerOrder(string customerId = default(string), string customerName = default(string), string channelId = default(string), string storeId = default(string), string storeName = default(string), string organizationId = default(string), string organizationName = default(string), string employeeId = default(string), string employeeName = default(string), string shoppingCartId = default(string), bool? isPrototype = default(bool?), string subscriptionNumber = default(string), string subscriptionId = default(string), string objectType = default(string), IList<OrderAddress> addresses = default(IList<OrderAddress>), IList<PaymentIn> inPayments = default(IList<PaymentIn>), IList<OrderLineItem> items = default(IList<OrderLineItem>), IList<OrderShipment> shipments = default(IList<OrderShipment>), IList<Discount> discounts = default(IList<Discount>), double? discountAmount = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), IList<string> scopes = default(IList<string>), double? total = default(double?), double? subTotal = default(double?), double? subTotalWithTax = default(double?), double? subTotalDiscount = default(double?), double? subTotalDiscountWithTax = default(double?), double? subTotalTaxTotal = default(double?), double? shippingTotal = default(double?), double? shippingTotalWithTax = default(double?), double? shippingSubTotal = default(double?), double? shippingSubTotalWithTax = default(double?), double? shippingDiscountTotal = default(double?), double? shippingDiscountTotalWithTax = default(double?), double? shippingTaxTotal = default(double?), double? paymentTotal = default(double?), double? paymentTotalWithTax = default(double?), double? paymentSubTotal = default(double?), double? paymentSubTotalWithTax = default(double?), double? paymentDiscountTotal = default(double?), double? paymentDiscountTotalWithTax = default(double?), double? paymentTaxTotal = default(double?), double? discountTotal = default(double?), double? discountTotalWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), double? feeTotal = default(double?), double? feeTotalWithTax = default(double?), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), string languageCode = default(string), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), string outerId = default(string), IList<IOperation> childrenOperations = default(IList<IOperation>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             CustomerId = customerId;
             CustomerName = customerName;
@@ -8981,11 +5882,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             OrganizationName = organizationName;
             EmployeeId = employeeId;
             EmployeeName = employeeName;
-            OuterId = outerId;
             ShoppingCartId = shoppingCartId;
             IsPrototype = isPrototype;
             SubscriptionNumber = subscriptionNumber;
             SubscriptionId = subscriptionId;
+            ObjectType = objectType;
             Addresses = addresses;
             InPayments = inPayments;
             Items = items;
@@ -9032,17 +5933,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             Comment = comment;
             Currency = currency;
             Sum = sum;
+            OuterId = outerId;
             ChildrenOperations = childrenOperations;
             IsCancelled = isCancelled;
             CancelledDate = cancelledDate;
             CancelReason = cancelReason;
-            ObjectType = objectType;
             DynamicProperties = dynamicProperties;
             OperationsLog = operationsLog;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -9098,34 +6000,40 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public string EmployeeName { get; set; }
 
         /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "outerId")]
-        public string OuterId { get; set; }
-
-        /// <summary>
+        /// Gets or sets the basis shopping cart id of which the order was
+        /// created
         /// </summary>
         [JsonProperty(PropertyName = "shoppingCartId")]
         public string ShoppingCartId { get; set; }
 
         /// <summary>
+        /// Gets or sets flag determines that the order is the prototype
         /// </summary>
         [JsonProperty(PropertyName = "isPrototype")]
         public bool? IsPrototype { get; set; }
 
         /// <summary>
+        /// Gets or sets number for subscription  associated with this order
         /// </summary>
         [JsonProperty(PropertyName = "subscriptionNumber")]
         public string SubscriptionNumber { get; set; }
 
         /// <summary>
+        /// Gets or sets identifier for subscription  associated with this
+        /// order
         /// </summary>
         [JsonProperty(PropertyName = "subscriptionId")]
         public string SubscriptionId { get; set; }
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "addresses")]
-        public IList<Address> Addresses { get; set; }
+        public IList<OrderAddress> Addresses { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9135,12 +6043,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "items")]
-        public IList<LineItem> Items { get; set; }
+        public IList<OrderLineItem> Items { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "shipments")]
-        public IList<Shipment> Shipments { get; set; }
+        public IList<OrderShipment> Shipments { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9148,6 +6056,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public IList<Discount> Discounts { get; set; }
 
         /// <summary>
+        /// Gets or sets when a discount is applied to the order, the tax
+        /// calculation has already been applied, and is reflected in the tax.
+        /// Therefore, a discount applying to the order  will occur after tax.
+        /// For instance, if the cart subtotal is $100, and $15 is the tax
+        /// subtotal, a cart-wide discount of 10% will yield a total of $105
+        /// ($100 subtotal – $10 discount + $15 tax on the original $100).
         /// </summary>
         [JsonProperty(PropertyName = "discountAmount")]
         public double? DiscountAmount { get; set; }
@@ -9163,6 +6077,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public IList<string> Scopes { get; set; }
 
         /// <summary>
+        /// Gets or sets grand order total
         /// </summary>
         [JsonProperty(PropertyName = "total")]
         public double? Total { get; set; }
@@ -9293,6 +6208,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public double? FeeTotalWithTax { get; set; }
 
         /// <summary>
+        /// Gets or sets tax category or type
         /// </summary>
         [JsonProperty(PropertyName = "taxType")]
         public string TaxType { get; set; }
@@ -9354,6 +6270,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "childrenOperations")]
         public IList<IOperation> ChildrenOperations { get; set; }
 
@@ -9371,11 +6292,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "cancelReason")]
         public string CancelReason { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9406,6 +6322,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -9446,11 +6367,26 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the Subscription class.
         /// </summary>
+        /// <param name="balance">Subscription actual balance</param>
+        /// <param name="number">Subscription number</param>
         /// <param name="interval">Possible values include: 'Days', 'Weeks',
         /// 'Months', 'Years'</param>
+        /// <param name="intervalCount">- to set more customized intervals
+        /// (every 5 month)</param>
+        /// <param name="trialPeriodDays">subscription trial period in
+        /// days</param>
         /// <param name="subscriptionStatus">Possible values include: 'Active',
         /// 'Trialing', 'PastDue', 'Cancelled', 'Unpaid'</param>
-        public Subscription(string storeId = default(string), string customerId = default(string), string customerName = default(string), double? balance = default(double?), string number = default(string), string interval = default(string), int? intervalCount = default(int?), int? trialPeriodDays = default(int?), string subscriptionStatus = default(string), string customerOrderPrototypeId = default(string), CustomerOrder customerOrderPrototype = default(CustomerOrder), IList<string> customerOrdersIds = default(IList<string>), IList<CustomerOrder> customerOrders = default(IList<CustomerOrder>), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), System.DateTime? trialSart = default(System.DateTime?), System.DateTime? trialEnd = default(System.DateTime?), System.DateTime? currentPeriodStart = default(System.DateTime?), System.DateTime? currentPeriodEnd = default(System.DateTime?), string outerId = default(string), string comment = default(string), IList<OperationLog> operationsLog = default(IList<OperationLog>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        /// <param name="customerOrdersIds">List of all orders ids created on
+        /// the basis of the subscription</param>
+        /// <param name="customerOrders">List of all orders  created on the
+        /// basis of the subscription</param>
+        /// <param name="startDate">Date the most recent update to this
+        /// subscription started.</param>
+        /// <param name="endDate">The date the subscription ended</param>
+        /// <param name="outerId">External Subscrption entity system Id</param>
+        /// <param name="comment">The subscription comment</param>
+        public Subscription(string storeId = default(string), string customerId = default(string), string customerName = default(string), double? balance = default(double?), string number = default(string), string interval = default(string), int? intervalCount = default(int?), int? trialPeriodDays = default(int?), string subscriptionStatus = default(string), string customerOrderPrototypeId = default(string), CustomerOrder customerOrderPrototype = default(CustomerOrder), IList<string> customerOrdersIds = default(IList<string>), IList<CustomerOrder> customerOrders = default(IList<CustomerOrder>), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), System.DateTime? trialSart = default(System.DateTime?), System.DateTime? trialEnd = default(System.DateTime?), System.DateTime? currentPeriodStart = default(System.DateTime?), System.DateTime? currentPeriodEnd = default(System.DateTime?), string outerId = default(string), string comment = default(string), IList<OperationLog> operationsLog = default(IList<OperationLog>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
         {
             StoreId = storeId;
             CustomerId = customerId;
@@ -9481,6 +6417,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -9506,11 +6443,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public string CustomerName { get; set; }
 
         /// <summary>
+        /// Gets or sets subscription actual balance
         /// </summary>
         [JsonProperty(PropertyName = "balance")]
         public double? Balance { get; set; }
 
         /// <summary>
+        /// Gets or sets subscription number
         /// </summary>
         [JsonProperty(PropertyName = "number")]
         public string Number { get; set; }
@@ -9523,11 +6462,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public string Interval { get; set; }
 
         /// <summary>
+        /// Gets or sets - to set more customized intervals (every 5 month)
         /// </summary>
         [JsonProperty(PropertyName = "intervalCount")]
         public int? IntervalCount { get; set; }
 
         /// <summary>
+        /// Gets or sets subscription trial period in days
         /// </summary>
         [JsonProperty(PropertyName = "trialPeriodDays")]
         public int? TrialPeriodDays { get; set; }
@@ -9550,21 +6491,28 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public CustomerOrder CustomerOrderPrototype { get; set; }
 
         /// <summary>
+        /// Gets or sets list of all orders ids created on the basis of the
+        /// subscription
         /// </summary>
         [JsonProperty(PropertyName = "customerOrdersIds")]
         public IList<string> CustomerOrdersIds { get; set; }
 
         /// <summary>
+        /// Gets or sets list of all orders  created on the basis of the
+        /// subscription
         /// </summary>
         [JsonProperty(PropertyName = "customerOrders")]
         public IList<CustomerOrder> CustomerOrders { get; set; }
 
         /// <summary>
+        /// Gets or sets date the most recent update to this subscription
+        /// started.
         /// </summary>
         [JsonProperty(PropertyName = "startDate")]
         public System.DateTime? StartDate { get; set; }
 
         /// <summary>
+        /// Gets or sets the date the subscription ended
         /// </summary>
         [JsonProperty(PropertyName = "endDate")]
         public System.DateTime? EndDate { get; set; }
@@ -9590,11 +6538,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         public System.DateTime? CurrentPeriodEnd { get; set; }
 
         /// <summary>
+        /// Gets or sets external Subscrption entity system Id
         /// </summary>
         [JsonProperty(PropertyName = "outerId")]
         public string OuterId { get; set; }
 
         /// <summary>
+        /// Gets or sets the subscription comment
         /// </summary>
         [JsonProperty(PropertyName = "comment")]
         public string Comment { get; set; }
@@ -9641,8 +6591,360 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class PaymentPlan
+    {
+        /// <summary>
+        /// Initializes a new instance of the PaymentPlan class.
+        /// </summary>
+        public PaymentPlan()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the PaymentPlan class.
+        /// </summary>
+        /// <param name="interval">Possible values include: 'Days', 'Weeks',
+        /// 'Months', 'Years'</param>
+        /// <param name="intervalCount">- to set more customized intervals
+        /// (every 5 month)</param>
+        /// <param name="trialPeriodDays">subscription trial period in
+        /// days</param>
+        public PaymentPlan(string interval = default(string), int? intervalCount = default(int?), int? trialPeriodDays = default(int?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        {
+            Interval = interval;
+            IntervalCount = intervalCount;
+            TrialPeriodDays = trialPeriodDays;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Days', 'Weeks', 'Months',
+        /// 'Years'
+        /// </summary>
+        [JsonProperty(PropertyName = "interval")]
+        public string Interval { get; set; }
+
+        /// <summary>
+        /// Gets or sets - to set more customized intervals (every 5 month)
+        /// </summary>
+        [JsonProperty(PropertyName = "intervalCount")]
+        public int? IntervalCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets subscription trial period in days
+        /// </summary>
+        [JsonProperty(PropertyName = "trialPeriodDays")]
+        public int? TrialPeriodDays { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class SortInfo
+    {
+        /// <summary>
+        /// Initializes a new instance of the SortInfo class.
+        /// </summary>
+        public SortInfo()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the SortInfo class.
+        /// </summary>
+        /// <param name="sortDirection">Possible values include: 'Ascending',
+        /// 'Descending'</param>
+        public SortInfo(string sortColumn = default(string), string sortDirection = default(string))
+        {
+            SortColumn = sortColumn;
+            SortDirection = sortDirection;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sortColumn")]
+        public string SortColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Ascending', 'Descending'
+        /// </summary>
+        [JsonProperty(PropertyName = "sortDirection")]
+        public string SortDirection { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class SubscriptionSearchCriteria
+    {
+        /// <summary>
+        /// Initializes a new instance of the SubscriptionSearchCriteria class.
+        /// </summary>
+        public SubscriptionSearchCriteria()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the SubscriptionSearchCriteria class.
+        /// </summary>
+        /// <param name="storeId">Search within specified store</param>
+        /// <param name="number">Search by subscription number</param>
+        /// <param name="customerOrderId">Search subscription for related order
+        /// id</param>
+        /// <param name="startDate">Search subscription in StartDate and
+        /// EndDate range inclusive</param>
+        /// <param name="statuses">Search with specified statuses</param>
+        /// <param name="outerId">Search by external subscription system
+        /// id</param>
+        public SubscriptionSearchCriteria(string storeId = default(string), string number = default(string), string customerOrderId = default(string), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), System.DateTime? modifiedSinceDate = default(System.DateTime?), string customerId = default(string), IList<string> statuses = default(IList<string>), string outerId = default(string), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        {
+            StoreId = storeId;
+            Number = number;
+            CustomerOrderId = customerOrderId;
+            StartDate = startDate;
+            EndDate = endDate;
+            ModifiedSinceDate = modifiedSinceDate;
+            CustomerId = customerId;
+            Statuses = statuses;
+            OuterId = outerId;
+            ResponseGroup = responseGroup;
+            ObjectType = objectType;
+            ObjectTypes = objectTypes;
+            ObjectIds = objectIds;
+            Keyword = keyword;
+            SearchPhrase = searchPhrase;
+            LanguageCode = languageCode;
+            Sort = sort;
+            SortInfos = sortInfos;
+            Skip = skip;
+            Take = take;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// Gets or sets search within specified store
+        /// </summary>
+        [JsonProperty(PropertyName = "storeId")]
+        public string StoreId { get; set; }
+
+        /// <summary>
+        /// Gets or sets search by subscription number
+        /// </summary>
+        [JsonProperty(PropertyName = "number")]
+        public string Number { get; set; }
+
+        /// <summary>
+        /// Gets or sets search subscription for related order id
+        /// </summary>
+        [JsonProperty(PropertyName = "customerOrderId")]
+        public string CustomerOrderId { get; set; }
+
+        /// <summary>
+        /// Gets or sets search subscription in StartDate and EndDate range
+        /// inclusive
+        /// </summary>
+        [JsonProperty(PropertyName = "startDate")]
+        public System.DateTime? StartDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "endDate")]
+        public System.DateTime? EndDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedSinceDate")]
+        public System.DateTime? ModifiedSinceDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "customerId")]
+        public string CustomerId { get; set; }
+
+        /// <summary>
+        /// Gets or sets search with specified statuses
+        /// </summary>
+        [JsonProperty(PropertyName = "statuses")]
+        public IList<string> Statuses { get; set; }
+
+        /// <summary>
+        /// Gets or sets search by external subscription system id
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "responseGroup")]
+        public string ResponseGroup { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectTypes")]
+        public IList<string> ObjectTypes { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectIds")]
+        public IList<string> ObjectIds { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "keyword")]
+        public string Keyword { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "searchPhrase")]
+        public string SearchPhrase { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "languageCode")]
+        public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sort")]
+        public string Sort { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sortInfos")]
+        public IList<SortInfo> SortInfos { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "skip")]
+        public int? Skip { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "take")]
+        public int? Take { get; set; }
 
     }
 }
@@ -9678,10 +6980,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the SubscriptionSearchResult class.
         /// </summary>
-        public SubscriptionSearchResult(int? totalCount = default(int?), IList<Subscription> subscriptions = default(IList<Subscription>))
+        public SubscriptionSearchResult(IList<Subscription> subscriptions = default(IList<Subscription>), int? totalCount = default(int?), IList<Subscription> results = default(IList<Subscription>))
         {
-            TotalCount = totalCount;
             Subscriptions = subscriptions;
+            TotalCount = totalCount;
+            Results = results;
             CustomInit();
         }
 
@@ -9692,13 +6995,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "subscriptions")]
+        public IList<Subscription> Subscriptions { get; private set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "totalCount")]
         public int? TotalCount { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "subscriptions")]
-        public IList<Subscription> Subscriptions { get; set; }
+        [JsonProperty(PropertyName = "results")]
+        public IList<Subscription> Results { get; set; }
 
     }
 }
@@ -9755,102 +7063,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "cancelReason")]
         public string CancelReason { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.SubscriptionModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class PaymentPlan
-    {
-        /// <summary>
-        /// Initializes a new instance of the PaymentPlan class.
-        /// </summary>
-        public PaymentPlan()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PaymentPlan class.
-        /// </summary>
-        /// <param name="interval">Possible values include: 'Days', 'Weeks',
-        /// 'Months', 'Years'</param>
-        public PaymentPlan(string interval = default(string), int? intervalCount = default(int?), int? trialPeriodDays = default(int?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            Interval = interval;
-            IntervalCount = intervalCount;
-            TrialPeriodDays = trialPeriodDays;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Days', 'Weeks', 'Months',
-        /// 'Years'
-        /// </summary>
-        [JsonProperty(PropertyName = "interval")]
-        public string Interval { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "intervalCount")]
-        public int? IntervalCount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "trialPeriodDays")]
-        public int? TrialPeriodDays { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
 
     }
 }

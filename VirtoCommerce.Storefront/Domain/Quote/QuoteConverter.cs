@@ -6,7 +6,7 @@ using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Quote;
-using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
+using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using quoteDto = VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
@@ -132,7 +132,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual DynamicProperty ToDynamicProperty(quoteDto.DynamicObjectProperty propertyDto)
         {
-            return propertyDto.JsonConvert<coreDto.DynamicObjectProperty>().ToDynamicProperty();
+            return propertyDto.JsonConvert<platformDto.DynamicObjectProperty>().ToDynamicProperty();
         }
 
         public virtual quoteDto.DynamicObjectProperty ToQuoteDynamicPropertyDto(DynamicProperty property)

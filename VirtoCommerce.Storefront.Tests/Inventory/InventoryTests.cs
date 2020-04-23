@@ -69,7 +69,7 @@ namespace VirtoCommerce.Storefront.Tests.Inventory
         {
             var inventoryModuleStub = new Mock<IInventoryModule>();
 
-            inventoryModuleStub.Setup(x => x.GetProductsInventoriesByPlentyIdsWithHttpMessagesAsync(It.IsAny<IList<string>>(), null, It.IsAny<CancellationToken>()))
+            inventoryModuleStub.Setup(x => x.GetProductsInventoriesByPlentyIdsWithHttpMessagesAsync(It.IsAny<IList<string>>(), null, null, It.IsAny<CancellationToken>()))
                 .Returns<IList<string>, Dictionary<string, List<string>>, CancellationToken>((ids, customHeaders, cancellationToken) =>
                     Task.FromResult(
                         new HttpOperationResponse<IList<InventoryInfo>>()
