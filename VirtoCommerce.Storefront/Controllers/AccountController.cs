@@ -878,7 +878,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
         private async Task<SendNotificationResult> SendNotificationAsync(NotificationBase notification)
         {
-            var result = new SendNotificationResult();
+            SendNotificationResult result;
 
             try
             {
@@ -886,8 +886,11 @@ namespace VirtoCommerce.Storefront.Controllers
             }
             catch
             {
-                result.IsSuccess = false;
-                result.ErrorMessage = "Error occurred while sending notification";
+                result = new SendNotificationResult
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Error occurred while sending notification"
+                };
             }
 
             return result;
