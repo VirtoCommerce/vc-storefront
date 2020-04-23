@@ -10,8 +10,6 @@ namespace VirtoCommerce.Storefront.Model.Features
 
         public string Name { get; set; }
 
-        public List<string> Replaced { get; set; }
-
         public List<string> Replaces { get; set; }
 
         public List<string> Requires { get; set; }
