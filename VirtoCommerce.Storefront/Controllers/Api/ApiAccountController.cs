@@ -407,12 +407,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<PasswordChangeResult>> ChangePassword([FromBody] ChangePassword formModel)
         {
-            var changePassword = new AutoRestClients.PlatformModuleApi.Models.ChangePasswordRequest
-            {
-                OldPassword = formModel.OldPassword,
-                NewPassword = formModel.NewPassword,
-            };
-
             var result = await _userManager.ChangePasswordAsync(WorkContext.CurrentUser, formModel.OldPassword, formModel.NewPassword);
             return new PasswordChangeResult { Succeeded = result.Succeeded, Errors = result.Errors.Select(x => new FormError { Code = x.Code.PascalToKebabCase(), Description = x.Description }).ToList() };
         }
