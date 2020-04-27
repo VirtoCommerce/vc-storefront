@@ -49,9 +49,9 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var contentItem = _factory.GetItemFromPath(blobRelativePath);
             var visitedContent = content;
-            Action<List<IContentItemVisitor>> runParsers = parsers =>
+            Action<List<IContentItemVisitor>> runVisitors = visitors =>
             {
-                parsers.Where(x => x.Suit(contentItem))
+                visitors.Where(x => x.Suit(contentItem))
                     .ForEach(x => visitedContent = x.ReadContent(blobRelativePath, visitedContent, contentItem));
             };
             if (contentItem != null)
@@ -64,7 +64,7 @@ namespace VirtoCommerce.Storefront.Domain
                 contentItem.FileName = Path.GetFileName(blobRelativePath);
                 new List<List<IContentItemVisitor>>
                     { _prepareVisitors, _metadataVisitors, _contentVisitors, _postVisitors }
-                    .ForEach(runParsers);
+                    .ForEach(runVisitors);
             }
 
             return contentItem;
