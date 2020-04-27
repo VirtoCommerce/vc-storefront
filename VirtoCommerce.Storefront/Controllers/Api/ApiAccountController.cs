@@ -102,9 +102,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/account/organization
         [HttpPost("organization")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<IdentityResult>> RegisterOrganization([FromBody] OrganizationRegistration orgRegistration)
+        public async Task<ActionResult<MemberIdIdentityResult>> RegisterOrganization([FromBody] OrganizationRegistration orgRegistration)
         {
-            IdentityResult result;
+            var result = MemberIdIdentityResult.Instance(IdentityResult.Success);
 
             TryValidateModel(orgRegistration);
 
@@ -145,24 +145,23 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                                  SecurityConstants.Roles.OrganizationMaintainer
                              };
 
-                result = await _userManager.CreateAsync(user, orgRegistration.Password);
+                var creatingResult = await _userManager.CreateAsync(user, orgRegistration.Password);
+                result = MemberIdIdentityResult.Instance(creatingResult);
                 if (result.Succeeded)
                 {
                     user = await _userManager.FindByNameAsync(user.UserName);
                     await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, orgRegistration));
                     await _signInManager.SignInAsync(user, isPersistent: true);
                     await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                    result.MemberId = user.Id;
                 }
             }
             else
             {
-                var modelStateEntries = ModelState.Values.SelectMany(value => value.Errors);
-                var errors = modelStateEntries.Select(
-                    modelError => new IdentityError
-                    {
-                        Description = modelError.ErrorMessage
-                    });
-                result = IdentityResult.Failed(errors.ToArray());
+                result = MemberIdIdentityResult.Instance(IdentityResult
+                            .Failed(ModelState.Values.SelectMany(x => x.Errors)
+                            .Select(x => new IdentityError { Description = x.ErrorMessage })
+                            .ToArray()));
             }
 
             return result;
@@ -172,9 +171,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost("user")]
         [Authorize(SecurityConstants.Permissions.CanCreateUsers)]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<IdentityResult>> RegisterUser([FromBody] OrganizationUserRegistration registration)
+        public async Task<ActionResult<MemberIdIdentityResult>> RegisterUser([FromBody] OrganizationUserRegistration registration)
         {
-            IdentityResult result;
+            var result = MemberIdIdentityResult.Instance(IdentityResult.Success);
 
             TryValidateModel(registration);
 
@@ -194,16 +193,21 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 user.Contact = contact;
                 user.StoreId = WorkContext.CurrentStore.Id;
 
-                result = await _userManager.CreateAsync(user, registration.Password);
+                var creatingResult = await _userManager.CreateAsync(user, registration.Password);
+                result = MemberIdIdentityResult.Instance(creatingResult);
                 if (result.Succeeded)
                 {
                     user = await _userManager.FindByNameAsync(user.UserName);
                     await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, registration));
+                    result.MemberId = user.Id;
                 }
             }
             else
             {
-                result = IdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors).Select(x => new IdentityError { Description = x.ErrorMessage }).ToArray());
+                result = MemberIdIdentityResult.Instance(IdentityResult
+                            .Failed(ModelState.Values.SelectMany(x => x.Errors)
+                            .Select(x => new IdentityError { Description = x.ErrorMessage })
+                            .ToArray()));
             }
             return result;
         }
