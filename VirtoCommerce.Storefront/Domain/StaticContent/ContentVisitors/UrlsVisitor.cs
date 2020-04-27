@@ -6,6 +6,7 @@ namespace VirtoCommerce.Storefront.Domain
 {
     internal class UrlsVisitor : IContentItemVisitor
     {
+        public ContentProcessStage Stage => ContentProcessStage.PostProcess;
         public bool Suit(ContentItem item)
         {
             return true;

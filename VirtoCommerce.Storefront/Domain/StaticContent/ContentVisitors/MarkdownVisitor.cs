@@ -6,6 +6,7 @@ namespace VirtoCommerce.Storefront.Domain
 {
     internal class MarkdownVisitor : IContentItemVisitor
     {
+        public ContentProcessStage Stage => ContentProcessStage.Content;
         private readonly MarkdownPipeline _markdownPipeline;
 
         public MarkdownVisitor(MarkdownPipeline markdownPipeline)

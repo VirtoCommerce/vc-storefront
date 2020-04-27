@@ -8,6 +8,8 @@ namespace VirtoCommerce.Storefront.Domain
 {
     internal class PageMetadataVisitor : IContentItemVisitor
     {
+        public ContentProcessStage Stage => ContentProcessStage.Prepare;
+
         public bool Suit(ContentItem item)
         {
             return item.FileName.EndsWith(".page");

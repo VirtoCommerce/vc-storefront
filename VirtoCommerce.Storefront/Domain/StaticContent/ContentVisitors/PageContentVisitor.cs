@@ -4,6 +4,7 @@ namespace VirtoCommerce.Storefront.Domain
 {
     internal class PageContentVisitor : IContentItemVisitor
     {
+        public ContentProcessStage Stage => ContentProcessStage.Content;
         public bool Suit(ContentItem item)
         {
             return item.FileName.EndsWith(".page");

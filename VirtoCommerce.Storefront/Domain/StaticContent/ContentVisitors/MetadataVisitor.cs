@@ -7,6 +7,7 @@ namespace VirtoCommerce.Storefront.Domain
 {
     internal class MetadataVisitor : IContentItemVisitor
     {
+        public ContentProcessStage Stage => ContentProcessStage.Metadata;
         public bool Suit(ContentItem item)
         {
             return true;

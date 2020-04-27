@@ -5,9 +5,10 @@ using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.Domain
 {
-
     internal class BlogExcerptMetadataVisitor : IContentItemVisitor
     {
+        public ContentProcessStage Stage => ContentProcessStage.Metadata;
+
         private static string _excerptToken = "<!--excerpt-->";
 
         public bool Suit(ContentItem item)
