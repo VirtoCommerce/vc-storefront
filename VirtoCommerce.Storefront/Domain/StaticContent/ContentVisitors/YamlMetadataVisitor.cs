@@ -1,44 +1,22 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using VirtoCommerce.Storefront.Model.StaticContent;
 using YamlDotNet.RepresentationModel;
 
 namespace VirtoCommerce.Storefront.Domain
 {
-    public class StaticContentLoader : IStaticContentLoader
+    internal class YamlMetadataVisitor : IContentItemVisitor
     {
-        private static readonly Regex _headerRegExp = new Regex(@"(?s:^---(.*?)---)");
-
-        public virtual string PrepareContent(string content)
+        public bool Suit(ContentItem item)
         {
-            return RemoveYamlHeader(content);
+            return StaticContentItemBuilder.extensions.Any(item.FileName.EndsWith);
         }
 
-        public virtual void ReadMetaData(string content, IDictionary<string, IEnumerable<string>> metadata)
+        public ContentItem Parse(string path, string content, ContentItem item)
         {
-            ReadYamlHeader(content, metadata);
-        }
-
-
-        private static string RemoveYamlHeader(string text)
-        {
-            var result = text;
-            var headerMatches = _headerRegExp.Matches(text);
-
-            if (headerMatches.Count > 0)
-            {
-                result = text.Replace(headerMatches[0].Groups[0].Value, "").Trim();
-            }
-
-            return result;
-        }
-
-        private static void ReadYamlHeader(string text, IDictionary<string, IEnumerable<string>> metadata)
-        {
-            var headerMatches = _headerRegExp.Matches(text);
-
+            item.MetaInfo = new Dictionary<string, IEnumerable<string>>();
+            var headerMatches = StaticContentItemBuilder.headerRegExp.Matches(content);
             if (headerMatches.Count > 0)
             {
                 var input = new StringReader(headerMatches[0].Groups[1].Value);
@@ -55,12 +33,13 @@ namespace VirtoCommerce.Storefront.Domain
                         {
                             if (entry.Key is YamlScalarNode node)
                             {
-                                metadata.Add(node.Value, GetYamlNodeValues(entry.Value));
+                                item.MetaInfo.Add(node.Value, GetYamlNodeValues(entry.Value));
                             }
                         }
                     }
                 }
             }
+            return item;
         }
 
         private static IEnumerable<string> GetYamlNodeValues(YamlNode value)
