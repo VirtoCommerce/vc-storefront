@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Markdig;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Model.StaticContent;
 using Xunit;
@@ -7,15 +9,27 @@ namespace VirtoCommerce.Storefront.Tests.StaticContent
 {
     public class StaticContentItemBuilderTests
     {
-        private IStaticContentItemBuilder builder = new StaticContentItemBuilder(new StaticContentItemFactory());
+        private static IEnumerable<IContentItemVisitor> visitors = new List<IContentItemVisitor>
+        {
+            new LangVisitor(),
+            new YamlMetadataVisitor(),
+            new PageMetadataVisitor(),
+            new BlogExcerptMetadataVisitor(),
+            new BlogMetadataVisitor(),
+            new ContentPageMetadataVisitor(),
+            new MetadataVisitor(),
+            new MarkdownVisitor(new MarkdownPipelineBuilder().UseAdvancedExtensions().Build()),
+            new PageContentVisitor(),
+            new UrlsVisitor()
+        };
+
+        private IStaticContentItemBuilder builder = new StaticContentItemBuilder(new StaticContentItemFactory(), visitors);
 
         [Fact]
         public void ReadContent_For_MarkdownStaticPage()
         {
-            // arrange
-            // act
+
             var result = builder.BuildFrom("", "custom/path/filename.md", StaticMarkdownPage);
-            // assert
             Assert.Equal("Custom page title", result.Title);
             Assert.Equal("Custom page description", result.Description);
             Assert.Equal(new DateTime(2020, 04, 27), result.PublishedDate);
