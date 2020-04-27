@@ -12,7 +12,7 @@ namespace VirtoCommerce.Storefront.Domain
             return true;
         }
 
-        public ContentItem Parse(string path, string content, ContentItem item)
+        public string ReadContent(string path, string content, ContentItem item)
         {
             // each content file  has a name pattern {name}.{language?}.{ext}
             var parts = Path.GetFileName(path)?.Split('.');
@@ -36,7 +36,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 item.Name = parts?.FirstOrDefault();
             }
-            return item;
+            return content;
         }
     }
 }

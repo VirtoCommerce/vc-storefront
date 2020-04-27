@@ -12,7 +12,7 @@ namespace VirtoCommerce.Storefront.Domain
             return true;
         }
 
-        public ContentItem Parse(string path, string content, ContentItem item)
+        public string ReadContent(string path, string content, ContentItem item)
         {
             foreach (var setting in item.MetaInfo)
             {
@@ -94,7 +94,7 @@ namespace VirtoCommerce.Storefront.Domain
                     page.Template = "article";
                     break;
             }
-            return item;
+            return content;
         }
     }
 }

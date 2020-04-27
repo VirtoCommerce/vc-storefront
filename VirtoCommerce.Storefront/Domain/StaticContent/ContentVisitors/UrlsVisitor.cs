@@ -11,7 +11,7 @@ namespace VirtoCommerce.Storefront.Domain
             return true;
         }
 
-        public ContentItem Parse(string path, string content, ContentItem item)
+        public string ReadContent(string path, string content, ContentItem item)
         {
             if (string.IsNullOrEmpty(item.Permalink))
             {
@@ -22,7 +22,7 @@ namespace VirtoCommerce.Storefront.Domain
             item.Url = GetContentItemUrl(item, item.Permalink);
             // Transform aliases permalink templates to urls
             item.AliasesUrls = item.Aliases.Select(x => GetContentItemUrl(item, x)).ToList();
-            return item;
+            return content;
         }
 
         private static string GetContentItemUrl(ContentItem item, string permalink)

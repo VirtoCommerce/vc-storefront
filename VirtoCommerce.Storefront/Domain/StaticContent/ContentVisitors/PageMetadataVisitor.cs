@@ -13,7 +13,7 @@ namespace VirtoCommerce.Storefront.Domain
             return item.FileName.EndsWith(".page");
         }
 
-        public ContentItem Parse(string path, string content, ContentItem item)
+        public string ReadContent(string path, string content, ContentItem item)
         {
             var page = JsonConvert.DeserializeObject<JArray>(content);
             var settings = page.FirstOrDefault(x => (x as JObject)?.GetValue("type")?.Value<string>() == "settings");
@@ -23,7 +23,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 item.MetaInfo.Add(prop.Name, new List<string> { prop.Value.Value<string>() });
             }
-            return item;
+            return content;
         }
     }
 }

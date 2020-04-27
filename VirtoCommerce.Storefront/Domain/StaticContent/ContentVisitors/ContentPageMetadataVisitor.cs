@@ -10,7 +10,7 @@ namespace VirtoCommerce.Storefront.Domain
             return item is ContentPage;
         }
 
-        public ContentItem Parse(string path, string content, ContentItem item)
+        public string ReadContent(string path, string content, ContentItem item)
         {
             var page = (ContentPage)item;
             page.Template = "page";
@@ -19,7 +19,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 page.Template = page.MetaInfo["template"].FirstOrDefault();
             }
-            return item;
+            return content;
         }
     }
 }

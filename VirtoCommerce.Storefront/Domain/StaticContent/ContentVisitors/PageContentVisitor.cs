@@ -9,10 +9,10 @@ namespace VirtoCommerce.Storefront.Domain
             return item.FileName.EndsWith(".page");
         }
 
-        public ContentItem Parse(string path, string content, ContentItem item)
+        public string ReadContent(string path, string content, ContentItem item)
         {
             item.Content = content;
-            return item;
+            return content;
         }
     }
 }

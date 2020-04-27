@@ -10,7 +10,7 @@ namespace VirtoCommerce.Storefront.Domain
             return item is BlogArticle;
         }
 
-        public ContentItem Parse(string path, string content, ContentItem item)
+        public string ReadContent(string path, string content, ContentItem item)
         {
             var post = (BlogArticle)item;
 
@@ -38,7 +38,7 @@ namespace VirtoCommerce.Storefront.Domain
             }
 
             post.Template = "article";
-            return item;
+            return content;
         }
     }
 }
