@@ -11,33 +11,33 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public partial class StaticContentItemBuilder : IStaticContentItemBuilder
     {
-        private static readonly Regex _headerRegExp = new Regex(@"(?s:^---(.*?)---)");
-        private static readonly string[] _extensions = new[] { ".md", ".liquid", ".html" };
+        internal static readonly Regex headerRegExp = new Regex(@"(?s:^---(.*?)---)");
+        internal static readonly string[] extensions = new[] { ".md", ".liquid", ".html" };
 
         private readonly IStaticContentItemFactory _factory;
 
-        private readonly List<IContentItemParser> _prepareParsers = new List<IContentItemParser>
+        private readonly List<IContentItemVisitor> _prepareVisitors = new List<IContentItemVisitor>
         {
-            new LangParser(),
-            new YamlMetadataParser(),
-            new PageMetadataParser(),
+            new LangVisitor(),
+            new YamlMetadataVisitor(),
+            new PageMetadataVisitor(),
         };
 
-        private readonly List<IContentItemParser> _metadataParsers = new List<IContentItemParser>
+        private readonly List<IContentItemVisitor> _metadataVisitors = new List<IContentItemVisitor>
         {
-            new BlogExcerptMetadataParser(),
-            new BlogMetadataParser(),
-            new ContentPageMetadataParser(),
-            new MetadataParser()
+            new BlogExcerptMetadataVisitor(),
+            new BlogMetadataVisitor(),
+            new ContentPageMetadataVisitor(),
+            new MetadataVisitor()
         };
 
-        private readonly List<IContentItemParser> _contentParsers = new List<IContentItemParser>
+        private readonly List<IContentItemVisitor> _contentVisitors = new List<IContentItemVisitor>
         {
-            new ContentWithYamlParser(new MarkdownPipelineBuilder().UseAdvancedExtensions().Build()),
-            new PageContentParser(),
+            new ContentWithYamlVisitor(new MarkdownPipelineBuilder().UseAdvancedExtensions().Build()),
+            new PageContentVisitor(),
         };
 
-        private readonly List<IContentItemParser> _postParsers = new List<IContentItemParser> { new UrlsParser() };
+        private readonly List<IContentItemVisitor> _postVisitors = new List<IContentItemVisitor> { new UrlsVisitor() };
 
 
         public StaticContentItemBuilder(IStaticContentItemFactory factory)
@@ -48,7 +48,7 @@ namespace VirtoCommerce.Storefront.Domain
         public ContentItem BuildFrom(string baseStoreContentPath, string blobRelativePath, string content)
         {
             var contentItem = _factory.GetItemFromPath(blobRelativePath);
-            Action<List<IContentItemParser>> runParsers = parsers =>
+            Action<List<IContentItemVisitor>> runParsers = parsers =>
             {
                 parsers.Where(x => x.Suit(contentItem))
                     .ForEach(x => x.Parse(blobRelativePath, content, contentItem));
@@ -57,18 +57,12 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 contentItem.StoragePath = "/" + blobRelativePath.Replace(baseStoreContentPath + "/", String.Empty).TrimStart('/');
                 contentItem.FileName = Path.GetFileName(blobRelativePath);
-                new List<List<IContentItemParser>>
-                    { _prepareParsers, _metadataParsers, _contentParsers, _postParsers }
+                new List<List<IContentItemVisitor>>
+                    { _prepareVisitors, _metadataVisitors, _contentVisitors, _postVisitors }
                     .ForEach(runParsers);
             }
 
             return contentItem;
-        }
-
-        private interface IContentItemParser
-        {
-            bool Suit(ContentItem item);
-            void Parse(string path, string content, ContentItem item);
         }
     }
 }
