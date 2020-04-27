@@ -7,6 +7,8 @@ namespace VirtoCommerce.Storefront.Domain
 {
     internal class LangVisitor : IContentItemVisitor
     {
+        public ContentProcessStage Stage => ContentProcessStage.Prepare;
+
         public bool Suit(ContentItem item)
         {
             return true;

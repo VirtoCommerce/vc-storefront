@@ -5,6 +5,7 @@ namespace VirtoCommerce.Storefront.Domain
 {
     internal class BlogMetadataVisitor : IContentItemVisitor
     {
+        public ContentProcessStage Stage => ContentProcessStage.Metadata;
         public bool Suit(ContentItem item)
         {
             return item is BlogArticle;
