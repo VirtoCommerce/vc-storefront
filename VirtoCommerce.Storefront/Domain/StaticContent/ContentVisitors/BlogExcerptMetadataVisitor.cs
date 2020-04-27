@@ -15,7 +15,7 @@ namespace VirtoCommerce.Storefront.Domain
             return item is BlogArticle && StaticContentItemBuilder.extensions.Any(item.FileName.EndsWith);
         }
 
-        public ContentItem Parse(string path, string content, ContentItem item)
+        public string ReadContent(string path, string content, ContentItem item)
         {
             var post = (BlogArticle)item;
             if (content.Contains(_excerptToken))
@@ -25,9 +25,10 @@ namespace VirtoCommerce.Storefront.Domain
                 {
                     post.Excerpt = parts[0];
                     post.Content = content.Replace(_excerptToken, string.Empty);
+                    return post.Content;
                 }
             }
-            return item;
+            return content;
         }
     }
 }

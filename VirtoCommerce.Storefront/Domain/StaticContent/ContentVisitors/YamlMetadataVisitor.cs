@@ -13,7 +13,7 @@ namespace VirtoCommerce.Storefront.Domain
             return StaticContentItemBuilder.extensions.Any(item.FileName.EndsWith);
         }
 
-        public ContentItem Parse(string path, string content, ContentItem item)
+        public string ReadContent(string path, string content, ContentItem item)
         {
             item.MetaInfo = new Dictionary<string, IEnumerable<string>>();
             var headerMatches = StaticContentItemBuilder.headerRegExp.Matches(content);
@@ -38,8 +38,9 @@ namespace VirtoCommerce.Storefront.Domain
                         }
                     }
                 }
+                return content.Replace(headerMatches[0].Groups[0].Value, "").Trim();
             }
-            return item;
+            return content;
         }
 
         private static IEnumerable<string> GetYamlNodeValues(YamlNode value)

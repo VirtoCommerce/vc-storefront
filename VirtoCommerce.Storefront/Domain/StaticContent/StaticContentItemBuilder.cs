@@ -33,7 +33,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         private readonly List<IContentItemVisitor> _contentVisitors = new List<IContentItemVisitor>
         {
-            new ContentWithYamlVisitor(new MarkdownPipelineBuilder().UseAdvancedExtensions().Build()),
+            new MarkdownVisitor(new MarkdownPipelineBuilder().UseAdvancedExtensions().Build()),
             new PageContentVisitor(),
         };
 
@@ -48,14 +48,19 @@ namespace VirtoCommerce.Storefront.Domain
         public ContentItem BuildFrom(string baseStoreContentPath, string blobRelativePath, string content)
         {
             var contentItem = _factory.GetItemFromPath(blobRelativePath);
+            var visitedContent = content;
             Action<List<IContentItemVisitor>> runParsers = parsers =>
             {
                 parsers.Where(x => x.Suit(contentItem))
-                    .ForEach(x => x.Parse(blobRelativePath, content, contentItem));
+                    .ForEach(x => visitedContent = x.ReadContent(blobRelativePath, visitedContent, contentItem));
             };
             if (contentItem != null)
             {
-                contentItem.StoragePath = "/" + blobRelativePath.Replace(baseStoreContentPath + "/", String.Empty).TrimStart('/');
+                contentItem.StoragePath = "/" +
+                    (string.IsNullOrEmpty(baseStoreContentPath) ?
+                        blobRelativePath :
+                        blobRelativePath.Replace(baseStoreContentPath + "/", String.Empty)
+                    ).TrimStart('/');
                 contentItem.FileName = Path.GetFileName(blobRelativePath);
                 new List<List<IContentItemVisitor>>
                     { _prepareVisitors, _metadataVisitors, _contentVisitors, _postVisitors }
