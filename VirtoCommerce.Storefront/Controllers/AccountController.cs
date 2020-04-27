@@ -1,9 +1,11 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
@@ -309,7 +311,23 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View("customers/login", WorkContext);
             }
 
-            if (!new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore) || new IsUserSuspendedSpecification().IsSatisfiedBy(user))
+            if (!new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore))
+            {
+                if (login.RedirectToStore)
+                {
+                    var store = WorkContext.AllStores.First(x => x.Id == user.StoreId);
+                    var url = HttpContext.Request.Path
+                        .TrimStoreAndLangSegment(WorkContext.CurrentStore, WorkContext.CurrentLanguage)
+                        .AddStoreAndLangSegment(store, store.DefaultLanguage)
+                        .ToString();
+                    return RedirectPreserveMethod(url);
+                }
+
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserCannotLoginInStore());
+                return View("customers/login", WorkContext);
+            }
+
+            if (new IsUserSuspendedSpecification().IsSatisfiedBy(user))
             {
                 WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserCannotLoginInStore());
                 return View("customers/login", WorkContext);
