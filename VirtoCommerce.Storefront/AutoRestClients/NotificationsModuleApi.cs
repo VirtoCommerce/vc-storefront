@@ -2417,7 +2417,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         /// <param name="languageCode">Code of Language</param>
         /// <param name="kind">For detecting kind of notifications (email, sms
         /// and etc.)</param>
-        public NotificationTemplate(string languageCode = default(string), string kind = default(string), bool? isReadonly = default(bool?), string outerId = default(string), bool? isPredefined = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public NotificationTemplate(string languageCode = default(string), string kind = default(string), bool? isReadonly = default(bool?), string outerId = default(string), bool? isPredefined = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             LanguageCode = languageCode;
             Kind = kind;
@@ -2428,7 +2428,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -2487,11 +2486,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
@@ -2540,7 +2534,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         /// <param name="type">Type of notifications, like Identifier</param>
         /// <param name="kind">For detecting kind of notifications (email, sms
         /// and etc.)</param>
-        public Notification(TenantIdentity tenantIdentity = default(TenantIdentity), bool? isActive = default(bool?), string languageCode = default(string), string alias = default(string), string type = default(string), string kind = default(string), string outerId = default(string), IList<NotificationTemplate> templates = default(IList<NotificationTemplate>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public Notification(TenantIdentity tenantIdentity = default(TenantIdentity), bool? isActive = default(bool?), string languageCode = default(string), string alias = default(string), string type = default(string), string kind = default(string), string outerId = default(string), IList<NotificationTemplate> templates = default(IList<NotificationTemplate>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             TenantIdentity = tenantIdentity;
             IsActive = isActive;
@@ -2554,7 +2548,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -2630,11 +2623,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -3143,7 +3131,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         /// attempt</param>
         /// <param name="sendDate">Date of sending</param>
         /// <param name="languageCode">Code of language</param>
-        public NotificationMessage(string kind = default(string), TenantIdentity tenantIdentity = default(TenantIdentity), string notificationId = default(string), string notificationType = default(string), int? sendAttemptCount = default(int?), int? maxSendAttemptCount = default(int?), string lastSendError = default(string), System.DateTime? lastSendAttemptDate = default(System.DateTime?), System.DateTime? sendDate = default(System.DateTime?), string languageCode = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public NotificationMessage(string kind = default(string), TenantIdentity tenantIdentity = default(TenantIdentity), string notificationId = default(string), string notificationType = default(string), int? sendAttemptCount = default(int?), int? maxSendAttemptCount = default(int?), string lastSendError = default(string), System.DateTime? lastSendAttemptDate = default(System.DateTime?), System.DateTime? sendDate = default(System.DateTime?), string languageCode = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Kind = kind;
             TenantIdentity = tenantIdentity;
@@ -3159,7 +3147,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -3246,11 +3233,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>

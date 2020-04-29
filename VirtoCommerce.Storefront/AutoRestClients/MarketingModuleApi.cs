@@ -6961,7 +6961,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// (1;21;344)</param>
         /// <param name="imageUrl">Gets or sets the image URL.</param>
         /// <param name="name">Gets or sets the name.</param>
-        public DynamicContentFolder(string path = default(string), string outline = default(string), string parentFolderId = default(string), DynamicContentFolder parentFolder = default(DynamicContentFolder), string objectType = default(string), string imageUrl = default(string), string name = default(string), string description = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public DynamicContentFolder(string path = default(string), string outline = default(string), string parentFolderId = default(string), DynamicContentFolder parentFolder = default(DynamicContentFolder), string objectType = default(string), string imageUrl = default(string), string name = default(string), string description = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Path = path;
             Outline = outline;
@@ -6975,7 +6975,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -7048,11 +7047,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -7250,7 +7244,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// <param name="valueType">Possible values include: 'Undefined',
         /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
         /// 'Boolean', 'Html', 'Image'</param>
-        public DynamicObjectProperty(string objectId = default(string), IList<DynamicPropertyObjectValue> values = default(IList<DynamicPropertyObjectValue>), string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public DynamicObjectProperty(string objectId = default(string), IList<DynamicPropertyObjectValue> values = default(IList<DynamicPropertyObjectValue>), string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             ObjectId = objectId;
             Values = values;
@@ -7268,7 +7262,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -7363,11 +7356,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
@@ -7411,7 +7399,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// (Root\Child\Child2)</param>
         /// <param name="imageUrl">Gets or sets the image URL.</param>
         /// <param name="name">Gets or sets the name.</param>
-        public DynamicContentItem(string contentType = default(string), int? priority = default(int?), string outline = default(string), string path = default(string), string folderId = default(string), DynamicContentFolder folder = default(DynamicContentFolder), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), string imageUrl = default(string), string name = default(string), string description = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public DynamicContentItem(string contentType = default(string), int? priority = default(int?), string outline = default(string), string path = default(string), string folderId = default(string), DynamicContentFolder folder = default(DynamicContentFolder), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), string imageUrl = default(string), string name = default(string), string description = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             ContentType = contentType;
             Priority = priority;
@@ -7428,7 +7416,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -7519,11 +7506,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
@@ -7574,7 +7556,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// order</param>
         /// <param name="maxPersonalUsageCount">Maximum redemptions by a single
         /// customer</param>
-        public Promotion(string store = default(string), IList<string> storeIds = default(IList<string>), string name = default(string), string type = default(string), bool? isActive = default(bool?), int? priority = default(int?), bool? isExclusive = default(bool?), bool? hasCoupons = default(bool?), string description = default(string), int? maxUsageCount = default(int?), int? maxUsageOnOrder = default(int?), int? maxPersonalUsageCount = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public Promotion(string store = default(string), IList<string> storeIds = default(IList<string>), string name = default(string), string type = default(string), bool? isActive = default(bool?), int? priority = default(int?), bool? isExclusive = default(bool?), bool? hasCoupons = default(bool?), string description = default(string), int? maxUsageCount = default(int?), int? maxUsageOnOrder = default(int?), int? maxPersonalUsageCount = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Store = store;
             StoreIds = storeIds;
@@ -7595,7 +7577,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -7709,11 +7690,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -8003,7 +7979,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// 0 infinitive</param>
         /// <param name="code">coupon code</param>
         /// <param name="totalUsesCount">Total number of uses</param>
-        public Coupon(int? maxUsesNumber = default(int?), int? maxUsesPerUser = default(int?), System.DateTime? expirationDate = default(System.DateTime?), string code = default(string), string promotionId = default(string), long? totalUsesCount = default(long?), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public Coupon(int? maxUsesNumber = default(int?), int? maxUsesPerUser = default(int?), System.DateTime? expirationDate = default(System.DateTime?), string code = default(string), string promotionId = default(string), long? totalUsesCount = default(long?), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             MaxUsesNumber = maxUsesNumber;
             MaxUsesPerUser = maxUsesPerUser;
@@ -8016,7 +7992,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -8086,11 +8061,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -8312,7 +8282,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// "content-item", "content-place"</param>
         /// <param name="imageUrl">Gets or sets the image URL.</param>
         /// <param name="name">Gets or sets the name.</param>
-        public DynamicContentListEntry(string objectType = default(string), string imageUrl = default(string), string name = default(string), string description = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public DynamicContentListEntry(string objectType = default(string), string imageUrl = default(string), string name = default(string), string description = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             ObjectType = objectType;
             ImageUrl = imageUrl;
@@ -8322,7 +8292,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -8375,11 +8344,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -8486,7 +8450,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// "content-item", "content-place"</param>
         /// <param name="imageUrl">Gets or sets the image URL.</param>
         /// <param name="name">Gets or sets the name.</param>
-        public DynamicContentPlace(string outline = default(string), string path = default(string), string folderId = default(string), DynamicContentFolder folder = default(DynamicContentFolder), string objectType = default(string), string imageUrl = default(string), string name = default(string), string description = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public DynamicContentPlace(string outline = default(string), string path = default(string), string folderId = default(string), DynamicContentFolder folder = default(DynamicContentFolder), string objectType = default(string), string imageUrl = default(string), string name = default(string), string description = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Outline = outline;
             Path = path;
@@ -8500,7 +8464,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -8575,11 +8538,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -9144,7 +9102,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the DynamicContentPublication class.
         /// </summary>
-        public DynamicContentPublication(string name = default(string), string description = default(string), int? priority = default(int?), bool? isActive = default(bool?), string storeId = default(string), DynamicContentConditionTree dynamicExpression = default(DynamicContentConditionTree), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string outerId = default(string), IList<DynamicContentItem> contentItems = default(IList<DynamicContentItem>), IList<DynamicContentPlace> contentPlaces = default(IList<DynamicContentPlace>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public DynamicContentPublication(string name = default(string), string description = default(string), int? priority = default(int?), bool? isActive = default(bool?), string storeId = default(string), DynamicContentConditionTree dynamicExpression = default(DynamicContentConditionTree), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string outerId = default(string), IList<DynamicContentItem> contentItems = default(IList<DynamicContentItem>), IList<DynamicContentPlace> contentPlaces = default(IList<DynamicContentPlace>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             Description = description;
@@ -9161,7 +9119,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -9245,11 +9202,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>

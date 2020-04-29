@@ -345,8 +345,13 @@ namespace VirtoCommerce.Storefront
                 c.IgnoreObsoleteActions();
                 // To include 401 response type to actions that requires Authorization
                 c.OperationFilter<AuthResponsesOperationFilter>();
-                c.OperationFilter<OptionalParametersFilter>();
+                c.OperationFilter<ConsumeFromBodyFilter>();
                 c.OperationFilter<FileResponseTypeFilter>();
+                c.OperationFilter<OptionalParametersFilter>();
+                c.OperationFilter<ArrayInQueryParametersFilter>();
+                c.OperationFilter<FileUploadOperationFilter>();
+                c.SchemaFilter<EnumSchemaFilter>();
+                c.SchemaFilter<NewtonsoftJsonIgnoreFilter>();
 
                 // To avoid errors with repeating type names
                 c.CustomSchemaIds(type => (Attribute.GetCustomAttribute(type, typeof(SwaggerSchemaIdAttribute)) as SwaggerSchemaIdAttribute)?.Id ?? type.FriendlyId());

@@ -2487,7 +2487,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the SitemapItem class.
         /// </summary>
-        public SitemapItem(string sitemapId = default(string), string title = default(string), string imageUrl = default(string), string objectId = default(string), string objectType = default(string), string urlTemplate = default(string), IList<SitemapItemRecord> itemsRecords = default(IList<SitemapItemRecord>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public SitemapItem(string sitemapId = default(string), string title = default(string), string imageUrl = default(string), string objectId = default(string), string objectType = default(string), string urlTemplate = default(string), IList<SitemapItemRecord> itemsRecords = default(IList<SitemapItemRecord>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             SitemapId = sitemapId;
             Title = title;
@@ -2500,7 +2500,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -2564,11 +2563,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -2793,7 +2787,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the Sitemap class.
         /// </summary>
-        public Sitemap(string location = default(string), string storeId = default(string), IList<SitemapItem> items = default(IList<SitemapItem>), string urlTemplate = default(string), int? totalItemsCount = default(int?), IList<string> pagedLocations = default(IList<string>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public Sitemap(string location = default(string), string storeId = default(string), IList<SitemapItem> items = default(IList<SitemapItem>), string urlTemplate = default(string), int? totalItemsCount = default(int?), IList<string> pagedLocations = default(IList<string>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Location = location;
             StoreId = storeId;
@@ -2805,7 +2799,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -2864,11 +2857,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>

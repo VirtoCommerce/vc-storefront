@@ -5624,7 +5624,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// valid. Null value means no limit</param>
         /// <param name="endDate">End of period when Prices Assignment is
         /// valid. Null value means no limit</param>
-        public PricelistAssignment(string catalogId = default(string), string pricelistId = default(string), Pricelist pricelist = default(Pricelist), string name = default(string), string description = default(string), int? priority = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), PriceConditionTree dynamicExpression = default(PriceConditionTree), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public PricelistAssignment(string catalogId = default(string), string pricelistId = default(string), Pricelist pricelist = default(Pricelist), string name = default(string), string description = default(string), int? priority = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), PriceConditionTree dynamicExpression = default(PriceConditionTree), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             CatalogId = catalogId;
             PricelistId = pricelistId;
@@ -5640,7 +5640,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -5728,11 +5727,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
@@ -5770,7 +5764,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the Pricelist class.
         /// </summary>
-        public Pricelist(string name = default(string), string description = default(string), string currency = default(string), string outerId = default(string), IList<Price> prices = default(IList<Price>), IList<PricelistAssignment> assignments = default(IList<PricelistAssignment>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public Pricelist(string name = default(string), string description = default(string), string currency = default(string), string outerId = default(string), IList<Price> prices = default(IList<Price>), IList<PricelistAssignment> assignments = default(IList<PricelistAssignment>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             Description = description;
@@ -5782,7 +5776,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -5844,11 +5837,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
@@ -5892,7 +5880,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <param name="endDate">Optional end date for this price, so that we
         /// can prepare prices ahead of time.
         /// If end date equals now, this price will not be active.</param>
-        public Price(string pricelistId = default(string), Pricelist pricelist = default(Pricelist), string currency = default(string), string productId = default(string), double? sale = default(double?), double? list = default(double?), int? minQuantity = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), double? effectiveValue = default(double?), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public Price(string pricelistId = default(string), Pricelist pricelist = default(Pricelist), string currency = default(string), string productId = default(string), double? sale = default(double?), double? list = default(double?), int? minQuantity = default(int?), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), double? effectiveValue = default(double?), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             PricelistId = pricelistId;
             Pricelist = pricelist;
@@ -5909,7 +5897,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -6002,11 +5989,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
@@ -6090,25 +6072,39 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class CatalogLanguage
+    public partial class PropertyValue
     {
         /// <summary>
-        /// Initializes a new instance of the CatalogLanguage class.
+        /// Initializes a new instance of the PropertyValue class.
         /// </summary>
-        public CatalogLanguage()
+        public PropertyValue()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the CatalogLanguage class.
+        /// Initializes a new instance of the PropertyValue class.
         /// </summary>
-        public CatalogLanguage(string catalogId = default(string), Catalog catalog = default(Catalog), bool? isDefault = default(bool?), string languageCode = default(string), string id = default(string))
+        /// <param name="valueType">Possible values include: 'ShortText',
+        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
+        /// 'GeoPoint'</param>
+        public PropertyValue(string propertyName = default(string), string propertyId = default(string), string languageCode = default(string), string alias = default(string), string valueType = default(string), string valueId = default(string), object value = default(object), bool? propertyMultivalue = default(bool?), string outerId = default(string), bool? isInherited = default(bool?), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
-            CatalogId = catalogId;
-            Catalog = catalog;
-            IsDefault = isDefault;
+            PropertyName = propertyName;
+            PropertyId = propertyId;
             LanguageCode = languageCode;
+            Alias = alias;
+            ValueType = valueType;
+            ValueId = valueId;
+            Value = value;
+            PropertyMultivalue = propertyMultivalue;
+            OuterId = outerId;
+            IsInherited = isInherited;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
             Id = id;
             CustomInit();
         }
@@ -6120,23 +6116,80 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "catalogId")]
-        public string CatalogId { get; set; }
+        [JsonProperty(PropertyName = "propertyName")]
+        public string PropertyName { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "catalog")]
-        public Catalog Catalog { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isDefault")]
-        public bool? IsDefault { get; set; }
+        [JsonProperty(PropertyName = "propertyId")]
+        public string PropertyId { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "languageCode")]
         public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "alias")]
+        public string Alias { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'ShortText', 'LongText',
+        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
+        /// </summary>
+        [JsonProperty(PropertyName = "valueType")]
+        public string ValueType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "valueId")]
+        public string ValueId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "value")]
+        public object Value { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "propertyMultivalue")]
+        public bool? PropertyMultivalue { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isInherited")]
+        public bool? IsInherited { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
 
         /// <summary>
         /// </summary>
@@ -6164,35 +6217,29 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class CategoryLink
+    public partial class PropertyAttribute
     {
         /// <summary>
-        /// Initializes a new instance of the CategoryLink class.
+        /// Initializes a new instance of the PropertyAttribute class.
         /// </summary>
-        public CategoryLink()
+        public PropertyAttribute()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the CategoryLink class.
+        /// Initializes a new instance of the PropertyAttribute class.
         /// </summary>
-        /// <param name="entryId">Entry identifier which this link belongs
-        /// to</param>
-        /// <param name="listEntryType">Gets or sets the type of the list
-        /// entry. E.g. "product", "category"</param>
-        /// <param name="priority">Product order position in virtual
-        /// catalog</param>
-        public CategoryLink(string entryId = default(string), string listEntryId = default(string), string listEntryType = default(string), int? priority = default(int?), string catalogId = default(string), Catalog catalog = default(Catalog), string categoryId = default(string), Category category = default(Category))
+        public PropertyAttribute(string propertyId = default(string), string value = default(string), string name = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
-            EntryId = entryId;
-            ListEntryId = listEntryId;
-            ListEntryType = listEntryType;
-            Priority = priority;
-            CatalogId = catalogId;
-            Catalog = catalog;
-            CategoryId = categoryId;
-            Category = category;
+            PropertyId = propertyId;
+            Value = value;
+            Name = name;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Id = id;
             CustomInit();
         }
 
@@ -6202,47 +6249,426 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets entry identifier which this link belongs to
         /// </summary>
-        [JsonProperty(PropertyName = "entryId")]
-        public string EntryId { get; private set; }
+        [JsonProperty(PropertyName = "propertyId")]
+        public string PropertyId { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "listEntryId")]
-        public string ListEntryId { get; set; }
+        [JsonProperty(PropertyName = "value")]
+        public string Value { get; set; }
 
         /// <summary>
-        /// Gets or sets the type of the list entry. E.g. "product", "category"
         /// </summary>
-        [JsonProperty(PropertyName = "listEntryType")]
-        public string ListEntryType { get; set; }
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets product order position in virtual catalog
         /// </summary>
-        [JsonProperty(PropertyName = "priority")]
-        public int? Priority { get; set; }
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
 
         /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class PropertyDisplayName
+    {
+        /// <summary>
+        /// Initializes a new instance of the PropertyDisplayName class.
+        /// </summary>
+        public PropertyDisplayName()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the PropertyDisplayName class.
+        /// </summary>
+        public PropertyDisplayName(string name = default(string), string languageCode = default(string))
+        {
+            Name = name;
+            LanguageCode = languageCode;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "languageCode")]
+        public string LanguageCode { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// Represents property validation rules definition
+    /// </summary>
+    public partial class PropertyValidationRule
+    {
+        /// <summary>
+        /// Initializes a new instance of the PropertyValidationRule class.
+        /// </summary>
+        public PropertyValidationRule()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the PropertyValidationRule class.
+        /// </summary>
+        /// <param name="isUnique">Uniquie value flag constrain</param>
+        /// <param name="charCountMin">Down chars count border or null if no
+        /// defined</param>
+        /// <param name="charCountMax">Upper chars count border or null if no
+        /// defined</param>
+        /// <param name="regExp">Custom regular expression</param>
+        public PropertyValidationRule(bool? isUnique = default(bool?), int? charCountMin = default(int?), int? charCountMax = default(int?), string regExp = default(string), string propertyId = default(string), string id = default(string))
+        {
+            IsUnique = isUnique;
+            CharCountMin = charCountMin;
+            CharCountMax = charCountMax;
+            RegExp = regExp;
+            PropertyId = propertyId;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// Gets or sets uniquie value flag constrain
+        /// </summary>
+        [JsonProperty(PropertyName = "isUnique")]
+        public bool? IsUnique { get; set; }
+
+        /// <summary>
+        /// Gets or sets down chars count border or null if no defined
+        /// </summary>
+        [JsonProperty(PropertyName = "charCountMin")]
+        public int? CharCountMin { get; set; }
+
+        /// <summary>
+        /// Gets or sets upper chars count border or null if no defined
+        /// </summary>
+        [JsonProperty(PropertyName = "charCountMax")]
+        public int? CharCountMax { get; set; }
+
+        /// <summary>
+        /// Gets or sets custom regular expression
+        /// </summary>
+        [JsonProperty(PropertyName = "regExp")]
+        public string RegExp { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "propertyId")]
+        public string PropertyId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class Property
+    {
+        /// <summary>
+        /// Initializes a new instance of the Property class.
+        /// </summary>
+        public Property()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Property class.
+        /// </summary>
+        /// <param name="isReadOnly">Gets or sets a value indicating whether
+        /// user can change property value.</param>
+        /// <param name="isManageable">Gets or sets a value indicating whether
+        /// user can change property metadata or remove this property.</param>
+        /// <param name="isNew">Gets or sets a value indicating whether this
+        /// instance is new. A new property should be created on server site
+        /// instead of trying to update it.</param>
+        /// <param name="catalogId">Gets or sets the catalog id that this
+        /// product belongs to.</param>
+        /// <param name="categoryId">Gets or sets the category id that this
+        /// product belongs to.</param>
+        /// <param name="hidden">Gets or sets a value indicating whether this
+        /// VirtoCommerce.CatalogModule.Core.Model.Property is hidden.</param>
+        /// <param name="valueType">Possible values include: 'ShortText',
+        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
+        /// 'GeoPoint'</param>
+        /// <param name="type">Possible values include: 'Product', 'Variation',
+        /// 'Category', 'Catalog'</param>
+        public Property(bool? isReadOnly = default(bool?), bool? isManageable = default(bool?), bool? isNew = default(bool?), string catalogId = default(string), string categoryId = default(string), string name = default(string), bool? required = default(bool?), bool? dictionary = default(bool?), bool? multivalue = default(bool?), bool? multilanguage = default(bool?), bool? hidden = default(bool?), string valueType = default(string), string type = default(string), string outerId = default(string), IList<PropertyValue> values = default(IList<PropertyValue>), IList<PropertyAttribute> attributes = default(IList<PropertyAttribute>), IList<PropertyDisplayName> displayNames = default(IList<PropertyDisplayName>), IList<PropertyValidationRule> validationRules = default(IList<PropertyValidationRule>), PropertyValidationRule validationRule = default(PropertyValidationRule), bool? isInherited = default(bool?), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        {
+            IsReadOnly = isReadOnly;
+            IsManageable = isManageable;
+            IsNew = isNew;
+            CatalogId = catalogId;
+            CategoryId = categoryId;
+            Name = name;
+            Required = required;
+            Dictionary = dictionary;
+            Multivalue = multivalue;
+            Multilanguage = multilanguage;
+            Hidden = hidden;
+            ValueType = valueType;
+            Type = type;
+            OuterId = outerId;
+            Values = values;
+            Attributes = attributes;
+            DisplayNames = displayNames;
+            ValidationRules = validationRules;
+            ValidationRule = validationRule;
+            IsInherited = isInherited;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// Gets or sets a value indicating whether user can change property
+        /// value.
+        /// </summary>
+        [JsonProperty(PropertyName = "isReadOnly")]
+        public bool? IsReadOnly { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether user can change property
+        /// metadata or remove this property.
+        /// </summary>
+        [JsonProperty(PropertyName = "isManageable")]
+        public bool? IsManageable { get; private set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is new. A new
+        /// property should be created on server site instead of trying to
+        /// update it.
+        /// </summary>
+        [JsonProperty(PropertyName = "isNew")]
+        public bool? IsNew { get; set; }
+
+        /// <summary>
+        /// Gets or sets the catalog id that this product belongs to.
         /// </summary>
         [JsonProperty(PropertyName = "catalogId")]
         public string CatalogId { get; set; }
 
         /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "catalog")]
-        public Catalog Catalog { get; set; }
-
-        /// <summary>
+        /// Gets or sets the category id that this product belongs to.
         /// </summary>
         [JsonProperty(PropertyName = "categoryId")]
         public string CategoryId { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "category")]
-        public Category Category { get; set; }
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "required")]
+        public bool? Required { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "dictionary")]
+        public bool? Dictionary { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "multivalue")]
+        public bool? Multivalue { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "multilanguage")]
+        public bool? Multilanguage { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this
+        /// VirtoCommerce.CatalogModule.Core.Model.Property is hidden.
+        /// </summary>
+        [JsonProperty(PropertyName = "hidden")]
+        public bool? Hidden { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'ShortText', 'LongText',
+        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
+        /// </summary>
+        [JsonProperty(PropertyName = "valueType")]
+        public string ValueType { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Product', 'Variation',
+        /// 'Category', 'Catalog'
+        /// </summary>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "values")]
+        public IList<PropertyValue> Values { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "attributes")]
+        public IList<PropertyAttribute> Attributes { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "displayNames")]
+        public IList<PropertyDisplayName> DisplayNames { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "validationRules")]
+        public IList<PropertyValidationRule> ValidationRules { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "validationRule")]
+        public PropertyValidationRule ValidationRule { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isInherited")]
+        public bool? IsInherited { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
     }
 }
@@ -6448,13 +6874,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <param name="languageCode">Gets or sets the asset language.</param>
         /// <param name="isInherited">System flag used to mark that object was
         /// inherited from other</param>
-        public Image(int? sortOrder = default(int?), byte[] binaryData = default(byte[]), string relativeUrl = default(string), string url = default(string), bool? hasExternalUrl = default(bool?), string typeId = default(string), string group = default(string), string name = default(string), string outerId = default(string), string languageCode = default(string), bool? isInherited = default(bool?), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Image(int? sortOrder = default(int?), byte[] binaryData = default(byte[]), string relativeUrl = default(string), string url = default(string), string typeId = default(string), string group = default(string), string name = default(string), string outerId = default(string), string languageCode = default(string), bool? isInherited = default(bool?), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             SortOrder = sortOrder;
             BinaryData = binaryData;
             RelativeUrl = relativeUrl;
             Url = url;
-            HasExternalUrl = hasExternalUrl;
             TypeId = typeId;
             Group = group;
             Name = name;
@@ -6498,9 +6923,180 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         public string Url { get; set; }
 
         /// <summary>
+        /// Gets or sets the asset type identifier.
         /// </summary>
-        [JsonProperty(PropertyName = "hasExternalUrl")]
-        public bool? HasExternalUrl { get; private set; }
+        [JsonProperty(PropertyName = "typeId")]
+        public string TypeId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the asset group name.
+        /// </summary>
+        [JsonProperty(PropertyName = "group")]
+        public string Group { get; set; }
+
+        /// <summary>
+        /// Gets or sets the asset name.
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the asset language.
+        /// </summary>
+        [JsonProperty(PropertyName = "languageCode")]
+        public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// Gets system flag used to mark that object was inherited from other
+        /// </summary>
+        [JsonProperty(PropertyName = "isInherited")]
+        public bool? IsInherited { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "seoObjectType")]
+        public string SeoObjectType { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "seoInfos")]
+        public IList<SeoInfo> SeoInfos { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
+        public bool? ShouldSerializeAuditableProperties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class Asset
+    {
+        /// <summary>
+        /// Initializes a new instance of the Asset class.
+        /// </summary>
+        public Asset()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Asset class.
+        /// </summary>
+        /// <param name="typeId">Gets or sets the asset type
+        /// identifier.</param>
+        /// <param name="group">Gets or sets the asset group name.</param>
+        /// <param name="name">Gets or sets the asset name.</param>
+        /// <param name="languageCode">Gets or sets the asset language.</param>
+        /// <param name="isInherited">System flag used to mark that object was
+        /// inherited from other</param>
+        public Asset(string mimeType = default(string), long? size = default(long?), string readableSize = default(string), byte[] binaryData = default(byte[]), string relativeUrl = default(string), string url = default(string), string typeId = default(string), string group = default(string), string name = default(string), string outerId = default(string), string languageCode = default(string), bool? isInherited = default(bool?), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        {
+            MimeType = mimeType;
+            Size = size;
+            ReadableSize = readableSize;
+            BinaryData = binaryData;
+            RelativeUrl = relativeUrl;
+            Url = url;
+            TypeId = typeId;
+            Group = group;
+            Name = name;
+            OuterId = outerId;
+            LanguageCode = languageCode;
+            IsInherited = isInherited;
+            SeoObjectType = seoObjectType;
+            SeoInfos = seoInfos;
+            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "mimeType")]
+        public string MimeType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "size")]
+        public long? Size { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "readableSize")]
+        public string ReadableSize { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "binaryData")]
+        public byte[] BinaryData { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "relativeUrl")]
+        public string RelativeUrl { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "url")]
+        public string Url { get; set; }
 
         /// <summary>
         /// Gets or sets the asset type identifier.
@@ -6763,24 +7359,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <param name="imgSrc">Gets the default image</param>
         /// <param name="isInherited">System flag used to mark that object was
         /// inherited from other</param>
-        public Category(string catalogId = default(string), Catalog catalog = default(Catalog), string parentId = default(string), Category parent = default(Category), string code = default(string), string name = default(string), string outline = default(string), string path = default(string), bool? isVirtual = default(bool?), int? level = default(int?), IList<Category> parents = default(IList<Category>), string packageType = default(string), int? priority = default(int?), bool? isActive = default(bool?), string outerId = default(string), IList<Category> children = default(IList<Category>), IList<Property> properties = default(IList<Property>), IList<CategoryLink> links = default(IList<CategoryLink>), string taxType = default(string), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), string imgSrc = default(string), IList<Image> images = default(IList<Image>), IList<Outline> outlines = default(IList<Outline>), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public Category(string catalogId = default(string), string parentId = default(string), string code = default(string), string name = default(string), string outline = default(string), string path = default(string), bool? isVirtual = default(bool?), int? level = default(int?), string packageType = default(string), int? priority = default(int?), bool? isActive = default(bool?), string outerId = default(string), IList<Property> properties = default(IList<Property>), IList<CategoryLink> links = default(IList<CategoryLink>), string taxType = default(string), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), string imgSrc = default(string), IList<Image> images = default(IList<Image>), IList<Outline> outlines = default(IList<Outline>), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             CatalogId = catalogId;
-            Catalog = catalog;
             ParentId = parentId;
-            Parent = parent;
             Code = code;
             Name = name;
             Outline = outline;
             Path = path;
             IsVirtual = isVirtual;
             Level = level;
-            Parents = parents;
             PackageType = packageType;
             Priority = priority;
             IsActive = isActive;
             OuterId = outerId;
-            Children = children;
             Properties = properties;
             Links = links;
             TaxType = taxType;
@@ -6794,7 +7386,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -6811,18 +7402,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "catalog")]
-        public Catalog Catalog { get; set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "parentId")]
         public string ParentId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "parent")]
-        public Category Parent { get; set; }
 
         /// <summary>
         /// </summary>
@@ -6860,11 +7441,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "parents")]
-        public IList<Category> Parents { get; set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "packageType")]
         public string PackageType { get; set; }
 
@@ -6882,11 +7458,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "outerId")]
         public string OuterId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "children")]
-        public IList<Category> Children { get; set; }
 
         /// <summary>
         /// </summary>
@@ -6957,11 +7528,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
@@ -6986,483 +7552,34 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class PropertyValue
+    public partial class CategoryLink
     {
         /// <summary>
-        /// Initializes a new instance of the PropertyValue class.
+        /// Initializes a new instance of the CategoryLink class.
         /// </summary>
-        public PropertyValue()
+        public CategoryLink()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the PropertyValue class.
+        /// Initializes a new instance of the CategoryLink class.
         /// </summary>
-        /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
-        /// 'GeoPoint'</param>
-        public PropertyValue(string propertyName = default(string), string propertyId = default(string), string languageCode = default(string), Property property = default(Property), string alias = default(string), string valueType = default(string), string valueId = default(string), object value = default(object), bool? propertyMultivalue = default(bool?), bool? isEmpty = default(bool?), string outerId = default(string), bool? isInherited = default(bool?), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        /// <param name="entryId">Entry identifier which this link belongs
+        /// to</param>
+        /// <param name="listEntryType">Gets or sets the type of the list
+        /// entry. E.g. "product", "category"</param>
+        /// <param name="priority">Product order position in virtual
+        /// catalog</param>
+        public CategoryLink(string entryId = default(string), string listEntryId = default(string), string listEntryType = default(string), int? priority = default(int?), string catalogId = default(string), string categoryId = default(string), Category category = default(Category))
         {
-            PropertyName = propertyName;
-            PropertyId = propertyId;
-            LanguageCode = languageCode;
-            Property = property;
-            Alias = alias;
-            ValueType = valueType;
-            ValueId = valueId;
-            Value = value;
-            PropertyMultivalue = propertyMultivalue;
-            IsEmpty = isEmpty;
-            OuterId = outerId;
-            IsInherited = isInherited;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyName")]
-        public string PropertyName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyId")]
-        public string PropertyId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "languageCode")]
-        public string LanguageCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "property")]
-        public Property Property { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "alias")]
-        public string Alias { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
-        /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "valueId")]
-        public string ValueId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "value")]
-        public object Value { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyMultivalue")]
-        public bool? PropertyMultivalue { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isEmpty")]
-        public bool? IsEmpty { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "outerId")]
-        public string OuterId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isInherited")]
-        public bool? IsInherited { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class PropertyAttribute
-    {
-        /// <summary>
-        /// Initializes a new instance of the PropertyAttribute class.
-        /// </summary>
-        public PropertyAttribute()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PropertyAttribute class.
-        /// </summary>
-        public PropertyAttribute(string propertyId = default(string), Property property = default(Property), string value = default(string), string name = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
-        {
-            PropertyId = propertyId;
-            Property = property;
-            Value = value;
-            Name = name;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyId")]
-        public string PropertyId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "property")]
-        public Property Property { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "value")]
-        public string Value { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class PropertyDisplayName
-    {
-        /// <summary>
-        /// Initializes a new instance of the PropertyDisplayName class.
-        /// </summary>
-        public PropertyDisplayName()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PropertyDisplayName class.
-        /// </summary>
-        public PropertyDisplayName(string name = default(string), string languageCode = default(string))
-        {
-            Name = name;
-            LanguageCode = languageCode;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "languageCode")]
-        public string LanguageCode { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    /// <summary>
-    /// Represents property validation rules definition
-    /// </summary>
-    public partial class PropertyValidationRule
-    {
-        /// <summary>
-        /// Initializes a new instance of the PropertyValidationRule class.
-        /// </summary>
-        public PropertyValidationRule()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PropertyValidationRule class.
-        /// </summary>
-        /// <param name="isUnique">Uniquie value flag constrain</param>
-        /// <param name="charCountMin">Down chars count border or null if no
-        /// defined</param>
-        /// <param name="charCountMax">Upper chars count border or null if no
-        /// defined</param>
-        /// <param name="regExp">Custom regular expression</param>
-        public PropertyValidationRule(bool? isUnique = default(bool?), int? charCountMin = default(int?), int? charCountMax = default(int?), string regExp = default(string), string propertyId = default(string), Property property = default(Property), string id = default(string))
-        {
-            IsUnique = isUnique;
-            CharCountMin = charCountMin;
-            CharCountMax = charCountMax;
-            RegExp = regExp;
-            PropertyId = propertyId;
-            Property = property;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// Gets or sets uniquie value flag constrain
-        /// </summary>
-        [JsonProperty(PropertyName = "isUnique")]
-        public bool? IsUnique { get; set; }
-
-        /// <summary>
-        /// Gets or sets down chars count border or null if no defined
-        /// </summary>
-        [JsonProperty(PropertyName = "charCountMin")]
-        public int? CharCountMin { get; set; }
-
-        /// <summary>
-        /// Gets or sets upper chars count border or null if no defined
-        /// </summary>
-        [JsonProperty(PropertyName = "charCountMax")]
-        public int? CharCountMax { get; set; }
-
-        /// <summary>
-        /// Gets or sets custom regular expression
-        /// </summary>
-        [JsonProperty(PropertyName = "regExp")]
-        public string RegExp { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyId")]
-        public string PropertyId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "property")]
-        public Property Property { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Property
-    {
-        /// <summary>
-        /// Initializes a new instance of the Property class.
-        /// </summary>
-        public Property()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Property class.
-        /// </summary>
-        /// <param name="isReadOnly">Gets or sets a value indicating whether
-        /// user can change property value.</param>
-        /// <param name="isManageable">Gets or sets a value indicating whether
-        /// user can change property metadata or remove this property.</param>
-        /// <param name="isNew">Gets or sets a value indicating whether this
-        /// instance is new. A new property should be created on server site
-        /// instead of trying to update it.</param>
-        /// <param name="catalogId">Gets or sets the catalog id that this
-        /// product belongs to.</param>
-        /// <param name="categoryId">Gets or sets the category id that this
-        /// product belongs to.</param>
-        /// <param name="hidden">Gets or sets a value indicating whether this
-        /// VirtoCommerce.CatalogModule.Core.Model.Property is hidden.</param>
-        /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
-        /// 'GeoPoint'</param>
-        /// <param name="type">Possible values include: 'Product', 'Variation',
-        /// 'Category', 'Catalog'</param>
-        public Property(bool? isReadOnly = default(bool?), bool? isManageable = default(bool?), bool? isNew = default(bool?), string catalogId = default(string), Catalog catalog = default(Catalog), string categoryId = default(string), Category category = default(Category), string name = default(string), bool? required = default(bool?), bool? dictionary = default(bool?), bool? multivalue = default(bool?), bool? multilanguage = default(bool?), bool? hidden = default(bool?), string valueType = default(string), string type = default(string), string outerId = default(string), IList<PropertyValue> values = default(IList<PropertyValue>), IList<PropertyAttribute> attributes = default(IList<PropertyAttribute>), IList<PropertyDisplayName> displayNames = default(IList<PropertyDisplayName>), IList<PropertyValidationRule> validationRules = default(IList<PropertyValidationRule>), PropertyValidationRule validationRule = default(PropertyValidationRule), bool? isInherited = default(bool?), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            IsReadOnly = isReadOnly;
-            IsManageable = isManageable;
-            IsNew = isNew;
+            EntryId = entryId;
+            ListEntryId = listEntryId;
+            ListEntryType = listEntryType;
+            Priority = priority;
             CatalogId = catalogId;
-            Catalog = catalog;
             CategoryId = categoryId;
             Category = category;
-            Name = name;
-            Required = required;
-            Dictionary = dictionary;
-            Multivalue = multivalue;
-            Multilanguage = multilanguage;
-            Hidden = hidden;
-            ValueType = valueType;
-            Type = type;
-            OuterId = outerId;
-            Values = values;
-            Attributes = attributes;
-            DisplayNames = displayNames;
-            ValidationRules = validationRules;
-            ValidationRule = validationRule;
-            IsInherited = isInherited;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
             CustomInit();
         }
 
@@ -7472,40 +7589,34 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets a value indicating whether user can change property
-        /// value.
+        /// Gets entry identifier which this link belongs to
         /// </summary>
-        [JsonProperty(PropertyName = "isReadOnly")]
-        public bool? IsReadOnly { get; set; }
+        [JsonProperty(PropertyName = "entryId")]
+        public string EntryId { get; private set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether user can change property
-        /// metadata or remove this property.
         /// </summary>
-        [JsonProperty(PropertyName = "isManageable")]
-        public bool? IsManageable { get; private set; }
+        [JsonProperty(PropertyName = "listEntryId")]
+        public string ListEntryId { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is new. A new
-        /// property should be created on server site instead of trying to
-        /// update it.
+        /// Gets or sets the type of the list entry. E.g. "product", "category"
         /// </summary>
-        [JsonProperty(PropertyName = "isNew")]
-        public bool? IsNew { get; set; }
+        [JsonProperty(PropertyName = "listEntryType")]
+        public string ListEntryType { get; set; }
 
         /// <summary>
-        /// Gets or sets the catalog id that this product belongs to.
+        /// Gets or sets product order position in virtual catalog
+        /// </summary>
+        [JsonProperty(PropertyName = "priority")]
+        public int? Priority { get; set; }
+
+        /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "catalogId")]
         public string CatalogId { get; set; }
 
         /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "catalog")]
-        public Catalog Catalog { get; set; }
-
-        /// <summary>
-        /// Gets or sets the category id that this product belongs to.
         /// </summary>
         [JsonProperty(PropertyName = "categoryId")]
         public string CategoryId { get; set; }
@@ -7514,415 +7625,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "category")]
         public Category Category { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "required")]
-        public bool? Required { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "dictionary")]
-        public bool? Dictionary { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "multivalue")]
-        public bool? Multivalue { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "multilanguage")]
-        public bool? Multilanguage { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this
-        /// VirtoCommerce.CatalogModule.Core.Model.Property is hidden.
-        /// </summary>
-        [JsonProperty(PropertyName = "hidden")]
-        public bool? Hidden { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
-        /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Product', 'Variation',
-        /// 'Category', 'Catalog'
-        /// </summary>
-        [JsonProperty(PropertyName = "type")]
-        public string Type { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "outerId")]
-        public string OuterId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "values")]
-        public IList<PropertyValue> Values { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "attributes")]
-        public IList<PropertyAttribute> Attributes { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "displayNames")]
-        public IList<PropertyDisplayName> DisplayNames { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "validationRules")]
-        public IList<PropertyValidationRule> ValidationRules { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "validationRule")]
-        public PropertyValidationRule ValidationRule { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isInherited")]
-        public bool? IsInherited { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Catalog
-    {
-        /// <summary>
-        /// Initializes a new instance of the Catalog class.
-        /// </summary>
-        public Catalog()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Catalog class.
-        /// </summary>
-        public Catalog(string name = default(string), bool? isVirtual = default(bool?), string outerId = default(string), CatalogLanguage defaultLanguage = default(CatalogLanguage), IList<CatalogLanguage> languages = default(IList<CatalogLanguage>), IList<Property> properties = default(IList<Property>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
-        {
-            Name = name;
-            IsVirtual = isVirtual;
-            OuterId = outerId;
-            DefaultLanguage = defaultLanguage;
-            Languages = languages;
-            Properties = properties;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isVirtual")]
-        public bool? IsVirtual { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "outerId")]
-        public string OuterId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "defaultLanguage")]
-        public CatalogLanguage DefaultLanguage { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "languages")]
-        public IList<CatalogLanguage> Languages { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "properties")]
-        public IList<Property> Properties { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Asset
-    {
-        /// <summary>
-        /// Initializes a new instance of the Asset class.
-        /// </summary>
-        public Asset()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Asset class.
-        /// </summary>
-        /// <param name="typeId">Gets or sets the asset type
-        /// identifier.</param>
-        /// <param name="group">Gets or sets the asset group name.</param>
-        /// <param name="name">Gets or sets the asset name.</param>
-        /// <param name="languageCode">Gets or sets the asset language.</param>
-        /// <param name="isInherited">System flag used to mark that object was
-        /// inherited from other</param>
-        public Asset(string mimeType = default(string), long? size = default(long?), string readableSize = default(string), byte[] binaryData = default(byte[]), string relativeUrl = default(string), string url = default(string), bool? hasExternalUrl = default(bool?), string typeId = default(string), string group = default(string), string name = default(string), string outerId = default(string), string languageCode = default(string), bool? isInherited = default(bool?), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            MimeType = mimeType;
-            Size = size;
-            ReadableSize = readableSize;
-            BinaryData = binaryData;
-            RelativeUrl = relativeUrl;
-            Url = url;
-            HasExternalUrl = hasExternalUrl;
-            TypeId = typeId;
-            Group = group;
-            Name = name;
-            OuterId = outerId;
-            LanguageCode = languageCode;
-            IsInherited = isInherited;
-            SeoObjectType = seoObjectType;
-            SeoInfos = seoInfos;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "mimeType")]
-        public string MimeType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "size")]
-        public long? Size { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "readableSize")]
-        public string ReadableSize { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "binaryData")]
-        public byte[] BinaryData { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "relativeUrl")]
-        public string RelativeUrl { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "url")]
-        public string Url { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "hasExternalUrl")]
-        public bool? HasExternalUrl { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the asset type identifier.
-        /// </summary>
-        [JsonProperty(PropertyName = "typeId")]
-        public string TypeId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the asset group name.
-        /// </summary>
-        [JsonProperty(PropertyName = "group")]
-        public string Group { get; set; }
-
-        /// <summary>
-        /// Gets or sets the asset name.
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "outerId")]
-        public string OuterId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the asset language.
-        /// </summary>
-        [JsonProperty(PropertyName = "languageCode")]
-        public string LanguageCode { get; set; }
-
-        /// <summary>
-        /// Gets system flag used to mark that object was inherited from other
-        /// </summary>
-        [JsonProperty(PropertyName = "isInherited")]
-        public bool? IsInherited { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "seoObjectType")]
-        public string SeoObjectType { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "seoInfos")]
-        public IList<SeoInfo> SeoInfos { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
 
     }
 }
@@ -8049,56 +7751,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class Entity
-    {
-        /// <summary>
-        /// Initializes a new instance of the Entity class.
-        /// </summary>
-        public Entity()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Entity class.
-        /// </summary>
-        public Entity(string id = default(string))
-        {
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public partial class ProductAssociation
     {
         /// <summary>
@@ -8123,14 +7775,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// object</param>
         /// <param name="associatedObjectImg">Associated object image
         /// URL</param>
-        public ProductAssociation(string type = default(string), int? priority = default(int?), int? quantity = default(int?), string associatedObjectId = default(string), string associatedObjectType = default(string), Entity associatedObject = default(Entity), string outerId = default(string), string associatedObjectName = default(string), string associatedObjectImg = default(string), IList<string> tags = default(IList<string>), string imgSrc = default(string), IList<Image> images = default(IList<Image>))
+        public ProductAssociation(string type = default(string), int? priority = default(int?), int? quantity = default(int?), string associatedObjectId = default(string), string associatedObjectType = default(string), string outerId = default(string), string associatedObjectName = default(string), string associatedObjectImg = default(string), IList<string> tags = default(IList<string>), string imgSrc = default(string), IList<Image> images = default(IList<Image>))
         {
             Type = type;
             Priority = priority;
             Quantity = quantity;
             AssociatedObjectId = associatedObjectId;
             AssociatedObjectType = associatedObjectType;
-            AssociatedObject = associatedObject;
             OuterId = outerId;
             AssociatedObjectName = associatedObjectName;
             AssociatedObjectImg = associatedObjectImg;
@@ -8175,11 +7826,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "associatedObjectType")]
         public string AssociatedObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "associatedObject")]
-        public Entity AssociatedObject { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8267,21 +7913,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// this property to use other object type for seo records</param>
         /// <param name="isInherited">System flag used to mark that object was
         /// inherited from other</param>
-        public Variation(string code = default(string), string manufacturerPartNumber = default(string), string gtin = default(string), string name = default(string), string catalogId = default(string), Catalog catalog = default(Catalog), string categoryId = default(string), Category category = default(Category), string outline = default(string), string path = default(string), string titularItemId = default(string), string mainProductId = default(string), CatalogProduct mainProduct = default(CatalogProduct), bool? isBuyable = default(bool?), bool? isActive = default(bool?), bool? trackInventory = default(bool?), System.DateTime? indexingDate = default(System.DateTime?), int? maxQuantity = default(int?), int? minQuantity = default(int?), string productType = default(string), string packageType = default(string), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), bool? enableReview = default(bool?), int? maxNumberOfDownload = default(int?), System.DateTime? downloadExpiration = default(System.DateTime?), string downloadType = default(string), bool? hasUserAgreement = default(bool?), string shippingType = default(string), string taxType = default(string), string vendor = default(string), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), int? priority = default(int?), string outerId = default(string), IList<Property> properties = default(IList<Property>), IList<PropertyValue> propertyValues = default(IList<PropertyValue>), string imgSrc = default(string), IList<Image> images = default(IList<Image>), IList<Asset> assets = default(IList<Asset>), IList<CategoryLink> links = default(IList<CategoryLink>), IList<Variation> variations = default(IList<Variation>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), IList<EditorialReview> reviews = default(IList<EditorialReview>), IList<ProductAssociation> associations = default(IList<ProductAssociation>), IList<ProductAssociation> referencedAssociations = default(IList<ProductAssociation>), IList<Outline> outlines = default(IList<Outline>), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public Variation(string code = default(string), string manufacturerPartNumber = default(string), string gtin = default(string), string name = default(string), string catalogId = default(string), string categoryId = default(string), string outline = default(string), string path = default(string), string titularItemId = default(string), string mainProductId = default(string), bool? isBuyable = default(bool?), bool? isActive = default(bool?), bool? trackInventory = default(bool?), System.DateTime? indexingDate = default(System.DateTime?), int? maxQuantity = default(int?), int? minQuantity = default(int?), string productType = default(string), string packageType = default(string), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), bool? enableReview = default(bool?), int? maxNumberOfDownload = default(int?), System.DateTime? downloadExpiration = default(System.DateTime?), string downloadType = default(string), bool? hasUserAgreement = default(bool?), string shippingType = default(string), string taxType = default(string), string vendor = default(string), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), int? priority = default(int?), string outerId = default(string), IList<Property> properties = default(IList<Property>), IList<PropertyValue> propertyValues = default(IList<PropertyValue>), string imgSrc = default(string), IList<Image> images = default(IList<Image>), IList<Asset> assets = default(IList<Asset>), IList<CategoryLink> links = default(IList<CategoryLink>), IList<Variation> variations = default(IList<Variation>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), IList<EditorialReview> reviews = default(IList<EditorialReview>), IList<ProductAssociation> associations = default(IList<ProductAssociation>), IList<ProductAssociation> referencedAssociations = default(IList<ProductAssociation>), IList<Outline> outlines = default(IList<Outline>), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Code = code;
             ManufacturerPartNumber = manufacturerPartNumber;
             Gtin = gtin;
             Name = name;
             CatalogId = catalogId;
-            Catalog = catalog;
             CategoryId = categoryId;
-            Category = category;
             Outline = outline;
             Path = path;
             TitularItemId = titularItemId;
             MainProductId = mainProductId;
-            MainProduct = mainProduct;
             IsBuyable = isBuyable;
             IsActive = isActive;
             TrackInventory = trackInventory;
@@ -8326,7 +7969,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -8367,18 +8009,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "catalog")]
-        public Catalog Catalog { get; set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "categoryId")]
         public string CategoryId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "category")]
-        public Category Category { get; set; }
 
         /// <summary>
         /// Gets product outline in physical catalog (all parent categories ids
@@ -8403,11 +8035,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "mainProductId")]
         public string MainProductId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "mainProduct")]
-        public CatalogProduct MainProduct { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8636,11 +8263,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -8701,21 +8323,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// this property to use other object type for seo records</param>
         /// <param name="isInherited">System flag used to mark that object was
         /// inherited from other</param>
-        public CatalogProduct(string code = default(string), string manufacturerPartNumber = default(string), string gtin = default(string), string name = default(string), string catalogId = default(string), Catalog catalog = default(Catalog), string categoryId = default(string), Category category = default(Category), string outline = default(string), string path = default(string), string titularItemId = default(string), string mainProductId = default(string), CatalogProduct mainProduct = default(CatalogProduct), bool? isBuyable = default(bool?), bool? isActive = default(bool?), bool? trackInventory = default(bool?), System.DateTime? indexingDate = default(System.DateTime?), int? maxQuantity = default(int?), int? minQuantity = default(int?), string productType = default(string), string packageType = default(string), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), bool? enableReview = default(bool?), int? maxNumberOfDownload = default(int?), System.DateTime? downloadExpiration = default(System.DateTime?), string downloadType = default(string), bool? hasUserAgreement = default(bool?), string shippingType = default(string), string taxType = default(string), string vendor = default(string), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), int? priority = default(int?), string outerId = default(string), IList<Property> properties = default(IList<Property>), IList<PropertyValue> propertyValues = default(IList<PropertyValue>), string imgSrc = default(string), IList<Image> images = default(IList<Image>), IList<Asset> assets = default(IList<Asset>), IList<CategoryLink> links = default(IList<CategoryLink>), IList<Variation> variations = default(IList<Variation>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), IList<EditorialReview> reviews = default(IList<EditorialReview>), IList<ProductAssociation> associations = default(IList<ProductAssociation>), IList<ProductAssociation> referencedAssociations = default(IList<ProductAssociation>), IList<Outline> outlines = default(IList<Outline>), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public CatalogProduct(string code = default(string), string manufacturerPartNumber = default(string), string gtin = default(string), string name = default(string), string catalogId = default(string), string categoryId = default(string), string outline = default(string), string path = default(string), string titularItemId = default(string), string mainProductId = default(string), bool? isBuyable = default(bool?), bool? isActive = default(bool?), bool? trackInventory = default(bool?), System.DateTime? indexingDate = default(System.DateTime?), int? maxQuantity = default(int?), int? minQuantity = default(int?), string productType = default(string), string packageType = default(string), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), bool? enableReview = default(bool?), int? maxNumberOfDownload = default(int?), System.DateTime? downloadExpiration = default(System.DateTime?), string downloadType = default(string), bool? hasUserAgreement = default(bool?), string shippingType = default(string), string taxType = default(string), string vendor = default(string), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), int? priority = default(int?), string outerId = default(string), IList<Property> properties = default(IList<Property>), IList<PropertyValue> propertyValues = default(IList<PropertyValue>), string imgSrc = default(string), IList<Image> images = default(IList<Image>), IList<Asset> assets = default(IList<Asset>), IList<CategoryLink> links = default(IList<CategoryLink>), IList<Variation> variations = default(IList<Variation>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), IList<EditorialReview> reviews = default(IList<EditorialReview>), IList<ProductAssociation> associations = default(IList<ProductAssociation>), IList<ProductAssociation> referencedAssociations = default(IList<ProductAssociation>), IList<Outline> outlines = default(IList<Outline>), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Code = code;
             ManufacturerPartNumber = manufacturerPartNumber;
             Gtin = gtin;
             Name = name;
             CatalogId = catalogId;
-            Catalog = catalog;
             CategoryId = categoryId;
-            Category = category;
             Outline = outline;
             Path = path;
             TitularItemId = titularItemId;
             MainProductId = mainProductId;
-            MainProduct = mainProduct;
             IsBuyable = isBuyable;
             IsActive = isActive;
             TrackInventory = trackInventory;
@@ -8760,7 +8379,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -8801,18 +8419,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "catalog")]
-        public Catalog Catalog { get; set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "categoryId")]
         public string CategoryId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "category")]
-        public Category Category { get; set; }
 
         /// <summary>
         /// Gets product outline in physical catalog (all parent categories ids
@@ -8837,11 +8445,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "mainProductId")]
         public string MainProductId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "mainProduct")]
-        public CatalogProduct MainProduct { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9070,11 +8673,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -9483,6 +9081,234 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "results")]
         public IList<PricelistAssignment> Results { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class CatalogLanguage
+    {
+        /// <summary>
+        /// Initializes a new instance of the CatalogLanguage class.
+        /// </summary>
+        public CatalogLanguage()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the CatalogLanguage class.
+        /// </summary>
+        public CatalogLanguage(string catalogId = default(string), bool? isDefault = default(bool?), string languageCode = default(string), string id = default(string))
+        {
+            CatalogId = catalogId;
+            IsDefault = isDefault;
+            LanguageCode = languageCode;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "catalogId")]
+        public string CatalogId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isDefault")]
+        public bool? IsDefault { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "languageCode")]
+        public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class Catalog
+    {
+        /// <summary>
+        /// Initializes a new instance of the Catalog class.
+        /// </summary>
+        public Catalog()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Catalog class.
+        /// </summary>
+        public Catalog(string name = default(string), bool? isVirtual = default(bool?), string outerId = default(string), CatalogLanguage defaultLanguage = default(CatalogLanguage), IList<CatalogLanguage> languages = default(IList<CatalogLanguage>), IList<Property> properties = default(IList<Property>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        {
+            Name = name;
+            IsVirtual = isVirtual;
+            OuterId = outerId;
+            DefaultLanguage = defaultLanguage;
+            Languages = languages;
+            Properties = properties;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isVirtual")]
+        public bool? IsVirtual { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "defaultLanguage")]
+        public CatalogLanguage DefaultLanguage { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "languages")]
+        public IList<CatalogLanguage> Languages { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "properties")]
+        public IList<Property> Properties { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class Entity
+    {
+        /// <summary>
+        /// Initializes a new instance of the Entity class.
+        /// </summary>
+        public Entity()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Entity class.
+        /// </summary>
+        public Entity(string id = default(string))
+        {
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
     }
 }

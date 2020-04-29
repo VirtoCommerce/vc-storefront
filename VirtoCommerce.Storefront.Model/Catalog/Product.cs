@@ -31,6 +31,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         }
 
         [JsonIgnore]
+
         public Lazy<Category> Category { get; set; }
 
         public string Handle => SeoInfo?.Slug ?? Id;

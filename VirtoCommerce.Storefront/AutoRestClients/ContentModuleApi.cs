@@ -3420,7 +3420,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the MenuLink class.
         /// </summary>
-        public MenuLink(string title = default(string), string url = default(string), int? priority = default(int?), string menuLinkListId = default(string), string associatedObjectId = default(string), string associatedObjectName = default(string), string associatedObjectType = default(string), IList<string> securityScopes = default(IList<string>), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public MenuLink(string title = default(string), string url = default(string), int? priority = default(int?), string menuLinkListId = default(string), string associatedObjectId = default(string), string associatedObjectName = default(string), string associatedObjectType = default(string), IList<string> securityScopes = default(IList<string>), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Title = title;
             Url = url;
@@ -3435,7 +3435,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -3512,11 +3511,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
@@ -3554,7 +3548,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the MenuLinkList class.
         /// </summary>
-        public MenuLinkList(string name = default(string), string storeId = default(string), string language = default(string), IList<MenuLink> menuLinks = default(IList<MenuLink>), IList<string> securityScopes = default(IList<string>), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public MenuLinkList(string name = default(string), string storeId = default(string), string language = default(string), IList<MenuLink> menuLinks = default(IList<MenuLink>), IList<string> securityScopes = default(IList<string>), string outerId = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             StoreId = storeId;
@@ -3566,7 +3560,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -3625,11 +3618,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>

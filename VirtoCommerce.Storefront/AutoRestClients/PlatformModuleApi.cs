@@ -13228,7 +13228,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<UserApiKey>>> SaveUserApiKey1WithHttpMessagesAsync(UserApiKey body = default(UserApiKey), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<UserApiKey>>> UpdateUserApiKeyWithHttpMessagesAsync(UserApiKey body = default(UserApiKey), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -13239,7 +13239,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "SaveUserApiKey1", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdateUserApiKey", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
@@ -14077,7 +14077,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<IList<UserApiKey>>> SaveUserApiKey1WithHttpMessagesAsync(UserApiKey body = default(UserApiKey), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<UserApiKey>>> UpdateUserApiKeyWithHttpMessagesAsync(UserApiKey body = default(UserApiKey), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='ids'>
         /// </param>
         /// <param name='customHeaders'>
@@ -15057,9 +15057,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// </param>
             /// <param name='body'>
             /// </param>
-            public static IList<UserApiKey> SaveUserApiKey1(this ISecurity operations, UserApiKey body = default(UserApiKey))
+            public static IList<UserApiKey> UpdateUserApiKey(this ISecurity operations, UserApiKey body = default(UserApiKey))
             {
-                return operations.SaveUserApiKey1Async(body).GetAwaiter().GetResult();
+                return operations.UpdateUserApiKeyAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
@@ -15070,9 +15070,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<UserApiKey>> SaveUserApiKey1Async(this ISecurity operations, UserApiKey body = default(UserApiKey), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<UserApiKey>> UpdateUserApiKeyAsync(this ISecurity operations, UserApiKey body = default(UserApiKey), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SaveUserApiKey1WithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.UpdateUserApiKeyWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -16133,7 +16133,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the BlobInfo class.
         /// </summary>
-        public BlobInfo(string key = default(string), long? size = default(long?), string contentType = default(string), string type = default(string), string name = default(string), string url = default(string), string relativeUrl = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public BlobInfo(string key = default(string), long? size = default(long?), string contentType = default(string), string type = default(string), string name = default(string), string url = default(string), string relativeUrl = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Key = key;
             Size = size;
@@ -16146,7 +16146,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -16213,11 +16212,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
@@ -16257,7 +16251,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         /// <param name="operationType">Possible values include: 'Detached',
         /// 'Unchanged', 'Added', 'Deleted', 'Modified'</param>
-        public OperationLog(string objectType = default(string), string objectId = default(string), string operationType = default(string), string detail = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public OperationLog(string objectType = default(string), string objectId = default(string), string operationType = default(string), string detail = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             ObjectType = objectType;
             ObjectId = objectId;
@@ -16267,7 +16261,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -16318,11 +16311,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -16423,7 +16411,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// Initializes a new instance of the DynamicPropertyDictionaryItem
         /// class.
         /// </summary>
-        public DynamicPropertyDictionaryItem(string propertyId = default(string), string name = default(string), IList<DynamicPropertyDictionaryItemName> displayNames = default(IList<DynamicPropertyDictionaryItemName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public DynamicPropertyDictionaryItem(string propertyId = default(string), string name = default(string), IList<DynamicPropertyDictionaryItemName> displayNames = default(IList<DynamicPropertyDictionaryItemName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             PropertyId = propertyId;
             Name = name;
@@ -16432,7 +16420,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -16476,11 +16463,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -16645,9 +16627,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the ModuleDescriptor class.
         /// </summary>
-        public ModuleDescriptor(ModuleIdentity identity = default(ModuleIdentity), string version = default(string), string platformVersion = default(string), string title = default(string), string description = default(string), IList<string> authors = default(IList<string>), IList<string> owners = default(IList<string>), string licenseUrl = default(string), string projectUrl = default(string), string iconUrl = default(string), bool? requireLicenseAcceptance = default(bool?), string releaseNotes = default(string), string copyright = default(string), string tags = default(string), IList<string> groups = default(IList<string>), IList<ModuleIdentity> dependencies = default(IList<ModuleIdentity>), IList<string> validationErrors = default(IList<string>), bool? isRemovable = default(bool?), bool? isInstalled = default(bool?), ModuleIdentity installedVersion = default(ModuleIdentity), string id = default(string))
+        public ModuleDescriptor(string version = default(string), string platformVersion = default(string), string title = default(string), string description = default(string), IList<string> authors = default(IList<string>), IList<string> owners = default(IList<string>), string licenseUrl = default(string), string projectUrl = default(string), string iconUrl = default(string), bool? requireLicenseAcceptance = default(bool?), string releaseNotes = default(string), string copyright = default(string), string tags = default(string), IList<string> groups = default(IList<string>), IList<ModuleIdentity> dependencies = default(IList<ModuleIdentity>), IList<string> validationErrors = default(IList<string>), bool? isRemovable = default(bool?), bool? isInstalled = default(bool?), ModuleIdentity installedVersion = default(ModuleIdentity), string id = default(string))
         {
-            Identity = identity;
             Version = version;
             PlatformVersion = platformVersion;
             Title = title;
@@ -16675,11 +16656,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "identity")]
-        public ModuleIdentity Identity { get; set; }
 
         /// <summary>
         /// </summary>
@@ -17200,7 +17176,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the UserApiKey class.
         /// </summary>
-        public UserApiKey(string apiKey = default(string), string userName = default(string), string userId = default(string), bool? isActive = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public UserApiKey(string apiKey = default(string), string userName = default(string), string userId = default(string), bool? isActive = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             ApiKey = apiKey;
             UserName = userName;
@@ -17210,7 +17186,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -17259,11 +17234,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -17615,7 +17585,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the AssetEntry class.
         /// </summary>
-        public AssetEntry(string languageCode = default(string), TenantIdentity tenant = default(TenantIdentity), BlobInfo blobInfo = default(BlobInfo), string group = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public AssetEntry(string languageCode = default(string), TenantIdentity tenant = default(TenantIdentity), BlobInfo blobInfo = default(BlobInfo), string group = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             LanguageCode = languageCode;
             Tenant = tenant;
@@ -17625,7 +17595,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -17674,11 +17643,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -17775,7 +17739,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the BlobEntry class.
         /// </summary>
-        public BlobEntry(string type = default(string), string name = default(string), string url = default(string), string relativeUrl = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public BlobEntry(string type = default(string), string name = default(string), string url = default(string), string relativeUrl = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Type = type;
             Name = name;
@@ -17785,7 +17749,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -17834,11 +17797,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -17935,7 +17893,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the BlobFolder class.
         /// </summary>
-        public BlobFolder(string parentUrl = default(string), string type = default(string), string name = default(string), string url = default(string), string relativeUrl = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public BlobFolder(string parentUrl = default(string), string type = default(string), string name = default(string), string url = default(string), string relativeUrl = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             ParentUrl = parentUrl;
             Type = type;
@@ -17946,7 +17904,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -18000,11 +17957,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -18610,7 +18562,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <param name="valueType">Possible values include: 'Undefined',
         /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
         /// 'Boolean', 'Html', 'Image'</param>
-        public DynamicProperty(string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public DynamicProperty(string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             Description = description;
@@ -18626,7 +18578,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -18708,11 +18659,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -18912,7 +18858,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <param name="valueType">Possible values include: 'Undefined',
         /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
         /// 'Boolean', 'Html', 'Image'</param>
-        public DynamicObjectProperty(string objectId = default(string), IList<DynamicPropertyObjectValue> values = default(IList<DynamicPropertyObjectValue>), string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), bool? shouldSerializeAuditableProperties = default(bool?), string id = default(string))
+        public DynamicObjectProperty(string objectId = default(string), IList<DynamicPropertyObjectValue> values = default(IList<DynamicPropertyObjectValue>), string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             ObjectId = objectId;
             Values = values;
@@ -18930,7 +18876,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
             ModifiedBy = modifiedBy;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             Id = id;
             CustomInit();
         }
@@ -19022,11 +18967,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>

@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -13,42 +11,48 @@ namespace VirtoCommerce.Storefront.Infrastructure.Swagger
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            if (IsFileResponse(context.ApiDescription))
+            if (IsFileResponse(context))
             {
-                var responseSchema = new OpenApiSchema { Format = "byte", Type = "file" };
+                var key = ((int)HttpStatusCode.OK).ToString();
+                // Attention!
+                // Accordingly to: https://swagger.io/docs/specification/describing-responses/#response-that-returns-a-file
+                // the type of response should have Format = "binary", Type = "string".
+                var responseSchema = new OpenApiSchema { Format = "binary", Type = "string" };
 
-                var okStatusString = ((int)HttpStatusCode.OK).ToString();
-                var okStatusResponse = new OpenApiResponse
+                if (operation.Responses == null)
                 {
-                    Description = "OK",
-                    Content = new Dictionary<string, OpenApiMediaType>
-                    {
-                        ["application/json"] = new OpenApiMediaType
-                        {
-                            Schema = responseSchema
-                        }
-                    }
+                    operation.Responses = new OpenApiResponses();
+                }
+
+                if (!operation.Responses.TryGetValue(key, out var response))
+                {
+                    response = new OpenApiResponse();
+                }
+
+                response.Description = "OK";
+                response.Content = new Dictionary<string, OpenApiMediaType>
+                {
+
+                    // TODO: (AK) ? Consider to correct content key depending on real MIME
+                    { "multipart/form-data", new OpenApiMediaType() { Schema = responseSchema } }
                 };
-                if (operation.Responses.Any(x => x.Key == okStatusString))
-                {
-                    operation.Responses[okStatusString] = okStatusResponse;
-                }
-                else
-                {
-                    operation.Responses.Add(okStatusString, okStatusResponse);
-                }
             }
         }
 
-        private static bool IsFileResponse(ApiDescription apiDescription)
+        private static bool IsFileResponse(OperationFilterContext context)
         {
-            apiDescription.TryGetMethodInfo(out var methodInfo);
-            var result = methodInfo.GetCustomAttributes<SwaggerFileResponseAttribute>().Any();
+            var fileResponseAttributes = context.MethodInfo.DeclaringType.GetCustomAttributes(true)
+                .Union(context.MethodInfo.GetCustomAttributes(true))
+                .OfType<SwaggerFileResponseAttribute>();
+
+            var result = fileResponseAttributes.Any();
+
             if (!result)
             {
-                result = apiDescription.SupportedResponseTypes.Any(r => r.Type == typeof(Stream));
+                result = context.ApiDescription.SupportedResponseTypes.Any(r => r.Type == typeof(Stream));
             }
             return result;
         }
+
     }
 }
