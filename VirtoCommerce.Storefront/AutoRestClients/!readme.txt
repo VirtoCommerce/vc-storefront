@@ -1,10 +1,14 @@
 
 Install Node.js v4.0.0 or above (we recommend latest LTS version https://nodejs.org/en/)
-Install latest AutoRest globally via 'npm install -g autorest' command (2.0.4283 was used last time)
+Install latest AutoRest globally via 'npm install -g autorest' command (3.0.6282 was used last time)
  
 1. Open Tools > NuGet Package Manager > Package Manager Console
 2. Run the following commands to generate API clients:
 
+$modules = @('Cache','Cart','Catalog','Content','Core','Customer','Inventory','Marketing','Orders','Platform','Pricing','Quote','Sitemaps','Store','Subscription')
+$modules.ForEach( { autoRest --csharp --input-file=http://localhost/admin/docs/VirtoCommerce.$_/v1  --output-file=$_`ModuleApi.cs --namespace=VirtoCommerce.Storefront.AutoRestClients.$_`ModuleApi --client-name=$_`ModuleApiClient --output-folder=VirtoCommerce.Storefront\AutoRestClients --add-credentials })
+
+Command for the autorest version 2.0.4283:
 $modules = @('Cache','Cart','Catalog','Content','Core','Customer','Inventory','Marketing','Orders','Platform','Pricing','Quote','Sitemaps','Store','Subscription')
 $modules.ForEach( { autoRest -Input http://localhost/admin/docs/VirtoCommerce.$_/v1  -OutputFileName $_`ModuleApi.cs -Namespace VirtoCommerce.Storefront.AutoRestClients.$_`ModuleApi -ClientName $_`ModuleApiClient -OutputDirectory VirtoCommerce.Storefront\AutoRestClients -AddCredentials true -UseDateTimeOffset false })
 
