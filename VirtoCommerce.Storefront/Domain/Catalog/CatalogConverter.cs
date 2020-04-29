@@ -356,10 +356,13 @@ namespace VirtoCommerce.Storefront.Domain
                     .Select(p => ToProperty(p, currentLanguage))
                     .ToList());
 
-                result.VariationProperties = new MutablePagedList<CatalogProperty>(productDto.Properties
-                    .Where(x => string.Equals(x.Type, "Variation", StringComparison.InvariantCultureIgnoreCase))
-                    .Select(p => ToProperty(p, currentLanguage))
-                    .ToList());
+                if (productDto.IsActive.GetValueOrDefault())
+                {
+                    result.VariationProperties = new MutablePagedList<CatalogProperty>(productDto.Properties
+                        .Where(x => string.Equals(x.Type, "Variation", StringComparison.InvariantCultureIgnoreCase))
+                        .Select(p => ToProperty(p, currentLanguage))
+                        .ToList());
+                }
             }
 
             if (productDto.Images != null)
