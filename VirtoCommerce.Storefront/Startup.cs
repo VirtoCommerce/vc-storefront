@@ -323,6 +323,7 @@ namespace VirtoCommerce.Storefront
             // Register event handlers via reflection
             services.RegisterAssembliesEventHandlers(typeof(Startup));
 
+            // The following line enables Application Insights telemetry collection.
             services.AddApplicationInsightsTelemetry();
             services.AddApplicationInsightsExtensions(Configuration);
 

@@ -49,7 +49,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref="AccessTokenDelegatingHandler"/> class.
+        ///  Initializes a new instance of the <see cref="UserPasswordAuthHandler"/> class.
         /// </summary>
         /// <param name="options"></param>
         /// <param name="clientFactory"></param>
@@ -71,7 +71,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         {
 
             var accessToken = await GetAccessTokenAsync(cancellationToken);
-            if (string.IsNullOrWhiteSpace(accessToken) && (await RenewTokensAsync(cancellationToken) == false))
+            if (string.IsNullOrWhiteSpace(accessToken) && (!(await RenewTokensAsync(cancellationToken))))
             {
                 return new HttpResponseMessage(HttpStatusCode.Unauthorized) { RequestMessage = request };
             }
@@ -84,7 +84,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
                 return response;
             }
 
-            if (await RenewTokensAsync(cancellationToken) == false)
+            if (!(await RenewTokensAsync(cancellationToken)))
             {
                 return response;
             }
