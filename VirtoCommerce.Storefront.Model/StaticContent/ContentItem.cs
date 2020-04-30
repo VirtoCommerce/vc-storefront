@@ -27,6 +27,8 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
 
         public string Permalink { get; set; }
 
+        public string Template { get; set; }
+
         /// <summary>
         /// Represent alternative urls which will be used for redirection to main url
         /// </summary>
