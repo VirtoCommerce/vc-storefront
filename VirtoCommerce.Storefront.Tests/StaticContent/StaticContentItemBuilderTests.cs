@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Markdig;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Model.StaticContent;
 using Xunit;
@@ -9,26 +7,11 @@ namespace VirtoCommerce.Storefront.Tests.StaticContent
 {
     public class StaticContentItemBuilderTests
     {
-        private static IEnumerable<IContentItemVisitor> visitors = new List<IContentItemVisitor>
-        {
-            new LangVisitor(),
-            new YamlMetadataVisitor(),
-            new PageMetadataVisitor(),
-            new BlogExcerptMetadataVisitor(),
-            new BlogMetadataVisitor(),
-            new ContentPageMetadataVisitor(),
-            new MetadataVisitor(),
-            new MarkdownVisitor(new MarkdownPipelineBuilder().UseAdvancedExtensions().Build()),
-            new PageContentVisitor(),
-            new UrlsVisitor()
-        };
-
-        private IStaticContentItemBuilder builder = new StaticContentItemBuilder(new StaticContentItemFactory(), visitors);
+        private IStaticContentItemBuilder builder = new StaticContentItemBuilder(new StaticContentItemFactory(), new ContentItemReaderFactory(), new ContentRestorerFactory());
 
         [Fact]
         public void ReadContent_For_MarkdownStaticPage()
         {
-
             var result = builder.BuildFrom("", "custom/path/filename.md", StaticMarkdownPage);
             Assert.Equal("Custom page title", result.Title);
             Assert.Equal("Custom page description", result.Description);
@@ -83,6 +66,34 @@ namespace VirtoCommerce.Storefront.Tests.StaticContent
             Assert.Equal("custom/path", result.Permalink);
             Assert.Equal("page description", result.Description);
             Assert.Equal("article excerpt", result.Excerpt);
+        }
+
+        [Fact]
+        public void PageTemplate_ShouldBe_JsonPage()
+        {
+            var result = builder.BuildFrom("", "pages/custom-page.page", string.Empty);
+            Assert.Equal("json-page", result.Template);
+        }
+
+        [Fact]
+        public void PageTemplate_ShouldBe_Page()
+        {
+            var result = builder.BuildFrom("", "pages/custom-page.md", string.Empty);
+            Assert.Equal("page", result.Template);
+        }
+
+        [Fact]
+        public void PageTemplate_ShouldBe_Article()
+        {
+            var result = builder.BuildFrom("", "blogs/blog/article.md", string.Empty);
+            Assert.Equal("article", result.Template);
+        }
+
+        [Fact]
+        public void PageTemplate_ShouldBe_JsonArticle()
+        {
+            var result = builder.BuildFrom("", "blogs/blog/article.page", string.Empty);
+            Assert.Equal("json-article", result.Template);
         }
 
         private static string StaticMarkdownPage = @"---

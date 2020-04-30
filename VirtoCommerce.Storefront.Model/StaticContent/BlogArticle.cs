@@ -16,6 +16,5 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
         public bool IsSticked { get; set; }
 
         public bool IsTrending { get; set; }
-        public string Template { get; set; }
     }
 }

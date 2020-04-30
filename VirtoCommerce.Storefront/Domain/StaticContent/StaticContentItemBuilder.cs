@@ -1,25 +1,20 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using AutoRest.Core.Utilities;
 using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.Domain
 {
     public partial class StaticContentItemBuilder : IStaticContentItemBuilder
     {
-        internal static readonly Regex headerRegExp = new Regex(@"(?s:^---(.*?)---)");
-        internal static readonly string[] extensions = new[] { ".md", ".liquid", ".html" };
-
         private readonly IStaticContentItemFactory _factory;
-        private readonly IEnumerable<IContentItemVisitor> _visitors;
+        readonly IContentItemReaderFactory _readerFactory;
+        readonly IContentRestorerFactory _restorerFactory;
 
-        public StaticContentItemBuilder(IStaticContentItemFactory factory, IEnumerable<IContentItemVisitor> visitors)
+        public StaticContentItemBuilder(IStaticContentItemFactory factory,
+            IContentItemReaderFactory readerFactory, IContentRestorerFactory restorerFactory)
         {
             _factory = factory;
-            _visitors = visitors;
+            _readerFactory = readerFactory;
+            _restorerFactory = restorerFactory;
         }
 
         public ContentItem BuildFrom(string baseStoreContentPath, string blobRelativePath, string content)
@@ -28,15 +23,16 @@ namespace VirtoCommerce.Storefront.Domain
             if (contentItem != null)
             {
                 contentItem.StoragePath = "/" +
-                    (string.IsNullOrEmpty(baseStoreContentPath) ?
-                        blobRelativePath :
-                        blobRelativePath.Replace(baseStoreContentPath + "/", String.Empty)
-                    ).TrimStart('/');
+                        (string.IsNullOrEmpty(baseStoreContentPath) ?
+                            blobRelativePath :
+                            blobRelativePath.Replace(baseStoreContentPath + "/", string.Empty)
+                        ).TrimStart('/');
                 contentItem.FileName = Path.GetFileName(blobRelativePath);
-                var visitedContent = content;
-                _visitors.OrderBy(x => x.Stage).Where(x => x.Suit(contentItem))
-                    .ForEach(x => visitedContent = x.ReadContent(blobRelativePath, visitedContent, contentItem));
+                var reader = _readerFactory.CreateReader(blobRelativePath, content);
+                var restorer = _restorerFactory.CreateRestorer(blobRelativePath, contentItem);
+                restorer.FulfillContent(reader, contentItem);
             }
+
 
             return contentItem;
         }
