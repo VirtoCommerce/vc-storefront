@@ -437,10 +437,16 @@ namespace VirtoCommerce.Storefront
                 context.Response.Headers["X-Xss-Protection"] = "1";
                 await next();
             });
+
+
+            // It will be good to rewrite endpoint routing as described here, but it's not easy to do:
+            // https://docs.microsoft.com/en-us/aspnet/core/migration/22-to-30?view=aspnetcore-3.1&tabs=visual-studio#routing-startup-code
+
             app.UseMvc(routes =>
             {
                 routes.MapSlugRoute("{*path}", defaults: new { controller = "Home", action = "Index" });
             });
+
         }
     }
 }
