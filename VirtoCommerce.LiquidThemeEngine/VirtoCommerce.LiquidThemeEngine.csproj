@@ -2,9 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Version>4.1.11</Version>
     <Description>The storefront implementation of the Virto Commerce platform.</Description>
-    <Copyright>Copyright © 2011-2019 Virto Commerce - an enterprise Microsoft ecommerce platform ©. All rights reserved</Copyright>
+    <Copyright>Copyright © 2011-2020 Virto Commerce - an enterprise Microsoft ecommerce platform ©. All rights reserved</Copyright>
     <Authors>Virto Commerce</Authors>
     <Company>Virto Commerce</Company>
     <Product>Virto Commerce</Product>
@@ -12,8 +11,9 @@
     <PackageProjectUrl>https://github.com/VirtoCommerce/vc-storefront-core</PackageProjectUrl>
     <PackageIconUrl>https://virtocommerce.com/themes/assets/logo.jpg</PackageIconUrl>
     <RepositoryUrl>https://github.com/VirtoCommerce/vc-storefront-core</RepositoryUrl>
-    <AssemblyVersion>4.1.11.0</AssemblyVersion>
-    <FileVersion>4.1.11.0</FileVersion>
+    <AssemblyVersion>4.1.12.0</AssemblyVersion>
+    <FileVersion>4.1.12.0</FileVersion>
+    <Version>4.1.12</Version>
   </PropertyGroup>
 
 

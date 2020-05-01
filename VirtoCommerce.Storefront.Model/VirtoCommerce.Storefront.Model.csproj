@@ -7,14 +7,14 @@
     <!--https://docs.microsoft.com/en-us/dotnet/core/deploying/runtime-patch-selection-->
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
     <Description>The storefront implementation of the Virto Commerce platform.</Description>
-    <Copyright>Copyright © 2011-2019 Virto Commerce - an enterprise Microsoft ecommerce platform ©. All rights reserved</Copyright>
+    <Copyright>Copyright © 2011-2020 Virto Commerce - an enterprise Microsoft ecommerce platform ©. All rights reserved</Copyright>
     <PackageLicenseUrl>https://virtocommerce.com/open-source-license</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/VirtoCommerce/vc-storefront-core</PackageProjectUrl>
     <PackageIconUrl>https://virtocommerce.com/themes/assets/logo.jpg</PackageIconUrl>
     <RepositoryUrl>https://github.com/VirtoCommerce/vc-storefront-core</RepositoryUrl>
-    <AssemblyVersion>4.1.11.0</AssemblyVersion>
-    <FileVersion>4.1.11.0</FileVersion>
-    <Version>4.1.11</Version>
+    <AssemblyVersion>4.1.12.0</AssemblyVersion>
+    <FileVersion>4.1.12.0</FileVersion>
+    <Version>4.1.12</Version>
     <Authors>Virto Commerce</Authors>
     <Company>Virto Commerce</Company>
     <Product>Virto Commerce</Product>
