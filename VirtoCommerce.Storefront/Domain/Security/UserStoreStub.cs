@@ -88,28 +88,6 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return result;
         }
 
-        public async Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
-        {
-            if (user.Contact != null)
-            {
-                if (user.Contact.IsTransient())
-                {
-                    user.Contact = await _memberService.CreateContactAsync(user.Contact);
-                }
-                else
-                {
-                    await _memberService.UpdateContactAsync(user.Contact);
-                }
-            }
-
-            var dtoUser = user.ToUserDto();
-            var resultDto = await _platformSecurityApi.UpdateAsync(dtoUser);
-
-            //Evict user from the cache
-            SecurityCacheRegion.ExpireUser(user.Id);
-            return resultDto.ToIdentityResult();
-        }
-
         public async Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
             var cacheKey = CacheKey.With(GetType(), "FindByIdAsync", userId);
@@ -171,6 +149,28 @@ namespace VirtoCommerce.Storefront.Domain.Security
         {
             user.UserName = userName;
             return Task.CompletedTask;
+        }
+
+        public async Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
+        {
+            if (user.Contact != null)
+            {
+                if (user.Contact.IsTransient())
+                {
+                    user.Contact = await _memberService.CreateContactAsync(user.Contact);
+                }
+                else
+                {
+                    await _memberService.UpdateContactAsync(user.Contact);
+                }
+            }
+
+            var dtoUser = user.ToUserDto();
+            var resultDto = await _platformSecurityApi.UpdateAsync(dtoUser);
+
+            //Evict user from the cache
+            SecurityCacheRegion.ExpireUser(user.Id);
+            return resultDto.ToIdentityResult();
         }
 
         #endregion
