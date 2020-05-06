@@ -1,3 +1,4 @@
+using System.Linq;
 using VirtoCommerce.Storefront.Model;
 using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 
@@ -5,18 +6,20 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public static class SettingConverter
     {
-        public static SettingEntry ToSettingEntry(this platformDto.Setting settingDto)
+        public static SettingEntry ToSettingEntry(this platformDto.ObjectSettingEntry settingDto)
         {
-            var retVal = new SettingEntry();
-            retVal.DefaultValue = settingDto.DefaultValue;
-            retVal.Description = settingDto.Description;
-            retVal.IsArray = settingDto.IsArray ?? false;
-            retVal.Name = settingDto.Name;
-            retVal.Title = settingDto.Title;
-            retVal.Value = settingDto.Value;
-            retVal.ValueType = settingDto.ValueType;
-            retVal.AllowedValues = settingDto.AllowedValues;
-            retVal.ArrayValues = settingDto.ArrayValues;
+            var retVal = new SettingEntry
+            {
+                DefaultValue = settingDto.DefaultValue,
+                IsArray = false,
+                Name = settingDto.Name,
+                Value = settingDto.Value,
+                ValueType = settingDto.ValueType
+            };
+            if (settingDto.AllowedValues != null)
+            {
+                retVal.AllowedValues = settingDto.AllowedValues.ToList();
+            }
             return retVal;
         }
     }

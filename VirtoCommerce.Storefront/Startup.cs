@@ -14,14 +14,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.WebEncoders;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using StackExchange.Redis;
-using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Binders;
 using VirtoCommerce.Storefront.Caching;
@@ -65,14 +64,14 @@ namespace VirtoCommerce.Storefront
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnviroment)
+        public Startup(IConfiguration configuration, IWebHostEnvironment hostingEnviroment)
         {
             Configuration = configuration;
             HostingEnvironment = hostingEnviroment;
         }
 
         public IConfiguration Configuration { get; }
-        public IHostingEnvironment HostingEnvironment { get; }
+        public IWebHostEnvironment HostingEnvironment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -282,11 +281,6 @@ namespace VirtoCommerce.Storefront
             });
             services.AddMvc(options =>
             {
-                // Workaround to avoid 'Null effective policy causing exception' (on logout)
-                // https://github.com/aspnet/Mvc/issues/7809
-                // TODO: Try to remove in ASP.NET Core 2.2
-                options.AllowCombiningAuthorizeFilters = false;
-
                 // Thus we disable anonymous users based on "Store:AllowAnonymous" store option
                 options.Filters.AddService<AnonymousUserForStoreAuthorizationFilter>();
 
@@ -308,7 +302,7 @@ namespace VirtoCommerce.Storefront
 
                 // Use the routing logic of ASP.NET Core 2.1 or earlier:
                 options.EnableEndpointRouting = false;
-            }).AddJsonOptions(options =>
+            }).AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver()
                 {
@@ -323,12 +317,13 @@ namespace VirtoCommerce.Storefront
                 // Converter for providing back compatibility with old themes was used CustomerInfo type which has contained user and contact data in the single type.
                 // May be removed when all themes will fixed to new User type with nested Contact property.
                 options.SerializerSettings.Converters.Add(new UserBackwardCompatibilityJsonConverter(options.SerializerSettings));
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
 
             // Register event handlers via reflection
             services.RegisterAssembliesEventHandlers(typeof(Startup));
 
+            // The following line enables Application Insights telemetry collection.
             services.AddApplicationInsightsTelemetry();
             services.AddApplicationInsightsExtensions(Configuration);
 
@@ -346,16 +341,18 @@ namespace VirtoCommerce.Storefront
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "Storefront REST API documentation", Version = "v1" });
-                c.DescribeAllEnumsAsStrings();
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Storefront REST API documentation", Version = "v1" });
                 c.IgnoreObsoleteProperties();
                 c.IgnoreObsoleteActions();
                 // To include 401 response type to actions that requires Authorization
                 c.OperationFilter<AuthResponsesOperationFilter>();
-                c.OperationFilter<OptionalParametersFilter>();
+                c.OperationFilter<ConsumeFromBodyFilter>();
                 c.OperationFilter<FileResponseTypeFilter>();
-                // Workaround of problem with int default value for enum parameter: https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/868
-                c.ParameterFilter<EnumDefaultValueParameterFilter>();
+                c.OperationFilter<OptionalParametersFilter>();
+                c.OperationFilter<ArrayInQueryParametersFilter>();
+                c.OperationFilter<FileUploadOperationFilter>();
+                c.SchemaFilter<EnumSchemaFilter>();
+                c.SchemaFilter<NewtonsoftJsonIgnoreFilter>();
 
                 // To avoid errors with repeating type names
                 c.CustomSchemaIds(type => (Attribute.GetCustomAttribute(type, typeof(SwaggerSchemaIdAttribute)) as SwaggerSchemaIdAttribute)?.Id ?? type.FriendlyId());
@@ -366,7 +363,7 @@ namespace VirtoCommerce.Storefront
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -386,6 +383,7 @@ namespace VirtoCommerce.Storefront
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseRouting();
 
             app.UseAuthentication();
             // WorkContextBuildMiddleware must  always be registered first in  the Middleware chain
@@ -395,7 +393,7 @@ namespace VirtoCommerce.Storefront
             app.UseMiddleware<CreateStorefrontRolesMiddleware>();
             app.UseMiddleware<ApiErrorHandlingMiddleware>();
 
-            var mvcJsonOptions = app.ApplicationServices.GetService<IOptions<MvcJsonOptions>>().Value;
+            var mvcJsonOptions = app.ApplicationServices.GetService<IOptions<MvcNewtonsoftJsonOptions>>().Value;
             mvcJsonOptions.SerializerSettings.Converters.Add(new CartTypesJsonConverter(app.ApplicationServices.GetService<IWorkContextAccessor>()));
             mvcJsonOptions.SerializerSettings.Converters.Add(new MoneyJsonConverter(app.ApplicationServices.GetService<IWorkContextAccessor>()));
             mvcJsonOptions.SerializerSettings.Converters.Add(new CurrencyJsonConverter(app.ApplicationServices.GetService<IWorkContextAccessor>()));
@@ -439,10 +437,16 @@ namespace VirtoCommerce.Storefront
                 context.Response.Headers["X-Xss-Protection"] = "1";
                 await next();
             });
+
+
+            // It will be good to rewrite endpoint routing as described here, but it's not easy to do:
+            // https://docs.microsoft.com/en-us/aspnet/core/migration/22-to-30?view=aspnetcore-3.1&tabs=visual-studio#routing-startup-code
+
             app.UseMvc(routes =>
             {
                 routes.MapSlugRoute("{*path}", defaults: new { controller = "Home", action = "Index" });
             });
+
         }
     }
 }

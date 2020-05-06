@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Formatting;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -395,17 +395,17 @@ namespace VirtoCommerce.Storefront.Tests.Routing
 
         private async Task<HttpResponseMessage> PerformSendingRequest(CustomHttpMethod method, string url, object objectToPost)
         {
+            var settings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+            var json = JsonConvert.SerializeObject(objectToPost, settings);
+            HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
             switch (method)
             {
                 case CustomHttpMethod.PostJson:
-                    var jsonFormatter = new JsonMediaTypeFormatter
-                    {
-                        SerializerSettings = new JsonSerializerSettings
-                        {
-                            ContractResolver = new CamelCasePropertyNamesContractResolver()
-                        }
-                    };
-                    return await Client.PostAsync(url, objectToPost, jsonFormatter);
+                    return await Client.PostAsync(url, content);
 
                 case CustomHttpMethod.PostForm:
                     var actualData = (IEnumerable<KeyValuePair<string, string>>)objectToPost ?? EmptyFormData;
@@ -415,7 +415,7 @@ namespace VirtoCommerce.Storefront.Tests.Routing
                     return await Client.GetAsync(url);
 
                 case CustomHttpMethod.Put:
-                    return await Client.PutAsJsonAsync(url, objectToPost);
+                    return await Client.PutAsync(url, content);
 
                 case CustomHttpMethod.Delete:
                     return await Client.DeleteAsync(url);

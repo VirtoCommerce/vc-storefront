@@ -1,11 +1,9 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
-using VirtoCommerce.LiquidThemeEngine.Objects;
 using VirtoCommerce.LiquidThemeEngine.Scriban;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;

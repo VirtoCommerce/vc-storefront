@@ -399,15 +399,15 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     //Remove the cart asynchronously
                     removeCart ? cartBuilder.RemoveCartAsync() : Task.CompletedTask
                 };
-            //Process order asynchronously
-            var incomingPaymentDto = orderDto.InPayments?.FirstOrDefault();
-            Task<orderModel.ProcessPaymentResult> processPaymentTask = null;
-            if (incomingPaymentDto != null)
-            {
-                processPaymentTask = _orderApi.ProcessOrderPaymentsAsync(orderDto.Id, incomingPaymentDto.Id, bankCardInfo?.ToBankCardInfoDto());
-                taskList.Add(processPaymentTask);
-            }
-            await Task.WhenAll(taskList.ToArray());
+                //Process order asynchronously
+                var incomingPaymentDto = orderDto.InPayments?.FirstOrDefault();
+                Task<orderModel.ProcessPaymentRequestResult> processPaymentTask = null;
+                if (incomingPaymentDto != null)
+                {
+                    processPaymentTask = _orderApi.ProcessOrderPaymentsAsync(orderDto.Id, incomingPaymentDto.Id, bankCardInfo?.ToBankCardInfoDto());
+                    taskList.Add(processPaymentTask);
+                }
+                await Task.WhenAll(taskList.ToArray());
 
             return new OrderCreatedInfo
             {

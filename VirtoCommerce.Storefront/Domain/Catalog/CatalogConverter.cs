@@ -152,11 +152,11 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static catalogDto.ProductSearchCriteria ToProductSearchCriteriaDto(this ProductSearchCriteria criteria, WorkContext workContext)
+        public static catalogDto.ProductIndexedSearchCriteria ToProductSearchCriteriaDto(this ProductSearchCriteria criteria, WorkContext workContext)
         {
             var currency = criteria.Currency ?? workContext.CurrentCurrency;
 
-            var result = new catalogDto.ProductSearchCriteria
+            var result = new catalogDto.ProductIndexedSearchCriteria
             {
                 SearchPhrase = criteria.Keyword,
                 LanguageCode = criteria.Language?.CultureName ?? workContext.CurrentLanguage.CultureName,
@@ -200,9 +200,9 @@ namespace VirtoCommerce.Storefront.Domain
             };
         }
 
-        public static catalogDto.CategorySearchCriteria ToCategorySearchCriteriaDto(this CategorySearchCriteria criteria, WorkContext workContext)
+        public static catalogDto.CategoryIndexedSearchCriteria ToCategorySearchCriteriaDto(this CategorySearchCriteria criteria, WorkContext workContext)
         {
-            var result = new catalogDto.CategorySearchCriteria
+            var result = new catalogDto.CategoryIndexedSearchCriteria
             {
                 SearchPhrase = criteria.Keyword,
                 LanguageCode = criteria.Language?.CultureName ?? workContext.CurrentLanguage.CultureName,
@@ -306,7 +306,12 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static Product ToProduct(this catalogDto.Product productDto, Language currentLanguage, Currency currentCurrency, Store store)
+        public static Product ToProduct(this catalogDto.Variation variationDto, Language currentLanguage, Currency currentCurrency, Store store)
+        {
+            return variationDto.JsonConvert<catalogDto.CatalogProduct>().ToProduct(currentLanguage, currentCurrency, store);
+        }
+
+        public static Product ToProduct(this catalogDto.CatalogProduct productDto, Language currentLanguage, Currency currentCurrency, Store store)
         {
             var result = new Product(currentCurrency, currentLanguage)
             {
@@ -351,10 +356,13 @@ namespace VirtoCommerce.Storefront.Domain
                     .Select(p => ToProperty(p, currentLanguage))
                     .ToList());
 
-                result.VariationProperties = new MutablePagedList<CatalogProperty>(productDto.Properties
-                    .Where(x => string.Equals(x.Type, "Variation", StringComparison.InvariantCultureIgnoreCase))
-                    .Select(p => ToProperty(p, currentLanguage))
-                    .ToList());
+                if (productDto.IsActive.GetValueOrDefault())
+                {
+                    result.VariationProperties = new MutablePagedList<CatalogProperty>(productDto.Properties
+                        .Where(x => string.Equals(x.Type, "Variation", StringComparison.InvariantCultureIgnoreCase))
+                        .Select(p => ToProperty(p, currentLanguage))
+                        .ToList());
+                }
             }
 
             if (productDto.Images != null)

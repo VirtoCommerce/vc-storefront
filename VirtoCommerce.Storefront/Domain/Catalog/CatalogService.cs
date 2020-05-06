@@ -27,7 +27,7 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IStorefrontUrlBuilder _storefrontUrlBuilder;
         private readonly ICatalogModuleCategories _categoriesApi;
         private readonly ICatalogModuleProducts _productsApi;
-        private readonly ICatalogModuleSearch _searchApi;
+        private readonly ICatalogModuleIndexedSearch _searchApi;
         private readonly IPricingService _pricingService;
         private readonly IMemberService _customerService;
         private readonly ISubscriptionService _subscriptionService;
@@ -38,7 +38,7 @@ namespace VirtoCommerce.Storefront.Domain
         public CatalogService(IWorkContextAccessor workContextAccessor
             , ICatalogModuleCategories categoriesApi
             , ICatalogModuleProducts productsApi
-            , ICatalogModuleSearch searchApi
+            , ICatalogModuleIndexedSearch searchApi
             , IPricingService pricingService
             , IMemberService customerService
             , ISubscriptionService subscriptionService
@@ -260,7 +260,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result.Select(x => x.ToProduct(workContext.CurrentLanguage, workContext.CurrentCurrency, workContext.CurrentStore)).ToArray();
         }
 
-        protected virtual async Task<catalogDto.ProductSearchResult> SearchProductsAsync(ProductSearchCriteria criteria, WorkContext workContext)
+        protected virtual async Task<catalogDto.ProductIndexedSearchResult> SearchProductsAsync(ProductSearchCriteria criteria, WorkContext workContext)
         {
             var cacheKey = CacheKey.With(GetType(), nameof(SearchProductsAsync), criteria.GetCacheKey(), workContext.CurrentStore.Id, workContext.CurrentLanguage.CultureName, workContext.CurrentCurrency.Code);
 

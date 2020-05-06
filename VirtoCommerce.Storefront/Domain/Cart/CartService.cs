@@ -97,7 +97,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             }
             else
             {
-                cartDto = await _cartApi.UpdateAsync(cartDto);
+                cartDto = await _cartApi.UpdateShoppingCartAsync(cartDto);
             }
             var result = cartDto.ToShoppingCart(cart.Currency, cart.Language, cart.Customer);
             return result;
@@ -114,7 +114,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             {
                 cacheEntry.AddExpirationToken(CartCacheRegion.CreateCustomerChangeToken(criteria.Customer?.Id));
 
-                var resultDto = await _cartApi.SearchAsync(criteria.ToSearchCriteriaDto());
+                var resultDto = await _cartApi.SearchShoppingCartAsync(criteria.ToSearchCriteriaDto());
                 var result = new List<ShoppingCart>();
                 foreach (var cartDto in resultDto.Results)
                 {
