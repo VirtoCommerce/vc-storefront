@@ -110,8 +110,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             var collection = source as ICollection;
             var pagedList = source as IPagedList;
             var requestUrl = context.GetValue(new ScriptVariableGlobal("request_url")) as Uri;
-            var pageNumber = (int)(context.GetValue(new ScriptVariableGlobal("page_number")) ?? 1);
-            pageSize = (int)(context.GetValue(new ScriptVariableGlobal("page_size")) ?? pageSize);
+            int pageNumber = int.TryParse(context.GetValue(new ScriptVariableGlobal("page_number"))?.ToString(), out pageNumber) ? pageNumber : 1;
+            int effectivePageSize = int.TryParse(context.GetValue(new ScriptVariableGlobal("page_size"))?.ToString(), out effectivePageSize) ? effectivePageSize : pageSize;
             var @params = new NameValueCollection();
 
             if (!string.IsNullOrEmpty(filterJson))
@@ -125,12 +125,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
             if (source is IMutablePagedList mutablePagedList)
             {
-                mutablePagedList.Slice(pageNumber, pageSize, mutablePagedList.SortInfos, @params);
+                mutablePagedList.Slice(pageNumber, effectivePageSize, mutablePagedList.SortInfos, @params);
                 pagedList = mutablePagedList;
             }
             else if (collection != null)
             {
-                pagedList = new PagedList<object>(collection.OfType<object>().AsQueryable(), pageNumber, pageSize);
+                pagedList = new PagedList<object>(collection.OfType<object>().AsQueryable(), pageNumber, effectivePageSize);
                 //TODO: Need find way to replace ICollection instance in liquid context to paged instance
                 //var hash = context.Environments.FirstOrDefault(s => s.ContainsKey(_collectionName));
                 //hash[_collectionName] = pagedList;
