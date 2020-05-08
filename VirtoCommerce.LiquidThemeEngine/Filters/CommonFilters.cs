@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
+using DotLiquid.ViewEngine.Extensions;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.DependencyInjection;
@@ -110,8 +111,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             var collection = source as ICollection;
             var pagedList = source as IPagedList;
             var requestUrl = context.GetValue(new ScriptVariableGlobal("request_url")) as Uri;
-            int pageNumber = int.TryParse(context.GetValue(new ScriptVariableGlobal("page_number"))?.ToString(), out pageNumber) ? pageNumber : 1;
-            int effectivePageSize = int.TryParse(context.GetValue(new ScriptVariableGlobal("page_size"))?.ToString(), out effectivePageSize) ? effectivePageSize : pageSize;
+            var pageNumber = context.GetValue(new ScriptVariableGlobal("page_number"))?.ToString().SafeParseInt(1) ?? default;
+            var effectivePageSize = context.GetValue(new ScriptVariableGlobal("page_size"))?.ToString().SafeParseInt(pageSize) ?? default;
             var @params = new NameValueCollection();
 
             if (!string.IsNullOrEmpty(filterJson))
