@@ -30,11 +30,13 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
             if (user != null && !new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(builder.WorkContext.CurrentStore))
             {
+                await signInManager.SignOutAsync();
                 user = null;
             }
 
             if (user != null && new IsUserSuspendedSpecification().IsSatisfiedBy(user))
             {
+                await signInManager.SignOutAsync();
                 user = null;
             }
 
