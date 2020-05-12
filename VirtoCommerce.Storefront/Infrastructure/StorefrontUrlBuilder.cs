@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using System.Web;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using VirtoCommerce.Storefront.Domain;
@@ -18,6 +21,9 @@ namespace VirtoCommerce.Storefront.Infrastructure
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IHostingEnvironment _hostEnv;
         private readonly IHttpContextAccessor _httpContextAccessor;
+
+        private static readonly string[] UrlContainingQueryParameters = { "ReturnUrl", };
+
         public StorefrontUrlBuilder(IUrlBuilder urlBuilder, IWorkContextAccessor workContextAccessor, IHostingEnvironment hostEnv, IHttpContextAccessor httpContextAccessor)
         {
             _urlBuilder = urlBuilder;
@@ -43,6 +49,64 @@ namespace VirtoCommerce.Storefront.Infrastructure
                 ? _httpContextAccessor.HttpContext.Request.PathBase + appRelativePath.Replace("~", string.Empty)
                 : appRelativePath;
             return result;
+        }
+
+        public string ToStoreAbsolute(string url, Store store = null, Language language = null)
+        {
+            // Need to build from an host absolute url a  relative  store-based url
+            // http://localhost/Account/Login -> http://localhost/{store}/{lang}/Account/Login
+
+            // Need to be able to properly handle the following case:
+            // http://localhost/store/Account/Login?ReturnUrl=%2Fstore%2FElectronics%2Fen-US%2Faccount, storeUrl = "http://localhost/store"
+            // 1. Should trim store path "/store" from the url path "/store/Account/Login" => path should become "/Account/Login"
+            // 2. Check for url params (e.g. ReturnUrl) in query string and trim store url for them too. ReturnUrl=%2Fstore%2FElectronics%2Fen-US%2Faccount => ReturnUrl=%2FElectronics%2Fen-US%2Faccount
+
+            var urlBuilder = new UriBuilder(new Uri(url, UriKind.RelativeOrAbsolute));
+            urlBuilder.Path = ConvertPathUrlToStoreAbsolute(urlBuilder.Path, store, language);
+            urlBuilder.Query = ConvertQueryUrlsToStoreAbsolute(urlBuilder.Query, store, language);
+            return urlBuilder.Uri.ToString();
+        }
+
+        public PathString ConvertPathUrlToStoreAbsolute(PathString path, Store store = null, Language language = null)
+        {
+            var relativeToAppPath = path.TrimStorePath(_workContextAccessor.WorkContext.CurrentStore);
+            var storeAbsolutePath = store != null || language != null
+                ? ToAppAbsolute(relativeToAppPath.TrimStoreAndLangSegment(_workContextAccessor.WorkContext.CurrentStore, _workContextAccessor.WorkContext.CurrentLanguage),
+                    store ?? _workContextAccessor.WorkContext.CurrentStore,
+                    language ?? store.DefaultLanguage ?? _workContextAccessor.WorkContext.CurrentLanguage)
+                : ToAppAbsolute(relativeToAppPath);
+
+            // Checks whether path is absolute path (starts with scheme), and extract local path if it is
+            if (Uri.TryCreate(storeAbsolutePath, UriKind.Absolute, out var absoluteUri))
+            {
+                storeAbsolutePath = absoluteUri.AbsolutePath;
+            }
+
+            return storeAbsolutePath;
+        }
+
+        /// <summary>
+        /// Trims store path for known url containing params. Encoding/Decoding is handled by HttpUtility.ParseQueryString.
+        /// </summary>
+        /// <param name="query">Query params need to be converted.</param>
+        private string ConvertQueryUrlsToStoreAbsolute(string query, Store store = null, Language language = null)
+        {
+            var queryParams = HttpUtility.ParseQueryString(query);
+            var allParamKeys = queryParams.AllKeys;
+
+            foreach (var paramName in UrlContainingQueryParameters)
+            {
+                var paramKey = allParamKeys.FirstOrDefault(x => x.EqualsInvariant(paramName));
+                var paramValue = paramKey != null ? queryParams[paramKey] : null;
+
+                // Need to check that param value is a valid relative url to avoid exception at PathString creation 
+                if (paramKey != null && Uri.TryCreate(paramValue, UriKind.Relative, out _))
+                {
+                    queryParams[paramKey] = ConvertPathUrlToStoreAbsolute(new PathString(paramValue), store, language);
+                }
+            }
+
+            return queryParams.ToString();
         }
 
         public string ToAppRelative(string virtualPath)

@@ -1,11 +1,10 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
@@ -28,6 +27,7 @@ namespace VirtoCommerce.Storefront.Controllers
     [StorefrontRoute("account")]
     public class AccountController : StorefrontControllerBase
     {
+        private readonly IStorefrontUrlBuilder _urlBuilder;
         private readonly SignInManager<User> _signInManager;
         private readonly IEventPublisher _publisher;
         private readonly StorefrontOptions _options;
@@ -46,6 +46,7 @@ namespace VirtoCommerce.Storefront.Controllers
             IOptions<StorefrontOptions> options)
             : base(workContextAccessor, urlBuilder)
         {
+            _urlBuilder = urlBuilder;
             _signInManager = signInManager;
             _publisher = publisher;
             _options = options.Value;
@@ -313,14 +314,12 @@ namespace VirtoCommerce.Storefront.Controllers
 
             if (!new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore))
             {
-                if (login.RedirectToStore)
+                if (login.ForceLoginToAccountStore)
                 {
                     var store = WorkContext.AllStores.First(x => x.Id == user.StoreId);
-                    var url = HttpContext.Request.Path
-                        .TrimStoreAndLangSegment(WorkContext.CurrentStore, WorkContext.CurrentLanguage)
-                        .AddStoreAndLangSegment(store, store.DefaultLanguage)
-                        .ToString();
-                    return RedirectPreserveMethod(url);
+                    var url = HttpContext.Request.GetEncodedUrl();
+                    var redirectUrl = _urlBuilder.ToStoreAbsolute(url, store, store.DefaultLanguage);
+                    return RedirectPreserveMethod(redirectUrl);
                 }
 
                 WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserCannotLoginInStore());
