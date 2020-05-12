@@ -61,35 +61,33 @@ namespace VirtoCommerce.Storefront.Infrastructure
             // 1. Should trim store path "/store" from the url path "/store/Account/Login" => path should become "/Account/Login"
             // 2. Check for url params (e.g. ReturnUrl) in query string and trim store url for them too. ReturnUrl=%2Fstore%2FElectronics%2Fen-US%2Faccount => ReturnUrl=%2FElectronics%2Fen-US%2Faccount
 
-            var urlBuilder = new UriBuilder(new Uri(url, UriKind.RelativeOrAbsolute));
-            urlBuilder.Path = ConvertPathUrlToStoreAbsolute(urlBuilder.Path, store, language);
-            urlBuilder.Query = ConvertQueryUrlsToStoreAbsolute(urlBuilder.Query, store, language);
+            var uri = new Uri(url, UriKind.RelativeOrAbsolute);
+            var absolutePathOrUrl = ConvertPathToStoreAbsolutePathOrUrl(uri.IsAbsoluteUri ? uri.AbsolutePath : url, store, language);
+            var storeRelativeOrAbsoluteUrl = new Uri(absolutePathOrUrl, UriKind.RelativeOrAbsolute);
+            var urlBuilder = new UriBuilder(new Uri(uri, storeRelativeOrAbsoluteUrl))
+            {
+                Query = ConvertQueryUrlsToStoreAbsolutePaths(uri.Query, store, language)
+            };
             return urlBuilder.Uri.ToString();
         }
 
-        public PathString ConvertPathUrlToStoreAbsolute(PathString path, Store store = null, Language language = null)
+        private string ConvertPathToStoreAbsolutePathOrUrl(PathString path, Store store = null, Language language = null)
         {
             var relativeToAppPath = path.TrimStorePath(_workContextAccessor.WorkContext.CurrentStore);
-            var storeAbsolutePath = store != null || language != null
+            var storeUrl = store != null || language != null
                 ? ToAppAbsolute(relativeToAppPath.TrimStoreAndLangSegment(_workContextAccessor.WorkContext.CurrentStore, _workContextAccessor.WorkContext.CurrentLanguage),
                     store ?? _workContextAccessor.WorkContext.CurrentStore,
                     language ?? store.DefaultLanguage ?? _workContextAccessor.WorkContext.CurrentLanguage)
                 : ToAppAbsolute(relativeToAppPath);
 
-            // Checks whether path is absolute path (starts with scheme), and extract local path if it is
-            if (Uri.TryCreate(storeAbsolutePath, UriKind.Absolute, out var absoluteUri))
-            {
-                storeAbsolutePath = absoluteUri.AbsolutePath;
-            }
-
-            return storeAbsolutePath;
+            return storeUrl;
         }
 
         /// <summary>
         /// Trims store path for known url containing params. Encoding/Decoding is handled by HttpUtility.ParseQueryString.
         /// </summary>
         /// <param name="query">Query params need to be converted.</param>
-        private string ConvertQueryUrlsToStoreAbsolute(string query, Store store = null, Language language = null)
+        private string ConvertQueryUrlsToStoreAbsolutePaths(string query, Store store = null, Language language = null)
         {
             var queryParams = HttpUtility.ParseQueryString(query);
             var allParamKeys = queryParams.AllKeys;
@@ -102,7 +100,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
                 // Need to check that param value is a valid relative url to avoid exception at PathString creation 
                 if (paramKey != null && Uri.TryCreate(paramValue, UriKind.Relative, out _))
                 {
-                    queryParams[paramKey] = ConvertPathUrlToStoreAbsolute(new PathString(paramValue), store, language);
+                    queryParams[paramKey] = ConvertPathToStoreAbsolutePathOrUrl(new PathString(paramValue), store, language).ToAbsolutePath();
                 }
             }
 

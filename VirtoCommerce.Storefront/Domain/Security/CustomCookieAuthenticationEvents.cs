@@ -24,7 +24,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 return Task.CompletedTask;
             }
 
-            context.RedirectUri = _storefrontUrlBuilder.ToStoreAbsolute(context.RedirectUri);
+            context.RedirectUri = _storefrontUrlBuilder.ToStoreAbsolute(context.RedirectUri).ToAbsolutePath();
 
             return base.RedirectToLogin(context);
         }
@@ -37,7 +37,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 return Task.CompletedTask;
             }
 
-            context.RedirectUri = _storefrontUrlBuilder.ToStoreAbsolute(context.RedirectUri);
+            context.RedirectUri = _storefrontUrlBuilder.ToStoreAbsolute(context.RedirectUri).ToAbsolutePath();
 
             return base.RedirectToAccessDenied(context);
         }
