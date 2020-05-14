@@ -20,5 +20,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         public bool RememberMe { get; set; }
 
         public bool DisplayCaptcha { get; set; }
+
+        public bool ForceLoginToAccountStore { get; set; }
     }
 }
