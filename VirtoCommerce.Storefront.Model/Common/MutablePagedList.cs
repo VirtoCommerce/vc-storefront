@@ -267,7 +267,9 @@ namespace VirtoCommerce.Storefront.Model.Common
         
         IDictionaryEnumerator IDictionary.GetEnumerator()
         {
-            throw new NotImplementedException();
+            TryReloadPagedData();
+            var dict = _pagedList.OfType<IAccessibleByIndexKey>().ToDictionary(x => x.IndexKey, x => x);
+            return dict.GetEnumerator();
         }
         #endregion
 
