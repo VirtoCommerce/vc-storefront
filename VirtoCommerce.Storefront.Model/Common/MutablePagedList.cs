@@ -238,14 +238,19 @@ namespace VirtoCommerce.Storefront.Model.Common
         {
             get
             {
-                throw new NotImplementedException();
+               TryReloadPagedData();
+               var dict = _pagedList.OfType<IAccessibleByIndexKey>().ToDictionary(x => x.IndexKey, x => x);
+               return dict.Keys;
+               
             }
         }
         public ICollection Values
         {
             get
             {
-                throw new NotImplementedException();
+                TryReloadPagedData();
+                var dict = _pagedList.OfType<IAccessibleByIndexKey>().ToDictionary(x => x.IndexKey, x => x);
+                return dict.Values;
             }
         }
 
