@@ -580,7 +580,11 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 if (lineItem.Product != null)
                 {
-                    lineItem.SalePrice = lineItem.Product.Price.GetTierPrice(quantity).Price;
+                    var salePrice = lineItem.Product.Price.GetTierPrice(quantity).Price;
+                    if (salePrice != 0)
+                    {
+                        lineItem.SalePrice = salePrice;
+                    }
                     //List price should be always greater ot equals sale price because it may cause incorrect totals calculation
                     if (lineItem.ListPrice < lineItem.SalePrice)
                     {

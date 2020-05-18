@@ -91,5 +91,16 @@ namespace VirtoCommerce.Storefront.Extensions
 
             return path;
         }
+
+        public static PathString ToAbsolutePath(this string path)
+        {
+            // Checks whether path is absolute path (starts with scheme), and extract local path if it is
+            if (Uri.TryCreate(path, UriKind.Absolute, out var absoluteUri))
+            {
+                return absoluteUri.AbsolutePath;
+            }
+
+            return path;
+        }
     }
 }

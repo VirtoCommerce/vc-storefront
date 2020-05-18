@@ -367,31 +367,6 @@ namespace VirtoCommerce.Storefront.Model.Common
             return result;
         }
 
-        /// <summary>
-        /// Evenly distributes the amount over n parts, resolving remainders that occur due to rounding 
-        /// errors, thereby garuanteeing the postcondition: result->sum(r|r.amount) = this.amount and
-        /// x elements in result are greater than at least one of the other elements, where x = amount mod n.
-        /// </summary>
-        /// <param name="n">Number of parts over which the amount is to be distibuted.</param>
-        /// <returns>Array with distributed Money amounts.</returns>
-        public Money[] Allocate(int n)
-        {
-            var cents = Math.Pow(10, DecimalDigits);
-            var lowResult = ((long)Math.Truncate((double)InternalAmount / n * cents)) / cents;
-            var highResult = lowResult + 1.0d / cents;
-            var remainder = (int)(((double)InternalAmount * cents) % n);
-
-            var results = new Money[n];
-
-            for (var i = 0; i < remainder; i++)
-                results[i] = new Money((decimal)highResult, Currency);
-
-            for (var i = remainder; i < n; i++)
-                results[i] = new Money((decimal)lowResult, Currency);
-
-            return results;
-        }
-
         #endregion
 
         #region IConvertible<Money> Members
