@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
-using PagedList.Core;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using PagedList.Core;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
@@ -84,7 +84,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 Products = category.Products,
                 Category = category
             };
-              
+
 
             // make sure title is set
             if (string.IsNullOrEmpty(WorkContext.CurrentPageSeo.Title))

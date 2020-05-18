@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.StaticContent
@@ -27,6 +26,8 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
         public string Url { get; set; }
 
         public string Permalink { get; set; }
+
+        public string Template { get; set; }
 
         /// <summary>
         /// Represent alternative urls which will be used for redirection to main url
@@ -79,84 +80,6 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
         public IDictionary<string, IEnumerable<string>> MetaFields => MetaInfo;
 
         public virtual string IndexKey => Handle;
-
-        public virtual void LoadContent(string content, IDictionary<string, IEnumerable<string>> metaInfoMap)
-        {
-            if (metaInfoMap != null)
-            {
-                foreach (var setting in metaInfoMap)
-                {
-                    var settingValue = setting.Value.FirstOrDefault();
-                    switch (setting.Key.ToLower())
-                    {
-                        case "permalink":
-                            Permalink = settingValue;
-                            break;
-
-                        case "aliases":
-                            Aliases = setting.Value.ToList();
-                            break;
-
-                        case "title":
-                            Title = settingValue;
-                            break;
-
-                        case "author":
-                            Author = settingValue;
-                            break;
-
-                        case "published":
-                            bool isPublished;
-                            IsPublished = bool.TryParse(settingValue, out isPublished) ? isPublished : true;
-                            break;
-
-                        case "date":
-                            DateTime date;
-                            PublishedDate = CreatedDate = DateTime.TryParse(settingValue, out date) ? date : new DateTime();
-                            break;
-                        case "tags":
-                            Tags = setting.Value.OrderBy(t => t).Select(t => t.Handelize()).ToList();
-                            break;
-
-                        case "categories":
-                            Categories = setting.Value?.Select(x => x.Handelize()).ToList();
-                            break;
-
-                        case "category":
-                            Category = settingValue?.Handelize();
-                            break;
-
-                        case "layout":
-                            Layout = settingValue;
-                            break;
-
-                        case "priority":
-                            int priority;
-                            Priority = int.TryParse(settingValue, out priority) ? priority : 0;
-                            break;
-
-                        case "description":
-                            Description = settingValue;
-                            break;
-
-                        case "authorize":
-                            bool isAuthorize;
-                            if (bool.TryParse(settingValue, out isAuthorize))
-                            {
-                                Authorize = isAuthorize;
-                            }
-                            break;
-                    }
-                }
-            }
-
-            MetaInfo = metaInfoMap;
-            Content = content;
-            if (Title == null)
-            {
-                Title = Name;
-            }
-        }
 
         public override string ToString()
         {
