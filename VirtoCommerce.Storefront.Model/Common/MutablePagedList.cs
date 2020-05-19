@@ -239,8 +239,8 @@ namespace VirtoCommerce.Storefront.Model.Common
             get
             {
                ReloadPagedData();
-               var dict = _pagedList.OfType<IAccessibleByIndexKey>().ToDictionary(x => x.IndexKey, x => x);
-               return dict.Keys;
+               var dictionary = _pagedList.OfType<IAccessibleByIndexKey>().ToDictionary(x => x.IndexKey, x => x);
+               return dictionary.Keys;
                
             }
         }
@@ -249,8 +249,8 @@ namespace VirtoCommerce.Storefront.Model.Common
             get
             {
                 ReloadPagedData();
-                var dict = _pagedList.OfType<IAccessibleByIndexKey>().ToDictionary(x => x.IndexKey, x => x);
-                return dict.Values;
+                var dictionary = _pagedList.OfType<IAccessibleByIndexKey>().ToDictionary(x => x.IndexKey, x => x);
+                return dictionary.Values;
             }
         }
 
@@ -273,8 +273,8 @@ namespace VirtoCommerce.Storefront.Model.Common
         IDictionaryEnumerator IDictionary.GetEnumerator()
         {
             ReloadPagedData();
-            var dict = _pagedList.OfType<IAccessibleByIndexKey>().ToDictionary(x => x.IndexKey, x => x);
-            return dict.GetEnumerator();
+            var dictionary = _pagedList.OfType<IAccessibleByIndexKey>().ToDictionary(x => x.IndexKey, x => x);
+            return dictionary.GetEnumerator();
         }
         #endregion
 

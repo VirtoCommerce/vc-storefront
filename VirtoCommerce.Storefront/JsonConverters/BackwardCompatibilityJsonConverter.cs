@@ -47,7 +47,7 @@ namespace VirtoCommerce.Storefront.JsonConverters
                 SerializationBinder = jsonSettings.SerializationBinder,
                 TypeNameAssemblyFormatHandling = jsonSettings.TypeNameAssemblyFormatHandling,
                 // exclude  BackCompatibilityJsonConverter from  Converters  to prevent infinite loops when serializing
-                Converters = jsonSettings.Converters.Except( jsonSettings.Converters.Where( x=> x.GetType() == typeof(UserBackwardCompatibilityJsonConverter)).ToList()).ToList()
+                Converters = jsonSettings.Converters.Except( jsonSettings.Converters.Where( x=> x.GetType() == typeof(UserBackwardCompatibilityJsonConverter))).ToList()
             };
 
         }
