@@ -22,14 +22,14 @@ namespace VirtoCommerce.Storefront.Domain
                     var fileName = Path.GetFileNameWithoutExtension(path);
                     if (fileName.EqualsInvariant(blogName) || fileName.EqualsInvariant("default"))
                     {
-                        retVal = new Blog()
+                        retVal = new Blog
                         {
                             Name = blogName,
                         };
                     }
                     else
                     {
-                        retVal = new BlogArticle()
+                        retVal = new BlogArticle
                         {
                             BlogName = blogName
                         };
@@ -40,7 +40,7 @@ namespace VirtoCommerce.Storefront.Domain
                     retVal = new ContentPage();
                 }
             }
-                
+
             return retVal;
         }
     }

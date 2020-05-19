@@ -35,9 +35,9 @@ namespace VirtoCommerce.Storefront.Tests.Reward
                 // No reward - other product
                 yield return new object[] { 100.0m, 3, 0m, new[] { new PromotionReward { ProductId = "NonExistentReward", Amount = 50.0m, AmountType = AmountType.Relative, Quantity = 2, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true } } };
                 // Full reward - no product specified  =  $33.33 discount on one item
-                yield return new object[] { 100.0m, 3, 33.34m, new[] { new PromotionReward { Amount = 50.0m, AmountType = AmountType.Relative, Quantity = 2, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true } } };
+                yield return new object[] { 100.0m, 3, 33.33m, new[] { new PromotionReward { Amount = 50.0m, AmountType = AmountType.Relative, Quantity = 2, RewardType = PromotionRewardType.CatalogItemAmountReward, Promotion = samplePromotion, IsValid = true } } };
                 // Full reward - correct product specified  =  $33.33 discount on one item
-                yield return new object[] { 100.0m, 3, 33.34m, new[] { new PromotionReward { ProductId = ExistingProductId, Amount = 50.0m, AmountType = AmountType.Relative, Quantity = 2, RewardType = PromotionRewardType.CatalogItemAmountReward, IsValid = true, Promotion = samplePromotion } } };
+                yield return new object[] { 100.0m, 3, 33.33m, new[] { new PromotionReward { ProductId = ExistingProductId, Amount = 50.0m, AmountType = AmountType.Relative, Quantity = 2, RewardType = PromotionRewardType.CatalogItemAmountReward, IsValid = true, Promotion = samplePromotion } } };
                 // No reward - different reward type
                 yield return new object[] { 100.0m, 3, 0m, new[] { new PromotionReward { RewardType = PromotionRewardType.CartSubtotalReward, Amount = 50.0m, AmountType = AmountType.Relative, Quantity = 2, IsValid = true, Promotion = samplePromotion } } };
                 // No reward - reward type not set
@@ -53,7 +53,7 @@ namespace VirtoCommerce.Storefront.Tests.Reward
                 // For 2 in every 3 items of total 2 items with price $100 get %50 off  =  no discount
                 yield return new object[] { 100.0m, 2, 0m, new[] { new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 3, Amount = 50, AmountType = AmountType.Relative, RewardType = PromotionRewardType.CatalogItemAmountReward, IsValid = true, Promotion = samplePromotion } } };
                 // For 2 in every 3 items of total 3 items with price $100 get %50 off  =  $33.34 no discount (2 discounted = $100)
-                yield return new object[] { 100.0m, 3, 33.34m, new[] { new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 3, Amount = 50, AmountType = AmountType.Relative, RewardType = PromotionRewardType.CatalogItemAmountReward, IsValid = true, Promotion = samplePromotion } } };
+                yield return new object[] { 100.0m, 3, 33.33m, new[] { new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 3, Amount = 50, AmountType = AmountType.Relative, RewardType = PromotionRewardType.CatalogItemAmountReward, IsValid = true, Promotion = samplePromotion } } };
                 // For 2 in every 3 items of total 4 items with price $100 get %50 off  =  $25 no discount (2 discounted = $100)
                 yield return new object[] { 100.0m, 4, 25m, new[] { new PromotionReward { ForNthQuantity = 2, InEveryNthQuantity = 3, Amount = 50, AmountType = AmountType.Relative, RewardType = PromotionRewardType.CatalogItemAmountReward, IsValid = true, Promotion = samplePromotion } } };
 
