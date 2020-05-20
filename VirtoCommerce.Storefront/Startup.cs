@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using Markdig;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -108,9 +107,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IStaticContentService, StaticContentService>();
             services.AddSingleton<IMenuLinkListService, MenuLinkListServiceImpl>();
             services.AddSingleton<IStaticContentItemFactory, StaticContentItemFactory>();
-            services.AddSingleton<IContentItemReaderFactory, ContentItemReaderFactory>();
-            services.AddSingleton<IContentRestorerFactory, ContentRestorerFactory>();
-            services.AddSingleton<IStaticContentItemBuilder, StaticContentItemBuilder>();
+            services.AddSingleton<IStaticContentLoaderFactory, StaticContentLoaderFactory>();
             services.AddSingleton<IApiChangesWatcher, ApiChangesWatcher>();
             services.AddSingleton<AssociationRecommendationsProvider>();
             services.AddSingleton<CognitiveRecommendationsProvider>();

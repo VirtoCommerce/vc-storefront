@@ -5,6 +5,8 @@ using contentDto = VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi.Mod
 
 namespace VirtoCommerce.Storefront.Domain
 {
+
+
     public static partial class LinkListConverter
     {
         public static MenuLinkList ToMenuLinkList(this contentDto.MenuLinkList menuLinkListDto)
