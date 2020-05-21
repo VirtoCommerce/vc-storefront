@@ -10,12 +10,14 @@ namespace VirtoCommerce.Storefront.Model.Security
         public string PhotoUrl { get; set; }
 
         [FromForm(Name = "customer[first_name]")]
+        [Required]
         public string FirstName { get; set; }
 
         [FromForm(Name = "customer[full_name]")]
         public string FullName { get; set; }
 
         [FromForm(Name = "customer[last_name]")]
+        [Required]
         public string LastName { get; set; }
 
         [FromForm(Name = "customer[email]")]
