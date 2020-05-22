@@ -1,12 +1,9 @@
-
+using System.Collections.Generic;
 using global::Scriban;
-
 using Newtonsoft.Json.Linq;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
-    using System.Collections.Generic;
-
     public class FeatureFilter
     {
         public static bool IsFeatureActive(TemplateContext context, string key, params object[] variables)
