@@ -44,6 +44,7 @@ using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Bus;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer.Services;
+using VirtoCommerce.Storefront.Model.Features;
 using VirtoCommerce.Storefront.Model.Inventory.Services;
 using VirtoCommerce.Storefront.Model.LinkList.Services;
 using VirtoCommerce.Storefront.Model.Marketing.Services;
@@ -123,6 +124,9 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton(new InProcessBus());
             services.AddSingleton<IEventPublisher>(provider => provider.GetService<InProcessBus>());
             services.AddSingleton<IHandlerRegistrar>(provider => provider.GetService<InProcessBus>());
+
+            // register features toggling agent
+            services.AddSingleton<IFeaturesAgent, FeaturesAgent>();
 
             //Cache
             var redisConnectionString = Configuration.GetConnectionString("RedisConnectionString");

@@ -11,13 +11,14 @@ using Newtonsoft.Json.Linq;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
+using VirtoCommerce.Storefront.Model.Features;
 using VirtoCommerce.Storefront.Model.StaticContent;
 using VirtoCommerce.Storefront.Model.Stores;
 using Xunit;
 
 namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
 {
-    public class ShopifyLiquidThemeEngineTests: IDisposable
+    public class ShopifyLiquidThemeEngineTests : IDisposable
     {
         private enum DefaultThemeType
         {
@@ -237,7 +238,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
                 var baseThemeSettingsPath = Path.Combine(ThemesPath, BaseThemePath, SettingsPath);
                 mock.Setup(service => service.PathExists(baseThemeSettingsPath))
                     .Returns(() => true);
-                mock.Setup(service =>  service.OpenRead(baseThemeSettingsPath))
+                mock.Setup(service => service.OpenRead(baseThemeSettingsPath))
                     .Returns(() => DefaultThemeStream);
                 var currentThemeSettingsPath = Path.Combine(ThemesPath, CurrentThemePath, SettingsPath);
                 mock.Setup(service => service.PathExists(currentThemeSettingsPath))
@@ -294,7 +295,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
         private ShopifyLiquidThemeEngine GetThemeEngine(bool useThemesInheritance, LiquidThemeEngineOptions options)
         {
             return new ShopifyLiquidThemeEngine(MemoryCache, GetWorkContextAccessor(useThemesInheritance), HttpContextAccessor,
-                null, ContentBlobProvider, null, new OptionsWrapper<LiquidThemeEngineOptions>(options));
+                null, ContentBlobProvider, null, new OptionsWrapper<LiquidThemeEngineOptions>(options), new FeaturesAgent());
         }
 
         public void Dispose()
