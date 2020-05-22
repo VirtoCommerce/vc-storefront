@@ -30,7 +30,7 @@ namespace VirtoCommerce.Storefront.Model.Customer
         /// User groups such as VIP, Wholesaler etc
         /// </summary>
         public IList<string> UserGroups { get; set; } = new List<string>();
-        public IList<DynamicProperty> DynamicProperties { get; set; } = new List<DynamicProperty>();
+        public IMutablePagedList<DynamicProperty> DynamicProperties { get; set; } = new MutablePagedList<DynamicProperty>(Enumerable.Empty<DynamicProperty>());
 
         public override string ToString()
         {
