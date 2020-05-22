@@ -83,7 +83,7 @@ namespace VirtoCommerce.Storefront.Domain
 
                 if (vendorDto.DynamicProperties != null)
                 {
-                    result.DynamicProperties = vendorDto.DynamicProperties.Select(ToDynamicProperty).ToList();
+                    result.DynamicProperties = new MutablePagedList<DynamicProperty>(vendorDto.DynamicProperties.Select(ToDynamicProperty).ToList());                     
                 }
             }
 
@@ -164,7 +164,7 @@ namespace VirtoCommerce.Storefront.Domain
             }
             if (!contactDto.DynamicProperties.IsNullOrEmpty())
             {
-                result.DynamicProperties = contactDto.DynamicProperties.Select(ToDynamicProperty).ToList();
+                result.DynamicProperties = new MutablePagedList<DynamicProperty>(contactDto.DynamicProperties.Select(ToDynamicProperty).ToList());
             }
             if (!contactDto.SecurityAccounts.IsNullOrEmpty())
             {
@@ -206,7 +206,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (!organizaionDto.DynamicProperties.IsNullOrEmpty())
             {
-                result.DynamicProperties = organizaionDto.DynamicProperties.Select(ToDynamicProperty).ToList();
+                result.DynamicProperties = new MutablePagedList<DynamicProperty>(organizaionDto.DynamicProperties.Select(ToDynamicProperty).ToList());
             }
 
             return result;

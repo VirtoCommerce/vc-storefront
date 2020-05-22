@@ -83,7 +83,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             {
                 var masterViewName = workContext.Layout ?? "theme";
 
-                var headerTemplate = await _liquidThemeEngine.RenderTemplateByNameAsync("content_header", scriptObject);
+                var headerTemplate = _liquidThemeEngine.ResolveTemplatePath("content_header") == null ? "" : await _liquidThemeEngine.RenderTemplateByNameAsync("content_header", scriptObject);
 
                 //add special placeholder 'content_for_layout' to content it will be replaced in master page by main content
                 scriptObject.Add("content_for_layout", result);

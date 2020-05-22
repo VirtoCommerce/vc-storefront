@@ -141,7 +141,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         [IgnoreDataMember]
         public IMutablePagedList<Subscription> Subscriptions { get; set; }
 
-        public IList<DynamicProperty> DynamicProperties => Contact?.DynamicProperties;
+        public IMutablePagedList<DynamicProperty> DynamicProperties => Contact?.DynamicProperties;
 
         public string FirstName => Contact?.FirstName;
         public string LastName => Contact?.LastName;

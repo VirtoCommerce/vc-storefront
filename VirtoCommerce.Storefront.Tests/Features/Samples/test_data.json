@@ -1,0 +1,22 @@
+{
+  "features": [
+    {
+      "Name": "OrdersBrowsing",
+      "IsActive": true,
+      "Requires": [ "PaymentBrowsing", "InvoiceBrowsing" ],
+      "Replaces": []
+    },
+    {
+      "Name": "PaymentBrowsing",
+      "IsActive": true,
+      "Requires": [ "OrdersBrowsing", "InvoiceBrowsing" ],
+      "Replaces": []
+    },
+    {
+      "Name": "InvoiceBrowsing",
+      "IsActive": true,
+      "Requires": [ "OrdersBrowsing", "PaymentBrowsing" ],
+      "Replaces": []
+    }
+  ]
+}
