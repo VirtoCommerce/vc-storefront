@@ -1,65 +1,61 @@
+
+using global::Scriban;
+
+using Newtonsoft.Json.Linq;
+
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
-    using System;
-
-    using global::Scriban;
-
-    using Newtonsoft.Json.Linq;
+    using System.Collections.Generic;
 
     public class FeatureFilter
     {
-        public static string IsFeatureActive(TemplateContext context, string key, params object[] variables)
+        public static bool IsFeatureActive(TemplateContext context, string key, params object[] variables)
         {
             if (string.IsNullOrEmpty(key))
             {
-                return IsFeaturesActive(context, key, variables);
+                return false;
             }
 
-            string result;
-            if (!(context.TemplateLoader is ShopifyLiquidThemeEngine themeEngine))
+            if (context.TemplateLoader is ShopifyLiquidThemeEngine themeEngine)
             {
-                result = Convert.ToString(false);
-            }
-            else
-            {
-                result = IsFeatureActive(themeEngine, key);
+                return themeEngine.IsFeatureActive(key);
             }
 
-            return result;
+            return false;
         }
 
-        public static string IsFeaturesActive(TemplateContext context, string key, params object[] variables)
+        public static string IsFeaturesActive(TemplateContext context, string key, params object[] featureNames)
         {
             if (!string.IsNullOrEmpty(key))
             {
-                return IsFeatureActive(context, key, variables);
+                return string.Empty;
             }
 
-            string result;
-            if (!(context.TemplateLoader is ShopifyLiquidThemeEngine themeEngine))
+            switch (context.TemplateLoader)
             {
-                result = Convert.ToString(false);
+                case ShopifyLiquidThemeEngine themeEngine:
+                    {
+                        var featuresStateJsonObject = BuildFeaturesStateJsonObject(themeEngine, featureNames);
+
+                        return featuresStateJsonObject.ToString();
+                    }
+
+                default:
+                    return string.Empty;
             }
-            else
+        }
+
+        private static JObject BuildFeaturesStateJsonObject(ShopifyLiquidThemeEngine themeEngine, IEnumerable<object> featureNames)
+        {
+            var result = new JObject();
+
+            foreach (string featureName in featureNames)
             {
-                var jObject = new JObject();
-
-                foreach (string featureName in variables)
-                {
-                    var isFeatureActiveResult = IsFeatureActive(themeEngine, featureName);
-                    jObject.Add(featureName, isFeatureActiveResult);
-                }
-
-                result = jObject.ToString();
+                var featureActive = themeEngine.IsFeatureActive(featureName);
+                result.Add(featureName, featureActive);
             }
 
             return result;
-        }
-
-        private static string IsFeatureActive(ShopifyLiquidThemeEngine themeEngine, string key)
-        {
-            var isActive = themeEngine.IsFeatureActive(key);
-            return Convert.ToString(isActive);
         }
     }
 }
