@@ -104,6 +104,24 @@ Read more about how to generate API keys [here](https://virtocommerce.com/docs/v
     }
 	...
 ```
+For platform v3 
+```
+...
+"Endpoint": {
+     //Specify platform url
+     "Url": "https://localhost:5001",
+     //Comment the follow settings
+     //"AppId": "...",
+     //"SecretKey":"...",
+
+     //Uncomment the follow settings
+      "UserName": "admin",
+      "Password": "store",
+      "RequestTimeout": "0:0:30"
+    },
+...
+```
+
 ASP.NET Core represents a new tools a **Secret Manager tool**, which allows in development to keep secrets out of your code.
 You can find more about them [here](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?tabs=visual-studio)
 
@@ -124,6 +142,12 @@ You can set this connection string in one of the following ways:
 ```
 mklink /d C:\vc-storefront-core\VirtoCommerce.Storefront\wwwroot\cms-content C:\vc-platform\VirtoCommerce.Platform.Web\App_Data\cms-content
 ```
+For platform v3 cms-content folder moved to wwwroot directory 
+```
+mklink /d C:\vc-storefront-core\VirtoCommerce.Storefront\wwwroot\cms-content C:\vc-platform\VirtoCommerce.Platform.Web\wwwroot\cms-content
+```
+
+
 2. If you did not install sample data with your platform, you need to create new store in platform manager and download themes as it described in this article
 [Theme development](https://virtocommerce.com/docs/vc2devguide/working-with-storefront/theme-development)
 
