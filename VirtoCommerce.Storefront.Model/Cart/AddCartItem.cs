@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace VirtoCommerce.Storefront.Model.Cart
@@ -32,5 +33,24 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// </summary>
         [JsonProperty("listName")]
         public string ListName { get; set; }
+
+        /// <summary>
+        /// Cart name
+        /// </summary>
+        [JsonProperty("price")]
+        public decimal? Price { get; set; }
+
+
+        /// <summary>
+        /// Cart name
+        /// </summary>
+        [JsonProperty("comment")]
+        public string Comment { get; set; }
+
+        /// <summary>
+        /// Cart name
+        /// </summary>
+        [JsonProperty("dynamicProperties")]
+        public Dictionary<string, string> DynamicProperties { get; set; }
     }
 }

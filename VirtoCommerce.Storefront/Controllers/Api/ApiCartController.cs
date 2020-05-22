@@ -97,7 +97,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var products = await _catalogService.GetProductsAsync(new[] { cartItem.ProductId }, Model.Catalog.ItemResponseGroup.Inventory | Model.Catalog.ItemResponseGroup.ItemWithPrices);
                 if (products != null && products.Any())
                 {
-                    await cartBuilder.AddItemAsync(products.First(), cartItem.Quantity);
+                    await cartBuilder.AddItemAsync(products.First(), cartItem.Quantity, cartItem.Price, cartItem.Comment);
                     await cartBuilder.SaveAsync();
                 }
                 return new ShoppingCartItems { ItemsCount = cartBuilder.Cart.ItemsQuantity };
@@ -107,7 +107,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // PUT: storefrontapi/cart/items/price
         [HttpPut("items/price")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangeCartItemPrice([FromBody] ChangeCartItemPrice newPrice)
+        public async Task<ActionResult> ChangeCartItemPrice([FromBody] ChangeCartItemPrice changeItemPrice)
         {
             EnsureCartExists();
 
@@ -116,19 +116,10 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
 
-                var lineItem = cartBuilder.Cart.Items.FirstOrDefault(x => x.Id == newPrice.LineItemId);
+                var lineItem = cartBuilder.Cart.Items.FirstOrDefault(x => x.Id == changeItemPrice.LineItemId);
                 if (lineItem != null)
                 {
-                    var newPriceMoney = new Money(newPrice.NewPrice, cartBuilder.Cart.Currency);
-                    //do not allow to set less price via this API call
-                    if (lineItem.ListPrice < newPriceMoney)
-                    {
-                        lineItem.ListPrice = newPriceMoney;
-                    }
-                    if (lineItem.SalePrice < newPriceMoney)
-                    {
-                        lineItem.SalePrice = newPriceMoney;
-                    }
+                    await cartBuilder.ChangeItemPriceAsync(lineItem.Id, changeItemPrice.NewPrice);
                 }
                 await cartBuilder.SaveAsync();
 

@@ -108,7 +108,7 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.CompletedTask;
         }
 
-        public virtual async Task<bool> AddItemAsync(Product product, int quantity)
+        public virtual async Task<bool> AddItemAsync(Product product, int quantity, decimal? price=null, string comment = null )
         {
             EnsureCartExists();
 
@@ -117,6 +117,18 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 var lineItem = product.ToLineItem(Cart.Language, quantity);
                 lineItem.Product = product;
+                if(price != null)
+                {
+                    var listPrice = new Money(price.Value, Cart.Currency);
+                    lineItem.ListPrice = listPrice;
+                    lineItem.SalePrice = listPrice;
+                }
+
+                if(string.IsNullOrEmpty(comment))
+                {
+                    lineItem.Comment = comment;
+                }
+                
                 await AddLineItemAsync(lineItem);
             }
             return isProductAvailable;
@@ -465,9 +477,39 @@ namespace VirtoCommerce.Storefront.Domain
             await TakeCartAsync(cart);
         }
 
-        #endregion
+        public Task ChangeItemPriceAsync(string lineItemId, decimal price)
+        {
+            var lineItem = Cart.Items.FirstOrDefault(x => x.Id == lineItemId);
+            if (lineItem != null)
+            {
+                var newPriceMoney = new Money(price, Cart.Currency);
+                //do not allow to set less price via this API call
+                if (lineItem.ListPrice < newPriceMoney)
+                {
+                    lineItem.ListPrice = newPriceMoney;
+                }
+                if (lineItem.SalePrice < newPriceMoney)
+                {
+                    lineItem.SalePrice = newPriceMoney;
+                }
+            }
+            return Task.CompletedTask;
+        }
 
-        protected virtual CartSearchCriteria CreateCartSearchCriteria(string cartName, Store store, User user, Language language, Currency currency, string type)
+
+       public  Task ChangeItemCommentAsync(string lineItemId, string comment)
+       {
+            var lineItem = Cart.Items.FirstOrDefault(x => x.Id == lineItemId);
+            if (lineItem != null)
+            {
+                lineItem.Comment = comment;
+            }
+            return Task.CompletedTask;
+        }   
+
+    #endregion
+
+    protected virtual CartSearchCriteria CreateCartSearchCriteria(string cartName, Store store, User user, Language language, Currency currency, string type)
         {
             return new CartSearchCriteria
             {
@@ -656,5 +698,7 @@ namespace VirtoCommerce.Storefront.Domain
                 }
             }
         }
+
+       
     }
 }
