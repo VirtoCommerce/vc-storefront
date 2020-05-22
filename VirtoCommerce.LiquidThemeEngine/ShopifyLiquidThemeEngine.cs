@@ -505,7 +505,9 @@ namespace VirtoCommerce.LiquidThemeEngine
 
         public bool IsFeatureActive(string featureName)
         {
-            return _memoryCache.GetOrCreateExclusive(featureName, cacheEntry =>
+            var cacheKey = CacheKey.With(GetType(), nameof(IsFeatureActive), featureName);
+
+            return _memoryCache.GetOrCreateExclusive(cacheKey, cacheEntry =>
             {
                 var changeToken = ThemeEngineCacheRegion.CreateChangeToken();
                 var watchChangeToken = _themeBlobProvider.Watch(CurrentThemeSettingPath);
