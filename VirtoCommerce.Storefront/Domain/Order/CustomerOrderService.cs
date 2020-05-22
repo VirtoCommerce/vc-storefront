@@ -1,8 +1,7 @@
-using PagedList.Core;
 using System;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
+using PagedList.Core;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 using VirtoCommerce.Storefront.Model;
@@ -53,7 +52,7 @@ namespace VirtoCommerce.Storefront.Domain
                 throw new ArgumentNullException(nameof(criteria));
             }
             var result = await _orderApi.SearchCustomerOrderAsync(criteria.ToSearchCriteriaDto());
-            return new StaticPagedList<CustomerOrder>(result.CustomerOrders.Select(x => x.ToCustomerOrder(workContext.AllCurrencies, workContext.CurrentLanguage)),
+            return new StaticPagedList<CustomerOrder>(result.Results.Select(x => x.ToCustomerOrder(workContext.AllCurrencies, workContext.CurrentLanguage)),
                                                      criteria.PageNumber, criteria.PageSize, result.TotalCount.Value);
         }
 
