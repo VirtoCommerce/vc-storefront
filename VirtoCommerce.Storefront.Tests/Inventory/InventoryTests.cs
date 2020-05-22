@@ -69,13 +69,13 @@ namespace VirtoCommerce.Storefront.Tests.Inventory
         {
             var inventoryModuleStub = new Mock<IInventoryModule>();
 
-            inventoryModuleStub.Setup(x => x.GetProductsInventoriesByPlentyIdsWithHttpMessagesAsync(It.IsAny<IList<string>>(), null, null, It.IsAny<CancellationToken>()))
-                .Returns<IList<string>, Dictionary<string, List<string>>, CancellationToken>((ids, customHeaders, cancellationToken) =>
-                    Task.FromResult(
-                        new HttpOperationResponse<IList<InventoryInfo>>()
-                        {
-                            Body = allInventoryInfos.Where(inventoryInfo => ids.Any(id => id == inventoryInfo.ProductId)).ToList(),
-                        }));
+            inventoryModuleStub.Setup(x => x.GetProductsInventoriesByPlentyIdsWithHttpMessagesAsync(It.IsAny<IList<string>>(), It.IsAny<IList<string>>(), null, It.IsAny<CancellationToken>()))
+                .Returns<IList<string>, IList<string>, Dictionary<string, List<string>>, CancellationToken>((productIds, ffcIds, customHeaders, cancellationToken) =>
+                   Task.FromResult(
+                       new HttpOperationResponse<IList<InventoryInfo>>()
+                       {
+                           Body = allInventoryInfos.Where(inventoryInfo => productIds.Any(id => id == inventoryInfo.ProductId)).ToList(),
+                       }));
 
             var storefrontMemoryCache = CreateStorefrontMemoryCache();
 
