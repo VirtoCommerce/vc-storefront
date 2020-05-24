@@ -40,8 +40,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="2.2.0" />
-    <PackageReference Include="AspNet.Security.OAuth.StackExchange" Version="2.2.0" />
+    <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="3.1.1" />
+    <PackageReference Include="AspNet.Security.OAuth.StackExchange" Version="3.1.1" />
     <PackageReference Include="IdentityModel" Version="4.1.1" />
     <PackageReference Include="Markdig" Version="0.18.3" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.13.1" />
@@ -51,7 +51,7 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AutoRest.Common" Version="2.4.48" />
-    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="2.2.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="3.1.4" />
     <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.21" />
     <PackageReference Include="Microsoft.SyndicationFeed.ReaderWriter" Version="1.0.2" />
     <PackageReference Include="MimeTypes" Version="1.1.0">
@@ -63,9 +63,9 @@
     <PackageReference Include="Polly" Version="7.2.0" />
     <PackageReference Include="Scrutor" Version="3.2.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.0.601" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="4.0.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="4.0.1" />
-    <PackageReference Include="VirtoCommerce.Tools" Version="1.2.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.4.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.4.1" />
+    <PackageReference Include="VirtoCommerce.Tools" Version="3.0.2" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
   </ItemGroup>
 
