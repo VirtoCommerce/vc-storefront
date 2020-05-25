@@ -138,7 +138,8 @@ namespace VirtoCommerce.Storefront.Domain
         {
             EnsureCartExists();
 
-            var lineItem = Cart.Items.FirstOrDefault(i => i.Id == id);
+            var lineItem = Cart.Items.FirstOrDefault(i => i.Id == id);           
+
             if (lineItem != null)
             {
                 await ChangeItemQuantityAsync(lineItem, quantity);
@@ -150,11 +151,14 @@ namespace VirtoCommerce.Storefront.Domain
             EnsureCartExists();
 
             var lineItem = Cart.Items.ElementAt(lineItemIndex);
+            
             if (lineItem != null)
             {
                 await ChangeItemQuantityAsync(lineItem, quantity);
             }
         }
+
+        
 
         public virtual async Task ChangeItemsQuantitiesAsync(int[] quantities)
         {
@@ -620,17 +624,23 @@ namespace VirtoCommerce.Storefront.Domain
         {
             if (lineItem != null && !lineItem.IsReadOnly)
             {
+
                 if (lineItem.Product != null)
                 {
-                    var salePrice = lineItem.Product.Price.GetTierPrice(quantity).Price;
-                    if (salePrice != 0)
+                    var product = lineItem.Product;
+
+                    if (product.Price.ListPrice == lineItem.ListPrice)
                     {
-                        lineItem.SalePrice = salePrice;
-                    }
-                    //List price should be always greater ot equals sale price because it may cause incorrect totals calculation
-                    if (lineItem.ListPrice < lineItem.SalePrice)
-                    {
-                        lineItem.ListPrice = lineItem.SalePrice;
+                        var salePrice = product.Price.GetTierPrice(quantity).Price;
+                        if (salePrice != 0)
+                        {
+                            lineItem.SalePrice = salePrice;
+                        }
+                        //List price should be always greater ot equals sale price because it may cause incorrect totals calculation
+                        if (lineItem.ListPrice < lineItem.SalePrice)
+                        {
+                            lineItem.ListPrice = lineItem.SalePrice;
+                        }
                     }
                 }
                 if (quantity > 0)
