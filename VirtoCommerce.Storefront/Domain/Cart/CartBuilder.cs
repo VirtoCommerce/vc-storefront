@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation;
 using Microsoft.Extensions.Caching.Memory;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Cart.ValidationErrors;
+using VirtoCommerce.Storefront.Model.Cart.Validators;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -47,7 +49,7 @@ namespace VirtoCommerce.Storefront.Domain
             _promotionEvaluator = promotionEvaluator;
             _taxEvaluator = taxEvaluator;
             _subscriptionService = subscriptionService;
-        }
+       }
 
         #region ICartBuilder Members
 
@@ -108,41 +110,73 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.CompletedTask;
         }
 
-        public virtual async Task<bool> AddItemAsync(Product product, int quantity, decimal? price=null, string comment = null )
+        public virtual async Task<bool> AddItemAsync(AddCartItem addCartItem)
         {
             EnsureCartExists();
 
-            var isProductAvailable = new ProductIsAvailableSpecification(product).IsSatisfiedBy(quantity);
-            if (isProductAvailable)
+            var result = await new AddCartItemValidator(Cart).ValidateAsync(addCartItem, ruleSet: Cart.ValidationRuleSet);
+            if (result.IsValid)
             {
-                var lineItem = product.ToLineItem(Cart.Language, quantity);
-                lineItem.Product = product;
-                if(price != null)
+                var lineItem = addCartItem.Product.ToLineItem(Cart.Language, addCartItem.Quantity);
+                lineItem.Product = addCartItem.Product;
+                if (addCartItem.Price != null)
                 {
-                    var listPrice = new Money(price.Value, Cart.Currency);
+                    var listPrice = new Money(addCartItem.Price.Value, Cart.Currency);
                     lineItem.ListPrice = listPrice;
                     lineItem.SalePrice = listPrice;
                 }
-
-                if(string.IsNullOrEmpty(comment))
+                if (string.IsNullOrEmpty(addCartItem.Comment))
                 {
-                    lineItem.Comment = comment;
+                    lineItem.Comment = addCartItem.Comment;
                 }
-                
+
+                if (!addCartItem.DynamicProperties.IsNullOrEmpty())
+                {
+                    lineItem.DynamicProperties = new MutablePagedList<DynamicProperty>(addCartItem.DynamicProperties.Select(x => new DynamicProperty
+                    {
+                        Name = x.Key,
+                        Values = new[] { new LocalizedString { Language = Cart.Language, Value = x.Value } }
+                    }));
+                }
+
                 await AddLineItemAsync(lineItem);
             }
-            return isProductAvailable;
+            return result.IsValid;
         }
 
-        public virtual async Task ChangeItemQuantityAsync(string id, int quantity)
+        public virtual async Task ChangeItemPriceAsync(ChangeCartItemPrice newPrice)
+        {
+            EnsureCartExists();
+            await new ChangeCartItemPriceValidator(Cart).ValidateAndThrowAsync(newPrice, ruleSet: Cart.ValidationRuleSet);
+
+            var lineItem = Cart.Items.FirstOrDefault(x => x.Id == newPrice.LineItemId);
+            if (lineItem != null)
+            {
+                var newPriceMoney = new Money(newPrice.NewPrice, Cart.Currency);
+                lineItem.ListPrice = newPriceMoney;
+                lineItem.SalePrice = newPriceMoney;
+            }
+        }
+
+        public virtual Task ChangeCommentAsync(ChangeCartItemComment newItemComment)
+        {
+            EnsureCartExists();
+            var lineItem = Cart.Items.FirstOrDefault(x => x.Id == newItemComment.LineItemId);
+            if (lineItem != null)
+            {
+                lineItem.Comment = newItemComment.Comment;
+            }
+            return Task.CompletedTask;
+        }
+
+        public virtual async Task ChangeItemQuantityAsync(ChangeCartItemQty changeItemQty)
         {
             EnsureCartExists();
 
-            var lineItem = Cart.Items.FirstOrDefault(i => i.Id == id);           
-
+            var lineItem = Cart.Items.FirstOrDefault(i => i.Id == changeItemQty.LineItemId);
             if (lineItem != null)
             {
-                await ChangeItemQuantityAsync(lineItem, quantity);
+                await ChangeItemQuantityAsync(lineItem, changeItemQty.Quantity);
             }
         }
 
@@ -151,14 +185,11 @@ namespace VirtoCommerce.Storefront.Domain
             EnsureCartExists();
 
             var lineItem = Cart.Items.ElementAt(lineItemIndex);
-            
             if (lineItem != null)
             {
                 await ChangeItemQuantityAsync(lineItem, quantity);
             }
         }
-
-        
 
         public virtual async Task ChangeItemsQuantitiesAsync(int[] quantities)
         {
@@ -437,8 +468,8 @@ namespace VirtoCommerce.Storefront.Domain
         public async Task ValidateAsync()
         {
             EnsureCartExists();
-            await Task.WhenAll(ValidateCartItemsAsync(), ValidateCartShipmentsAsync());
-            Cart.IsValid = Cart.Items.All(x => x.IsValid) && Cart.Shipments.All(x => x.IsValid);
+            var result = await new CartValidator(_cartService).ValidateAsync(Cart, ruleSet: Cart.ValidationRuleSet);
+            Cart.IsValid = result.IsValid;
         }
 
         public virtual async Task EvaluatePromotionsAsync()
@@ -481,39 +512,9 @@ namespace VirtoCommerce.Storefront.Domain
             await TakeCartAsync(cart);
         }
 
-        public Task ChangeItemPriceAsync(string lineItemId, decimal price)
-        {
-            var lineItem = Cart.Items.FirstOrDefault(x => x.Id == lineItemId);
-            if (lineItem != null)
-            {
-                var newPriceMoney = new Money(price, Cart.Currency);
-                //do not allow to set less price via this API call
-                if (lineItem.ListPrice < newPriceMoney)
-                {
-                    lineItem.ListPrice = newPriceMoney;
-                }
-                if (lineItem.SalePrice < newPriceMoney)
-                {
-                    lineItem.SalePrice = newPriceMoney;
-                }
-            }
-            return Task.CompletedTask;
-        }
+        #endregion
 
-
-       public  Task ChangeItemCommentAsync(string lineItemId, string comment)
-       {
-            var lineItem = Cart.Items.FirstOrDefault(x => x.Id == lineItemId);
-            if (lineItem != null)
-            {
-                lineItem.Comment = comment;
-            }
-            return Task.CompletedTask;
-        }   
-
-    #endregion
-
-    protected virtual CartSearchCriteria CreateCartSearchCriteria(string cartName, Store store, User user, Language language, Currency currency, string type)
+        protected virtual CartSearchCriteria CreateCartSearchCriteria(string cartName, Store store, User user, Language language, Currency currency, string type)
         {
             return new CartSearchCriteria
             {
@@ -537,61 +538,13 @@ namespace VirtoCommerce.Storefront.Domain
                 Type = type,
                 IsAnonymous = !user.IsRegisteredUser,
                 CustomerName = user.IsRegisteredUser ? user.UserName : SecurityConstants.AnonymousUsername,
+
             };
 
             return cart;
         }
 
-        protected virtual Task ValidateCartItemsAsync()
-        {
-            foreach (var lineItem in Cart.Items.ToList())
-            {
-                lineItem.ValidationErrors.Clear();
-
-                if (lineItem.Product == null || !lineItem.Product.IsActive || !lineItem.Product.IsBuyable)
-                {
-                    lineItem.ValidationErrors.Add(new UnavailableError());
-                }
-                else
-                {
-                    var isProductAvailable = new ProductIsAvailableSpecification(lineItem.Product).IsSatisfiedBy(lineItem.Quantity);
-                    if (!isProductAvailable)
-                    {
-                        var availableQuantity = lineItem.Product.AvailableQuantity;
-                        lineItem.ValidationErrors.Add(new QuantityError(availableQuantity));
-                    }
-
-                    var tierPrice = lineItem.Product.Price.GetTierPrice(lineItem.Quantity);
-                    if (tierPrice.Price > lineItem.SalePrice)
-                    {
-                        lineItem.ValidationErrors.Add(new PriceError(lineItem.SalePrice, lineItem.SalePriceWithTax, tierPrice.Price, tierPrice.PriceWithTax));
-                    }
-                }
-
-                lineItem.IsValid = !lineItem.ValidationErrors.Any();
-            }
-            return Task.CompletedTask;
-        }
-
-        protected virtual async Task ValidateCartShipmentsAsync()
-        {
-            foreach (var shipment in Cart.Shipments.ToArray())
-            {
-                shipment.ValidationErrors.Clear();
-
-                var availShippingmethods = await GetAvailableShippingMethodsAsync();
-                var shipmentShippingMethod = availShippingmethods.FirstOrDefault(sm => shipment.HasSameMethod(sm));
-                if (shipmentShippingMethod == null)
-                {
-                    shipment.ValidationErrors.Add(new UnavailableError());
-                }
-                else if (shipmentShippingMethod.Price != shipment.Price)
-                {
-                    shipment.ValidationErrors.Add(new PriceError(shipment.Price, shipment.PriceWithTax, shipmentShippingMethod.Price, shipmentShippingMethod.PriceWithTax));
-                }
-            }
-        }
-
+    
         protected virtual Task RemoveExistingPaymentAsync(Payment payment)
         {
             if (payment != null)
@@ -624,23 +577,17 @@ namespace VirtoCommerce.Storefront.Domain
         {
             if (lineItem != null && !lineItem.IsReadOnly)
             {
-
                 if (lineItem.Product != null)
                 {
-                    var product = lineItem.Product;
-
-                    if (product.Price.ListPrice == lineItem.ListPrice)
+                    var salePrice = lineItem.Product.Price.GetTierPrice(quantity).Price;
+                    if (salePrice != 0)
                     {
-                        var salePrice = product.Price.GetTierPrice(quantity).Price;
-                        if (salePrice != 0)
-                        {
-                            lineItem.SalePrice = salePrice;
-                        }
-                        //List price should be always greater ot equals sale price because it may cause incorrect totals calculation
-                        if (lineItem.ListPrice < lineItem.SalePrice)
-                        {
-                            lineItem.ListPrice = lineItem.SalePrice;
-                        }
+                        lineItem.SalePrice = salePrice;
+                    }
+                    //List price should be always greater ot equals sale price because it may cause incorrect totals calculation
+                    if (lineItem.ListPrice < lineItem.SalePrice)
+                    {
+                        lineItem.ListPrice = lineItem.SalePrice;
                     }
                 }
                 if (quantity > 0)
@@ -661,6 +608,7 @@ namespace VirtoCommerce.Storefront.Domain
             if (existingLineItem != null)
             {
                 await ChangeItemQuantityAsync(existingLineItem, existingLineItem.Quantity + Math.Max(1, lineItem.Quantity));
+                //TODO: Merge dynamic properties
             }
             else
             {
@@ -707,8 +655,9 @@ namespace VirtoCommerce.Storefront.Domain
                     lineItem.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == lineItem.ProductId);
                 }
             }
+            //Load validation rule set from store configuration
+            //ensure what 'default' rule set is always present
+            cart.ValidationRuleSet = store.CartValidationRuleSet?.AddIfNotContains("default") ?? cart.ValidationRuleSet;
         }
-
-       
     }
 }

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using VirtoCommerce.Storefront.Model.Catalog;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Cart
 {
@@ -19,6 +21,9 @@ namespace VirtoCommerce.Storefront.Model.Cart
         [JsonProperty("productId")]
         public string ProductId { get; set; }
 
+        [JsonIgnore]
+        public Product Product { get; set; }
+
         [JsonProperty("quantity")]
         public int Quantity { get; set; }
 
@@ -35,7 +40,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         public string ListName { get; set; }
 
         /// <summary>
-        /// Cart name
+        /// Manual price
         /// </summary>
         [JsonProperty("price")]
         public decimal? Price { get; set; }

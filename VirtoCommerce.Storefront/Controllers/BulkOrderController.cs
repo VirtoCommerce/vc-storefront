@@ -132,7 +132,11 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 if (foundSkusProductsWithVariationsMap.TryGetValue(bulkOrderItem.Sku, out var product))
                 {
-                    if (await _cartBuilder.AddItemAsync(product, bulkOrderItem.Quantity))
+                    if (await _cartBuilder.AddItemAsync(new Model.Cart.AddCartItem
+                    {
+                        Product = product,
+                        Quantity = bulkOrderItem.Quantity
+                    }))
                     {
                         addedSkus.Add(product.Sku);
                     }
