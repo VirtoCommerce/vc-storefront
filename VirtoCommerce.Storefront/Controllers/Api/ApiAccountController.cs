@@ -110,23 +110,31 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             if (ModelState.IsValid)
             {
-                var organization = orgRegistration.ToOrganization();
-                organization = await _memberService.CreateOrganizationAsync(organization);
-                var contact = orgRegistration.ToContact();
-                contact.OrganizationId = organization.Id;
-
-                var user = orgRegistration.ToUser();
-                user.Contact = contact;
-                user.StoreId = WorkContext.CurrentStore.Id;
-                user.Roles = new[] { SecurityConstants.Roles.OrganizationMaintainer };
-
-                result = await _userManager.CreateAsync(user, orgRegistration.Password);
-                if (result.Succeeded)
+                var user = await _userManager.FindByNameAsync(orgRegistration.UserName);
+                if (user == null)
                 {
-                    user = await _userManager.FindByNameAsync(user.UserName);
-                    await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, orgRegistration));
-                    await _signInManager.SignInAsync(user, isPersistent: true);
-                    await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                    var organization = orgRegistration.ToOrganization();
+                    organization = await _memberService.CreateOrganizationAsync(organization);
+                    var contact = orgRegistration.ToContact();
+                    contact.OrganizationId = organization.Id;
+
+                    user = orgRegistration.ToUser();
+                    user.Contact = contact;
+                    user.StoreId = WorkContext.CurrentStore.Id;
+                    user.Roles = new[] { SecurityConstants.Roles.OrganizationMaintainer };
+
+                    result = await _userManager.CreateAsync(user, orgRegistration.Password);
+                    if (result.Succeeded)
+                    {
+                        user = await _userManager.FindByNameAsync(user.UserName);
+                        await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, orgRegistration));
+                        await _signInManager.SignInAsync(user, isPersistent: true);
+                        await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                    }
+                }
+                else
+                {
+                    result = IdentityResult.Failed(new IdentityError[] { new IdentityError() { Description = $"User name '{orgRegistration.UserName}' is already taken." } });
                 }
             }
             else
