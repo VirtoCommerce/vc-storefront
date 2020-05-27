@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
@@ -360,7 +359,7 @@ namespace VirtoCommerce.Storefront
                 c.SchemaFilter<EnumSchemaFilter>();
                 c.SchemaFilter<NewtonsoftJsonIgnoreFilter>();
 
-                // Use method name as operationId
+                // Use method name as operation ID, i.e. ApiAccount.GetOrganization instead of /storefrontapi/account/organization (will be treated as just organization method)
                 c.CustomOperationIds(apiDesc => apiDesc.TryGetMethodInfo(out var methodInfo) ? methodInfo.Name : null);
 
                 // To avoid errors with repeating type names
