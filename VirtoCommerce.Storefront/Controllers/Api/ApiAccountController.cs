@@ -110,7 +110,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByNameAsync(orgRegistration.UserName);
+                var user = await _userManager.FindByEmailAsync(orgRegistration.Email);
+                if (user != null)
+                {
+                    return IdentityResult.Failed(new IdentityError[] { new IdentityError() { Description = $"Email '{orgRegistration.Email}' is already taken." } });
+                }
+                user = await _userManager.FindByNameAsync(orgRegistration.UserName);
                 if (user == null)
                 {
                     var organization = orgRegistration.ToOrganization();
@@ -134,7 +139,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 }
                 else
                 {
-                    result = IdentityResult.Failed(new IdentityError[] { new IdentityError() { Description = $"User name '{orgRegistration.UserName}' is already taken." } });
+                    return IdentityResult.Failed(new IdentityError[] { new IdentityError() { Description = $"User name '{orgRegistration.UserName}' is already taken." } });
                 }
             }
             else
