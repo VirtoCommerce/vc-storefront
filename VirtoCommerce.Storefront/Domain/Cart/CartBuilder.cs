@@ -125,7 +125,7 @@ namespace VirtoCommerce.Storefront.Domain
                     lineItem.ListPrice = listPrice;
                     lineItem.SalePrice = listPrice;
                 }
-                if (string.IsNullOrEmpty(addCartItem.Comment))
+                if (!string.IsNullOrEmpty(addCartItem.Comment))
                 {
                     lineItem.Comment = addCartItem.Comment;
                 }
@@ -158,13 +158,28 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
-        public virtual Task ChangeCommentAsync(ChangeCartItemComment newItemComment)
+        public virtual Task ChangeItemCommentAsync(ChangeCartItemComment newItemComment)
         {
             EnsureCartExists();
             var lineItem = Cart.Items.FirstOrDefault(x => x.Id == newItemComment.LineItemId);
             if (lineItem != null)
             {
                 lineItem.Comment = newItemComment.Comment;
+            }
+            return Task.CompletedTask;
+        }
+
+        public virtual Task ChangeItemDynamicPropertiesAsync(ChangeCartItemDynamicProperties newItemDynamicProperties)
+        {
+            EnsureCartExists();
+            var lineItem = Cart.Items.FirstOrDefault(x => x.Id == newItemDynamicProperties.LineItemId);
+            if (lineItem != null && !newItemDynamicProperties.DynamicProperties.IsNullOrEmpty())
+            {
+                lineItem.DynamicProperties = new MutablePagedList<DynamicProperty>(newItemDynamicProperties.DynamicProperties.Select(x => new DynamicProperty
+                {
+                    Name = x.Key,
+                    Values = new[] { new LocalizedString { Language = Cart.Language, Value = x.Value } }
+                }));
             }
             return Task.CompletedTask;
         }

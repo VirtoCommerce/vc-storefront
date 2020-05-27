@@ -69,7 +69,9 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
 
         Task ChangeItemPriceAsync(ChangeCartItemPrice newPrice);
 
-        Task ChangeCommentAsync(ChangeCartItemComment newItemComment);
+        Task ChangeItemCommentAsync(ChangeCartItemComment newItemComment);
+
+        Task ChangeItemDynamicPropertiesAsync(ChangeCartItemDynamicProperties newItemDynamicProperties);
 
         /// <summary>
         /// Remove item from cart by id

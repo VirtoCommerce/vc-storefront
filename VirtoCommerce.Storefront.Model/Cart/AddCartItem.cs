@@ -47,13 +47,13 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
 
         /// <summary>
-        /// Cart name
+        /// Comment
         /// </summary>
         [JsonProperty("comment")]
         public string Comment { get; set; }
 
         /// <summary>
-        /// Cart name
+        /// Dynamic properties
         /// </summary>
         [JsonProperty("dynamicProperties")]
         public Dictionary<string, string> DynamicProperties { get; set; }
