@@ -106,21 +106,46 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<IdentityResult>> RegisterOrganization([FromBody] OrganizationRegistration orgRegistration)
         {
-            var result = IdentityResult.Success;
+            IdentityResult result;
 
             TryValidateModel(orgRegistration);
 
             if (ModelState.IsValid)
             {
+                var user = await _userManager.FindByEmailAsync(orgRegistration.Email);
+                if (user != null)
+                {
+                    var error = new IdentityError
+                    {
+                        Description = $"Email '{orgRegistration.Email}' is already taken."
+                    };
+
+                    return IdentityResult.Failed(error);
+                }
+
+                user = await _userManager.FindByNameAsync(orgRegistration.UserName);
+                if (user != null)
+                {
+                    var error = new IdentityError
+                    {
+                        Description = $"User name '{orgRegistration.UserName}' is already taken."
+                    };
+
+                    return IdentityResult.Failed(error);
+                }
+
                 var organization = orgRegistration.ToOrganization();
                 organization = await _memberService.CreateOrganizationAsync(organization);
                 var contact = orgRegistration.ToContact();
                 contact.OrganizationId = organization.Id;
 
-                var user = orgRegistration.ToUser();
+                user = orgRegistration.ToUser();
                 user.Contact = contact;
                 user.StoreId = WorkContext.CurrentStore.Id;
-                user.Roles = new[] { SecurityConstants.Roles.OrganizationMaintainer };
+                user.Roles = new[]
+                             {
+                                 SecurityConstants.Roles.OrganizationMaintainer
+                             };
 
                 result = await _userManager.CreateAsync(user, orgRegistration.Password);
                 if (result.Succeeded)
@@ -133,7 +158,13 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
             else
             {
-                result = IdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors).Select(x => new IdentityError { Description = x.ErrorMessage }).ToArray());
+                var modelStateEntries = ModelState.Values.SelectMany(value => value.Errors);
+                var errors = modelStateEntries.Select(
+                    modelError => new IdentityError
+                    {
+                        Description = modelError.ErrorMessage
+                    });
+                result = IdentityResult.Failed(errors.ToArray());
             }
 
             return result;
