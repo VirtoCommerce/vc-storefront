@@ -142,21 +142,18 @@ namespace VirtoCommerce.Storefront.Domain
                 await AddLineItemAsync(lineItem);
             }
             return result.IsValid;
-        }
-
-        public virtual async Task ChangeItemPriceAsync(ChangeCartItemPrice newPrice)
+        }        
+        
+        public virtual async Task ChangeItemPriceAsync(ChangeCartItemPrice changePrice)
         {
-            EnsureCartExists();
-            await new ChangeCartItemPriceValidator(Cart).ValidateAndThrowAsync(newPrice, ruleSet: Cart.ValidationRuleSet);
+            EnsureCartExists();            
 
-            var lineItem = Cart.Items.FirstOrDefault(x => x.Id == newPrice.LineItemId);
+            var lineItem = Cart.Items.FirstOrDefault(x => x.Id == changePrice.LineItemId);
             if (lineItem != null)
             {
-                var newPriceMoney = new Money(newPrice.NewPrice, Cart.Currency);
-                lineItem.ListPrice = newPriceMoney;
-                lineItem.SalePrice = newPriceMoney;
+                await ChangeItemPriceAsync(lineItem, changePrice);                
             }
-        }
+        }        
 
         public virtual Task ChangeItemCommentAsync(ChangeCartItemComment newItemComment)
         {
@@ -622,14 +619,24 @@ namespace VirtoCommerce.Storefront.Domain
             var existingLineItem = Cart.Items.FirstOrDefault(li => li.ProductId == lineItem.ProductId);
             if (existingLineItem != null)
             {
-                await ChangeItemQuantityAsync(existingLineItem, existingLineItem.Quantity + Math.Max(1, lineItem.Quantity));
-                //TODO: Merge dynamic properties
+                await ChangeItemQuantityAsync(existingLineItem, existingLineItem.Quantity + Math.Max(1, lineItem.Quantity));                
+                await ChangeItemPriceAsync(existingLineItem, new ChangeCartItemPrice() { LineItemId = existingLineItem.Id, NewPrice = lineItem.ListPrice.Amount });
+                existingLineItem.Comment = lineItem.Comment;
+                existingLineItem.DynamicProperties = lineItem.DynamicProperties;
             }
             else
             {
                 lineItem.Id = null;
                 Cart.Items.Add(lineItem);
             }
+        }
+
+        public virtual async Task ChangeItemPriceAsync(LineItem lineItem, ChangeCartItemPrice changePrice)
+        {
+            await new ChangeCartItemPriceValidator(Cart).ValidateAndThrowAsync(changePrice, ruleSet: Cart.ValidationRuleSet);
+            var newPriceMoney = new Money(changePrice.NewPrice, Cart.Currency);
+            lineItem.ListPrice = newPriceMoney;
+            lineItem.SalePrice = newPriceMoney;
         }
 
         protected virtual void EnsureCartExists()
