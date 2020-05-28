@@ -21,6 +21,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using StackExchange.Redis;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Binders;
 using VirtoCommerce.Storefront.Caching;
@@ -357,6 +358,9 @@ namespace VirtoCommerce.Storefront
                 c.OperationFilter<FileUploadOperationFilter>();
                 c.SchemaFilter<EnumSchemaFilter>();
                 c.SchemaFilter<NewtonsoftJsonIgnoreFilter>();
+
+                // Use method name as operation ID, i.e. ApiAccount.GetOrganization instead of /storefrontapi/account/organization (will be treated as just organization method)
+                c.CustomOperationIds(apiDesc => apiDesc.TryGetMethodInfo(out var methodInfo) ? methodInfo.Name : null);
 
                 // To avoid errors with repeating type names
                 c.CustomSchemaIds(type => (Attribute.GetCustomAttribute(type, typeof(SwaggerSchemaIdAttribute)) as SwaggerSchemaIdAttribute)?.Id ?? type.FriendlyId());
