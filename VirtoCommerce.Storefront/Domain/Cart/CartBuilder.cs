@@ -144,14 +144,14 @@ namespace VirtoCommerce.Storefront.Domain
             return result.IsValid;
         }        
         
-        public virtual async Task ChangeItemPriceAsync(ChangeCartItemPrice changePrice)
+        public virtual async Task ChangeItemPriceAsync(ChangeCartItemPrice newPrice)
         {
             EnsureCartExists();            
 
-            var lineItem = Cart.Items.FirstOrDefault(x => x.Id == changePrice.LineItemId);
+            var lineItem = Cart.Items.FirstOrDefault(x => x.Id == newPrice.LineItemId);
             if (lineItem != null)
             {
-                await ChangeItemPriceAsync(lineItem, changePrice);                
+                await ChangeItemPriceAsync(lineItem, newPrice);                
             }
         }        
 
