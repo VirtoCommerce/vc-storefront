@@ -36,7 +36,6 @@ namespace VirtoCommerce.Storefront.Model.Cart
             TaxDetails = new List<TaxDetail>();
             DynamicProperties = new MutablePagedList<DynamicProperty>(Enumerable.Empty<DynamicProperty>());
             ValidationErrors = new List<ValidationError>();
-            IsValid = true;
         }
 
         /// <summary>
@@ -258,7 +257,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         public IMutablePagedList<DynamicProperty> DynamicProperties { get; set; }
 
         #region IValidatable Members
-        public bool IsValid { get; set; }
+        public bool IsValid => ValidationErrors?.Any() ?? true;
         public IList<ValidationError> ValidationErrors { get; set; }
         #endregion
 
