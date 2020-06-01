@@ -119,7 +119,7 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 // Register user
                 var user = registration.ToUser();
-                user.Contact = registration.ToContact();
+                user.Contact = registration.ToContact(WorkContext.CurrentLanguage);
                 user.StoreId = WorkContext.CurrentStore.Id;
 
                 var result = await _signInManager.UserManager.CreateAsync(user, registration.Password);
@@ -224,7 +224,7 @@ namespace VirtoCommerce.Storefront.Controllers
                     if (result.Succeeded)
                     {
                         user.UserName = register.UserName;
-                        user.Contact = register.ToContact();
+                        user.Contact = register.ToContact(WorkContext.CurrentLanguage);
                         user.Contact.OrganizationId = register.OrganizationId;
 
                         result = await _signInManager.UserManager.UpdateAsync(user);
@@ -510,7 +510,7 @@ namespace VirtoCommerce.Storefront.Controllers
                         UserName = user.UserName,
                         Email = user.Email
                     };
-                    user.Contact = userRegistration.ToContact();
+                    user.Contact = userRegistration.ToContact(WorkContext.CurrentLanguage);
 
                     identityResult = await _signInManager.UserManager.CreateAsync(user);
                     if (identityResult.Succeeded)

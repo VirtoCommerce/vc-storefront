@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace VirtoCommerce.Storefront.Model.Security
@@ -6,5 +7,6 @@ namespace VirtoCommerce.Storefront.Model.Security
     {
         
         public string OrganizationName { get; set; }
+        public Dictionary<string, string> OrganizationDynamicProperties { get; set; }
     }
 }

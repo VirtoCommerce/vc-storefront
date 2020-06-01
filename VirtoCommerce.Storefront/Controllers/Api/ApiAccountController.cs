@@ -112,9 +112,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             if (ModelState.IsValid)
             {
-                var organization = orgRegistration.ToOrganization();
+                var organization = orgRegistration.ToOrganization(WorkContext.CurrentLanguage);
                 organization = await _memberService.CreateOrganizationAsync(organization);
-                var contact = orgRegistration.ToContact();
+                var contact = orgRegistration.ToContact(WorkContext.CurrentLanguage);
                 contact.OrganizationId = organization.Id;
 
                 var user = orgRegistration.ToUser();
@@ -158,7 +158,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     return Unauthorized();
                 }
 
-                var contact = registration.ToContact();
+                var contact = registration.ToContact(WorkContext.CurrentLanguage);
                 contact.OrganizationId = registration.OrganizationId;
 
                 var user = registration.ToUser();

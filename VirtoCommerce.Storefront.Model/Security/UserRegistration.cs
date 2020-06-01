@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace VirtoCommerce.Storefront.Model.Security
 {
@@ -45,7 +47,8 @@ namespace VirtoCommerce.Storefront.Model.Security
         [FromForm(Name = "customer[birthDate]")]
         public DateTime? BirthDate { get; set; }
         [FromForm(Name = "customer[timeZone]")]
-        public string TimeZone { get; set; }     
-      
+        public string TimeZone { get; set; }
+        [FromForm(Name = "customer[dynamic_properties]")]
+        public Dictionary<string, string> ContactDynamicProperties { get; set; }
     }
 }

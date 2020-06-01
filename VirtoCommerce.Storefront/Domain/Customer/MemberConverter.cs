@@ -89,21 +89,30 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static Organization ToOrganization(this OrganizationRegistration orgRegistration)
+        public static Organization ToOrganization(this OrganizationRegistration orgRegistration, Language language)
         {
             var organization = new Organization
             {
                 Name = orgRegistration.OrganizationName,
             };
-            if (organization.Addresses != null)
+            if (orgRegistration.Address != null)
             {
                 organization.Addresses.Add(orgRegistration.Address);
+            }
+
+            if (!orgRegistration.OrganizationDynamicProperties.IsNullOrEmpty())
+            {
+                organization.DynamicProperties = new MutablePagedList<DynamicProperty>(orgRegistration.OrganizationDynamicProperties.Select(x => new DynamicProperty
+                {
+                    Name = x.Key,
+                    Values = new[] { new LocalizedString { Language = language, Value = x.Value } }
+                }));
             }
             return organization;
         }
 
 
-        public static Contact ToContact(this UserRegistration userRegistration)
+        public static Contact ToContact(this UserRegistration userRegistration, Language language)
         {
             var result = new Contact
             {
@@ -125,6 +134,15 @@ namespace VirtoCommerce.Storefront.Domain
             if (userRegistration.Address != null)
             {
                 result.Addresses = new[] { userRegistration.Address };
+            }
+
+            if (!userRegistration.ContactDynamicProperties.IsNullOrEmpty())
+            {
+                result.DynamicProperties = new MutablePagedList<DynamicProperty>(userRegistration.ContactDynamicProperties.Select(x => new DynamicProperty
+                {
+                    Name = x.Key,
+                    Values = new[] { new LocalizedString { Language = language, Value = x.Value } }
+                }));
             }
             return result;
         }
