@@ -27,13 +27,11 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
         const decimal MAX_PRICE = 50;
 
         static readonly string[] ShipmentMehodCodes = new[] { "FedEx", "DHL", "EMS" };
-
         static readonly Currency Usd = new Currency(Language.InvariantLanguage, CURRENCY_CODE);
-
-        static readonly IEnumerable<ShippingMethod> ShippingMethods = GetShippingMethods();
-
         static readonly Randomizer Rand = new Randomizer();
         static readonly Faker Faker = new Faker();
+        static readonly IEnumerable<ShippingMethod> ShippingMethods = GetShippingMethods();
+        
 
         [Fact]       
         public async Task ValidateCart_RuleSetDefault_Valid()
@@ -177,7 +175,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             var newItemPrice = new ChangeCartItemPrice
             {
                 LineItemId = item.Id,
-                NewPrice = Rand.Decimal(1, 100)
+                NewPrice = Rand.Decimal(MIN_PRICE, MAX_PRICE)
             };
 
             //Act
@@ -226,7 +224,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             var newItemPrice = new ChangeCartItemPrice
             {
                 LineItemId = item.Id,
-                NewPrice = item.ListPrice.Amount + Rand.Decimal(1, 100)
+                NewPrice = item.ListPrice.Amount + Rand.Decimal(MIN_PRICE, MAX_PRICE)
             };
 
             //Act
@@ -319,7 +317,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             //Arrange            
             var cart = GetValidCart();
 
-            var productPrice = new Money(Rand.Decimal(1, 50), Usd);
+            var productPrice = new Money(Rand.Decimal(MIN_PRICE, MAX_PRICE), Usd);
 
             var testAddItem = new Faker<AddCartItem>()
                 .RuleFor(x => x.Id, f => f.Random.Guid().ToString())
@@ -344,12 +342,12 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             //Arrange            
             var cart = GetValidCart();
 
-            var productPrice = new Money(Rand.Decimal(1, 50), Usd);
+            var productPrice = new Money(Rand.Decimal(MIN_PRICE, MAX_PRICE), Usd);
 
             var testAddItem = new Faker<AddCartItem>()
                 .RuleFor(x => x.Id, f => f.Random.Guid().ToString())
                 .RuleFor(x => x.Quantity, f => f.Random.Int(1, InStockQuantity))
-                .RuleFor(x => x.Price, f=> f.Random.Decimal(1, productPrice.Amount-1))
+                .RuleFor(x => x.Price, f=> f.Random.Decimal(MIN_PRICE, productPrice.Amount-1))
                 .RuleFor(x => x.Product, f => GenTestProduct(productPrice));
 
             var addItem = testAddItem.Generate();
@@ -373,7 +371,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             //Arrange            
             var cart = GetValidCart();
 
-            var productPrice = new Money(Rand.Decimal(1, 50), Usd);
+            var productPrice = new Money(Rand.Decimal(MIN_PRICE, MAX_PRICE), Usd);
 
             var testAddItem = new Faker<AddCartItem>()
                 .RuleFor(x => x.Id, f => f.Random.Guid().ToString())
@@ -495,17 +493,9 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             var testItems = new Faker<LineItem>()
                 .CustomInstantiator(f => new LineItem(Usd, Language.InvariantLanguage))
                 .RuleFor(i => i.Id, f => f.Random.Guid().ToString())
-                .RuleFor(i => i.ListPrice, f => new Money(f.Random.Decimal(1, 50), Usd))
+                .RuleFor(i => i.ListPrice, f => new Money(f.Random.Decimal(MIN_PRICE, MAX_PRICE), Usd))
                 .RuleFor(i => i.SalePrice, (f, i) => i.ListPrice)
-                .RuleFor(i => i.Product, (f, i) => new Product
-                {
-                    Price = new ProductPrice(Usd)
-                    {
-                        ListPrice = i.ListPrice                        
-                    },
-                    IsActive = false
-                })
-                .RuleFor(i => i.Product, (f, i) => GenTestProduct( new Money(Rand.Decimal(1, 50), Usd) ))
+                .RuleFor(i => i.Product, (f, i) => GenTestProduct( i.ListPrice ))
             ;
 
            
@@ -542,18 +532,13 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
         {
             var shippingMethods = new List<ShippingMethod>();
 
-            //testShippingMetjods  = new Faker<ShippingMethod>()
-            //    .RuleFor(x=>x.Price)
-
-            var random = new Random();
-
             foreach(var code in ShipmentMehodCodes)
             {
                 var method = new ShippingMethod
                 {
                     ShipmentMethodCode = code,
                     OptionName = code,
-                    Price = new Money((decimal)random.Next(0, 100), Usd)
+                    Price = new Money(Rand.Decimal(0, MAX_PRICE), Usd)
                 };
                 shippingMethods.Add(method);
             }
