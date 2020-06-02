@@ -50,15 +50,12 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         /// <param name="product"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        Task<bool> AddItemAsync(Product product, int quantity);
+        Task<bool> AddItemAsync(AddCartItem addCartItem);
 
         /// <summary>
         /// Change cart item qty by product index
         /// </summary>
-        /// <param name="lineItemId"></param>
-        /// <param name="quantity"></param>
-        /// <returns></returns>
-        Task ChangeItemQuantityAsync(string lineItemId, int quantity);
+        Task ChangeItemQuantityAsync(ChangeCartItemQty changeItemQty);
 
         /// <summary>
         /// Change cart item qty by item id
@@ -69,6 +66,12 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         Task ChangeItemQuantityAsync(int lineItemIndex, int quantity);
 
         Task ChangeItemsQuantitiesAsync(int[] quantities);
+
+        Task ChangeItemPriceAsync(ChangeCartItemPrice newPrice);
+
+        Task ChangeItemCommentAsync(ChangeCartItemComment newItemComment);
+
+        Task ChangeItemDynamicPropertiesAsync(ChangeCartItemDynamicProperties newItemDynamicProperties);
 
         /// <summary>
         /// Remove item from cart by id
