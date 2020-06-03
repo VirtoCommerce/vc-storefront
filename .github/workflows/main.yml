@@ -68,19 +68,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install VirtoCommerce.GlobalTool
-      run: |
-        dotnet tool install --global VirtoCommerce.GlobalTool --version 3.0.0-beta0010
-        mv Directory.Build.Props Directory.Build.props
-
     - name: Build Package
-      run: vc-build Compress -skip Test
+      run: dotnet publish
 
     - name: Build Docker Image
       run: |
         REPOSITORY=$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]') 
         pwsh -command "Invoke-WebRequest -Uri https://raw.githubusercontent.com/VirtoCommerce/jenkins-pipeline-scripts/master/resources/docker.core/linux/platform/Dockerfile -OutFile artifacts/publish/Dockerfile"
-        docker build artifacts/publish --build-arg SOURCE=. --tag "docker.pkg.github.com/$REPOSITORY/platform:${{ github.sha }}"
+        docker build artifacts/publish --build-arg SOURCE=. --tag "docker.pkg.github.com/$REPOSITORY/storefront:${{ github.sha }}"
 
     - name: Docker Login
       uses: azure/docker-login@v1
