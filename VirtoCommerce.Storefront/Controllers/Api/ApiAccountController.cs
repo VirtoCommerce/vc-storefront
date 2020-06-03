@@ -77,10 +77,10 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpDelete("{userId}")]
         [Authorize(SecurityConstants.Permissions.CanDeleteUsers)]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<IdentityResult>> DeleteUser([FromRoute] string userId)
+        public async Task<ActionResult<UserActionIdentityResult>> DeleteUser([FromRoute] string userId)
         {
             //TODO: Authorization check
-            var result = IdentityResult.Success;
+            var result = UserActionIdentityResult.Success;
             var user = await _userManager.FindByIdAsync(userId);
             if (user != null)
             {
@@ -90,7 +90,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     return Unauthorized();
                 }
 
-                result = await _userManager.DeleteAsync(user);
+                result = UserActionIdentityResult.Instance(await _userManager.DeleteAsync(user));
                 if (result.Succeeded)
                 {
                     await _publisher.Publish(new UserDeletedEvent(WorkContext, user));
@@ -102,9 +102,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/account/organization
         [HttpPost("organization")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<IdentityResult>> RegisterOrganization([FromBody] OrganizationRegistration orgRegistration)
+        public async Task<ActionResult<UserActionIdentityResult>> RegisterOrganization([FromBody] OrganizationRegistration orgRegistration)
         {
-            IdentityResult result;
+            UserActionIdentityResult result;
 
             TryValidateModel(orgRegistration);
 
@@ -118,7 +118,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         Description = $"Email '{orgRegistration.Email}' is already taken."
                     };
 
-                    return IdentityResult.Failed(error);
+                    return UserActionIdentityResult.Failed(error);
                 }
 
                 user = await _userManager.FindByNameAsync(orgRegistration.UserName);
@@ -129,7 +129,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         Description = $"User name '{orgRegistration.UserName}' is already taken."
                     };
 
-                    return IdentityResult.Failed(error);
+                    return UserActionIdentityResult.Failed(error);
                 }
 
                 var organization = orgRegistration.ToOrganization();
@@ -145,24 +145,23 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                                  SecurityConstants.Roles.OrganizationMaintainer
                              };
 
-                result = await _userManager.CreateAsync(user, orgRegistration.Password);
+                var creatingResult = await _userManager.CreateAsync(user, orgRegistration.Password);
+                result = UserActionIdentityResult.Instance(creatingResult);
                 if (result.Succeeded)
                 {
                     user = await _userManager.FindByNameAsync(user.UserName);
                     await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, orgRegistration));
                     await _signInManager.SignInAsync(user, isPersistent: true);
                     await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                    result.MemberId = user.Id;
                 }
             }
             else
             {
-                var modelStateEntries = ModelState.Values.SelectMany(value => value.Errors);
-                var errors = modelStateEntries.Select(
-                    modelError => new IdentityError
-                    {
-                        Description = modelError.ErrorMessage
-                    });
-                result = IdentityResult.Failed(errors.ToArray());
+                result = UserActionIdentityResult
+                            .Failed(ModelState.Values.SelectMany(x => x.Errors)
+                            .Select(x => new IdentityError { Description = x.ErrorMessage })
+                            .ToArray());
             }
 
             return result;
@@ -172,9 +171,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost("user")]
         [Authorize(SecurityConstants.Permissions.CanCreateUsers)]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<IdentityResult>> RegisterUser([FromBody] OrganizationUserRegistration registration)
+        public async Task<ActionResult<UserActionIdentityResult>> RegisterUser([FromBody] OrganizationUserRegistration registration)
         {
-            IdentityResult result;
+            UserActionIdentityResult result;
 
             TryValidateModel(registration);
 
@@ -194,16 +193,21 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 user.Contact = contact;
                 user.StoreId = WorkContext.CurrentStore.Id;
 
-                result = await _userManager.CreateAsync(user, registration.Password);
+                var creatingResult = await _userManager.CreateAsync(user, registration.Password);
+                result = UserActionIdentityResult.Instance(creatingResult);
                 if (result.Succeeded)
                 {
                     user = await _userManager.FindByNameAsync(user.UserName);
                     await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, registration));
+                    result.MemberId = user.Id;
                 }
             }
             else
             {
-                result = IdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors).Select(x => new IdentityError { Description = x.ErrorMessage }).ToArray());
+                result = UserActionIdentityResult
+                            .Failed(ModelState.Values.SelectMany(x => x.Errors)
+                            .Select(x => new IdentityError { Description = x.ErrorMessage })
+                            .ToArray());
             }
             return result;
         }
@@ -212,9 +216,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost("invitation")]
         [ValidateAntiForgeryToken]
         [ProducesResponseType(401)]
-        public async Task<ActionResult<IdentityResult>> CreateUserInvitation([FromBody] UsersInvitation invitation)
+        public async Task<ActionResult<UserActionIdentityResult>> CreateUserInvitation([FromBody] UsersInvitation invitation)
         {
-            var result = IdentityResult.Success;
+            var result = UserActionIdentityResult.Success;
             TryValidateModel(invitation);
 
             if (ModelState.IsValid)
@@ -248,7 +252,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                             roles = new[] { SecurityConstants.Roles.OrganizationEmployee }.ToList();
                         }
                         user.Roles = roles;
-                        result = await _userManager.CreateAsync(user);
+                        result = UserActionIdentityResult.Instance(await _userManager.CreateAsync(user));
                     }
 
                     if (result.Succeeded)
@@ -266,14 +270,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         if (sendingResult.IsSuccess != true)
                         {
                             var errors = result.Errors.Concat(new IdentityError[] { new IdentityError() { Description = sendingResult.ErrorMessage } }).ToArray();
-                            result = IdentityResult.Failed(errors);
+                            result = UserActionIdentityResult.Failed(errors);
                         }
                     }
                 }
             }
             else
             {
-                result = IdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors).Select(x => new IdentityError { Description = x.ErrorMessage }).ToArray());
+                result = UserActionIdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors).Select(x => new IdentityError { Description = x.ErrorMessage }).ToArray());
             }
             return result;
         }
@@ -342,10 +346,10 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost("{userId}/lock")]
         [Authorize(SecurityConstants.Permissions.CanEditUsers)]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<IdentityResult>> LockUser([FromRoute]string userId)
+        public async Task<ActionResult<UserActionIdentityResult>> LockUser([FromRoute]string userId)
         {
             //TODO: Add authorization checks
-            var result = IdentityResult.Success;
+            var result = UserActionIdentityResult.Success;
             var user = await _userManager.FindByIdAsync(userId);
             if (user != null)
             {
@@ -365,10 +369,10 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost("{userId}/unlock")]
         [Authorize(SecurityConstants.Permissions.CanEditUsers)]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<IdentityResult>> UnlockUser([FromRoute] string userId)
+        public async Task<ActionResult<UserActionIdentityResult>> UnlockUser([FromRoute] string userId)
         {
             //TODO: Add authorization checks
-            var result = IdentityResult.Success;
+            var result = UserActionIdentityResult.Success;
             var user = await _userManager.FindByIdAsync(userId);
             if (user != null)
             {
