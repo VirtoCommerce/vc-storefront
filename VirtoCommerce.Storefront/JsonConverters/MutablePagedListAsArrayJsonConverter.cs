@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.JsonConverters
@@ -22,7 +24,10 @@ namespace VirtoCommerce.Storefront.JsonConverters
             return typeof(IMutablePagedList).IsAssignableFrom(objectType);
         }
 
+        public override bool CanRead => true;
+
         public override bool CanWrite => true;
+
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             serializer = JsonSerializer.Create(_jsonSettings);
@@ -36,7 +41,12 @@ namespace VirtoCommerce.Storefront.JsonConverters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            serializer = JsonSerializer.Create(_jsonSettings);
+            var mutablePagedListType = typeof(MutablePagedList<>).MakeGenericType(objectType.GetGenericArguments()[0]);
+            var jsonArray = JToken.ReadFrom(reader);
+            var enumerable = jsonArray.ToObject(typeof(DynamicProperty[]), serializer) as IEnumerable<DynamicProperty>;
+            var result = Activator.CreateInstance(mutablePagedListType, enumerable);
+            return result;
         }
     }
 }

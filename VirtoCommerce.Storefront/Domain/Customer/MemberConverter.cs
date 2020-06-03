@@ -89,62 +89,22 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static Organization ToOrganization(this OrganizationRegistration orgRegistration, Language language)
+        public static Contact ToContact(this UserRegistration userRegistration)
         {
-            var organization = new Organization
+            var contact = userRegistration.Contact;
+            contact.Name = contact.Name ?? userRegistration.User.UserName;
+            contact.FullName = string.IsNullOrWhiteSpace(contact.FullName)
+                ? string.Join(" ", contact.FirstName, contact.LastName)
+                : contact.FullName;
+            if (!string.IsNullOrEmpty(userRegistration.User.Email) && !contact.Emails.Contains(userRegistration.User.Email))
             {
-                Name = orgRegistration.OrganizationName,
-            };
-            if (orgRegistration.Address != null)
-            {
-                organization.Addresses.Add(orgRegistration.Address);
+                contact.Emails.Add(userRegistration.User.Email);
             }
-
-            if (!orgRegistration.OrganizationDynamicProperties.IsNullOrEmpty())
+            if (string.IsNullOrEmpty(contact.FullName) || string.IsNullOrWhiteSpace(contact.FullName))
             {
-                organization.DynamicProperties = new MutablePagedList<DynamicProperty>(orgRegistration.OrganizationDynamicProperties.Select(x => new DynamicProperty
-                {
-                    Name = x.Key,
-                    Values = new[] { new LocalizedString { Language = language, Value = x.Value } }
-                }));
+                contact.FullName = userRegistration.User.Email;
             }
-            return organization;
-        }
-
-
-        public static Contact ToContact(this UserRegistration userRegistration, Language language)
-        {
-            var result = new Contact
-            {
-                Name = userRegistration.Name ?? userRegistration.UserName,
-                FullName = string.IsNullOrWhiteSpace(userRegistration.FullName) ? string.Join(" ", userRegistration.FirstName, userRegistration.LastName) : userRegistration.FullName,
-                FirstName = userRegistration.FirstName,
-                LastName = userRegistration.LastName,
-                Salutation = userRegistration.Salutation,
-                PhotoUrl = userRegistration.PhotoUrl
-            };
-            if (!string.IsNullOrEmpty(userRegistration.Email))
-            {
-                result.Emails.Add(userRegistration.Email);
-            }
-            if (string.IsNullOrEmpty(result.FullName) || string.IsNullOrWhiteSpace(result.FullName))
-            {
-                result.FullName = userRegistration.Email;
-            }
-            if (userRegistration.Address != null)
-            {
-                result.Addresses = new[] { userRegistration.Address };
-            }
-
-            if (!userRegistration.ContactDynamicProperties.IsNullOrEmpty())
-            {
-                result.DynamicProperties = new MutablePagedList<DynamicProperty>(userRegistration.ContactDynamicProperties.Select(x => new DynamicProperty
-                {
-                    Name = x.Key,
-                    Values = new[] { new LocalizedString { Language = language, Value = x.Value } }
-                }));
-            }
-            return result;
+            return contact;
         }
 
         public static Contact ToContact(this customerDto.Contact contactDto)
@@ -164,7 +124,8 @@ namespace VirtoCommerce.Storefront.Domain
                 OrganizationId = contactDto.Organizations?.FirstOrDefault(),
                 OrganizationsIds = contactDto.Organizations,
                 Salutation = contactDto.Salutation,
-                PhotoUrl = contactDto.PhotoUrl
+                PhotoUrl = contactDto.PhotoUrl,
+                BirthDate = contactDto.BirthDate
             };
 
             if (contactDto.Addresses != null)
@@ -242,6 +203,7 @@ namespace VirtoCommerce.Storefront.Domain
                 MiddleName = customer.MiddleName,
                 Salutation = customer.Salutation,
                 PhotoUrl = customer.PhotoUrl,
+                BirthDate = customer.BirthDate,
                 MemberType = "Contact",
             };
             if (!customer.UserGroups.IsNullOrEmpty())
@@ -274,14 +236,21 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 retVal.Emails = customer.Emails;
             }
+
             //TODO: It needs to be rework to support only a multiple  organizations for a customer by design.
             if (customer.OrganizationId != null)
             {
                 retVal.Organizations = new List<string>() { customer.OrganizationId };
             }
+
             if (customer.OrganizationsIds != null)
             {
                 retVal.Organizations = customer.OrganizationsIds.Concat(retVal.Organizations ?? Array.Empty<string>()).Distinct().ToArray();
+            }
+
+            if (!customer.DynamicProperties.IsNullOrEmpty())
+            {
+                retVal.DynamicProperties = customer.DynamicProperties.Select(ToCustomerDynamicPropertyDto).ToList();
             }
 
             return retVal;
