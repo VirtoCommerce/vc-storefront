@@ -51,10 +51,10 @@ jobs:
         pwsh -command $CMD
 
     - name: Build
-      run: vc-build Compile
+      run: dotnet build VirtoCommerce.Storefront.sln /p:Configuration=Debug /p:Platform="Any CPU" /t:rebuild /m
 
     - name: Unit Tests
-      run: vc-build Test -skip Restore+Compile
+      run: dotnet test --no-restore --verbosity normal
 
     - name: SonarCloud End
       if: ${{ env.SONAR_TOKEN != 0 }}
