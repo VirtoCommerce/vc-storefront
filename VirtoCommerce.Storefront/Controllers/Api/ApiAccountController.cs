@@ -137,7 +137,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var contact = orgRegistration.ToContact();
                 contact.OrganizationId = organization.Id;
 
-                var user = orgRegistration.User;
+                user = orgRegistration.User;
                 user.Contact = contact;
                 user.StoreId = WorkContext.CurrentStore.Id;
                 user.Roles = new[]
