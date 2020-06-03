@@ -42,6 +42,8 @@
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="3.1.0" />
     <PackageReference Include="AspNet.Security.OAuth.StackExchange" Version="3.1.0" />
     <PackageReference Include="IdentityModel" Version="4.2.0" />
+    <PackageReference Include="FluentValidation" Version="8.6.2" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.6.2" />
     
     <PackageReference Include="Markdig" Version="0.20.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.13.1" />

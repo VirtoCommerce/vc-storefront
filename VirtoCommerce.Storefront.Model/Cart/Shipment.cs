@@ -17,7 +17,6 @@ namespace VirtoCommerce.Storefront.Model.Cart
             Items = new List<CartShipmentItem>();
             TaxDetails = new List<TaxDetail>();
             ValidationErrors = new List<ValidationError>();
-            IsValid = true;
         }
 
         public Shipment(Currency currency)
@@ -183,7 +182,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         #endregion
 
         #region IValidatable Members
-        public bool IsValid { get; set; }
+        public bool IsValid => ValidationErrors?.Any() ?? true;
         public IList<ValidationError> ValidationErrors { get; set; }
         #endregion
 
