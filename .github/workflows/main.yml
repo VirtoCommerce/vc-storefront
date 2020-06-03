@@ -74,8 +74,8 @@ jobs:
     - name: Build Docker Image
       run: |
         REPOSITORY=$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]') 
-        pwsh -command "Invoke-WebRequest -Uri https://raw.githubusercontent.com/VirtoCommerce/jenkins-pipeline-scripts/master/resources/docker.core/linux/platform/Dockerfile -OutFile artifacts/publish/Dockerfile"
-        docker build artifacts/publish --build-arg SOURCE=. --tag "docker.pkg.github.com/$REPOSITORY/storefront:${{ github.sha }}"
+        pwsh -command "Invoke-WebRequest -Uri https://raw.githubusercontent.com/VirtoCommerce/jenkins-pipeline-scripts/master/resources/docker.core/linux/platform/Dockerfile -OutFile Dockerfile"
+        docker build . --build-arg SOURCE=./VirtoCommerce.Storefront --tag "docker.pkg.github.com/$REPOSITORY/storefront:${{ github.sha }}"
 
     - name: Docker Login
       uses: azure/docker-login@v1
@@ -84,13 +84,6 @@ jobs:
         username: $GITHUB_ACTOR
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        # Artifact name
-        name: Platform # optional
-        # A file, directory or wildcard pattern that describes what to upload
-        path: artifacts/publish/  
 
     - name: Push Docker Image to GitHub
       run: |
