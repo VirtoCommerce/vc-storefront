@@ -50,11 +50,11 @@ jobs:
         }
         pwsh -command $CMD
 
-      - name: Build
-        run: vc-build Compile
-  
-      - name: Unit Tests
-        run: vc-build Test -skip Restore+Compile
+    - name: Build
+      run: vc-build Compile
+
+    - name: Unit Tests
+      run: vc-build Test -skip Restore+Compile
 
     - name: SonarCloud End
       if: ${{ env.SONAR_TOKEN != 0 }}
