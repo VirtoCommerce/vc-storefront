@@ -19,12 +19,12 @@ namespace VirtoCommerce.Storefront.Infrastructure
     {
         private readonly IUrlBuilder _urlBuilder;
         private readonly IWorkContextAccessor _workContextAccessor;
-        private readonly IHostingEnvironment _hostEnv;
+        private readonly IWebHostEnvironment _hostEnv;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         private static readonly string[] UrlContainingQueryParameters = { "ReturnUrl", };
 
-        public StorefrontUrlBuilder(IUrlBuilder urlBuilder, IWorkContextAccessor workContextAccessor, IHostingEnvironment hostEnv, IHttpContextAccessor httpContextAccessor)
+        public StorefrontUrlBuilder(IUrlBuilder urlBuilder, IWorkContextAccessor workContextAccessor, IWebHostEnvironment hostEnv, IHttpContextAccessor httpContextAccessor)
         {
             _urlBuilder = urlBuilder;
             _workContextAccessor = workContextAccessor;

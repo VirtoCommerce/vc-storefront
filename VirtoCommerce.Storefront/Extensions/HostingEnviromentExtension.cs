@@ -5,7 +5,7 @@ namespace VirtoCommerce.Storefront.Extensions
 {
     public static class HostingEnviromentExtension
     {
-        public static string MapPath(this IHostingEnvironment hostEnv, string path)
+        public static string MapPath(this IWebHostEnvironment hostEnv, string path)
         {
             var result = hostEnv.WebRootPath;
 

@@ -17,7 +17,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class ShippingModule : ServiceClient<ShippingModule>, IShippingModule
+    public partial class ShippingModuleClient : ServiceClient<ShippingModuleClient>, IShippingModuleClient
     {
         /// <summary>
         /// The base URI of the service.
@@ -40,31 +40,36 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         public ServiceClientCredentials Credentials { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the ShippingModule class.
+        /// Gets the IShippingModule.
+        /// </summary>
+        public virtual IShippingModule ShippingModule { get; private set; }
+
+        /// <summary>
+        /// Initializes a new instance of the ShippingModuleClient class.
         /// </summary>
         /// <param name='httpClient'>
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling ShippingModule.Dispose(). False: will not dispose provided httpClient</param>
-        protected ShippingModule(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
+        /// True: will dispose the provided httpClient on calling ShippingModuleClient.Dispose(). False: will not dispose provided httpClient</param>
+        protected ShippingModuleClient(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the ShippingModule class.
+        /// Initializes a new instance of the ShippingModuleClient class.
         /// </summary>
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected ShippingModule(params DelegatingHandler[] handlers) : base(handlers)
+        protected ShippingModuleClient(params DelegatingHandler[] handlers) : base(handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the ShippingModule class.
+        /// Initializes a new instance of the ShippingModuleClient class.
         /// </summary>
         /// <param name='rootHandler'>
         /// Optional. The http client handler used to handle http transport.
@@ -72,13 +77,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected ShippingModule(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
+        protected ShippingModuleClient(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the ShippingModule class.
+        /// Initializes a new instance of the ShippingModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -89,7 +94,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected ShippingModule(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
+        protected ShippingModuleClient(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -99,7 +104,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the ShippingModule class.
+        /// Initializes a new instance of the ShippingModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -113,7 +118,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected ShippingModule(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        protected ShippingModuleClient(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -123,7 +128,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the ShippingModule class.
+        /// Initializes a new instance of the ShippingModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -134,7 +139,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public ShippingModule(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public ShippingModuleClient(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (credentials == null)
             {
@@ -148,7 +153,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the ShippingModule class.
+        /// Initializes a new instance of the ShippingModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -157,11 +162,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling ShippingModule.Dispose(). False: will not dispose provided httpClient</param>
+        /// True: will dispose the provided httpClient on calling ShippingModuleClient.Dispose(). False: will not dispose provided httpClient</param>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public ShippingModule(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
+        public ShippingModuleClient(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
         {
             if (credentials == null)
             {
@@ -175,7 +180,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the ShippingModule class.
+        /// Initializes a new instance of the ShippingModuleClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -189,7 +194,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public ShippingModule(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public ShippingModuleClient(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (credentials == null)
             {
@@ -203,7 +208,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the ShippingModule class.
+        /// Initializes a new instance of the ShippingModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -217,7 +222,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public ShippingModule(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public ShippingModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -236,7 +241,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         }
 
         /// <summary>
-        /// Initializes a new instance of the ShippingModule class.
+        /// Initializes a new instance of the ShippingModuleClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -253,7 +258,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public ShippingModule(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public ShippingModuleClient(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -280,6 +285,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         /// </summary>
         private void Initialize()
         {
+            ShippingModule = new ShippingModule(this);
             BaseUri = new System.Uri("http://localhost");
             SerializationSettings = new JsonSerializerSettings
             {
@@ -308,7 +314,110 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
             };
             CustomInitialize();
         }
-        /// <param name='criteria'>
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Models;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// </summary>
+    public partial interface IShippingModuleClient : System.IDisposable
+    {
+        /// <summary>
+        /// The base URI of the service.
+        /// </summary>
+        System.Uri BaseUri { get; set; }
+
+        /// <summary>
+        /// Gets or sets json serialization settings.
+        /// </summary>
+        JsonSerializerSettings SerializationSettings { get; }
+
+        /// <summary>
+        /// Gets or sets json deserialization settings.
+        /// </summary>
+        JsonSerializerSettings DeserializationSettings { get; }
+
+        /// <summary>
+        /// Subscription credentials which uniquely identify client
+        /// subscription.
+        /// </summary>
+        ServiceClientCredentials Credentials { get; }
+
+
+        /// <summary>
+        /// Gets the IShippingModule.
+        /// </summary>
+        IShippingModule ShippingModule { get; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Models;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// ShippingModule operations.
+    /// </summary>
+    public partial class ShippingModule : IServiceOperations<ShippingModuleClient>, IShippingModule
+    {
+        /// <summary>
+        /// Initializes a new instance of the ShippingModule class.
+        /// </summary>
+        /// <param name='client'>
+        /// Reference to the service client.
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        public ShippingModule(ShippingModuleClient client)
+        {
+            if (client == null)
+            {
+                throw new System.ArgumentNullException("client");
+            }
+            Client = client;
+        }
+
+        /// <summary>
+        /// Gets a reference to the ShippingModuleClient
+        /// </summary>
+        public ShippingModuleClient Client { get; private set; }
+
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -325,7 +434,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ShippingMethodsSearchResult>> SearchShippingMethodsWithHttpMessagesAsync(ShippingMethodsSearchCriteria criteria = default(ShippingMethodsSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ShippingMethodsSearchResult>> SearchShippingMethodsWithHttpMessagesAsync(ShippingMethodsSearchCriteria body = default(ShippingMethodsSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -334,12 +443,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "SearchShippingMethods", tracingParameters);
             }
             // Construct URL
-            var _baseUrl = BaseUri.AbsoluteUri;
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
             var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/shipping/search").ToString();
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
@@ -363,17 +472,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(criteria != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
-            if (Credentials != null)
+            if (Client.Credentials != null)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             }
             // Send Request
             if (_shouldTrace)
@@ -381,7 +490,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
                 ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
             }
             cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             if (_shouldTrace)
             {
                 ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
@@ -389,7 +498,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -421,7 +530,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ShippingMethodsSearchResult>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<ShippingMethodsSearchResult>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -481,7 +590,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
                 ServiceClientTracing.Enter(_invocationId, this, "GetShippingMethodById", tracingParameters);
             }
             // Construct URL
-            var _baseUrl = BaseUri.AbsoluteUri;
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
             var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/shipping/{id}").ToString();
             _url = _url.Replace("{id}", System.Uri.EscapeDataString(id));
             // Create HTTP transport objects
@@ -507,10 +616,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
             // Serialize Request
             string _requestContent = null;
             // Set Credentials
-            if (Credentials != null)
+            if (Client.Credentials != null)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             }
             // Send Request
             if (_shouldTrace)
@@ -518,7 +627,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
                 ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
             }
             cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             if (_shouldTrace)
             {
                 ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
@@ -526,7 +635,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -558,7 +667,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ShippingMethod>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<ShippingMethod>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -577,7 +686,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
             return _result;
         }
 
-        /// <param name='shippingMethod'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -594,7 +703,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ShippingMethod>> UpdateShippingMethodWithHttpMessagesAsync(ShippingMethod shippingMethod = default(ShippingMethod), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ShippingMethod>> UpdateShippingMethodWithHttpMessagesAsync(ShippingMethod body = default(ShippingMethod), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -603,12 +712,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("shippingMethod", shippingMethod);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "UpdateShippingMethod", tracingParameters);
             }
             // Construct URL
-            var _baseUrl = BaseUri.AbsoluteUri;
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
             var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/shipping").ToString();
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
@@ -632,17 +741,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
 
             // Serialize Request
             string _requestContent = null;
-            if(shippingMethod != null)
+            if(body != null)
             {
-                _requestContent = SafeJsonConvert.SerializeObject(shippingMethod, SerializationSettings);
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Set Credentials
-            if (Credentials != null)
+            if (Client.Credentials != null)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             }
             // Send Request
             if (_shouldTrace)
@@ -650,7 +759,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
                 ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
             }
             cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             if (_shouldTrace)
             {
                 ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
@@ -658,7 +767,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -690,7 +799,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ShippingMethod>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<ShippingMethod>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -731,32 +840,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
     using System.Threading.Tasks;
 
     /// <summary>
+    /// ShippingModule operations.
     /// </summary>
-    public partial interface IShippingModule : System.IDisposable
+    public partial interface IShippingModule
     {
-        /// <summary>
-        /// The base URI of the service.
-        /// </summary>
-        System.Uri BaseUri { get; set; }
-
-        /// <summary>
-        /// Gets or sets json serialization settings.
-        /// </summary>
-        JsonSerializerSettings SerializationSettings { get; }
-
-        /// <summary>
-        /// Gets or sets json deserialization settings.
-        /// </summary>
-        JsonSerializerSettings DeserializationSettings { get; }
-
-        /// <summary>
-        /// Subscription credentials which uniquely identify client
-        /// subscription.
-        /// </summary>
-        ServiceClientCredentials Credentials { get; }
-
-
-        /// <param name='criteria'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -764,8 +852,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ShippingMethodsSearchResult>> SearchShippingMethodsWithHttpMessagesAsync(ShippingMethodsSearchCriteria criteria = default(ShippingMethodsSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        Task<HttpOperationResponse<ShippingMethodsSearchResult>> SearchShippingMethodsWithHttpMessagesAsync(ShippingMethodsSearchCriteria body = default(ShippingMethodsSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='id'>
         /// </param>
         /// <param name='customHeaders'>
@@ -774,9 +867,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
         Task<HttpOperationResponse<ShippingMethod>> GetShippingMethodByIdWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <param name='shippingMethod'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -784,8 +885,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ShippingMethod>> UpdateShippingMethodWithHttpMessagesAsync(ShippingMethod shippingMethod = default(ShippingMethod), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        Task<HttpOperationResponse<ShippingMethod>> UpdateShippingMethodWithHttpMessagesAsync(ShippingMethod body = default(ShippingMethod), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -815,24 +921,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
-            public static ShippingMethodsSearchResult SearchShippingMethods(this IShippingModule operations, ShippingMethodsSearchCriteria criteria = default(ShippingMethodsSearchCriteria))
+            public static ShippingMethodsSearchResult SearchShippingMethods(this IShippingModule operations, ShippingMethodsSearchCriteria body = default(ShippingMethodsSearchCriteria))
             {
-                return operations.SearchShippingMethodsAsync(criteria).GetAwaiter().GetResult();
+                return operations.SearchShippingMethodsAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='criteria'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ShippingMethodsSearchResult> SearchShippingMethodsAsync(this IShippingModule operations, ShippingMethodsSearchCriteria criteria = default(ShippingMethodsSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ShippingMethodsSearchResult> SearchShippingMethodsAsync(this IShippingModule operations, ShippingMethodsSearchCriteria body = default(ShippingMethodsSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SearchShippingMethodsWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SearchShippingMethodsWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -867,28 +973,149 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='shippingMethod'>
+            /// <param name='body'>
             /// </param>
-            public static ShippingMethod UpdateShippingMethod(this IShippingModule operations, ShippingMethod shippingMethod = default(ShippingMethod))
+            public static ShippingMethod UpdateShippingMethod(this IShippingModule operations, ShippingMethod body = default(ShippingMethod))
             {
-                return operations.UpdateShippingMethodAsync(shippingMethod).GetAwaiter().GetResult();
+                return operations.UpdateShippingMethodAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='shippingMethod'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ShippingMethod> UpdateShippingMethodAsync(this IShippingModule operations, ShippingMethod shippingMethod = default(ShippingMethod), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ShippingMethod> UpdateShippingMethodAsync(this IShippingModule operations, ShippingMethod body = default(ShippingMethod), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.UpdateShippingMethodWithHttpMessagesAsync(shippingMethod, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.UpdateShippingMethodWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class ObjectSettingEntry
+    {
+        /// <summary>
+        /// Initializes a new instance of the ObjectSettingEntry class.
+        /// </summary>
+        public ObjectSettingEntry()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ObjectSettingEntry class.
+        /// </summary>
+        /// <param name="valueType">Possible values include: 'ShortText',
+        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean',
+        /// 'SecureString', 'Json'</param>
+        public ObjectSettingEntry(bool? itHasValues = default(bool?), string objectId = default(string), string objectType = default(string), object value = default(object), bool? restartRequired = default(bool?), string moduleId = default(string), string groupName = default(string), string name = default(string), string valueType = default(string), IList<object> allowedValues = default(IList<object>), object defaultValue = default(object), bool? isDictionary = default(bool?))
+        {
+            ItHasValues = itHasValues;
+            ObjectId = objectId;
+            ObjectType = objectType;
+            Value = value;
+            RestartRequired = restartRequired;
+            ModuleId = moduleId;
+            GroupName = groupName;
+            Name = name;
+            ValueType = valueType;
+            AllowedValues = allowedValues;
+            DefaultValue = defaultValue;
+            IsDictionary = isDictionary;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "itHasValues")]
+        public bool? ItHasValues { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectId")]
+        public string ObjectId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "value")]
+        public object Value { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "restartRequired")]
+        public bool? RestartRequired { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "moduleId")]
+        public string ModuleId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "groupName")]
+        public string GroupName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'ShortText', 'LongText',
+        /// 'Integer', 'Decimal', 'DateTime', 'Boolean', 'SecureString', 'Json'
+        /// </summary>
+        [JsonProperty(PropertyName = "valueType")]
+        public string ValueType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "allowedValues")]
+        public IList<object> AllowedValues { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "defaultValue")]
+        public object DefaultValue { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isDictionary")]
+        public bool? IsDictionary { get; set; }
 
     }
 }
@@ -985,10 +1212,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi.Models
         /// Initializes a new instance of the ShippingMethodsSearchCriteria
         /// class.
         /// </summary>
-        /// <param name="objectType">Search object type</param>
-        /// <param name="keyword">Search phrase</param>
-        /// <param name="languageCode">Search phrase language</param>
-        public ShippingMethodsSearchCriteria(string storeId = default(string), IList<string> codes = default(IList<string>), bool? isActive = default(bool?), string taxType = default(string), bool? withoutTransient = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public ShippingMethodsSearchCriteria(string storeId = default(string), IList<string> codes = default(IList<string>), bool? isActive = default(bool?), string taxType = default(string), bool? withoutTransient = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
             StoreId = storeId;
             Codes = codes;
@@ -1000,6 +1224,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi.Models
             ObjectTypes = objectTypes;
             ObjectIds = objectIds;
             Keyword = keyword;
+            SearchPhrase = searchPhrase;
             LanguageCode = languageCode;
             Sort = sort;
             SortInfos = sortInfos;
@@ -1044,7 +1269,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi.Models
         public string ResponseGroup { get; set; }
 
         /// <summary>
-        /// Gets or sets search object type
         /// </summary>
         [JsonProperty(PropertyName = "objectType")]
         public string ObjectType { get; set; }
@@ -1060,13 +1284,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi.Models
         public IList<string> ObjectIds { get; set; }
 
         /// <summary>
-        /// Gets or sets search phrase
         /// </summary>
         [JsonProperty(PropertyName = "keyword")]
         public string Keyword { get; set; }
 
         /// <summary>
-        /// Gets or sets search phrase language
+        /// </summary>
+        [JsonProperty(PropertyName = "searchPhrase")]
+        public string SearchPhrase { get; set; }
+
+        /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "languageCode")]
         public string LanguageCode { get; set; }
@@ -1112,145 +1339,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class ObjectSettingEntry
-    {
-        /// <summary>
-        /// Initializes a new instance of the ObjectSettingEntry class.
-        /// </summary>
-        public ObjectSettingEntry()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ObjectSettingEntry class.
-        /// </summary>
-        /// <param name="objectId">Setting may belong to any object in
-        /// system</param>
-        /// <param name="restartRequired">The flag indicates that you need to
-        /// restart the application to apply this setting changes.</param>
-        /// <param name="moduleId">The module id which setting belong
-        /// to</param>
-        /// <param name="groupName">Setting group name</param>
-        /// <param name="name">Setting name</param>
-        /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean',
-        /// 'SecureString', 'Json'</param>
-        /// <param name="isDictionary">The flag indicates what current setting
-        /// is just editable dictionary and hasn't any concrete value</param>
-        public ObjectSettingEntry(bool? itHasValues = default(bool?), string objectId = default(string), string objectType = default(string), object value = default(object), bool? restartRequired = default(bool?), string moduleId = default(string), string groupName = default(string), string name = default(string), string valueType = default(string), IList<object> allowedValues = default(IList<object>), object defaultValue = default(object), bool? isDictionary = default(bool?))
-        {
-            ItHasValues = itHasValues;
-            ObjectId = objectId;
-            ObjectType = objectType;
-            Value = value;
-            RestartRequired = restartRequired;
-            ModuleId = moduleId;
-            GroupName = groupName;
-            Name = name;
-            ValueType = valueType;
-            AllowedValues = allowedValues;
-            DefaultValue = defaultValue;
-            IsDictionary = isDictionary;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "itHasValues")]
-        public bool? ItHasValues { get; private set; }
-
-        /// <summary>
-        /// Gets or sets setting may belong to any object in system
-        /// </summary>
-        [JsonProperty(PropertyName = "objectId")]
-        public string ObjectId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "value")]
-        public object Value { get; set; }
-
-        /// <summary>
-        /// Gets or sets the flag indicates that you need to restart the
-        /// application to apply this setting changes.
-        /// </summary>
-        [JsonProperty(PropertyName = "restartRequired")]
-        public bool? RestartRequired { get; set; }
-
-        /// <summary>
-        /// Gets or sets the module id which setting belong to
-        /// </summary>
-        [JsonProperty(PropertyName = "moduleId")]
-        public string ModuleId { get; set; }
-
-        /// <summary>
-        /// Gets or sets setting group name
-        /// </summary>
-        [JsonProperty(PropertyName = "groupName")]
-        public string GroupName { get; set; }
-
-        /// <summary>
-        /// Gets or sets setting name
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Integer', 'Decimal', 'DateTime', 'Boolean', 'SecureString', 'Json'
-        /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "allowedValues")]
-        public IList<object> AllowedValues { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "defaultValue")]
-        public object DefaultValue { get; set; }
-
-        /// <summary>
-        /// Gets or sets the flag indicates what current setting is just
-        /// editable dictionary and hasn't any concrete value
-        /// </summary>
-        [JsonProperty(PropertyName = "isDictionary")]
-        public bool? IsDictionary { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public partial class ShippingMethod
     {
         /// <summary>
@@ -1264,9 +1352,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the ShippingMethod class.
         /// </summary>
-        public ShippingMethod(string code = default(string), string logoUrl = default(string), bool? isActive = default(bool?), int? priority = default(int?), string taxType = default(string), string storeId = default(string), IList<ObjectSettingEntry> settings = default(IList<ObjectSettingEntry>), string typeName = default(string), string id = default(string))
+        public ShippingMethod(string code = default(string), string name = default(string), string logoUrl = default(string), bool? isActive = default(bool?), int? priority = default(int?), string taxType = default(string), string storeId = default(string), IList<ObjectSettingEntry> settings = default(IList<ObjectSettingEntry>), string typeName = default(string), string id = default(string))
         {
             Code = code;
+            Name = name;
             LogoUrl = logoUrl;
             IsActive = isActive;
             Priority = priority;
@@ -1287,6 +1376,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.ShippingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "code")]
         public string Code { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; private set; }
 
         /// <summary>
         /// </summary>

@@ -11,11 +11,11 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public class PaymentSearchService : IPaymentSearchService
     {
-        private readonly IOrderModule _orderApi;
+        private readonly IOrderModulePayments _orderPaymentsApi;
         private readonly IWorkContextAccessor _workContextAccessor;
-        public PaymentSearchService(IOrderModule orderApi, IWorkContextAccessor workContextAccessor)
+        public PaymentSearchService(IOrderModulePayments orderPaymentsApi, IWorkContextAccessor workContextAccessor)
         {
-            _orderApi = orderApi;
+            _orderPaymentsApi = orderPaymentsApi;
             _workContextAccessor = workContextAccessor;
         }
 
@@ -26,10 +26,10 @@ namespace VirtoCommerce.Storefront.Domain
                 throw new ArgumentNullException(nameof(criteria));
             }
             var workContext = _workContextAccessor.WorkContext;
-            var result = await _orderApi.SearchPaymentsAsync(criteria.ToPaymentSearchCriteriaDto());
+            var result = await _orderPaymentsApi.SearchOrderPaymentsAsync(criteria.ToPaymentSearchCriteriaDto());
             return new StaticPagedList<PaymentIn>(result.Results.Select(x => x.ToOrderInPayment(workContext.AllCurrencies, workContext.CurrentLanguage)),
                                                      criteria.PageNumber, criteria.PageSize, result.TotalCount.Value);
         }
-       
+
     }
 }

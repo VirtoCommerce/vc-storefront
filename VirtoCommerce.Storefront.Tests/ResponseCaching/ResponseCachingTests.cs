@@ -3,9 +3,11 @@ using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using Moq;
 using VirtoCommerce.LiquidThemeEngine;
@@ -17,11 +19,24 @@ using Language = VirtoCommerce.Storefront.Model.Language;
 
 namespace VirtoCommerce.Storefront.Tests.OutputCache
 {
-    [Trait("Category", "CI")]
-    public class ResponseCachingTests : IClassFixture<WebApplicationFactory<Startup>>, IDisposable
+    public class AppTestFixture : WebApplicationFactory<Startup>
     {
-        private readonly WebApplicationFactory<Startup> _factory;
-        public ResponseCachingTests(WebApplicationFactory<Startup> factory)
+        protected override IHostBuilder CreateHostBuilder()
+        {
+            var builder = Host.CreateDefaultBuilder()
+                              .ConfigureWebHostDefaults(x =>
+                              {
+                                  x.UseStartup<Startup>().UseTestServer();
+                              });
+            return builder;
+        }
+    }
+
+    [Trait("Category", "CI")]
+    public class ResponseCachingTests : IClassFixture<AppTestFixture>, IDisposable
+    {
+        private readonly AppTestFixture _factory;
+        public ResponseCachingTests(AppTestFixture factory)
         {
             _factory = factory;
             Client = factory

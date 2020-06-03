@@ -37,7 +37,7 @@ namespace VirtoCommerce.Storefront.Middleware
                 await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
                 {
                     cacheEntry.AddExpirationToken(SecurityCacheRegion.CreateChangeToken());
-                    var allRolesIds = (await _platformSecurityApi.SearchRolesAsync(new RoleSearchRequest { TakeCount = int.MaxValue })).Roles.Select(x => x.Id).ToArray();
+                    var allRolesIds = (await _platformSecurityApi.SearchRolesAsync(new RoleSearchCriteria { Take = int.MaxValue })).Roles.Select(x => x.Id).ToArray();
                     foreach (var role in SecurityConstants.Roles.AllRoles)
                     {
                         if (!allRolesIds.Contains(role.Id))

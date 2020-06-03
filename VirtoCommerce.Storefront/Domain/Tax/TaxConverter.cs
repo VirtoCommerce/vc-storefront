@@ -1,17 +1,19 @@
 using System.Collections.Generic;
 using System.Linq;
+using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Tax;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
+using taxDto = VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
 
     public static partial class TaxConverter
     {
-        public static TaxRate ToTaxRate(this coreDto.TaxRate taxRateDto, Currency currency)
+        public static TaxRate ToTaxRate(this taxDto.TaxRate taxRateDto, Currency currency)
         {
             var result = new TaxRate(currency)
             {
@@ -42,30 +44,26 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static coreDto.TaxEvaluationContext ToTaxEvaluationContextDto(this TaxEvaluationContext taxContext)
+        public static taxDto.TaxEvaluationContext ToTaxEvaluationContextDto(this TaxEvaluationContext taxContext)
         {
-            var retVal = new coreDto.TaxEvaluationContext();
+            var retVal = new taxDto.TaxEvaluationContext();
             retVal.Code = taxContext.Code;
             retVal.Id = taxContext.Id;
             retVal.Type = taxContext.Type;
 
             if (taxContext.Address != null)
             {
-                retVal.Address = taxContext.Address.ToCoreAddressDto();
+                retVal.Address = taxContext.Address.ToCoreAddressDto().JsonConvert<taxDto.TaxAddress>();
             }
 
-            retVal.Customer = taxContext?.Customer?.Contact?.ToCoreContactDto();
-            if (retVal.Customer != null)
-            {
-                retVal.Customer.MemberType = "Contact";
-            }
+            retVal.Customer = taxContext?.Customer?.Contact?.ToCoreContactDto().JsonConvert<taxDto.TaxCustomer>();
 
             if (taxContext.Currency != null)
             {
                 retVal.Currency = taxContext.Currency.Code;
             }
 
-            retVal.Lines = new List<coreDto.TaxLine>();
+            retVal.Lines = new List<taxDto.TaxLine>();
             if (!taxContext.Lines.IsNullOrEmpty())
             {
                 retVal.Lines = taxContext.Lines.Select(x => x.ToTaxLineDto()).ToList();
@@ -73,9 +71,9 @@ namespace VirtoCommerce.Storefront.Domain
             }
             return retVal;
         }
-        public static coreDto.TaxLine ToTaxLineDto(this TaxLine taxLine)
+        public static taxDto.TaxLine ToTaxLineDto(this TaxLine taxLine)
         {
-            return new coreDto.TaxLine
+            return new taxDto.TaxLine
             {
                 Id = taxLine.Id,
                 Code = taxLine.Code,
@@ -108,7 +106,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static TaxDetail ToTaxDetail(this coreDto.TaxDetail taxDetailDto, Currency currency)
+        public static TaxDetail ToTaxDetail(this taxDto.TaxDetail taxDetailDto, Currency currency)
         {
             return new TaxDetail(currency)
             {
