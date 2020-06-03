@@ -118,7 +118,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         Description = $"Email '{orgRegistration.Email}' is already taken."
                     };
 
-                    return IdentityResult.Failed(error);
+                    return UserActionIdentityResult.Failed(error);
                 }
 
                 user = await _userManager.FindByNameAsync(orgRegistration.UserName);
@@ -129,7 +129,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         Description = $"User name '{orgRegistration.UserName}' is already taken."
                     };
 
-                    return IdentityResult.Failed(error);
+                    return UserActionIdentityResult.Failed(error);
                 }
 
                 var organization = orgRegistration.ToOrganization();
