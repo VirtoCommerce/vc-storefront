@@ -23,15 +23,15 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
         const string CART_NAME = "default";
         const string CURRENCY_CODE = "USD";
         const int InStockQuantity = 100;
+        const decimal MIN_PRICE = 1;
+        const decimal MAX_PRICE = 50;
 
         static readonly string[] ShipmentMehodCodes = new[] { "FedEx", "DHL", "EMS" };
-
         static readonly Currency Usd = new Currency(Language.InvariantLanguage, CURRENCY_CODE);
-
-        static readonly IEnumerable<ShippingMethod> ShippingMethods = GetShippingMethods();
-
         static readonly Randomizer Rand = new Randomizer();
         static readonly Faker Faker = new Faker();
+        static readonly IEnumerable<ShippingMethod> ShippingMethods = GetShippingMethods();
+        
 
         [Fact]       
         public async Task ValidateCart_RuleSetDefault_Valid()
@@ -175,7 +175,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             var newItemPrice = new ChangeCartItemPrice
             {
                 LineItemId = item.Id,
-                NewPrice = Rand.Decimal(1, 100)
+                NewPrice = Rand.Decimal(MIN_PRICE, MAX_PRICE)
             };
 
             //Act
@@ -224,7 +224,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             var newItemPrice = new ChangeCartItemPrice
             {
                 LineItemId = item.Id,
-                NewPrice = item.ListPrice.Amount + Rand.Decimal(1, 100)
+                NewPrice = item.ListPrice.Amount + Rand.Decimal(MIN_PRICE, MAX_PRICE)
             };
 
             //Act
@@ -262,32 +262,241 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             });
         }
 
+
+
+        [Fact]
+        public async Task ValidateAddItem_RuleSetDefault_Valid()
+        {
+            //Arrange            
+            var cart = GetValidCart();
+                       
+            var testAddItem = new Faker<AddCartItem>()
+                .RuleFor(x => x.Id, f => f.Random.Guid().ToString())
+                .RuleFor(x => x.Quantity, f => f.Random.Int(1, InStockQuantity))
+                .RuleFor(x => x.Product, f => new Product(Usd, Language.InvariantLanguage));
+
+            var addItem = testAddItem.Generate();           
+
+            //Act
+            var validator = new AddCartItemValidator(cart);
+
+            var result = await validator.ValidateAsync(addItem, ruleSet: "default");
+            //Assertion
+            Assert.True(result.IsValid);
+            Assert.Empty(result.Errors);
+        }
+
+
+        [Fact]
+        public async Task ValidateAddItem_RuleSetDefault_Invalid()
+        {
+            //Arrange            
+            var cart = GetValidCart();
+
+            var addItem = new AddCartItem()
+            {
+                Quantity = 0
+            };
+                
+            //Act
+            var validator = new AddCartItemValidator(cart);
+
+            var result = await validator.ValidateAsync(addItem, ruleSet: "default");
+            //Assertion
+            Assert.False(result.IsValid);
+            Assert.NotEmpty(result.Errors);
+            Assert.Collection(result.Errors, x => { Assert.Equal(nameof(addItem.Quantity), x.PropertyName); Assert.Equal(nameof(GreaterThanValidator), x.ErrorCode); }
+                                        , x => { Assert.Equal(nameof(addItem.Product), x.PropertyName); Assert.Equal(nameof(NotNullValidator), x.ErrorCode); }
+                           );
+        }
+
+
+        [Fact]
+        public async Task ValidateAddItem_RuleSetStrict_Valid()
+        {
+            //Arrange            
+            var cart = GetValidCart();
+
+            var productPrice = new Money(Rand.Decimal(MIN_PRICE, MAX_PRICE), Usd);
+
+            var testAddItem = new Faker<AddCartItem>()
+                .RuleFor(x => x.Id, f => f.Random.Guid().ToString())
+                .RuleFor(x => x.Quantity, f => f.Random.Int(1, InStockQuantity))
+                .RuleFor(x => x.Product, f => GenTestProduct(productPrice));
+
+            var addItem = testAddItem.Generate();
+
+            //Act
+            var validator = new AddCartItemValidator(cart);
+
+            var result = await validator.ValidateAsync(addItem, ruleSet: "strict");
+            //Assertion
+            Assert.True(result.IsValid);
+            Assert.Empty(result.Errors);
+        }
+
+        
+        [Fact]
+        public async Task ValidateAddItem_RuleSetStrict_PriceError()
+        {
+            //Arrange            
+            var cart = GetValidCart();
+
+            var productPrice = new Money(Rand.Decimal(MIN_PRICE, MAX_PRICE), Usd);
+
+            var testAddItem = new Faker<AddCartItem>()
+                .RuleFor(x => x.Id, f => f.Random.Guid().ToString())
+                .RuleFor(x => x.Quantity, f => f.Random.Int(1, InStockQuantity))
+                .RuleFor(x => x.Price, f=> f.Random.Decimal(MIN_PRICE, productPrice.Amount-1))
+                .RuleFor(x => x.Product, f => GenTestProduct(productPrice));
+
+            var addItem = testAddItem.Generate();
+
+            //Act
+            var validator = new AddCartItemValidator(cart);
+
+            var result = await validator.ValidateAsync(addItem, ruleSet: "strict");
+            //Assertion
+            Assert.False(result.IsValid);
+            Assert.NotEmpty(result.Errors);
+            Assert.Collection(result.Errors, x =>
+            {
+                Assert.Equal(nameof(addItem.Price), x.PropertyName);
+            });
+        }
+
+        [Fact]
+        public async Task ValidateAddItem_RuleSetStrict_UnavailableQuantity()
+        {
+            //Arrange            
+            var cart = GetValidCart();
+
+            var productPrice = new Money(Rand.Decimal(MIN_PRICE, MAX_PRICE), Usd);
+
+            var testAddItem = new Faker<AddCartItem>()
+                .RuleFor(x => x.Id, f => f.Random.Guid().ToString())
+                .RuleFor(x => x.Quantity, f => f.Random.Int(InStockQuantity+1, InStockQuantity*2))                
+                .RuleFor(x => x.Product, f => GenTestProduct(productPrice));
+
+            var addItem = testAddItem.Generate();
+
+            //Act
+            var validator = new AddCartItemValidator(cart);
+
+            var result = await validator.ValidateAsync(addItem, ruleSet: "strict");
+            //Assertion
+            Assert.False(result.IsValid);
+            Assert.NotEmpty(result.Errors);
+            Assert.Collection(result.Errors, x => { Assert.Equal(nameof(addItem.Product), x.PropertyName); Assert.Equal(nameof(PredicateValidator), x.ErrorCode); });
+        }
+
+
+        [Fact]
+        public async Task ValidateCartLineItem_RuleSetStrict_Valid()
+        {
+            //Arrange            
+            var cart = GetValidCart();
+            var item = Faker.PickRandom(cart.Items);  
+
+            //Act
+            var validator = new CartLineItemValidator(cart);
+            var result = await validator.ValidateAsync(item, ruleSet: "strict");
+
+            //Assertion
+            Assert.True(result.IsValid);
+            Assert.Empty(result.Errors);            
+        }
+
+
+        [Theory]
+        [InlineData("Product_null")]
+        [InlineData("Product_IsActive_false")]
+        [InlineData("Product_IsBuyable_false")]
+        public async Task ValidateCartLineItem_RuleSetStrict_UnavailableError(string scenario)
+        {
+            //Arrange            
+            var cart = GetValidCart();
+            var item = Faker.PickRandom(cart.Items);
+            switch (scenario) {
+                case "Product_null":
+                    item.Product = null;
+                    break;
+                case "Product_IsActive_false":
+                    item.Product.IsActive = false;
+                    break;
+                case "Product_IsBuyable_false":
+                    item.Product.IsBuyable = false;
+                    break;
+            }
+            
+
+            //Act
+            var validator = new CartLineItemValidator(cart);
+            var result = await validator.ValidateAsync(item, ruleSet: "strict");
+
+            //Assertion
+            Assert.False(result.IsValid);
+            Assert.NotEmpty(result.Errors);
+            Assert.Collection(result.Errors, x => { Assert.Equal(nameof(item.Product), x.PropertyName); });
+            Assert.NotEmpty(item.ValidationErrors);
+            Assert.Collection(item.ValidationErrors, x => { Assert.Equal(nameof(UnavailableError), x.ErrorCode); });
+        }
+
+        [Fact]
+        public async Task ValidateCartLineItem_RuleSetStrict_QuantityError()
+        {
+            //Arrange            
+            var cart = GetValidCart();
+            var item = Faker.PickRandom(cart.Items);
+
+            item.Quantity = InStockQuantity * 2;
+
+
+            //Act
+            var validator = new CartLineItemValidator(cart);
+            var result = await validator.ValidateAsync(item, ruleSet: "strict");
+
+            //Assertion
+            Assert.False(result.IsValid);
+            Assert.NotEmpty(result.Errors);
+            Assert.Collection(result.Errors, x => { Assert.Equal(nameof(item.Product.AvailableQuantity), x.PropertyName); });
+            Assert.NotEmpty(item.ValidationErrors);
+            Assert.Collection(item.ValidationErrors, x => { Assert.Equal(nameof(QuantityError), x.ErrorCode); });
+        }
+
+
+        [Fact]
+        public async Task ValidateCartLineItem_RuleSetStrict_PriceError()
+        {
+            //Arrange            
+            var cart = GetValidCart();
+            var item = Faker.PickRandom(cart.Items);
+
+            item.SalePrice = new Money(item.SalePrice.Amount/2m, Usd);
+
+
+            //Act
+            var validator = new CartLineItemValidator(cart);
+            var result = await validator.ValidateAsync(item, ruleSet: "strict");
+
+            //Assertion
+            Assert.False(result.IsValid);
+            Assert.NotEmpty(result.Errors);
+            Assert.Collection(result.Errors, x => { Assert.Equal(nameof(item.SalePrice), x.PropertyName); });
+            Assert.NotEmpty(item.ValidationErrors);
+            Assert.Collection(item.ValidationErrors, x => { Assert.Equal(nameof(PriceError), x.ErrorCode); });
+        }
+
+
         private ShoppingCart GetValidCart()
         {
             var testItems = new Faker<LineItem>()
                 .CustomInstantiator(f => new LineItem(Usd, Language.InvariantLanguage))
                 .RuleFor(i => i.Id, f => f.Random.Guid().ToString())
-                .RuleFor(i => i.ListPrice, f => new Money(f.Random.Decimal(1, 50), Usd))
+                .RuleFor(i => i.ListPrice, f => new Money(f.Random.Decimal(MIN_PRICE, MAX_PRICE), Usd))
                 .RuleFor(i => i.SalePrice, (f, i) => i.ListPrice)
-                .RuleFor(i => i.Product, (f, i) => new Product
-                {
-                    Price = new ProductPrice(Usd)
-                    {
-                        ListPrice = i.ListPrice                        
-                    },
-                    IsActive = false
-                })
-                .RuleFor(i => i.Product, (f, i) => new Product(Usd, Language.InvariantLanguage)
-                {
-                    IsActive = true,
-                    IsBuyable = true,
-                    IsAvailable = true,
-                    IsInStock = true,
-                    Inventory = new inventory.Inventory()
-                    {
-                        InStockQuantity = InStockQuantity
-                    }
-                } );
+                .RuleFor(i => i.Product, (f, i) => GenTestProduct( i.ListPrice ))
+            ;
 
            
             var testShipments = new Faker<Shipment>()
@@ -323,23 +532,43 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
         {
             var shippingMethods = new List<ShippingMethod>();
 
-            //testShippingMetjods  = new Faker<ShippingMethod>()
-            //    .RuleFor(x=>x.Price)
-
-            var random = new Random();
-
             foreach(var code in ShipmentMehodCodes)
             {
                 var method = new ShippingMethod
                 {
                     ShipmentMethodCode = code,
                     OptionName = code,
-                    Price = new Money((decimal)random.Next(0, 100), Usd)
+                    Price = new Money(Rand.Decimal(0, MAX_PRICE), Usd)
                 };
                 shippingMethods.Add(method);
             }
 
             return shippingMethods;           
+        }
+
+        private static Product GenTestProduct(Money productPrice)
+        {
+            var inventory = new inventory.Inventory()
+            {
+                AllowPreorder = false,
+                AllowBackorder = false,
+                InStockQuantity = InStockQuantity,
+            };
+            return new Product(Usd, Language.InvariantLanguage)
+            {
+                Id = Rand.Guid().ToString(),
+                Price = new ProductPrice(Usd) { ListPrice = productPrice, SalePrice = productPrice },
+                IsActive = true,
+                IsBuyable = true,
+                IsAvailable = true,
+                IsInStock = true,
+                
+                TrackInventory = true,
+
+                Inventory = inventory,
+
+                InventoryAll = new[] { inventory }
+            };
         }
     }
 }
