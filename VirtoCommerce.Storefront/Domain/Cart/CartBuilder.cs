@@ -668,9 +668,18 @@ namespace VirtoCommerce.Storefront.Domain
             //Load cart payment plan with have same id
             if (store.SubscriptionEnabled)
             {
-                var paymentPlanIds = new[] { cart.Id }.Concat(cart.Items.Select(x => x.ProductId).Distinct()).ToArray();
-                var paymentPlans = await _subscriptionService.GetPaymentPlansByIdsAsync(paymentPlanIds);
+                var paymentPlanIds = new HashSet<string>();
+
+                if (!string.IsNullOrEmpty(cart.Id))
+                {
+                    paymentPlanIds.Add(cart.Id);
+                }
+
+                paymentPlanIds.AddRange(cart.Items.Select(x => x.ProductId).Distinct());
+
+                var paymentPlans = await _subscriptionService.GetPaymentPlansByIdsAsync(paymentPlanIds.ToArray());
                 cart.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == cart.Id);
+
                 //Realize this code whith dictionary
                 foreach (var lineItem in cart.Items)
                 {
