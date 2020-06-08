@@ -9,7 +9,6 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
-using VirtoCommerce.Storefront.Model.Cart.ValidationErrors;
 using VirtoCommerce.Storefront.Model.Cart.Validators;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
@@ -217,11 +216,11 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
-        public virtual Task RemoveItemAsync(string id)
+        public virtual Task RemoveItemAsync(string lineItemId)
         {
             EnsureCartExists();
 
-            var lineItem = Cart.Items.FirstOrDefault(x => x.Id == id);
+            var lineItem = Cart.Items.FirstOrDefault(x => x.Id == lineItemId);
             if (lineItem != null)
             {
                 Cart.Items.Remove(lineItem);
@@ -284,7 +283,7 @@ namespace VirtoCommerce.Storefront.Domain
                 var shippingMethod = availableShippingMethods.FirstOrDefault(sm => shipment.ShipmentMethodCode.EqualsInvariant(sm.ShipmentMethodCode) && shipment.ShipmentMethodOption.EqualsInvariant(sm.OptionName));
                 if (shippingMethod == null)
                 {
-                    throw new Exception(string.Format(CultureInfo.InvariantCulture, "Unknown shipment method: {0} with option: {1}", shipment.ShipmentMethodCode, shipment.ShipmentMethodOption));
+                    throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Unknown shipment method: {0} with option: {1}", shipment.ShipmentMethodCode, shipment.ShipmentMethodOption));
                 }
                 shipment.Price = shippingMethod.Price;
                 shipment.DiscountAmount = shippingMethod.DiscountAmount;
@@ -324,7 +323,7 @@ namespace VirtoCommerce.Storefront.Domain
                 var paymentMethod = availablePaymentMethods.FirstOrDefault(pm => string.Equals(pm.Code, payment.PaymentGatewayCode, StringComparison.InvariantCultureIgnoreCase));
                 if (paymentMethod == null)
                 {
-                    throw new Exception("Unknown payment method " + payment.PaymentGatewayCode);
+                    throw new InvalidOperationException("Unknown payment method " + payment.PaymentGatewayCode);
                 }
             }
         }
@@ -639,6 +638,7 @@ namespace VirtoCommerce.Storefront.Domain
             lineItem.SalePrice = newPriceMoney;
         }
 
+
         protected virtual void EnsureCartExists()
         {
             if (Cart == null)
@@ -654,6 +654,16 @@ namespace VirtoCommerce.Storefront.Domain
                 throw new ArgumentNullException(nameof(cart));
             }
 
+            if (store == null)
+            {
+                throw new ArgumentNullException(nameof(store));
+            }
+
+            await PrepareCartInternalAsync(cart, store);
+        }
+
+        protected virtual async Task PrepareCartInternalAsync(ShoppingCart cart, Store store)
+        {
             //Load products for cart line items
             if (cart.Items.Any())
             {
@@ -668,9 +678,18 @@ namespace VirtoCommerce.Storefront.Domain
             //Load cart payment plan with have same id
             if (store.SubscriptionEnabled)
             {
-                var paymentPlanIds = new[] { cart.Id }.Concat(cart.Items.Select(x => x.ProductId).Distinct()).ToArray();
-                var paymentPlans = await _subscriptionService.GetPaymentPlansByIdsAsync(paymentPlanIds);
+                var paymentPlanIds = new HashSet<string>();
+
+                if (!string.IsNullOrEmpty(cart.Id))
+                {
+                    paymentPlanIds.Add(cart.Id);
+                }
+
+                paymentPlanIds.AddRange(cart.Items.Select(x => x.ProductId).Distinct());
+
+                var paymentPlans = await _subscriptionService.GetPaymentPlansByIdsAsync(paymentPlanIds.ToArray());
                 cart.PaymentPlan = paymentPlans.FirstOrDefault(x => x.Id == cart.Id);
+
                 //Realize this code whith dictionary
                 foreach (var lineItem in cart.Items)
                 {

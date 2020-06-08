@@ -12,7 +12,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Validators
     {
         public ChangeCartItemPriceValidator(ShoppingCart cart)
         {
-            RuleFor(x => x.NewPrice).GreaterThan(0);
+            RuleFor(x => x.NewPrice).GreaterThanOrEqualTo(0);
             RuleFor(x => x.LineItemId).NotNull().NotEmpty();
             RuleSet("strict", () =>
             {
