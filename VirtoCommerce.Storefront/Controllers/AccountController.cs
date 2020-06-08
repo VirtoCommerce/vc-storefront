@@ -326,9 +326,14 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View("customers/login", WorkContext);
             }
 
+            if (new IsUserLockedOutSpecification().IsSatisfiedBy(user))
+            {
+                return View("lockedout", WorkContext);
+            }
+
             if (new IsUserSuspendedSpecification().IsSatisfiedBy(user))
             {
-                WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserCannotLoginInStore());
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.AccountIsBlocked());
                 return View("customers/login", WorkContext);
             }
 
@@ -390,16 +395,6 @@ namespace VirtoCommerce.Storefront.Controllers
                 WorkContext.Form = Form.FromObject(veryfyCodeViewModel);
 
                 return View("customers/verify_code", WorkContext);
-            }
-
-            if (loginResult.IsLockedOut)
-            {
-                return View("lockedout", WorkContext);
-            }
-
-            if (loginResult is CustomSignInResult signInResult && signInResult.IsRejected)
-            {
-                WorkContext.Form.Errors.Add(SecurityErrorDescriber.AccountIsBlocked());
             }
 
             WorkContext.Form.Errors.Add(SecurityErrorDescriber.LoginFailed());
