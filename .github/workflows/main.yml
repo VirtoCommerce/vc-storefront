@@ -22,7 +22,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Install VirtoCommerce.GlobalTool
-      run: dotnet tool install --global VirtoCommerce.GlobalTool --version 3.0.0-beta0010
+      run: dotnet tool install --global VirtoCommerce.GlobalTool
 
     - name: Build
       run: vc-build Compile
@@ -44,7 +44,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Install VirtoCommerce.GlobalTool
-      run: dotnet tool install --global VirtoCommerce.GlobalTool --version 3.0.0-beta0010
+      run: dotnet tool install --global VirtoCommerce.GlobalTool
 
     - name: Install dotnet-sonarscanner
       run: dotnet tool install --global dotnet-sonarscanner
@@ -70,10 +70,10 @@ jobs:
         pwsh -command $CMD
 
     - name: Build
-      run: dotnet build VirtoCommerce.Storefront.sln /p:Configuration=Debug /p:Platform="Any CPU" /t:rebuild /m
+      run: vc-build Compile
 
     - name: Unit Tests
-      run: dotnet test --no-restore --verbosity normal
+      run: vc-build Test -skip Restore+Compile
 
     - name: SonarCloud End
       if: ${{ env.SONAR_TOKEN != 0 }}
