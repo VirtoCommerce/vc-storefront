@@ -397,16 +397,6 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View("customers/verify_code", WorkContext);
             }
 
-            if (loginResult.IsLockedOut)
-            {
-                return View("lockedout", WorkContext);
-            }
-
-            if (loginResult is CustomSignInResult signInResult && signInResult.IsRejected)
-            {
-                WorkContext.Form.Errors.Add(SecurityErrorDescriber.AccountIsBlocked());
-            }
-
             WorkContext.Form.Errors.Add(SecurityErrorDescriber.LoginFailed());
 
             return View("customers/login", WorkContext);
