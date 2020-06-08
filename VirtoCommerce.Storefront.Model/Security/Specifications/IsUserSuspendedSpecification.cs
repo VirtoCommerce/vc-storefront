@@ -6,7 +6,7 @@ namespace VirtoCommerce.Storefront.Model.Security.Specifications
     {
         public bool IsSatisfiedBy(User obj)
         {
-            return obj.UserState == AccountState.Rejected || obj.IsLockedOut;
+            return obj.UserState == AccountState.Rejected;
         }
     }
 }

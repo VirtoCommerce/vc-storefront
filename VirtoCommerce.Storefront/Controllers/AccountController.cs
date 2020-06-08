@@ -326,9 +326,14 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View("customers/login", WorkContext);
             }
 
+            if (new IsUserLockedOutSpecification().IsSatisfiedBy(user))
+            {
+                return View("lockedout", WorkContext);
+            }
+
             if (new IsUserSuspendedSpecification().IsSatisfiedBy(user))
             {
-                WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserCannotLoginInStore());
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.AccountIsBlocked());
                 return View("customers/login", WorkContext);
             }
 
