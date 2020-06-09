@@ -101,7 +101,7 @@ jobs:
     - name: Push Docker Image to GitHub
       run: |
         REPOSITORY=$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]') 
-        docker push "docker.pkg.github.com/$REPOSITORY/platform:${{ steps.image.outputs.tag }}"
+        docker push "docker.pkg.github.com/$REPOSITORY/storefront:${{ steps.image.outputs.tag }}"
 
   swagger-validation:
     name: Swagger Schema Validation
