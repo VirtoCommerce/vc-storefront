@@ -72,8 +72,7 @@ jobs:
       id: image
 
     - name: Install VirtoCommerce.GlobalTool
-      run: |
-        run: dotnet tool install --global VirtoCommerce.GlobalTool --version 1.0.0
+      run: dotnet tool install --global VirtoCommerce.GlobalTool --version 1.0.0
 
     - name: Build Package
       run: vc-build Compress -skip Test
