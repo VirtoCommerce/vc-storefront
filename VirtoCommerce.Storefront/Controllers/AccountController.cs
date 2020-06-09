@@ -166,7 +166,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 {
                     foreach (var error in result.Errors)
                     {
-                        WorkContext.Form.Errors.Add(new FormError { Code = error.Code.PascalToKebabCase(), Description = error.Description });
+                        WorkContext.Form.Errors.Add(new FormError { Code = error.Code?.PascalToKebabCase(), Description = error.Description });
                     }
                 }
             }
@@ -291,7 +291,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpPost("login")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login([FromForm] Login login, [FromQuery]string returnUrl)
+        public async Task<ActionResult> Login([FromForm] Login login, [FromQuery] string returnUrl)
         {
             TryValidateModel(login);
 
@@ -819,7 +819,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
         [HttpPost("phonenumber")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UpdatePhoneNumber([FromForm]UpdatePhoneNumberModel formModel)
+        public async Task<ActionResult> UpdatePhoneNumber([FromForm] UpdatePhoneNumberModel formModel)
         {
             TryValidateModel(formModel);
             if (!ModelState.IsValid)
@@ -850,7 +850,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
         [HttpPost("phonenumber/verify")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> VerifyPhoneNumber([FromForm]VerifyPhoneNumberModel formModel)
+        public async Task<ActionResult> VerifyPhoneNumber([FromForm] VerifyPhoneNumberModel formModel)
         {
             TryValidateModel(formModel);
             if (!ModelState.IsValid)
