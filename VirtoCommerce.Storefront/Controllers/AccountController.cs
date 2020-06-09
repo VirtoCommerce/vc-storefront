@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -896,12 +897,12 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 result = await _platformNotificationApi.SendNotificationByRequestAsync(notification.ToNotificationDto());
             }
-            catch
+            catch (Exception exception)
             {
                 result = new NotificationSendResult
                 {
                     IsSuccess = false,
-                    ErrorMessage = "Error occurred while sending notification"
+                    ErrorMessage = $"Error occurred while sending notification: {exception.Message}"
                 };
             }
 
