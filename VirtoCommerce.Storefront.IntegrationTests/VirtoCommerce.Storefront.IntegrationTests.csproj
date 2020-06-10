@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="AutoFixture" Version="4.11.0" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="3.1.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="RestSharp" Version="106.11.4" />
     <PackageReference Include="xunit" Version="2.4.0" />
@@ -17,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\" />
+    <ProjectReference Include="..\VirtoCommerce.Storefront\VirtoCommerce.Storefront.csproj" />
   </ItemGroup>
 
 </Project>
