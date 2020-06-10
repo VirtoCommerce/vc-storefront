@@ -2,7 +2,9 @@ namespace VirtoCommerce.Storefront.Model.Features
 {
     using System;
     using System.Collections.Generic;
+
     using Newtonsoft.Json.Linq;
+
     using VirtoCommerce.Storefront.Model.Features.Exceptions;
 
     public class FeaturesAgent : IFeaturesAgent
@@ -14,9 +16,9 @@ namespace VirtoCommerce.Storefront.Model.Features
             _featuresBranchToken = featuresBranchToken;
         }
 
-        public bool IsActive(string featureName, IDictionary<string, object> settings)
+        public bool IsActive(string featureName, JObject jObject)
         {
-            var features = GetFeatures(settings);
+            var features = GetFeatures(jObject);
 
             var feature = features.GetFeature(featureName);
 
@@ -42,17 +44,17 @@ namespace VirtoCommerce.Storefront.Model.Features
             return result;
         }
 
-        private List<Feature> GetFeatures(IDictionary<string, object> settings)
+        private List<Feature> GetFeatures(JObject jObject)
         {
             List<Feature> result;
 
             try
             {
-                var featuresJson = settings[_featuresBranchToken] as JArray;
+                var featuresJson = jObject[_featuresBranchToken];
 
                 if (featuresJson == null)
                 {
-                    throw new FeaturesException($"Can't find \"{_featuresBranchToken}\" section ");
+                    throw new FeaturesException($"Can' find \"{_featuresBranchToken}\" section ");
                 }
 
                 result = featuresJson.ToObject<List<Feature>>();
