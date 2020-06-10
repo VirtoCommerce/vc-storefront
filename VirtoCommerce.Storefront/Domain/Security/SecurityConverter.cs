@@ -37,33 +37,6 @@ namespace VirtoCommerce.Storefront.Domain.Security
             };
         }
 
-        public static User ToUser(this OrganizationUserRegistration registerForm)
-        {
-            var result = ((UserRegistration)registerForm).ToUser();
-            if (!string.IsNullOrEmpty(registerForm.Role))
-            {
-                result.Roles = new[] { new Role { Id = registerForm.Role, Name = registerForm.Role } };
-            }
-            return result;
-        }
-
-        public static User ToUser(this UserRegistration registerForm)
-        {
-            var result = new User
-            {
-                Email = registerForm.Email,
-                UserName = registerForm.UserName,
-                Password = registerForm.Password,
-                UserType = "Customer"
-            };
-            //Take userName as Email if it valid and Email is not set 
-            if (string.IsNullOrEmpty(result.Email))
-            {
-                result.Email = registerForm.UserName.IsValidEmail() ? registerForm.UserName : result.Email;
-            }
-            return result;
-        }
-
         public static dto.ApplicationUser ToUserDto(this User user)
         {
             var result = new dto.ApplicationUser

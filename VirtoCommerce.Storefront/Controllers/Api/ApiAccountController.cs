@@ -132,12 +132,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     return UserActionIdentityResult.Failed(error);
                 }
 
-                var organization = orgRegistration.ToOrganization();
+                var organization = orgRegistration.Organization;
                 organization = await _memberService.CreateOrganizationAsync(organization);
                 var contact = orgRegistration.ToContact();
                 contact.OrganizationId = organization.Id;
 
-                user = orgRegistration.ToUser();
+                user = orgRegistration.User;
                 user.Contact = contact;
                 user.StoreId = WorkContext.CurrentStore.Id;
                 user.Roles = new[]
@@ -189,7 +189,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var contact = registration.ToContact();
                 contact.OrganizationId = registration.OrganizationId;
 
-                var user = registration.ToUser();
+                var user = registration.User;
                 user.Contact = contact;
                 user.StoreId = WorkContext.CurrentStore.Id;
 

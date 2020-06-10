@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,6 +25,8 @@ namespace VirtoCommerce.Storefront.Model.Customer
 
         public string PhotoUrl { get; set; }
 
+        public DateTime? BirthDate { get; set; }
+
         public string TimeZone { get; set; }
         public string DefaultLanguage { get; set; }
 
@@ -49,6 +52,5 @@ namespace VirtoCommerce.Storefront.Model.Customer
         /// All contact security accounts
         /// </summary>
         public IEnumerable<SecurityAccount> SecurityAccounts { get; set; }
-
     }
 }

@@ -18,6 +18,7 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Common.Notifications;
+using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Security.Events;
 using VirtoCommerce.Storefront.Model.Security.Specifications;
@@ -118,7 +119,7 @@ namespace VirtoCommerce.Storefront.Controllers
             if (ModelState.IsValid)
             {
                 // Register user
-                var user = registration.ToUser();
+                var user = registration.User;
                 user.Contact = registration.ToContact();
                 user.StoreId = WorkContext.CurrentStore.Id;
 
