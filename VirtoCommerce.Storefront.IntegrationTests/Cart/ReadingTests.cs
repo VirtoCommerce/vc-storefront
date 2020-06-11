@@ -36,7 +36,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                 .Excluding(c => c.SelectedMemberInfo.Name == "CustomerId")
                 .Excluding(c => c.SelectedMemberInfo.Name == "ExtendedPriceTotal")
                 .Excluding(c => c.SelectedMemberInfo.Name == "ExtendedPriceTotalWithTax")
-                .ComparingByValue<ShoppingCart>()
+                .ComparingByMembers<ShoppingCart>()
                 .ComparingByMembers<User>()
                 .ComparingByMembers<Currency>()
             );
