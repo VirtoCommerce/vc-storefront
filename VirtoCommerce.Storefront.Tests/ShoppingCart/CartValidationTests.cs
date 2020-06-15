@@ -196,7 +196,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             var newItemPrice = new ChangeCartItemPrice
             {
                 LineItemId = null,
-                NewPrice = 0
+                NewPrice = -1
             };
 
             //Act
@@ -208,7 +208,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             Assert.NotEmpty(result.Errors);
             Assert.Equal(3, result.Errors.Count);
 
-            Assert.Collection(result.Errors, x => { Assert.Equal(nameof(newItemPrice.NewPrice), x.PropertyName); Assert.Equal(nameof(GreaterThanValidator), x.ErrorCode); }                                          
+            Assert.Collection(result.Errors, x => { Assert.Equal(nameof(newItemPrice.NewPrice), x.PropertyName); Assert.Equal(nameof(GreaterThanOrEqualValidator), x.ErrorCode); }
                                           , x => { Assert.Equal(nameof(newItemPrice.LineItemId), x.PropertyName); Assert.Equal(nameof(NotNullValidator), x.ErrorCode); }
                                           , x => { Assert.Equal(nameof(newItemPrice.LineItemId), x.PropertyName); Assert.Equal(nameof(NotEmptyValidator), x.ErrorCode); }
                              );
