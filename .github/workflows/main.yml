@@ -80,7 +80,7 @@ jobs:
     - name: Build Docker Image
       run: |
         REPOSITORY=$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]') 
-        pwsh -command "Invoke-WebRequest -Uri https://raw.githubusercontent.com/VirtoCommerce/vc-docker/v3-linux-solution/linux/storefront/Dockerfile -OutFile artifacts/publish/Dockerfile"
+        pwsh -command "Invoke-WebRequest -Uri https://raw.githubusercontent.com/VirtoCommerce/vc-docker/v3-linux-solution/linux/storefront/Dockerfile -OutFile artifacts/Dockerfile"
         docker build artifacts/publish --build-arg SOURCE=. --tag "docker.pkg.github.com/$REPOSITORY/storefront:${{ steps.image.outputs.tag }}"
 
     - name: Docker Login
