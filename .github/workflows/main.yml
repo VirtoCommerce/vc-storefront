@@ -78,10 +78,11 @@ jobs:
       run: vc-build Compress -skip Test
 
     - name: Build Docker Image
+      shell: pwsh
       run: |
-        REPOSITORY=$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]') 
-        pwsh -command "Invoke-WebRequest -Uri https://raw.githubusercontent.com/VirtoCommerce/vc-docker/v3-linux-solution/linux/storefront/Dockerfile -OutFile artifacts/Dockerfile"
-        docker build artifacts --build-arg SOURCE=. --tag "docker.pkg.github.com/$REPOSITORY/storefront:${{ steps.image.outputs.tag }}"
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/VirtoCommerce/vc-docker/v3-linux-solution/linux/storefront/Dockerfile -OutFile artifacts/Dockerfile
+        ((Get-Content -path artifacts/Dockerfile -Raw) -replace 'microsoft/dotnet:2.2-aspnetcore-runtime','mcr.microsoft.com/dotnet/core/aspnet:3.1') | Set-Content -Path artifacts/Dockerfile
+        docker build artifacts --build-arg SOURCE=. --tag "docker.pkg.github.com/$('$GITHUB_REPOSITORY'.ToLower())/storefront:${{ steps.image.outputs.tag }}"
 
     - name: Docker Login
       uses: azure/docker-login@v1
