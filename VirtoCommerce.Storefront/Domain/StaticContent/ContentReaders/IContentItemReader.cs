@@ -4,7 +4,7 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public interface IContentItemReader
     {
-        Dictionary<string, IEnumerable<string>> ReadMetadata();
+        Dictionary<string, object> ReadMetadata();
         string ReadContent();
     }
 }

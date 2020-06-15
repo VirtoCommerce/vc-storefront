@@ -76,8 +76,9 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
         public bool Authorize { get; set; }
 
         public virtual string Handle => Url;
-        public IDictionary<string, IEnumerable<string>> MetaInfo { get; set; }
-        public IDictionary<string, IEnumerable<string>> MetaFields => MetaInfo;
+
+        public IDictionary<string, object> MetaInfo { get; set; }
+        public IDictionary<string, object> MetaFields => MetaInfo;
 
         public virtual string IndexKey => Handle;
 

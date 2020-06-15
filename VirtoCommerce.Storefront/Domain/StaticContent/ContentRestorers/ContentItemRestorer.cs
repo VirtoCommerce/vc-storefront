@@ -21,7 +21,7 @@ namespace VirtoCommerce.Storefront.Domain
             ApplyContent(reader.ReadContent(), contentItem);
         }
 
-        protected virtual void ApplyMetadata(Dictionary<string, IEnumerable<string>> metadata, ContentItem contentItem)
+        protected virtual void ApplyMetadata(Dictionary<string, object> metadata, ContentItem contentItem)
         {
             contentItem.MetaInfo = metadata;
             SetIfExists(contentItem, "template", () => contentItem.Template);
@@ -65,30 +65,71 @@ namespace VirtoCommerce.Storefront.Domain
                     ? (MemberExpression)((UnaryExpression)expr.Body).Operand
                     : (MemberExpression)expr.Body).Member;
 
-                var value = item.MetaInfo[key].FirstOrDefault();
-                if (propInfo.PropertyType == typeof(string))
+                var value = item.MetaInfo[key];
+                try
                 {
-                    propInfo.SetValue(item, value);
+                    if (propInfo.PropertyType == typeof(string))
+                    {
+                        propInfo.SetValue(item, GetString(value));
+                    }
+                    else if (propInfo.PropertyType == typeof(bool))
+                    {
+                        bool.TryParse(GetString(value), out var result);
+                        propInfo.SetValue(item, result);
+                    }
+                    else if (propInfo.PropertyType == typeof(DateTime) || propInfo.PropertyType == typeof(DateTime?))
+                    {
+                        propInfo.SetValue(item, DateTime.TryParse(GetString(value), out var date) ? date : new DateTime());
+                    }
+                    else if (propInfo.PropertyType == typeof(int))
+                    {
+                        propInfo.SetValue(item, int.TryParse(GetString(value), out var result) ? result : default);
+                    }
+                    else if (typeof(IEnumerable).IsAssignableFrom(propInfo.PropertyType))
+                    {
+                        propInfo.SetValue(item, GetStringList(item.MetaInfo[key]));
+                    }
                 }
-                else if (propInfo.PropertyType == typeof(bool))
+                catch
                 {
-                    bool.TryParse(value, out var result);
-                    propInfo.SetValue(item, result);
-                }
-                else if (propInfo.PropertyType == typeof(DateTime) || propInfo.PropertyType == typeof(DateTime?))
-                {
-                    propInfo.SetValue(item, DateTime.TryParse(value, out var date) ? date : new DateTime());
-                }
-                else if (propInfo.PropertyType == typeof(int))
-                {
-                    propInfo.SetValue(item, int.TryParse(value, out var result) ? result : default);
-                }
-                else if (typeof(IEnumerable).IsAssignableFrom(propInfo.PropertyType))
-                {
-                    propInfo.SetValue(item, item.MetaInfo[key].ToList());
                 }
             }
 
+        }
+
+        private static List<string> GetStringList(object value)
+        {
+            var result = new List<string>();
+            if (value != null)
+            {
+                if (typeof(string) != value.GetType() && typeof(IEnumerable).IsAssignableFrom(value.GetType()))
+                {
+                    result = ((IEnumerable)value).Cast<string>().ToList();
+                }
+                else
+                {
+                    result.Add(value.ToString());
+                };
+            }
+            return result;
+        }
+
+        private static string GetString(object value)
+        {
+            if (value != null)
+            {
+                if (typeof(string) == value.GetType())
+                {
+                    return (string)value;
+                }
+                if (typeof(IEnumerable).IsAssignableFrom(value.GetType()))
+                {
+                    var result = ((IEnumerable)value).Cast<object>().FirstOrDefault();
+                    return Convert.ToString(result);
+                }
+                return Convert.ToString(value);
+            }
+            return null;
         }
 
         protected virtual void ApplyContent(string content, ContentItem contentItem)
@@ -96,11 +137,11 @@ namespace VirtoCommerce.Storefront.Domain
             contentItem.Content = content;
         }
 
-        protected void SetLanguage(Dictionary<string, IEnumerable<string>> metadata, ContentItem contentItem)
+        protected void SetLanguage(Dictionary<string, object> metadata, ContentItem contentItem)
         {
             if (metadata.ContainsKey("language"))
             {
-                var value = metadata["language"].FirstOrDefault();
+                var value = (string)metadata["language"];
                 if (!value.IsNullOrEmpty() && contentItem.Language == null)
                 {
                     try

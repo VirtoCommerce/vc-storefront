@@ -5,7 +5,7 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public class BlogArticleRestorer : ContentItemRestorer
     {
-        protected override void ApplyMetadata(Dictionary<string, IEnumerable<string>> metadata, ContentItem contentItem)
+        protected override void ApplyMetadata(Dictionary<string, object> metadata, ContentItem contentItem)
         {
             base.ApplyMetadata(metadata, contentItem);
             var article = (BlogArticle)contentItem;

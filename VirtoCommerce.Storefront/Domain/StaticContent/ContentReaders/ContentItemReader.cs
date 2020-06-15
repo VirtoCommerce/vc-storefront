@@ -18,17 +18,17 @@ namespace VirtoCommerce.Storefront.Domain
 
         public abstract string ReadContent();
 
-        public abstract Dictionary<string, IEnumerable<string>> ReadMetadata();
+        public abstract Dictionary<string, object> ReadMetadata();
 
-        protected virtual void AddPropertiesFromFilename(Dictionary<string, IEnumerable<string>> metadata)
+        protected virtual void AddPropertiesFromFilename(Dictionary<string, object> metadata)
         {
             // each content file  has a name pattern {name}.{language?}.{ext}
             var parts = Path.GetFileName(BlobRelativePath)?.Split('.');
 
             if (parts?.Length == 3)
             {
-                metadata.Add("language", new string[] { parts[1] });
-                metadata.Add("contentItemName", new string[] { parts.FirstOrDefault() });
+                metadata.Add("language", parts[1]);
+                metadata.Add("contentItemName", parts.FirstOrDefault());
             }
         }
     }

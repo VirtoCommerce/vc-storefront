@@ -28,16 +28,16 @@ namespace VirtoCommerce.Storefront.Domain
             return Markdown.ToHtml(result, pipeline);
         }
 
-        public override Dictionary<string, IEnumerable<string>> ReadMetadata()
+        public override Dictionary<string, object> ReadMetadata()
         {
-            var result = new Dictionary<string, IEnumerable<string>>();
+            var result = new Dictionary<string, object>();
             var contentWithoutYaml = ReadYamlMetadata(result);
             ReadExcerpt(result, contentWithoutYaml);
             AddPropertiesFromFilename(result);
             return result;
         }
 
-        private void ReadExcerpt(Dictionary<string, IEnumerable<string>> metadata, string contentWithoutYaml)
+        private void ReadExcerpt(Dictionary<string, object> metadata, string contentWithoutYaml)
         {
 
             if (contentWithoutYaml.Contains(_excerptToken))
@@ -50,7 +50,7 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
-        private string ReadYamlMetadata(Dictionary<string, IEnumerable<string>> metadata)
+        private string ReadYamlMetadata(Dictionary<string, object> metadata)
         {
             var headerMatches = _headerRegExp.Matches(Content);
             if (headerMatches.Count > 0)
@@ -69,7 +69,8 @@ namespace VirtoCommerce.Storefront.Domain
                         {
                             if (entry.Key is YamlScalarNode node)
                             {
-                                metadata.Add(node.Value, GetYamlNodeValues(entry.Value));
+                                var values = GetYamlNodeValues(entry.Value);
+                                metadata.Add(node.Value, values.Count() == 1 ? (object)values.First() : values);
                             }
                         }
                     }

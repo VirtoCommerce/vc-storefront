@@ -14,18 +14,14 @@ namespace VirtoCommerce.Storefront.Domain
             return Content;
         }
 
-        public override Dictionary<string, IEnumerable<string>> ReadMetadata()
+        public override Dictionary<string, object> ReadMetadata()
         {
-            var result = new Dictionary<string, IEnumerable<string>>();
+            var result = new Dictionary<string, object>();
             var page = JsonConvert.DeserializeObject<JArray>(Content) ?? new JArray();
             var settings = page.FirstOrDefault(x => (x as JObject)?.GetValue("type")?.Value<string>() == "settings");
             if (settings != null)
             {
-                var items = settings.AsJEnumerable();
-                foreach (JProperty prop in items)
-                {
-                    result.Add(prop.Name, new List<string> { prop.Value.Value<string>() });
-                }
+                result = settings.ToObject<Dictionary<string, object>>().ToDictionary(x => x.Key, x => x.Value);
             }
             AddPropertiesFromFilename(result);
             return result;
