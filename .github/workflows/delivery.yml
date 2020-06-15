@@ -49,7 +49,7 @@ jobs:
         cd vc-deploy-apps/webstore-app/overlays/dev
 
         $REPOSITORY = "docker.pkg.github.com/$('${{ github.repository }}'.ToLower())"
-        kustomize edit set image virtocommerce/platform=$REPOSITORY/storefront:${{ steps.image.outputs.tag }}
+        kustomize edit set image virtocommerce/storefront=$REPOSITORY/storefront:${{ steps.image.outputs.tag }}
 
         git config user.email "github.actions@virtoway.com"
         git config user.name "GitHub Actions"
