@@ -81,7 +81,7 @@ jobs:
       run: |
         REPOSITORY=$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]') 
         pwsh -command "Invoke-WebRequest -Uri https://raw.githubusercontent.com/VirtoCommerce/vc-docker/v3-linux-solution/linux/storefront/Dockerfile -OutFile artifacts/Dockerfile"
-        docker build artifacts/publish --build-arg SOURCE=. --tag "docker.pkg.github.com/$REPOSITORY/storefront:${{ steps.image.outputs.tag }}"
+        docker build artifacts --build-arg SOURCE=. --tag "docker.pkg.github.com/$REPOSITORY/storefront:${{ steps.image.outputs.tag }}"
 
     - name: Docker Login
       uses: azure/docker-login@v1
