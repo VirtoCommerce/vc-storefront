@@ -1,0 +1,205 @@
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master, dev ]
+  pull_request:
+    branches: [ master, dev ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  unit-tests:
+    name: Unit Tests
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+    env:
+      SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    - name: Install VirtoCommerce.GlobalTool
+      run: dotnet tool install --global VirtoCommerce.GlobalTool --version 1.0.0
+
+    - name: Install dotnet-sonarscanner
+      run: dotnet tool install --global dotnet-sonarscanner
+
+    - name: SonarCloud Begin
+      if: ${{ env.SONAR_TOKEN != 0 }}
+      shell: pwsh
+      env:
+        PULL_REQUEST_TITLE: ${{ github.event.pull_request.title }}
+      run: |
+        $BRANCH='${{ github.ref }}'.Replace('refs/heads', '')
+        $CMD="dotnet sonarscanner begin /k:'VirtoCommerce_vc-storefront-core'"
+        $CMD="$($CMD) /o:'virto-commerce'"
+        $CMD="$($CMD) /d:sonar.cs.opencover.reportsPaths='$PWD/.tmp/coverage.xml'"
+        $CMD="$($CMD) /d:sonar.host.url='https://sonarcloud.io'"
+        $CMD="$($CMD) /d:sonar.login='${{ secrets.SONAR_TOKEN }}'"
+        $CMD = "$($CMD) /d:sonar.branch='$($BRANCH)'"
+        if ('${{ github.event_name }}' -eq 'pull_request' ) {
+          $CMD="$($CMD) /d:sonar.pullrequest.base='$('${{ github.event.pull_request.base.ref }}')'"
+          $CMD="$($CMD) /d:sonar.pullrequest.branch='$($env:PULL_REQUEST_TITLE)'"
+          $CMD="$($CMD) /d:sonar.pullrequest.key=${{ github.event.number }}"
+        }
+        pwsh -command $CMD
+
+    - name: Build
+      run: vc-build Compile
+
+    - name: Unit Tests
+      run: vc-build Test -TestsFilter "Category=Unit|Category=CI" -skip Restore+Compile
+
+    - name: SonarCloud End
+      if: ${{ env.SONAR_TOKEN != 0 }}
+      run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+
+  build-package:
+    name: Build Package
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Get Image Tag
+      uses: VirtoCommerce/vc-github-actions/get-image-tag@v2
+      id: image
+
+    - name: Install VirtoCommerce.GlobalTool
+      run: dotnet tool install --global VirtoCommerce.GlobalTool --version 1.0.0
+
+    - name: Build Package
+      run: vc-build Compress -skip Test
+
+    - name: Build Docker Image
+      shell: pwsh
+      run: |
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/VirtoCommerce/vc-docker/v3-linux-solution/linux/storefront/Dockerfile -OutFile artifacts/Dockerfile
+        ((Get-Content -path artifacts/Dockerfile -Raw) -replace 'microsoft/dotnet:2.2-aspnetcore-runtime','mcr.microsoft.com/dotnet/core/aspnet:3.1') | Set-Content -Path artifacts/Dockerfile
+        docker build artifacts --build-arg SOURCE=. --tag "docker.pkg.github.com/$('${{ github.repository }}'.ToLower())/storefront:${{ steps.image.outputs.tag }}"
+
+    - name: Docker Login
+      uses: azure/docker-login@v1
+      with:
+        login-server: docker.pkg.github.com
+        username: $GITHUB_ACTOR
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Push Docker Image to GitHub
+      run: |
+        REPOSITORY=$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]') 
+        docker push "docker.pkg.github.com/$REPOSITORY/storefront:${{ steps.image.outputs.tag }}"
+
+  publish:
+    name: Publish image
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    needs: [build-package, unit-tests]
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Docker Login
+      uses: azure/docker-login@v1
+      with:
+        login-server: docker.pkg.github.com
+        username: $GITHUB_ACTOR
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Get Image Tag
+      uses: VirtoCommerce/vc-github-actions/get-image-tag@v2
+      id: image
+
+    - name: Pull Docker Image from GitHub
+      run: |
+        REPOSITORY=$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]') 
+        docker pull "docker.pkg.github.com/$REPOSITORY/storefront:${{ steps.image.outputs.tag }}"
+
+    - name: Push Docker Image to docker.pkg.github.com
+      shell: pwsh
+      run: |
+        $REPOSITORY = "docker.pkg.github.com/$('${{ github.repository }}'.ToLower())/storefront"
+        $DOCKER_TAG = ''
+        if ('${{ github.ref }}' -eq 'refs/heads/master') {
+          $DOCKER_TAG = 'linux-latest'
+        }
+        elseif ('${{ github.event_name }}' -eq 'pull_request') {
+          $DOCKER_TAG = 'pr${{ github.event.pull_request.number }}'
+        }
+        else {
+          $DOCKER_TAG = "$('${{ github.ref }}'.Replace('refs/heads/', ''))-linux-latest"
+        }
+
+        $DOCKER_TAG = $DOCKER_TAG.Replace('/', '_')
+        
+        docker tag "$($REPOSITORY):${{ steps.image.outputs.tag }}" "$($REPOSITORY):$($DOCKER_TAG)"
+        docker push "$($REPOSITORY):$($DOCKER_TAG)"
+        echo "::set-env name=BUILD_STATE::successful"
+
+    - name: Push Docker Image to hub.docker.io
+      if: ${{ env.DOCKER_USERNAME != 0 && env.DOCKER_TOKEN != 0 && github.event_name != 'pull_request' }}
+      env:
+        DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+        DOCKER_TOKEN: ${{secrets.DOCKER_TOKEN}}
+      run: |
+        REPOSITORY=$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]') 
+        DOCKER_TAG='dev-linux-experimental'
+        if [ '${{ github.ref }}' = 'refs/heads/master' ]; then DOCKER_TAG=linux-experimental; fi
+        docker tag docker.pkg.github.com/$REPOSITORY/storefront:${{ steps.image.outputs.tag }} ${{ secrets.DOCKER_USERNAME }}/storefront:$DOCKER_TAG
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
+        docker push ${{ secrets.DOCKER_USERNAME }}/storefront:$DOCKER_TAG
+        echo "::set-env name=BUILD_STATE::successful"
+
+    - name: Add tag "ver.${{ steps.image.outputs.tag }}"
+      if: ${{ env.REPO_TOKEN != 0 && (github.ref == 'refs/heads/dev' || github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'testing')) }}
+      uses: tvdias/github-tagger@v0.0.2
+      env:
+        REPO_TOKEN: ${{secrets.REPO_TOKEN}}
+      with:
+        repo-token: ${{ secrets.REPO_TOKEN }}
+        tag: ver.${{ steps.image.outputs.tag }}
+        # optional commit sha to apply the tag to
+        commit-sha: ${{ steps.image.outputs.sha }}
+
+    - name: Set Build status Failed
+      if: failure()
+      run: echo "::set-env name=BUILD_STATE::failed"
+
+    - name: Parse Jira Keys from Commit
+      id: jira_keys
+      if: always()
+      uses: HighwayThree/jira-extract-issue-keys@master
+      with:
+        is-pull-request: ${{ github.event_name == 'pull_request' }}
+        parse-all-commits: ${{ github.event_name == 'push' }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Push Build Info to Jira
+      if: ${{ env.CLOUD_INSTANCE_BASE_URL != 0 && env.CLIENT_ID != 0 && env.CLIENT_SECRET != 0 && env.BUILD_STATE != 0 && steps.jira_keys.outputs.jira-keys != '' && always() }}
+      id: push_build_info_to_jira
+      uses: HighwayThree/jira-upload-build-info@master
+      env:
+        CLOUD_INSTANCE_BASE_URL: ${{secrets.CLOUD_INSTANCE_BASE_URL}}
+        CLIENT_ID: ${{secrets.CLIENT_ID}}
+        CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+      with:
+        cloud-instance-base-url: '${{ secrets.CLOUD_INSTANCE_BASE_URL }}'
+        client-id: '${{ secrets.CLIENT_ID }}'
+        client-secret: '${{ secrets.CLIENT_SECRET }}'
+        pipeline-id: '${{ github.repository }} ${{ github.workflow }}'
+        build-number: ${{ github.run_number }}
+        build-display-name: 'Workflow: ${{ github.workflow }} (#${{ github.run_number }})'
+        build-state: "${{ env.BUILD_STATE }}"
+        build-url: '${{github.event.repository.html_url}}/actions/runs/${{github.run_id}}'
+        update-sequence-number: '${{ github.run_id }}'
+        last-updated: '${{github.event.head_commit.timestamp}}'
+        issue-keys: "${{ steps.jira_keys.outputs.jira-keys }}"
+        commit-id: '${{ github.sha }}'
+        repo-url: '${{ github.event.repository.html_url }}'
+        build-ref-url: '${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}'
