@@ -12,7 +12,11 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
             var builder = Host.CreateDefaultBuilder()
                 .ConfigureWebHostDefaults(x =>
                 {
-                    x.UseStartup<Storefront.Startup>().UseTestServer();
+                    x.UseStartup<Storefront.Startup>()
+                        //.ConfigureServices(s => s.AddAuthentication("Test")
+                        //    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+                        //        "Test", options => { }))
+                        .UseTestServer();
                 });
             return builder;
         }
