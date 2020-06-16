@@ -16,150 +16,158 @@ using Xunit;
 namespace VirtoCommerce.Storefront.IntegrationTests.Cart
 {
     [Trait("Category", "CI")]
-    public class ApiCartControllerTests : IClassFixture<StorefrontApplicationFactory>
+    public class ApiCartControllerTests : IClassFixture<StorefrontApplicationFactory>, IDisposable
     {
-        private readonly StorefrontApplicationFactory _factory;
+        private readonly HttpClient _client;
+        private bool _isDisposed;
 
         public ApiCartControllerTests(StorefrontApplicationFactory factory)
         {
-            _factory = factory;
+            _client = factory.CreateClient();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_isDisposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                _client?.Dispose();
+            }
+
+            _isDisposed = true;
+        }
+
+        ~ApiCartControllerTests()
+        {
+            Dispose(false);
         }
 
         [Fact]
         public async Task GetCart_IfCartIsNotExistForUser_ShouldReturnNewCart()
         {
-            using (var client = _factory.CreateClient())
-            {
-                //act
-                var result = await GetCart(client);
+            //act
+            var result = await GetCart(_client);
 
-                //assert
-                GetCartComparationResult(
-                    result,
-                    "GetEmptyCartForAnonymous",
-                    new[] { "$.customer", "$" },
-                    new[] { "id", "customerId" })
-                    .Should()
-                    .BeNull();
-            }
+            //assert
+            GetCartComparationResult(
+                result,
+                "GetEmptyCartForAnonymous",
+                new[] { "$.customer", "$" },
+                new[] { "id", "customerId" })
+                .Should()
+                .BeNull();
         }
 
         [Fact]
         public async Task GetCart_IfCartExistForUser_ShouldReturnExistedCart()
         {
+            //arrange
+            _client
+                .Login("admin", "store")
+                .СlearCart()
+                .InsertCartItem(new AddCartItem { Id = "9cbd8f316e254a679ba34a900fccb076", Quantity = 1 });
 
-            using (var client = _factory.CreateClient())
-            {
-                //arrange
-                client
-                    .Login("admin", "store")
-                    .СlearCart()
-                    .InsertCartItem(new AddCartItem { Id = "9cbd8f316e254a679ba34a900fccb076", Quantity = 1 });
+            //act
+            var result = await GetCart(_client);
 
-                //act
-                var result = await GetCart(client);
+            //assert
+            GetCartComparationResult(
+                result,
+                "GetFilledCartWithItem",
+                new[] { "$.items[*]", "$.recentlyAddedItem" },
+                new[] { "id" })
+                .Should()
+                .BeNull();
 
-                //assert
-                GetCartComparationResult(
-                    result,
-                    "GetFilledCartWithItem",
-                    new[] { "$.items[*]", "$.recentlyAddedItem" },
-                    new[] { "id" })
-                    .Should()
-                    .BeNull();
-
-                client.Logout();
-            }
+            _client.Logout();
         }
 
         [Fact]
         public async Task GetCartItemsCount_IfCartHasNoItems_ShouldReturnZero()
         {
-            using (var client = _factory.CreateClient())
-            {
-                //arrange
-                client
-                    .Login("admin", "store")
-                    .СlearCart();
+            //arrange
+            _client
+                .Login("admin", "store")
+                .СlearCart();
 
-                //act
-                var result = await client.GetAsync<int>(TestEnvironment.CartItemsCountEndpoint);
+            //act
+            var result = await _client.GetAsync<int>(TestEnvironment.CartItemsCountEndpoint);
 
-                //assert
-                result.Should().Be(0);
-                client.Logout();
-            }
+            //assert
+            result.Should().Be(0);
+            _client.Logout();
         }
 
         [Fact]
         public async Task GetCartItemsCount_IfCartHasItems_ShouldReturnExactItemsCount()
         {
-            using (var client = _factory.CreateClient())
-            {
-                //arrange
-                var quantity = (new Fixture()).Create<int>();
+            //arrange
+            var quantity = (new Fixture()).Create<int>();
 
-                client
-                    .Login("admin", "store")
-                    .СlearCart()
-                    .InsertCartItem(new AddCartItem { Id = "9cbd8f316e254a679ba34a900fccb076", Quantity = quantity });
+            _client
+                .Login("admin", "store")
+                .СlearCart()
+                .InsertCartItem(new AddCartItem { Id = "9cbd8f316e254a679ba34a900fccb076", Quantity = quantity });
 
-                //act
-                var result = await client.GetAsync<int>(TestEnvironment.CartItemsCountEndpoint);
+            //act
+            var result = await _client.GetAsync<int>(TestEnvironment.CartItemsCountEndpoint);
 
-                //assert
-                result.Should().Be(quantity);
-                client.Logout();
-            }
+            //assert
+            result.Should().Be(quantity);
+            _client.Logout();
         }
 
         [Fact]
         public async Task ClearCart_IfCartExists_ShouldReturnEmptyCart()
         {
-            using (var client = _factory.CreateClient())
-            {
-                //arrange
-                client
-                    .Login("admin", "store")
-                    .СlearCart();
+            //arrange
+            _client
+                .Login("admin", "store")
+                .СlearCart();
 
-                //act
-                var result = await GetCart(client);
+            //act
+            var result = await GetCart(_client);
 
-                //assert
-                GetCartComparationResult(result, "GetEmptyCartForAdmin")
-                    .Should()
-                    .BeNull();
-            }
+            //assert
+            GetCartComparationResult(result, "GetEmptyCartForAdmin")
+                .Should()
+                .BeNull();
         }
 
 
         [Fact]
         public async Task AddItemToCart_ShouldReturnCartItemsCount()
         {
-            using (var client = _factory.CreateClient())
+            //arrange
+            _client
+                .Login("admin", "store")
+                .СlearCart();
+
+            var item = new AddCartItem
             {
-                //arrange
-                client
-                    .Login("admin", "store")
-                    .СlearCart();
+                Id = "9cbd8f316e254a679ba34a900fccb076",
+                Quantity = (new Fixture()).Create<int>()
+            };
+            var content = new StringContent(
+                JsonConvert.SerializeObject(item),
+                Encoding.UTF8,
+                "application/json");
 
-                var item = new AddCartItem
-                {
-                    Id = "9cbd8f316e254a679ba34a900fccb076",
-                    Quantity = (new Fixture()).Create<int>()
-                };
-                var content = new StringContent(
-                    JsonConvert.SerializeObject(item),
-                    Encoding.UTF8,
-                    "application/json");
+            //act
+            var response = await _client.PostAsync<ShoppingCartItems>(TestEnvironment.CartItemsEndpoint, content);
 
-                //act
-                var response = await client.PostAsync<ShoppingCartItems>(TestEnvironment.CartItemsEndpoint, content);
-
-                //assert
-                response.Should().BeEquivalentTo(new ShoppingCartItems { ItemsCount = item.Quantity });
-            }
+            //assert
+            response.Should().BeEquivalentTo(new ShoppingCartItems { ItemsCount = item.Quantity });
         }
 
         private async Task<string> GetCart(HttpClient client)
