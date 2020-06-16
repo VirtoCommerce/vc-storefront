@@ -89,7 +89,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                 .Should()
                 .BeNull();
 
-            _client.Logout();
+            _client.СlearCart().Logout();
         }
 
         [Fact]
@@ -124,7 +124,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
 
             //assert
             result.Should().Be(quantity);
-            _client.Logout();
+            _client.СlearCart().Logout();
         }
 
         [Fact]
@@ -167,6 +167,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
 
             //assert
             response.Should().BeEquivalentTo(new ShoppingCartItems { ItemsCount = item.Quantity });
+            _client.СlearCart().Logout();
         }
 
         private async Task<string> GetCart(HttpClient client)
