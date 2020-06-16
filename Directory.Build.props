@@ -1,0 +1,15 @@
+<Project>
+  <!-- These properties will be shared for all projects -->
+
+  <PropertyGroup>
+    <Product>VirtoCommerce</Product>
+    <Copyright>Copyright © VirtoCommerce 2011-2020</Copyright>
+    <Authors>VirtoCommerce</Authors>
+  </PropertyGroup>
+   <PropertyGroup>
+    <VersionPrefix>5.0.0</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+    <VersionSuffix Condition=" '$(VersionSuffix)' != '' AND '$(BuildNumber)' != '' ">$(VersionSuffix)-$(BuildNumber)</VersionSuffix>
+  </PropertyGroup>
+
+</Project>
