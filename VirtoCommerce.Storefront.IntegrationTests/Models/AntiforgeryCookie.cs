@@ -12,7 +12,6 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Models
 
         public AntiforgeryCookie(HttpHeaders headers)
         {
-
             var cookies = headers.FirstOrDefault(c => c.Key.Contains("Cookie")).Value.ToList();
             if (cookies.IsNullOrEmpty())
             {

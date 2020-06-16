@@ -144,7 +144,6 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                 .BeNull();
         }
 
-
         [Fact]
         public async Task AddItemToCart_ShouldReturnCartItemsCount()
         {

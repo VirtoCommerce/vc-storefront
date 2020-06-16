@@ -88,10 +88,5 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
 
             return client;
         }
-
-        //public static HttpClient Login(this HttpClient client)
-        //{
-        //    return (client as StorefrontClient);
-        //}
     }
 }
