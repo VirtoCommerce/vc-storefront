@@ -346,12 +346,16 @@ namespace VirtoCommerce.Storefront
                 options.MaxAge = TimeSpan.FromDays(30);
             });
 
+            services.Configure<SwaggerOptions>(Configuration.GetSection("Swagger").Bind);
+
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Storefront REST API documentation", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "Storefront REST API documentation", Version = "v1"});
                 c.IgnoreObsoleteProperties();
                 c.IgnoreObsoleteActions();
+                c.ParameterFilter<ParameterOrderFilter>();
+                c.RequestBodyFilter<NameAndOrderRequestBodyFilter>();
                 // To include 401 response type to actions that requires Authorization
                 c.OperationFilter<AuthResponsesOperationFilter>();
                 c.OperationFilter<ConsumeFromBodyFilter>();
@@ -421,7 +425,12 @@ namespace VirtoCommerce.Storefront
             });
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger(c => c.RouteTemplate = "docs/{documentName}/docs.json");
+            app.UseSwagger(c =>
+            {
+                var options = app.ApplicationServices.GetService<IOptions<SwaggerOptions>>().Value;
+                c.SerializeAsV2 = options.Schema.OpenApiSpecificationVersion == OpenApiSpecificationVersion.V2;
+                c.RouteTemplate = "docs/{documentName}/docs.json";
+            });
 
             var rewriteOptions = new RewriteOptions();
             // Load IIS url rewrite rules from external file
