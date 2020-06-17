@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
@@ -17,8 +16,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Swagger
 
         public void Apply(OpenApiParameter parameter, ParameterFilterContext context)
         {
-            if (_swaggerOptions.Schema.NameAndOrderRequestBody &&
-                _swaggerOptions.Schema.OpenApiSpecificationVersion == OpenApiSpecificationVersion.V3)
+            if (_swaggerOptions.Schema.NameAndOrderRequestBody)
             {
                 // Explicitly specify parameters position
                 // Position for store and language is unknown and they should be last, so use int.MaxValue relative values

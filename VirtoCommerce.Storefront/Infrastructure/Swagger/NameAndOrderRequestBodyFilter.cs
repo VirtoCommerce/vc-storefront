@@ -25,8 +25,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Swagger
             requestBody.Extensions.Add("x-codegen-request-body-name", new OpenApiString(bodyName));
             requestBody.Extensions.Add("x-ms-requestBody-name", new OpenApiString(bodyName));
 
-            if (_swaggerOptions.Schema.NameAndOrderRequestBody &&
-                _swaggerOptions.Schema.OpenApiSpecificationVersion == OpenApiSpecificationVersion.V3)
+            if (_swaggerOptions.Schema.NameAndOrderRequestBody)
             {
                 var bodyPosition = context.BodyParameterDescription.ParameterInfo().Position;
                 requestBody.Extensions.Add("x-position", new OpenApiInteger(bodyPosition));

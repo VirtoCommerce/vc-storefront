@@ -80,8 +80,7 @@ jobs:
     - name: Build Docker Image
       shell: pwsh
       run: |
-        Invoke-WebRequest -Uri https://raw.githubusercontent.com/VirtoCommerce/vc-docker/v3-linux-solution/linux/storefront/Dockerfile -OutFile artifacts/Dockerfile
-        ((Get-Content -path artifacts/Dockerfile -Raw) -replace 'microsoft/dotnet:2.2-aspnetcore-runtime','mcr.microsoft.com/dotnet/core/aspnet:3.1') | Set-Content -Path artifacts/Dockerfile
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/VirtoCommerce/vc-docker/master/linux/storefront/Dockerfile -OutFile artifacts/Dockerfile
         docker build artifacts --build-arg SOURCE=. --tag "docker.pkg.github.com/$('${{ github.repository }}'.ToLower())/storefront:${{ steps.image.outputs.tag }}"
 
     - name: Docker Login
