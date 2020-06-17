@@ -233,6 +233,11 @@ namespace VirtoCommerce.Storefront.Domain
                 }
             }
 
+            if (!customer.Phones.IsNullOrEmpty())
+            {
+                retVal.Phones = customer.Phones;
+            }
+
             if (!customer.Emails.IsNullOrEmpty())
             {
                 retVal.Emails = customer.Emails;
