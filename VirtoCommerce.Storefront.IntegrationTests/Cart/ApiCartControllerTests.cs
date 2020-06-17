@@ -93,6 +93,12 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         }
 
         [Fact]
+        public async Task GetCart_IfAnonimousHaveItemsInCartAndLoggedIn_ShouldReturnMergedCart()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact]
         public async Task GetCartItemsCount_IfCartHasNoItems_ShouldReturnZero()
         {
             //arrange
@@ -145,7 +151,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         }
 
         [Fact]
-        public async Task AddItemToCart_ShouldReturnCartItemsCount()
+        public async Task AddItemToCart_IfItemIsAvailable_ShouldReturnCartItemsCount()
         {
             //arrange
             _client
@@ -168,6 +174,66 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
             //assert
             response.Should().BeEquivalentTo(new ShoppingCartItems { ItemsCount = item.Quantity });
             _client.СlearCart();
+        }
+
+        [Fact]
+        public async Task AddItemToCart_IfItemIsNotAvailable_ShouldNotUpdateCartItems()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact]
+        public async Task ChangeCartItemPrice_IfPriceIsMoreThanCurrent_ShouldUpdatePriceForItem()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact]
+        public async Task ChangeCartItemPrice_IfPriceIsLessThanCurrent_ShouldNotUpdatePriceForItem()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact]
+        public async Task AddCartCoupon_ShouldAddCouponToCart()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact]
+        public async Task RemoveCartCoupon_ShouldRemoveCouponFromCart()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact]
+        public async Task AddOrUpdateCartPaymentPlan_ShouldUpdatePaymentPlan()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact]
+        public async Task DeleteCartPaymentPlan_ShouldRemovePaymentPlan()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact]
+        public async Task AddOrUpdateCartShipment_IfShipmentIsRegistered_ShouldAddCartShipment()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact]
+        public async Task AddOrUpdateCartShipment_IfShipmentIsNotRegistered_ShouldReturnBadRequest()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact]
+        public async Task AddOrUpdateCartPayment_IfShipmentIsRegistered_ShouldAddCartPayment()
+        {
+            throw new NotImplementedException();
         }
 
         private async Task<string> GetCart(HttpClient client)
