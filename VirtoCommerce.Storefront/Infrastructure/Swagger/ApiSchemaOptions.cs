@@ -6,8 +6,6 @@ namespace VirtoCommerce.Storefront.Infrastructure.Swagger
     {
         public bool NameAndOrderRequestBody { get; set; }
 
-        public bool NotNullableReferenceTypesInArrays { get; set; }
-
         public OpenApiSpecificationVersion OpenApiSpecificationVersion { get; set; }
     }
 }
