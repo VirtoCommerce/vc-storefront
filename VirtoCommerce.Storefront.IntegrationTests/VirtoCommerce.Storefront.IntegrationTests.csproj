@@ -10,6 +10,7 @@
     <None Remove="Responses\GetEmptyCart.json" />
     <None Remove="Responses\GetEmptyCartForAdmin.json" />
     <None Remove="Responses\GetFilledCartWithItem.json" />
+    <None Remove="Responses\GetMergedAnonymousCartWithAdmin.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,6 +18,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Responses\GetFilledCartWithItem.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Responses\GetMergedAnonymousCartWithAdmin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

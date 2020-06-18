@@ -7,7 +7,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Models
 {
     public class AntiforgeryCookie
     {
-        public string Key => "X-XSRF-TOKEN";
+        public static string Name => "X-XSRF-TOKEN";
         public string Value { get; }
 
         public AntiforgeryCookie(HttpHeaders headers)

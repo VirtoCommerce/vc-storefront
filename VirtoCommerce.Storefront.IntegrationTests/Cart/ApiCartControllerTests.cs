@@ -10,6 +10,7 @@ using JsonDiffPatchDotNet;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using VirtoCommerce.Storefront.IntegrationTests.Infrastructure;
+using VirtoCommerce.Storefront.IntegrationTests.Models;
 using VirtoCommerce.Storefront.Model.Cart;
 using Xunit;
 
@@ -39,9 +40,14 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                 return;
             }
 
-            if (disposing)
+            if (disposing && _client != null)
             {
-                _client?.Dispose();
+                if (_client.DefaultRequestHeaders.TryGetValues(AntiforgeryCookie.Name, out var tokens))
+                {
+                    _client.ClearCart();
+                }
+
+                _client.Dispose();
             }
 
             _isDisposed = true;
@@ -74,8 +80,8 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
             //arrange
             _client
                 .Login("admin", "store")
-                .СlearCart()
-                .InsertCartItem(new AddCartItem { Id = "9cbd8f316e254a679ba34a900fccb076", Quantity = 1 });
+                .ClearCart()
+                .InsertCartItem(new AddCartItem { Id = Product.Quadcopter, Quantity = 1 });
 
             //act
             var result = await GetCart(_client);
@@ -89,13 +95,33 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                 .Should()
                 .BeNull();
 
-            _client.СlearCart().Logout();
+            _client.ClearCart().Logout();
         }
 
         [Fact]
         public async Task GetCart_IfAnonimousHaveItemsInCartAndLoggedIn_ShouldReturnMergedCart()
         {
-            throw new NotImplementedException();
+            //arrange
+            _client
+                .GotoMainPage()
+                .ClearCart()
+                .InsertCartItem(new AddCartItem { Id = Product.Quadcopter, Quantity = 1 })
+                .Login("admin", "store")
+                .InsertCartItem(new AddCartItem { Id = Product.Octocopter, Quantity = 1 });
+
+            //act
+            var result = await GetCart(_client);
+
+            //assert
+            GetCartComparationResult(
+                    result,
+                    "GetMergedAnonymousCartWithAdmin",
+                    new[] { "$.items[*]", "$.recentlyAddedItem" },
+                    new[] { "id" })
+                .Should()
+                .BeNull();
+
+            _client.ClearCart().Logout();
         }
 
         [Fact]
@@ -104,7 +130,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
             //arrange
             _client
                 .Login("admin", "store")
-                .СlearCart();
+                .ClearCart();
 
             //act
             var result = await _client.GetAsync<int>(TestEnvironment.CartItemsCountEndpoint);
@@ -122,15 +148,15 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
 
             _client
                 .Login("admin", "store")
-                .СlearCart()
-                .InsertCartItem(new AddCartItem { Id = "9cbd8f316e254a679ba34a900fccb076", Quantity = quantity });
+                .ClearCart()
+                .InsertCartItem(new AddCartItem { Id = Product.Quadcopter, Quantity = quantity });
 
             //act
             var result = await _client.GetAsync<int>(TestEnvironment.CartItemsCountEndpoint);
 
             //assert
             result.Should().Be(quantity);
-            _client.СlearCart().Logout();
+            _client.ClearCart().Logout();
         }
 
         [Fact]
@@ -139,7 +165,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
             //arrange
             _client
                 .Login("admin", "store")
-                .СlearCart();
+                .ClearCart();
 
             //act
             var result = await GetCart(_client);
@@ -156,11 +182,11 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
             //arrange
             _client
                 .Login("admin", "store")
-                .СlearCart();
+                .ClearCart();
 
             var item = new AddCartItem
             {
-                Id = "9cbd8f316e254a679ba34a900fccb076",
+                Id = Product.Quadcopter,
                 Quantity = (new Fixture()).Create<int>()
             };
             var content = new StringContent(
@@ -173,7 +199,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
 
             //assert
             response.Should().BeEquivalentTo(new ShoppingCartItems { ItemsCount = item.Quantity });
-            _client.СlearCart();
+            _client.ClearCart();
         }
 
         [Fact]

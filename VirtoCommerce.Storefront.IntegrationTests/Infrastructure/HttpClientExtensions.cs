@@ -29,7 +29,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
 
         public static HttpClient Login(this HttpClient client, string userName, string password)
         {
-            var loginPage = client.GetAsync("account/login").GetAwaiter().GetResult();
+            var loginPage = client.GetAsync(TestEnvironment.LoginEndpoint).GetAwaiter().GetResult();
 
             var antiforgery = new AntiforgeryCookie(loginPage.Headers);
             var content = new MultipartFormDataContent
@@ -46,7 +46,22 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
             }
 
             var cookie = new AntiforgeryCookie(loginResponse.Headers);
-            client.DefaultRequestHeaders.Add(cookie.Key, new[] { cookie.Value });
+            if (client.DefaultRequestHeaders.TryGetValues(AntiforgeryCookie.Name, out var tokens))
+            {
+                client.DefaultRequestHeaders.Remove(AntiforgeryCookie.Name);
+            }
+
+            client.DefaultRequestHeaders.Add(AntiforgeryCookie.Name, new[] { cookie.Value });
+
+            return client;
+        }
+
+        public static HttpClient GotoMainPage(this HttpClient client)
+        {
+            var mainPage = client.GetAsync("").GetAwaiter().GetResult();
+
+            var antiforgery = new AntiforgeryCookie(mainPage.Headers);
+            client.DefaultRequestHeaders.Add(AntiforgeryCookie.Name, new[] { antiforgery.Value });
 
             return client;
         }
@@ -67,7 +82,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
             return client;
         }
 
-        public static HttpClient СlearCart(this HttpClient client)
+        public static HttpClient ClearCart(this HttpClient client)
         {
             var response = client.PostAsync(TestEnvironment.CartClearEndpoint, new StringContent("")).GetAwaiter().GetResult();
             if (!response.IsSuccessStatusCode)
@@ -84,6 +99,11 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception($"Logout failed: {response.StatusCode}");
+            }
+
+            if (client.DefaultRequestHeaders.TryGetValues(AntiforgeryCookie.Name, out var tokens))
+            {
+                client.DefaultRequestHeaders.Remove(AntiforgeryCookie.Name);
             }
 
             return client;
