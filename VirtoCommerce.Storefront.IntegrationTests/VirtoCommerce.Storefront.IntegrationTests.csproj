@@ -11,6 +11,8 @@
     <None Remove="Responses\GetEmptyCartForAdmin.json" />
     <None Remove="Responses\GetFilledCartWithItem.json" />
     <None Remove="Responses\GetMergedAnonymousCartWithAdmin.json" />
+    <None Remove="Responses\GetPaymentMethodsForAdmin.json" />
+    <None Remove="Responses\GetShipmentMethodsForAdmin.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +23,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Responses\GetMergedAnonymousCartWithAdmin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Responses\GetPaymentMethodsForAdmin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Responses\GetShipmentMethodsForAdmin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

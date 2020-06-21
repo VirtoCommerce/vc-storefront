@@ -46,24 +46,20 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
             }
 
             var cookie = new AntiforgeryCookie(loginResponse.Headers);
-            if (client.DefaultRequestHeaders.TryGetValues(AntiforgeryCookie.Name, out var tokens))
-            {
-                client.DefaultRequestHeaders.Remove(AntiforgeryCookie.Name);
-            }
-
-            client.DefaultRequestHeaders.Add(AntiforgeryCookie.Name, new[] { cookie.Value });
-
-            return client;
+            return SetAntiforgeryHeader(client, cookie);
         }
 
         public static HttpClient GotoMainPage(this HttpClient client)
         {
             var mainPage = client.GetAsync("").GetAwaiter().GetResult();
+            if (!mainPage.IsSuccessStatusCode)
+            {
+                throw new Exception($"Main page loading failed: {mainPage.StatusCode}");
+            }
 
             var antiforgery = new AntiforgeryCookie(mainPage.Headers);
-            client.DefaultRequestHeaders.Add(AntiforgeryCookie.Name, new[] { antiforgery.Value });
 
-            return client;
+            return SetAntiforgeryHeader(client, antiforgery);
         }
 
         public static HttpClient InsertCartItem(this HttpClient client, AddCartItem item)
@@ -82,12 +78,50 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
             return client;
         }
 
+        public static HttpClient ChangeCartItemPrice(this HttpClient client, ChangeCartItemPrice priceItem)
+        {
+            var content = new StringContent(
+                JsonConvert.SerializeObject(priceItem),
+                Encoding.UTF8,
+                "application/json");
+
+            var response = client.PutAsync(TestEnvironment.ItemPriceEndpoint, content).GetAwaiter().GetResult();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"ChangeCartItemPrice failed: {response.StatusCode}");
+            }
+
+            return client;
+        }
+
         public static HttpClient ClearCart(this HttpClient client)
         {
             var response = client.PostAsync(TestEnvironment.CartClearEndpoint, new StringContent("")).GetAwaiter().GetResult();
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception($"Clear cart failed: {response.StatusCode}");
+            }
+
+            return client;
+        }
+
+        public static HttpClient AddCoupon(this HttpClient client, string couponCode)
+        {
+            var response = client.PostAsync(TestEnvironment.AddCouponEndpoint(couponCode), null).GetAwaiter().GetResult();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Add coupon failed: {response.StatusCode}");
+            }
+
+            return client;
+        }
+
+        public static HttpClient RemoveCoupon(this HttpClient client, string couponCode)
+        {
+            var response = client.DeleteAsync(TestEnvironment.RemoveCouponEndpoint(couponCode)).GetAwaiter().GetResult();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Remove coupon failed: {response.StatusCode}");
             }
 
             return client;
@@ -105,6 +139,29 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
             {
                 client.DefaultRequestHeaders.Remove(AntiforgeryCookie.Name);
             }
+
+            return client;
+        }
+
+        public static async Task<string> GetCart(this HttpClient client)
+        {
+            var response = await client.GetAsync(TestEnvironment.CartEndpoint);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Get cart failed: {response.StatusCode}");
+            }
+
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        private static HttpClient SetAntiforgeryHeader(HttpClient client, AntiforgeryCookie cookie)
+        {
+            if (client.DefaultRequestHeaders.TryGetValues(AntiforgeryCookie.Name, out var tokens))
+            {
+                client.DefaultRequestHeaders.Remove(AntiforgeryCookie.Name);
+            }
+
+            client.DefaultRequestHeaders.Add(AntiforgeryCookie.Name, new[] { cookie.Value });
 
             return client;
         }
