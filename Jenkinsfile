@@ -1,2 +1,2 @@
 #!groovy
-virtoPlatform { solution = 'VirtoCommerce.Storefront.sln'; projectType = 'NETCORE2'}
+virtoStorefront { solution = 'VirtoCommerce.Storefront.sln'; projectType = 'NETCORE2'}

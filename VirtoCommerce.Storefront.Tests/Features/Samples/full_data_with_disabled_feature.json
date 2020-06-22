@@ -1,0 +1,11 @@
+{
+  "features": [
+    {
+      "Name": "OrdersBrowsing",
+      "IsActive": false,
+      "Requires": [],
+      "Replaces": [],
+      "Conflicts": []
+    }
+  ]
+}

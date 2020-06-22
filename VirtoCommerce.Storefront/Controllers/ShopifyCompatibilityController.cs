@@ -55,7 +55,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 var product = (await _catalogService.GetProductsAsync(new[] { id }, Model.Catalog.ItemResponseGroup.ItemLarge)).FirstOrDefault();
                 if (product != null)
                 {
-                    await cartBuilder.AddItemAsync(product, quantity);
+                    await cartBuilder.AddItemAsync(new AddCartItem { Product = product, Quantity = quantity });
                     await cartBuilder.SaveAsync();
                 }
             }
@@ -121,7 +121,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 if (product != null)
                 {
                     var cartBuilder = await LoadOrCreateCartAsync();
-                    await cartBuilder.AddItemAsync(product, quantity);
+                    await cartBuilder.AddItemAsync(new AddCartItem { Product = product, Quantity = quantity });
                     await cartBuilder.SaveAsync();
 
                     lineItem = cartBuilder.Cart.Items.FirstOrDefault(i => i.ProductId == id);
@@ -138,7 +138,7 @@ namespace VirtoCommerce.Storefront.Controllers
             using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
-                await cartBuilder.ChangeItemQuantityAsync(id, quantity);
+                await cartBuilder.ChangeItemQuantityAsync(new ChangeCartItemQty { LineItemId = id, Quantity = quantity });
                 await cartBuilder.SaveAsync();
                 return LiquidJson(cartBuilder.Cart);
             }

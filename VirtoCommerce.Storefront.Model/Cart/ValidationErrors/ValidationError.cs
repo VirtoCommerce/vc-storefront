@@ -4,7 +4,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.ValidationErrors
 {
     public abstract class ValidationError : ValueObject
     {
-        public ValidationError()
+        protected ValidationError()
         {
             ErrorCode = GetType().Name;
         }
