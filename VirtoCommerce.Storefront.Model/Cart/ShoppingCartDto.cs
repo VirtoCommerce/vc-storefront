@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Marketing;
 
 namespace VirtoCommerce.Storefront.Model.Cart
@@ -44,7 +45,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "currency")]
-        public string Currency { get; set; }
+        public CurrencyDto Currency { get; set; }
 
         /// <summary>
         /// </summary>
@@ -99,42 +100,32 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "total")]
-        public double? Total { get; set; }
+        public Money Total { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "subTotal")]
-        public double? SubTotal { get; set; }
+        public MoneyDto SubTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "subTotalWithTax")]
-        public double? SubTotalWithTax { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "subTotalDiscount")]
-        public double? SubTotalDiscount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "subTotalDiscountWithTax")]
-        public double? SubTotalDiscountWithTax { get; set; }
+        public MoneyDto SubTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "shippingTotal")]
-        public double? ShippingTotal { get; set; }
+        public MoneyDto ShippingTotal { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "shippingTotalWithTax")]
-        public double? ShippingTotalWithTax { get; set; }
+        public MoneyDto ShippingTotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "shippingSubTotal")]
-        public double? ShippingSubTotal { get; set; }
+        public MoneyDto ShippingSubTotal { get; set; }
 
         /// <summary>
         /// </summary>
@@ -251,6 +242,12 @@ namespace VirtoCommerce.Storefront.Model.Cart
         [JsonProperty(PropertyName = "shipments")]
         public IList<CartShipmentDto> Shipments { get; set; }
 
+        [JsonProperty(PropertyName = "shippingPrice")]
+        public MoneyDto ShippingPrice { get; set; }
+
+        [JsonProperty(PropertyName = "shippingPriceWithTax")]
+        public MoneyDto ShippingPriceWithTax { get; set; }
+
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "coupons")]
@@ -274,7 +271,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "taxTotal")]
-        public double? TaxTotal { get; set; }
+        public MoneyDto TaxTotal { get; set; }
 
         /// <summary>
         /// </summary>
@@ -284,7 +281,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "taxDetails")]
-        public IList<TaxDetail> TaxDetails { get; set; }
+        public IList<TaxDetailDto> TaxDetails { get; set; }
 
         /// <summary>
         /// </summary>

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using PagedList.Core;
 using VirtoCommerce.Storefront.AutoRestClients.CartModuleApi;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Cart;
@@ -21,14 +22,16 @@ namespace VirtoCommerce.Storefront.Domain.Cart
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly ICartModule _cartApi;
         private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly IGraphQlService _graphQlClient;
         private readonly UserManager<User> _userManager;
 
         public CartService(ICartModule cartModule, IWorkContextAccessor workContextAccessor,
-            IStorefrontMemoryCache memoryCache, UserManager<User> userManager)
+            IStorefrontMemoryCache memoryCache, IGraphQlService graphQlClient, UserManager<User> userManager)
         {
             _cartApi = cartModule;
             _memoryCache = memoryCache;
             _workContextAccessor = workContextAccessor;
+            _graphQlClient = graphQlClient;
             _userManager = userManager;
         }
 
@@ -113,6 +116,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CartCacheRegion.CreateCustomerChangeToken(criteria.Customer?.Id));
+
+                var resDto = await _graphQlClient.SearchShoppingCartAsync(criteria);
 
                 var resultDto = await _cartApi.SearchShoppingCartAsync(criteria.ToSearchCriteriaDto());
                 var result = new List<ShoppingCart>();

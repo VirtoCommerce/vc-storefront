@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using FluentValidation.AspNetCore;
+using GraphQL.Client.Abstractions;
+using GraphQL.Client.Http;
+using GraphQL.Client.Serializer.Newtonsoft;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -120,6 +123,10 @@ namespace VirtoCommerce.Storefront
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<AngularAntiforgeryCookieResultFilter>();
             services.AddTransient<AnonymousUserForStoreAuthorizationFilter>();
+            services.AddTransient<IGraphQlService, GraphQlService>();
+            services.AddScoped<IGraphQLClient>(s =>
+                new GraphQLHttpClient(Configuration.GetSection("VirtoCommerce:Endpoint:Url").Value + "/graphql",
+                new NewtonsoftJsonSerializer()));
 
             //Register events framework dependencies
             services.AddSingleton(new InProcessBus());

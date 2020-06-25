@@ -74,32 +74,32 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "price")]
-        public double? Price { get; set; }
+        public MoneyDto Price { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "priceWithTax")]
-        public double? PriceWithTax { get; set; }
+        public MoneyDto PriceWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "total")]
-        public double? Total { get; set; }
+        public MoneyDto Total { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "totalWithTax")]
-        public double? TotalWithTax { get; set; }
+        public MoneyDto TotalWithTax { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "discountAmount")]
-        public double? DiscountAmount { get; set; }
+        public MoneyDto DiscountAmount { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "discountAmountWithTax")]
-        public double? DiscountAmountWithTax { get; set; }
+        public MoneyDto DiscountAmountWithTax { get; set; }
 
         /// <summary>
         /// </summary>
