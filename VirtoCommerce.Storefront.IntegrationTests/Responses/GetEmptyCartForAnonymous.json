@@ -1,1 +1,277 @@
-{"validationRuleSet":"default, strict","name":"default","storeId":"Electronics","hasPhysicalProducts":false,"isAnonymous":true,"customer":{"userName":"Anonymous","phoneNumberConfirmed":false,"emailConfirmed":false,"twoFactorEnabled":false,"isLockedOut":false,"accessFailedCount":0,"lockoutEnabled":false,"isRegisteredUser":false,"isAdministrator":false,"userState":0,"externalLogins":[],"isFirstTimeBuyer":false,"id":"4fd49e02-e461-45c9-b806-09c8f496d010"},"customerId":"4fd49e02-e461-45c9-b806-09c8f496d010","customerName":"Anonymous","isRecuring":false,"volumetricWeight":0.0,"weight":0.0,"height":0.0,"length":0.0,"width":0.0,"total":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"subTotal":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"subTotalWithTax":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"shippingPrice":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"shippingPriceWithTax":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"shippingTotal":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"shippingTotalWithTax":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"paymentPrice":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"paymentPriceWithTax":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"paymentTotal":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"paymentTotalWithTax":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"extendedPriceTotal":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"extendedPriceTotalWithTax":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"handlingTotal":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"handlingTotalWithTax":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"discountAmount":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"discountTotal":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"discountTotalWithTax":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"addresses":[],"items":[],"itemsCount":0,"itemsQuantity":0,"coupons":[],"payments":[],"shipments":[],"dynamicProperties":[],"availablePaymentMethods":[],"isValid":true,"validationErrors":[],"discounts":[],"currency":{"code":"USD","symbol":"$"},"taxTotal":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"taxPercentRate":0.0,"taxDetails":[],"language":{"isInvariant":false,"cultureName":"en-US","nativeName":"English (United States)","threeLeterLanguageName":"eng","twoLetterLanguageName":"en","twoLetterRegionName":"US","threeLetterRegionName":"USA"}}
+{
+  "validationRuleSet": "default, strict",
+  "name": "default",
+  "storeId": "Electronics",
+  "hasPhysicalProducts": false,
+  "isAnonymous": true,
+  "customer": {
+    "userName": "Anonymous",
+    "phoneNumberConfirmed": false,
+    "emailConfirmed": false,
+    "twoFactorEnabled": false,
+    "isLockedOut": false,
+    "accessFailedCount": 0,
+    "lockoutEnabled": false,
+    "isRegisteredUser": false,
+    "isAdministrator": false,
+    "userState": 0,
+    "externalLogins": [
+    ],
+    "isFirstTimeBuyer": false,
+    "id": "4fd49e02-e461-45c9-b806-09c8f496d010"
+  },
+  "customerId": "4fd49e02-e461-45c9-b806-09c8f496d010",
+  "customerName": "Anonymous",
+  "isRecuring": false,
+  "volumetricWeight": 0.0,
+  "weight": 0.0,
+  "height": 0.0,
+  "length": 0.0,
+  "width": 0.0,
+  "total": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "subTotal": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "subTotalWithTax": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "shippingPrice": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "shippingPriceWithTax": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "shippingTotal": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "shippingTotalWithTax": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "paymentPrice": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "paymentPriceWithTax": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "paymentTotal": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "paymentTotalWithTax": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "extendedPriceTotal": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "extendedPriceTotalWithTax": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "handlingTotal": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "handlingTotalWithTax": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "discountAmount": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "discountTotal": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "discountTotalWithTax": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "addresses": [
+  ],
+  "items": [
+  ],
+  "itemsCount": 0,
+  "itemsQuantity": 0,
+  "coupons": [
+  ],
+  "payments": [
+  ],
+  "shipments": [
+  ],
+  "dynamicProperties": [
+  ],
+  "availablePaymentMethods": [
+  ],
+  "isValid": true,
+  "validationErrors": [
+  ],
+  "discounts": [
+  ],
+  "currency": {
+    "code": "USD",
+    "symbol": "$"
+  },
+  "taxTotal": {
+    "amount": 0.0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "taxPercentRate": 0.0,
+  "taxDetails": [
+  ],
+  "language": {
+    "isInvariant": false,
+    "cultureName": "en-US",
+    "nativeName": "English (United States)",
+    "threeLeterLanguageName": "eng",
+    "twoLetterLanguageName": "en",
+    "twoLetterRegionName": "US",
+    "threeLetterRegionName": "USA"
+  }
+}

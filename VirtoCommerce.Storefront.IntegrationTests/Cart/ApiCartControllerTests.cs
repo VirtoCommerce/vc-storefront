@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,13 +10,16 @@ using FluentAssertions;
 using JsonDiffPatchDotNet;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi.Models;
 using VirtoCommerce.Storefront.IntegrationTests.Infrastructure;
 using VirtoCommerce.Storefront.Model.Cart;
+using VirtoCommerce.Storefront.Model.Subscriptions;
 using Xunit;
 
 namespace VirtoCommerce.Storefront.IntegrationTests.Cart
 {
     [Trait("Category", "CI")]
+    [CollectionDefinition("ApiCartControllerTests", DisableParallelization = true)]
     public class ApiCartControllerTests : IClassFixture<StorefrontApplicationFactory>, IDisposable
     {
         private readonly HttpClient _client;
@@ -56,7 +60,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         public async Task GetCart_IfCartIsNotExistForUser_ShouldReturnNewCart()
         {
             //act
-            var result = await GetCart(_client);
+            var result = await _client.GetCart();
 
             //assert
             GetCartComparationResult(
@@ -74,22 +78,61 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
             //arrange
             _client
                 .Login("admin", "store")
-                .СlearCart()
-                .InsertCartItem(new AddCartItem { Id = "9cbd8f316e254a679ba34a900fccb076", Quantity = 1 });
+                .ClearCart()
+                .InsertCartItem(new AddCartItem { Id = Product.Quadcopter, Quantity = 1 });
 
             //act
-            var result = await GetCart(_client);
+            var result = await _client.GetCart();
 
             //assert
             GetCartComparationResult(
                 result,
                 "GetFilledCartWithItem",
-                new[] { "$.items[*]", "$.recentlyAddedItem" },
-                new[] { "id" })
+                new[] { "$", "$.items[*]", "$.recentlyAddedItem", "$.items[*].product", "$.recentlyAddedItem.product" },
+                new[] { "id", "primaryImage", "images", "imageUrl" })
                 .Should()
                 .BeNull();
 
-            _client.СlearCart().Logout();
+            _client
+                .ClearCart()
+                .Logout();
+        }
+
+        // TODO: test should be improved, because of blinking (looks like comparation result waiting result with same order in items)
+        [Fact]
+        public async Task GetCart_IfAnonimousHaveItemsInCartAndLoggedIn_ShouldReturnMergedCart()
+        {
+            //arrange
+            _client.Login("admin", "store");
+
+            await RemoveAllCoupons();
+
+            _client
+                .ClearCart()
+                .Logout()
+                .GotoMainPage()
+                .ClearCart()
+                .InsertCartItem(new AddCartItem { Id = Product.Quadcopter, Quantity = 1 })
+                .Login("admin", "store")
+                .InsertCartItem(new AddCartItem { Id = Product.Octocopter, Quantity = 1 });
+
+            //act
+            var result = await _client.GetCart();
+
+            //assert
+            GetCartComparationResult(
+                    result,
+                    "GetMergedAnonymousCartWithAdmin",
+                    new[] { "$", "$.items[*]", "$.recentlyAddedItem", "$.items[*].product", "$.recentlyAddedItem.product" },
+                    new[] { "id", "primaryImage", "images", "imageUrl" })
+                .Should()
+                .BeNull();
+
+            _client
+                .ClearCart()
+                .Logout()
+                .GotoMainPage()
+                .ClearCart();
         }
 
         [Fact]
@@ -98,7 +141,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
             //arrange
             _client
                 .Login("admin", "store")
-                .СlearCart();
+                .ClearCart();
 
             //act
             var result = await _client.GetAsync<int>(TestEnvironment.CartItemsCountEndpoint);
@@ -112,19 +155,20 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         public async Task GetCartItemsCount_IfCartHasItems_ShouldReturnExactItemsCount()
         {
             //arrange
-            var quantity = (new Fixture()).Create<int>();
+            var quantity = new Fixture().Create<int>();
 
             _client
                 .Login("admin", "store")
-                .СlearCart()
-                .InsertCartItem(new AddCartItem { Id = "9cbd8f316e254a679ba34a900fccb076", Quantity = quantity });
+                .ClearCart()
+                .InsertCartItem(new AddCartItem { Id = Product.Quadcopter, Quantity = quantity });
 
             //act
             var result = await _client.GetAsync<int>(TestEnvironment.CartItemsCountEndpoint);
 
             //assert
             result.Should().Be(quantity);
-            _client.СlearCart().Logout();
+
+            _client.ClearCart().Logout();
         }
 
         [Fact]
@@ -132,30 +176,34 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             //arrange
             _client
-                .Login("admin", "store")
-                .СlearCart();
+                .Login("admin", "store");
+
+            await RemoveAllCoupons();
+
+            _client
+                .ClearCart();
 
             //act
-            var result = await GetCart(_client);
+            var result = await _client.GetCart();
 
             //assert
-            GetCartComparationResult(result, "GetEmptyCartForAdmin")
+            GetCartComparationResult(result, "GetEmptyCartForAdmin", new[] { "$" }, new[] { "id" })
                 .Should()
                 .BeNull();
         }
 
         [Fact]
-        public async Task AddItemToCart_ShouldReturnCartItemsCount()
+        public async Task AddItemToCart_IfItemIsAvailable_ShouldReturnCartItemsCount()
         {
             //arrange
             _client
                 .Login("admin", "store")
-                .СlearCart();
+                .ClearCart();
 
             var item = new AddCartItem
             {
-                Id = "9cbd8f316e254a679ba34a900fccb076",
-                Quantity = (new Fixture()).Create<int>()
+                Id = Product.Quadcopter,
+                Quantity = new Fixture().Create<int>()
             };
             var content = new StringContent(
                 JsonConvert.SerializeObject(item),
@@ -167,26 +215,410 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
 
             //assert
             response.Should().BeEquivalentTo(new ShoppingCartItems { ItemsCount = item.Quantity });
-            _client.СlearCart();
+            _client.ClearCart();
         }
 
-        private async Task<string> GetCart(HttpClient client)
+        [Fact]
+        public async Task AddItemToCart_IfItemIsNotAvailable_ShouldNotUpdateCartItems()
         {
-            var response = await client.GetAsync(TestEnvironment.CartEndpoint);
+            //arrange
+            _client
+                .GotoMainPage()
+                .ClearCart();
+
+            var randomizer = new Fixture();
+
+            var newItem = new AddCartItem
+            {
+                Id = randomizer.Create<string>(),
+                Quantity = randomizer.Create<int>()
+            };
+
+            var content = new StringContent(
+                JsonConvert.SerializeObject(newItem),
+                Encoding.UTF8,
+                "application/json");
+
+            var response = await _client.PostAsync<ShoppingCartItems>(TestEnvironment.CartItemsEndpoint, content);
+
+            //act
+            var result = _client.InsertCartItem(newItem);
+
+            //assert
+            response.Should().BeEquivalentTo(new ShoppingCartItems { ItemsCount = 0 });
+            _client.ClearCart();
+        }
+
+        [Fact]
+        public async Task ChangeCartItemPrice_IfPriceIsMoreThanCurrent_ShouldUpdatePriceForItem()
+        {
+            //arrange
+            _client
+                .Login("admin", "store")
+                .ClearCart()
+                .InsertCartItem(new AddCartItem { ProductId = Product.Quadcopter, Quantity = 1 });
+
+            var cart = await _client.GetCart();
+            var itemPriceDetail = GetCurrentPriceAmountOfLineItem(Product.Quadcopter, cart);
+            var newPrice = itemPriceDetail.listPrice + new Fixture().Create<decimal>();
+
+            //act
+            _client.ChangeCartItemPrice(new ChangeCartItemPrice
+            {
+                LineItemId = itemPriceDetail.lineItemId,
+                NewPrice = newPrice
+            });
+
+            //assert
+            var updatedCart = await _client.GetCart();
+            var updatedPriceDetail = GetCurrentPriceAmountOfLineItem(Product.Quadcopter, updatedCart);
+
+            newPrice.Should().BeGreaterThan(itemPriceDetail.listPrice);
+            updatedPriceDetail.listPrice.Should().Be(newPrice);
+            updatedPriceDetail.salePrice.Should().Be(newPrice);
+
+            _client.ClearCart().Logout();
+        }
+
+        //TODO: looks like fluent validation rule for changing item price to less value doesn't work properly
+        [Fact]
+        public async Task ChangeCartItemPrice_IfPriceIsLessThanCurrent_ShouldNotUpdatePriceForItem()
+        {
+            //arrange
+            _client
+                .Login("admin", "store")
+                .ClearCart()
+                .InsertCartItem(new AddCartItem { ProductId = Product.Quadcopter, Quantity = 1 });
+
+            var cart = await _client.GetCart();
+            var itemPriceDetail = GetCurrentPriceAmountOfLineItem(Product.Quadcopter, cart);
+            var newPrice = itemPriceDetail.listPrice - new Fixture().Create<decimal>();
+
+            //act
+            _client.ChangeCartItemPrice(new ChangeCartItemPrice
+            {
+                LineItemId = itemPriceDetail.lineItemId,
+                NewPrice = newPrice
+            });
+
+            //assert
+            var updatedCart = await _client.GetCart();
+            var updatedPriceDetail = GetCurrentPriceAmountOfLineItem(Product.Quadcopter, updatedCart);
+
+            newPrice.Should().BeLessThan(itemPriceDetail.listPrice);
+            updatedPriceDetail.listPrice.Should().Be(itemPriceDetail.listPrice);
+            updatedPriceDetail.salePrice.Should().Be(itemPriceDetail.salePrice);
+
+            _client.ClearCart().Logout();
+        }
+
+        [Fact]
+        public async Task GetCartShipmentAvailShippingMethods_ShouldReturnShipmentMethods()
+        {
+            //arrange
+            _client
+                .Login("admin", "store");
+            var shipmentId = new Fixture().Create<string>(); //TODO: looks like it's unused in Storefront
+
+            //act
+            var result = await _client.GetStringAsync(TestEnvironment.ShippingMethodsEndpoint(shipmentId));
+
+            //assert
+            GetCartComparationResult(result, "GetShipmentMethodsForAdmin")
+                .Should()
+                .BeNull();
+
+            _client.Logout();
+        }
+
+        [Fact]
+        public async Task GetCartAvailPaymentMethods_ShouldReturnPaymentMethods()
+        {
+            //arrange
+            _client
+                .Login("admin", "store");
+
+            //act
+            var result = await _client.GetStringAsync(TestEnvironment.PaymentMethodsEndpoint);
+
+            //assert
+            GetCartComparationResult(result, "GetPaymentMethodsForAdmin")
+                .Should()
+                .BeNull();
+
+            _client.Logout();
+        }
+
+        [Fact]
+        public async Task AddCartCoupon_ShouldAddCouponToCart()
+        {
+            //arrange
+            _client
+                .Login("admin", "store")
+                .ClearCart();
+
+            await RemoveAllCoupons();
+
+            var couponCode = new Fixture().Create<string>();
+
+            //act
+            _client.AddCoupon(couponCode);
+
+            //assert
+            var cart = await _client.GetCart();
+
+            var couponCodes = GetCouponCodes(cart);
+
+            couponCodes.Should().BeEquivalentTo(new[] { couponCode }.ToList());
+
+            _client.ClearCart().Logout();
+        }
+
+        [Fact]
+        public async Task RemoveCartCoupon_ShouldRemoveCouponFromCart()
+        {
+            //arrange
+            _client
+                .Login("admin", "store")
+                .ClearCart();
+
+            await RemoveAllCoupons();
+
+            var couponCode = new Fixture().Create<string>();
+            _client.AddCoupon(couponCode);
+
+            //act
+            _client.RemoveCoupon(couponCode);
+
+            //assert
+            var cart = await _client.GetCart();
+
+            GetCouponCodes(cart).Should().BeNullOrEmpty();
+
+            _client.Logout();
+        }
+
+        [Fact]
+        public async Task AddOrUpdateCartPaymentPlan_ShouldUpdatePaymentPlan()
+        {
+            //arrange
+            _client
+                .Login("admin", "store")
+                .ClearCart();
+
+            var paymentPlan = new Fixture().Create<PaymentPlan>();
+
+            //act
+            _client.AddOrUpdateCartPaymentPlan(paymentPlan);
+
+            //assert
+            var cart = await _client.GetCart();
+
+            var paymentPlanJson = GetPaymentPlan(cart);
+            ComparationResult(paymentPlanJson, JsonConvert.SerializeObject(paymentPlan), new[] { "$" }, new[] { "id" });
+
+            _client
+                .DeleteCartPaymentPlan()
+                .ClearCart()
+                .Logout();
+        }
+
+        [Fact]
+        public async Task DeleteCartPaymentPlan_ShouldRemovePaymentPlan()
+        {
+            //arrange
+            _client
+                .Login("admin", "store")
+                .ClearCart();
+
+            var paymentPlan = new Fixture().Create<PaymentPlan>();
+            _client.AddOrUpdateCartPaymentPlan(paymentPlan);
+
+            //act
+            _client.DeleteCartPaymentPlan();
+
+            //assert
+            var cart = await _client.GetCart();
+
+            GetPaymentPlan(cart).Should().BeNull();
+
+            _client
+                .ClearCart()
+                .Logout();
+        }
+
+        // TODO: Fix problems while saving cart.
+        [Fact(Skip = "Cart not saved due to exception")]
+        public async Task AddOrUpdateCartShipment_IfShipmentIsRegistered_ShouldAddCartShipment()
+        {
+            //arrange
+            _client
+                .Login("admin", "store")
+                .ClearCart();
+
+            var shipment = GetRequestDataFromFile<Shipment>("AddOrUpdateCartShipmentIsRegistered");
+
+            //act
+            var response = await _client.AddOrUpdateCartShipment(shipment);
+            var content = await response.Content.ReadAsStringAsync();
+
+            //assert
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception($"Get cart failed: {response.StatusCode}");
+                throw new Exception($"Get failed: {response.StatusCode} {content}");
             }
 
-            return await response.Content.ReadAsStringAsync();
+            response.IsSuccessStatusCode.Should().BeTrue();
+
+            _client
+                .ClearCart()
+                .Logout();
+        }
+
+        // TODO: Fix problems while saving cart.
+        [Fact(Skip = "Cart not saved due to exception")]
+        public async Task AddOrUpdateCartShipment_IfShipmentIsNotRegistered_ShouldReturnBadRequest()
+        {
+            //arrange
+            _client
+                .Login("admin", "store")
+                .ClearCart();
+
+            var shipment = GetRequestDataFromFile<Shipment>("AddOrUpdateCartShipmentIsNotRegistered");
+
+            //act
+            var response = await _client.AddOrUpdateCartShipment(shipment);
+
+            //assert
+            response.IsSuccessStatusCode.Should().BeFalse();
+
+            _client
+                .ClearCart()
+                .Logout();
+        }
+
+        // TODO: Fix problems while saving cart.
+        [Fact(Skip = "Cart not saved due to exception")]
+        public async Task AddOrUpdateCartPayment_IfPaymentIsRegistered_ShouldAddCartPayment()
+        {
+            //arrange
+            _client
+                .Login("admin", "store")
+                .ClearCart();
+
+            var payment = GetRequestDataFromFile<Payment>("AddOrUpdateCartShipmentIsRegistered");
+
+            var paymentPlan = new Fixture().Create<PaymentPlan>();
+            _client.AddOrUpdateCartPaymentPlan(paymentPlan);
+
+            //act
+            var response = await _client.AddOrUpdateCartPayment(payment);
+
+            //assert
+            response.IsSuccessStatusCode.Should().BeTrue();
+
+            _client
+                .ClearCart()
+                .Logout();
+        }
+
+        // TODO: Fix problems while saving cart.
+        [Fact(Skip = "Cart not saved due to exception")]
+        public async Task AddOrUpdateCartPayment_IfPaymentIsNotRegistered_ShouldReturnBadRequest()
+        {
+            //arrange
+            _client
+                .Login("admin", "store")
+                .ClearCart();
+
+            var payment = GetRequestDataFromFile<Payment>("AddOrUpdateCartShipmentIsRegistered");
+
+            var paymentPlan = new Fixture().Create<PaymentPlan>();
+            _client.AddOrUpdateCartPaymentPlan(paymentPlan);
+
+            //act
+            var response = await _client.AddOrUpdateCartPayment(payment);
+
+            //assert
+            response.IsSuccessStatusCode.Should().BeFalse();
+
+            _client
+                .ClearCart()
+                .Logout();
+        }
+
+
+        private T GetRequestDataFromFile<T>(string fileNameWithExpectation) where T : class
+        {
+            var response = File.ReadAllText($"Requests\\{fileNameWithExpectation}.json");
+
+            if (string.IsNullOrEmpty(response))
+            {
+                throw new Exception($"Get request data from file {fileNameWithExpectation} failed");
+            }
+
+            var jobject = JObject.Parse(response);
+
+            return jobject.ToObject<T>();
         }
 
         private string GetCartComparationResult(string actualJson, string fileNameWithExpectation, IEnumerable<string> pathsForExclusion = null, IEnumerable<string> excludedProperties = null)
         {
             var expectedResponse = File.ReadAllText($"Responses\\{fileNameWithExpectation}.json");
+            return ComparationResult(actualJson, expectedResponse, pathsForExclusion, excludedProperties);
+        }
+
+        private string ComparationResult(string actualJson, string expectedJson, IEnumerable<string> pathsForExclusion = null, IEnumerable<string> excludedProperties = null)
+        {
             var actualResult = JToken.Parse(actualJson).RemovePropertyInChildren(pathsForExclusion, excludedProperties).ToString();
-            var expectedResult = JToken.Parse(expectedResponse).RemovePropertyInChildren(pathsForExclusion, excludedProperties).ToString();
+            var expectedResult = JToken.Parse(expectedJson).RemovePropertyInChildren(pathsForExclusion, excludedProperties).ToString();
             return new JsonDiffPatch().Diff(actualResult, expectedResult);
+        }
+
+        private (string lineItemId, decimal listPrice, decimal salePrice) GetCurrentPriceAmountOfLineItem(string productId, string serializedCart)
+        {
+            var cartObject = JObject.Parse(serializedCart);
+
+            var token = cartObject["items"].Children().FirstOrDefault(c => c["productId"].Value<string>() == productId);
+            if (token == null)
+            {
+                throw new Exception($"Item with product id {productId} not found");
+            }
+
+            return (
+                lineItemId: token["id"].Value<string>(),
+                listPrice: token["listPrice"]["amount"].Value<decimal>(),
+                salePrice: token["salePrice"]["amount"].Value<decimal>());
+        }
+
+        private IList<string> GetCouponCodes(string actualJson)
+        {
+            var cartObject = JObject.Parse(actualJson);
+            return cartObject["coupons"].Children()["code"].Values<string>().ToList();
+        }
+
+        private string GetPaymentPlan(string actualJson)
+        {
+            var cartObject = JObject.Parse(actualJson);
+            return cartObject["paymentPlan"]?.ToString();
+        }
+
+        private ShipmentMethod GetShippingMethod(string actualJson)
+        {
+            var cartObject = JArray.Parse(actualJson);
+            return cartObject.FirstOrDefault().ToObject<ShipmentMethod>();
+        }
+
+        private async Task RemoveAllCoupons()
+        {
+            var cart = await _client.GetCart();
+
+            var couponCodes = GetCouponCodes(cart);
+
+            foreach (var couponCode in couponCodes)
+            {
+                _client.RemoveCoupon(couponCode);
+            }
         }
     }
 }
