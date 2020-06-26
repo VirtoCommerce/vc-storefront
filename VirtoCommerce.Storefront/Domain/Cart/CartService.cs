@@ -117,19 +117,13 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             {
                 cacheEntry.AddExpirationToken(CartCacheRegion.CreateCustomerChangeToken(criteria.Customer?.Id));
 
-                var resDto = await _graphQlClient.SearchShoppingCartAsync(criteria);
+                var cartDto = await _graphQlClient.SearchShoppingCartAsync(criteria);
+                var currency = _workContextAccessor.WorkContext.AllCurrencies.FirstOrDefault(x => x.Equals(cartDto.Currency));
+                var language = cartDto.Language ?? Language.InvariantLanguage;
+                var user = await _userManager.FindByIdAsync(cartDto.CustomerId) ?? criteria.Customer;
+                var cart = cartDto.ToShoppingCart(currency, language, user);
 
-                var resultDto = await _cartApi.SearchShoppingCartAsync(criteria.ToSearchCriteriaDto());
-                var result = new List<ShoppingCart>();
-                foreach (var cartDto in resultDto.Results)
-                {
-                    var currency = _workContextAccessor.WorkContext.AllCurrencies.FirstOrDefault(x => x.Equals(cartDto.Currency));
-                    var language = string.IsNullOrEmpty(cartDto.LanguageCode) ? Language.InvariantLanguage : new Language(cartDto.LanguageCode);
-                    var user = await _userManager.FindByIdAsync(cartDto.CustomerId) ?? criteria.Customer;
-                    var cart = cartDto.ToShoppingCart(currency, language, user);
-                    result.Add(cart);
-                }
-                return new StaticPagedList<ShoppingCart>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalCount.Value);
+                return new StaticPagedList<ShoppingCart>(new[] { cart }, criteria.PageNumber, criteria.PageSize, cartDto.ItemsCount);
             });
         }
 

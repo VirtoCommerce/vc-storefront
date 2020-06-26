@@ -498,6 +498,53 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
+        public static ShoppingCart ToShoppingCart(this ShoppingCartDto cartDto, Currency currency, Language language, User user)
+         => new ShoppingCart(currency, language)
+         {
+             ChannelId = cartDto.ChannelId,
+             Comment = cartDto.Comment,
+             CustomerId = cartDto.CustomerId,
+             CustomerName = cartDto.CustomerName,
+             Id = cartDto.Id,
+             Name = cartDto.Name,
+             ObjectType = cartDto.ObjectType,
+             OrganizationId = cartDto.OrganizationId,
+             Status = cartDto.Status,
+             StoreId = cartDto.StoreId,
+             Type = cartDto.Type,
+             Customer = user,
+             Coupons = cartDto.Coupons,
+             Items = cartDto.Items,
+             Addresses = cartDto.Addresses,
+             Payments = cartDto.Payments,
+             Shipments = cartDto.Shipments,
+             DynamicProperties = cartDto.DynamicProperties,
+             TaxDetails = cartDto.TaxDetails,
+
+             //TODO implement after fix problems with Money type
+             //DiscountAmount = new Money(cartDto.DiscountAmount.Amount, currency), //TODO: check on whether it's correct or not
+             //HandlingTotal = new Money(cartDto.HandlingTotal.Amount, currency), //TODO: check on whether it's correct or not
+             //HandlingTotalWithTax = new Money(cartDto.HandlingTotalWithTax.Amount, currency), //TODO: check on whether it's correct or not
+             //Total = new Money(cartDto.Total.Amount, currency), //TODO: check on whether it's correct or not
+             //SubTotal = new Money(cartDto.SubTotal.Amount, currency), //TODO: check on whether it's correct or not
+             //SubTotalWithTax = new Money(cartDto.SubTotalWithTax.Amount, currency), //TODO: check on whether it's correct or not
+             //ShippingPrice = new Money(cartDto.ShippingPrice.Amount, currency), //TODO: check on whether it's correct or not
+             //ShippingPriceWithTax = new Money(cartDto.ShippingPriceWithTax.Amount, currency), //TODO: check on whether it's correct or not
+             //ShippingTotal = new Money(cartDto.ShippingTotal.Amount, currency), //TODO: check on whether it's correct or not
+             //ShippingTotalWithTax = new Money(cartDto.ShippingTotalWithTax.Amount, currency), //TODO: check on whether it's correct or not
+             //PaymentPrice = new Money(cartDto.PaymentPrice.Amount, currency), //TODO: check on whether it's correct or not
+             //PaymentPriceWithTax = new Money(cartDto.PaymentPriceWithTax.Amount, currency), //TODO: check on whether it's correct or not
+             //PaymentTotal = new Money(cartDto.PaymentTotal.Amount, currency), //TODO: check on whether it's correct or not
+             //PaymentTotalWithTax = new Money(cartDto.PaymentTotalWithTax.Amount, currency), //TODO: check on whether it's correct or not
+             //DiscountTotal = new Money(cartDto.DiscountTotal.Amount, currency), //TODO: check on whether it's correct or not
+             //DiscountTotalWithTax = new Money(cartDto.DiscountTotalWithTax.Amount, currency), //TODO: check on whether it's correct or not
+             //TaxTotal = new Money(cartDto.TaxTotal.Amount, currency),
+             IsAnonymous = cartDto.IsAnonymous,
+             IsRecuring = cartDto.IsRecuring,
+             VolumetricWeight = cartDto.VolumetricWeight,
+             Weight = cartDto.Weight
+         };
+
         public static cartDto.ShoppingCart ToShoppingCartDto(this ShoppingCart cart)
         {
             var result = new cartDto.ShoppingCart
