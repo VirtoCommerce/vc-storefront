@@ -1,5 +1,3 @@
-using System;
-
 namespace VirtoCommerce.Storefront.Infrastructure.Swagger
 {
     public class ApiSchemaOptions

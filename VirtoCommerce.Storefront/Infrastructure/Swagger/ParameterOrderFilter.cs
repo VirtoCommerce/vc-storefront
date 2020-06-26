@@ -7,7 +7,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Swagger
 {
     public class ParameterOrderFilter: IParameterFilter
     {
-        private SwaggerOptions _swaggerOptions;
+        private readonly SwaggerOptions _swaggerOptions;
 
         public ParameterOrderFilter(IOptions<SwaggerOptions> swaggerOptions)
         {
