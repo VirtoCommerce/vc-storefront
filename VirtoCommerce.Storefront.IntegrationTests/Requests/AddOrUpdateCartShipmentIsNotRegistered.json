@@ -1,0 +1,105 @@
+{
+  "deliveryAddress": {
+    "type": "Shipping",
+    "name": "asdasd, asdasd, Alabama, sds, United States",
+    "countryCode": "USA",
+    "countryName": "United States",
+    "city": "asdasd",
+    "postalCode": "sds",
+    "line1": "asdasd",
+    "regionId": "AL",
+    "regionName": "Alabama",
+    "firstName": "example",
+    "lastName": "e",
+    "email": "example@example.com"
+  },
+  "price": {
+    "amount": 0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "priceWithTax": {
+    "amount": 0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "total": {
+    "amount": 0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "totalWithTax": {
+    "amount": 0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "discountAmount": {
+    "amount": 0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "discountAmountWithTax": {
+    "amount": 0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "items": [],
+  "taxTotal": {
+    "amount": 0,
+    "formattedAmount": "$0.00",
+    "formattedAmountWithoutPointAndCurrency": "0",
+    "formattedAmountWithoutPoint": "$0",
+    "formattedAmountWithoutCurrency": "$0",
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  "taxPercentRate": 0,
+  "taxDetails": [],
+  "isValid": false,
+  "discounts": [],
+  "currency": {
+    "code": "USD",
+    "symbol": "$"
+  },
+  "id": "18d6a422-7bab-476b-aaa2-a0595e6a0928",
+  "shipmentMethodCode": "TestMethodCode",
+  "shipmentMethodOption": "Ground"
+}
