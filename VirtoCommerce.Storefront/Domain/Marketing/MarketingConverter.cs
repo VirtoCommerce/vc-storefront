@@ -5,8 +5,8 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Marketing;
-using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using marketingDto = VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models;
+using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -114,11 +114,11 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new marketingDto.DynamicContentEvaluationContext
             {
                 UserGroups = dynamicContentEvalContext?.User?.Contact?.UserGroups,
-                Language = dynamicContentEvalContext.Language != null ? dynamicContentEvalContext.Language.CultureName : null,
-                StoreId = dynamicContentEvalContext.StoreId,
-                Tags = dynamicContentEvalContext.Tags,
-                ToDate = dynamicContentEvalContext.ToDate,
-                PlaceName = dynamicContentEvalContext.PlaceName
+                Language = dynamicContentEvalContext?.Language != null ? dynamicContentEvalContext.Language.CultureName : null,
+                StoreId = dynamicContentEvalContext?.StoreId,
+                Tags = dynamicContentEvalContext?.Tags,
+                ToDate = dynamicContentEvalContext?.ToDate,
+                PlaceName = dynamicContentEvalContext?.PlaceName
             };
             return result;
         }

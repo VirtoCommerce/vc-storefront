@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using FluentValidation.AspNetCore;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -322,7 +323,9 @@ namespace VirtoCommerce.Storefront
                 // Converter for providing back compatibility with old themes was used CustomerInfo type which has contained user and contact data in the single type.
                 // May be removed when all themes will fixed to new User type with nested Contact property.
                 options.SerializerSettings.Converters.Add(new UserBackwardCompatibilityJsonConverter(options.SerializerSettings));
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            })
+             .AddFluentValidation()
+            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
 
             // Register event handlers via reflection

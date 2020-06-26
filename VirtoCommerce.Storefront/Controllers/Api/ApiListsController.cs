@@ -76,7 +76,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var products = await _catalogService.GetProductsAsync(new[] { listItem.ProductId }, Model.Catalog.ItemResponseGroup.Inventory | Model.Catalog.ItemResponseGroup.ItemWithPrices);
                 if (products != null && products.Any())
                 {
-                    await cartBuilder.AddItemAsync(products.First(), 1);
+                    listItem.Product = products.First();
+                    listItem.Quantity = 1;
+                    await cartBuilder.AddItemAsync(listItem);
                     await cartBuilder.SaveAsync();
                 }
                 return new ShoppingCartItems { ItemsCount = cartBuilder.Cart.ItemsQuantity };
@@ -113,7 +115,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var lineItem = cartBuilder.Cart.Items.FirstOrDefault(i => i.Id == changeQty.LineItemId);
                 if (lineItem != null)
                 {
-                    await cartBuilder.ChangeItemQuantityAsync(changeQty.LineItemId, changeQty.Quantity);
+                    await cartBuilder.ChangeItemQuantityAsync(new ChangeCartItemQty { LineItemId = changeQty.LineItemId, Quantity = changeQty.Quantity });
                     await cartBuilder.SaveAsync();
                 }
             }
