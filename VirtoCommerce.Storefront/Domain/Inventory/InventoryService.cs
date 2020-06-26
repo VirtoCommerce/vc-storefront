@@ -41,6 +41,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 cacheEntry.SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
                 cacheEntry.AddExpirationToken(InventoryCacheRegion.CreateChangeToken());
+                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
 
                 return await _inventoryApi.GetProductsInventoriesByPlentyIdsAsync(productIds);
             });
