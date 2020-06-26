@@ -10,9 +10,12 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
         public static string LogoutEndpoint => "account/logout";
         public static string ItemPriceEndpoint => "storefrontapi/cart/items/price";
         public static string PaymentMethodsEndpoint => "storefrontapi/cart/paymentmethods";
+        public static string CartPaymentPlanEndpoint => "storefrontapi/cart/paymentPlan";
+        public static string CartPaymentEndpoint => "storefrontapi/cart/payments";
+        public static string CartShipmentEndpoint => "storefrontapi/cart/shipments";
+
         public static string AddCouponEndpoint(string couponCode) =>
             $"storefrontapi/cart/coupons/{couponCode}";
-
         public static string RemoveCouponEndpoint(string couponCode) =>
             $"storefrontapi/cart/coupons{(string.IsNullOrWhiteSpace(couponCode) ? "" : $"?couponCode={couponCode}")}";
         public static string ShippingMethodsEndpoint(string shippmentId) =>

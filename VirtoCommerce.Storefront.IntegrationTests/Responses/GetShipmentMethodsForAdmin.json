@@ -1,1 +1,236 @@
-[{"priority":1,"shipmentMethodCode":"FixedRate","name":"FixedRate","title":"FixedRate","handle":"FixedRate","optionName":"Ground","logoUrl":"https://raw.githubusercontent.com/VirtoCommerce/vc-module-core/master/VirtoCommerce.CoreModule.Web/Content/logoVC.png","price":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"priceWithTax":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"total":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"totalWithTax":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"discountAmount":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"discountAmountWithTax":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"settings":[{"name":"VirtoCommerce.Shipping.FixedRateShippingMethod.Ground.Rate","valueType":"Decimal","allowedValues":[],"defaultValue":0.0,"isArray":false,"arrayValues":[],"indexKey":"VirtoCommerce.Shipping.FixedRateShippingMethod.Ground.Rate"},{"name":"VirtoCommerce.Shipping.FixedRateShippingMethod.Air.Rate","valueType":"Decimal","allowedValues":[],"defaultValue":0.0,"isArray":false,"arrayValues":[],"indexKey":"VirtoCommerce.Shipping.FixedRateShippingMethod.Air.Rate"}],"taxTotal":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"taxPercentRate":0.0,"discounts":[],"currency":{"code":"USD","symbol":"$"}},{"priority":1,"shipmentMethodCode":"FixedRate","name":"FixedRate","title":"FixedRate","handle":"FixedRate","optionName":"Air","logoUrl":"https://raw.githubusercontent.com/VirtoCommerce/vc-module-core/master/VirtoCommerce.CoreModule.Web/Content/logoVC.png","price":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"priceWithTax":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"total":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"totalWithTax":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"discountAmount":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"discountAmountWithTax":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"settings":[{"name":"VirtoCommerce.Shipping.FixedRateShippingMethod.Ground.Rate","valueType":"Decimal","allowedValues":[],"defaultValue":0.0,"isArray":false,"arrayValues":[],"indexKey":"VirtoCommerce.Shipping.FixedRateShippingMethod.Ground.Rate"},{"name":"VirtoCommerce.Shipping.FixedRateShippingMethod.Air.Rate","valueType":"Decimal","allowedValues":[],"defaultValue":0.0,"isArray":false,"arrayValues":[],"indexKey":"VirtoCommerce.Shipping.FixedRateShippingMethod.Air.Rate"}],"taxTotal":{"amount":0.0,"formattedAmount":"$0.00","formattedAmountWithoutPointAndCurrency":"0","formattedAmountWithoutPoint":"$0","formattedAmountWithoutCurrency":"$0","currency":{"code":"USD","symbol":"$"}},"taxPercentRate":0.0,"discounts":[],"currency":{"code":"USD","symbol":"$"}}]
+[
+  {
+    "priority": 1,
+    "shipmentMethodCode": "FixedRate",
+    "name": "FixedRate",
+    "title": "FixedRate",
+    "handle": "FixedRate",
+    "optionName": "Ground",
+    "logoUrl": "https://raw.githubusercontent.com/VirtoCommerce/vc-module-core/master/VirtoCommerce.CoreModule.Web/Content/logoVC.png",
+    "price": {
+      "amount": 0.0,
+      "formattedAmount": "$0.00",
+      "formattedAmountWithoutPointAndCurrency": "0",
+      "formattedAmountWithoutPoint": "$0",
+      "formattedAmountWithoutCurrency": "$0",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      }
+    },
+    "priceWithTax": {
+      "amount": 0.0,
+      "formattedAmount": "$0.00",
+      "formattedAmountWithoutPointAndCurrency": "0",
+      "formattedAmountWithoutPoint": "$0",
+      "formattedAmountWithoutCurrency": "$0",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      }
+    },
+    "total": {
+      "amount": 0.0,
+      "formattedAmount": "$0.00",
+      "formattedAmountWithoutPointAndCurrency": "0",
+      "formattedAmountWithoutPoint": "$0",
+      "formattedAmountWithoutCurrency": "$0",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      }
+    },
+    "totalWithTax": {
+      "amount": 0.0,
+      "formattedAmount": "$0.00",
+      "formattedAmountWithoutPointAndCurrency": "0",
+      "formattedAmountWithoutPoint": "$0",
+      "formattedAmountWithoutCurrency": "$0",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      }
+    },
+    "discountAmount": {
+      "amount": 0.0,
+      "formattedAmount": "$0.00",
+      "formattedAmountWithoutPointAndCurrency": "0",
+      "formattedAmountWithoutPoint": "$0",
+      "formattedAmountWithoutCurrency": "$0",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      }
+    },
+    "discountAmountWithTax": {
+      "amount": 0.0,
+      "formattedAmount": "$0.00",
+      "formattedAmountWithoutPointAndCurrency": "0",
+      "formattedAmountWithoutPoint": "$0",
+      "formattedAmountWithoutCurrency": "$0",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      }
+    },
+    "settings": [
+      {
+        "name": "VirtoCommerce.Shipping.FixedRateShippingMethod.Ground.Rate",
+        "valueType": "Decimal",
+        "allowedValues": [
+        ],
+        "defaultValue": 0.0,
+        "isArray": false,
+        "arrayValues": [
+        ],
+        "indexKey": "VirtoCommerce.Shipping.FixedRateShippingMethod.Ground.Rate"
+      },
+      {
+        "name": "VirtoCommerce.Shipping.FixedRateShippingMethod.Air.Rate",
+        "valueType": "Decimal",
+        "allowedValues": [
+        ],
+        "defaultValue": 0.0,
+        "isArray": false,
+        "arrayValues": [
+        ],
+        "indexKey": "VirtoCommerce.Shipping.FixedRateShippingMethod.Air.Rate"
+      }
+    ],
+    "taxTotal": {
+      "amount": 0.0,
+      "formattedAmount": "$0.00",
+      "formattedAmountWithoutPointAndCurrency": "0",
+      "formattedAmountWithoutPoint": "$0",
+      "formattedAmountWithoutCurrency": "$0",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      }
+    },
+    "taxPercentRate": 0.0,
+    "discounts": [
+    ],
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  },
+  {
+    "priority": 1,
+    "shipmentMethodCode": "FixedRate",
+    "name": "FixedRate",
+    "title": "FixedRate",
+    "handle": "FixedRate",
+    "optionName": "Air",
+    "logoUrl": "https://raw.githubusercontent.com/VirtoCommerce/vc-module-core/master/VirtoCommerce.CoreModule.Web/Content/logoVC.png",
+    "price": {
+      "amount": 0.0,
+      "formattedAmount": "$0.00",
+      "formattedAmountWithoutPointAndCurrency": "0",
+      "formattedAmountWithoutPoint": "$0",
+      "formattedAmountWithoutCurrency": "$0",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      }
+    },
+    "priceWithTax": {
+      "amount": 0.0,
+      "formattedAmount": "$0.00",
+      "formattedAmountWithoutPointAndCurrency": "0",
+      "formattedAmountWithoutPoint": "$0",
+      "formattedAmountWithoutCurrency": "$0",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      }
+    },
+    "total": {
+      "amount": 0.0,
+      "formattedAmount": "$0.00",
+      "formattedAmountWithoutPointAndCurrency": "0",
+      "formattedAmountWithoutPoint": "$0",
+      "formattedAmountWithoutCurrency": "$0",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      }
+    },
+    "totalWithTax": {
+      "amount": 0.0,
+      "formattedAmount": "$0.00",
+      "formattedAmountWithoutPointAndCurrency": "0",
+      "formattedAmountWithoutPoint": "$0",
+      "formattedAmountWithoutCurrency": "$0",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      }
+    },
+    "discountAmount": {
+      "amount": 0.0,
+      "formattedAmount": "$0.00",
+      "formattedAmountWithoutPointAndCurrency": "0",
+      "formattedAmountWithoutPoint": "$0",
+      "formattedAmountWithoutCurrency": "$0",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      }
+    },
+    "discountAmountWithTax": {
+      "amount": 0.0,
+      "formattedAmount": "$0.00",
+      "formattedAmountWithoutPointAndCurrency": "0",
+      "formattedAmountWithoutPoint": "$0",
+      "formattedAmountWithoutCurrency": "$0",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      }
+    },
+    "settings": [
+      {
+        "name": "VirtoCommerce.Shipping.FixedRateShippingMethod.Ground.Rate",
+        "valueType": "Decimal",
+        "allowedValues": [
+        ],
+        "defaultValue": 0.0,
+        "isArray": false,
+        "arrayValues": [
+        ],
+        "indexKey": "VirtoCommerce.Shipping.FixedRateShippingMethod.Ground.Rate"
+      },
+      {
+        "name": "VirtoCommerce.Shipping.FixedRateShippingMethod.Air.Rate",
+        "valueType": "Decimal",
+        "allowedValues": [
+        ],
+        "defaultValue": 0.0,
+        "isArray": false,
+        "arrayValues": [
+        ],
+        "indexKey": "VirtoCommerce.Shipping.FixedRateShippingMethod.Air.Rate"
+      }
+    ],
+    "taxTotal": {
+      "amount": 0.0,
+      "formattedAmount": "$0.00",
+      "formattedAmountWithoutPointAndCurrency": "0",
+      "formattedAmountWithoutPoint": "$0",
+      "formattedAmountWithoutCurrency": "$0",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      }
+    },
+    "taxPercentRate": 0.0,
+    "discounts": [
+    ],
+    "currency": {
+      "code": "USD",
+      "symbol": "$"
+    }
+  }
+]

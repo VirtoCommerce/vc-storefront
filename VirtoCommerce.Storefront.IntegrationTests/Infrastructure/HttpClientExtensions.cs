@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using VirtoCommerce.Storefront.IntegrationTests.Models;
 using VirtoCommerce.Storefront.Model.Cart;
+using VirtoCommerce.Storefront.Model.Subscriptions;
 
 namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
 {
@@ -143,9 +144,63 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
             return client;
         }
 
+        public static HttpClient AddOrUpdateCartPaymentPlan(this HttpClient client, PaymentPlan paymentPlan)
+        {
+            var content = new StringContent(
+                JsonConvert.SerializeObject(paymentPlan),
+                Encoding.UTF8,
+                "application/json");
+
+            var response = client.PostAsync(TestEnvironment.CartPaymentPlanEndpoint, content).GetAwaiter().GetResult();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Add or update cart payment plan failed: {response.StatusCode}");
+            }
+
+            return client;
+        }
+
+        public static HttpClient DeleteCartPaymentPlan(this HttpClient client)
+        {
+            var response = client.DeleteAsync(TestEnvironment.CartPaymentPlanEndpoint).GetAwaiter().GetResult();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Delete cart payment plan failed: {response.StatusCode}");
+            }
+
+            return client;
+        }
+
+        public static async Task<HttpResponseMessage> AddOrUpdateCartPayment(this HttpClient client, Payment payment)
+        {
+            var content = new StringContent(
+                JsonConvert.SerializeObject(payment),
+                Encoding.UTF8,
+                "application/json");
+
+            var response = await client.PostAsync(TestEnvironment.CartPaymentEndpoint, content);
+
+            return response;
+        }
+
+        public static async Task<HttpResponseMessage> AddOrUpdateCartShipment(this HttpClient client, Shipment shipment)
+        {
+            var content = new StringContent(
+                JsonConvert.SerializeObject(shipment),
+                Encoding.UTF8,
+                "application/json");
+
+            var response = await client.PostAsync(TestEnvironment.CartShipmentEndpoint, content);
+
+            return response;
+        }
+
         public static async Task<string> GetCart(this HttpClient client)
         {
             var response = await client.GetAsync(TestEnvironment.CartEndpoint);
+
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception($"Get cart failed: {response.StatusCode}");
@@ -153,6 +208,31 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
 
             return await response.Content.ReadAsStringAsync();
         }
+
+        public static async Task<string> GetCartAvailPaymentMethods(this HttpClient client)
+        {
+            var response = await client.GetAsync(TestEnvironment.PaymentMethodsEndpoint);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Get cart available payment methods failed: {response.StatusCode}");
+            }
+
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        public static async Task<string> GetCartShipmentAvailShippingMethods(this HttpClient client)
+        {
+            var response = await client.GetAsync(TestEnvironment.ShippingMethodsEndpoint("1"));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Get cart available shipping methods failed: {response.StatusCode}");
+            }
+
+            return await response.Content.ReadAsStringAsync();
+        }
+
 
         private static HttpClient SetAntiforgeryHeader(HttpClient client, AntiforgeryCookie cookie)
         {
