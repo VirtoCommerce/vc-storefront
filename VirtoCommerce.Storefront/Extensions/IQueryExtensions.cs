@@ -43,6 +43,21 @@ namespace VirtoCommerce.Storefront.Extensions
             return query;
         }
 
+        public static IQuery<T> AddCartArguments<T>(this IQuery<T> query, Model.Cart.CartSearchCriteria criteria) where T : class
+        {
+            query.AddArguments(new
+            {
+                storeId = criteria.StoreId,
+                cartName = criteria.Name,
+                userId = criteria.Customer?.Id,
+                cultureName = criteria.Language?.CultureName ?? "en-US",
+                currencyCode = criteria.Currency.Code,
+                type = criteria.Type ?? string.Empty
+            });
+
+            return query;
+        }
+
         public static IQuery<T> AddMoneyField<T>(this IQuery<T> query, Expression<Func<T, Money>> selector) where T : class
         {
             //TODO: fix MoneyType producing, because Currency is not filled therefore MoneyConverter cannot deserialize value to object

@@ -26,24 +26,17 @@ namespace VirtoCommerce.Storefront.Infrastructure
                 new GraphQLRequest { Query = query },
                 () => new
                 {
-                    cart = new ShoppingCartDto()
+                    Cart = new ShoppingCartDto()
                 });
 
-            return result.Data.cart;
+            return result.Data.Cart;
+        }
         }
 
         private static IQuery<ShoppingCartDto> GetCartQuery(Model.Cart.CartSearchCriteria criteria)
         {
             var builder = new Query<ShoppingCartDto>("cart", new QueryOptions { Formatter = QueryFormatters.CamelCaseFormatter })
-                .AddArguments(new
-                {
-                    storeId = criteria.StoreId,
-                    cartName = criteria.Name,
-                    userId = criteria.Customer?.Id,
-                    cultureName = criteria.Language?.CultureName ?? "en-US",
-                    currencyCode = criteria.Currency.Code,
-                    type = criteria.Type ?? string.Empty
-                })
+                .AddCartArguments(criteria)
                 .AddField(x => x.Id)
                 .AddField(x => x.Name)
                 .AddField(x => x.Status)
@@ -130,6 +123,5 @@ namespace VirtoCommerce.Storefront.Infrastructure
 
             return builder;
         }
-
     }
 }
