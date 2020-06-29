@@ -190,6 +190,8 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
             GetCartComparationResult(result, "GetEmptyCartForAdmin", new[] { "$" }, new[] { "id" })
                 .Should()
                 .BeNull();
+
+            _client.Logout();
         }
 
         [Fact]
@@ -215,7 +217,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
 
             //assert
             response.Should().BeEquivalentTo(new ShoppingCartItems { ItemsCount = item.Quantity });
-            _client.ClearCart();
+            _client.ClearCart().Logout();
         }
 
         [Fact]
@@ -246,6 +248,31 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
 
             //assert
             response.Should().BeEquivalentTo(new ShoppingCartItems { ItemsCount = 0 });
+            _client.ClearCart();
+        }
+
+        [Fact]
+        public async Task DeleteItemFromCart_ShouldReturnCartItemsCount()
+        {
+            //arrange
+            _client
+                .GotoMainPage()
+                .ClearCart()
+                .InsertCartItem(new AddCartItem() { Id = Product.Quadcopter, Quantity = 1 })
+                .InsertCartItem(new AddCartItem() { Id = Product.Octocopter, Quantity = 1 });
+
+            var cart = await _client.GetCart();
+            var lineItemIds = GetLineItemIds(cart);
+
+            //act
+            _client.DeleteCartItem(lineItemIds.FirstOrDefault());
+
+            //assert
+            var updatedCart = await _client.GetCart();
+
+            lineItemIds.Count().Should().Be(2);
+            GetLineItemIds(updatedCart).Count().Should().Be(1);
+
             _client.ClearCart();
         }
 
@@ -607,6 +634,12 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             var cartObject = JArray.Parse(actualJson);
             return cartObject.FirstOrDefault().ToObject<ShipmentMethod>();
+        }
+
+        private string[] GetLineItemIds(string actualJson)
+        {
+            var cartObject = JObject.Parse(actualJson);
+            return cartObject["items"]?.Children()["id"].Select(x => x.ToString()).ToArray();
         }
 
         private async Task RemoveAllCoupons()
