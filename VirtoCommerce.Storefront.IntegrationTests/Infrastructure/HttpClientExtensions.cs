@@ -79,6 +79,17 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
             return client;
         }
 
+        public static HttpClient DeleteCartItem(this HttpClient client, string lineItemId)
+        {
+            var response = client.DeleteAsync(TestEnvironment.DeleteCartItemEndpoint(lineItemId)).GetAwaiter().GetResult();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Delete line item from cart failed: {response.StatusCode}");
+            }
+
+            return client;
+        }
+
         public static HttpClient ChangeCartItemPrice(this HttpClient client, ChangeCartItemPrice priceItem)
         {
             var content = new StringContent(
