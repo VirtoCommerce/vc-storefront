@@ -1,8 +1,7 @@
-using PagedList.Core;
 using System;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
+using PagedList.Core;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.QuoteModuleApi;
 using VirtoCommerce.Storefront.Model;
@@ -36,24 +35,24 @@ namespace VirtoCommerce.Storefront.Domain
         public async Task<CustomerOrder> GetOrderByNumberAsync(string number)
         {
             var workContext = _workContextAccessor.WorkContext;
-            return (await _orderApi.GetByNumberAsync(number))?.ToCustomerOrder(workContext.AllCurrencies, workContext.CurrentLanguage);
+            return (await _orderApi.GetByNumberAsync(number, string.Empty))?.ToCustomerOrder(workContext.AllCurrencies, workContext.CurrentLanguage);
         }
 
 
         public async Task<CustomerOrder> GetOrderByIdAsync(string id)
         {
             var workContext = _workContextAccessor.WorkContext;
-            return (await _orderApi.GetByIdAsync(id))?.ToCustomerOrder(workContext.AllCurrencies, workContext.CurrentLanguage);
+            return (await _orderApi.GetByIdAsync(id, string.Empty))?.ToCustomerOrder(workContext.AllCurrencies, workContext.CurrentLanguage);
         }
-		
+
         protected virtual async Task<IPagedList<CustomerOrder>> InnerSearchOrdersAsync(OrderSearchCriteria criteria, WorkContext workContext)
         {
             if (criteria == null)
             {
                 throw new ArgumentNullException(nameof(criteria));
             }
-            var result = await _orderApi.SearchAsync(criteria.ToSearchCriteriaDto());
-            return new StaticPagedList<CustomerOrder>(result.CustomerOrders.Select(x => x.ToCustomerOrder(workContext.AllCurrencies, workContext.CurrentLanguage)),
+            var result = await _orderApi.SearchCustomerOrderAsync(criteria.ToSearchCriteriaDto());
+            return new StaticPagedList<CustomerOrder>(result.Results.Select(x => x.ToCustomerOrder(workContext.AllCurrencies, workContext.CurrentLanguage)),
                                                      criteria.PageNumber, criteria.PageSize, result.TotalCount.Value);
         }
 

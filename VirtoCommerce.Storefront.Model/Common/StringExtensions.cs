@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace VirtoCommerce.Storefront.Model.Common
 {
     public static class StringExtensions
     {
-
+        private static readonly Regex _validJsonPath = new Regex(@"^[a-zA-Z_]\w*(\.@?[a-zA-Z_]\w*)*$", RegexOptions.Compiled);
         private static readonly Regex _regexIllegal = new Regex(@"[\[, \]]", RegexOptions.Compiled);
         private static readonly Regex _regex1 = new Regex(@"([A-Z]+)([A-Z][a-z])", RegexOptions.Compiled);
         private static readonly Regex _regex2 = new Regex(@"([a-z\d])([A-Z])", RegexOptions.Compiled);
@@ -24,6 +25,15 @@ namespace VirtoCommerce.Storefront.Model.Common
             name = _regexIllegal.Replace(name, "_").TrimEnd('_');
             // Replace any capital letters, apart from the first character, with _x, the same way Ruby does
             return _regex2.Replace(_regex1.Replace(name, "$1_$2"), "$1_$2").ToLower();
+        }
+
+        public static bool IsValidJsonPath(this string input)
+        {
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+            return _validJsonPath.IsMatch(input);
         }
 
         public static bool IsValidEmail(this string input)
@@ -82,6 +92,17 @@ namespace VirtoCommerce.Storefront.Model.Common
         public static bool FilePathHasMaskChars(this string path)
         {
             return (!string.IsNullOrEmpty(path) && path.IndexOfAny(_maskChars) >= 0);
+        }
+
+        public static string AddIfNotContains(this string inputStr, string str, char separator = ',')
+        {
+            if(inputStr == null)
+            {
+                throw new ArgumentNullException(nameof(inputStr));
+            }
+            var strHashSet = inputStr.Split(separator, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            strHashSet.Add(str);
+            return string.Join(separator, strHashSet);
         }
 
         public static bool FitsMask(this string fileName, string fileMask)

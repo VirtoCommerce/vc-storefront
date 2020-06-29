@@ -141,7 +141,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         [IgnoreDataMember]
         public IMutablePagedList<Subscription> Subscriptions { get; set; }
 
-        public IList<DynamicProperty> DynamicProperties => Contact?.DynamicProperties;
+        public IMutablePagedList<DynamicProperty> DynamicProperties => Contact?.DynamicProperties;
 
         public string FirstName => Contact?.FirstName;
         public string LastName => Contact?.LastName;
@@ -152,5 +152,9 @@ namespace VirtoCommerce.Storefront.Model.Security
         public Address DefaultBillingAddress => Contact?.DefaultBillingAddress;
         public Address DefaultShippingAddress => Contact?.DefaultShippingAddress;
         public IList<Address> Addresses => Contact?.Addresses;
+        /// <summary>
+        /// Indicates that user has no orders
+        /// </summary>
+        public bool IsFirstTimeBuyer { get; set; }
     }
 }

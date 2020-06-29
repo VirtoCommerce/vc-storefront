@@ -1,12 +1,14 @@
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
-using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
+using VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Common;
 using VirtoCommerce.Storefront.Domain.Security;
@@ -26,6 +28,7 @@ namespace VirtoCommerce.Storefront.Controllers
     [StorefrontRoute("account")]
     public class AccountController : StorefrontControllerBase
     {
+        private readonly IStorefrontUrlBuilder _urlBuilder;
         private readonly SignInManager<User> _signInManager;
         private readonly IEventPublisher _publisher;
         private readonly StorefrontOptions _options;
@@ -44,6 +47,7 @@ namespace VirtoCommerce.Storefront.Controllers
             IOptions<StorefrontOptions> options)
             : base(workContextAccessor, urlBuilder)
         {
+            _urlBuilder = urlBuilder;
             _signInManager = signInManager;
             _publisher = publisher;
             _options = options.Value;
@@ -163,7 +167,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 {
                     foreach (var error in result.Errors)
                     {
-                        WorkContext.Form.Errors.Add(new FormError { Code = error.Code.PascalToKebabCase(), Description = error.Description });
+                        WorkContext.Form.Errors.Add(new FormError { Code = error.Code?.PascalToKebabCase(), Description = error.Description });
                     }
                 }
             }
@@ -288,7 +292,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpPost("login")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login([FromForm] Login login, [FromQuery]string returnUrl)
+        public async Task<ActionResult> Login([FromForm] Login login, [FromQuery] string returnUrl)
         {
             TryValidateModel(login);
 
@@ -309,9 +313,28 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View("customers/login", WorkContext);
             }
 
-            if (!new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore) || new IsUserSuspendedSpecification().IsSatisfiedBy(user))
+            if (!new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore))
             {
+                if (login.ForceLoginToAccountStore)
+                {
+                    var store = WorkContext.AllStores.First(x => x.Id == user.StoreId);
+                    var url = HttpContext.Request.GetEncodedUrl();
+                    var redirectUrl = _urlBuilder.ToStoreAbsolute(url, store, store.DefaultLanguage);
+                    return RedirectPreserveMethod(redirectUrl);
+                }
+
                 WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserCannotLoginInStore());
+                return View("customers/login", WorkContext);
+            }
+
+            if (new IsUserLockedOutSpecification().IsSatisfiedBy(user))
+            {
+                return View("lockedout", WorkContext);
+            }
+
+            if (new IsUserSuspendedSpecification().IsSatisfiedBy(user))
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.AccountIsBlocked());
                 return View("customers/login", WorkContext);
             }
 
@@ -373,16 +396,6 @@ namespace VirtoCommerce.Storefront.Controllers
                 WorkContext.Form = Form.FromObject(veryfyCodeViewModel);
 
                 return View("customers/verify_code", WorkContext);
-            }
-
-            if (loginResult.IsLockedOut)
-            {
-                return View("lockedout", WorkContext);
-            }
-
-            if (loginResult is CustomSignInResult signInResult && signInResult.IsRejected)
-            {
-                WorkContext.Form.Errors.Add(SecurityErrorDescriber.AccountIsBlocked());
             }
 
             WorkContext.Form.Errors.Add(SecurityErrorDescriber.LoginFailed());
@@ -807,7 +820,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
         [HttpPost("phonenumber")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UpdatePhoneNumber([FromForm]UpdatePhoneNumberModel formModel)
+        public async Task<ActionResult> UpdatePhoneNumber([FromForm] UpdatePhoneNumberModel formModel)
         {
             TryValidateModel(formModel);
             if (!ModelState.IsValid)
@@ -838,7 +851,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
         [HttpPost("phonenumber/verify")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> VerifyPhoneNumber([FromForm]VerifyPhoneNumberModel formModel)
+        public async Task<ActionResult> VerifyPhoneNumber([FromForm] VerifyPhoneNumberModel formModel)
         {
             TryValidateModel(formModel);
             if (!ModelState.IsValid)
@@ -876,18 +889,21 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
 
-        private async Task<SendNotificationResult> SendNotificationAsync(NotificationBase notification)
+        private async Task<NotificationSendResult> SendNotificationAsync(NotificationBase notification)
         {
-            var result = new SendNotificationResult();
+            NotificationSendResult result;
 
             try
             {
-                result = await _platformNotificationApi.SendNotificationAsync(notification.ToNotificationDto());
+                result = await _platformNotificationApi.SendNotificationByRequestAsync(notification.ToNotificationDto());
             }
-            catch
+            catch (Exception exception)
             {
-                result.IsSuccess = false;
-                result.ErrorMessage = "Error occurred while sending notification";
+                result = new NotificationSendResult
+                {
+                    IsSuccess = false,
+                    ErrorMessage = $"Error occurred while sending notification: {exception.Message}"
+                };
             }
 
             return result;

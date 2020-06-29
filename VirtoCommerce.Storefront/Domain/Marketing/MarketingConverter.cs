@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.Storefront.Common;
@@ -6,19 +5,16 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Marketing;
-using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 using marketingDto = VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi.Models;
+using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
-
-
-
     public static partial class MarketingConverter
     {
         public static DynamicProperty ToDynamicProperty(this marketingDto.DynamicObjectProperty propertyDto)
         {
-            return propertyDto.JsonConvert<coreDto.DynamicObjectProperty>().ToDynamicProperty();
+            return propertyDto.JsonConvert<platformDto.DynamicObjectProperty>().ToDynamicProperty();
         }
 
         public static marketingDto.DynamicObjectProperty ToMarketingDynamicPropertyDto(this DynamicProperty property)
@@ -118,11 +114,11 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new marketingDto.DynamicContentEvaluationContext
             {
                 UserGroups = dynamicContentEvalContext?.User?.Contact?.UserGroups,
-                Language = dynamicContentEvalContext.Language != null ? dynamicContentEvalContext.Language.CultureName : null,
-                StoreId = dynamicContentEvalContext.StoreId,
-                Tags = dynamicContentEvalContext.Tags,
-                ToDate = dynamicContentEvalContext.ToDate,
-                PlaceName = dynamicContentEvalContext.PlaceName
+                Language = dynamicContentEvalContext?.Language != null ? dynamicContentEvalContext.Language.CultureName : null,
+                StoreId = dynamicContentEvalContext?.StoreId,
+                Tags = dynamicContentEvalContext?.Tags,
+                ToDate = dynamicContentEvalContext?.ToDate,
+                PlaceName = dynamicContentEvalContext?.PlaceName
             };
             return result;
         }
@@ -176,6 +172,7 @@ namespace VirtoCommerce.Storefront.Domain
             result.CustomerId = promoEvalContext.User.Id;
             result.IsEveryone = true;
             result.IsRegisteredUser = promoEvalContext.User.IsRegisteredUser;
+            result.IsFirstTimeBuyer = promoEvalContext.User.IsFirstTimeBuyer;
 
             result.Currency = promoEvalContext.Currency != null ? promoEvalContext.Currency.Code : null;
             result.Language = promoEvalContext.Language != null ? promoEvalContext.Language.CultureName : null;

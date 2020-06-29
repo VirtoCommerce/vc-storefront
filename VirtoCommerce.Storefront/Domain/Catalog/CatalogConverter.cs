@@ -5,6 +5,7 @@ using Markdig;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
+using VirtoCommerce.Storefront.Model.Catalog.Specifications;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Stores;
 using catalogDto = VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models;
@@ -15,12 +16,8 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public static partial class CatalogConverter
     {
-        private static MarkdownPipeline _markdownPipeline;
-        static CatalogConverter()
-        {
-            _markdownPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-        }
-
+        private static MarkdownPipeline _markdownPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+    
         public static SeoInfo ToSeoInfo(this catalogDto.SeoInfo seoDto)
         {
             return seoDto.JsonConvert<coreDto.SeoInfo>().ToSeoInfo();
@@ -34,16 +31,13 @@ namespace VirtoCommerce.Storefront.Domain
                 Field = aggregationDto.Field
             };
 
+            var aggrItemIsVisbileSpec = new AggregationItemIsVisibleSpecification();
             if (aggregationDto.Items != null)
             {
-                result.Items = aggregationDto.Items.Select(i => i.ToAggregationItem(currentLanguage))
-                                             .ToArray();
-                foreach (var aggregationItem in result.Items)
-                {
-                    aggregationItem.Group = result;
-                }
+                result.Items = aggregationDto.Items.Select(i => i.ToAggregationItem(result, currentLanguage))
+                                                   .Where(x => aggrItemIsVisbileSpec.IsSatisfiedBy(x))
+                                                   .Distinct().ToArray();
             }
-
             if (aggregationDto.Labels != null)
             {
                 result.Label =
@@ -60,10 +54,11 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static AggregationItem ToAggregationItem(this catalogDto.AggregationItem itemDto, string currentLanguage)
+        public static AggregationItem ToAggregationItem(this catalogDto.AggregationItem itemDto, Aggregation aggregationGroup, string currentLanguage)
         {
             var result = new AggregationItem
             {
+                Group = aggregationGroup,
                 Value = itemDto.Value,
                 IsApplied = itemDto.IsApplied ?? false,
                 Count = itemDto.Count ?? 0,
@@ -82,6 +77,11 @@ namespace VirtoCommerce.Storefront.Domain
             if (string.IsNullOrEmpty(result.Label) && itemDto.Value != null)
             {
                 result.Label = itemDto.Value.ToString();
+            }
+
+            if (aggregationGroup.Field.EqualsInvariant("__outline"))
+            {
+                result = CategoryAggregationItem.FromAggregationItem(result);
             }
 
             return result;
@@ -113,12 +113,9 @@ namespace VirtoCommerce.Storefront.Domain
             }
 
             //For multilingual properties need populate LocalizedValues collection and set value for requested language
-            if (propertyDto.Multilanguage ?? false)
+            if ((propertyDto.Multilanguage ?? false) && propertyDto.Values != null)
             {
-                if (propertyDto.Values != null)
-                {
-                    result.LocalizedValues = propertyDto.Values.Where(x => x.Value != null).Select(x => new LocalizedString(new Language(x.LanguageCode), x.Value.ToString())).ToList();
-                }
+                result.LocalizedValues = propertyDto.Values.Where(x => x.Value != null).Select(x => new LocalizedString(new Language(x.LanguageCode), x.Value.ToString())).ToList();
             }
 
             //Set property value
@@ -152,11 +149,11 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static catalogDto.ProductSearchCriteria ToProductSearchCriteriaDto(this ProductSearchCriteria criteria, WorkContext workContext)
+        public static catalogDto.ProductIndexedSearchCriteria ToProductSearchCriteriaDto(this ProductSearchCriteria criteria, WorkContext workContext)
         {
             var currency = criteria.Currency ?? workContext.CurrentCurrency;
 
-            var result = new catalogDto.ProductSearchCriteria
+            var result = new catalogDto.ProductIndexedSearchCriteria
             {
                 SearchPhrase = criteria.Keyword,
                 LanguageCode = criteria.Language?.CultureName ?? workContext.CurrentLanguage.CultureName,
@@ -200,9 +197,9 @@ namespace VirtoCommerce.Storefront.Domain
             };
         }
 
-        public static catalogDto.CategorySearchCriteria ToCategorySearchCriteriaDto(this CategorySearchCriteria criteria, WorkContext workContext)
+        public static catalogDto.CategoryIndexedSearchCriteria ToCategorySearchCriteriaDto(this CategorySearchCriteria criteria, WorkContext workContext)
         {
-            var result = new catalogDto.CategorySearchCriteria
+            var result = new catalogDto.CategoryIndexedSearchCriteria
             {
                 SearchPhrase = criteria.Keyword,
                 LanguageCode = criteria.Language?.CultureName ?? workContext.CurrentLanguage.CultureName,
@@ -306,7 +303,12 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static Product ToProduct(this catalogDto.Product productDto, Language currentLanguage, Currency currentCurrency, Store store)
+        public static Product ToProduct(this catalogDto.Variation variationDto, Language currentLanguage, Currency currentCurrency, Store store)
+        {
+            return variationDto.JsonConvert<catalogDto.CatalogProduct>().ToProduct(currentLanguage, currentCurrency, store);
+        }
+
+        public static Product ToProduct(this catalogDto.CatalogProduct productDto, Language currentLanguage, Currency currentCurrency, Store store)
         {
             var result = new Product(currentCurrency, currentLanguage)
             {
@@ -351,10 +353,13 @@ namespace VirtoCommerce.Storefront.Domain
                     .Select(p => ToProperty(p, currentLanguage))
                     .ToList());
 
-                result.VariationProperties = new MutablePagedList<CatalogProperty>(productDto.Properties
-                    .Where(x => string.Equals(x.Type, "Variation", StringComparison.InvariantCultureIgnoreCase))
-                    .Select(p => ToProperty(p, currentLanguage))
-                    .ToList());
+                if (productDto.IsActive.GetValueOrDefault())
+                {
+                    result.VariationProperties = new MutablePagedList<CatalogProperty>(productDto.Properties
+                        .Where(x => string.Equals(x.Type, "Variation", StringComparison.InvariantCultureIgnoreCase))
+                        .Select(p => ToProperty(p, currentLanguage))
+                        .ToList());
+                }
             }
 
             if (productDto.Images != null)

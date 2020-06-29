@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
@@ -7,6 +8,7 @@ using VirtoCommerce.Storefront.Model.StaticContent;
 namespace VirtoCommerce.Storefront.Controllers
 {
     [StorefrontRoute]
+    [AllowAnonymous]
     public class DesignerPreviewController : StorefrontControllerBase
     {
         public DesignerPreviewController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder)

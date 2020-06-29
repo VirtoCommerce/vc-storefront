@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 
 namespace DotLiquid.ViewEngine.Extensions
 {
@@ -23,6 +19,11 @@ namespace DotLiquid.ViewEngine.Extensions
             {
                 return null;
             }
+        }
+
+        public static int SafeParseInt(this string input, int defaultValue = default)
+        {
+            return int.TryParse(input, out var result) ? result : defaultValue;
         }
     }
 }

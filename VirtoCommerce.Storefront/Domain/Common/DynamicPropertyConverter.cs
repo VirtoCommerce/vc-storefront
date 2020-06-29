@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using VirtoCommerce.Storefront.Model;
@@ -9,7 +9,7 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public static class DynamicPropertyConverter
     {
-        public static DynamicProperty ToDynamicProperty(this coreDto.DynamicObjectProperty propertyDto)
+        public static DynamicProperty ToDynamicProperty(this platformDto.DynamicObjectProperty propertyDto)
         {
             var result = new DynamicProperty();
 
@@ -51,9 +51,9 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
 
-        public static coreDto.DynamicObjectProperty ToDynamicPropertyDto(this DynamicProperty dynamicProperty)
+        public static platformDto.DynamicObjectProperty ToDynamicPropertyDto(this DynamicProperty dynamicProperty)
         {
-            var result = new coreDto.DynamicObjectProperty();
+            var result = new platformDto.DynamicObjectProperty();
 
             result.Id = dynamicProperty.Id;
             result.IsArray = dynamicProperty.IsArray;
@@ -87,20 +87,20 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        private static LocalizedString ToLocalizedString(this coreDto.DynamicPropertyObjectValue dto)
+        private static LocalizedString ToLocalizedString(this platformDto.DynamicPropertyObjectValue dto)
         {
             return new LocalizedString(new Language(dto.Locale), string.Format(CultureInfo.InvariantCulture, "{0}", dto.Value));
         }
 
-        private static coreDto.DynamicPropertyObjectValue ToPropertyValueDto(this DynamicPropertyDictionaryItem dictItem)
+        private static platformDto.DynamicPropertyObjectValue ToPropertyValueDto(this DynamicPropertyDictionaryItem dictItem)
         {
-            var result = new coreDto.DynamicPropertyObjectValue { Value = dictItem };
+            var result = new platformDto.DynamicPropertyObjectValue { Value = dictItem };
             return result;
         }
 
-        private static coreDto.DynamicPropertyObjectValue ToPropertyValueDto(this LocalizedString dynamicPropertyObjectValue)
+        private static platformDto.DynamicPropertyObjectValue ToPropertyValueDto(this LocalizedString dynamicPropertyObjectValue)
         {
-            var result = new coreDto.DynamicPropertyObjectValue
+            var result = new platformDto.DynamicPropertyObjectValue
             {
                 Value = dynamicPropertyObjectValue.Value,
                 Locale = dynamicPropertyObjectValue.Language.CultureName

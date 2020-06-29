@@ -177,9 +177,9 @@ namespace VirtoCommerce.Storefront.Model.Marketing
             var workMaxLimit = MaxLimit > 0 ? MaxLimit : totalCost;
             //Do not allow maxLimit be greater that total cost (to prevent reward amount be greater that price)
             workMaxLimit = Math.Min(workMaxLimit, totalCost);
-            result = Math.Min(workMaxLimit, result);
+            result = Math.Min(workMaxLimit, result) / quantity;
 
-            return new Money(result, price.Currency).Allocate(quantity).FirstOrDefault();
+            return new Money(result, price.Currency);
         }
     }
 }

@@ -42,7 +42,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             var result = ((UserRegistration)registerForm).ToUser();
             if (!string.IsNullOrEmpty(registerForm.Role))
             {
-                result.Roles = new[] { new Role { Id = registerForm.Role } };
+                result.Roles = new[] { new Role { Id = registerForm.Role, Name = registerForm.Role } };
             }
             return result;
         }
@@ -64,9 +64,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return result;
         }
 
-        public static dto.ApplicationUserExtended ToUserDto(this User user)
+        public static dto.ApplicationUser ToUserDto(this User user)
         {
-            var result = new dto.ApplicationUserExtended
+            var result = new dto.ApplicationUser
             {
                 Id = user.Id,
                 Email = user.Email,
@@ -104,7 +104,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return result;
         }
 
-        public static User ToUser(this dto.ApplicationUserExtended userDto)
+        public static User ToUser(this dto.ApplicationUser userDto)
         {
             var result = new User()
             {

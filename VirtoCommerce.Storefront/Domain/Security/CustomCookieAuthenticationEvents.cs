@@ -1,4 +1,3 @@
-using System;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -25,7 +24,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 return Task.CompletedTask;
             }
 
-            context.RedirectUri = GetStoreAbsoluteUri(context.RedirectUri);
+            context.RedirectUri = _storefrontUrlBuilder.ToStoreAbsolute(context.RedirectUri).ToAbsolutePath();
 
             return base.RedirectToLogin(context);
         }
@@ -38,28 +37,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 return Task.CompletedTask;
             }
 
-            context.RedirectUri = GetStoreAbsoluteUri(context.RedirectUri);
+            context.RedirectUri = _storefrontUrlBuilder.ToStoreAbsolute(context.RedirectUri).ToAbsolutePath();
 
             return base.RedirectToAccessDenied(context);
-        }
-
-
-        private string GetStoreAbsoluteUri(string uri)
-        {
-            //Need to build from an host absolute url a  relative  store-based url
-            // http://localhost/Account/Login -> http://localhost/{store}/{lang}/Account/Login
-            var redirectUri = new UriBuilder(uri);
-            var storeBasedRedirectPath = _storefrontUrlBuilder.ToAppAbsolute(redirectUri.Path);
-
-            // Checks whether path is absolute path (starts with scheme), and extract local path if it is
-            if (Uri.TryCreate(storeBasedRedirectPath, UriKind.Absolute, out var absoluteUri))
-            {
-                storeBasedRedirectPath = absoluteUri.AbsolutePath;
-            }
-
-            redirectUri.Path = storeBasedRedirectPath;
-
-            return redirectUri.Uri.ToString();
         }
     }
 }

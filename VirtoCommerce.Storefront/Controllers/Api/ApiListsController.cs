@@ -76,7 +76,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var products = await _catalogService.GetProductsAsync(new[] { listItem.ProductId }, Model.Catalog.ItemResponseGroup.Inventory | Model.Catalog.ItemResponseGroup.ItemWithPrices);
                 if (products != null && products.Any())
                 {
-                    await cartBuilder.AddItemAsync(products.First(), 1);
+                    listItem.Product = products.First();
+                    listItem.Quantity = 1;
+                    await cartBuilder.AddItemAsync(listItem);
                     await cartBuilder.SaveAsync();
                 }
                 return new ShoppingCartItems { ItemsCount = cartBuilder.Cart.ItemsQuantity };
@@ -97,6 +99,43 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 await cartBuilder.SaveAsync();
                 return new ShoppingCartItems { ItemsCount = cartBuilder.Cart.ItemsQuantity };
             }
+        }
+
+        // PUT: storefrontapi/lists/{listName}/{type}/items
+        [HttpPut("{listName}/{type}/items")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeListItem(string listName, string type, [FromBody] ChangeCartItemQty changeQty)
+        {
+            var unescapedListName = Uri.UnescapeDataString(listName);
+            //Need lock to prevent concurrent access to same list
+            using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, unescapedListName, type)).LockAsync())
+            {
+                var cartBuilder = await LoadOrCreateCartAsync(unescapedListName, type);
+
+                var lineItem = cartBuilder.Cart.Items.FirstOrDefault(i => i.Id == changeQty.LineItemId);
+                if (lineItem != null)
+                {
+                    await cartBuilder.ChangeItemQuantityAsync(new ChangeCartItemQty { LineItemId = changeQty.LineItemId, Quantity = changeQty.Quantity });
+                    await cartBuilder.SaveAsync();
+                }
+            }
+            return Ok();
+        }
+
+        // POST: storefrontapi/lists/{listName}/{type}/clear
+        [HttpPost("{listName}/{type}/clear")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ClearList(string listName, string type)
+        {
+            var unescapedListName = Uri.UnescapeDataString(listName);
+            //Need lock to prevent concurrent access to same list
+            using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, unescapedListName, type)).LockAsync())
+            {
+                var cartBuilder = await LoadOrCreateCartAsync(unescapedListName, type);
+                await cartBuilder.ClearAsync();
+                await cartBuilder.SaveAsync();
+            }
+            return Ok();
         }
 
         // POST: storefrontapi/lists/search

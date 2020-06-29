@@ -1,32 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Version>4.1.7</Version>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Description>The storefront implementation of the Virto Commerce platform.</Description>
-    <Copyright>Copyright © 2011-2019 Virto Commerce - an enterprise Microsoft ecommerce platform ©. All rights reserved</Copyright>
-    <Authors>Virto Commerce</Authors>
-    <Company>Virto Commerce</Company>
-    <Product>Virto Commerce</Product>
     <PackageLicenseUrl>https://virtocommerce.com/open-source-license</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/VirtoCommerce/vc-storefront-core</PackageProjectUrl>
     <PackageIconUrl>https://virtocommerce.com/themes/assets/logo.jpg</PackageIconUrl>
     <RepositoryUrl>https://github.com/VirtoCommerce/vc-storefront-core</RepositoryUrl>
-    <AssemblyVersion>4.1.7.0</AssemblyVersion>
-    <FileVersion>4.1.7.0</FileVersion>
+    <IsPackable>False</IsPackable>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
 
   <ItemGroup>
-    <PackageReference Include="LibSassHost" Version="1.2.10" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="LibSassHost" Version="1.3.0" />
     <PackageReference Include="LibSassHost.Native.linux-x64" Version="1.2.10" />
     <PackageReference Include="LibSassHost.Native.osx-x64" Version="1.3.1" />
     <PackageReference Include="LibSassHost.Native.win-x64" Version="1.2.10" />
     <PackageReference Include="LibSassHost.Native.win-x86" Version="1.2.10" />
-    <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Nito.AsyncEx" Version="5.0.0" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
-    <PackageReference Include="Scriban" Version="2.1.1" />
+    <PackageReference Include="Scriban" Version="2.1.2" />
   </ItemGroup>
 
 
