@@ -14,6 +14,8 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
         public static string CartPaymentEndpoint => "storefrontapi/cart/payments";
         public static string CartShipmentEndpoint => "storefrontapi/cart/shipments";
 
+        public static string DeleteCartItemEndpoint(string lineItemId) =>
+            $"storefrontapi/cart/items{(string.IsNullOrWhiteSpace(lineItemId) ? "" : $"?lineItemId={lineItemId}")}";
         public static string AddCouponEndpoint(string couponCode) =>
             $"storefrontapi/cart/coupons/{couponCode}";
         public static string RemoveCouponEndpoint(string couponCode) =>
