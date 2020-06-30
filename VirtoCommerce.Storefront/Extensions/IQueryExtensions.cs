@@ -60,7 +60,6 @@ namespace VirtoCommerce.Storefront.Extensions
 
         public static IQuery<T> AddMoneyField<T>(this IQuery<T> query, Expression<Func<T, Money>> selector) where T : class
         {
-            //TODO: fix MoneyType producing, because Currency is not filled therefore MoneyConverter cannot deserialize value to object
             query.AddField(
                 selector,
                 t => t

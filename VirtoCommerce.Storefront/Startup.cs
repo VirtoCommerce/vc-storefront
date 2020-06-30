@@ -130,7 +130,7 @@ namespace VirtoCommerce.Storefront
             new NewtonsoftJsonSerializer(
                 p =>
                 {
-                    //p.Converters.Add(new MoneyJsonConverter(s.GetService<IWorkContextAccessor>()));
+                    p.Converters.Add(new MoneyJsonConverter(s.GetService<IWorkContextAccessor>()));
                 })));
 
             //Register events framework dependencies

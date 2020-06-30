@@ -4,6 +4,7 @@ using GraphQL.Client.Abstractions;
 using GraphQL.Query.Builder;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model.Cart;
+using VirtoCommerce.Storefront.Model.Commands;
 
 namespace VirtoCommerce.Storefront.Infrastructure
 {
@@ -14,6 +15,11 @@ namespace VirtoCommerce.Storefront.Infrastructure
         public GraphQlService(IGraphQLClient client)
         {
             _client = client;
+        }
+
+        public async Task<ShoppingCartDto> AddCouponAsync(string couponCode)
+        {
+            throw new System.NotImplementedException();
         }
 
         public async Task<ShoppingCartDto> SearchShoppingCartAsync(Model.Cart.CartSearchCriteria criteria)
@@ -31,6 +37,21 @@ namespace VirtoCommerce.Storefront.Infrastructure
 
             return result.Data.Cart;
         }
+
+        public async Task<ShoppingCartDto> AddItemToCartAsync(AddCartItemCommand command)
+        {
+            var request = new GraphQLRequest
+            {
+                Query = Mutation.AddItemToCart,
+                Variables = new
+                {
+                    Command = command
+                }
+            };
+
+            var result = await _client.SendMutationAsync(request, () => new { AddItem = new ShoppingCartDto() });
+
+            return result.Data.AddItem;
         }
 
         private static IQuery<ShoppingCartDto> GetCartQuery(Model.Cart.CartSearchCriteria criteria)
