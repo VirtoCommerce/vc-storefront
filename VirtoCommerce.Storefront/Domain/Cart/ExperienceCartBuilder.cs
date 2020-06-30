@@ -29,9 +29,21 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
         public virtual ShoppingCart Cart { get; protected set; }
 
-        public Task AddCouponAsync(string couponCode)
+        public async Task AddCouponAsync(string couponCode)
         {
-            throw new NotImplementedException();
+            var command = new AddCouponCommand
+            {
+                StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
+                CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
+                UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
+                Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
+            };
+
+            var modifiedCart = await _graphQlService.AddCouponAsync(command);
+
+            Cart = modifiedCart.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
         public virtual async Task<bool> AddItemAsync(AddCartItem addCartItem)
@@ -168,7 +180,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
         public Task SaveAsync()
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task TakeCartAsync(ShoppingCart cart)
@@ -181,9 +193,13 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             throw new NotImplementedException();
         }
 
-        public Task ValidateAsync()
+        public async Task ValidateAsync()
         {
-            throw new NotImplementedException();
+            EnsureCartExists();
+            //TODO: implement cart validator
+            //var result = await new CartValidator(_cartService).ValidateAsync(Cart, ruleSet: Cart.ValidationRuleSet);
+            //Cart.IsValid = result.IsValid;
+            Cart.IsValid = await Task.FromResult(true);
         }
 
         protected virtual CartSearchCriteria CreateCartSearchCriteria(string cartName, Store store, User user, Language language, Currency currency, string type)

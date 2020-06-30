@@ -1,15 +1,39 @@
 namespace VirtoCommerce.Storefront.Infrastructure
 {
-    public class Mutation
+    public class QueryHelper
     {
         private readonly string externalHeader;
         private readonly string internalHeader;
 
-        public static string AddItemToCart
-        => @"mutation ($command:InputAddItemType!)
-        { 
+        public static string GetCart(string storeId, string cartName, string userId, string cultureName, string currencyCode, string type, string selectedFields)
+        => $@"
+        {{
+            cart(storeId:{storeId},cartName:{cartName},userId:{userId},cultureName:{cultureName},currencyCode:{currencyCode},type:{type})
+            {{
+            {selectedFields}
+            }}
+        }}";
+
+        public static string AddCoupon(string selectedFields)
+        => $@"mutation ($command:InputAddCouponType!)
+        {{
+            removeCartItem(command: $command)
+            {{
+            { selectedFields }
+            }}
+        }}";
+
+        public static string AddItemToCart(string selectedFields)
+        => $@"mutation ($command:InputAddItemType!)
+        {{ 
           addItem(command: $command) 
-          { 
+          {{ 
+            { selectedFields }
+          }}
+        }}";
+
+        public static string AllFields()
+            => @"
             id 
             name 
             status 
@@ -192,10 +216,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
             coupon {code isAppliedSuccessfully} 
             isValid 
             validationErrors{errorCode} 
-            type 
-          } 
-        }";
-
+            type";
         //public Mutation(string name, params KeyValuePair<string, string>[] parameters)
         //{
         //    externalHeader = $"mutation ({string.Join(',', parameters.Select(p => $"${p.Key}:{p.Value}").ToList())})";
