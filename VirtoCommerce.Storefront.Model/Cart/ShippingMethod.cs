@@ -81,25 +81,13 @@ namespace VirtoCommerce.Storefront.Model
         /// <summary>
         /// Resulting price with discount and tax
         /// </summary>
-        public Money TotalWithTax
-        {
-            get
-            {
-                return PriceWithTax - DiscountAmountWithTax;
-            }
-        }
+        public Money TotalWithTax { get; set; }
 
         /// <summary>
         /// Total discount amount without tax
         /// </summary>
         public Money DiscountAmount { get; set; }
-        public Money DiscountAmountWithTax
-        {
-            get
-            {
-                return DiscountAmount + DiscountAmount * TaxPercentRate;
-            }
-        }
+        public Money DiscountAmountWithTax { get; set; }
 
         /// <summary>
         /// Custom properties for shipping method
@@ -110,20 +98,14 @@ namespace VirtoCommerce.Storefront.Model
         /// <summary>
         /// Gets the value of total shipping method tax 
         /// </summary>
-        public Money TaxTotal
-        {
-            get
-            {
-                return TotalWithTax - Total;
-            }
-        }
+        public Money TaxTotal { get; set; }
 
         /// <summary>
         /// Gets or sets the value of shipping tax type
         /// </summary>
         public string TaxType { get; set; }
 
-        public decimal TaxPercentRate { get; private set; }
+        public decimal TaxPercentRate { get; set; }
 
         /// <summary>
         /// Gets or sets the collection of line item tax details lines
