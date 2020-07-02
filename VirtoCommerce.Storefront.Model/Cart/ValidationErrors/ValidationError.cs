@@ -9,6 +9,6 @@ namespace VirtoCommerce.Storefront.Model.Cart.ValidationErrors
             ErrorCode = GetType().Name;
         }
 
-        public string ErrorCode { get; private set; }
+        public string ErrorCode { get; set; }
     }
 }

@@ -60,24 +60,11 @@ namespace VirtoCommerce.Storefront.Model
         /// <summary>
         ///  price with tax but without discount
         /// </summary>
-        public Money PriceWithTax
-        {
-            get
-            {
-                return Price + Price * TaxPercentRate;
-            }
-        }
-
+        public Money PriceWithTax { get; set; }
         /// <summary>
         /// Resulting price with discount but without tax
         /// </summary>
-        public Money Total
-        {
-            get
-            {
-                return Price - DiscountAmount;
-            }
-        }
+        public Money Total { get; set; }
         /// <summary>
         /// Resulting price with discount and tax
         /// </summary>

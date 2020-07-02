@@ -15,6 +15,9 @@ namespace VirtoCommerce.Storefront.Model.Cart
     [SwaggerSchemaId("CartLineItem")]
     public partial class LineItem : Entity, IDiscountable, IValidatable, ITaxable, ICloneable
     {
+        public LineItem()
+        { }
+
         public LineItem(Currency currency, Language language)
         {
             Currency = currency;
@@ -256,6 +259,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <value>Dynamic properties collections</value>
         public IMutablePagedList<DynamicProperty> DynamicProperties { get; set; }
 
+        //TODO: implement ValidationError deserialization
         #region IValidatable Members
         public bool IsValid => ValidationErrors?.Any() ?? true;
         public IList<ValidationError> ValidationErrors { get; set; }
@@ -313,9 +317,9 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
 
         #region IDiscountable  Members
-        public Currency Currency { get; private set; }
+        public Currency Currency { get; set; }
 
-        public IList<Discount> Discounts { get; private set; }
+        public IList<Discount> Discounts { get; set; }
 
         public void ApplyRewards(IEnumerable<PromotionReward> rewards)
         {

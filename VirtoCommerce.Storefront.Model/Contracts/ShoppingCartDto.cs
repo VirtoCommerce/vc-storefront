@@ -77,14 +77,12 @@ namespace VirtoCommerce.Storefront.Model.Contracts
 
         public Money PaymentTotalWithTax { get; set; }
 
-        public Money ExtendedPriceTotal { get; set; }
+        //public Money ExtendedPriceTotal { get; set; }
 
-        public Money ExtendedPriceTotalWithTax { get; set; }
+        //public Money ExtendedPriceTotalWithTax { get; set; }
 
         public Money HandlingTotal { get; set; }
         public Money HandlingTotalWithTax { get; set; }
-
-        public Money DiscountAmount { get; set; }
 
         public Money DiscountTotal { get; set; }
 

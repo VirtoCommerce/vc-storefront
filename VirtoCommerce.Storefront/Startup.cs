@@ -125,7 +125,12 @@ namespace VirtoCommerce.Storefront
             services.AddTransient<AnonymousUserForStoreAuthorizationFilter>();
             services.AddScoped<IGraphQLClient>(s =>
                 new GraphQLHttpClient(Configuration.GetSection("VirtoCommerce:Endpoint:Url").Value + "/graphql",
-            new NewtonsoftJsonSerializer(p => p.Converters.Add(new GraphQlMoneyJsonConverter(s.GetService<IWorkContextAccessor>())))));
+            new NewtonsoftJsonSerializer(p =>
+            {
+                p.Converters.Add(new GraphQlMoneyJsonConverter(s.GetService<IWorkContextAccessor>()));
+                p.Converters.Add(new CurrencyJsonConverter(s.GetService<IWorkContextAccessor>()));
+                p.Converters.Add(new ValidationErrorJsonConverter());
+            })));
 
             //Register events framework dependencies
             services.AddSingleton(new InProcessBus());

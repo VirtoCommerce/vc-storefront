@@ -11,6 +11,9 @@ namespace VirtoCommerce.Storefront.JsonConverters
     public class GraphQlMoneyJsonConverter : JsonConverter<Money>
     {
         private readonly IWorkContextAccessor _workContextAccessor;
+        public override bool CanWrite => true;
+        public override bool CanRead => true;
+
         public GraphQlMoneyJsonConverter(IWorkContextAccessor workContextAccessor)
         {
             _workContextAccessor = workContextAccessor;
@@ -21,6 +24,10 @@ namespace VirtoCommerce.Storefront.JsonConverters
             var obj = JObject.Load(reader);
 
             var currencyCode = obj["currency"]?["code"]?.Value<string>() ?? _workContextAccessor.WorkContext.CurrentCurrency.Code;
+            if (currencyCode == null)
+            {
+                throw new NotSupportedException("Unknown currency code: " + currencyCode);
+            }
             var amount = obj["amount"].Value<decimal>();
             var currency = _workContextAccessor.WorkContext.AllCurrencies.FirstOrDefault(x => x.Equals(currencyCode));
             if (currency == null)
