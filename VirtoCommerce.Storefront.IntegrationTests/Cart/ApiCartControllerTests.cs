@@ -63,7 +63,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
             var result = await _client.GetCart();
 
             //assert
-            GetCartComparationResult(
+            GetComparationResultFromFile(
                 result,
                 "GetEmptyCartForAnonymous",
                 new[] { "$.customer", "$" },
@@ -85,7 +85,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
             var result = await _client.GetCart();
 
             //assert
-            GetCartComparationResult(
+            GetComparationResultFromFile(
                 result,
                 "GetFilledCartWithItem",
                 new[] { "$", "$.items[*]", "$.recentlyAddedItem", "$.items[*].product", "$.recentlyAddedItem.product" },
@@ -120,7 +120,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
             var result = await _client.GetCart();
 
             //assert
-            GetCartComparationResult(
+            GetComparationResultFromFile(
                     result,
                     "GetMergedAnonymousCartWithAdmin",
                     new[] { "$", "$.items[*]", "$.recentlyAddedItem", "$.items[*].product", "$.recentlyAddedItem.product" },
@@ -187,7 +187,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
             var result = await _client.GetCart();
 
             //assert
-            GetCartComparationResult(result, "GetEmptyCartForAdmin", new[] { "$" }, new[] { "id" })
+            GetComparationResultFromFile(result, "GetEmptyCartForAdmin", new[] { "$" }, new[] { "id" })
                 .Should()
                 .BeNull();
 
@@ -243,8 +243,9 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
 
             var response = await _client.PostAsync<ShoppingCartItems>(TestEnvironment.CartItemsEndpoint, content);
 
+
             //act
-            var result = _client.InsertCartItem(newItem);
+            _ = _client.InsertCartItem(newItem);
 
             //assert
             response.Should().BeEquivalentTo(new ShoppingCartItems { ItemsCount = 0 });
@@ -351,7 +352,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
             var result = await _client.GetStringAsync(TestEnvironment.ShippingMethodsEndpoint(shipmentId));
 
             //assert
-            GetCartComparationResult(result, "GetShipmentMethodsForAdmin")
+            GetComparationResultFromFile(result, "GetShipmentMethodsForAdmin")
                 .Should()
                 .BeNull();
 
@@ -369,7 +370,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
             var result = await _client.GetStringAsync(TestEnvironment.PaymentMethodsEndpoint);
 
             //assert
-            GetCartComparationResult(result, "GetPaymentMethodsForAdmin")
+            GetComparationResultFromFile(result, "GetPaymentMethodsForAdmin")
                 .Should()
                 .BeNull();
 
@@ -589,7 +590,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
             return jobject.ToObject<T>();
         }
 
-        private string GetCartComparationResult(string actualJson, string fileNameWithExpectation, IEnumerable<string> pathsForExclusion = null, IEnumerable<string> excludedProperties = null)
+        private string GetComparationResultFromFile(string actualJson, string fileNameWithExpectation, IEnumerable<string> pathsForExclusion = null, IEnumerable<string> excludedProperties = null)
         {
             var expectedResponse = File.ReadAllText($"Responses\\{fileNameWithExpectation}.json");
             return ComparationResult(actualJson, expectedResponse, pathsForExclusion, excludedProperties);

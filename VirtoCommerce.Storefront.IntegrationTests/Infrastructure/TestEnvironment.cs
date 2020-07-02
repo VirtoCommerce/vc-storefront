@@ -1,3 +1,6 @@
+using System.Linq;
+using VirtoCommerce.Storefront.Model.Common;
+
 namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
 {
     public static class TestEnvironment
@@ -23,6 +26,22 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
         public static string ShippingMethodsEndpoint(string shippmentId) =>
             $"storefrontapi/cart/shipments/{shippmentId}/shippingmethods";
 
+        public static string GetListsWithProduct => "storefrontapi/lists/getlistswithproduct";
+        public static string ListItemsEndpoint => "storefrontapi/lists/items";
+        public static string ListSearchEndpoint => "storefrontapi/lists/search";
+
+        public static string CreateList(string listName, string type) =>
+            $"storefrontapi/lists/{listName}/{type}/create";
+        public static string DeleteListByIds(string[] ids) =>
+            $"storefrontapi/lists/deletelistsbyids?{ids.Select(x => $"listIds={x}").JoinWithoutWhitespaces("&")}";
+        public static string GetList(string listName, string type) =>
+            $"storefrontapi/lists/{listName}/{type}";
+        public static string ClearList(string listName, string type) =>
+            $"storefrontapi/lists/{listName}/{type}/clear";
+        public static string MergeWithCurrentCart(string listName, string type) =>
+            $"storefrontapi/lists/{listName}/{type}/mergewithcurrentcart";
+        public static string DeleteListItemEndpoint(string lineItemId, string listName, string type) =>
+            $"storefrontapi/lists/{listName}/{type}/items/{lineItemId}";
     }
 
     public static class Product

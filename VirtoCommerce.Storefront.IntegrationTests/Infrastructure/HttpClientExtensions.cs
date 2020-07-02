@@ -220,6 +220,126 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
             return await response.Content.ReadAsStringAsync();
         }
 
+
+        public static HttpClient CreateList(this HttpClient client, string listName, string type)
+        {
+            var response = client.PostAsync(TestEnvironment.CreateList(listName, type), null).GetAwaiter().GetResult();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Create list failed: {response.StatusCode}");
+            }
+
+            return client;
+        }
+
+        public static HttpClient DeleteListsByIds(this HttpClient client, string[] ids)
+        {
+            var response = client.DeleteAsync(TestEnvironment.DeleteListByIds(ids)).GetAwaiter().GetResult();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Delete lists failed: {response.StatusCode}");
+            }
+
+            return client;
+        }
+
+        public static async Task<string> GetList(this HttpClient client, string listName, string type)
+        {
+            var response = await client.GetAsync(TestEnvironment.GetList(listName, type));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Get list failed: {response.StatusCode}");
+            }
+
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        public static async Task<string> GetListsWithProduct(this HttpClient client, GetCartsWithProductRequest request)
+        {
+            var content = new StringContent(
+                JsonConvert.SerializeObject(request),
+                Encoding.UTF8,
+                "application/json");
+
+            var response = await client.PostAsync(TestEnvironment.GetListsWithProduct, content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Get list with product failed: {response.StatusCode}");
+            }
+
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        public static async Task<string> SearchLists(this HttpClient client, CartSearchCriteria searchCriteria)
+        {
+            var content = new StringContent(
+                JsonConvert.SerializeObject(searchCriteria),
+                Encoding.UTF8,
+                "application/json");
+
+            var response = await client.PostAsync(TestEnvironment.ListSearchEndpoint, content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Search lists failed: {response.StatusCode}");
+            }
+
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        public static HttpClient ClearList(this HttpClient client, string listName, string type)
+        {
+            var response = client.PostAsync(TestEnvironment.ClearList(listName, type), new StringContent("")).GetAwaiter().GetResult();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Clear list failed: {response.StatusCode}");
+            }
+
+            return client;
+        }
+
+        public static HttpClient InsertListItem(this HttpClient client, AddCartItem item)
+        {
+            var content = new StringContent(
+                JsonConvert.SerializeObject(item),
+                Encoding.UTF8,
+                "application/json");
+
+            var response = client.PostAsync(TestEnvironment.ListItemsEndpoint, content).GetAwaiter().GetResult();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Fill list failed: {response.StatusCode}");
+            }
+
+            return client;
+        }
+
+        public static HttpClient DeleteListItem(this HttpClient client, string lineItemId, string listName, string type)
+        {
+            var response = client.DeleteAsync(TestEnvironment.DeleteListItemEndpoint(lineItemId, listName, type)).GetAwaiter().GetResult();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Delete line item from list failed: {response.StatusCode}");
+            }
+
+            return client;
+        }
+
+        public static HttpClient MergeWithCurrentCart(this HttpClient client, string listName, string type)
+        {
+            var response = client.PostAsync(TestEnvironment.MergeWithCurrentCart(listName, type), new StringContent("")).GetAwaiter().GetResult();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Fill list failed: {response.StatusCode}");
+            }
+
+            return client;
+        }
+
         public static async Task<string> GetCartAvailPaymentMethods(this HttpClient client)
         {
             var response = await client.GetAsync(TestEnvironment.PaymentMethodsEndpoint);
