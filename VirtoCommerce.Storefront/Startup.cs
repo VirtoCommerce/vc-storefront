@@ -119,14 +119,13 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IRecommendationProviderFactory, RecommendationProviderFactory>(provider => new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(), provider.GetService<CognitiveRecommendationsProvider>()));
             services.AddTransient<IQuoteRequestBuilder, QuoteRequestBuilder>();
             services.AddSingleton<IBlobChangesWatcher, BlobChangesWatcher>();
-            services.AddTransient<ICartBuilder, CartBuilder>();
+            services.AddTransient<ICartBuilder, ExperienceCartBuilder>();
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<AngularAntiforgeryCookieResultFilter>();
             services.AddTransient<AnonymousUserForStoreAuthorizationFilter>();
-            services.AddTransient<IGraphQlService, GraphQlService>();
             services.AddScoped<IGraphQLClient>(s =>
                 new GraphQLHttpClient(Configuration.GetSection("VirtoCommerce:Endpoint:Url").Value + "/graphql",
-            new NewtonsoftJsonSerializer(p => p.Converters.Add(new MoneyJsonConverter(s.GetService<IWorkContextAccessor>())))));
+            new NewtonsoftJsonSerializer(p => p.Converters.Add(new GraphQlMoneyJsonConverter(s.GetService<IWorkContextAccessor>())))));
 
             //Register events framework dependencies
             services.AddSingleton(new InProcessBus());

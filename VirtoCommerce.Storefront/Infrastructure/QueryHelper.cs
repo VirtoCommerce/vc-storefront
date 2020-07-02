@@ -5,34 +5,97 @@ namespace VirtoCommerce.Storefront.Infrastructure
         private readonly string externalHeader;
         private readonly string internalHeader;
 
-        public static string GetCart(string storeId, string cartName, string userId, string cultureName, string currencyCode, string type, string selectedFields)
+        public static string GetCart(string storeId, string cartName, string userId, string cultureName, string currencyCode, string type, string selectedFields = null)
         => $@"
         {{
-            cart(storeId:{storeId},cartName:{cartName},userId:{userId},cultureName:{cultureName},currencyCode:{currencyCode},type:{type})
+            cart(storeId:""{storeId}"",cartName:""{cartName}"",userId:""{userId}"",cultureName:""{cultureName}"",currencyCode:""{currencyCode}"",type:""{type}"")
             {{
-            {selectedFields}
+            {selectedFields ?? AllFields()}
             }}
         }}";
 
-        public static string AddCoupon(string selectedFields)
+        public static string ClearCart(string selectedFields = null)
+        => $@"mutation ($command:InputClearCartType!)
+        {{
+            clearCart(command: $command)
+            {{
+            {selectedFields ?? AllFields()}
+            }}
+        }}";
+
+        public static string AddCoupon(string selectedFields = null)
         => $@"mutation ($command:InputAddCouponType!)
         {{
             removeCartItem(command: $command)
             {{
-            { selectedFields }
+            { selectedFields ?? AllFields() }
             }}
         }}";
 
-        public static string AddItemToCart(string selectedFields)
+        public static string AddItemToCart(string selectedFields = null)
         => $@"mutation ($command:InputAddItemType!)
         {{ 
           addItem(command: $command) 
           {{ 
-            { selectedFields }
+            { selectedFields ?? AllFields() }
           }}
         }}";
 
-        public static string AllFields()
+        public static string AddOrUpdatePayment(string selectedFields = null)
+        => $@"mutation ($command:InputAddOrUpdateCartPaymentType!)
+        {{ 
+          addOrUpdateCartPayment(command: $command)
+          {{ 
+            { selectedFields ?? AllFields() }
+          }}
+        }}";
+
+        public static string AddOrUpdateShippment(string selectedFields = null)
+        => $@"mutation ($command:InputAddOrUpdateCartShipmentType!)
+        {{ 
+          addOrUpdateCartShipment(command: $command)
+          {{ 
+            { selectedFields ?? AllFields() }
+          }}
+        }}";
+
+        public static string ChangeCartComment(string selectedFields = null)
+        => $@"mutation ($command:InputChangeCommentType!)
+        {{ 
+          changeComment(command: $command)
+          {{ 
+            { selectedFields ?? AllFields() }
+          }}
+        }}";
+
+        public static string ChangeCartItemPrice(string selectedFields = null)
+        => $@"mutation ($command:InputChangeCartItemPriceType!)
+        {{ 
+          changeCartItemPrice(command: $command)
+          {{ 
+            { selectedFields ?? AllFields() }
+          }}
+        }}";
+
+        public static string ChangeCartItemQuantity(string selectedFields = null)
+        => $@"mutation ($command:InputChangeCartItemQuantityType!)
+        {{ 
+          changeCartItemQuantity(command: $command)
+          {{ 
+            { selectedFields ?? AllFields() }
+          }}
+        }}";
+
+        public static string RemoveCartItem(string selectedFields = null)
+        => $@"mutation ($command:InputRemoveItemType!)
+        {{ 
+          removeCartItem(command: $command)
+          {{ 
+            { selectedFields ?? AllFields() }
+          }}
+        }}";
+
+        private static string AllFields()
             => @"
             id 
             name 
@@ -212,8 +275,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
             }  
             itemsCount
             itemsQuantity
-            coupon {code isAppliedSuccessfully} 
-            coupon {code isAppliedSuccessfully} 
+            coupons {code isAppliedSuccessfully} 
             isValid 
             validationErrors{errorCode} 
             type";

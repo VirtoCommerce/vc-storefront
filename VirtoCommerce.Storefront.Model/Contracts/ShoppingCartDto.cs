@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.ValidationErrors;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Subscriptions;
 
-namespace VirtoCommerce.Storefront.Model.Cart
+namespace VirtoCommerce.Storefront.Model.Contracts
 {
     public class ShoppingCartDto
     {
@@ -34,25 +35,25 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
         public string OrganizationId { get; set; }
 
-        public bool IsRecuring { get; set; }
+        public bool? IsRecuring { get; set; }
 
         public string Comment { get; set; }
         [JsonIgnore]
         public string Note => Comment;
 
-        public decimal VolumetricWeight { get; set; }
+        public decimal? VolumetricWeight { get; set; }
 
         public string WeightUnit { get; set; }
 
-        public decimal Weight { get; set; }
+        public decimal? Weight { get; set; }
 
-        public string MeasureUnit { get; set; }
+        //public string MeasureUnit { get; set; }
 
-        public decimal Height { get; set; }
+        //public decimal Height { get; set; }
 
-        public decimal Length { get; set; }
+        //public decimal Length { get; set; }
 
-        public decimal Width { get; set; }
+        //public decimal Width { get; set; }
 
         public Money Total { get; set; }
 

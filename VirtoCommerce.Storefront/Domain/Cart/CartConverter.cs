@@ -6,6 +6,7 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Contracts;
 using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Stores;
@@ -540,10 +541,60 @@ namespace VirtoCommerce.Storefront.Domain
              DiscountTotalWithTax = new Money(cartDto.DiscountTotalWithTax.Amount, currency), //TODO: check on whether it's correct or not
              TaxTotal = new Money(cartDto.TaxTotal.Amount, currency),
              IsAnonymous = cartDto.IsAnonymous,
-             IsRecuring = cartDto.IsRecuring,
-             VolumetricWeight = cartDto.VolumetricWeight,
-             Weight = cartDto.Weight
+             IsRecuring = cartDto.IsRecuring.GetValueOrDefault(),
+             VolumetricWeight = cartDto.VolumetricWeight.GetValueOrDefault(),
+             Weight = cartDto.Weight.GetValueOrDefault()
          };
+
+        public static ShipmentDto ToDto(this Shipment shipment)
+            => new ShipmentDto
+            {
+                FulfillmentCenterId = shipment.FulfillmentCenterId,
+                Height = shipment.Height.HasValue ? Convert.ToDecimal(shipment.Height.Value) : (decimal?)null,
+                Length = shipment.Length.HasValue ? Convert.ToDecimal(shipment.Length.Value) : (decimal?)null,
+                MeasureUnit = shipment.MeasureUnit,
+                ShipmentMethodCode = shipment.ShipmentMethodCode,
+                ShipmentMethodOption = shipment.ShipmentMethodOption,
+                VolumetricWeight = shipment.VolumetricWeight,
+                Weight = shipment.Weight.HasValue ? Convert.ToDecimal(shipment.Weight.Value) : (decimal?)null,
+                WeightUnit = shipment.WeightUnit,
+                Width = shipment.Width.HasValue ? Convert.ToDecimal(shipment.Width.Value) : (decimal?)null,
+                DeliveryAddress = shipment.DeliveryAddress.ToDto(),
+                Currency = shipment.Currency.Code,
+                Price = shipment.Price.Amount
+            };
+
+        public static AddressDto ToDto(this Address address)
+        => new AddressDto
+        {
+            City = address.City,
+            CountryCode = address.CountryCode,
+            CountryName = address.CountryName,
+            Email = address.Email,
+            FirstName = address.FirstName,
+            Key = address.Key,
+            LastName = address.LastName,
+            Line1 = address.Line1,
+            Line2 = address.Line2,
+            MiddleName = address.MiddleName,
+            Name = address.Name,
+            Organization = address.Organization,
+            Phone = address.Phone,
+            PostalCode = address.PostalCode,
+            RegionId = address.RegionId,
+            RegionName = address.RegionName,
+            Zip = address.Zip
+        };
+
+        public static PaymentDto ToDto(this Payment payment)
+        => new PaymentDto
+        {
+            OuterId = payment.OuterId,
+            PaymentGatewayCode = payment.PaymentGatewayCode,
+            BillingAddress = payment.BillingAddress.ToDto(),
+            Currency = payment.Currency.Code,
+            Price = payment.Price.Amount
+        };
 
         public static cartDto.ShoppingCart ToShoppingCartDto(this ShoppingCart cart)
         {
