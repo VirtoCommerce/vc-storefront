@@ -214,7 +214,7 @@ namespace VirtoCommerce.Storefront.Model.Common
 
         public static Money operator -(Money first, Money second)
         {
-            return new Money(first.InternalAmount - second.ConvertTo(first.Currency).InternalAmount, first.Currency);
+            return new Money(first.InternalAmount - second?.ConvertTo(first.Currency).InternalAmount ?? 0m, first.Currency);
         }
 
         public static Money operator *(Money first, Money second)

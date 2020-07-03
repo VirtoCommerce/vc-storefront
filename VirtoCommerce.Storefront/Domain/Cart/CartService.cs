@@ -2,16 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GraphQL;
+using GraphQL.Client.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using PagedList.Core;
 using VirtoCommerce.Storefront.AutoRestClients.CartModuleApi;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
+using VirtoCommerce.Storefront.Model.Contracts;
 using VirtoCommerce.Storefront.Model.Security;
 
 namespace VirtoCommerce.Storefront.Domain.Cart
@@ -21,13 +25,15 @@ namespace VirtoCommerce.Storefront.Domain.Cart
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly ICartModule _cartApi;
         private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly IGraphQLClient _client;
         private readonly UserManager<User> _userManager;
 
         public CartService(ICartModule cartModule, IWorkContextAccessor workContextAccessor,
-            IStorefrontMemoryCache memoryCache, UserManager<User> userManager)
+            IStorefrontMemoryCache memoryCache, IGraphQLClient client, UserManager<User> userManager)
         {
             _cartApi = cartModule;
             _memoryCache = memoryCache;
+            _client = client;
             _workContextAccessor = workContextAccessor;
             _userManager = userManager;
         }
@@ -114,18 +120,29 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             {
                 cacheEntry.AddExpirationToken(CartCacheRegion.CreateCustomerChangeToken(criteria.Customer?.Id));
 
-                var resultDto = await _cartApi.SearchShoppingCartAsync(criteria.ToSearchCriteriaDto());
-                var result = new List<ShoppingCart>();
-                foreach (var cartDto in resultDto.Results)
-                {
-                    var currency = _workContextAccessor.WorkContext.AllCurrencies.FirstOrDefault(x => x.Equals(cartDto.Currency));
-                    var language = string.IsNullOrEmpty(cartDto.LanguageCode) ? Language.InvariantLanguage : new Language(cartDto.LanguageCode);
-                    var user = await _userManager.FindByIdAsync(cartDto.CustomerId) ?? criteria.Customer;
-                    var cart = cartDto.ToShoppingCart(currency, language, user);
-                    result.Add(cart);
-                }
-                return new StaticPagedList<ShoppingCart>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalCount.Value);
+                var cartDto = await SearchCartAsync(criteria);
+                var currency = _workContextAccessor.WorkContext.AllCurrencies.FirstOrDefault(x => x.Equals(cartDto.Currency));
+                var language = cartDto.Language ?? Language.InvariantLanguage;
+                var user = await _userManager.FindByIdAsync(cartDto.CustomerId) ?? criteria.Customer;
+                var cart = cartDto.ToShoppingCart(currency, language, user);
+
+                return new StaticPagedList<ShoppingCart>(new[] { cart }, criteria.PageNumber, criteria.PageSize, cartDto.ItemsCount);
             });
+        }
+
+        private async Task<ShoppingCartDto> SearchCartAsync(CartSearchCriteria criteria)
+        {
+            var query = QueryHelper.GetCart(
+                storeId: criteria.StoreId,
+                cartName: criteria.Name,
+                userId: criteria.Customer.Id,
+                cultureName: criteria.Language?.CultureName ?? "en-US",
+                currencyCode: criteria.Currency.Code,
+                type: criteria.Type ?? string.Empty);
+
+            var response = await _client.SendQueryAsync<GetCartResponseDto>(new GraphQLRequest { Query = query });
+
+            return response.Data.Cart;
         }
 
 

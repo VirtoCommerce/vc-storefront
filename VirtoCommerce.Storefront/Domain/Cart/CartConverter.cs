@@ -6,6 +6,7 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Contracts;
 using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Stores;
@@ -497,6 +498,101 @@ namespace VirtoCommerce.Storefront.Domain
 
             return result;
         }
+
+        public static ShoppingCart ToShoppingCart(this ShoppingCartDto cartDto, Currency currency, Language language, User user)
+         => new ShoppingCart(currency, language)
+         {
+             ChannelId = cartDto.ChannelId,
+             Comment = cartDto.Comment,
+             CustomerId = cartDto.CustomerId,
+             CustomerName = cartDto.CustomerName,
+             Id = cartDto.Id,
+             Name = cartDto.Name,
+             ObjectType = cartDto.ObjectType,
+             OrganizationId = cartDto.OrganizationId,
+             Status = cartDto.Status,
+             StoreId = cartDto.StoreId,
+             Type = cartDto.Type,
+             Customer = user,
+             Coupons = cartDto.Coupons ?? new List<Coupon>(),
+             Items = cartDto.Items,
+             Addresses = cartDto.Addresses,
+             Payments = cartDto.Payments,
+             Shipments = cartDto.Shipments,
+             DynamicProperties = cartDto.DynamicProperties,
+             TaxDetails = cartDto.TaxDetails,
+             DiscountAmount = cartDto.DiscountTotal,
+             HandlingTotal = cartDto.HandlingTotal,
+             HandlingTotalWithTax = cartDto.HandlingTotalWithTax,
+             Total = cartDto.Total,
+             SubTotal = cartDto.SubTotal,
+             SubTotalWithTax = cartDto.SubTotalWithTax,
+             ShippingPrice = cartDto.ShippingPrice,
+             ShippingPriceWithTax = cartDto.ShippingPriceWithTax,
+             ShippingTotal = cartDto.ShippingTotal,
+             ShippingTotalWithTax = cartDto.ShippingTotalWithTax,
+             PaymentPrice = cartDto.PaymentPrice,
+             PaymentPriceWithTax = cartDto.PaymentPriceWithTax,
+             PaymentTotal = cartDto.PaymentTotal,
+             PaymentTotalWithTax = cartDto.PaymentTotalWithTax,
+             DiscountTotal = cartDto.DiscountTotal,
+             DiscountTotalWithTax = cartDto.DiscountTotalWithTax,
+             TaxTotal = cartDto.TaxTotal,
+             IsAnonymous = cartDto.IsAnonymous,
+             IsRecuring = cartDto.IsRecuring.GetValueOrDefault(),
+             VolumetricWeight = cartDto.VolumetricWeight.GetValueOrDefault(),
+             Weight = cartDto.Weight.GetValueOrDefault()
+         };
+
+        public static ShipmentDto ToDto(this Shipment shipment)
+            => new ShipmentDto
+            {
+                FulfillmentCenterId = shipment.FulfillmentCenterId,
+                Height = shipment.Height.HasValue ? Convert.ToDecimal(shipment.Height.Value) : (decimal?)null,
+                Length = shipment.Length.HasValue ? Convert.ToDecimal(shipment.Length.Value) : (decimal?)null,
+                MeasureUnit = shipment.MeasureUnit,
+                ShipmentMethodCode = shipment.ShipmentMethodCode,
+                ShipmentMethodOption = shipment.ShipmentMethodOption,
+                VolumetricWeight = shipment.VolumetricWeight,
+                Weight = shipment.Weight.HasValue ? Convert.ToDecimal(shipment.Weight.Value) : (decimal?)null,
+                WeightUnit = shipment.WeightUnit,
+                Width = shipment.Width.HasValue ? Convert.ToDecimal(shipment.Width.Value) : (decimal?)null,
+                DeliveryAddress = shipment.DeliveryAddress.ToDto(),
+                Currency = shipment.Currency.Code,
+                Price = shipment.Price.Amount
+            };
+
+        public static AddressDto ToDto(this Address address)
+        => new AddressDto
+        {
+            City = address.City,
+            CountryCode = address.CountryCode,
+            CountryName = address.CountryName,
+            Email = address.Email,
+            FirstName = address.FirstName,
+            Key = address.Key,
+            LastName = address.LastName,
+            Line1 = address.Line1,
+            Line2 = address.Line2,
+            MiddleName = address.MiddleName,
+            Name = address.Name,
+            Organization = address.Organization,
+            Phone = address.Phone,
+            PostalCode = address.PostalCode,
+            RegionId = address.RegionId,
+            RegionName = address.RegionName,
+            Zip = address.Zip
+        };
+
+        public static PaymentDto ToDto(this Payment payment)
+        => new PaymentDto
+        {
+            OuterId = payment.OuterId,
+            PaymentGatewayCode = payment.PaymentGatewayCode,
+            BillingAddress = payment.BillingAddress.ToDto(),
+            Currency = payment.Currency.Code,
+            Price = payment.Price.Amount
+        };
 
         public static cartDto.ShoppingCart ToShoppingCartDto(this ShoppingCart cart)
         {

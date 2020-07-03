@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using FluentValidation.AspNetCore;
+using GraphQL.Client.Abstractions;
+using GraphQL.Client.Http;
+using GraphQL.Client.Serializer.Newtonsoft;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -116,10 +119,18 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IRecommendationProviderFactory, RecommendationProviderFactory>(provider => new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(), provider.GetService<CognitiveRecommendationsProvider>()));
             services.AddTransient<IQuoteRequestBuilder, QuoteRequestBuilder>();
             services.AddSingleton<IBlobChangesWatcher, BlobChangesWatcher>();
-            services.AddTransient<ICartBuilder, CartBuilder>();
+            services.AddTransient<ICartBuilder, ExperienceCartBuilder>();
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<AngularAntiforgeryCookieResultFilter>();
             services.AddTransient<AnonymousUserForStoreAuthorizationFilter>();
+            services.AddScoped<IGraphQLClient>(s =>
+                new GraphQLHttpClient(Configuration.GetSection("VirtoCommerce:Endpoint:Url").Value + "/graphql",
+            new NewtonsoftJsonSerializer(p =>
+            {
+                p.Converters.Add(new GraphQlMoneyJsonConverter(s.GetService<IWorkContextAccessor>()));
+                p.Converters.Add(new CurrencyJsonConverter(s.GetService<IWorkContextAccessor>()));
+                p.Converters.Add(new ValidationErrorJsonConverter());
+            })));
 
             //Register events framework dependencies
             services.AddSingleton(new InProcessBus());
