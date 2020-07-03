@@ -474,8 +474,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                 .Logout();
         }
 
-        // TODO: Fix problems while saving cart.
-        [Fact(Skip = "Cart not saved due to exception")]
+        [Fact]
         public async Task AddOrUpdateCartShipment_IfShipmentIsRegistered_ShouldAddCartShipment()
         {
             //arrange
@@ -483,10 +482,8 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                 .Login("admin", "store")
                 .ClearCart();
 
-            var shipment = GetRequestDataFromFile<Shipment>("AddOrUpdateCartShipmentIsRegistered");
-
             //act
-            var response = await _client.AddOrUpdateCartShipment(shipment);
+            var response = await _client.AddOrUpdateCartShipment(TestRequestEnvironment.ShipmentIsRegistered);
             var content = await response.Content.ReadAsStringAsync();
 
             //assert
@@ -502,8 +499,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                 .Logout();
         }
 
-        // TODO: Fix problems while saving cart.
-        [Fact(Skip = "Cart not saved due to exception")]
+        [Fact]
         public async Task AddOrUpdateCartShipment_IfShipmentIsNotRegistered_ShouldReturnBadRequest()
         {
             //arrange
@@ -511,10 +507,8 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                 .Login("admin", "store")
                 .ClearCart();
 
-            var shipment = GetRequestDataFromFile<Shipment>("AddOrUpdateCartShipmentIsNotRegistered");
-
             //act
-            var response = await _client.AddOrUpdateCartShipment(shipment);
+            var response = await _client.AddOrUpdateCartShipment(TestRequestEnvironment.ShipmentIsNotRegistered);
 
             //assert
             response.IsSuccessStatusCode.Should().BeFalse();
@@ -524,8 +518,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                 .Logout();
         }
 
-        // TODO: Fix problems while saving cart.
-        [Fact(Skip = "Cart not saved due to exception")]
+        [Fact]
         public async Task AddOrUpdateCartPayment_IfPaymentIsRegistered_ShouldAddCartPayment()
         {
             //arrange
@@ -533,13 +526,8 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                 .Login("admin", "store")
                 .ClearCart();
 
-            var payment = GetRequestDataFromFile<Payment>("AddOrUpdateCartShipmentIsRegistered");
-
-            var paymentPlan = new Fixture().Create<PaymentPlan>();
-            _client.AddOrUpdateCartPaymentPlan(paymentPlan);
-
             //act
-            var response = await _client.AddOrUpdateCartPayment(payment);
+            var response = await _client.AddOrUpdateCartPayment(TestRequestEnvironment.PaymentIsRegistered);
 
             //assert
             response.IsSuccessStatusCode.Should().BeTrue();
@@ -549,8 +537,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                 .Logout();
         }
 
-        // TODO: Fix problems while saving cart.
-        [Fact(Skip = "Cart not saved due to exception")]
+        [Fact]
         public async Task AddOrUpdateCartPayment_IfPaymentIsNotRegistered_ShouldReturnBadRequest()
         {
             //arrange
@@ -558,13 +545,8 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                 .Login("admin", "store")
                 .ClearCart();
 
-            var payment = GetRequestDataFromFile<Payment>("AddOrUpdateCartShipmentIsRegistered");
-
-            var paymentPlan = new Fixture().Create<PaymentPlan>();
-            _client.AddOrUpdateCartPaymentPlan(paymentPlan);
-
             //act
-            var response = await _client.AddOrUpdateCartPayment(payment);
+            var response = await _client.AddOrUpdateCartPayment(TestRequestEnvironment.PaymentIsNotRegistered);
 
             //assert
             response.IsSuccessStatusCode.Should().BeFalse();
@@ -587,6 +569,18 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
             var jobject = JObject.Parse(response);
 
             return jobject.ToObject<T>();
+        }
+
+        private string GetRequestDataFromFile(string fileNameWithExpectation)
+        {
+            var response = File.ReadAllText($"Requests\\{fileNameWithExpectation}.json");
+
+            if (string.IsNullOrEmpty(response))
+            {
+                throw new Exception($"Get request data from file {fileNameWithExpectation} failed");
+            }
+
+            return response;
         }
 
         private string GetCartComparationResult(string actualJson, string fileNameWithExpectation, IEnumerable<string> pathsForExclusion = null, IEnumerable<string> excludedProperties = null)

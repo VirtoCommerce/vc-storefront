@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using VirtoCommerce.Storefront.IntegrationTests.Models;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Subscriptions;
@@ -186,26 +187,24 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
 
         public static async Task<HttpResponseMessage> AddOrUpdateCartPayment(this HttpClient client, Payment payment)
         {
-            var content = new StringContent(
-                JsonConvert.SerializeObject(payment),
-                Encoding.UTF8,
-                "application/json");
+            var serializerSettings = new JsonSerializerSettings();
+            serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
-            var response = await client.PostAsync(TestEnvironment.CartPaymentEndpoint, content);
+            var serializedObject = JsonConvert.SerializeObject(payment, serializerSettings);
+            var content = new StringContent(serializedObject, Encoding.UTF8, "application/json");
 
-            return response;
+            return await client.PostAsync(TestEnvironment.CartPaymentEndpoint, content);
         }
 
         public static async Task<HttpResponseMessage> AddOrUpdateCartShipment(this HttpClient client, Shipment shipment)
         {
-            var content = new StringContent(
-                JsonConvert.SerializeObject(shipment),
-                Encoding.UTF8,
-                "application/json");
+            var serializerSettings = new JsonSerializerSettings();
+            serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
-            var response = await client.PostAsync(TestEnvironment.CartShipmentEndpoint, content);
+            var serializedObject = JsonConvert.SerializeObject(shipment, serializerSettings);
+            var content = new StringContent(serializedObject, Encoding.UTF8, "application/json");
 
-            return response;
+            return await client.PostAsync(TestEnvironment.CartShipmentEndpoint, content);
         }
 
         public static async Task<string> GetCart(this HttpClient client)
