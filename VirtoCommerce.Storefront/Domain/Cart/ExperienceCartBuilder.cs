@@ -185,7 +185,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                 return;
             }
 
-            await ChangeLineItemQuantity(lineItem.ProductId, changeItemQty.Quantity);
+            await ChangeLineItemQuantity(changeItemQty.LineItemId, changeItemQty.Quantity);
         }
 
         public async Task ChangeItemQuantityAsync(int lineItemIndex, int quantity)
@@ -198,7 +198,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                 return;
             }
 
-            await ChangeLineItemQuantity(lineItem.ProductId, quantity);
+            await ChangeLineItemQuantity(lineItem.Id, quantity);
         }
 
         public Task ChangeItemsQuantitiesAsync(int[] quantities)
@@ -245,11 +245,13 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             throw new NotImplementedException();
         }
 
+        //TODO: How to implement: get new request of shopping cart or use this.Cart ?
         public Task<IEnumerable<PaymentMethod>> GetAvailablePaymentMethodsAsync()
         {
             throw new NotImplementedException();
         }
 
+        //TODO: How to implement: get new request of shopping cart or use this.Cart ?
         public Task<IEnumerable<ShippingMethod>> GetAvailableShippingMethodsAsync()
         {
             throw new NotImplementedException();
@@ -292,14 +294,6 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
         public async Task RemoveItemAsync(string lineItemId)
         {
-            EnsureCartExists();
-
-            var lineItem = Cart.Items.FirstOrDefault(i => i.Id == lineItemId);
-            if (lineItem == null)
-            {
-                return;
-            }
-
             var request = new GraphQLRequest
             {
                 Query = QueryHelper.RemoveCartItem(),
@@ -313,7 +307,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                         Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
                         Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
-                        ProductId = lineItem.ProductId
+                        LineItemId = lineItemId
                     }
                 }
             };
@@ -394,7 +388,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             }
         }
 
-        private async Task ChangeLineItemQuantity(string productId, decimal quantity)
+        private async Task ChangeLineItemQuantity(string lineItemId, int quantity)
         {
             var request = new GraphQLRequest
             {
@@ -409,7 +403,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                         Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
                         Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
-                        ProductId = productId,
+                        LineItemId = lineItemId,
                         Quantity = quantity
                     }
                 }

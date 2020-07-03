@@ -2,9 +2,6 @@ namespace VirtoCommerce.Storefront.Infrastructure
 {
     public class QueryHelper
     {
-        private readonly string externalHeader;
-        private readonly string internalHeader;
-
         public static string GetCart(string storeId, string cartName, string userId, string cultureName, string currencyCode, string type, string selectedFields = null)
         => $@"
         {{
