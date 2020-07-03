@@ -92,46 +92,8 @@ namespace VirtoCommerce.Storefront.Infrastructure
           }}
         }}";
 
-        private static string AllFields()
+        public static string AvailableShippingMethods()
             => @"
-            id 
-            name 
-            status 
-            storeId 
-            channelId 
-            isAnonymous 
-            customerId 
-            customerName 
-            organizationId 
-            isRecuring 
-            comment 
-            volumetricWeight 
-            weightUnit 
-            weight 
-            currency {code symbol exchangeRate customFormatting} 
-            taxPercentRate 
-            taxType 
-            taxDetails 
-            {
-              rate {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              amount {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              name 
-              price {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            } 
-            shipments
-            {
-              shipmentMethodCode 
-              shipmentMethodOption 
-              fulfillmentCenterId 
-              deliveryAddress{key name organization countryCode countryName city postalCode zip line1 line2 regionId regionName firstName middleName lastName phone email} 
-              volumetricWeight 
-              weightUnit 
-              weight 
-              measureUnit 
-              height 
-              length 
-              width
-            } 
             availableShippingMethods
             {
               code 
@@ -146,32 +108,10 @@ namespace VirtoCommerce.Storefront.Infrastructure
               totalWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency} 
               discountAmount {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency} 
               discountAmountWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            } 
-            discounts
-            {
-              promotionId
-              amount {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              coupon 
-              description
-            } 
-            currency{code symbol exchangeRate customFormatting} 
-            payments
-            {
-              outerId 
-              paymentGatewayCode 
-              currency{code symbol exchangeRate customFormatting} 
-              billingAddress{key name organization countryCode countryName city postalCode zip line1 line2 regionId regionName firstName middleName lastName phone email} 
-              taxPercentRate 
-              taxType 
-              taxDetails
-              {
-                rate {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-                amount {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-                name
-                price {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              }
-              discounts{promotionId coupon description}
-            } 
+            }";
+
+        public static string AvailablePaymentMethods()
+            => @"
             availablePaymentMethods
             {
               code 
@@ -198,9 +138,77 @@ namespace VirtoCommerce.Storefront.Infrastructure
                 name
                 price {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
               }
-            } 
+            }";
+
+        private static string AllFields()
+            => $@"
+            id 
+            name 
+            status 
+            storeId 
+            channelId 
+            isAnonymous 
+            customerId 
+            customerName 
+            organizationId 
+            isRecuring 
+            comment 
+            volumetricWeight 
+            weightUnit 
+            weight 
+            currency {{code symbol exchangeRate customFormatting}}
+            taxPercentRate 
+            taxType 
+            taxDetails 
+            {{
+              rate {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+              amount {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+              name 
+              price {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            }}
+            shipments
+            {{
+              shipmentMethodCode 
+              shipmentMethodOption 
+              fulfillmentCenterId 
+              deliveryAddress{{key name organization countryCode countryName city postalCode zip line1 line2 regionId regionName firstName middleName lastName phone email}} 
+              volumetricWeight 
+              weightUnit 
+              weight 
+              measureUnit 
+              height 
+              length 
+              width
+            }} 
+            {AvailableShippingMethods()} 
+            discounts
+            {{
+              promotionId
+              amount {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+              coupon 
+              description
+            }} 
+            currency{{code symbol exchangeRate customFormatting}} 
+            payments
+            {{
+              outerId 
+              paymentGatewayCode 
+              currency{{code symbol exchangeRate customFormatting}}
+              billingAddress{{key name organization countryCode countryName city postalCode zip line1 line2 regionId regionName firstName middleName lastName phone email}} 
+              taxPercentRate 
+              taxType 
+              taxDetails
+              {{
+                rate {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+                amount {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+                name
+                price {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+              }}
+              discounts{{promotionId coupon description}}
+            }} 
+            {AvailablePaymentMethods()} 
             addresses
-            {
+            {{
               key 
               name 
               organization 
@@ -218,9 +226,9 @@ namespace VirtoCommerce.Storefront.Infrastructure
               lastName 
               phone 
               email
-            } 
+            }} 
             items
-            {
+            {{
               id
               createdDate 
               productId 
@@ -246,65 +254,51 @@ namespace VirtoCommerce.Storefront.Infrastructure
               length 
               width 
               isReadOnly 
-              listPrice {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              listPriceWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              salePrice {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              salePriceWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              placedPrice {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              placedPriceWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              extendedPrice {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              extendedPriceWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              discountAmount {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              discountAmountWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              discountTotal {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              discountTotalWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
+              listPrice {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+              listPriceWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+              salePrice {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+              salePriceWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+              placedPrice {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+              placedPriceWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+              extendedPrice {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+              extendedPriceWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+              discountAmount {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+              discountAmountWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+              discountTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+              discountTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
               objectType 
-              taxTotal {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-        			taxPercentRate 
+              taxTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+        	  taxPercentRate 
               taxType 
-               taxDetails
-              {
-                rate {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-                amount {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
+              taxDetails
+              {{
+                rate {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+                amount {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
                 name
-                price {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              }
-            }  
+                price {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+              }}
+            }} 
             itemsCount
             itemsQuantity
-            coupons {code isAppliedSuccessfully} 
+            coupons {{code isAppliedSuccessfully}} 
             isValid 
-            validationErrors{errorCode} 
+            validationErrors{{errorCode}} 
             type
-            handlingTotal {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            handlingTotalWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            total {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            subTotal {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            subTotalWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            shippingPrice {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            shippingPriceWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            shippingTotal {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            shippingTotalWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            paymentPrice {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            paymentPriceWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            paymentTotal {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            paymentTotalWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            discountTotal {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            discountTotalWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            taxTotal {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}";
-        //public Mutation(string name, params KeyValuePair<string, string>[] parameters)
-        //{
-        //    externalHeader = $"mutation ({string.Join(',', parameters.Select(p => $"${p.Key}:{p.Value}").ToList())})";
-        //    internalHeader = $"{name}({string.Join(',', parameters.Select(p => $"{p.Key}:${p.Key}").ToList())})";
-        //}
-
-        //public Mutation<T> AddField<Prop>(Expression<Func<T, Prop>> selector)
-        //{
-        //    var body = selector.Body as MemberExpression;
-        //    var propertyInfo = (PropertyInfo)body.Member;
-
-        //    var propertyType = propertyInfo.PropertyType;
-        //    var propertyName = propertyInfo.Name;
-        //}
+            handlingTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            handlingTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            total {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            subTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            subTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            shippingPrice {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            shippingPriceWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            shippingTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            shippingTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            paymentPrice {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            paymentPriceWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            paymentTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            paymentTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            discountTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            discountTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            taxTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}";
     }
 }

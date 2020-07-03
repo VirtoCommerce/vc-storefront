@@ -245,16 +245,36 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             throw new NotImplementedException();
         }
 
-        //TODO: How to implement: get new request of shopping cart or use this.Cart ?
-        public Task<IEnumerable<PaymentMethod>> GetAvailablePaymentMethodsAsync()
+        public async Task<IEnumerable<PaymentMethod>> GetAvailablePaymentMethodsAsync()
         {
-            throw new NotImplementedException();
+            var query = QueryHelper.GetCart(
+                storeId: _workContextAccessor.WorkContext.CurrentStore.Id,
+                cartName: _workContextAccessor.WorkContext.CurrentCart.Value.Name,
+                userId: _workContextAccessor.WorkContext.CurrentUser.Id,
+                cultureName: _workContextAccessor.WorkContext.CurrentLanguage?.CultureName ?? "en-US",
+                currencyCode: _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                type: _workContextAccessor.WorkContext.CurrentCart.Value.Type ?? string.Empty,
+                selectedFields: QueryHelper.AvailablePaymentMethods());
+
+            var response = await _client.SendQueryAsync<GetCartResponseDto>(new GraphQLRequest { Query = query });
+
+            return response.Data.Cart.AvailablePaymentMethods;
         }
 
-        //TODO: How to implement: get new request of shopping cart or use this.Cart ?
-        public Task<IEnumerable<ShippingMethod>> GetAvailableShippingMethodsAsync()
+        public async Task<IEnumerable<ShippingMethod>> GetAvailableShippingMethodsAsync()
         {
-            throw new NotImplementedException();
+            var query = QueryHelper.GetCart(
+                storeId: _workContextAccessor.WorkContext.CurrentStore.Id,
+                cartName: _workContextAccessor.WorkContext.CurrentCart.Value.Name,
+                userId: _workContextAccessor.WorkContext.CurrentUser.Id,
+                cultureName: _workContextAccessor.WorkContext.CurrentLanguage?.CultureName ?? "en-US",
+                currencyCode: _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                type: _workContextAccessor.WorkContext.CurrentCart.Value.Type ?? string.Empty,
+                selectedFields: QueryHelper.AvailableShippingMethods());
+
+            var response = await _client.SendQueryAsync<GetCartResponseDto>(new GraphQLRequest { Query = query });
+
+            return response.Data.Cart.AvailableShippingMethods;
         }
 
         public void LoadOrCreateNewTransientCart(string cartName, Store store, User user, Language language, Currency currency, string type = null)
