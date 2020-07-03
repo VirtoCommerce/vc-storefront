@@ -9,27 +9,13 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
         public static Payment PaymentIsRegistered => new Payment(Currency)
         {
             PaymentGatewayCode = "DefaultManualPaymentMethod",
-            Amount = new Money(900.00, Currency),
-            //Price = new Money(currency: Currency),
-            //PriceWithTax = new Money(currency: Currency),
-            //Total = new Money(currency: Currency),
-            //TotalWithTax = new Money(currency: Currency),
-            //DiscountAmount = new Money(currency: Currency),
-            //DiscountAmountWithTax = new Money(currency: Currency),
-            //TaxTotal = new Money(currency: Currency)
+            Amount = new Money(900.00, Currency)
         };
 
         public static Payment PaymentIsNotRegistered => new Payment(Currency)
         {
             PaymentGatewayCode = "TestPaymentGatewayCode_IsNotRegistered",
-            Amount = new Money(900.00, Currency),
-            //Price = new Money(currency: Currency),
-            //PriceWithTax = new Money(currency: Currency),
-            //Total = new Money(currency: Currency),
-            //TotalWithTax = new Money(currency: Currency),
-            //DiscountAmount = new Money(currency: Currency),
-            //DiscountAmountWithTax = new Money(currency: Currency),
-            //TaxTotal = new Money(currency: Currency)
+            Amount = new Money(900.00, Currency)
         };
 
         public static Shipment ShipmentIsRegistered => new Shipment(Currency)
