@@ -31,63 +31,72 @@ namespace VirtoCommerce.Storefront.Infrastructure
 
         public static string AddItemToCart(string selectedFields = null)
         => $@"mutation ($command:InputAddItemType!)
-        {{ 
-          addItem(command: $command) 
-          {{ 
+        {{
+          addItem(command: $command)
+          {{
             { selectedFields ?? AllFields() }
           }}
         }}";
 
         public static string AddOrUpdatePayment(string selectedFields = null)
         => $@"mutation ($command:InputAddOrUpdateCartPaymentType!)
-        {{ 
+        {{
           addOrUpdateCartPayment(command: $command)
-          {{ 
+          {{
             { selectedFields ?? AllFields() }
           }}
         }}";
 
         public static string AddOrUpdateShippment(string selectedFields = null)
         => $@"mutation ($command:InputAddOrUpdateCartShipmentType!)
-        {{ 
+        {{
           addOrUpdateCartShipment(command: $command)
-          {{ 
+          {{
             { selectedFields ?? AllFields() }
           }}
         }}";
 
         public static string ChangeCartComment(string selectedFields = null)
         => $@"mutation ($command:InputChangeCommentType!)
-        {{ 
+        {{
           changeComment(command: $command)
-          {{ 
+          {{
             { selectedFields ?? AllFields() }
           }}
         }}";
 
         public static string ChangeCartItemPrice(string selectedFields = null)
         => $@"mutation ($command:InputChangeCartItemPriceType!)
-        {{ 
+        {{
           changeCartItemPrice(command: $command)
-          {{ 
+          {{
             { selectedFields ?? AllFields() }
           }}
         }}";
 
         public static string ChangeCartItemQuantity(string selectedFields = null)
         => $@"mutation ($command:InputChangeCartItemQuantityType!)
-        {{ 
+        {{
           changeCartItemQuantity(command: $command)
-          {{ 
+          {{
             { selectedFields ?? AllFields() }
           }}
         }}";
 
         public static string RemoveCartItem(string selectedFields = null)
         => $@"mutation ($command:InputRemoveItemType!)
-        {{ 
+        {{
           removeCartItem(command: $command)
-          {{ 
+          {{
+            { selectedFields ?? AllFields() }
+          }}
+        }}";
+
+        public static string MergeCartType(string selectedFields = null)
+        => $@"mutation ($command:MergeCartType!)
+        {{
+          removeCartItem(command: $command)
+          {{
             { selectedFields ?? AllFields() }
           }}
         }}";
@@ -96,17 +105,17 @@ namespace VirtoCommerce.Storefront.Infrastructure
             => @"
             availableShippingMethods
             {
-              code 
-              logoUrl 
-              optionName 
-              optionDescription 
-              priority 
-              currency{code symbol exchangeRate customFormatting} 
+              code
+              logoUrl
+              optionName
+              optionDescription
+              priority
+              currency{code symbol exchangeRate customFormatting}
               price {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              priceWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency} 
-              total {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency} 
-              totalWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency} 
-              discountAmount {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency} 
+              priceWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
+              total {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
+              totalWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
+              discountAmount {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
               discountAmountWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
             }";
 
@@ -114,19 +123,19 @@ namespace VirtoCommerce.Storefront.Infrastructure
             => @"
             availablePaymentMethods
             {
-              code 
-              name 
-              logoUrl 
-              paymentMethodType 
-              paymentMethodGroupType 
-              priority 
-              isAvailableForPartial 
-              currency {code symbol exchangeRate customFormatting} 
+              code
+              name
+              logoUrl
+              paymentMethodType
+              paymentMethodGroupType
+              priority
+              isAvailableForPartial
+              currency {code symbol exchangeRate customFormatting}
               price {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-              priceWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency} 
-              total {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency} 
-              totalWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency} 
-              discountAmount {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency} 
+              priceWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
+              total {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
+              totalWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
+              discountAmount {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
             	discountAmountWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
             	taxTotal{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
               taxPercentRate
@@ -142,61 +151,61 @@ namespace VirtoCommerce.Storefront.Infrastructure
 
         private static string AllFields()
             => $@"
-            id 
-            name 
-            status 
-            storeId 
-            channelId 
-            isAnonymous 
-            customerId 
-            customerName 
-            organizationId 
-            isRecuring 
-            comment 
-            volumetricWeight 
-            weightUnit 
-            weight 
+            id
+            name
+            status
+            storeId
+            channelId
+            isAnonymous
+            customerId
+            customerName
+            organizationId
+            isRecuring
+            comment
+            volumetricWeight
+            weightUnit
+            weight
             currency {{code symbol exchangeRate customFormatting}}
-            taxPercentRate 
-            taxType 
-            taxDetails 
+            taxPercentRate
+            taxType
+            taxDetails
             {{
               rate {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
               amount {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
-              name 
+              name
               price {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
             }}
             shipments
             {{
-              shipmentMethodCode 
-              shipmentMethodOption 
-              fulfillmentCenterId 
-              deliveryAddress{{key name organization countryCode countryName city postalCode zip line1 line2 regionId regionName firstName middleName lastName phone email}} 
-              volumetricWeight 
-              weightUnit 
-              weight 
-              measureUnit 
-              height 
-              length 
+              shipmentMethodCode
+              shipmentMethodOption
+              fulfillmentCenterId
+              deliveryAddress{{key name organization countryCode countryName city postalCode zip line1 line2 regionId regionName firstName middleName lastName phone email}}
+              volumetricWeight
+              weightUnit
+              weight
+              measureUnit
+              height
+              length
               width
-            }} 
-            {AvailableShippingMethods()} 
+            }}
+            {AvailableShippingMethods()}
             discounts
             {{
               promotionId
               amount {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
-              coupon 
+              coupon
               description
-            }} 
-            currency{{code symbol exchangeRate customFormatting}} 
+            }}
+            currency{{code symbol exchangeRate customFormatting}}
             payments
             {{
-              outerId 
-              paymentGatewayCode 
+              outerId
+              paymentGatewayCode
               currency{{code symbol exchangeRate customFormatting}}
-              billingAddress{{key name organization countryCode countryName city postalCode zip line1 line2 regionId regionName firstName middleName lastName phone email}} 
-              taxPercentRate 
-              taxType 
+              billingAddress{{key name organization countryCode countryName city postalCode zip line1 line2 regionId regionName firstName middleName lastName phone email}}
+              taxPercentRate
+              taxType
               taxDetails
               {{
                 rate {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
@@ -205,55 +214,55 @@ namespace VirtoCommerce.Storefront.Infrastructure
                 price {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
               }}
               discounts{{promotionId coupon description}}
-            }} 
-            {AvailablePaymentMethods()} 
+            }}
+            {AvailablePaymentMethods()}
             addresses
             {{
-              key 
-              name 
-              organization 
-              countryCode 
-              countryName 
-              city 
-              postalCode 
-              zip 
-              line1 
-              line2 
-              regionId 
-              regionName 
+              key
+              name
+              organization
+              countryCode
+              countryName
+              city
+              postalCode
+              zip
+              line1
+              line2
+              regionId
+              regionName
               firstName
-              middleName 
-              lastName 
-              phone 
+              middleName
+              lastName
+              phone
               email
-            }} 
+            }}
             items
             {{
               id
-              createdDate 
-              productId 
-              productType 
-              catalogId 
-              categoryId 
-              sku 
-              name 
-              quantity 
-              shipmentMethodCode 
-              requiredShipping 
-              thumbnailImageUrl 
-              imageUrl 
-              isGift 
-              languageCode 
-              note 
-              isReccuring 
-              volumetricWeight 
-              weightUnit 
-              weight 
-              measureUnit 
-              height 
-              length 
-              width 
-              isReadOnly 
+              createdDate
+              productId
+              productType
+              catalogId
+              categoryId
+              sku
+              name
+              quantity
+              shipmentMethodCode
+              requiredShipping
+              thumbnailImageUrl
+              imageUrl
+              isGift
+              languageCode
+              note
+              isReccuring
+              volumetricWeight
+              weightUnit
+              weight
+              measureUnit
+              height
+              length
+              width
+              isReadOnly
               listPrice {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
               listPriceWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
               salePrice {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
@@ -266,10 +275,10 @@ namespace VirtoCommerce.Storefront.Infrastructure
               discountAmountWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
               discountTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
               discountTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
-              objectType 
+              objectType
               taxTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
-        	  taxPercentRate 
-              taxType 
+        	  taxPercentRate
+              taxType
               taxDetails
               {{
                 rate {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
@@ -277,12 +286,12 @@ namespace VirtoCommerce.Storefront.Infrastructure
                 name
                 price {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
               }}
-            }} 
+            }}
             itemsCount
             itemsQuantity
-            coupons {{code isAppliedSuccessfully}} 
-            isValid 
-            validationErrors{{errorCode}} 
+            coupons {{code isAppliedSuccessfully}}
+            isValid
+            validationErrors{{errorCode}}
             type
             handlingTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
             handlingTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
