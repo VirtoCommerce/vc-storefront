@@ -46,9 +46,23 @@ namespace VirtoCommerce.Storefront.Domain.Customer
             return await _memberService.CreateContactAsync(contact);
         }
 
-        public Task<Organization> CreateOrganizationAsync(Organization organization)
+        public async Task<Organization> CreateOrganizationAsync(Organization organization)
         {
-            throw new NotImplementedException();
+            var request = new GraphQLRequest
+            {
+                Query = this.CreateOrganizationRequest(),
+                Variables = new
+                {
+                    command = new CreateOrganizationCommand
+                    {
+                        Name = organization.Name,
+                        Addresses = organization.Addresses
+                    }
+                }
+            };
+            var response = await _client.SendMutationAsync<OrganizationDto>(request);
+            var result = response.Data.ToOrganization();
+            return result;
         }
 
         public Task DeleteContactAsync(string contactId)
