@@ -230,9 +230,22 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             await ChangeLineItemQuantity(lineItem.Id, quantity);
         }
 
-        public Task ChangeItemsQuantitiesAsync(int[] quantities)
+        public async Task ChangeItemsQuantitiesAsync(int[] quantities)
         {
-            throw new NotImplementedException();
+            EnsureCartExists();
+
+            for (var i = 0; i < quantities.Length; i++)
+            {
+                var lineItem = Cart.Items.ElementAt(i);
+                if (lineItem != null && quantities[i] > 0)
+                {
+                    await ChangeItemQuantityAsync(new ChangeCartItemQty
+                    {
+                        LineItemId = lineItem.Id,
+                        Quantity = quantities[i],
+                    });
+                }
+            }
         }
 
         public virtual async Task ClearAsync()
