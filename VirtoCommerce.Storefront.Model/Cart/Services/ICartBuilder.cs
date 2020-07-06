@@ -132,7 +132,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         /// Remove cart from service
         /// </summary>
         /// <returns></returns>
-        Task RemoveCartAsync();
+        Task RemoveCartAsync(string cartId = null);
 
         /// <summary>
         /// Fill current captured cart from RFQ

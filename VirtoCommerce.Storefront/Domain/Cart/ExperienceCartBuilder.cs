@@ -141,7 +141,36 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
         public async Task ChangeItemCommentAsync(ChangeCartItemComment newItemComment)
         {
-            throw new NotImplementedException();
+            EnsureCartExists();
+
+            var lineItem = Cart.Items.FirstOrDefault(i => i.Id == newItemComment.LineItemId);
+            if (lineItem == null)
+            {
+                return;
+            }
+
+            var request = new GraphQLRequest
+            {
+                Query = QueryHelper.ChangeCartItemComment(),
+                Variables = new
+                {
+                    Command = new ChangeCartItemCommentCommand
+                    {
+                        StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
+                        CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
+                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
+                        LineItemId = newItemComment.LineItemId,
+                        Comment = newItemComment.Comment,
+                    }
+                }
+            };
+
+            var response = await _client.SendMutationAsync<ShoppingCartDtoContainer>(request);
+
+            Cart = response.Data.ShoppingCartDto.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
         public Task ChangeItemDynamicPropertiesAsync(ChangeCartItemDynamicProperties newItemDynamicProperties)
@@ -201,9 +230,22 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             await ChangeLineItemQuantity(lineItem.Id, quantity);
         }
 
-        public Task ChangeItemsQuantitiesAsync(int[] quantities)
+        public async Task ChangeItemsQuantitiesAsync(int[] quantities)
         {
-            throw new NotImplementedException();
+            EnsureCartExists();
+
+            for (var i = 0; i < quantities.Length; i++)
+            {
+                var lineItem = Cart.Items.ElementAt(i);
+                if (lineItem != null && quantities[i] > 0)
+                {
+                    await ChangeItemQuantityAsync(new ChangeCartItemQty
+                    {
+                        LineItemId = lineItem.Id,
+                        Quantity = quantities[i],
+                    });
+                }
+            }
         }
 
         public virtual async Task ClearAsync()
@@ -232,17 +274,17 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
         public Task EvaluatePromotionsAsync()
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task EvaluateTaxesAsync()
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task FillFromQuoteRequestAsync(QuoteRequest quoteRequest)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public async Task<IEnumerable<PaymentMethod>> GetAvailablePaymentMethodsAsync()
@@ -297,19 +339,76 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             Cart = response.Data.Cart.ToShoppingCart(currency, language, user);
         }
 
-        public Task MergeWithCartAsync(ShoppingCart cart)
+        public async Task MergeWithCartAsync(ShoppingCart cart)
         {
-            throw new NotImplementedException();
+            var request = new GraphQLRequest
+            {
+                Query = QueryHelper.MergeCartType(),
+                Variables = new
+                {
+                    Command = new MergeCartCommand
+                    {
+                        StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
+                        CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
+                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
+                        SecondCartId = cart.Id
+                    }
+                }
+            };
+            var response = await _client.SendMutationAsync<MergeCartResponseDto>(request);
+
+            Cart = response.Data.MergeCart.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
-        public Task RemoveCartAsync()
+        public async Task RemoveCartAsync(string cartId = null)
         {
-            throw new NotImplementedException();
+            // Guardian, nullable argument added for backward compatibility
+            if (cartId == null)
+            {
+                return;
+            }
+
+            var request = new GraphQLRequest
+            {
+                Query = QueryHelper.RemoveCartType(),
+                Variables = new
+                {
+                    Command = new RemoveCartCommand
+                    {
+                        CartId = cartId
+                    }
+                }
+            };
+
+            await _client.SendMutationAsync<bool>(request);
         }
 
-        public Task RemoveCouponAsync(string couponCode = null)
+        public async Task RemoveCouponAsync(string couponCode = null)
         {
-            throw new NotImplementedException();
+            var request = new GraphQLRequest
+            {
+                Query = QueryHelper.RemoveCouponMutation(),
+                Variables = new
+                {
+                    Command = new RemoveCouponCommand
+                    {
+                        StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
+                        CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
+                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
+                        CouponCode = couponCode
+                    }
+                }
+            };
+
+            var response = await _client.SendMutationAsync<ShoppingCartDtoContainer>(request);
+
+            Cart = response.Data.ShoppingCartDto.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
         public async Task RemoveItemAsync(string lineItemId)
@@ -335,23 +434,44 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             var response = await _client.SendMutationAsync<RemoveCartItemResponseDto>(request);
 
             Cart = response.Data.RemoveCartItem.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
-
         }
 
-        public Task RemoveShipmentAsync(string shipmentId)
+        public async Task RemoveShipmentAsync(string shipmentId)
         {
-            throw new NotImplementedException();
+            var request = new GraphQLRequest
+            {
+                Query = QueryHelper.RemoveShipmentMutation(),
+                Variables = new
+                {
+                    Command = new RemoveShipmentCommand
+                    {
+                        StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
+                        CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
+                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
+                        ShipmentId = shipmentId
+                    }
+                }
+            };
+
+            var response = await _client.SendMutationAsync<ShoppingCartDtoContainer>(request);
+
+            Cart = response.Data.ShoppingCartDto.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
-        public Task SaveAsync()
-        {
-            return Task.CompletedTask;
-        }
+        /// <summary>
+        /// Backward compatibility
+        /// </summary>
+        [Obsolete("Do not use this method")]
+        public Task SaveAsync() => Task.CompletedTask;
 
-        public Task TakeCartAsync(ShoppingCart cart)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Backward compatibility
+        /// </summary>
+        [Obsolete("Do not use this method")]
+        public Task TakeCartAsync(ShoppingCart cart) => Task.CompletedTask;
 
         public async Task UpdateCartComment(string comment)
         {
@@ -376,7 +496,6 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             var response = await _client.SendMutationAsync<ChangeCartCommentResponseDto>(request);
 
             Cart = response.Data.ChangeComment.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
-
         }
 
         public async Task ValidateAsync()
