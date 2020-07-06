@@ -48,7 +48,7 @@ namespace VirtoCommerce.Storefront.Domain
             _promotionEvaluator = promotionEvaluator;
             _taxEvaluator = taxEvaluator;
             _subscriptionService = subscriptionService;
-       }
+        }
 
         #region ICartBuilder Members
 
@@ -141,18 +141,18 @@ namespace VirtoCommerce.Storefront.Domain
                 await AddLineItemAsync(lineItem);
             }
             return result.IsValid;
-        }        
-        
+        }
+
         public virtual async Task ChangeItemPriceAsync(ChangeCartItemPrice newPrice)
         {
-            EnsureCartExists();            
+            EnsureCartExists();
 
             var lineItem = Cart.Items.FirstOrDefault(x => x.Id == newPrice.LineItemId);
             if (lineItem != null)
             {
-                await ChangeItemPriceAsync(lineItem, newPrice);                
+                await ChangeItemPriceAsync(lineItem, newPrice);
             }
-        }        
+        }
 
         public virtual Task ChangeItemCommentAsync(ChangeCartItemComment newItemComment)
         {
@@ -271,11 +271,10 @@ namespace VirtoCommerce.Storefront.Domain
             if (shipment.DeliveryAddress != null)
             {
                 //Reset address key because it can equal a customer address from profile and if not do that it may cause
-                //address primary key duplication error for multiple carts with the same address 
+                //address primary key duplication error for multiple carts with the same address
                 shipment.DeliveryAddress.Key = null;
             }
             Cart.Shipments.Add(shipment);
-
 
             if (!string.IsNullOrEmpty(shipment.ShipmentMethodCode) && !Cart.IsTransient())
             {
@@ -312,7 +311,7 @@ namespace VirtoCommerce.Storefront.Domain
             if (payment.BillingAddress != null)
             {
                 //Reset address key because it can equal a customer address from profile and if not do that it may cause
-                //address primary key duplication error for multiple carts with the same address 
+                //address primary key duplication error for multiple carts with the same address
                 payment.BillingAddress.Key = null;
             }
             Cart.Payments.Add(payment);
@@ -362,7 +361,7 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
-        public virtual async Task RemoveCartAsync()
+        public virtual async Task RemoveCartAsync(string cartId = null)
         {
             EnsureCartExists();
             //Evict cart from cache
@@ -439,7 +438,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var workContext = _workContextAccessor.WorkContext;
 
-            //Request available shipping rates 
+            //Request available shipping rates
             var result = await _cartService.GetAvailableShippingMethodsAsync(Cart);
             if (!result.IsNullOrEmpty())
             {
@@ -466,7 +465,7 @@ namespace VirtoCommerce.Storefront.Domain
                 var promoEvalContext = Cart.ToPromotionEvaluationContext();
                 await _promotionEvaluator.EvaluateDiscountsAsync(promoEvalContext, result);
 
-                //Evaluate taxes for available payments 
+                //Evaluate taxes for available payments
                 var workContext = _workContextAccessor.WorkContext;
                 var taxEvalContext = Cart.ToTaxEvalContext(workContext.CurrentStore);
                 taxEvalContext.Lines.Clear();
@@ -523,7 +522,7 @@ namespace VirtoCommerce.Storefront.Domain
             await TakeCartAsync(cart);
         }
 
-        #endregion
+        #endregion ICartBuilder Members
 
         protected virtual CartSearchCriteria CreateCartSearchCriteria(string cartName, Store store, User user, Language language, Currency currency, string type)
         {
@@ -549,13 +548,11 @@ namespace VirtoCommerce.Storefront.Domain
                 Type = type,
                 IsAnonymous = !user.IsRegisteredUser,
                 CustomerName = user.IsRegisteredUser ? user.UserName : SecurityConstants.AnonymousUsername,
-
             };
 
             return cart;
         }
 
-    
         protected virtual Task RemoveExistingPaymentAsync(Payment payment)
         {
             if (payment != null)
@@ -618,7 +615,7 @@ namespace VirtoCommerce.Storefront.Domain
             var existingLineItem = Cart.Items.FirstOrDefault(li => li.ProductId == lineItem.ProductId);
             if (existingLineItem != null)
             {
-                await ChangeItemQuantityAsync(existingLineItem, existingLineItem.Quantity + Math.Max(1, lineItem.Quantity));                
+                await ChangeItemQuantityAsync(existingLineItem, existingLineItem.Quantity + Math.Max(1, lineItem.Quantity));
                 await ChangeItemPriceAsync(existingLineItem, new ChangeCartItemPrice() { LineItemId = existingLineItem.Id, NewPrice = lineItem.ListPrice.Amount });
                 existingLineItem.Comment = lineItem.Comment;
                 existingLineItem.DynamicProperties = lineItem.DynamicProperties;
@@ -637,7 +634,6 @@ namespace VirtoCommerce.Storefront.Domain
             lineItem.ListPrice = newPriceMoney;
             lineItem.SalePrice = newPriceMoney;
         }
-
 
         protected virtual void EnsureCartExists()
         {

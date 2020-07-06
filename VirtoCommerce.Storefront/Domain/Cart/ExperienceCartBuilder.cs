@@ -232,17 +232,17 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
         public Task EvaluatePromotionsAsync()
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task EvaluateTaxesAsync()
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task FillFromQuoteRequestAsync(QuoteRequest quoteRequest)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public async Task<IEnumerable<PaymentMethod>> GetAvailablePaymentMethodsAsync()
@@ -321,9 +321,21 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             Cart = response.Data.MergeCart.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
-        public Task RemoveCartAsync()
+        public async Task RemoveCartAsync(string cartId)
         {
-            throw new NotImplementedException();
+            var request = new GraphQLRequest
+            {
+                Query = QueryHelper.RemoveCartType(),
+                Variables = new
+                {
+                    Command = new RemoveCartCommand
+                    {
+                        CartId = cartId
+                    }
+                }
+            };
+
+            await _client.SendMutationAsync<bool>(request);
         }
 
         public Task RemoveCouponAsync(string couponCode = null)
@@ -368,7 +380,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
         public Task TakeCartAsync(ShoppingCart cart)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public async Task UpdateCartComment(string comment)
