@@ -370,6 +370,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             {
                 return;
             }
+
             var request = new GraphQLRequest
             {
                 Query = QueryHelper.RemoveCartType(),
