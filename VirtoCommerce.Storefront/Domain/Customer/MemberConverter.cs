@@ -104,6 +104,19 @@ namespace VirtoCommerce.Storefront.Domain
             return organization;
         }
 
+        public static Organization ToOrganization(this OrganizationDto organizationDto)
+        {
+            var organization = new Organization
+            {
+                Name = organizationDto.Name,
+            };
+            if (organization.Addresses != null)
+            {
+                organization.Addresses = organizationDto.Addresses.Select(x => x.ToAddress()).ToList();
+            }
+            return organization;
+        }
+
 
         public static Contact ToContact(this UserRegistration userRegistration)
         {

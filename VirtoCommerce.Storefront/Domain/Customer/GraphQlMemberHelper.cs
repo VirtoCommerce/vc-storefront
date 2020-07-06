@@ -11,7 +11,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         public static readonly string AllMemberSearchFields = $"totalCount items {{ {AllCustomerFields} }}";
 
         public static string UpdateContactAddressesRequest(this IMemberService service, string selectedFields = null)
-        => $@"mutation ($id: String!, $addresses: [AddressInputType]!)
+        => $@"mutation ($id: String!, $addresses: [InputAddressType]!)
         {{
           updateAddresses(addresses: $addresses, customerId: $id)
           {{
@@ -19,8 +19,15 @@ namespace VirtoCommerce.Storefront.Domain.Customer
           }}
         }}";
 
+        public static string CreateOrganizationRequest(this IMemberService service, string selectedFields = null)
+        => $@"mutation ($command: InputCreateOrganizationType!){{
+          createOrganization(command: $command){{
+            { selectedFields ?? AllOrganizationFields }
+          }}
+        }}";
+
         public static string UpdateOrganizationRequest(this IMemberService service, string selectedFields = null)
-        => $@"mutation ($command: OrganizationInputType!){{
+        => $@"mutation ($command: InputUpdateOrganizationType!){{
           updateOrganization(command: $command){{
             { selectedFields ?? AllOrganizationFields }
           }}
