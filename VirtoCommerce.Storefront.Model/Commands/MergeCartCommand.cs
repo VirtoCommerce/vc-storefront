@@ -1,4 +1,4 @@
-﻿namespace VirtoCommerce.Storefront.Model.Commands
+namespace VirtoCommerce.Storefront.Model.Commands
 {
     public class MergeCartCommand : MutationCommand
     {

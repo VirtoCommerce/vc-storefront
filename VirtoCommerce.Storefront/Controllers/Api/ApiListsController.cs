@@ -188,7 +188,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 if (cart != null && cart.CustomerId == WorkContext.CurrentUser.Id)
                 {
                     await _cartBuilder.TakeCartAsync(cart);
-                    await _cartBuilder.RemoveCartAsync();
+                    await _cartBuilder.RemoveCartAsync(cart.Id);
                 }
             }
             return Ok();
@@ -225,7 +225,5 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             await _cartBuilder.LoadOrCreateNewTransientCartAsync(cartName, WorkContext.CurrentStore, WorkContext.CurrentUser, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency, type);
             return _cartBuilder;
         }
-
-
     }
 }
