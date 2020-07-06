@@ -321,8 +321,13 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             Cart = response.Data.MergeCart.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
-        public async Task RemoveCartAsync(string cartId)
+        public async Task RemoveCartAsync(string cartId = null)
         {
+            // Guardian, nullable argument added for backward compatibility
+            if (cartId == null)
+            {
+                return;
+            }
             var request = new GraphQLRequest
             {
                 Query = QueryHelper.RemoveCartType(),
@@ -388,20 +393,42 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             Cart = response.Data.RemoveCartItem.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
-        public Task RemoveShipmentAsync(string shipmentId)
+        public async Task RemoveShipmentAsync(string shipmentId)
         {
-            throw new NotImplementedException();
+            var request = new GraphQLRequest
+            {
+                Query = QueryHelper.RemoveShipmentMutation(),
+                Variables = new
+                {
+                    Command = new RemoveShipmentCommand
+                    {
+                        StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
+                        CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
+                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
+                        ShipmentId = shipmentId
+                    }
+                }
+            };
+
+            var response = await _client.SendMutationAsync<ShoppingCartDtoContainer>(request);
+
+            Cart = response.Data.ShoppingCartDto.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
-        public Task SaveAsync()
-        {
-            return Task.CompletedTask;
-        }
+        /// <summary>
+        /// Backward compatibility
+        /// </summary>
+        [Obsolete("Do not use this method")]
+        public Task SaveAsync() => Task.CompletedTask;
 
-        public Task TakeCartAsync(ShoppingCart cart)
-        {
-            return Task.CompletedTask;
-        }
+        /// <summary>
+        /// Backward compatibility
+        /// </summary>
+        [Obsolete("Do not use this method")]
+        public Task TakeCartAsync(ShoppingCart cart) => Task.CompletedTask;
 
         public async Task UpdateCartComment(string comment)
         {
