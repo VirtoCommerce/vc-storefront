@@ -74,6 +74,15 @@ namespace VirtoCommerce.Storefront.Infrastructure
           }}
         }}";
 
+        public static string ChangeCartItemComment(string selectedFields = null)
+        => $@"mutation ($command:InputChangeCartItemCommentType!)
+        {{
+          changeCartItemComment(command: $command)
+          {{
+            { selectedFields ?? AllFields() }
+          }}
+        }}";
+
         public static string ChangeCartItemQuantity(string selectedFields = null)
         => $@"mutation ($command:InputChangeCartItemQuantityType!)
         {{
@@ -87,6 +96,24 @@ namespace VirtoCommerce.Storefront.Infrastructure
         => $@"mutation ($command:InputRemoveItemType!)
         {{
           removeCartItem(command: $command)
+          {{
+            { selectedFields ?? AllFields() }
+          }}
+        }}";
+
+        public static string RemoveCouponMutation(string selectedFields = null)
+        => $@"mutation ($command:InputRemoveCouponType!)
+        {{
+          removeCoupon(command: $command)
+          {{
+            { selectedFields ?? AllFields() }
+          }}
+        }}";
+
+        public static string RemoveShipmentMutation(string selectedFields = null)
+        => $@"mutation ($command:InputRemoveShipmentType!)
+        {{
+          removeShipment(command: $command)
           {{
             { selectedFields ?? AllFields() }
           }}
