@@ -297,9 +297,28 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             Cart = response.Data.Cart.ToShoppingCart(currency, language, user);
         }
 
-        public Task MergeWithCartAsync(ShoppingCart cart)
+        public async Task MergeWithCartAsync(ShoppingCart cart)
         {
-            throw new NotImplementedException();
+            var request = new GraphQLRequest
+            {
+                Query = QueryHelper.MergeCartType(),
+                Variables = new
+                {
+                    Command = new MergeCartCommand
+                    {
+                        StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
+                        CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
+                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
+                        SecondCartId = cart.Id
+                    }
+                }
+            };
+            var response = await _client.SendMutationAsync<MergeCartResponseDto>(request);
+
+            Cart = response.Data.MergeCart.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
         public Task RemoveCartAsync()
@@ -335,7 +354,6 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             var response = await _client.SendMutationAsync<RemoveCartItemResponseDto>(request);
 
             Cart = response.Data.RemoveCartItem.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
-
         }
 
         public Task RemoveShipmentAsync(string shipmentId)
@@ -376,7 +394,6 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             var response = await _client.SendMutationAsync<ChangeCartCommentResponseDto>(request);
 
             Cart = response.Data.ChangeComment.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
-
         }
 
         public async Task ValidateAsync()
