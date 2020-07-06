@@ -11,9 +11,9 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         public static readonly string AllMemberSearchFields = $"totalCount items {{ {AllCustomerFields} }}";
 
         public static string UpdateContactAddressesRequest(this IMemberService service, string selectedFields = null)
-        => $@"mutation ($id: String!, $addresses: [InputAddressType]!)
+        => $@"mutation ($command: InputUpdateContactAddressType!)
         {{
-          updateAddresses(addresses: $addresses, customerId: $id)
+          updateAddresses(command: $command)
           {{
             { selectedFields ?? AllCustomerFields }
           }}
