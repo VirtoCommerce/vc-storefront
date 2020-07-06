@@ -338,9 +338,29 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             await _client.SendMutationAsync<bool>(request);
         }
 
-        public Task RemoveCouponAsync(string couponCode = null)
+        public async Task RemoveCouponAsync(string couponCode = null)
         {
-            throw new NotImplementedException();
+            var request = new GraphQLRequest
+            {
+                Query = QueryHelper.RemoveCouponMutation(),
+                Variables = new
+                {
+                    Command = new RemoveCouponCommand
+                    {
+                        StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
+                        CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
+                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
+                        CouponCode = couponCode
+                    }
+                }
+            };
+
+            var response = await _client.SendMutationAsync<ShoppingCartDtoContainer>(request);
+
+            Cart = response.Data.ShoppingCartDto.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
         public async Task RemoveItemAsync(string lineItemId)

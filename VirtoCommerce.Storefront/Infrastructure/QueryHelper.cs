@@ -92,6 +92,15 @@ namespace VirtoCommerce.Storefront.Infrastructure
           }}
         }}";
 
+        public static string RemoveCouponMutation(string selectedFields = null)
+        => $@"mutation ($command:InputRemoveCouponType!)
+        {{
+          removeCoupon(command: $command)
+          {{
+            { selectedFields ?? AllFields() }
+          }}
+        }}";
+
         public static string MergeCartType(string selectedFields = null)
         => $@"mutation ($command:MergeCartType!)
         {{
