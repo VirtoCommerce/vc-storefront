@@ -74,6 +74,15 @@ namespace VirtoCommerce.Storefront.Infrastructure
           }}
         }}";
 
+        public static string ChangeCartItemComment(string selectedFields = null)
+        => $@"mutation ($command:InputChangeCartItemCommentType!)
+        {{
+          changeCartItemComment(command: $command)
+          {{
+            { selectedFields ?? AllFields() }
+          }}
+        }}";
+
         public static string ChangeCartItemQuantity(string selectedFields = null)
         => $@"mutation ($command:InputChangeCartItemQuantityType!)
         {{

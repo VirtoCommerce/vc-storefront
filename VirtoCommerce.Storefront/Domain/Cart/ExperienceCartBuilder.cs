@@ -141,7 +141,36 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
         public async Task ChangeItemCommentAsync(ChangeCartItemComment newItemComment)
         {
-            throw new NotImplementedException();
+            EnsureCartExists();
+
+            var lineItem = Cart.Items.FirstOrDefault(i => i.Id == newItemComment.LineItemId);
+            if (lineItem == null)
+            {
+                return;
+            }
+
+            var request = new GraphQLRequest
+            {
+                Query = QueryHelper.ChangeCartItemComment(),
+                Variables = new
+                {
+                    Command = new ChangeCartItemCommentCommand
+                    {
+                        StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
+                        CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
+                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
+                        LineItemId = newItemComment.LineItemId,
+                        Comment = newItemComment.Comment,
+                    }
+                }
+            };
+
+            var response = await _client.SendMutationAsync<ShoppingCartDtoContainer>(request);
+
+            Cart = response.Data.ShoppingCartDto.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
         public Task ChangeItemDynamicPropertiesAsync(ChangeCartItemDynamicProperties newItemDynamicProperties)
