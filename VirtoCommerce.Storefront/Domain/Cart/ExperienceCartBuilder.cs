@@ -321,8 +321,14 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             Cart = response.Data.MergeCart.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
-        public async Task RemoveCartAsync(string cartId)
+        public async Task RemoveCartAsync(string cartId = null)
         {
+            // Guardian, nullable argument added for backward compatibility
+            if (cartId == null)
+            {
+                return;
+            }
+
             var request = new GraphQLRequest
             {
                 Query = QueryHelper.RemoveCartType(),
