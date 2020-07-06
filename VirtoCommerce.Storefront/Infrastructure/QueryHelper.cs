@@ -239,6 +239,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
             items
             {{
               id
+              inStockQuantity
               createdDate
               productId
               productType
