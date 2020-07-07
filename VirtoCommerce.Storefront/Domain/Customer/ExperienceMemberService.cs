@@ -42,8 +42,29 @@ namespace VirtoCommerce.Storefront.Domain.Customer
 
         public async Task<Contact> CreateContactAsync(Contact contact)
         {
-            // throw new NotImplementedException();
-            return await _memberService.CreateContactAsync(contact);
+            var request = new GraphQLRequest
+            {
+                Query = this.CreateContactRequest(),
+                Variables = new
+                {
+                    command = new
+                    {
+                        Name = contact.Name,
+                        FullName = contact.FullName,
+                        FirstName = contact.FirstName,
+                        LastName = contact.LastName,
+                        MiddleName = contact.MiddleName,
+                        Salutation = contact.Salutation,
+                        PhotoUrl = contact.PhotoUrl,
+                        TimeZone = contact.TimeZone,
+                        DefaultLanguage = contact.DefaultLanguage,
+                        Addresses = contact.Addresses
+                    }
+                }
+            };
+            var response = await _client.SendMutationAsync<Contact>(request);
+            var result = response.Data;
+            return result;
         }
 
         public async Task<Organization> CreateOrganizationAsync(Organization organization)
@@ -164,20 +185,23 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                 Query = this.UpdateContactRequest(),
                 Variables = new
                 {
-                    Command = new UpdateContactCommand
+                    command = new
                     {
-                        Id = _workContextAccessor.WorkContext.CurrentUser.Id,
-                        //StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
-                        //CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
-                        //Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
-                        //Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
-                        //CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
-                        //Payment = payment.ToDto()
+                        Id = contact.Id,
+                        Name = contact.Name,
+                        FullName = contact.FullName,
+                        FirstName = contact.FirstName,
+                        LastName = contact.LastName,
+                        MiddleName = contact.MiddleName,
+                        Salutation = contact.Salutation,
+                        PhotoUrl = contact.PhotoUrl,
+                        TimeZone = contact.TimeZone,
+                        DefaultLanguage = contact.DefaultLanguage,
+                        Addresses = contact.Addresses
                     }
                 }
             };
-
-            var response = await _client.SendMutationAsync<UpdateContactResponseDto>(request);
+            var response = await _client.SendMutationAsync<Contact>(request);
 
             //Invalidate cache
             CustomerCacheRegion.ExpireMember(contact.Id);

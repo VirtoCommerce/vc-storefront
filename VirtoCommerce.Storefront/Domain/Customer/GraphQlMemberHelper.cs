@@ -7,15 +7,33 @@ namespace VirtoCommerce.Storefront.Domain.Customer
     {
         public const string AllAddressFields = "city countryCode countryName email firstName key lastName line1 line2 middleName name organization phone postalCode regionId regionName zip";
         public static readonly string AllOrganizationFields = $"addresses {{ {AllAddressFields} }} businessCategory description emails groups memberType name outerId ownerId parentId phones seoObjectType";
-        public static readonly string AllCustomerFields = $"firstName lastName organizations id birthDate fullName middleName name outerId addresses {{ {AllAddressFields} }} organization {{ {AllOrganizationFields} }}";
-        public static readonly string AllMemberSearchFields = $"totalCount items {{ {AllCustomerFields} }}";
+        public static readonly string AllContactFields = $"firstName lastName organizations id birthDate fullName middleName name outerId addresses {{ {AllAddressFields} }} organization {{ {AllOrganizationFields} }}";
+        public static readonly string AllMemberSearchFields = $"totalCount items {{ {AllContactFields } }}";
+
+        public static string CreateContactRequest(this IMemberService service, string selectedFields = null)
+        => $@"mutation ($command: InputCreateContactType!)
+        {{
+          createContact(command: $command)
+          {{
+            { selectedFields ?? AllContactFields }
+          }}
+        }}";
+
+        public static string UpdateContactRequest(this IMemberService service, string selectedFields = null)
+        => $@"mutation ($command: InputUpdateContactType!)
+        {{
+          updateContact(command: $command)
+          {{
+            { selectedFields ?? AllContactFields }
+          }}
+        }}";
 
         public static string UpdateContactAddressesRequest(this IMemberService service, string selectedFields = null)
         => $@"mutation ($command: InputUpdateContactAddressType!)
         {{
           updateAddresses(command: $command)
           {{
-            { selectedFields ?? AllCustomerFields }
+            { selectedFields ?? AllContactFields }
           }}
         }}";
 
@@ -39,8 +57,5 @@ namespace VirtoCommerce.Storefront.Domain.Customer
             { selectedFields ?? AllMemberSearchFields }
             }}
         }}";
-
-        public static string UpdateContactRequest(this IMemberService service, string selectedFields = null)
-        => throw new NotImplementedException();
     }
 }
