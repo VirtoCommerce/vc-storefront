@@ -189,6 +189,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
             => $@"
             id
             name
+            hasPhysicalProducts
             status
             storeId
             channelId

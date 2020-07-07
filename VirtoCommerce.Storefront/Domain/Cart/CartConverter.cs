@@ -502,6 +502,7 @@ namespace VirtoCommerce.Storefront.Domain
         public static ShoppingCart ToShoppingCart(this ShoppingCartDto cartDto, Currency currency, Language language, User user)
          => new ShoppingCart(currency, language)
          {
+             HasPhysicalProducts = cartDto.HasPhysicalProducts,
              ChannelId = cartDto.ChannelId,
              Comment = cartDto.Comment,
              CustomerId = cartDto.CustomerId,
