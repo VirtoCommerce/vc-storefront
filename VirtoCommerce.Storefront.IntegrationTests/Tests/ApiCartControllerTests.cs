@@ -25,6 +25,9 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         private readonly HttpClient _client;
         private bool _isDisposed;
 
+        public const string Login = "test@test.com";
+        public const string Password = "!Password1";
+
         public ApiCartControllerTests(StorefrontApplicationFactory factory)
         {
             _client = factory.CreateClient();
@@ -67,7 +70,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                 result,
                 "GetEmptyCartForAnonymous",
                 new[] { "$.customer", "$" },
-                new[] { "id", "customerId" })
+                new[] { "id", "customerId", "dynamicProperties", "type" })
                 .Should()
                 .BeNull();
         }
@@ -77,7 +80,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             //arrange
             _client
-                .Login("admin", "store")
+                .Login(Login, Password)
                 .ClearCart()
                 .InsertCartItem(new AddCartItem { Id = Product.Quadcopter, Quantity = 1 });
 
@@ -89,7 +92,9 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                 result,
                 "GetFilledCartWithItem",
                 new[] { "$", "$.items[*]", "$.recentlyAddedItem", "$.items[*].product", "$.recentlyAddedItem.product" },
-                new[] { "id", "primaryImage", "images", "imageUrl" })
+                new[] { "id", "primaryImage", "images", "imageUrl",
+                    "total", "subTotal", "subTotalWithTax", "extendedPriceTotal", "extendedPriceTotalWithTax", "discountAmount", "discountTotal", "discountTotalWithTax",
+                 "items", "hasPhysicalProducts", "customerId", "customerName", "createdDate", "recentlyAddedItem", "objectType", "type", "dynamicProperties", "customer"})
                 .Should()
                 .BeNull();
 
@@ -103,7 +108,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         public async Task GetCart_IfAnonimousHaveItemsInCartAndLoggedIn_ShouldReturnMergedCart()
         {
             //arrange
-            _client.Login("admin", "store");
+            _client.Login(Login, Password);
 
             await RemoveAllCoupons();
 
@@ -113,7 +118,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                 .GotoMainPage()
                 .ClearCart()
                 .InsertCartItem(new AddCartItem { Id = Product.Quadcopter, Quantity = 1 })
-                .Login("admin", "store")
+                .Login(Login, Password)
                 .InsertCartItem(new AddCartItem { Id = Product.Octocopter, Quantity = 1 });
 
             //act
@@ -140,7 +145,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             //arrange
             _client
-                .Login("admin", "store")
+                .Login(Login, Password)
                 .ClearCart();
 
             //act
@@ -158,7 +163,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
             var quantity = new Fixture().Create<int>();
 
             _client
-                .Login("admin", "store")
+                .Login(Login, Password)
                 .ClearCart()
                 .InsertCartItem(new AddCartItem { Id = Product.Quadcopter, Quantity = quantity });
 
@@ -176,7 +181,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             //arrange
             _client
-                .Login("admin", "store");
+                .Login(Login, Password);
 
             await RemoveAllCoupons();
 
@@ -199,7 +204,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             //arrange
             _client
-                .Login("admin", "store")
+                .Login(Login, Password)
                 .ClearCart();
 
             var item = new AddCartItem
@@ -281,7 +286,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             //arrange
             _client
-                .Login("admin", "store")
+                .Login(Login, Password)
                 .ClearCart()
                 .InsertCartItem(new AddCartItem { ProductId = Product.Quadcopter, Quantity = 1 });
 
@@ -313,7 +318,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             //arrange
             _client
-                .Login("admin", "store")
+                .Login(Login, Password)
                 .ClearCart()
                 .InsertCartItem(new AddCartItem { ProductId = Product.Quadcopter, Quantity = 1 });
 
@@ -344,7 +349,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             //arrange
             _client
-                .Login("admin", "store");
+                .Login(Login, Password);
             var shipmentId = new Fixture().Create<string>(); //TODO: looks like it's unused in Storefront
 
             //act
@@ -363,7 +368,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             //arrange
             _client
-                .Login("admin", "store");
+                .Login(Login, Password);
 
             //act
             var result = await _client.GetStringAsync(TestEnvironment.PaymentMethodsEndpoint);
@@ -381,7 +386,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             //arrange
             _client
-                .Login("admin", "store")
+                .Login(Login, Password)
                 .ClearCart();
 
             await RemoveAllCoupons();
@@ -406,7 +411,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             //arrange
             _client
-                .Login("admin", "store")
+                .Login(Login, Password)
                 .ClearCart();
 
             await RemoveAllCoupons();
@@ -430,7 +435,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             //arrange
             _client
-                .Login("admin", "store")
+                .Login(Login, Password)
                 .ClearCart();
 
             var paymentPlan = new Fixture().Create<PaymentPlan>();
@@ -455,7 +460,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             //arrange
             _client
-                .Login("admin", "store")
+                .Login(Login, Password)
                 .ClearCart();
 
             var paymentPlan = new Fixture().Create<PaymentPlan>();
@@ -480,7 +485,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             //arrange
             _client
-                .Login("admin", "store")
+                .Login(Login, Password)
                 .ClearCart();
 
             var shipment = GetRequestDataFromFile<Shipment>("AddOrUpdateCartShipmentIsRegistered");
@@ -508,7 +513,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             //arrange
             _client
-                .Login("admin", "store")
+                .Login(Login, Password)
                 .ClearCart();
 
             var shipment = GetRequestDataFromFile<Shipment>("AddOrUpdateCartShipmentIsNotRegistered");
@@ -530,7 +535,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             //arrange
             _client
-                .Login("admin", "store")
+                .Login(Login, Password)
                 .ClearCart();
 
             var payment = GetRequestDataFromFile<Payment>("AddOrUpdateCartShipmentIsRegistered");
@@ -555,7 +560,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
         {
             //arrange
             _client
-                .Login("admin", "store")
+                .Login(Login, Password)
                 .ClearCart();
 
             var payment = GetRequestDataFromFile<Payment>("AddOrUpdateCartShipmentIsRegistered");
