@@ -406,9 +406,9 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                 }
             };
 
-            var response = await _client.SendMutationAsync<ShoppingCartDtoContainer>(request);
+            var response = await _client.SendMutationAsync<RemoveCouponResponseDto>(request);
 
-            Cart = response.Data.ShoppingCartDto.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
+            Cart = response.Data.RemoveCoupon.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
         public async Task RemoveItemAsync(string lineItemId)
