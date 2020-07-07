@@ -110,13 +110,10 @@ namespace VirtoCommerce.Storefront.Infrastructure
           }}
         }}";
 
-        public static string ValidateCoupon(string selectedFields = null)
+        public static string ValidateCoupon()
         => $@"mutation ($command:InputValidateCouponType!)
         {{
           validateCoupon(command: $command)
-          {{
-            { selectedFields ?? AllFields() }
-          }}
         }}";
 
         public static string RemoveShipmentMutation(string selectedFields = null)
