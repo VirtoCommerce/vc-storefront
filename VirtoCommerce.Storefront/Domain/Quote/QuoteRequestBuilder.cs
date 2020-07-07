@@ -262,8 +262,5 @@ namespace VirtoCommerce.Storefront.Domain
 
         #endregion
 
-
-
-
     }
 }
