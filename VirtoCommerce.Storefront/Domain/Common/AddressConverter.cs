@@ -58,7 +58,7 @@ namespace VirtoCommerce.Storefront.Domain
                 RegionName = addressDto.RegionName,
                 Zip = addressDto.Zip,
 
-                Type = (AddressType)Enum.Parse(typeof(AddressType), addressDto.AddressType, true)
+                Type = (AddressType)Enum.Parse(typeof(AddressType), addressDto.Type, true)
             };
             return retVal;
         }

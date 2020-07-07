@@ -142,8 +142,10 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                 Query = this.UpdateContactAddressesRequest(),
                 Variables = new
                 {
-                    id = contactId,
-                    addresses = addresses.Select(x => x.ToDto())
+                    Command = new {
+                        contactId = contactId,
+                        addresses = addresses.Select(x => x.ToDto()).ToList()
+                    }
                 }
             };
             var response = await _client.SendMutationAsync<Contact>(request);
