@@ -23,7 +23,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
         public static string AddCoupon(string selectedFields = null)
         => $@"mutation ($command:InputAddCouponType!)
         {{
-            removeCartItem(command: $command)
+            addCoupon(command: $command)
             {{
             { selectedFields ?? AllFields() }
             }}
@@ -120,7 +120,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
         }}";
 
         public static string MergeCartType(string selectedFields = null)
-        => $@"mutation ($command:MergeCartType!)
+        => $@"mutation ($command:InputMergeCartType!)
         {{
           mergeCart(command: $command)
           {{
