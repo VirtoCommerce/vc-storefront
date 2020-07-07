@@ -350,7 +350,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                     {
                         StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
                         CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
-                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
+                        UserId = Cart.CustomerId.ToString(),
                         Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
                         Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
@@ -358,6 +358,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                     }
                 }
             };
+
             var response = await _client.SendMutationAsync<MergeCartResponseDto>(request);
 
             Cart = response.Data.MergeCart.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
