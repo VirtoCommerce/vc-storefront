@@ -589,7 +589,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             OuterId = payment.OuterId,
             PaymentGatewayCode = payment.PaymentGatewayCode,
-            BillingAddress = payment.BillingAddress.ToDto(),
+            BillingAddress = payment.BillingAddress?.ToDto(),
             Currency = payment.Currency.Code,
             Price = payment.Price.Amount
         };
