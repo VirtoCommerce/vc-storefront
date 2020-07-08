@@ -370,7 +370,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             // Guardian, nullable argument added for backward compatibility
             if (cartId == null)
             {
-                return;
+                cartId = this.Cart.Id;
             }
 
             var request = new GraphQLRequest

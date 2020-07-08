@@ -593,6 +593,7 @@ namespace VirtoCommerce.Storefront.Domain
             PaymentGatewayCode = payment.PaymentGatewayCode,
             BillingAddress = payment.BillingAddress?.ToDto(),
             Currency = payment.Currency.Code,
+            Amount = payment.Amount.Amount,
             Price = payment.Price.Amount
         };
 
