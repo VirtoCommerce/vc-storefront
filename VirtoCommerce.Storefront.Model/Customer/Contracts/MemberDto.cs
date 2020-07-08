@@ -11,7 +11,6 @@ namespace VirtoCommerce.Storefront.Model.Customer.Contracts
         public IList<string> Phones { get; set; } = new List<string>();
         public IList<string> Groups { get; set; } = new List<string>();
 
-        public IList<string> PhoneNumbers { get; set; } = new List<string>();
         public IList<string> Emails { get; set; } = new List<string>();
         public IList<Address> Addresses { get; set; } = new List<Address>();
     }

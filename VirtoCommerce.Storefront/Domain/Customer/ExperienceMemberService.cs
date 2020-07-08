@@ -80,9 +80,17 @@ namespace VirtoCommerce.Storefront.Domain.Customer
             return response.Data.Organization.ToOrganization();
         }
 
-        public Task DeleteContactAsync(string contactId)
+        public async Task DeleteContactAsync(string contactId)
         {
-            throw new NotImplementedException();
+            var request = new GraphQLRequest
+            {
+                Query = this.DeleteContactRequest(),
+                Variables = new
+                {
+                    Command = new { contactId }
+                }
+            };
+            var response = await _client.SendMutationAsync<DeleteContactResponseDto>(request);
         }
 
         public async Task<Contact> GetContactByIdAsync(string contactId)
@@ -99,9 +107,15 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         /// <summary>
         /// no usages found. Redundant?
         /// </summary>
-        public Task<Organization> GetOrganizationByIdAsync(string organizationId)
+        public async Task<Organization> GetOrganizationByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            var request = new GraphQLRequest
+            {
+                Query = this.GetOrganizationRequest(id)
+            };
+            var response = await _client.SendQueryAsync<GetOrganizationResponseDto>(request);
+
+            return response.Data.Organization.ToOrganization();
         }
 
         /// <summary>
@@ -229,13 +243,22 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         {
             var request = new GraphQLRequest
             {
-                Query = this.UpdateOrganizationRequest(nameof(Member.Id)),
+                Query = this.UpdateOrganizationRequest("id"),
                 Variables = new
                 {
-                    command = organization.ToDto()
+                    Command = new
+                    {
+                        organization.Id,
+                        organization.Name,
+                        organization.MemberType,
+                        organization.Phones,
+                        organization.Groups,
+                        organization.Emails,
+                        organization.Addresses
+                    }
                 }
             };
-            await _client.SendMutationAsync<OrganizationDto>(request);
+            var response = await _client.SendMutationAsync<UpdateOrganizationResponseDto>(request);
 
             CustomerCacheRegion.ExpireMember(organization.Id);
         }

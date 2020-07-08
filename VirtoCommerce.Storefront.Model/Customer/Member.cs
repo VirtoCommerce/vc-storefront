@@ -6,7 +6,6 @@ namespace VirtoCommerce.Storefront.Model.Customer
 {
     public class Member : Entity
     {
-        public IList<string> PhoneNumbers { get; set; } = new List<string>();
         public string Email
         {
             get
