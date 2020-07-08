@@ -56,7 +56,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
 
         public static string UpdateOrganizationRequest(this IMemberService service, string selectedFields = null)
         => $@"mutation ($command: InputUpdateOrganizationType!){{
-          updateOrganization(command: $command){{
+          organization: updateOrganization(command: $command){{
             { selectedFields ?? AllOrganizationFields }
           }}
         }}";

@@ -76,10 +76,8 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                     }
                 }
             };
-            var response = await _client.SendMutationAsync<OrganizationDto>(request);
-            return response.Data.Organization;
-            var result = response.Data.ToOrganization();
-            return result;
+            var response = await _client.SendMutationAsync<CreateOrganizationResponseDto>(request);
+            return response.Data.Organization.ToOrganization();
         }
 
         public Task DeleteContactAsync(string contactId)
@@ -237,7 +235,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                     command = organization.ToDto()
                 }
             };
-            await _client.SendMutationAsync<Organization>(request);
+            await _client.SendMutationAsync<OrganizationDto>(request);
 
             CustomerCacheRegion.ExpireMember(organization.Id);
         }
