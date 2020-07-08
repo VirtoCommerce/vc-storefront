@@ -107,11 +107,11 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         /// <summary>
         /// no usages found. Redundant?
         /// </summary>
-        public async Task<Organization> GetOrganizationByIdAsync(string id)
+        public async Task<Organization> GetOrganizationByIdAsync(string organizationId)
         {
             var request = new GraphQLRequest
             {
-                Query = this.GetOrganizationRequest(id)
+                Query = this.GetOrganizationRequest(organizationId)
             };
             var response = await _client.SendQueryAsync<GetOrganizationResponseDto>(request);
 
