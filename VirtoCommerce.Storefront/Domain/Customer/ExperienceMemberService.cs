@@ -6,7 +6,6 @@ using AutoRest.Core.Utilities;
 using GraphQL;
 using GraphQL.Client.Abstractions;
 using PagedList.Core;
-using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
@@ -24,19 +23,15 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         private readonly IGraphQLClient _client;
         private readonly IWorkContextAccessor _workContextAccessor;
 
-        private readonly ICustomerModule _customerApi;
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
-        private readonly MemberService _memberService;
 
-        public ExperienceMemberService(IGraphQLClient client, IWorkContextAccessor workContextAccessor, ICustomerModule customerApi, IStorefrontMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
+        public ExperienceMemberService(IGraphQLClient client, IWorkContextAccessor workContextAccessor, IStorefrontMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
         {
             _client = client;
             _workContextAccessor = workContextAccessor;
-            _customerApi = customerApi;
             _memoryCache = memoryCache;
             _apiChangesWatcher = apiChangesWatcher;
-            _memberService = new MemberService(customerApi, memoryCache, apiChangesWatcher);
         }
 
 
@@ -47,18 +42,18 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                 Query = this.CreateContactRequest(),
                 Variables = new
                 {
-                    command = new
+                    Command = new
                     {
-                        Name = contact.Name,
-                        FullName = contact.FullName,
-                        FirstName = contact.FirstName,
-                        LastName = contact.LastName,
-                        MiddleName = contact.MiddleName,
-                        Salutation = contact.Salutation,
-                        PhotoUrl = contact.PhotoUrl,
-                        TimeZone = contact.TimeZone,
-                        DefaultLanguage = contact.DefaultLanguage,
-                        Addresses = contact.Addresses
+                        contact.Name,
+                        contact.FullName,
+                        contact.FirstName,
+                        contact.LastName,
+                        contact.MiddleName,
+                        contact.Salutation,
+                        contact.PhotoUrl,
+                        contact.TimeZone,
+                        contact.DefaultLanguage,
+                        contact.Addresses
                     }
                 }
             };
@@ -93,15 +88,26 @@ namespace VirtoCommerce.Storefront.Domain.Customer
 
         public async Task<Contact> GetContactByIdAsync(string contactId)
         {
-            //throw new NotImplementedException();
-            return await _memberService.GetContactByIdAsync(contactId);
+            var request = new GraphQLRequest
+            {
+                Query = this.GetContactRequest(contactId)
+            };
+            var response = await _client.SendQueryAsync<ContactResponseDto>(request);
+
+            return response.Data.Contact;
         }
 
+        /// <summary>
+        /// no usages found. Redundant?
+        /// </summary>
         public Task<Organization> GetOrganizationByIdAsync(string organizationId)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// no usages found. Redundant?
+        /// </summary>
         public Vendor[] GetVendorsByIds(Store store, Language language, params string[] vendorIds)
         {
             throw new NotImplementedException();
@@ -112,11 +118,17 @@ namespace VirtoCommerce.Storefront.Domain.Customer
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// no usages found. Redundant? Organization Contacts should be loaded as part of org.
+        /// </summary>
         public IPagedList<Contact> SearchOrganizationContacts(OrganizationContactsSearchCriteria criteria)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// no usages found. Redundant? Organization Contacts should be loaded as part of org.
+        /// </summary>
         public async Task<IPagedList<Contact>> SearchOrganizationContactsAsync(OrganizationContactsSearchCriteria criteria)
         {
             //var criteriaDto = new customerDto.MembersSearchCriteria
@@ -163,13 +175,14 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                 Query = this.UpdateContactAddressesRequest(),
                 Variables = new
                 {
-                    Command = new {
-                        contactId = contactId,
-                        addresses = addresses.Select(x => x.ToDto()).ToList()
+                    Command = new
+                    {
+                        contactId,
+                        addresses = addresses.Select(x => x.ToDto())
                     }
                 }
             };
-            var response = await _client.SendMutationAsync<Contact>(request);
+            var response = await _client.SendMutationAsync<ContactResponseDto>(request);
 
             if (response.Data != null)
             {
@@ -182,26 +195,32 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         {
             var request = new GraphQLRequest
             {
-                Query = this.UpdateContactRequest(),
+                Query = this.UpdateContactRequest("id"),
+                // Query = this.UpdateContactRequest(),
                 Variables = new
                 {
-                    command = new
+                    //Command = new UpdateContactCommand
+                    Command = new
                     {
-                        Id = contact.Id,
-                        Name = contact.Name,
-                        FullName = contact.FullName,
-                        FirstName = contact.FirstName,
-                        LastName = contact.LastName,
-                        MiddleName = contact.MiddleName,
-                        Salutation = contact.Salutation,
-                        PhotoUrl = contact.PhotoUrl,
-                        TimeZone = contact.TimeZone,
-                        DefaultLanguage = contact.DefaultLanguage,
-                        Addresses = contact.Addresses
+                        Addresses = contact.Addresses.Select(x => x.ToDto()),
+                        contact.DefaultLanguage,
+                        //contact.DynamicProperties,
+                        contact.Emails,
+                        contact.FirstName,
+                        contact.FullName,
+                        contact.Groups,
+                        contact.Id,
+                        contact.LastName,
+                        contact.MiddleName,
+                        contact.Phones,
+                        contact.PhotoUrl,
+                        contact.Salutation,
+                        contact.TimeZone
                     }
                 }
             };
-            var response = await _client.SendMutationAsync<Contact>(request);
+
+            _ = await _client.SendMutationAsync<ContactResponseDto>(request);
 
             //Invalidate cache
             CustomerCacheRegion.ExpireMember(contact.Id);

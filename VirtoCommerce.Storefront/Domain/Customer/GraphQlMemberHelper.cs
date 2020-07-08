@@ -1,4 +1,3 @@
-using System;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 
 namespace VirtoCommerce.Storefront.Domain.Customer
@@ -7,7 +6,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
     {
         public const string AllAddressFields = "city countryCode countryName email firstName key lastName line1 line2 middleName name organization phone postalCode regionId regionName zip";
         public static readonly string AllOrganizationFields = $"addresses {{ {AllAddressFields} }} businessCategory description emails groups memberType name outerId ownerId parentId phones seoObjectType";
-        public static readonly string AllContactFields = $"firstName lastName organizations id birthDate fullName middleName name outerId addresses {{ {AllAddressFields} }} organization {{ {AllOrganizationFields} }}";
+        public static readonly string AllContactFields = $"firstName lastName organizations id birthDate fullName memberType middleName name outerId addresses {{ {AllAddressFields} }} organization {{ {AllOrganizationFields} }}";
         public static readonly string AllMemberSearchFields = $"totalCount items {{ {AllContactFields } }}";
 
         public static string CreateContactRequest(this IMemberService service, string selectedFields = null)
@@ -22,16 +21,25 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         public static string UpdateContactRequest(this IMemberService service, string selectedFields = null)
         => $@"mutation ($command: InputUpdateContactType!)
         {{
-          updateContact(command: $command)
+          contact: updateContact(command: $command)
           {{
             { selectedFields ?? AllContactFields }
           }}
         }}";
 
+        public static string GetContactRequest(this IMemberService service, string contactId, string selectedFields = null)
+        => $@"
+        {{
+            contact(contactId:""{contactId}"")
+            {{
+            { selectedFields ?? AllContactFields }
+            }}
+        }}";
+
         public static string UpdateContactAddressesRequest(this IMemberService service, string selectedFields = null)
         => $@"mutation ($command: InputUpdateContactAddressType!)
         {{
-          updateAddresses(command: $command)
+          contact: updateAddresses(command: $command)
           {{
             { selectedFields ?? AllContactFields }
           }}
