@@ -108,11 +108,11 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var organization = new Organization
             {
-                Name = organizationDto.Name,
+                Name = organizationDto.Organization.Name,
             };
             if (organization.Addresses != null)
             {
-                organization.Addresses = organizationDto.Addresses.Select(x => x.ToAddress()).ToList();
+                organization.Addresses = organizationDto.Organization.Addresses;
             }
             return organization;
         }

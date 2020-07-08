@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using VirtoCommerce.Storefront.Model.Contracts;
+using Newtonsoft.Json;
 
 namespace VirtoCommerce.Storefront.Model.Customer.Contracts
 {
@@ -8,7 +8,8 @@ namespace VirtoCommerce.Storefront.Model.Customer.Contracts
         public IList<string> PhoneNumbers { get; set; } = new List<string>();
         public IList<string> Emails { get; set; } = new List<string>();
 
+        [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
-        public IList<AddressDto> Addresses { get; set; } = new List<AddressDto>();
+        public IList<Address> Addresses { get; set; } = new List<Address>();
     }
 }

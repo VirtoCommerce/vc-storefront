@@ -72,11 +72,12 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                     command = new CreateOrganizationCommand
                     {
                         Name = organization.Name,
-                        Addresses = organization.Addresses
+                        Addresses = organization.Addresses.Select(x => x.ToDto()).ToList()
                     }
                 }
             };
             var response = await _client.SendMutationAsync<OrganizationDto>(request);
+            return response.Data.Organization;
             var result = response.Data.ToOrganization();
             return result;
         }

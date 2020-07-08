@@ -4,8 +4,8 @@ namespace VirtoCommerce.Storefront.Domain.Customer
 {
     public static class GraphQlMemberHelper
     {
-        public const string AllAddressFields = "city countryCode countryName email firstName key lastName line1 line2 middleName name organization phone postalCode regionId regionName zip";
-        public static readonly string AllOrganizationFields = $"addresses {{ {AllAddressFields} }} businessCategory description emails groups memberType name outerId ownerId parentId phones seoObjectType";
+        public const string AllAddressFields = "city countryCode countryName email firstName key lastName line1 line2 middleName name organization phone postalCode regionId regionName zip addressType";
+        public static readonly string AllOrganizationFields = $"id memberType name addresses {{ {AllAddressFields} }} businessCategory description emails groups outerId ownerId parentId phones seoObjectType";
         public static readonly string AllContactFields = $"firstName lastName organizations id birthDate fullName memberType middleName name outerId addresses {{ {AllAddressFields} }} organization {{ {AllOrganizationFields} }}";
         public static readonly string AllMemberSearchFields = $"totalCount items {{ {AllContactFields } }}";
 
@@ -46,10 +46,12 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         }}";
 
         public static string CreateOrganizationRequest(this IMemberService service, string selectedFields = null)
-        => $@"mutation ($command: InputCreateOrganizationType!){{
-          createOrganization(command: $command){{
-            { selectedFields ?? AllOrganizationFields }
-          }}
+        => $@"mutation ($command: InputCreateOrganizationType!)
+        {{
+          organization: createOrganization(command: $command)
+            {{
+                { selectedFields ?? AllOrganizationFields }
+            }}
         }}";
 
         public static string UpdateOrganizationRequest(this IMemberService service, string selectedFields = null)

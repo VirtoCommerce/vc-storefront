@@ -581,7 +581,7 @@ namespace VirtoCommerce.Storefront.Domain
             PostalCode = address.PostalCode,
             RegionId = address.RegionId,
             RegionName = address.RegionName,
-            Type = Enum.IsDefined(typeof(AddressType), address.Type) ? address.Type.ToString() : AddressType.Shipping.ToString(),
+            AddressType = Enum.IsDefined(typeof(AddressType), address.Type) ? address.Type.ToString() : AddressType.Shipping.ToString(),
             Zip = address.Zip
         };
 
