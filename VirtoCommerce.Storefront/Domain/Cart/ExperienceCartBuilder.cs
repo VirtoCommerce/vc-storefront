@@ -385,7 +385,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                 }
             };
 
-            await _client.SendMutationAsync<bool>(request);
+            await _client.SendMutationAsync<object>(request);
         }
 
         public async Task RemoveCouponAsync(string couponCode = null)

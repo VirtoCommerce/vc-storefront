@@ -138,9 +138,6 @@ namespace VirtoCommerce.Storefront.Infrastructure
         => $@"mutation ($command:InputRemoveCartType!)
         {{
           removeCart(command: $command)
-          {{
-            { selectedFields ?? AllFields() }
-          }}
         }}";
 
         public static string AvailableShippingMethods()
