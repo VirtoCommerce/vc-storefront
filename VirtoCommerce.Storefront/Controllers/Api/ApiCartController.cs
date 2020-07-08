@@ -226,7 +226,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/cart/coupons/validate
         [HttpPost("coupons/validate")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<Coupon>> ValidateCoupon([FromBody]Coupon coupon)
+        public async Task<ActionResult<Coupon>> ValidateCoupon([FromBody] Coupon coupon)
         {
             EnsureCartExists();
 
@@ -244,7 +244,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // DELETE: storefrontapi/cart/coupons
         [HttpDelete("coupons")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RemoveCartCoupon([FromQuery]string couponCode = null)
+        public async Task<ActionResult> RemoveCartCoupon([FromQuery] string couponCode = null)
         {
             EnsureCartExists();
 
@@ -310,6 +310,16 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
+
+                if (shipment.ShipmentMethodCode == null)
+                {
+                    var shippingMethods = await cartBuilder.GetAvailableShippingMethodsAsync();
+                    var newShipment = shippingMethods.First().ToCartShipment(cartBuilder.Cart.Currency);
+
+                    newShipment.DeliveryAddress = shipment.DeliveryAddress;
+                    shipment = newShipment;
+                }
+
                 await cartBuilder.AddOrUpdateShipmentAsync(shipment);
                 await cartBuilder.SaveAsync();
             }
@@ -359,7 +369,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/cart/{name}/{type}/createorder?removeCart=true
         [HttpPost("{name}/{type}/createorder")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<OrderCreatedInfo>> CreateOrderFromNamedCart([FromRoute] string name, [FromRoute] string type, [FromBody] BankCardInfo bankCardInfo, [FromQuery]bool removeCart)
+        public async Task<ActionResult<OrderCreatedInfo>> CreateOrderFromNamedCart([FromRoute] string name, [FromRoute] string type, [FromBody] BankCardInfo bankCardInfo, [FromQuery] bool removeCart)
         {
             var cartBuilder = await LoadOrCreateCartAsync(Uri.UnescapeDataString(name), type);
             if (cartBuilder.Cart.IsTransient())
@@ -385,15 +395,15 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     //Remove the cart asynchronously
                     removeCart ? cartBuilder.RemoveCartAsync() : Task.CompletedTask
                 };
-                //Process order asynchronously
-                var incomingPaymentDto = orderDto.InPayments?.FirstOrDefault();
-                Task<orderModel.ProcessPaymentRequestResult> processPaymentTask = null;
-                if (incomingPaymentDto != null)
-                {
-                    processPaymentTask = _orderApi.ProcessOrderPaymentsAsync(orderDto.Id, incomingPaymentDto.Id, bankCardInfo?.ToBankCardInfoDto());
-                    taskList.Add(processPaymentTask);
-                }
-                await Task.WhenAll(taskList.ToArray());
+            //Process order asynchronously
+            var incomingPaymentDto = orderDto.InPayments?.FirstOrDefault();
+            Task<orderModel.ProcessPaymentRequestResult> processPaymentTask = null;
+            if (incomingPaymentDto != null)
+            {
+                processPaymentTask = _orderApi.ProcessOrderPaymentsAsync(orderDto.Id, incomingPaymentDto.Id, bankCardInfo?.ToBankCardInfoDto());
+                taskList.Add(processPaymentTask);
+            }
+            await Task.WhenAll(taskList.ToArray());
 
             return new OrderCreatedInfo
             {

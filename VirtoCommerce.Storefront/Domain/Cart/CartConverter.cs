@@ -117,6 +117,7 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new Shipment(currency)
             {
                 ShipmentMethodCode = shippingMethod.ShipmentMethodCode,
+                ShipmentMethodOption = shippingMethod.ShipmentMethodOption,
                 Price = shippingMethod.Price,
                 DiscountAmount = shippingMethod.DiscountAmount,
                 TaxType = shippingMethod.TaxType

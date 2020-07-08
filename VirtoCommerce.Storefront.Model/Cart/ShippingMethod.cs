@@ -30,6 +30,8 @@ namespace VirtoCommerce.Storefront.Model
         /// </summary>
         public string ShipmentMethodCode { get; set; }
 
+        public string ShipmentMethodOption { get; set; }
+
         /// <summary>
         /// Gets or sets the value of shipping method name
         /// </summary>
@@ -37,10 +39,13 @@ namespace VirtoCommerce.Storefront.Model
         public string Title => Name;
 
         public string Handle => ShipmentMethodCode;
+
+        public string Code { get { return ShipmentMethodCode; } set { ShipmentMethodCode = value; } }
+
         /// <summary>
         /// Gets or sets the value of shipping method option name
         /// </summary>
-        public string OptionName { get; set; }
+        public string OptionName { get { return ShipmentMethodOption; } set { ShipmentMethodOption = value; } }
 
         /// <summary>
         /// Gets or sets the value of shipping method option description
