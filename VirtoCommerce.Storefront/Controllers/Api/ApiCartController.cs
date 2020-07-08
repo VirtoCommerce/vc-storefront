@@ -30,6 +30,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private readonly ICatalogService _catalogService;
         private readonly IEventPublisher _publisher;
         private readonly ISubscriptionService _subscriptionService;
+
         public ApiCartController(IWorkContextAccessor workContextAccessor, ICatalogService catalogService, ICartBuilder cartBuilder,
                                  IOrderModule orderApi, IStorefrontUrlBuilder urlBuilder,
                                  IEventPublisher publisher, ISubscriptionService subscriptionService)
@@ -121,7 +122,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 await cartBuilder.ChangeItemPriceAsync(newPrice);
 
                 await cartBuilder.SaveAsync();
-
             }
             return Ok();
         }
@@ -159,7 +159,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 await cartBuilder.SaveAsync();
                 return new ShoppingCartItems { ItemsCount = cartBuilder.Cart.ItemsQuantity };
             }
-
         }
 
         // POST: storefrontapi/cart/clear
@@ -234,12 +233,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 await _cartBuilder.TakeCartAsync(WorkContext.CurrentCart.Value.Clone() as ShoppingCart);
-                _cartBuilder.Cart.Coupons = new[] { coupon };
-                await _cartBuilder.EvaluatePromotionsAsync();
+                await _cartBuilder.ValidateCouponAsync(coupon);
+
                 return Ok(coupon);
             }
         }
-
 
         // DELETE: storefrontapi/cart/coupons
         [HttpDelete("coupons")]
@@ -259,8 +257,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Ok();
         }
 
-
-        // POST: storefrontapi/cart/paymentPlan    
+        // POST: storefrontapi/cart/paymentPlan
         [HttpPost("paymentPlan")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddOrUpdateCartPaymentPlan([FromBody] PaymentPlan paymentPlan)
@@ -280,7 +277,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Ok();
         }
 
-        // DELETE: storefrontapi/cart/paymentPlan    
+        // DELETE: storefrontapi/cart/paymentPlan
         [HttpDelete("paymentPlan")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteCartPaymentPlan()
@@ -298,8 +295,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Ok();
         }
 
-
-        // POST: storefrontapi/cart/shipments    
+        // POST: storefrontapi/cart/shipments
         [HttpPost("shipments")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddOrUpdateCartShipment([FromBody] Shipment shipment)
