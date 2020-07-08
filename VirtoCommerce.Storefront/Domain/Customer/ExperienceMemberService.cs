@@ -57,8 +57,8 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                     }
                 }
             };
-            var response = await _client.SendMutationAsync<Contact>(request);
-            var result = response.Data;
+            var response = await _client.SendMutationAsync<ContactResponseDto>(request);
+            var result = response.Data.Contact;
             return result;
         }
 

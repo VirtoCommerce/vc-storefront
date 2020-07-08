@@ -12,7 +12,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         public static string CreateContactRequest(this IMemberService service, string selectedFields = null)
         => $@"mutation ($command: InputCreateContactType!)
         {{
-          createContact(command: $command)
+          contact: createContact(command: $command)
           {{
             { selectedFields ?? AllContactFields }
           }}
