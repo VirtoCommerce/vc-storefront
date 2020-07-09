@@ -2,6 +2,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Security;
+using VirtoCommerce.Storefront.Model.Security.Contracts;
 using dto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain.Security
@@ -10,6 +11,15 @@ namespace VirtoCommerce.Storefront.Domain.Security
     public static class SecurityConverter
     {
         public static IdentityResult ToIdentityResult(this dto.SecurityResult resultDto)
+        {
+            if (resultDto.Succeeded == true)
+            {
+                return IdentityResult.Success;
+            }
+            return IdentityResult.Failed(resultDto.Errors.Select(x => new IdentityError { Description = x }).ToArray());
+        }
+
+        public static IdentityResult ToIdentityResult(this SecurityResultDto resultDto)
         {
             if (resultDto.Succeeded == true)
             {

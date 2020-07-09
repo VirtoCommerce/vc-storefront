@@ -194,8 +194,9 @@ namespace VirtoCommerce.Storefront
             }
 
             //Identity overrides for use remote user storage
-            services.AddScoped<IUserStore<User>, UserStoreStub>();
-            services.AddScoped<IRoleStore<Role>, UserStoreStub>();
+            services.AddScoped<IUserStore<User>, ExperienceUserStoreStub>();
+            services.AddScoped<IRoleStore<Role>, ExperienceUserStoreStub>();
+            services.AddScoped<SecurityGraphQLProvider>();
             services.AddScoped<UserManager<User>, CustomUserManager>();
             services.AddScoped<SignInManager<User>, CustomSignInManager>();
 
