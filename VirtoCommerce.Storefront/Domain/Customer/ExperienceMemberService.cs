@@ -45,7 +45,8 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                         contact.PhotoUrl,
                         contact.TimeZone,
                         contact.DefaultLanguage,
-                        contact.Addresses
+                        organizations = !string.IsNullOrEmpty(contact.OrganizationId) ? new[] { contact.OrganizationId } : contact.OrganizationsIds,
+                        Addresses = contact.Addresses.Select(x => x.ToDto())
                     }
                 }
             };
