@@ -18,6 +18,7 @@ using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Quote;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Stores;
+using VirtoCommerce.Storefront.Extensions;
 
 namespace VirtoCommerce.Storefront.Domain.Cart
 {
@@ -56,6 +57,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
             var response = await _client.SendMutationAsync<AddCouponResponseDto>(request);
 
+            response.ThrowExceptionOnError();
+
             Cart = response.Data.AddCoupon.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
@@ -84,6 +87,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                 };
 
                 var response = await _client.SendMutationAsync<AddItemResponseDto>(request);
+
+                response.ThrowExceptionOnError();
 
                 Cart = response.Data.AddItem.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
             }
@@ -114,6 +119,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
             var response = await _client.SendMutationAsync<AddOrUpdateCartPaymentResponseDto>(request);
 
+            response.ThrowExceptionOnError();
+
             Cart = response.Data.AddOrUpdateCartPayment.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
@@ -140,6 +147,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             };
 
             var response = await _client.SendMutationAsync<AddOrUpdateCartShipmentResponseDto>(request);
+
+            response.ThrowExceptionOnError();
 
             Cart = response.Data.AddOrUpdateCartShipment.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
@@ -175,6 +184,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
             var response = await _client.SendMutationAsync<ChangeCartItemCommentResponceDto>(request);
 
+            response.ThrowExceptionOnError();
+
             Cart = response.Data.ChangeCartItemComment.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
@@ -205,6 +216,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             };
 
             var response = await _client.SendMutationAsync<ChangeCartItemPriceResponseDto>(request);
+
+            response.ThrowExceptionOnError();
 
             Cart = response.Data.ChangeCartItemPrice.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
@@ -274,6 +287,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
             var response = await _client.SendMutationAsync<ClearCartResponseDto>(request);
 
+            response.ThrowExceptionOnError();
+
             Cart = response.Data.ClearCart.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
@@ -298,6 +313,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
             var response = await _client.SendMutationAsync<ClearPaymentsResponseDto>(request);
 
+            response.ThrowExceptionOnError();
+
             Cart = response.Data.ClearPayments.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
@@ -321,6 +338,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             };
 
             var response = await _client.SendMutationAsync<ClearShipmentsResponseDto>(request);
+
+            response.ThrowExceptionOnError();
 
             Cart = response.Data.ClearShipments.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
@@ -353,6 +372,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
             var response = await _client.SendQueryAsync<GetCartResponseDto>(new GraphQLRequest { Query = query });
 
+            response.ThrowExceptionOnError();
+
             return response.Data.Cart.AvailablePaymentMethods;
         }
 
@@ -368,6 +389,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                 selectedFields: QueryHelper.AvailableShippingMethods());
 
             var response = await _client.SendQueryAsync<GetCartResponseDto>(new GraphQLRequest { Query = query });
+
+            response.ThrowExceptionOnError();
 
             return response.Data.Cart.AvailableShippingMethods;
         }
@@ -388,6 +411,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                 type: type ?? string.Empty);
 
             var response = await _client.SendQueryAsync<GetCartResponseDto>(new GraphQLRequest { Query = query });
+
+            response.ThrowExceptionOnError();
 
             Cart = response.Data.Cart.ToShoppingCart(currency, language, user);
         }
@@ -413,6 +438,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             };
 
             var response = await _client.SendMutationAsync<MergeCartResponseDto>(request);
+
+            response.ThrowExceptionOnError();
 
             Cart = response.Data.MergeCart.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
@@ -462,6 +489,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
             var response = await _client.SendMutationAsync<RemoveCouponResponceDto>(request);
 
+            response.ThrowExceptionOnError();
+
             Cart = response.Data.RemoveCoupon.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
@@ -487,6 +516,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
             var response = await _client.SendMutationAsync<RemoveCartItemResponseDto>(request);
 
+            response.ThrowExceptionOnError();
+
             Cart = response.Data.RemoveCartItem.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
@@ -511,6 +542,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             };
 
             var response = await _client.SendMutationAsync<RemoveShipmentResponceDto>(request);
+
+
 
             Cart = response.Data.RemoveShipment.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
@@ -549,6 +582,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
             var response = await _client.SendMutationAsync<ChangeCartCommentResponseDto>(request);
 
+            response.ThrowExceptionOnError();
+
             Cart = response.Data.ChangeComment.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
@@ -582,6 +617,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             };
 
             var response = await _client.SendMutationAsync<ValidateCouponResponseDto>(request);
+
+            response.ThrowExceptionOnError();
 
             coupon.AppliedSuccessfully = response.Data.ValidateCoupon;
         }
@@ -629,7 +666,17 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
             var response = await _client.SendMutationAsync<ChangeCartItemQuantityResponseDto>(request);
 
+            response.ThrowExceptionOnError();
+
             Cart = response.Data.ChangeCartItemQuantity.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
+        }
+
+        private void ThrowExceptionOnError<T>(GraphQLResponse<T> response)
+        {
+            if (response.Errors != null && response.Errors.Any())
+            {
+                throw new StorefrontException(string.Join("\r\n", response.Errors.Select(e => e.Message)));
+            }
         }
     }
 }
