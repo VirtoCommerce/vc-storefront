@@ -696,9 +696,5 @@ namespace VirtoCommerce.Storefront.Domain
             //ensure what 'default' rule set is always present
             cart.ValidationRuleSet = store.CartValidationRuleSet?.AddIfNotContains("default") ?? cart.ValidationRuleSet;
         }
-
-        public Task ClearShipments() => Task.CompletedTask;
-
-        public Task ClearPayments() => Task.CompletedTask;
     }
 }
