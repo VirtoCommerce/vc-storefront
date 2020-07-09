@@ -162,6 +162,13 @@ namespace VirtoCommerce.Storefront.Domain
             return this;
         }
 
+        public IQuoteRequestBuilder Clear()
+        {
+            _quoteRequest.Items.Clear();
+
+            return this;
+        }
+
         public IQuoteRequestBuilder Update(QuoteRequestFormModel quoteRequest)
         {
             QuoteCacheRegion.ExpireQuote(_quoteRequest);
@@ -255,8 +262,5 @@ namespace VirtoCommerce.Storefront.Domain
 
         #endregion
 
-      
-
-     
     }
 }
