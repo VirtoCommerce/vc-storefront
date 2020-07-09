@@ -583,7 +583,8 @@ namespace VirtoCommerce.Storefront.Domain
             PostalCode = address.PostalCode,
             RegionId = address.RegionId,
             RegionName = address.RegionName,
-            Zip = address.Zip
+            Zip = address.Zip,
+            AddressType = (int)address.Type
         };
 
         public static PaymentDto ToDto(this Payment payment)
