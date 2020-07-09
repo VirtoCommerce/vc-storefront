@@ -104,20 +104,6 @@ namespace VirtoCommerce.Storefront.Domain
             return organization;
         }
 
-        public static Organization ToOrganization(this OrganizationDto organizationDto)
-        {
-            var organization = new Organization
-            {
-                Name = organizationDto.Name,
-            };
-            if (organization.Addresses != null)
-            {
-                organization.Addresses = organizationDto.Addresses;
-            }
-            return organization;
-        }
-
-
         public static Contact ToContact(this UserRegistration userRegistration)
         {
             var result = new Contact
@@ -320,8 +306,6 @@ namespace VirtoCommerce.Storefront.Domain
 
             return retVal;
         }
-
-        public static OrganizationDto ToDto(this Organization org) => org.ToOrganizationDto().JsonConvert<OrganizationDto>();
 
         public static customerDto.Contact ToCoreContactDto(this Contact contact)
         {

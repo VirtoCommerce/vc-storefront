@@ -6,12 +6,9 @@ using AutoRest.Core.Utilities;
 using GraphQL;
 using GraphQL.Client.Abstractions;
 using PagedList.Core;
-using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
-using VirtoCommerce.Storefront.Model.Customer.Commands;
 using VirtoCommerce.Storefront.Model.Customer.Contracts;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Stores;
@@ -23,15 +20,10 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         private readonly IGraphQLClient _client;
         private readonly IWorkContextAccessor _workContextAccessor;
 
-        private readonly IStorefrontMemoryCache _memoryCache;
-        private readonly IApiChangesWatcher _apiChangesWatcher;
-
-        public ExperienceMemberService(IGraphQLClient client, IWorkContextAccessor workContextAccessor, IStorefrontMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
+        public ExperienceMemberService(IGraphQLClient client, IWorkContextAccessor workContextAccessor)
         {
             _client = client;
             _workContextAccessor = workContextAccessor;
-            _memoryCache = memoryCache;
-            _apiChangesWatcher = apiChangesWatcher;
         }
 
 
@@ -58,8 +50,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                 }
             };
             var response = await _client.SendMutationAsync<ContactResponseDto>(request);
-            var result = response.Data.Contact;
-            return result;
+            return response.Data?.Contact;
         }
 
         public async Task<Organization> CreateOrganizationAsync(Organization organization)
@@ -69,7 +60,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                 Query = this.CreateOrganizationRequest(),
                 Variables = new
                 {
-                    command = new CreateOrganizationCommand
+                    command = new
                     {
                         Name = organization.Name,
                         Addresses = organization.Addresses.Select(x => x.ToDto()).ToList()
@@ -77,7 +68,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                 }
             };
             var response = await _client.SendMutationAsync<CreateOrganizationResponseDto>(request);
-            return response.Data.Organization.ToOrganization();
+            return response.Data?.Organization;
         }
 
         public async Task DeleteContactAsync(string contactId)
@@ -101,7 +92,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
             };
             var response = await _client.SendQueryAsync<ContactResponseDto>(request);
 
-            return response.Data.Contact;
+            return response.Data?.Contact;
         }
 
         /// <summary>
@@ -115,7 +106,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
             };
             var response = await _client.SendQueryAsync<GetOrganizationResponseDto>(request);
 
-            return response.Data.Organization.ToOrganization();
+            return response.Data?.Organization;
         }
 
         /// <summary>
