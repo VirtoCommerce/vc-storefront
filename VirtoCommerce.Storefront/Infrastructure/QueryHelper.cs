@@ -21,7 +21,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
         }}";
 
         public static string ClearPayments(string selectedFields = null)
-        => $@"mutation ($command:InputClearCartType!)
+        => $@"mutation ($command:InputClearPaymentsType!)
         {{
             clearPayments(command: $command)
             {{
@@ -30,7 +30,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
         }}";
 
         public static string ClearShipments(string selectedFields = null)
-        => $@"mutation ($command:InputClearCartType!)
+        => $@"mutation ($command:InputClearShipmentsType!)
         {{
             clearShipments(command: $command)
             {{
