@@ -7,7 +7,8 @@ namespace VirtoCommerce.Storefront.Model
 {
     public partial class Address : ValueObject
     {
-        public AddressType Type { get; set; }
+        public AddressType Type { get; set; } = AddressType.BillingAndShipping;
+        public AddressType AddressType { get => Type; set { Type = value; } }
         public string Key { get; set; }
         public string Name { get; set; }
 

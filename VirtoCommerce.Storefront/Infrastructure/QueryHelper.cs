@@ -238,7 +238,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
               shipmentMethodCode
               shipmentMethodOption
               fulfillmentCenterId
-              deliveryAddress{{key name organization countryCode countryName city postalCode zip line1 line2 regionId regionName firstName middleName lastName phone email type}}
+              deliveryAddress{{key name organization countryCode countryName city postalCode zip line1 line2 regionId regionName firstName middleName lastName phone email addressType}}
               volumetricWeight
               weightUnit
               weight
@@ -262,7 +262,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
               outerId
               paymentGatewayCode
               currency{{code symbol exchangeRate customFormatting}}
-              billingAddress{{key name organization countryCode countryName city postalCode zip line1 line2 regionId regionName firstName middleName lastName phone email type}}
+              billingAddress{{key name organization countryCode countryName city postalCode zip line1 line2 regionId regionName firstName middleName lastName phone email addressType}}
               taxPercentRate
               taxType
               taxDetails
@@ -297,7 +297,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
               lastName
               phone
               email
-              type
+              addressType
             }}
             items
             {{

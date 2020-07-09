@@ -115,12 +115,14 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         /// </summary>
         public Vendor[] GetVendorsByIds(Store store, Language language, params string[] vendorIds)
         {
-            throw new NotImplementedException();
+            //TODO:
+            return new Vendor[] { };
         }
 
         public Task<Vendor[]> GetVendorsByIdsAsync(Store store, Language language, params string[] vendorIds)
         {
-            throw new NotImplementedException();
+            //TODO:
+            return Task.FromResult(new Vendor[] { });
         }
 
         /// <summary>
@@ -168,7 +170,8 @@ namespace VirtoCommerce.Storefront.Domain.Customer
 
         public IPagedList<Vendor> SearchVendors(Store store, Language language, string keyword, int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos)
         {
-            throw new NotImplementedException();
+            //TODO:
+            return new StaticPagedList<Vendor>(new Vendor[] { }, pageNumber, pageSize, 0);
         }
 
         public async Task UpdateContactAddressesAsync(string contactId, IList<Address> addresses)
