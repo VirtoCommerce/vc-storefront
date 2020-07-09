@@ -323,7 +323,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             if (searchCriteria.OrganizationId != null)
             {
                 var contactsSearchResult = await _memberService.SearchOrganizationContactsAsync(searchCriteria);
-                var userIds = contactsSearchResult.Select(x => x.SecurityAccounts?.FirstOrDefault()).Select(x => x.Id);
+                var userIds = contactsSearchResult.Select(x => x.SecurityAccounts?.FirstOrDefault()).Where(x => x != null).Select(x => x.Id);
                 var users = new List<User>();
                 foreach (var userId in userIds)
                 {

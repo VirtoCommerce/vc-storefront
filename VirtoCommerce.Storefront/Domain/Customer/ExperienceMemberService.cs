@@ -92,7 +92,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                 Query = this.GetContactRequest(contactId)
             };
             var response = await _client.SendQueryAsync<ContactResponseDto>(request);
-
+          
             return response.Data?.Contact;
         }
 
@@ -150,22 +150,14 @@ namespace VirtoCommerce.Storefront.Domain.Customer
 
             var request = new GraphQLRequest
             {
-                Query = this.SearchOrganizationContacts(criteria.PageSize, (criteria.PageNumber - 1) * criteria.PageSize),
-                Variables = new
-                {
-                    criteria = new
-                    {
-                        organizationId = criteria.OrganizationId,
-                        searchPhrase = criteria.SearchPhrase
-                    }
-                }
+                Query = this.SearchOrganizationContacts(criteria.OrganizationId, criteria.PageSize, (criteria.PageNumber - 1) * criteria.PageSize)              
             };
-            var searchResult = await _client.SendQueryAsync<SearchMemberResponseDto>(request);
+            var searchResult = await _client.SendQueryAsync<SearchOrganizationMembersResponseDto>(request);
             //var searchResult = await _customerApi.SearchMemberAsync(criteriaDto);
             //var contacts = _customerApi.GetContactsByIds(searchResult.Results.Select(x => x.Id).ToList()).Select(x => x.ToContact()).ToList();
             //var contacts = searchResult.Data?.Items.Select(x => x.ToContact()).ToList();
 
-            return new StaticPagedList<Contact>(searchResult.Data?.Items, criteria.PageNumber, criteria.PageSize, searchResult.Data.TotalCount);
+            return new StaticPagedList<Contact>(searchResult.Data?.Organization?.Contacts?.Items, criteria.PageNumber, criteria.PageSize, searchResult.Data?.Organization?.Contacts?.TotalCount ?? 0);
         }
 
         public IPagedList<Vendor> SearchVendors(Store store, Language language, string keyword, int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos)
