@@ -36,5 +36,6 @@ namespace VirtoCommerce.Storefront.Model.Contracts
         public string RegionName { get; set; }
         //[JsonProperty(PropertyName = "zip")]
         public string Zip { get; set; }
+        public int AddressType { get; set; }
     }
 }

@@ -193,8 +193,8 @@ namespace VirtoCommerce.Storefront.Infrastructure
               total {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
               totalWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
               discountAmount {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            	discountAmountWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
-            	taxTotal{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
+              discountAmountWithTax {amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
+              taxTotal{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}
               taxPercentRate
               taxType
               taxDetails
@@ -238,7 +238,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
               shipmentMethodCode
               shipmentMethodOption
               fulfillmentCenterId
-              deliveryAddress{{key name organization countryCode countryName city postalCode zip line1 line2 regionId regionName firstName middleName lastName phone email}}
+              deliveryAddress{{key name organization countryCode countryName city postalCode zip line1 line2 regionId regionName firstName middleName lastName phone email addressType}}
               volumetricWeight
               weightUnit
               weight
@@ -262,7 +262,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
               outerId
               paymentGatewayCode
               currency{{code symbol exchangeRate customFormatting}}
-              billingAddress{{key name organization countryCode countryName city postalCode zip line1 line2 regionId regionName firstName middleName lastName phone email}}
+              billingAddress{{key name organization countryCode countryName city postalCode zip line1 line2 regionId regionName firstName middleName lastName phone email addressType}}
               taxPercentRate
               taxType
               taxDetails
@@ -297,6 +297,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
               lastName
               phone
               email
+              addressType
             }}
             items
             {{
