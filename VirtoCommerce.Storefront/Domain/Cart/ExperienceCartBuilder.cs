@@ -91,6 +91,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
         public async Task AddOrUpdatePaymentAsync(Payment payment)
         {
+            await ClearPayments();
+
             var request = new GraphQLRequest
             {
                 Query = QueryHelper.AddOrUpdatePayment(),
@@ -116,6 +118,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
         public async Task AddOrUpdateShipmentAsync(Shipment shipment)
         {
+            await ClearShipments();
+
             var request = new GraphQLRequest
             {
                 Query = QueryHelper.AddOrUpdateShippment(),
@@ -270,6 +274,54 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             var response = await _client.SendMutationAsync<ClearCartResponseDto>(request);
 
             Cart = response.Data.ClearCart.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
+        }
+
+        private async Task ClearPayments()
+        {
+            var request = new GraphQLRequest
+            {
+                Query = QueryHelper.ClearPayments(),
+                Variables = new
+                {
+                    Command = new ClearPaymentsCommand
+                    {
+                        StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
+                        CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
+                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
+                    }
+                }
+            };
+
+            var response = await _client.SendMutationAsync<ClearPaymentsResponseDto>(request);
+
+            Cart = response.Data.ClearPayments.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
+        }
+
+        private async Task ClearShipments()
+        {
+            var request = new GraphQLRequest
+            {
+                Query = QueryHelper.ClearShipments(),
+                Variables = new
+                {
+                    Command = new ClearShipmentsCommand
+                    {
+                        StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
+                        CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
+                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
+                    }
+                }
+            };
+
+            var response = await _client.SendMutationAsync<ClearShipmentsResponseDto>(request);
+
+            Cart = response.Data.ClearShipments.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
         public Task EvaluatePromotionsAsync()
