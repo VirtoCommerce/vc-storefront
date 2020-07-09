@@ -173,9 +173,9 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                 }
             };
 
-            var response = await _client.SendMutationAsync<ShoppingCartDtoContainer>(request);
+            var response = await _client.SendMutationAsync<ChangeCartItemCommentResponceDto>(request);
 
-            Cart = response.Data.ShoppingCartDto.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
+            Cart = response.Data.ChangeCartItemComment.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
         public Task ChangeItemDynamicPropertiesAsync(ChangeCartItemDynamicProperties newItemDynamicProperties)
@@ -460,7 +460,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                 }
             };
 
-            var response = await _client.SendMutationAsync<RemoveCouponResponseDto>(request);
+            var response = await _client.SendMutationAsync<RemoveCouponResponceDto>(request);
 
             Cart = response.Data.RemoveCoupon.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
@@ -510,9 +510,9 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                 }
             };
 
-            var response = await _client.SendMutationAsync<ShoppingCartDtoContainer>(request);
+            var response = await _client.SendMutationAsync<RemoveShipmentResponceDto>(request);
 
-            Cart = response.Data.ShoppingCartDto.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
+            Cart = response.Data.RemoveShipment.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
         /// <summary>
