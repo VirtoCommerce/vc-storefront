@@ -33,6 +33,7 @@ using VirtoCommerce.Storefront.Caching.Redis;
 using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Cart;
+using VirtoCommerce.Storefront.Domain.Customer;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Filters;
@@ -96,13 +97,13 @@ namespace VirtoCommerce.Storefront
 
             services.AddSingleton<IStoreService, StoreService>();
             services.AddSingleton<ICurrencyService, CurrencyService>();
-            services.AddSingleton<ISlugRouteService, SlugRouteService>();
-            services.AddSingleton<IMemberService, MemberService>();
+            services.AddScoped<ISlugRouteService, SlugRouteService>();
+            services.AddScoped<IMemberService, ExperienceMemberService>();
             services.AddSingleton<ICustomerOrderService, CustomerOrderService>();
             services.AddSingleton<IPaymentSearchService, PaymentSearchService>();
             services.AddSingleton<IQuoteService, QuoteService>();
             services.AddSingleton<ISubscriptionService, SubscriptionService>();
-            services.AddSingleton<ICatalogService, CatalogService>();
+            services.AddScoped<ICatalogService, CatalogService>();
             services.AddSingleton<IInventoryService, InventoryService>();
             services.AddSingleton<IPricingService, PricingService>();
             services.AddSingleton<ITaxEvaluator, TaxEvaluator>();
@@ -110,13 +111,13 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IDynamicContentEvaluator, DynamicContentEvaluator>();
             services.AddSingleton<IMarketingService, MarketingService>();
             services.AddSingleton<IStaticContentService, StaticContentService>();
-            services.AddSingleton<IMenuLinkListService, MenuLinkListServiceImpl>();
+            services.AddScoped<IMenuLinkListService, MenuLinkListServiceImpl>();
             services.AddSingleton<IStaticContentItemFactory, StaticContentItemFactory>();
             services.AddSingleton<IStaticContentLoaderFactory, StaticContentLoaderFactory>();
             services.AddSingleton<IApiChangesWatcher, ApiChangesWatcher>();
-            services.AddSingleton<AssociationRecommendationsProvider>();
-            services.AddSingleton<CognitiveRecommendationsProvider>();
-            services.AddSingleton<IRecommendationProviderFactory, RecommendationProviderFactory>(provider => new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(), provider.GetService<CognitiveRecommendationsProvider>()));
+            services.AddScoped<AssociationRecommendationsProvider>();
+            services.AddScoped<CognitiveRecommendationsProvider>();
+            services.AddScoped<IRecommendationProviderFactory, RecommendationProviderFactory>(provider => new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(), provider.GetService<CognitiveRecommendationsProvider>()));
             services.AddTransient<IQuoteRequestBuilder, QuoteRequestBuilder>();
             services.AddSingleton<IBlobChangesWatcher, BlobChangesWatcher>();
             services.AddTransient<ICartBuilder, ExperienceCartBuilder>();
@@ -420,7 +421,9 @@ namespace VirtoCommerce.Storefront
             mvcJsonOptions.SerializerSettings.Converters.Add(new MoneyJsonConverter(app.ApplicationServices.GetService<IWorkContextAccessor>()));
             mvcJsonOptions.SerializerSettings.Converters.Add(new CurrencyJsonConverter(app.ApplicationServices.GetService<IWorkContextAccessor>()));
             mvcJsonOptions.SerializerSettings.Converters.Add(new OrderTypesJsonConverter(app.ApplicationServices.GetService<IWorkContextAccessor>()));
-            mvcJsonOptions.SerializerSettings.Converters.Add(new RecommendationJsonConverter(app.ApplicationServices.GetService<IRecommendationProviderFactory>()));
+            // TODO: resolve "Cannot resolve scoped service 'VirtoCommerce.Storefront.Model.Recommendations.IRecommendationProviderFactory' from root provider."
+            // and uncomment the next line
+            //mvcJsonOptions.SerializerSettings.Converters.Add(new RecommendationJsonConverter(app.ApplicationServices.GetService<IRecommendationProviderFactory>()));
 
             var mvcViewOptions = app.ApplicationServices.GetService<IOptions<MvcViewOptions>>().Value;
             mvcViewOptions.ViewEngines.Add(app.ApplicationServices.GetService<ILiquidViewEngine>());

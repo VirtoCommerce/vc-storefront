@@ -5,11 +5,12 @@ using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
+using VirtoCommerce.Storefront.Model.Customer.Contracts;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Stores;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
-using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using customerDto = VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models;
+using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -83,7 +84,7 @@ namespace VirtoCommerce.Storefront.Domain
 
                 if (vendorDto.DynamicProperties != null)
                 {
-                    result.DynamicProperties = new MutablePagedList<DynamicProperty>(vendorDto.DynamicProperties.Select(ToDynamicProperty).ToList());                     
+                    result.DynamicProperties = new MutablePagedList<DynamicProperty>(vendorDto.DynamicProperties.Select(ToDynamicProperty).ToList());
                 }
             }
 
@@ -102,7 +103,6 @@ namespace VirtoCommerce.Storefront.Domain
             }
             return organization;
         }
-
 
         public static Contact ToContact(this UserRegistration userRegistration)
         {

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Contracts;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 using shopifyModel = VirtoCommerce.LiquidThemeEngine.Objects;
 
@@ -31,6 +32,33 @@ namespace VirtoCommerce.Storefront.Domain
                 Zip = addressDto.Zip,
 
                 Type = (AddressType)Enum.Parse(typeof(AddressType), addressDto.AddressType, true)
+            };
+            return retVal;
+        }
+
+        public static Address ToAddress(this AddressDto addressDto)
+        {
+            var retVal = new Address
+            {
+                Key = addressDto.Key,
+                City = addressDto.City,
+                CountryCode = addressDto.CountryCode,
+                CountryName = addressDto.CountryName,
+                Email = addressDto.Email,
+                FirstName = addressDto.FirstName,
+                LastName = addressDto.LastName,
+                Line1 = addressDto.Line1,
+                Line2 = addressDto.Line2,
+                MiddleName = addressDto.MiddleName,
+                Name = addressDto.Name,
+                Organization = addressDto.Organization,
+                Phone = addressDto.Phone,
+                PostalCode = addressDto.PostalCode,
+                RegionId = addressDto.RegionId,
+                RegionName = addressDto.RegionName,
+                Zip = addressDto.Zip,
+
+                Type = (AddressType)addressDto.AddressType
             };
             return retVal;
         }
