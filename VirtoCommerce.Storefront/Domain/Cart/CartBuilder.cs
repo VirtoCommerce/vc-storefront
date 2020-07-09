@@ -696,5 +696,7 @@ namespace VirtoCommerce.Storefront.Domain
             //ensure what 'default' rule set is always present
             cart.ValidationRuleSet = store.CartValidationRuleSet?.AddIfNotContains("default") ?? cart.ValidationRuleSet;
         }
+
+        public Task ValidateCouponAsync(Coupon coupon) => Task.CompletedTask;
     }
 }

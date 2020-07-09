@@ -20,6 +20,24 @@ namespace VirtoCommerce.Storefront.Infrastructure
             }}
         }}";
 
+        public static string ClearPayments(string selectedFields = null)
+        => $@"mutation ($command:InputClearPaymentsType!)
+        {{
+            clearPayments(command: $command)
+            {{
+            { selectedFields ?? AllFields() }
+            }}
+        }}";
+
+        public static string ClearShipments(string selectedFields = null)
+        => $@"mutation ($command:InputClearShipmentsType!)
+        {{
+            clearShipments(command: $command)
+            {{
+            { selectedFields ?? AllFields() }
+            }}
+        }}";
+
         public static string AddCoupon(string selectedFields = null)
         => $@"mutation ($command:InputAddCouponType!)
         {{
@@ -110,6 +128,12 @@ namespace VirtoCommerce.Storefront.Infrastructure
           }}
         }}";
 
+        public static string ValidateCoupon()
+        => $@"mutation ($command:InputValidateCouponType!)
+        {{
+          validateCoupon(command: $command)
+        }}";
+
         public static string RemoveShipmentMutation(string selectedFields = null)
         => $@"mutation ($command:InputRemoveShipmentType!)
         {{
@@ -132,9 +156,6 @@ namespace VirtoCommerce.Storefront.Infrastructure
         => $@"mutation ($command:InputRemoveCartType!)
         {{
           removeCart(command: $command)
-          {{
-            { selectedFields ?? AllFields() }
-          }}
         }}";
 
         public static string AvailableShippingMethods()
@@ -189,6 +210,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
             => $@"
             id
             name
+            hasPhysicalProducts
             status
             storeId
             channelId
@@ -224,6 +246,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
               height
               length
               width
+              total {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}  
             }}
             {AvailableShippingMethods()}
             discounts
@@ -250,6 +273,9 @@ namespace VirtoCommerce.Storefront.Infrastructure
                 price {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
               }}
               discounts{{promotionId coupon description}}
+              price {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}  
+              amount {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}  
+              total {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}  
             }}
             {AvailablePaymentMethods()}
             addresses
