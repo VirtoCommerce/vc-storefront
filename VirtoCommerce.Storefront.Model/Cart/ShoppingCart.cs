@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -47,6 +46,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
             DynamicProperties = new List<DynamicProperty>();
             ValidationErrors = new List<ValidationError>();
             AvailablePaymentMethods = new List<PaymentMethod>();
+            AvailableShippingMethods = new List<ShippingMethod>();
         }
 
         /// <summary>
@@ -331,6 +331,8 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
         public IList<PaymentMethod> AvailablePaymentMethods { get; set; }
 
+        public IList<ShippingMethod> AvailableShippingMethods { get; set; }
+
         public LineItem RecentlyAddedItem
         {
             get
@@ -531,6 +533,10 @@ namespace VirtoCommerce.Storefront.Model.Cart
             if (AvailablePaymentMethods != null)
             {
                 result.AvailablePaymentMethods = new List<PaymentMethod>(AvailablePaymentMethods.Select(x => x.Clone() as PaymentMethod));
+            }
+            if (AvailableShippingMethods != null)
+            {
+                result.AvailableShippingMethods = new List<ShippingMethod>(AvailableShippingMethods.Select(x => x.Clone() as ShippingMethod));
             }
 
             return result;

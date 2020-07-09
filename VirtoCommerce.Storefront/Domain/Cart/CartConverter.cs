@@ -117,6 +117,7 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new Shipment(currency)
             {
                 ShipmentMethodCode = shippingMethod.ShipmentMethodCode,
+                ShipmentMethodOption = shippingMethod.ShipmentMethodOption,
                 Price = shippingMethod.Price,
                 DiscountAmount = shippingMethod.DiscountAmount,
                 TaxType = shippingMethod.TaxType
@@ -502,6 +503,7 @@ namespace VirtoCommerce.Storefront.Domain
         public static ShoppingCart ToShoppingCart(this ShoppingCartDto cartDto, Currency currency, Language language, User user)
          => new ShoppingCart(currency, language)
          {
+             HasPhysicalProducts = cartDto.HasPhysicalProducts,
              ChannelId = cartDto.ChannelId,
              Comment = cartDto.Comment,
              CustomerId = cartDto.CustomerId,
@@ -591,6 +593,7 @@ namespace VirtoCommerce.Storefront.Domain
             PaymentGatewayCode = payment.PaymentGatewayCode,
             BillingAddress = payment.BillingAddress?.ToDto(),
             Currency = payment.Currency.Code,
+            Amount = payment.Amount.Amount,
             Price = payment.Price.Amount
         };
 

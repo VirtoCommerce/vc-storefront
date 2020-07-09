@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using VirtoCommerce.Storefront.Model.BulkOrder;
-using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Customer;
+using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Quote;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Stores;
@@ -168,5 +166,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         Task ValidateAsync();
 
         Task SaveAsync();
+
+        Task ValidateCouponAsync(Coupon coupon);
     }
 }

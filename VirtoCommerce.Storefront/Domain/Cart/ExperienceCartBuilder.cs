@@ -14,6 +14,7 @@ using VirtoCommerce.Storefront.Model.Commands;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 using VirtoCommerce.Storefront.Model.Contracts;
+using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Quote;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Stores;
@@ -421,7 +422,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             // Guardian, nullable argument added for backward compatibility
             if (cartId == null)
             {
-                return;
+                cartId = this.Cart.Id;
             }
 
             var request = new GraphQLRequest
@@ -436,7 +437,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                 }
             };
 
-            await _client.SendMutationAsync<bool>(request);
+            await _client.SendMutationAsync<object>(request);
         }
 
         public async Task RemoveCouponAsync(string couponCode = null)
@@ -558,6 +559,31 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             //var result = await new CartValidator(_cartService).ValidateAsync(Cart, ruleSet: Cart.ValidationRuleSet);
             //Cart.IsValid = result.IsValid;
             Cart.IsValid = await Task.FromResult(true);
+        }
+
+        public async Task ValidateCouponAsync(Coupon coupon)
+        {
+            var request = new GraphQLRequest
+            {
+                Query = QueryHelper.ValidateCoupon(),
+                Variables = new
+                {
+                    Command = new ValidateCouponCommand
+                    {
+                        StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
+                        CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
+                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
+                        Coupon = coupon.Code
+                    }
+                }
+            };
+
+            var response = await _client.SendMutationAsync<ValidateCouponResponseDto>(request);
+
+            coupon.AppliedSuccessfully = response.Data.ValidateCoupon;
         }
 
         protected virtual CartSearchCriteria CreateCartSearchCriteria(string cartName, Store store, User user, Language language, Currency currency, string type)

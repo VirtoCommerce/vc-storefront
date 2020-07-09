@@ -92,9 +92,9 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                 result,
                 "GetFilledCartWithItem",
                 new[] { "$", "$.items[*]", "$.recentlyAddedItem", "$.items[*].product", "$.recentlyAddedItem.product" },
-                new[] { "id", "primaryImage", "images", "imageUrl",
+                new[] { "id", "primaryImage", "images", "imageUrl", "payments", "coupons", "coupon",
                     "total", "subTotal", "subTotalWithTax", "extendedPriceTotal", "extendedPriceTotalWithTax", "discountAmount", "discountTotal", "discountTotalWithTax",
-                 "items", "hasPhysicalProducts", "customerId", "customerName", "createdDate", "recentlyAddedItem", "objectType", "type", "dynamicProperties", "customer"})
+                 "items", "customerId", "customerName", "createdDate", "recentlyAddedItem", "objectType", "type", "dynamicProperties", "customer"})
                 .Should()
                 .BeNull();
 
@@ -129,7 +129,9 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Cart
                     result,
                     "GetMergedAnonymousCartWithAdmin",
                     new[] { "$", "$.items[*]", "$.recentlyAddedItem", "$.items[*].product", "$.recentlyAddedItem.product" },
-                    new[] { "id", "primaryImage", "images", "imageUrl" })
+                     new[] { "id", "primaryImage", "images", "imageUrl", "payments", "coupons", "coupon",
+                    "total", "subTotal", "subTotalWithTax", "extendedPriceTotal", "extendedPriceTotalWithTax", "discountAmount", "discountTotal", "discountTotalWithTax",
+                 "items", "customerId", "customerName", "createdDate", "recentlyAddedItem", "objectType", "type", "dynamicProperties", "customer"})
                 .Should()
                 .BeNull();
 
