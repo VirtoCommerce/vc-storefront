@@ -207,7 +207,21 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
         public static string TermsToString(TemplateContext context, IList<Term> terms)
         {
-            return string.Join(";", terms.ToStrings() ?? new List<string> { });          
+            return string.Join(";", terms.ToStrings() ?? new List<string> { });
+        }
+
+        /// <summary>
+        /// Generate corrected with Image Processor URL to image (with optional transform width and height)
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="inputUrl">raw image URL</param>
+        /// <param name="width">new width (optional)</param>
+        /// <param name="height">new height (optional)</param>
+        /// <returns></returns>
+        public static string ImageUrl(TemplateContext context, string inputUrl, int width = 0, int height = 0)
+        {
+            var themeEngine = (ShopifyLiquidThemeEngine)context.TemplateLoader;
+            return themeEngine.UrlBuilder.ToImageAbsolute(inputUrl, width, height);
         }
 
         /// <summary>
@@ -247,7 +261,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <param name="context"></param>
         /// <param name="keyword">search keyword</param>
         /// <returns>example: /collection?q=foo</returns>
-        public static string AddSearchByKeywordUrl (TemplateContext context, string keyword)
+        public static string AddSearchByKeywordUrl(TemplateContext context, string keyword)
         {
             return BuildUriWithSearchQueryString(context, criteria =>
             {
