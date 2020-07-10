@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.Client.Abstractions;
@@ -27,7 +28,12 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 {
                     Command = new
                     {
-                        user
+                        user.UserName,
+                        user.UserType,
+                        user.Password,
+                        user.Email,
+                        user.StoreId,
+                        memberId = !string.IsNullOrEmpty(user.ContactId) ? user.ContactId : user.Contact?.Id
                     }
                 }
             };
@@ -45,7 +51,21 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 {
                     Command = new
                     {
-                        user
+                        user.UserName,
+                        user.UserType,
+                        user.Email,
+                        user.Id,
+                        memberId = !string.IsNullOrEmpty(user.ContactId) ? user.ContactId : user.Contact?.Id,
+                        user.IsAdministrator,
+                        user.LockoutEnabled,
+                        LockoutEnd = user.LockoutEndDateUtc,
+                        user.PhoneNumber,
+                        user.PhoneNumberConfirmed,
+                        //user.PhotoUrl,
+                        roles = user.Roles.Select(x => new { x.Id, x.Name }),
+                        user.TwoFactorEnabled,
+                        user.PasswordHash,
+                        user.SecurityStamp
                     }
                 }
             };

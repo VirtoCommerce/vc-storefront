@@ -2,11 +2,11 @@ namespace VirtoCommerce.Storefront.Domain.Security
 {
     public static class GraphQlSecurityHelper
     {
-        public static readonly string SecurityResultFields = $"succeeded errors";
+        public static readonly string SecurityResultFields = "succeeded errors { description }";
         public static readonly string AllRoleFields = $"id name permissions";
-        public static readonly string AllExternalLoginFields = $"";
-        public static readonly string AllUserFields = $"id storeId userName password phoneNumber phoneNumberConfirmed email emailConfirmed twoFactorEnabled" +
-            $"accessFailedCount lockoutEnabled lockoutEndDateUtc isAdministrator userType userState contactId roles {{{AllRoleFields}}} externalLogins {{{AllExternalLoginFields}}}";
+        public static readonly string AllExternalLoginFields = $"loginProvider providerKey";
+        public static readonly string AllUserFields = $"id storeId userName phoneNumber phoneNumberConfirmed email emailConfirmed twoFactorEnabled accessFailedCount " +
+            $"lockoutEnabled lockoutEnd isAdministrator userType contactId roles {{{AllRoleFields}}} securityStamp passwordHash "; //logins {{{AllExternalLoginFields}}}
 
         public static string CreateUserRequest(this SecurityGraphQLProvider service, string selectedFields = null)
         => $@"mutation ($command: InputCreateUserType!)
@@ -26,16 +26,19 @@ namespace VirtoCommerce.Storefront.Domain.Security
           }}
         }}";
 
-        public static string DeleteUserRequest(this SecurityGraphQLProvider service)
+        public static string DeleteUserRequest(this SecurityGraphQLProvider service, string selectedFields = null)
         => $@"mutation ($command: InputDeleteUserType!)
         {{
             deleteContact(command: $command)
+            {{
+                { selectedFields ?? SecurityResultFields }
+            }}
         }}";
 
         public static string GetUserByIdRequest(this SecurityGraphQLProvider service, string id, string selectedFields = null)
             => $@"
         {{
-            user(id:""{id}"")
+            user:getUserById(id:""{id}"")
             {{
             { selectedFields ?? AllUserFields }
             }}
@@ -44,7 +47,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public static string GetUserByNameRequest(this SecurityGraphQLProvider service, string name, string selectedFields = null)
             => $@"
         {{
-            user(name:""{name}"")
+            user:getUserByName(userName:""{name}"")
             {{
             { selectedFields ?? AllUserFields }
             }}
@@ -53,7 +56,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public static string GetUserByEmailRequest(this SecurityGraphQLProvider service, string email, string selectedFields = null)
             => $@"
         {{
-            user(email:""{email}"")
+            user:user(email:""{email}"")
             {{
             { selectedFields ?? AllUserFields }
             }}
@@ -62,7 +65,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public static string GetUserByLoginRequest(this SecurityGraphQLProvider service, string loginProvider, string providerKey, string selectedFields = null)
             => $@"
         {{
-            user(loginProvider:""{loginProvider}"" providerKey:""{providerKey}"")
+            getUserByEmail(loginProvider:""{loginProvider}"" providerKey:""{providerKey}"")
             {{
             { selectedFields ?? AllUserFields }
             }}
@@ -77,10 +80,10 @@ namespace VirtoCommerce.Storefront.Domain.Security
           }}
         }}";
 
-        public static string GetRoleByIdRequest(this SecurityGraphQLProvider service, string id, string selectedFields = null)
+        public static string GetRoleByIdRequest(this SecurityGraphQLProvider service, string roleName, string selectedFields = null)
             => $@"
         {{
-            role(id:""{id}"")
+            role:getRole(roleName:""{roleName}"")
             {{
             { selectedFields ?? AllRoleFields }
             }}

@@ -2,6 +2,6 @@ namespace VirtoCommerce.Storefront.Model.Security.Contracts
 {
     public class DeleteUserResponseDto
     {
-        public bool DeleteUser { get; set; }
+        public SecurityResultDto DeleteUser { get; set; }
     }
 }

@@ -221,6 +221,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                         contact.Emails,
                         contact.FirstName,
                         contact.FullName,
+                        contact.Name,
                         contact.Groups,
                         contact.Id,
                         contact.LastName,

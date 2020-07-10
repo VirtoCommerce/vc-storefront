@@ -516,7 +516,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 });
 
                 user.IsFirstTimeBuyer = orderSearchResult.TotalCount == 0;
-
+                user.IsRegisteredUser = true;
                 //TODO
                 //options.AddExpirationToken(new PollingApiUserChangeToken(_platformSecurityApi, _options.ChangesPollingInterval));
                 options.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(user.Id));

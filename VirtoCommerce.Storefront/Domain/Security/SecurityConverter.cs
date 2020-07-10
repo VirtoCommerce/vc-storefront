@@ -25,7 +25,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             {
                 return IdentityResult.Success;
             }
-            return IdentityResult.Failed(resultDto.Errors.Select(x => new IdentityError { Description = x }).ToArray());
+            return IdentityResult.Failed(resultDto.Errors.Select(x => new IdentityError { Description = x.Description }).ToArray());
         }
 
         public static dto.Role ToRoleDto(this Role role)
