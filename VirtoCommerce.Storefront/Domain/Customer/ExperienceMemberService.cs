@@ -70,7 +70,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                     }
                 }
             };
-            var response = await _client.SendMutationAsync<CreateOrganizationResponseDto>(request);
+            var response = await _client.SendMutationAsync<OrganizationResponseDto>(request);
             response.ThrowExceptionOnError();
             return response.Data?.Organization;
         }
@@ -109,7 +109,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
             {
                 Query = this.GetOrganizationRequest(organizationId)
             };
-            var response = await _client.SendQueryAsync<GetOrganizationResponseDto>(request);
+            var response = await _client.SendQueryAsync<OrganizationResponseDto>(request);
 
             return response.Data?.Organization;
         }
@@ -221,7 +221,6 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                         contact.Emails,
                         contact.FirstName,
                         contact.FullName,
-                        contact.Name,
                         contact.Groups,
                         contact.Id,
                         contact.LastName,
@@ -260,7 +259,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                     }
                 }
             };
-            var response = await _client.SendMutationAsync<UpdateOrganizationResponseDto>(request);
+            var response = await _client.SendMutationAsync<OrganizationResponseDto>(request);
             response.ThrowExceptionOnError();
 
             CustomerCacheRegion.ExpireMember(organization.Id);

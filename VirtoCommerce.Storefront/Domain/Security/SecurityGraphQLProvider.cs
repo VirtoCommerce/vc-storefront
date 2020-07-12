@@ -37,7 +37,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                     }
                 }
             };
-            var response = await _client.SendMutationAsync<CreateUserResponseDto>(request);
+            var response = await _client.SendMutationAsync<SecurityResultResponseDto>(request);
             response.ThrowExceptionOnError();
             return response.Data?.SecurityResult.ToIdentityResult();
         }
@@ -69,7 +69,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                     }
                 }
             };
-            var response = await _client.SendMutationAsync<UpdateUserResponseDto>(request);
+            var response = await _client.SendMutationAsync<SecurityResultResponseDto>(request);
             response.ThrowExceptionOnError();
             return response.Data?.SecurityResult.ToIdentityResult();
         }
@@ -84,7 +84,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                     Command = new { userName }
                 }
             };
-            var response = await _client.SendMutationAsync<DeleteUserResponseDto>(request);
+            var response = await _client.SendMutationAsync<SecurityResultResponseDto>(request);
             response.ThrowExceptionOnError();
         }
 
@@ -149,7 +149,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                     }
                 }
             };
-            var response = await _client.SendMutationAsync<UpdateRoleResponseDto>(request);
+            var response = await _client.SendMutationAsync<SecurityResultResponseDto>(request);
             response.ThrowExceptionOnError();
             return response.Data?.SecurityResult.ToIdentityResult();
         }
