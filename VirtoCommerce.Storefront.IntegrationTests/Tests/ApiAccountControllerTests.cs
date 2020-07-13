@@ -120,7 +120,12 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
 
             //Assert
             var user = await GetCurrentUser();
-            Assert.Equal(addresses.FirstOrDefault(), user.Addresses.FirstOrDefault());
+            Assert.Equal(addresses.FirstOrDefault().City, user.Addresses.FirstOrDefault().City);
+            Assert.Equal(addresses.FirstOrDefault().CountryCode, user.Addresses.FirstOrDefault().CountryCode);
+            Assert.Equal(addresses.FirstOrDefault().CountryName, user.Addresses.FirstOrDefault().CountryName);
+            Assert.Equal(addresses.FirstOrDefault().PostalCode, user.Addresses.FirstOrDefault().PostalCode);
+            Assert.Equal(addresses.FirstOrDefault().RegionId, user.Addresses.FirstOrDefault().RegionId);
+            Assert.Equal(addresses.FirstOrDefault().Line1, user.Addresses.FirstOrDefault().Line1);
             _client.Logout();
         }
         
@@ -195,6 +200,8 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
             return new OrganizationRegistration
             {
                 UserName = $"TestOrg{ticks}",
+                FirstName = $"firstName{ticks}",
+                LastName = $"lastName{ticks}",
                 Password = "Somepass123!",
                 Email = $"org{ticks}@org.com1",
                 OrganizationName = $"OrgName{ticks}",
