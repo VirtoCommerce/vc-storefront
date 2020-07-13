@@ -129,7 +129,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
             return _hostEnv.MapPath(virtualPath);
         }
 
-        public string ToImageAbsolute(string virtualPath, int width, int height)
+        public string ToImageAbsolute(string virtualPath, int? width, int? height)
         {
             return _imageProcessor.ResolveUrl(virtualPath, width, height);
         }

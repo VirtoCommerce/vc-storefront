@@ -380,10 +380,7 @@ namespace VirtoCommerce.Storefront
             if (imageProcessorOptions.Provider.EqualsInvariant("Imagekit"))
             {
                 services.AddSingleton<IImageProcessor, ImagekitImageProcessor>();
-                services.Configure<ImageProcessorOptions>(options =>
-                {
-                    options.ServiceUrl = imageProcessorOptions.ServiceUrl;
-                });
+                services.Configure<ImageProcessorOptions>(Configuration.GetSection("VirtoCommerce:ImageProcessor"));
             }
             else
             {

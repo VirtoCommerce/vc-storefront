@@ -4,7 +4,7 @@ namespace VirtoCommerce.Storefront.Domain.ImageProcessing
 {
     public class DefaultImageProcessor : IImageProcessor
     {
-        public string ResolveUrl(string inputUrl, int width, int height)
+        public string ResolveUrl(string inputUrl, int? width, int? height)
         {
             return inputUrl;
         }

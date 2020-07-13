@@ -218,7 +218,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <param name="width">new width (optional)</param>
         /// <param name="height">new height (optional)</param>
         /// <returns></returns>
-        public static string ImageUrl(TemplateContext context, string inputUrl, int width = 0, int height = 0)
+        public static string ImageUrl(TemplateContext context, string inputUrl, int? width = null, int? height = null)
         {
             var themeEngine = (ShopifyLiquidThemeEngine)context.TemplateLoader;
             return themeEngine.UrlBuilder.ToImageAbsolute(inputUrl, width, height);
