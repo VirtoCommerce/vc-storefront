@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 
 namespace VirtoCommerce.Storefront.Model.Security
 {
@@ -13,6 +14,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// Flag indicating whether if the operation succeeded or not.
         /// </summary>
         /// <value>True if the operation succeeded, otherwise false.</value>
+        [JsonProperty] 
         public bool Succeeded { get; protected set; }
 
         /// <summary>
@@ -28,6 +30,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// <returns>An <see cref="IdentityResult"/> indicating a successful operation.</returns>
         public static UserActionIdentityResult Success => _success;
 
+        [JsonProperty]
         public string MemberId { get; set; }
 
         /// <summary>
