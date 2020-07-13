@@ -65,7 +65,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public static string GetUserByLoginRequest(this SecurityGraphQLProvider service, string loginProvider, string providerKey, string selectedFields = null)
             => $@"
         {{
-            getUserByEmail(loginProvider:""{loginProvider}"" providerKey:""{providerKey}"")
+            user: getUserByLogin(loginProvider:""{loginProvider}"" providerKey:""{providerKey}"")
             {{
             { selectedFields ?? AllUserFields }
             }}
