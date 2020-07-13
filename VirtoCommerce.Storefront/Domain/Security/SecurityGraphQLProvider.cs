@@ -29,10 +29,11 @@ namespace VirtoCommerce.Storefront.Domain.Security
                     Command = new
                     {
                         user.UserName,
-                        user.UserType,
+                        UserType = user.UserType ?? "Customer",
                         user.Password,
                         user.Email,
                         user.StoreId,
+                        Logins = user.ExternalLogins.Select(x => new { x.LoginProvider, x.ProviderKey }),
                         memberId = !string.IsNullOrEmpty(user.ContactId) ? user.ContactId : user.Contact?.Id
                     }
                 }
