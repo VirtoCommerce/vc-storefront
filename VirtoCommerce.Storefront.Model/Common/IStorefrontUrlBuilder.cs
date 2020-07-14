@@ -10,5 +10,6 @@ namespace VirtoCommerce.Storefront.Model.Common
         string ToAppRelative(string virtualPath);
         string ToAppRelative(string virtualPath, Store store, Language language);
         string ToLocalPath(string virtualPath);
+        string ToImageAbsolute(string virtualPath, int? width, int? height);
     }
 }

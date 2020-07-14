@@ -31,6 +31,7 @@ using VirtoCommerce.Storefront.Caching.Redis;
 using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Cart;
+using VirtoCommerce.Storefront.Domain.ImageProcessing;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Filters;
@@ -372,6 +373,19 @@ namespace VirtoCommerce.Storefront
             });
 
             services.AddResponseCompression();
+
+            // Image Processor - correct image URL with image processing service endpoint
+            var imageProcessorOptions = new ImageProcessorOptions();
+            Configuration.GetSection("VirtoCommerce:ImageProcessor").Bind(imageProcessorOptions);
+            if (imageProcessorOptions.Provider.EqualsInvariant("Imagekit"))
+            {
+                services.AddSingleton<IImageProcessor, ImagekitImageProcessor>();
+                services.Configure<ImageProcessorOptions>(Configuration.GetSection("VirtoCommerce:ImageProcessor"));
+            }
+            else
+            {
+                services.AddSingleton<IImageProcessor, DefaultImageProcessor>();
+            }
 
         }
 
