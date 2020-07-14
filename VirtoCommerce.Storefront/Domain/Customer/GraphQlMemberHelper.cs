@@ -6,7 +6,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
     {
         public const string AllAddressFields = "city countryCode countryName email firstName key lastName line1 line2 middleName name organization phone postalCode regionId regionName zip addressType";
         public static readonly string AllOrganizationFields = $"id memberType name addresses {{ {AllAddressFields} }} businessCategory description emails groups outerId ownerId parentId phones seoObjectType";
-        public static readonly string AllContactFields = $"firstName lastName organizations {{ {AllOrganizationFields} }} id birthDate fullName memberType middleName name outerId addresses {{ {AllAddressFields} }}";
+        public static readonly string AllContactFields = $"firstName lastName organizations {{ {AllOrganizationFields} }} organizationsIds id birthDate fullName memberType middleName name outerId addresses {{ {AllAddressFields} }}";
         public static readonly string AllMemberSearchFields = $"totalCount items {{ {AllContactFields } }}";
 
         public static string CreateContactRequest(this IMemberService service, string selectedFields = null)
@@ -73,7 +73,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         {{
             organization(id:""{id}"")
             {{
-            { selectedFields ?? AllContactFields }
+            { selectedFields ?? AllOrganizationFields }
             }}
         }}";
 

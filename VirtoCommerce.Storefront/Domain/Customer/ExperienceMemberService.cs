@@ -97,7 +97,19 @@ namespace VirtoCommerce.Storefront.Domain.Customer
             };
             var response = await _client.SendQueryAsync<ContactResponseDto>(request);
 
-            return response.Data?.Contact;
+            if (response.Data != null)
+            {
+                var contact = response.Data.Contact;
+                if (response.Data.Contact.OrganizationsIds.Any())
+                {
+                    //Load contact organization
+                    contact.Organization = await GetOrganizationByIdAsync(contact.OrganizationsIds.FirstOrDefault());
+                }
+
+                return contact;
+            }
+
+            return null;
         }
 
         /// <summary>
