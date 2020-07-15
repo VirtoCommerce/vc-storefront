@@ -53,18 +53,20 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 {
                     Command = new
                     {
+                        user.AccessFailedCount,
                         user.UserName,
                         user.UserType,
                         user.Email,
                         user.Id,
-                        memberId = !string.IsNullOrEmpty(user.ContactId) ? user.ContactId : user.Contact?.Id,
                         user.IsAdministrator,
                         user.LockoutEnabled,
                         LockoutEnd = user.LockoutEndDateUtc,
+                        memberId = !string.IsNullOrEmpty(user.ContactId) ? user.ContactId : user.Contact?.Id,
                         user.PhoneNumber,
                         user.PhoneNumberConfirmed,
                         //user.PhotoUrl,
                         roles = user.Roles.Select(x => new { x.Id, x.Name }),
+                        user.StoreId,
                         user.TwoFactorEnabled,
                         user.PasswordHash,
                         user.SecurityStamp

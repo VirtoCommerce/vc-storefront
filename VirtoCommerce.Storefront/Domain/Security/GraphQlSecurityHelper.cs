@@ -6,7 +6,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public static readonly string AllRoleFields = $"id name permissions";
         public static readonly string AllExternalLoginFields = $"loginProvider providerKey";
         public static readonly string AllUserFields = $"id storeId userName phoneNumber phoneNumberConfirmed email emailConfirmed twoFactorEnabled accessFailedCount " +
-            $"lockoutEnabled lockoutEnd isAdministrator userType contactId:memberId roles {{{AllRoleFields}}} securityStamp passwordHash "; //logins {{{AllExternalLoginFields}}}
+            $"lockoutEnabled lockoutEndDateUtc:lockoutEnd isAdministrator userType contactId:memberId roles {{{AllRoleFields}}} securityStamp passwordHash "; //logins {{{AllExternalLoginFields}}}
 
         public static string CreateUserRequest(this SecurityGraphQLProvider service, string selectedFields = null)
         => $@"mutation ($command: InputCreateUserType!)
