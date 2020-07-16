@@ -37,9 +37,9 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 Query = this.GetOrderByNumberRequest(number)
             };
-            var response = await _client.SendQueryAsync<CustomerOrder>(request);
+            var response = await _client.SendQueryAsync<OrderResponseDto>(request);
 
-            return response.Data;
+            return response.Data?.Order;
         }
 
         public IPagedList<CustomerOrder> SearchOrders(OrderSearchCriteria criteria)
