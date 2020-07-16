@@ -73,6 +73,12 @@ namespace VirtoCommerce.Storefront.Model.Quote.Services
         IQuoteRequestBuilder Confirm();
 
         /// <summary>
+        /// Remove all items from captured RFQ
+        /// </summary>
+        /// <returns></returns>
+        IQuoteRequestBuilder Clear();
+
+        /// <summary>
         /// Remove item from captured RFQ
         /// </summary>
         /// <param name="quoteItemId"></param>

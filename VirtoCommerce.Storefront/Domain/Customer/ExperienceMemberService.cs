@@ -6,6 +6,7 @@ using AutoRest.Core.Utilities;
 using GraphQL;
 using GraphQL.Client.Abstractions;
 using PagedList.Core;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
@@ -51,6 +52,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                 }
             };
             var response = await _client.SendMutationAsync<ContactResponseDto>(request);
+            response.ThrowExceptionOnError();
             return response.Data?.Contact;
         }
 
@@ -69,6 +71,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                 }
             };
             var response = await _client.SendMutationAsync<CreateOrganizationResponseDto>(request);
+            response.ThrowExceptionOnError();
             return response.Data?.Organization;
         }
 
@@ -83,6 +86,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                 }
             };
             var response = await _client.SendMutationAsync<DeleteContactResponseDto>(request);
+            response.ThrowExceptionOnError();
         }
 
         public async Task<Contact> GetContactByIdAsync(string contactId)
@@ -183,6 +187,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                 }
             };
             var response = await _client.SendMutationAsync<ContactResponseDto>(request);
+            response.ThrowExceptionOnError();
 
             if (response.Data != null)
             {
@@ -220,7 +225,8 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                 }
             };
 
-            _ = await _client.SendMutationAsync<ContactResponseDto>(request);
+            var response = await _client.SendMutationAsync<ContactResponseDto>(request);
+            response.ThrowExceptionOnError();
 
             //Invalidate cache
             CustomerCacheRegion.ExpireMember(contact.Id);
@@ -246,6 +252,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                 }
             };
             var response = await _client.SendMutationAsync<UpdateOrganizationResponseDto>(request);
+            response.ThrowExceptionOnError();
 
             CustomerCacheRegion.ExpireMember(organization.Id);
         }
