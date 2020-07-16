@@ -22,18 +22,20 @@ namespace VirtoCommerce.Storefront.Controllers.Api
     [ResponseCache(CacheProfileName = "None")]
     public class ApiOrderController : StorefrontControllerBase
     {
+        private readonly ICustomerOrderService _customerOrderService;
         private readonly IOrderModule _orderApi;
         private readonly IStoreService _storeService;
         private readonly IAuthorizationService _authorizationService;
         private readonly IPaymentSearchService _paymentSearchService;
 
-        public ApiOrderController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IOrderModule orderApi, IStoreService storeService, IAuthorizationService authorizationService, IPaymentSearchService paymentSearchService)
+        public ApiOrderController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IOrderModule orderApi, IStoreService storeService, IAuthorizationService authorizationService, IPaymentSearchService paymentSearchService, ICustomerOrderService customerOrderService)
             : base(workContextAccessor, urlBuilder)
         {
             _orderApi = orderApi;
             _storeService = storeService;
             _authorizationService = authorizationService;
             _paymentSearchService = paymentSearchService;
+            _customerOrderService = customerOrderService;
         }
 
 
@@ -89,13 +91,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpGet("{orderNumber}")]
         public async Task<ActionResult<CustomerOrder>> GetCustomerOrder(string orderNumber)
         {
-            var orderDto = await _orderApi.GetByNumberAsync(orderNumber, string.Empty);
+            var orderDto = await _customerOrderService.GetOrderByNumberAsync(orderNumber);
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, orderDto, CanAccessOrderAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
             {
                 return Unauthorized();
             }
-            return orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
+            return orderDto;
+            //return orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
         }
 
         // GET: storefrontapi/orders/{orderNumber}/newpaymentdata
