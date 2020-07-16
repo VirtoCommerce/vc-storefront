@@ -116,6 +116,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             //Load user associated contact
             if (result != null && result.ContactId != null)
             {
+                // TODO: research if this can be switched to single graphQL request
                 result.Contact = await _memberService.GetContactByIdAsync(result.ContactId);
             }
             return result;
@@ -517,6 +518,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
                 user.IsFirstTimeBuyer = orderSearchResult.TotalCount == 0;
                 user.IsRegisteredUser = true;
+                user.Permissions = user.Roles.SelectMany(x => x.Permissions).Distinct().ToArray();
                 //TODO
                 //options.AddExpirationToken(new PollingApiUserChangeToken(_platformSecurityApi, _options.ChangesPollingInterval));
                 options.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(user.Id));

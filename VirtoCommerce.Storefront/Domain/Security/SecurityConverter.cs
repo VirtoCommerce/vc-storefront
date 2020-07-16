@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Security.Contracts;
+using static VirtoCommerce.Storefront.Model.Security.SecurityConstants;
 using dto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain.Security
@@ -50,9 +51,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public static User ToUser(this OrganizationUserRegistration registerForm)
         {
             var result = ((UserRegistration)registerForm).ToUser();
-            if (!string.IsNullOrEmpty(registerForm.Role))
+            if (!string.IsNullOrEmpty(registerForm.Role) && Roles.FindRoleById(registerForm.Role) != null)
             {
-                result.Roles = new[] { new Role { Id = registerForm.Role, Name = registerForm.Role } };
+                result.Roles = new[] { (Role)Roles.FindRoleById(registerForm.Role).Clone() };
             }
             return result;
         }

@@ -85,7 +85,10 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 Query = this.DeleteUserRequest(),
                 Variables = new
                 {
-                    Command = new { userName }
+                    Command = new
+                    {
+                        UserNames = new[] { userName }
+                    }
                 }
             };
             var response = await _client.SendMutationAsync<SecurityResultResponseDto>(request);

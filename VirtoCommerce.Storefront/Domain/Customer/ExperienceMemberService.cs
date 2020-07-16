@@ -100,10 +100,10 @@ namespace VirtoCommerce.Storefront.Domain.Customer
             if (response.Data != null)
             {
                 var contact = response.Data.Contact;
-                if (response.Data.Contact.OrganizationsIds.Any())
+                if (contact.OrganizationsIds.Any())
                 {
-                    //Load contact organization
-                    contact.Organization = await GetOrganizationByIdAsync(contact.OrganizationsIds.FirstOrDefault());
+                    contact.OrganizationId = contact.OrganizationsIds.First();
+                    contact.Organization = contact.Organizations.FirstOrDefault();
                 }
 
                 return contact;
@@ -154,34 +154,13 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         /// </summary>
         public async Task<IPagedList<Contact>> SearchOrganizationContactsAsync(OrganizationContactsSearchCriteria criteria)
         {
-            //var criteriaDto = new customerDto.MembersSearchCriteria
-            //{
-            //    MemberId = criteria.OrganizationId,
-            //    Skip = (criteria.PageNumber - 1) * criteria.PageSize,
-            //    Take = criteria.PageSize,
-            //    Sort = criteria.Sort,
-            //    SearchPhrase = criteria.SearchPhrase,
-            //    ObjectType = "Member"
-            //};
-
             var request = new GraphQLRequest
             {
-                Query = this.SearchOrganizationContacts(criteria.PageSize, (criteria.PageNumber - 1) * criteria.PageSize),
-                Variables = new
-                {
-                    criteria = new
-                    {
-                        organizationId = criteria.OrganizationId,
-                        searchPhrase = criteria.SearchPhrase
-                    }
-                }
+                Query = this.OrganizationWithContactsRequest(criteria)
             };
-            var searchResult = await _client.SendQueryAsync<SearchMemberResponseDto>(request);
-            //var searchResult = await _customerApi.SearchMemberAsync(criteriaDto);
-            //var contacts = _customerApi.GetContactsByIds(searchResult.Results.Select(x => x.Id).ToList()).Select(x => x.ToContact()).ToList();
-            //var contacts = searchResult.Data?.Items.Select(x => x.ToContact()).ToList();
+            var searchResult = await _client.SendQueryAsync<OrganizationContactsResponseDto>(request);
 
-            return new StaticPagedList<Contact>(searchResult.Data?.Items, criteria.PageNumber, criteria.PageSize, searchResult.Data.TotalCount);
+            return new StaticPagedList<Contact>(searchResult.Data.Organization?.Contacts?.Results, criteria.PageNumber, criteria.PageSize, searchResult.Data.Organization?.Contacts?.TotalCount ?? 0);
         }
 
         public IPagedList<Vendor> SearchVendors(Store store, Language language, string keyword, int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos)
@@ -237,6 +216,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                         contact.Id,
                         contact.LastName,
                         contact.MiddleName,
+                        Organizations = contact.OrganizationsIds,
                         contact.Phones,
                         contact.PhotoUrl,
                         contact.Salutation,

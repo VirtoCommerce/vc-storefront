@@ -18,6 +18,7 @@ using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Security.Events;
+using static VirtoCommerce.Storefront.Model.Security.SecurityConstants;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
@@ -245,7 +246,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                             StoreId = WorkContext.CurrentStore.Id,
                             Email = email,
                         };
-                        var roles = invitation.Roles?.Select(x => new Model.Security.Role { Id = x }).ToList();
+                        var roles = invitation.Roles?.Select(Roles.FindRoleById);
                         //Add default role for organization member invitation
                         if (roles.IsNullOrEmpty() && !string.IsNullOrEmpty(organizationId))
                         {
@@ -323,10 +324,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             if (searchCriteria.OrganizationId != null)
             {
                 var contactsSearchResult = await _memberService.SearchOrganizationContactsAsync(searchCriteria);
-                var userIds = contactsSearchResult.Select(x => x.SecurityAccounts?.FirstOrDefault()).Select(x => x.Id);
+                var userIds = contactsSearchResult.Select(x => x.SecurityAccounts?.FirstOrDefault()?.Id);
                 var users = new List<User>();
                 foreach (var userId in userIds)
                 {
+                    // TODO: refactor to eliminate redundant requests (use GraphQL)
                     var user = await _userManager.FindByIdAsync(userId);
                     if (user != null)
                     {
@@ -346,7 +348,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost("{userId}/lock")]
         [Authorize(SecurityConstants.Permissions.CanEditUsers)]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserActionIdentityResult>> LockUser([FromRoute]string userId)
+        public async Task<ActionResult<UserActionIdentityResult>> LockUser([FromRoute] string userId)
         {
             //TODO: Add authorization checks
             var result = UserActionIdentityResult.Success;
@@ -419,7 +421,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                             return Unauthorized();
                         }
                         //Doesn't allow change self roles
-                        user.Roles = userUpdateInfo.Roles?.Select(x => new Model.Security.Role { Id = x, Name = x });
+                        user.Roles = userUpdateInfo.Roles?.Select(Roles.FindRoleById);
                     }
 
                     if (user.Contact != null)
@@ -500,6 +502,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<UpdatePhoneNumberResult>> UpdatePhoneNumber([FromBody] UpdatePhoneNumberModel model)
         {
+            // TODO: check/restore the functionality
             TryValidateModel(model);
 
             if (!ModelState.IsValid)

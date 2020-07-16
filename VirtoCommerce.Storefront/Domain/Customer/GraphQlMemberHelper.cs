@@ -1,3 +1,4 @@
+using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 
 namespace VirtoCommerce.Storefront.Domain.Customer
@@ -7,7 +8,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         public const string AllAddressFields = "city countryCode countryName email firstName key lastName line1 line2 middleName name organization phone postalCode regionId regionName zip addressType";
         public static readonly string AllOrganizationFields = $"id memberType name addresses {{ {AllAddressFields} }} businessCategory description emails groups outerId ownerId parentId phones seoObjectType";
         public static readonly string AllContactFields = $"firstName lastName organizations {{ {AllOrganizationFields} }} organizationsIds id birthDate fullName memberType middleName name outerId addresses {{ {AllAddressFields} }}";
-        public static readonly string AllMemberSearchFields = $"totalCount items {{ {AllContactFields } }}";
+        public static readonly string AllMemberSearchFields = $"totalCount results:items {{ securityAccounts {{ id }} }}";
 
         public static string CreateContactRequest(this IMemberService service, string selectedFields = null)
         => $@"mutation ($command: InputCreateContactType!)
@@ -61,12 +62,12 @@ namespace VirtoCommerce.Storefront.Domain.Customer
           }}
         }}";
 
-        public static string SearchOrganizationContacts(this IMemberService service, int first = 20, int after = 0, string selectedFields = null)
-        => $@"query ($criteria: SearchOrganizationMembersInputType!){{
-          searchOrganizationMembers(command: $criteria, first: {first}, after: ""{after}""){{
+        public static string OrganizationWithContactsRequest(this IMemberService service, OrganizationContactsSearchCriteria criteria, string selectedFields = null)
+        => $@"{{organization(id:""{criteria.OrganizationId}""){{
+                contacts(first: {criteria.PageSize}, after: ""{(criteria.PageNumber - 1) * criteria.PageSize}"", searchPhrase: ""{criteria.SearchPhrase}""){{
             { selectedFields ?? AllMemberSearchFields }
             }}
-        }}";
+        }} }}";
 
         public static string GetOrganizationRequest(this IMemberService service, string id, string selectedFields = null)
         => $@"

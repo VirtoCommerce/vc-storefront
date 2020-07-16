@@ -29,7 +29,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public static string DeleteUserRequest(this SecurityGraphQLProvider service, string selectedFields = null)
         => $@"mutation ($command: InputDeleteUserType!)
         {{
-            deleteUser(command: $command)
+            deleteUsers(command: $command)
             {{
                 { selectedFields ?? SecurityResultFields }
             }}
@@ -38,7 +38,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public static string GetUserByIdRequest(this SecurityGraphQLProvider service, string id, string selectedFields = null)
             => $@"
         {{
-            user:getUserById(id:""{id}"")
+            user(id:""{id}"")
             {{
             { selectedFields ?? AllUserFields }
             }}
@@ -47,7 +47,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public static string GetUserByNameRequest(this SecurityGraphQLProvider service, string name, string selectedFields = null)
             => $@"
         {{
-            user:getUserByName(userName:""{name}"")
+            user(userName:""{name}"")
             {{
             { selectedFields ?? AllUserFields }
             }}
@@ -56,7 +56,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public static string GetUserByEmailRequest(this SecurityGraphQLProvider service, string email, string selectedFields = null)
             => $@"
         {{
-            user:user(email:""{email}"")
+            user(email:""{email}"")
             {{
             { selectedFields ?? AllUserFields }
             }}
@@ -65,7 +65,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public static string GetUserByLoginRequest(this SecurityGraphQLProvider service, string loginProvider, string providerKey, string selectedFields = null)
             => $@"
         {{
-            user: getUserByLogin(loginProvider:""{loginProvider}"" providerKey:""{providerKey}"")
+            user(loginProvider:""{loginProvider}"" providerKey:""{providerKey}"")
             {{
             { selectedFields ?? AllUserFields }
             }}
@@ -83,7 +83,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public static string GetRoleByIdRequest(this SecurityGraphQLProvider service, string roleName, string selectedFields = null)
             => $@"
         {{
-            role:getRole(roleName:""{roleName}"")
+            role(roleName:""{roleName}"")
             {{
             { selectedFields ?? AllRoleFields }
             }}
