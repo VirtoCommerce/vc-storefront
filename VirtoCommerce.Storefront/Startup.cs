@@ -131,18 +131,11 @@ namespace VirtoCommerce.Storefront
 
             //Cache
             var redisConnectionString = Configuration.GetConnectionString("RedisConnectionString");
-            if (!string.IsNullOrEmpty(redisConnectionString))
+            services.AddStorefrontCache(redisConnectionString, o =>
             {
-                services.AddOptions<RedisCachingOptions>().Bind(Configuration.GetSection("VirtoCommerce:Redis")).ValidateDataAnnotations();
-
-                var redis = ConnectionMultiplexer.Connect(redisConnectionString);
-                services.AddSingleton(redis.GetSubscriber());
-                services.AddSingleton<IStorefrontMemoryCache, RedisStorefrontMemoryCache>();
-            }
-            else
-            {
-                services.AddSingleton<IStorefrontMemoryCache, StorefrontMemoryCache>();
-            }
+                Configuration.GetSection("VirtoCommerce:Redis").Bind(o);
+            });
+          
 
             //Register platform API clients
             services.AddPlatformEndpoint(options =>
