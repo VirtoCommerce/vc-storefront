@@ -584,10 +584,12 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.FromResult((object)null);
         }
 
-        protected virtual Task ChangeItemQuantityAsync(LineItem lineItem, int quantity)
+        protected virtual async Task ChangeItemQuantityAsync(LineItem lineItem, int quantity)
         {
             if (lineItem != null && !lineItem.IsReadOnly)
             {
+                 await new AddCartItemValidator(Cart).ValidateAndThrowAsync(new AddCartItem { Product = lineItem.Product, Quantity = quantity }, ruleSet: Cart.ValidationRuleSet);
+
                 if (lineItem.Product != null)
                 {
                     var salePrice = lineItem.Product.Price.GetTierPrice(quantity).Price;
@@ -610,7 +612,6 @@ namespace VirtoCommerce.Storefront.Domain
                     Cart.Items.Remove(lineItem);
                 }
             }
-            return Task.CompletedTask;
         }
 
         protected virtual async Task AddLineItemAsync(LineItem lineItem)
