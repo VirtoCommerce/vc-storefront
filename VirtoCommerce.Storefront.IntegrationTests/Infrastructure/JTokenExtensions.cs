@@ -20,19 +20,34 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
                 {
                     foreach (var propertyName in propertyNames)
                     {
-                        var foundObject = ((JObject)itemToken);
-
-                        if (!foundObject.ContainsKey(propertyName))
+                        switch (itemToken)
                         {
-                            continue;
-                        }
+                            case JObject foundObject:
+                                TryRemoveProperty(foundObject, propertyName);
+                                break;
+                            case JArray arrayObject:
+                            {
+                                foreach (var obj in arrayObject)
+                                {
+                                    TryRemoveProperty(obj, propertyName);
+                                }
 
-                        ((JObject)itemToken).Property(propertyName).Remove();
+                                break;
+                            }
+                        }
                     }
                 }
             }
 
             return token;
+        }
+
+        private static void TryRemoveProperty(JToken @object, string propertyName)
+        {
+            if (@object is JObject jObject && jObject.ContainsKey(propertyName))
+            {
+                jObject.Property(propertyName)?.Remove();
+            }
         }
     }
 }
