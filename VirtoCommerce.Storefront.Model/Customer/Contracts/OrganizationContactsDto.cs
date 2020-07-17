@@ -1,11 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace VirtoCommerce.Storefront.Model.Customer.Contracts
 {
-    public class SearchMemberResponseDto
+    public class OrganizationContactsDto
     {
         public int TotalCount { get; set; }
-        //public IList<MemberDto> Items { get; set; } = new List<MemberDto>();
         public IList<Contact> Items { get; set; }
     }
 }
