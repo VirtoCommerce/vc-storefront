@@ -55,6 +55,8 @@ namespace VirtoCommerce.Storefront.Domain
             $" subTotalWithTax{{{AllMoneyFields}}} total{{{AllMoneyFields}}}"
             ;
 
+        public static readonly string AllOrderSearchFields = $"totalCount items {{ {AllOrderFields } }}";
+
         public static string GetOrderByIdRequest(this ICustomerOrderService service, string id, string selectedFields = null)
         => $@"
         {{
@@ -70,6 +72,15 @@ namespace VirtoCommerce.Storefront.Domain
             order(number:""{number}"")
             {{
             { selectedFields ?? AllOrderFields }
+            }}
+        }}";
+
+        public static string SearchOrdersRequest(this ICustomerOrderService service, string sort, string filter, int first = 20, int after = 0, string selectedFields = null)
+        => $@"
+        {{
+            orders(first:{first}, after:""{after}"", sort:""{sort}"", filter:""{filter}"")
+            {{
+             { selectedFields ?? AllOrderSearchFields }
             }}
         }}";
     }

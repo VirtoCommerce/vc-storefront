@@ -78,12 +78,15 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 //Does not allow to see a other customer orders
                 criteria.CustomerId = WorkContext.CurrentUser.Id;
             }
-            var result = await _orderApi.SearchCustomerOrderAsync(criteria.ToSearchCriteriaDto());
+            //var result = await _orderApi.SearchCustomerOrderAsync(criteria.ToSearchCriteriaDto());
+            var result = await _customerOrderService.SearchOrdersAsync(criteria);
 
             return new CustomerOrderSearchResult
             {
-                Results = result.Results.Select(x => x.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage)).ToArray(),
-                TotalCount = result.TotalCount ?? default(int),
+                //Results = result.Results.Select(x => x.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage)).ToArray(),
+                //TotalCount = result.TotalCount ?? default(int),
+                Results = result.ToArray(),
+                TotalCount = result.Count
             };
         }
 

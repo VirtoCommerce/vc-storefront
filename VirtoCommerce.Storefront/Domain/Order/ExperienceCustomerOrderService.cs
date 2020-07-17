@@ -1,4 +1,6 @@
+using System.Text;
 using System.Threading.Tasks;
+using AutoRest.Core.Utilities;
 using GraphQL;
 using GraphQL.Client.Abstractions;
 using PagedList.Core;
@@ -44,12 +46,21 @@ namespace VirtoCommerce.Storefront.Domain
 
         public IPagedList<CustomerOrder> SearchOrders(OrderSearchCriteria criteria)
         {
-            throw new System.NotImplementedException();
+            return SearchOrdersAsync(criteria).GetAwaiter().GetResult();
         }
 
-        public Task<IPagedList<CustomerOrder>> SearchOrdersAsync(OrderSearchCriteria criteria)
+        public async Task<IPagedList<CustomerOrder>> SearchOrdersAsync(OrderSearchCriteria criteria)
         {
-            throw new System.NotImplementedException();
+            var filer = new StringBuilder();
+            filer.Append(!string.IsNullOrEmpty(criteria.CustomerId) ? $"{nameof(OrderSearchCriteria.CustomerId).ToCamelCase()}:{criteria.CustomerId}" : string.Empty);
+
+            var request = new GraphQLRequest
+            {
+                Query = this.SearchOrdersRequest(criteria.Sort, filer.ToString(), criteria.PageSize, (criteria.PageNumber - 1) * criteria.PageSize)
+            };
+            var searchResult = await _client.SendQueryAsync<SearchOrdersResponseDto>(request);
+
+            return new PagedList<CustomerOrder>(searchResult.Data.Items, criteria.PageNumber, criteria.PageSize);
         }
     }
 }
