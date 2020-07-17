@@ -587,9 +587,7 @@ namespace VirtoCommerce.Storefront.Domain
         protected virtual async Task ChangeItemQuantityAsync(LineItem lineItem, int quantity)
         {
             if (lineItem != null && !lineItem.IsReadOnly)
-            {
-                 await new AddCartItemValidator(Cart).ValidateAndThrowAsync(new AddCartItem { Product = lineItem.Product, Quantity = quantity }, ruleSet: Cart.ValidationRuleSet);
-
+            {               
                 if (lineItem.Product != null)
                 {
                     var salePrice = lineItem.Product.Price.GetTierPrice(quantity).Price;
