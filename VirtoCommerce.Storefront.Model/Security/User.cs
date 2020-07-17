@@ -28,11 +28,11 @@ namespace VirtoCommerce.Storefront.Model.Security
         public string UserName { get; set; }
         public string NormalizedUserName { get; set; }
         public string Password { get; set; }
-        [JsonIgnore]
-        [IgnoreDataMember]
+        //[JsonIgnore]
+        //[IgnoreDataMember]
         public string PasswordHash { get; set; }
-        [JsonIgnore]
-        [IgnoreDataMember]
+        //[JsonIgnore]
+        //[IgnoreDataMember]
         public string SecurityStamp { get; set; }
         public string PhoneNumber { get; set; }
         public bool PhoneNumberConfirmed { get; set; }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace VirtoCommerce.Storefront.Model.Security
 {
@@ -46,6 +47,11 @@ namespace VirtoCommerce.Storefront.Model.Security
             };
 
             public static readonly IEnumerable<Role> AllRoles = new[] { OrganizationMaintainer, OrganizationEmployee, StoreAdministrator, StoreManager };
+
+            public static Role FindRoleById(string id)
+            {
+                return AllRoles.FirstOrDefault(x => x.Id == id);
+            }
         }
 
         public static class Permissions

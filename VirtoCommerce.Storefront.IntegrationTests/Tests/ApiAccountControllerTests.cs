@@ -5,8 +5,10 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.IntegrationTests.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -56,12 +58,29 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
         }
 
         [Fact]
+        public async Task RegisterUser_Registered()
+        {
+            //Arrange
+            _client.Login("admin", "store");
+
+            var request = CreateUserRegistration();
+
+            //Act
+            var result = await RegisterUserAsync(request);
+
+            //Assert
+            result.Should().BeTrue();
+            _client.Logout();
+        }
+
+        [Fact]
         public async Task RegisterOrganization_Registered()
         {
             //Arrange
             _client.Login("admin", "store");
 
             var request = CreateOrganizationRegistration();
+            
 
             //Act
             var result = await RegisterOrganizationAsync(request);
@@ -75,16 +94,16 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
         public async Task UpdateOrganization_Updated()
         {
             //Arrange
-            
             _client.Login("admin", "store");
 
             var request = CreateOrganizationRegistration();
             await RegisterOrganizationAsync(request);
             _client.Logout();
-            _client.Login(request.UserName, request.Password);
-            
-            _client.Logout();
+
+            _client.Login(request.UserName, request.Password).GotoMainPage();
             var organization = await GetCurrentOrganization();
+            _client.Logout();
+            
             _client.Login("admin", "store");
             organization.Name += "after_update";
             var content = new StringContent(
@@ -93,9 +112,43 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
                 "application/json");
 
             //Act
-            await _client.PutAsync(TestEnvironment.OrganizationEndpoint, content);
+            var response = await _client.PutAsync(TestEnvironment.OrganizationEndpoint, content);
 
             //Assert
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            _client.Logout();
+        }
+
+        [Fact]
+        public async Task UpdateAccount_UpdateUserName_UpdatedAndCheckRelationship()
+        {
+            //Arrange
+            _client.Login("admin", "store");
+
+            var request = CreateUserRegistration();
+            await RegisterUserAsync(request);
+            _client.Logout();
+
+            _client.Login(request.UserName, request.Password).GotoMainPage();
+            var user = await GetCurrentUser();
+            user.UserName += "after_update";
+            var content = new StringContent(
+                JsonConvert.SerializeObject(new UserUpdateInfo
+                {
+                    FullName = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Roles = user.Roles.Select(x => x.Name).ToList()
+                }),
+                Encoding.UTF8,
+                "application/json");
+
+            //Act
+            var response = await _client.PostAsync(TestEnvironment.UserEndpoint, content);
+
+            //Assert
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             _client.Logout();
         }
 
@@ -158,6 +211,22 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
 
         #endregion Dispose
 
+        private async Task<bool> RegisterUserAsync(OrganizationUserRegistration organization)
+        {
+            var body = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("customer[user_name]", organization.UserName),
+                new KeyValuePair<string, string>("customer[password]", organization.Password),
+                new KeyValuePair<string, string>("customer[first_name]", organization.FirstName),
+                new KeyValuePair<string, string>("customer[last_name]", organization.LastName),
+                new KeyValuePair<string, string>("customer[email]", organization.Email),
+                new KeyValuePair<string, string>("customer[name]", organization.Name)                
+            };
+            var content = new FormUrlEncodedContent(body);
+            var createResponse = await _client.PostAsync("account/register", content);
+
+            return createResponse.StatusCode == System.Net.HttpStatusCode.OK;
+        }
 
         private async Task<UserActionIdentityResult> RegisterOrganizationAsync(OrganizationRegistration organization)
         {
@@ -193,6 +262,21 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
             return user;
         }
 
+        private OrganizationUserRegistration CreateUserRegistration()
+        {
+            var ticks = (DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).Ticks;
+
+            return new OrganizationUserRegistration
+            {
+                UserName = $"TestUser{ticks}",
+                FirstName = $"firstName{ticks}",
+                LastName = $"lastName{ticks}",
+                Password = "Somepass123!",
+                Email = $"user{ticks}@us.com",
+                Address = new Address { City = "Los Angeles", CountryCode = "USA", CountryName = "United States", PostalCode = "34535", RegionId = "CA", Line1 = "20945 Devonshire St Suite 102" },
+            };
+        }
+
         private OrganizationRegistration CreateOrganizationRegistration()
         {
             var ticks = (DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).Ticks;
@@ -205,6 +289,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
                 Password = "Somepass123!",
                 Email = $"org{ticks}@org.com1",
                 OrganizationName = $"OrgName{ticks}",
+                StoreId = "B2B-store",
                 Address = new Address { City = "Los Angeles", CountryCode = "USA", CountryName = "United States", PostalCode = "34535", RegionId = "CA", Line1 = "20945 Devonshire St Suite 102" },
             };
         }

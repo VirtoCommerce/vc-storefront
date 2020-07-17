@@ -584,7 +584,7 @@ namespace VirtoCommerce.Storefront.Domain
         protected virtual Task ChangeItemQuantityAsync(LineItem lineItem, int quantity)
         {
             if (lineItem != null && !lineItem.IsReadOnly)
-            {
+            {               
                 if (lineItem.Product != null)
                 {
                     var salePrice = lineItem.Product.Price.GetTierPrice(quantity).Price;

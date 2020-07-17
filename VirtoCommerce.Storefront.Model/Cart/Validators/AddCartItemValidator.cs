@@ -28,7 +28,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Validators
                         {
                             context.AddFailure(new ValidationFailure(nameof(addCartItem.Price), "Unable to set less price"));
                         }
-                    }                    
+                    }
                 });
             });
 
