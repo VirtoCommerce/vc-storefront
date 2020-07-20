@@ -54,7 +54,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// FluentValidation RuleSets allow you to group validation rules together which can be executed together as a group. You can set exists rule set name to evaluate default.
         /// <see cref="CartValidator"/>
         /// </summary>        
-        public string ValidationRuleSet { get; set; } = "default, strict";
+        public string ValidationRuleSet { get; set; } = "default,strict"; //Achtung!!! It is very important not to use spaces for fluent validation  rule set string, all values after the space will be ignored!
         /// <summary>
         /// Gets or sets the value of shopping cart name
         /// </summary>
