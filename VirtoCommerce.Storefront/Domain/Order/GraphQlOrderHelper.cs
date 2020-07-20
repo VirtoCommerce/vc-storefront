@@ -22,7 +22,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         public const string AllShipmentPackageFields = "barCode height id items {quantity} length measureUnit packageType weight weightUnit width";
         
-        public static readonly string AllLineItemFields = $" cancelledDate cancelReason catalogId categoryId comment " +
+        public static readonly string AllLineItemFields = $" cancelledDate cancelReason catalogId categoryId comment currency {{{AllCurrencyFields}}} " +
             $" discountAmount{{{AllMoneyFields}}} discountAmountWithTax{{{AllMoneyFields}}} discountTotal{{{AllMoneyFields}}} discountTotalWithTax{{{AllMoneyFields}}} " +
             $" extendedPrice{{{AllMoneyFields}}} extendedPriceWithTax{{{AllMoneyFields}}} placedPrice{{{AllMoneyFields}}} placedPriceWithTax{{{AllMoneyFields}}} taxTotal{{{AllMoneyFields}}} " +
             $" fee feeWithTax fulfillmentCenterId fulfillmentCenterName fulfillmentLocationCode" +
@@ -39,9 +39,9 @@ namespace VirtoCommerce.Storefront.Domain
             $" shippingMethod {{{AllShipmentMethodFields}}} taxDetails {{{AllTaxDetailFields}}} discounts {{{AllDiscountFields}}} currency {{{AllCurrencyFields}}}";
 
 
-        public static readonly string AllOrderFields = $"addresses {{{AllAddressFields}}} cancelledDate cancelReason channelId comment  customerId customerName " +
+        public static readonly string AllOrderFields = $"id createdDate cancelledDate cancelReason channelId comment  customerId customerName " +
             $" discountAmount{{{AllMoneyFields}}} discountTotal{{{AllMoneyFields}}} discountTotalWithTax{{{AllMoneyFields}}}" +
-            $" employeeId employeeName fee feeTotal feeTotalWithTax feeWithTax id  isApproved isCancelled isPrototype" +
+            $" employeeId employeeName fee feeTotal feeTotalWithTax feeWithTax isApproved isCancelled isPrototype" +
             $" languageCode number objectType operationType organizationId organizationName outerId  shoppingCartId" +
             $" status storeId storeName subscriptionId subscriptionNumber" +
             $" sum taxPercentRate taxTotal{{{AllMoneyFields}}} taxType" +
@@ -52,7 +52,7 @@ namespace VirtoCommerce.Storefront.Domain
             $" shippingSubTotal{{{AllMoneyFields}}} shippingSubTotalWithTax{{{AllMoneyFields}}} shippingTaxTotal{{{AllMoneyFields}}} shippingTotal{{{AllMoneyFields}}} " +
             $" shippingTotalWithTax{{{AllMoneyFields}}} paymentDiscountTotal{{{AllMoneyFields}}} " +
             $" subTotal{{{AllMoneyFields}}} subTotalDiscount{{{AllMoneyFields}}} subTotalDiscountWithTax{{{AllMoneyFields}}} subTotalTaxTotal{{{AllMoneyFields}}} " +
-            $" subTotalWithTax{{{AllMoneyFields}}} total{{{AllMoneyFields}}}"
+            $" subTotalWithTax{{{AllMoneyFields}}} total{{{AllMoneyFields}}} addresses {{{AllAddressFields}}} "
             ;
 
         public static readonly string AllOrderSearchFields = $"totalCount items {{ {AllOrderFields } }}";
@@ -75,10 +75,10 @@ namespace VirtoCommerce.Storefront.Domain
             }}
         }}";
 
-        public static string SearchOrdersRequest(this ICustomerOrderService service, string sort, string filter, int first = 20, int after = 0, string selectedFields = null)
+        public static string SearchOrdersRequest(this ICustomerOrderService service, string sort, string filter, string language, int first = 20, int after = 0, string selectedFields = null)
         => $@"
         {{
-            orders(first:{first}, after:""{after}"", sort:""{sort}"", filter:""{filter}"")
+            orders(first:{first}, after:""{after}"", sort:""{sort}"", filter:""{filter}"", language:""{language}"")
             {{
              { selectedFields ?? AllOrderSearchFields }
             }}

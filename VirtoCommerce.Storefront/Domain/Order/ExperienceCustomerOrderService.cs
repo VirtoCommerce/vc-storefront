@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoRest.Core.Utilities;
@@ -51,16 +53,30 @@ namespace VirtoCommerce.Storefront.Domain
 
         public async Task<IPagedList<CustomerOrder>> SearchOrdersAsync(OrderSearchCriteria criteria)
         {
-            var filer = new StringBuilder();
-            filer.Append(!string.IsNullOrEmpty(criteria.CustomerId) ? $"{nameof(OrderSearchCriteria.CustomerId).ToCamelCase()}:{criteria.CustomerId}" : string.Empty);
-
             var request = new GraphQLRequest
             {
-                Query = this.SearchOrdersRequest(criteria.Sort, filer.ToString(), criteria.PageSize, (criteria.PageNumber - 1) * criteria.PageSize)
+                Query = this.SearchOrdersRequest(criteria.Sort,
+                                                PrepareFilter(criteria),
+                                                _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                                                criteria.PageSize,
+                                                (criteria.PageNumber - 1) * criteria.PageSize)
             };
-            var searchResult = await _client.SendQueryAsync<SearchOrdersResponseDto>(request);
+            var searchResult = await _client.SendQueryAsync<OrdersResponseDto>(request);
 
-            return new PagedList<CustomerOrder>(searchResult.Data.Items, criteria.PageNumber, criteria.PageSize);
+            return new StaticPagedList<CustomerOrder>(searchResult.Data?.Orders.Items, criteria.PageNumber, criteria.PageSize, searchResult.Data.Orders.TotalCount);
+        }
+
+        //TODO
+        private string PrepareFilter(OrderSearchCriteria criteria)
+        {
+            var filer = new StringBuilder();
+            filer.Append(!string.IsNullOrEmpty(criteria.CustomerId) ? $"{nameof(OrderSearchCriteria.CustomerId).ToCamelCase()}:{criteria.CustomerId}" : string.Empty);
+            filer.Append(!string.IsNullOrEmpty(criteria.Status) ? $"{nameof(OrderSearchCriteria.Status).ToCamelCase()}:{criteria.Status}" : string.Empty);
+            filer.Append(!criteria.Statuses.IsNullOrEmpty() ? $"{nameof(OrderSearchCriteria.Statuses).ToCamelCase()}:{criteria.Statuses}" : string.Empty);
+            filer.Append(!criteria.StoreIds.IsNullOrEmpty() ? $"{nameof(OrderSearchCriteria.StoreIds).ToCamelCase()}:{criteria.StoreIds}" : string.Empty);
+            filer.Append(!string.IsNullOrEmpty(criteria.Keyword) ? $"{nameof(OrderSearchCriteria.Keyword).ToCamelCase()}:{criteria.Keyword}" : string.Empty);
+
+            return filer.ToString();
         }
     }
 }
