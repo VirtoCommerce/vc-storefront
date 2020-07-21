@@ -31,7 +31,22 @@ namespace VirtoCommerce.Storefront.Model.Customer
         public Address DefaultShippingAddress { get; set; }
 
         public string OrganizationId { get; set; }
-        public Organization Organization { get; set; }
+        private Organization _organization;
+        //TODO: It needs to be rework to support only a multiple  organizations for a customer by design.
+        public Organization Organization
+        {
+            get
+            {
+                return _organization ?? Organizations.FirstOrDefault(x => x.Id == OrganizationId);
+            }
+            set
+            {
+                _organization = value;
+            }
+        }
+
+        public IList<Organization> Organizations { get; set; } = new List<Organization>();
+
         //TODO: It needs to be rework to support only a multiple  organizations for a customer by design.
         public IList<string> OrganizationsIds { get; set; } = new List<string>();
 

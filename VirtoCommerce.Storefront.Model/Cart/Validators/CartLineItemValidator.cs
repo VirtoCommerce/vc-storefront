@@ -21,6 +21,11 @@ namespace VirtoCommerce.Storefront.Model.Cart.Validators
                         lineItem.ValidationErrors.Add(unavailableError);
                         context.AddFailure(new ValidationFailure(nameof(lineItem.Product), "The product is not longer available for purchase"));
                     }
+                    else if (lineItem.Product.Price == null || lineItem.Product.Price.GetTierPrice(lineItem.Quantity).Price == 0)
+                    {
+                        var unavailableError = new UnavailableError();
+                        lineItem.ValidationErrors.Add(unavailableError);
+                    }
                     else
                     {
                         var isProductAvailable = new ProductIsAvailableSpecification(lineItem.Product).IsSatisfiedBy(lineItem.Quantity);
@@ -43,7 +48,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Validators
                 });
             });
 
-         
+
         }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
+using VirtoCommerce.Storefront.Model.Common.Caching;
 
 namespace VirtoCommerce.Storefront.Caching
 {
@@ -21,6 +22,7 @@ namespace VirtoCommerce.Storefront.Caching
             _workContextAccessor = workContextAccessor;
             _memoryCache = memoryCache;
             _storefrontOptions = storefrontOptions.Value;
+            CacheEnabled = _storefrontOptions.CacheEnabled;
             _log = loggerFactory?.CreateLogger<StorefrontMemoryCache>();
         }
 
@@ -42,6 +44,8 @@ namespace VirtoCommerce.Storefront.Caching
                 {
                     result.SlidingExpiration = SlidingExpiration;
                 }
+
+                result.AddExpirationToken(GlobalCacheRegion.CreateChangeToken());
             }
             return result;
         }
@@ -77,7 +81,7 @@ namespace VirtoCommerce.Storefront.Caching
         protected TimeSpan? AbsoluteExpiration => _storefrontOptions.CacheAbsoluteExpiration;
         protected TimeSpan? SlidingExpiration => _storefrontOptions.CacheSlidingExpiration;
 
-        protected bool CacheEnabled => _storefrontOptions.CacheEnabled;
+        protected bool CacheEnabled { get; set; }
 
 
         ~StorefrontMemoryCache()

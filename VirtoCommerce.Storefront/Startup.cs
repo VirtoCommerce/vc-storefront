@@ -143,18 +143,11 @@ namespace VirtoCommerce.Storefront
 
             //Cache
             var redisConnectionString = Configuration.GetConnectionString("RedisConnectionString");
-            if (!string.IsNullOrEmpty(redisConnectionString))
+            services.AddStorefrontCache(redisConnectionString, o =>
             {
-                services.AddOptions<RedisCachingOptions>().Bind(Configuration.GetSection("VirtoCommerce:Redis")).ValidateDataAnnotations();
-
-                var redis = ConnectionMultiplexer.Connect(redisConnectionString);
-                services.AddSingleton(redis.GetSubscriber());
-                services.AddSingleton<IStorefrontMemoryCache, RedisStorefrontMemoryCache>();
-            }
-            else
-            {
-                services.AddSingleton<IStorefrontMemoryCache, StorefrontMemoryCache>();
-            }
+                Configuration.GetSection("VirtoCommerce:Redis").Bind(o);
+            });
+          
 
             //Register platform API clients
             services.AddPlatformEndpoint(options =>
@@ -194,8 +187,9 @@ namespace VirtoCommerce.Storefront
             }
 
             //Identity overrides for use remote user storage
-            services.AddScoped<IUserStore<User>, UserStoreStub>();
-            services.AddScoped<IRoleStore<Role>, UserStoreStub>();
+            services.AddScoped<IUserStore<User>, ExperienceUserStoreStub>();
+            services.AddScoped<IRoleStore<Role>, ExperienceUserStoreStub>();
+            services.AddScoped<SecurityGraphQLProvider>();
             services.AddScoped<UserManager<User>, CustomUserManager>();
             services.AddScoped<SignInManager<User>, CustomSignInManager>();
 

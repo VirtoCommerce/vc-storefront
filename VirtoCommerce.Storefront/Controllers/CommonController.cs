@@ -12,6 +12,7 @@ using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Models;
 
@@ -38,23 +39,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [Authorize(SecurityConstants.Permissions.CanResetCache)]
         public ActionResult ResetCache()
         {
-
-            //TODO: Replace to some other (maybe with using reflection)
-            ThemeEngineCacheRegion.ExpireRegion();
-            CartCacheRegion.ExpireRegion();
-            CatalogCacheRegion.ExpireRegion();
-            ContentBlobCacheRegion.ExpireRegion();
-            CustomerCacheRegion.ExpireRegion();
-            MarketingCacheRegion.ExpireRegion();
-            PricingCacheRegion.ExpireRegion();
-            QuoteCacheRegion.ExpireRegion();
-            RecommendationsCacheRegion.ExpireRegion();
-            StaticContentCacheRegion.ExpireRegion();
-            StoreCacheRegion.ExpireRegion();
-            TaxCacheRegion.ExpireRegion();
-            SubscriptionCacheRegion.ExpireRegion();
-            SecurityCacheRegion.ExpireRegion();
-            InventoryCacheRegion.ExpireRegion();
+            GlobalCacheRegion.ExpireRegion();
 
             return StoreFrontRedirect("~/");
         }

@@ -23,6 +23,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
         public static string ShippingMethodsEndpoint(string shippmentId) =>
             $"storefrontapi/cart/shipments/{shippmentId}/shippingmethods";
 
+        public static string UserEndpoint => "storefrontapi/account";
         public static string OrganizationEndpoint => "storefrontapi/account/organization";
 
     }

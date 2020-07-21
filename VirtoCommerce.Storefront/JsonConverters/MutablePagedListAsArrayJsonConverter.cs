@@ -36,7 +36,7 @@ namespace VirtoCommerce.Storefront.JsonConverters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

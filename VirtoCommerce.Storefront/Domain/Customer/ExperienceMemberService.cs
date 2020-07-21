@@ -70,7 +70,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                     }
                 }
             };
-            var response = await _client.SendMutationAsync<CreateOrganizationResponseDto>(request);
+            var response = await _client.SendMutationAsync<OrganizationResponseDto>(request);
             response.ThrowExceptionOnError();
             return response.Data?.Organization;
         }
@@ -97,7 +97,19 @@ namespace VirtoCommerce.Storefront.Domain.Customer
             };
             var response = await _client.SendQueryAsync<ContactResponseDto>(request);
 
-            return response.Data?.Contact;
+            if (response.Data?.Contact != null)
+            {
+                var contact = response.Data.Contact;
+                if (contact.OrganizationsIds.Any())
+                {
+                    contact.OrganizationId = contact.OrganizationsIds.First();
+                    contact.Organization = contact.Organizations.FirstOrDefault();
+                }
+
+                return contact;
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -109,7 +121,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
             {
                 Query = this.GetOrganizationRequest(organizationId)
             };
-            var response = await _client.SendQueryAsync<GetOrganizationResponseDto>(request);
+            var response = await _client.SendQueryAsync<OrganizationResponseDto>(request);
 
             return response.Data?.Organization;
         }
@@ -142,34 +154,13 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         /// </summary>
         public async Task<IPagedList<Contact>> SearchOrganizationContactsAsync(OrganizationContactsSearchCriteria criteria)
         {
-            //var criteriaDto = new customerDto.MembersSearchCriteria
-            //{
-            //    MemberId = criteria.OrganizationId,
-            //    Skip = (criteria.PageNumber - 1) * criteria.PageSize,
-            //    Take = criteria.PageSize,
-            //    Sort = criteria.Sort,
-            //    SearchPhrase = criteria.SearchPhrase,
-            //    ObjectType = "Member"
-            //};
-
             var request = new GraphQLRequest
             {
-                Query = this.SearchOrganizationContacts(criteria.PageSize, (criteria.PageNumber - 1) * criteria.PageSize),
-                Variables = new
-                {
-                    criteria = new
-                    {
-                        organizationId = criteria.OrganizationId,
-                        searchPhrase = criteria.SearchPhrase
-                    }
-                }
+                Query = this.OrganizationWithContactsRequest(criteria)
             };
-            var searchResult = await _client.SendQueryAsync<SearchMemberResponseDto>(request);
-            //var searchResult = await _customerApi.SearchMemberAsync(criteriaDto);
-            //var contacts = _customerApi.GetContactsByIds(searchResult.Results.Select(x => x.Id).ToList()).Select(x => x.ToContact()).ToList();
-            //var contacts = searchResult.Data?.Items.Select(x => x.ToContact()).ToList();
+            var searchResult = await _client.SendQueryAsync<OrganizationContactsResponseDto>(request);
 
-            return new StaticPagedList<Contact>(searchResult.Data?.Items, criteria.PageNumber, criteria.PageSize, searchResult.Data.TotalCount);
+            return new StaticPagedList<Contact>(searchResult.Data.Organization?.Contacts?.Results, criteria.PageNumber, criteria.PageSize, searchResult.Data.Organization?.Contacts?.TotalCount ?? 0);
         }
 
         public IPagedList<Vendor> SearchVendors(Store store, Language language, string keyword, int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos)
@@ -225,6 +216,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                         contact.Id,
                         contact.LastName,
                         contact.MiddleName,
+                        Organizations = contact.OrganizationsIds,
                         contact.Phones,
                         contact.PhotoUrl,
                         contact.Salutation,
@@ -259,7 +251,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                     }
                 }
             };
-            var response = await _client.SendMutationAsync<UpdateOrganizationResponseDto>(request);
+            var response = await _client.SendMutationAsync<OrganizationResponseDto>(request);
             response.ThrowExceptionOnError();
 
             CustomerCacheRegion.ExpireMember(organization.Id);
