@@ -29,7 +29,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<ProductPrice[]>> GetActualProductPrices([FromBody] Product[] products)
         {
-            if (products != null)
+            if (products != null && products.Any())
             {
                 //Evaluate products prices
                 await _pricingService.EvaluateProductPricesAsync(products, WorkContext);
