@@ -5,7 +5,7 @@
 [![Build status](http://ci.virtocommerce.com/buildStatus/icon?job=vc-2-org/vc-storefront/master)](http://ci.virtocommerce.com/job/vc-2-org/job/vc-storefront/job/master/) [![Quality Gate](https://sonar.virtocommerce.com/api/badges/gate?key=vc-storefront%3Amaster&blinking=true)](https://sonar.virtocommerce.com/dashboard?id=vc-storefront%3Amaster) [![Lines of code](https://sonar.virtocommerce.com/api/badges/measure?key=vc-storefront%3Amaster&metric=ncloc)](https://sonar.virtocommerce.com/api/badges/measure?key=vc-storefront%3Amaster&metric=ncloc)&emsp;
 [![Documentation](https://img.shields.io/badge/docs-read-brightgreen.svg)](https://virtocommerce.com/docs/latest/)&nbsp;[![Discourse topics](https://img.shields.io/discourse/topics?label=community&logo=community&server=http%3A%2F%2Fwww.virtocommerce.org)](https://www.virtocommerce.org) [![Contributors](https://img.shields.io/github/contributors/VirtoCommerce/vc-storefront.svg)](https://github.com/VirtoCommerce/vc-storefront/graphs/contributors)
 
-[![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FVirtoCommerce%2Fvc-storefront%2Fmaster%2Fazuredeploy.json)
 
 Official online shopping website based on Virto Commerce Platform written on ASP.NET Core. The website is a client application for VC Platform and uses only public APIs while communicating.
 
