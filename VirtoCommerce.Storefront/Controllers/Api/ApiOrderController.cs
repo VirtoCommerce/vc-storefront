@@ -144,7 +144,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     payment.CancelReason = "Canceled by customer";
                     payment.CancelledDate = DateTime.UtcNow;
                     payment.Status = "Cancelled";
-                    await _orderApi.UpdateOrderAsync(order.ToCustomerOrderDto());
+                    await _customerOrderService.UpdateOrderAsync(order);
                 }
             }
             return Ok();
@@ -169,12 +169,13 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 {
                     throw new StorefrontException("payment " + paymentNumber + " not found");
                 }
+                //TODO
                 var processingResult = await _orderApi.ProcessOrderPaymentsAsync(order.Id, payment.Id, bankCardInfo.ToBankCardInfoDto());
-                var paymentDto = order.ToCustomerOrderDto().InPayments.FirstOrDefault(x => x.Number.EqualsInvariant(paymentNumber));
                 return new ProcessOrderPaymentResult
                 {
                     OrderProcessingResult = processingResult.ToProcessPaymentResult(order),
-                    PaymentMethod = paymentDto.PaymentMethod.ToPaymentMethod(order)
+                    //TODO
+                    PaymentMethod = new PaymentMethod(order.Currency) { PaymentMethodType = payment.PaymentMethodType }
                 };
             }
         }
@@ -211,7 +212,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     paymentOrder.BillingAddress = payment.BillingAddress;
                 }
 
-                await _orderApi.UpdateOrderAsync(order.ToCustomerOrderDto());
+                await _customerOrderService.UpdateOrderAsync(order);
                 //Need to return payment with generated id
                 order = await _customerOrderService.GetOrderByIdAsync(order.Id);
                 if (string.IsNullOrEmpty(payment.Id))
@@ -262,14 +263,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             using (await AsyncLock.GetLockByKey(GetAsyncLockKey(orderNumber, WorkContext)).LockAsync())
             {
-                var order = await _customerOrderService.GetOrderByIdAsync(orderNumber);
+                var order = await _customerOrderService.GetOrderByNumberAsync(orderNumber);
                 var authorizationResult = await _authorizationService.AuthorizeAsync(User, order, CanAccessOrderAuthorizationRequirement.PolicyName);
                 if (!authorizationResult.Succeeded)
                 {
                     return Unauthorized();
                 }
                 order.Status = changeOrderStatus.NewStatus;
-                await _orderApi.UpdateOrderAsync(order.ToCustomerOrderDto());
+                await _customerOrderService.UpdateOrderAsync(order);
             }
 
             return Ok();

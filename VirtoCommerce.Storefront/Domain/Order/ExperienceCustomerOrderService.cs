@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 using AutoRest.Core.Utilities;
 using GraphQL;
 using GraphQL.Client.Abstractions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using PagedList.Core;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Order;
 using VirtoCommerce.Storefront.Model.Order.Contracts;
@@ -65,6 +68,37 @@ namespace VirtoCommerce.Storefront.Domain
 
             return new StaticPagedList<CustomerOrder>(searchResult.Data?.Orders.Items, criteria.PageNumber, criteria.PageSize, searchResult.Data.Orders.TotalCount);
         }
+
+        public async Task<CustomerOrder> CreateOrderFromCartAsync(string cartId)
+        {
+            var request = new GraphQLRequest
+            {
+                Query = this.CreateOrderRequest(),
+                Variables = new
+                {
+                    Command = new { cartId }
+                }
+            };
+            var response = await _client.SendMutationAsync<OrderResponseDto>(request);
+            response.ThrowExceptionOnError();
+
+            return response.Data?.Order;
+        }
+
+        public async Task UpdateOrderAsync(CustomerOrder order)
+        {
+            var request = new GraphQLRequest
+            {
+                Query = this.UpdateOrderRequest(),
+                Variables = new
+                {
+                    Command = order.ToCustomerOrderDto()
+                }
+            };
+            var response = await _client.SendMutationAsync<UpdateOrderResponseDto>(request);
+            response.ThrowExceptionOnError();
+        }
+
 
         //TODO
         private string PrepareFilter(OrderSearchCriteria criteria)

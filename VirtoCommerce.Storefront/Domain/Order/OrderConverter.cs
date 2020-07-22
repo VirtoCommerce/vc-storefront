@@ -10,6 +10,8 @@ using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.M
 using orderDto = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models;
 using storeDto = VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models;
 using paymentDto = VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models;
+using VirtoCommerce.Storefront.Model.Contracts;
+using System;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -104,24 +106,24 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static orderDto.ShipmentPackage ToShipmentPackageDto(this ShipmentPackage shipmentPackageDto)
+        public static ShipmentPackageDto ToShipmentPackageDto(this ShipmentPackage shipmentPackage)
         {
-            var result = new orderDto.ShipmentPackage
+            var result = new ShipmentPackageDto
             {
-                BarCode = shipmentPackageDto.BarCode,
-                Id = shipmentPackageDto.Id,
+                BarCode = shipmentPackage.BarCode,
+                Id = shipmentPackage.Id,
 
-                Height = shipmentPackageDto.Height,
-                Weight = shipmentPackageDto.Weight,
-                Length = shipmentPackageDto.Length,
-                Width = shipmentPackageDto.Width,
-                WeightUnit = shipmentPackageDto.WeightUnit,
-                MeasureUnit = shipmentPackageDto.MeasureUnit
+                Height = shipmentPackage.Height,
+                Weight = shipmentPackage.Weight,
+                Length = shipmentPackage.Length,
+                Width = shipmentPackage.Width,
+                WeightUnit = shipmentPackage.WeightUnit,
+                MeasureUnit = shipmentPackage.MeasureUnit
             };
 
-            if (shipmentPackageDto.Items != null)
+            if (shipmentPackage.Items != null)
             {
-                result.Items = shipmentPackageDto.Items.Select(i => ToShipmentItemDto(i)).ToList();
+                result.Items = shipmentPackage.Items.Select(i => ToShipmentItemDto(i)).ToList();
             }
 
             return result;
@@ -144,18 +146,18 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static orderDto.OrderShipmentItem ToShipmentItemDto(this ShipmentItem shipmentItemDto)
+        public static OrderShipmentItemDto ToShipmentItemDto(this ShipmentItem shipmentItem)
         {
-            var result = new orderDto.OrderShipmentItem();
+            var result = new OrderShipmentItemDto();
 
-            result.BarCode = shipmentItemDto.BarCode;
-            result.Id = shipmentItemDto.Id;
-            result.LineItemId = shipmentItemDto.LineItemId;
-            result.Quantity = shipmentItemDto.Quantity;
+            result.BarCode = shipmentItem.BarCode;
+            result.Id = shipmentItem.Id;
+            result.LineItemId = shipmentItem.LineItemId;
+            result.Quantity = shipmentItem.Quantity;
 
-            if (shipmentItemDto.LineItem != null)
+            if (shipmentItem.LineItem != null)
             {
-                result.LineItem = ToOrderLineItemDto(shipmentItemDto.LineItem);
+                result.LineItem = ToOrderLineItemDto(shipmentItem.LineItem);
             }
 
             return result;
@@ -240,81 +242,88 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static orderDto.OrderShipment ToOrderShipmentDto(this Shipment shipmentDto)
+        public static OrderShipmentDto ToOrderShipmentDto(this Shipment shipment)
         {
-            var result = new orderDto.OrderShipment()
+            var result = new OrderShipmentDto()
             {
-                CancelledDate = shipmentDto.CancelledDate,
-                CancelReason = shipmentDto.CancelReason,
-                Comment = shipmentDto.Comment,
-                EmployeeId = shipmentDto.EmployeeId,
-                EmployeeName = shipmentDto.EmployeeName,
-                FulfillmentCenterId = shipmentDto.FulfillmentCenterId,
-                FulfillmentCenterName = shipmentDto.FulfillmentCenterName,
-                Height = shipmentDto.Height,
-                Id = shipmentDto.Id,
-                Length = shipmentDto.Length,
-                MeasureUnit = shipmentDto.MeasureUnit,
-                Number = shipmentDto.Number,
-                OperationType = shipmentDto.OperationType,
-                OrganizationId = shipmentDto.OrganizationId,
-                OrganizationName = shipmentDto.OrganizationName,
-                ShipmentMethodCode = shipmentDto.ShipmentMethodCode,
-                ShipmentMethodOption = shipmentDto.ShipmentMethodOption,
-                Status = shipmentDto.Status,
-                TaxType = shipmentDto.TaxType,
-                Weight = shipmentDto.Weight,
-                WeightUnit = shipmentDto.WeightUnit,
-                Width = shipmentDto.Width,
-                Currency = shipmentDto.Currency.Code,
-                CreatedBy = shipmentDto.CreatedBy,
-                CreatedDate = shipmentDto.CreatedDate,
-                ModifiedDate = shipmentDto.ModifiedDate,
-                ModifiedBy = shipmentDto.ModifiedBy,
-                Price = (double?)shipmentDto.Price.Amount,
-                PriceWithTax = (double?)shipmentDto.PriceWithTax.Amount,
-                DiscountAmount = (double?)shipmentDto.DiscountAmount.Amount,
-                DiscountAmountWithTax = (double?)shipmentDto.DiscountAmountWithTax.Amount,
-                Total = (double?)shipmentDto.Total.Amount,
-                TotalWithTax = (double?)shipmentDto.TotalWithTax.Amount,
-                TaxTotal = (double?)shipmentDto.TaxTotal.Amount,
-                TaxPercentRate = (double?)shipmentDto.TaxPercentRate
+                CancelledDate = shipment.CancelledDate,
+                CancelReason = shipment.CancelReason,
+                Comment = shipment.Comment,
+                EmployeeId = shipment.EmployeeId,
+                EmployeeName = shipment.EmployeeName,
+                FulfillmentCenterId = shipment.FulfillmentCenterId,
+                FulfillmentCenterName = shipment.FulfillmentCenterName,
+                Height = shipment.Height,
+                Id = shipment.Id,
+                IsCancelled = shipment.IsCancelled.GetValueOrDefault(),
+                IsApproved = shipment.IsApproved.GetValueOrDefault(),
+                Length = shipment.Length,
+                MeasureUnit = shipment.MeasureUnit,
+                Number = shipment.Number,
+                OperationType = shipment.OperationType,
+                OrganizationId = shipment.OrganizationId,
+                OrganizationName = shipment.OrganizationName,
+                ShipmentMethodCode = shipment.ShipmentMethodCode,
+                ShipmentMethodOption = shipment.ShipmentMethodOption,
+                Status = shipment.Status,
+                TaxType = shipment.TaxType,
+                Weight = shipment.Weight,
+                WeightUnit = shipment.WeightUnit,
+                Width = shipment.Width,
+                Currency = shipment.Currency.Code,
+                //CreatedBy = shipment.CreatedBy,
+                //CreatedDate = shipment.CreatedDate,
+                //ModifiedDate = shipment.ModifiedDate,
+                //ModifiedBy = shipment.ModifiedBy,
+                Price = (double?)shipment.Price.Amount,
+                PriceWithTax = (double?)shipment.PriceWithTax.Amount,
+                DiscountAmount = (double?)shipment.DiscountAmount.Amount,
+                DiscountAmountWithTax = (double?)shipment.DiscountAmountWithTax.Amount,
+                Total = (double?)shipment.Total.Amount,
+                TotalWithTax = (double?)shipment.TotalWithTax.Amount,
+                TaxTotal = (double?)shipment.TaxTotal.Amount,
+                TaxPercentRate = (double?)shipment.TaxPercentRate,
+                Sum = (double?)shipment.Total.Amount,
+                //TODO
+                Fee = 0,
+                FeeWithTax = 0
             };
 
-            if (shipmentDto.DeliveryAddress != null)
+            if (shipment.DeliveryAddress != null)
             {
-                result.DeliveryAddress = ToOrderAddressDto(shipmentDto.DeliveryAddress);
+                result.DeliveryAddress = shipment.DeliveryAddress.ToDto();
             }
 
-            if (!shipmentDto.Discounts.IsNullOrEmpty())
+            if (!shipment.Discounts.IsNullOrEmpty())
             {
-                result.Discounts.AddRange(shipmentDto.Discounts.Select(x => ToDiscountDto(x)));
+                result.Discounts.AddRange(shipment.Discounts.Select(x => x.ToDiscountDto()).ToList());
             }
 
-            if (shipmentDto.DynamicProperties != null)
+            //TODO
+            //if (shipment.DynamicProperties != null)
+            //{
+            //    result.DynamicProperties = shipment.DynamicProperties.Select(ToOrderDynamicPropertyDto).ToList();
+            //}
+
+            if (shipment.InPayments != null)
             {
-                result.DynamicProperties = shipmentDto.DynamicProperties.Select(ToOrderDynamicPropertyDto).ToList();
+                result.InPayments = shipment.InPayments.Select(p => ToOrderPaymentInDto(p)).ToList();
             }
 
-            if (shipmentDto.InPayments != null)
+            if (shipment.Items != null)
             {
-                result.InPayments = shipmentDto.InPayments.Select(p => ToOrderPaymentInDto(p)).ToList();
+                result.Items = shipment.Items.Select(i => ToShipmentItemDto(i)).ToList();
             }
 
-            if (shipmentDto.Items != null)
+            if (shipment.Packages != null)
             {
-                result.Items = shipmentDto.Items.Select(i => ToShipmentItemDto(i)).ToList();
-            }
-
-            if (shipmentDto.Packages != null)
-            {
-                result.Packages = shipmentDto.Packages.Select(p => ToShipmentPackageDto(p)).ToList();
+                result.Packages = shipment.Packages.Select(p => ToShipmentPackageDto(p)).ToList();
             }
 
             
-            if (shipmentDto.TaxDetails != null)
+            if (shipment.TaxDetails != null)
             {
-                result.TaxDetails = shipmentDto.TaxDetails.Select(td => ToTaxDetailDto(td)).ToList();
+                result.TaxDetails = shipment.TaxDetails.Select(p => ToTaxDetailDto(p)).ToList();
             }
             return result;
         }
@@ -385,64 +394,67 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static orderDto.OrderLineItem ToOrderLineItemDto(this LineItem lineItemDto)
+        public static OrderLineItemDto ToOrderLineItemDto(this LineItem lineItem)
         {
-            var result = new orderDto.OrderLineItem()
+            var result = new OrderLineItemDto()
             {
-                CancelledDate = lineItemDto.CancelledDate,
-                CancelReason = lineItemDto.CancelReason,
-                CatalogId = lineItemDto.CatalogId,
-                CategoryId = lineItemDto.CategoryId,
-                Height = lineItemDto.Height,
-                Id = lineItemDto.Id,
-                ImageUrl = lineItemDto.ImageUrl,
-                IsCancelled = lineItemDto.IsCancelled,
-                IsGift = lineItemDto.IsGift,
-                Length = lineItemDto.Length,
-                MeasureUnit = lineItemDto.MeasureUnit,
-                Name = lineItemDto.Name,
-                ProductId = lineItemDto.ProductId,
-                Quantity = lineItemDto.Quantity,
-                ReserveQuantity = lineItemDto.ReserveQuantity,
-                ShippingMethodCode = lineItemDto.ShippingMethodCode,
-                Sku = lineItemDto.Sku,
-                TaxType = lineItemDto.TaxType,
-                Weight = lineItemDto.Weight,
-                WeightUnit = lineItemDto.WeightUnit,
-                Width = lineItemDto.Width,
-                CreatedBy = lineItemDto.CreatedBy,
-                CreatedDate = lineItemDto.CreatedDate,
-                ModifiedDate = lineItemDto.ModifiedDate,
-                ModifiedBy = lineItemDto.ModifiedBy,
-                Currency = lineItemDto.Currency.Code,
-                Price = (double?)lineItemDto.ListPrice.Amount,
-                PriceWithTax = (double?)lineItemDto.ListPriceWithTax.Amount,
-                DiscountAmount = (double?)lineItemDto.DiscountAmount.Amount,
-                DiscountAmountWithTax = (double?)lineItemDto.DiscountAmountWithTax.Amount,
-                PlacedPrice = (double?)lineItemDto.PlacedPrice.Amount,
-                PlacedPriceWithTax = (double?)lineItemDto.PlacedPriceWithTax.Amount,
-                ExtendedPrice = (double?)lineItemDto.ExtendedPrice.Amount,
-                ExtendedPriceWithTax = (double?)lineItemDto.ExtendedPriceWithTax.Amount,
-                DiscountTotal = (double?)lineItemDto.DiscountTotal.Amount,
-                DiscountTotalWithTax = (double?)lineItemDto.DiscountTotalWithTax.Amount,
-                TaxTotal = (double?)lineItemDto.TaxTotal.Amount,
-                TaxPercentRate = (double?)lineItemDto.TaxPercentRate
+                CancelledDate = lineItem.CancelledDate,
+                CancelReason = lineItem.CancelReason,
+                CatalogId = lineItem.CatalogId,
+                CategoryId = lineItem.CategoryId,
+                Height = lineItem.Height,
+                Id = lineItem.Id,
+                ImageUrl = lineItem.ImageUrl,
+                IsCancelled = lineItem.IsCancelled,
+                IsGift = lineItem.IsGift,
+                Length = lineItem.Length,
+                MeasureUnit = lineItem.MeasureUnit,
+                Name = lineItem.Name,
+                ProductId = lineItem.ProductId,
+                Quantity = lineItem.Quantity,
+                ReserveQuantity = lineItem.ReserveQuantity,
+                ShippingMethodCode = lineItem.ShippingMethodCode,
+                Sku = lineItem.Sku,
+                TaxType = lineItem.TaxType,
+                Weight = lineItem.Weight,
+                WeightUnit = lineItem.WeightUnit,
+                Width = lineItem.Width,
+                //CreatedBy = lineItem.CreatedBy,
+                //CreatedDate = lineItem.CreatedDate,
+                //ModifiedDate = lineItem.ModifiedDate,
+                //ModifiedBy = lineItem.ModifiedBy,
+                Currency = lineItem.Currency.Code,
+                Price = (double?)lineItem.ListPrice.Amount,
+                PriceWithTax = (double?)lineItem.ListPriceWithTax.Amount,
+                DiscountAmount = (double?)lineItem.DiscountAmount.Amount,
+                DiscountAmountWithTax = (double?)lineItem.DiscountAmountWithTax.Amount,
+                PlacedPrice = (double?)lineItem.PlacedPrice.Amount,
+                PlacedPriceWithTax = (double?)lineItem.PlacedPriceWithTax.Amount,
+                ExtendedPrice = (double?)lineItem.ExtendedPrice.Amount,
+                ExtendedPriceWithTax = (double?)lineItem.ExtendedPriceWithTax.Amount,
+                DiscountTotal = (double?)lineItem.DiscountTotal.Amount,
+                DiscountTotalWithTax = (double?)lineItem.DiscountTotalWithTax.Amount,
+                TaxTotal = (double?)lineItem.TaxTotal.Amount,
+                TaxPercentRate = (double?)lineItem.TaxPercentRate,
+                //TODO
+                Fee = 0,
+                FeeWithTax = 0
             };
 
             result.ImageUrl = result.ImageUrl.RemoveLeadingUriScheme();
 
-            if (lineItemDto.DynamicProperties != null)
-            {
-                result.DynamicProperties = lineItemDto.DynamicProperties.Select(ToOrderDynamicPropertyDto).ToList();
-            }
+            //if (!lineItem.DynamicProperties.IsNullOrEmpty())
+            //{
+            //    result.DynamicProperties = lineItem.DynamicProperties.Select(ToOrderDynamicPropertyDto).ToList();
+            //}
             
-            if (!lineItemDto.Discounts.IsNullOrEmpty())
+            if (!lineItem.Discounts.IsNullOrEmpty())
             {
-                result.Discounts.AddRange(lineItemDto.Discounts.Select(x => ToDiscountDto(x)));
+                result.Discounts = lineItem.Discounts.Select(x => x.ToDiscountDto()).ToList();
             }
-            if (lineItemDto.TaxDetails != null)
+            if (!lineItem.TaxDetails.IsNullOrEmpty())
             {
-                result.TaxDetails = lineItemDto.TaxDetails.Select(td => ToTaxDetailDto(td)).ToList();
+                result.TaxDetails = lineItem.TaxDetails.Select(p => ToTaxDetailDto(p)).ToList();
             }
 
             return result;
@@ -504,9 +516,9 @@ namespace VirtoCommerce.Storefront.Domain
             return retVal;
         }
 
-        public static orderDto.PaymentIn ToOrderPaymentInDto(this PaymentIn payment)
+        public static OrderPaymentInDto ToOrderPaymentInDto(this PaymentIn payment)
         {
-            var retVal = new orderDto.PaymentIn
+            var retVal = new OrderPaymentInDto
             {
                 CancelledDate = payment.CancelledDate,
                 CancelReason = payment.CancelReason,
@@ -518,11 +530,20 @@ namespace VirtoCommerce.Storefront.Domain
                 IncomingDate = payment.IncomingDate,
                 IsApproved = payment.IsApproved,
                 IsCancelled = payment.IsCancelled,
-                CreatedBy = payment.CreatedBy,
-                CreatedDate = payment.CreatedDate,
-                ModifiedDate = payment.ModifiedDate,
-                ModifiedBy = payment.ModifiedBy,
-                Number = payment.Number
+                //CreatedBy = payment.CreatedBy,
+                //CreatedDate = payment.CreatedDate,
+                //ModifiedDate = payment.ModifiedDate,
+                //ModifiedBy = payment.ModifiedBy,
+                Number = payment.Number,
+                TaxTotal = (double?)payment.Tax.Amount,
+                //TODO ??
+                Price = (double?)payment.Sum.Amount,
+                PriceWithTax = (double?)payment.Sum.Amount,
+                Total = (double?)payment.Sum.Amount,
+                TotalWithTax = (double?)(payment.Sum.Amount + payment.Tax.Amount),
+                DiscountAmount = 0,
+                DiscountAmountWithTax = 0,
+                TaxPercentRate = 0
             };
             retVal.IsCancelled = payment.IsCancelled;
             retVal.Number = payment.Number;
@@ -536,17 +557,17 @@ namespace VirtoCommerce.Storefront.Domain
 
             retVal.Sum = (double)payment.Sum.Amount;
             retVal.Currency = payment.Currency.Code;
-            retVal.PaymentStatus = payment.Status;
+            retVal.PaymentStatus = (int)Enum.Parse(typeof(PaymentStatus), payment.Status, true);
 
             if (payment.BillingAddress != null)
             {
-                retVal.BillingAddress = payment.BillingAddress.ToOrderAddressDto();
+                retVal.BillingAddress = payment.BillingAddress.ToDto();
             }
 
-            if (payment.DynamicProperties != null)
-            {
-                retVal.DynamicProperties = payment.DynamicProperties.Select(ToOrderDynamicPropertyDto).ToList();
-            }
+            //if (payment.DynamicProperties != null)
+            //{
+            //    retVal.DynamicProperties = payment.DynamicProperties.Select(ToOrderDynamicPropertyDto).ToList();
+            //}
 
             //if (payment.GatewayCode != null)
             //{
@@ -589,30 +610,31 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static orderDto.Discount ToDiscountDto(this Discount discountDto)
+        public static DiscountDto ToDiscountDto(this Discount discount)
         {
-            var result = new orderDto.Discount()
+            var result = new DiscountDto()
             {
-                Coupon = discountDto.Coupon,
-                Description = discountDto.Description,
-                PromotionId = discountDto.PromotionId,
-                Currency = discountDto.Amount.Currency.Code,
-                DiscountAmount = (double?)discountDto.Amount.Amount
+                Coupon = discount.Coupon,
+                Description = discount.Description,
+                PromotionId = discount.PromotionId,
+                Currency = discount.Amount.Currency.Code,
+                DiscountAmount = (double?)discount.Amount.Amount,
+                DiscountAmountWithTax = (double?)discount.Amount.Amount
             };
 
             return result;
         }
 
-        public static orderDto.CustomerOrder ToCustomerOrderDto(this CustomerOrder order)
+        public static CustomerOrderRequestDto ToCustomerOrderDto(this CustomerOrder order)
         {
-            var result = new orderDto.CustomerOrder()
+            var result = new CustomerOrderRequestDto()
             {
                 CancelledDate = order.CancelledDate,
                 CancelReason = order.CancelReason,
                 ChannelId = order.ChannelId,
                 Comment = order.Comment,
-                CreatedBy = order.CreatedBy,
-                CreatedDate = order.CreatedDate,
+                //CreatedBy = order.CreatedBy,
+                //CreatedDate = order.CreatedDate,
                 CustomerId = order.CustomerId,
                 CustomerName = order.CustomerName,
                 EmployeeId = order.EmployeeId,
@@ -620,8 +642,8 @@ namespace VirtoCommerce.Storefront.Domain
                 Id = order.Id,
                 IsApproved = order.IsApproved,
                 IsCancelled = order.IsCancelled,
-                ModifiedBy = order.ModifiedBy,
-                ModifiedDate = order.ModifiedDate,
+                //ModifiedBy = order.ModifiedBy,
+                //ModifiedDate = order.ModifiedDate,
                 Number = order.Number,
                 OrganizationId = order.OrganizationId,
                 OrganizationName = order.OrganizationName,
@@ -632,41 +654,74 @@ namespace VirtoCommerce.Storefront.Domain
                 Currency = order.Currency.Code
             };
 
-            if (order.Addresses != null)
+            if (!order.Addresses.IsNullOrEmpty())
             {
-                result.Addresses = order.Addresses.Select(ToOrderAddressDto).ToList();
+                result.Addresses = order.Addresses.Select(x => x.ToDto()).ToList();
             }
 
+            //TODO
+            //if (!order.DynamicProperties.IsNullOrEmpty())
+            //{
+            //    result.DynamicProperties = order.DynamicProperties;
+            //}
 
-            if (order.DynamicProperties != null)
+            if (!order.InPayments.IsNullOrEmpty())
             {
-                result.DynamicProperties = order.DynamicProperties.Select(ToOrderDynamicPropertyDto).ToList();
+                result.InPayments = order.InPayments.Select(x => x.ToOrderPaymentInDto()).ToList();
             }
 
-            if (order.InPayments != null)
+            if (!order.Items.IsNullOrEmpty())
             {
-                result.InPayments = order.InPayments.Select(p => ToOrderPaymentInDto(p)).ToList();
+                result.Items = order.Items.Select(x => x.ToOrderLineItemDto()).ToList();
             }
 
-            if (order.Items != null)
+            if (!order.Shipments.IsNullOrEmpty())
             {
-                result.Items = order.Items.Select(i => ToOrderLineItemDto(i)).ToList();
-            }
-
-            if (order.Shipments != null)
-            {
-                result.Shipments = order.Shipments.Select(s => ToOrderShipmentDto(s)).ToList();
+                result.Shipments = order.Shipments.Select(x =>
+                {
+                    var result = x.ToOrderShipmentDto();
+                    result.CustomerOrderId = order.Id;
+                    return result;
+                }).ToList();
             }
 
             if (!order.Discounts.IsNullOrEmpty())
             {
-                result.Discounts.AddRange(order.Discounts.Select(x => ToDiscountDto(x)));
-            }
-            if (order.TaxDetails != null)
-            {
-                result.TaxDetails = order.TaxDetails.Select(td => ToTaxDetailDto(td)).ToList();
+                result.Discounts = order.Discounts.Select(x => x.ToDiscountDto()).ToList();
             }
 
+            if (!order.TaxDetails.IsNullOrEmpty())
+            {
+                result.TaxDetails = order.TaxDetails.Select(p => ToTaxDetailDto(p)).ToList();
+            }
+
+            result.DiscountAmount = (double?)order.DiscountAmount.Amount;
+            result.DiscountTotal = (double?)order.DiscountTotal.Amount;
+            result.DiscountTotalWithTax = (double?)order.DiscountTotalWithTax.Amount;
+
+            result.PaymentTotal = (double?)order.PaymentTotal.Amount;
+            result.PaymentTotalWithTax = (double?)order.PaymentTotalWithTax.Amount;
+            result.PaymentDiscountTotal = (double?)order.PaymentDiscountTotal.Amount;
+            result.PaymentDiscountTotalWithTax = (double?)order.PaymentDiscountTotalWithTax.Amount;
+            result.PaymentTaxTotal = (double?)order.PaymentTaxTotal.Amount;
+            result.PaymentSubTotal = (double?)order.PaymentPrice?.Amount;
+            result.PaymentSubTotalWithTax = (double?)order.PaymentPriceWithTax?.Amount;
+
+            result.Total = (double?)order.Total.Amount;
+            result.SubTotal = (double?)order.SubTotal.Amount;
+            result.SubTotalWithTax = (double?)order.SubTotalWithTax.Amount;
+            result.TaxTotal = (double?)order.TaxTotal.Amount;
+
+            result.ShippingTotal = (double?)order.ShippingTotal.Amount;
+            result.ShippingTotalWithTax = (double?)order.ShippingTotalWithTax.Amount;
+            result.ShippingTaxTotal = (double?)order.ShippingTaxTotal.Amount;
+            result.ShippingSubTotal = (double?)order.ShippingPrice?.Amount;
+            result.ShippingSubTotalWithTax = (double?)order.ShippingPriceWithTax?.Amount;
+
+            result.SubTotalTaxTotal = (double?)order.SubTotalTaxTotal.Amount;
+            result.SubTotalDiscount = (double?)order.SubTotalDiscount.Amount;
+            result.SubTotalDiscountWithTax = (double?)order.SubTotalDiscountWithTax.Amount;
+            result.Sum = (double?)order.Total.Amount;
 
             return result;
         }
@@ -778,9 +833,9 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static orderDto.TaxDetail ToTaxDetailDto(this TaxDetail taxDetailDto)
+        public static TaxDetailDto ToTaxDetailDto(this TaxDetail taxDetailDto)
         {
-            var result = new orderDto.TaxDetail()
+            var result = new TaxDetailDto()
             {
                 Name = taxDetailDto.Name,
                 Amount = (double?)taxDetailDto.Amount.Amount,

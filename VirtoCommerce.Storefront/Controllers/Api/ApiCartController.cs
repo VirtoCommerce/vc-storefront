@@ -14,6 +14,7 @@ using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 using VirtoCommerce.Storefront.Model.Marketing;
 using VirtoCommerce.Storefront.Model.Order.Events;
+using VirtoCommerce.Storefront.Model.Order.Services;
 using VirtoCommerce.Storefront.Model.Services;
 using VirtoCommerce.Storefront.Model.Subscriptions;
 using VirtoCommerce.Storefront.Model.Subscriptions.Services;
@@ -30,10 +31,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private readonly ICatalogService _catalogService;
         private readonly IEventPublisher _publisher;
         private readonly ISubscriptionService _subscriptionService;
+        private readonly ICustomerOrderService _customerOrderService;
 
         public ApiCartController(IWorkContextAccessor workContextAccessor, ICatalogService catalogService, ICartBuilder cartBuilder,
                                  IOrderModule orderApi, IStorefrontUrlBuilder urlBuilder,
-                                 IEventPublisher publisher, ISubscriptionService subscriptionService)
+                                 IEventPublisher publisher, ISubscriptionService subscriptionService, ICustomerOrderService customerOrderService)
             : base(workContextAccessor, urlBuilder)
         {
             _cartBuilder = cartBuilder;
@@ -41,6 +43,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             _catalogService = catalogService;
             _publisher = publisher;
             _subscriptionService = subscriptionService;
+            _customerOrderService = customerOrderService;
         }
 
         // Get current user shopping cart
@@ -381,22 +384,22 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         private async Task<OrderCreatedInfo> CreateOrderFromCartAsync(ICartBuilder cartBuilder, BankCardInfo bankCardInfo, bool removeCart)
         {
-            var orderDto = await _orderApi.CreateOrderFromCartAsync(cartBuilder.Cart.Id);
-            var order = orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
+            var order = await _customerOrderService.CreateOrderFromCartAsync(cartBuilder.Cart.Id);
 
             var taskList = new List<Task>
                 {
                     //Raise domain event asynchronously
-                    _publisher.Publish(new OrderPlacedEvent(WorkContext, orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage), cartBuilder.Cart)),
+                    _publisher.Publish(new OrderPlacedEvent(WorkContext, order, cartBuilder.Cart)),
                     //Remove the cart asynchronously
                     removeCart ? cartBuilder.RemoveCartAsync() : Task.CompletedTask
                 };
             //Process order asynchronously
-            var incomingPaymentDto = orderDto.InPayments?.FirstOrDefault();
+            var incomingPayment = order.InPayments?.FirstOrDefault();
             Task<orderModel.ProcessPaymentRequestResult> processPaymentTask = null;
-            if (incomingPaymentDto != null)
+            if (incomingPayment != null)
             {
-                processPaymentTask = _orderApi.ProcessOrderPaymentsAsync(orderDto.Id, incomingPaymentDto.Id, bankCardInfo?.ToBankCardInfoDto());
+                //TODO 
+                processPaymentTask = _orderApi.ProcessOrderPaymentsAsync(order.Id, incomingPayment.Id, bankCardInfo?.ToBankCardInfoDto());
                 taskList.Add(processPaymentTask);
             }
             await Task.WhenAll(taskList.ToArray());
@@ -405,7 +408,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 Order = order,
                 OrderProcessingResult = processPaymentTask != null ? (await processPaymentTask).ToProcessPaymentResult(order) : null,
-                PaymentMethod = incomingPaymentDto?.PaymentMethod.ToPaymentMethod(order),
+                //TODO
+                PaymentMethod = new PaymentMethod(order.Currency) { PaymentMethodType = incomingPayment.PaymentMethodType }
             };
         }
 

@@ -33,7 +33,9 @@ namespace VirtoCommerce.Storefront.Domain
         public static readonly string AllShipmentItemFields = $"barCode id lineItem {{{AllLineItemFields}}} lineItemId outerId quantity";
 
         public static readonly string AllShipmentFields = $"customerOrderId discountAmount{{{AllMoneyFields}}} discountAmountWithTax{{{AllMoneyFields}}} employeeId employeeName fee feeWithTax" +
-            $" fulfillmentCenterId fulfillmentCenterName height id length measureUnit objectType organizationId organizationName price{{{AllMoneyFields}}} priceWithTax{{{AllMoneyFields}}}" +
+            $" fulfillmentCenterId fulfillmentCenterName height id length measureUnit organizationId organizationName " +
+            $" isApproved isCancelled number objectType operationType status" +
+            $" price{{{AllMoneyFields}}} priceWithTax{{{AllMoneyFields}}}" +
             $" shipmentMethodCode shipmentMethodOption taxPercentRate taxTotal{{{AllMoneyFields}}} taxType total{{{AllMoneyFields}}} totalWithTax{{{AllMoneyFields}}} weight weightUnit width" +
             $" deliveryAddress {{{AllAddressFields}}} inPayments {{{AllPaymentInFields}}} items {{{AllShipmentItemFields}}} packages {{{AllShipmentPackageFields}}} " +
             $" shippingMethod {{{AllShipmentMethodFields}}} taxDetails {{{AllTaxDetailFields}}} discounts {{{AllDiscountFields}}} currency {{{AllCurrencyFields}}}";
@@ -82,6 +84,19 @@ namespace VirtoCommerce.Storefront.Domain
             {{
              { selectedFields ?? AllOrderSearchFields }
             }}
+        }}";
+
+        public static string CreateOrderRequest(this ICustomerOrderService service, string selectedFields = null)
+        => $@"mutation ($command: InputCreateOrderFromCartType!){{
+          order:createOrderFromCart(command: $command)
+            {{
+             { selectedFields ?? AllOrderFields }
+            }}
+        }}";
+
+        public static string UpdateOrderRequest(this ICustomerOrderService service, string selectedFields = null)
+        => $@"mutation ($command: InputUpdateOrderType!){{
+          updateOrder(command: $command)
         }}";
     }
 }
