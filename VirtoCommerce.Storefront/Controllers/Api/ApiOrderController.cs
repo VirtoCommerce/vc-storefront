@@ -97,7 +97,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 return Unauthorized();
             }
-            return orderDto;
+            return order;
         }
 
         // GET: storefrontapi/orders/{orderNumber}/newpaymentdata
