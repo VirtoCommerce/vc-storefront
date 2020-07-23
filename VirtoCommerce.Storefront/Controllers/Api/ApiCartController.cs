@@ -144,6 +144,25 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Ok();
         }
 
+        // PUT: storefrontapi/cart/items/bulk
+        [HttpPut("items/bulk")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeCartItem([FromBody] ChangeCartItemQty[] changeQty)
+        {
+            EnsureCartExists();
+
+            //Need lock to prevent concurrent access to same cart
+            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
+            {
+                var cartBuilder = await LoadOrCreateCartAsync();
+
+                foreach (var change in changeQty)
+                    await cartBuilder.ChangeItemQuantityAsync(change);
+                await cartBuilder.SaveAsync();
+            }
+            return Ok();
+        }
+
         // DELETE: storefrontapi/cart/items?lineItemId=...
         [HttpDelete("items")]
         [ValidateAntiForgeryToken]
@@ -226,7 +245,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/cart/coupons/validate
         [HttpPost("coupons/validate")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<Coupon>> ValidateCoupon([FromBody]Coupon coupon)
+        public async Task<ActionResult<Coupon>> ValidateCoupon([FromBody] Coupon coupon)
         {
             EnsureCartExists();
 
@@ -244,7 +263,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // DELETE: storefrontapi/cart/coupons
         [HttpDelete("coupons")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RemoveCartCoupon([FromQuery]string couponCode = null)
+        public async Task<ActionResult> RemoveCartCoupon([FromQuery] string couponCode = null)
         {
             EnsureCartExists();
 
@@ -359,7 +378,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/cart/{name}/{type}/createorder?removeCart=true
         [HttpPost("{name}/{type}/createorder")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<OrderCreatedInfo>> CreateOrderFromNamedCart([FromRoute] string name, [FromRoute] string type, [FromBody] BankCardInfo bankCardInfo, [FromQuery]bool removeCart)
+        public async Task<ActionResult<OrderCreatedInfo>> CreateOrderFromNamedCart([FromRoute] string name, [FromRoute] string type, [FromBody] BankCardInfo bankCardInfo, [FromQuery] bool removeCart)
         {
             var cartBuilder = await LoadOrCreateCartAsync(Uri.UnescapeDataString(name), type);
             if (cartBuilder.Cart.IsTransient())
@@ -385,15 +404,15 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     //Remove the cart asynchronously
                     removeCart ? cartBuilder.RemoveCartAsync() : Task.CompletedTask
                 };
-                //Process order asynchronously
-                var incomingPaymentDto = orderDto.InPayments?.FirstOrDefault();
-                Task<orderModel.ProcessPaymentRequestResult> processPaymentTask = null;
-                if (incomingPaymentDto != null)
-                {
-                    processPaymentTask = _orderApi.ProcessOrderPaymentsAsync(orderDto.Id, incomingPaymentDto.Id, bankCardInfo?.ToBankCardInfoDto());
-                    taskList.Add(processPaymentTask);
-                }
-                await Task.WhenAll(taskList.ToArray());
+            //Process order asynchronously
+            var incomingPaymentDto = orderDto.InPayments?.FirstOrDefault();
+            Task<orderModel.ProcessPaymentRequestResult> processPaymentTask = null;
+            if (incomingPaymentDto != null)
+            {
+                processPaymentTask = _orderApi.ProcessOrderPaymentsAsync(orderDto.Id, incomingPaymentDto.Id, bankCardInfo?.ToBankCardInfoDto());
+                taskList.Add(processPaymentTask);
+            }
+            await Task.WhenAll(taskList.ToArray());
 
             return new OrderCreatedInfo
             {
