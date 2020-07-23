@@ -160,16 +160,6 @@ namespace VirtoCommerce.Storefront.Model.Order
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "fee")]
-        public double? Fee { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "feeWithTax")]
-        public double? FeeWithTax { get; set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "objectType")]
         public string ObjectType { get; set; }
 
@@ -228,11 +218,6 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// </summary>
         [JsonProperty(PropertyName = "currency")]
         public string Currency { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "sum")]
-        public double? Sum { get; set; }
 
         /// <summary>
         /// </summary>

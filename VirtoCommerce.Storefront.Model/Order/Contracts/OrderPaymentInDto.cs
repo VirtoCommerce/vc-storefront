@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
 using VirtoCommerce.Storefront.Model.Contracts;
-using VirtoCommerce.Storefront.Model.Marketing;
 
 namespace VirtoCommerce.Storefront.Model.Order
 {
@@ -87,42 +85,6 @@ namespace VirtoCommerce.Storefront.Model.Order
         /// </summary>
         [JsonProperty(PropertyName = "voidedDate")]
         public System.DateTime? VoidedDate { get; set; }
-
-        //TODO
-        ///// <summary>
-        ///// </summary>
-        //[JsonProperty(PropertyName = "processPaymentResult")]
-        //public ProcessPaymentRequestResult ProcessPaymentResult { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "price")]
-        public double? Price { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "priceWithTax")]
-        public double? PriceWithTax { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "total")]
-        public double? Total { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "totalWithTax")]
-        public double? TotalWithTax { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "discountAmount")]
-        public double? DiscountAmount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "discountAmountWithTax")]
-        public double? DiscountAmountWithTax { get; set; }
 
         /// <summary>
         /// </summary>

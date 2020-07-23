@@ -11,8 +11,8 @@ namespace VirtoCommerce.Storefront.Domain
         public const string AllShipmentMethodFields = "code id isActive logoUrl priority storeId taxType typeName";
         public const string AllMoneyFields = "amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency";
 
-        public static readonly string AllPaymentMethodFields = $"code currency{{{AllCurrencyFields}}} discountAmount discountAmountWithTax isActive isAvailableForPartial logoUrl" +
-            $" name paymentMethodGroupType paymentMethodType price priceWithTax priority storeId taxPercentRate taxTotal taxType total totalWithTax typeName" +
+        public static readonly string AllPaymentMethodFields = $"code currency{{{AllCurrencyFields}}} isActive isAvailableForPartial logoUrl" +
+            $" name paymentMethodGroupType paymentMethodType priority storeId taxTotal taxType typeName" +
             $" taxDetails {{{AllTaxDetailFields}}}";
 
         public static readonly string AllPaymentInFields = $"authorizedDate cancelledDate cancelReason capturedDate comment createdBy createdDate " +
@@ -25,14 +25,14 @@ namespace VirtoCommerce.Storefront.Domain
         public static readonly string AllLineItemFields = $" cancelledDate cancelReason catalogId categoryId comment currency {{{AllCurrencyFields}}} " +
             $" discountAmount{{{AllMoneyFields}}} discountAmountWithTax{{{AllMoneyFields}}} discountTotal{{{AllMoneyFields}}} discountTotalWithTax{{{AllMoneyFields}}} " +
             $" extendedPrice{{{AllMoneyFields}}} extendedPriceWithTax{{{AllMoneyFields}}} placedPrice{{{AllMoneyFields}}} placedPriceWithTax{{{AllMoneyFields}}} taxTotal{{{AllMoneyFields}}} " +
-            $" fee feeWithTax fulfillmentCenterId fulfillmentCenterName fulfillmentLocationCode" +
+            $" fulfillmentCenterId fulfillmentCenterName fulfillmentLocationCode" +
             $" height id imageUrl isCancelled isGift length measureUnit name objectType outerId price priceId priceWithTax productId productType" +
             $" quantity reserveQuantity shippingMethodCode sku taxDetails {{{AllTaxDetailFields}}} taxPercentRate taxType weight weightUnit width" +
             $" discounts {{{AllDiscountFields}}}";
 
         public static readonly string AllShipmentItemFields = $"barCode id lineItem {{{AllLineItemFields}}} lineItemId outerId quantity";
 
-        public static readonly string AllShipmentFields = $"customerOrderId discountAmount{{{AllMoneyFields}}} discountAmountWithTax{{{AllMoneyFields}}} employeeId employeeName fee feeWithTax" +
+        public static readonly string AllShipmentFields = $"customerOrderId discountAmount{{{AllMoneyFields}}} discountAmountWithTax{{{AllMoneyFields}}} employeeId employeeName" +
             $" fulfillmentCenterId fulfillmentCenterName height id length measureUnit organizationId organizationName " +
             $" isApproved isCancelled number objectType operationType status" +
             $" price{{{AllMoneyFields}}} priceWithTax{{{AllMoneyFields}}}" +
@@ -46,7 +46,7 @@ namespace VirtoCommerce.Storefront.Domain
             $" employeeId employeeName fee feeTotal feeTotalWithTax feeWithTax isApproved isCancelled isPrototype" +
             $" languageCode number objectType operationType organizationId organizationName outerId  shoppingCartId" +
             $" status storeId storeName subscriptionId subscriptionNumber" +
-            $" sum taxPercentRate taxTotal{{{AllMoneyFields}}} taxType" +
+            $" taxPercentRate taxTotal{{{AllMoneyFields}}} taxType" +
             $" items {{{AllLineItemFields}}} inPayments {{{AllPaymentInFields}}} shipments {{{AllShipmentFields}}} taxDetails {{{AllTaxDetailFields}}}" +
             $" currency {{{AllCurrencyFields}}} " +
             $" paymentDiscountTotalWithTax{{{AllMoneyFields}}} paymentSubTotal{{{AllMoneyFields}}} paymentSubTotalWithTax{{{AllMoneyFields}}} paymentTaxTotal{{{AllMoneyFields}}} " +

@@ -283,10 +283,6 @@ namespace VirtoCommerce.Storefront.Domain
                 TotalWithTax = (double?)shipment.TotalWithTax.Amount,
                 TaxTotal = (double?)shipment.TaxTotal.Amount,
                 TaxPercentRate = (double?)shipment.TaxPercentRate,
-                Sum = (double?)shipment.Total.Amount,
-                //TODO
-                Fee = 0,
-                FeeWithTax = 0
             };
 
             if (shipment.DeliveryAddress != null)
@@ -436,9 +432,6 @@ namespace VirtoCommerce.Storefront.Domain
                 DiscountTotalWithTax = (double?)lineItem.DiscountTotalWithTax.Amount,
                 TaxTotal = (double?)lineItem.TaxTotal.Amount,
                 TaxPercentRate = (double?)lineItem.TaxPercentRate,
-                //TODO
-                Fee = 0,
-                FeeWithTax = 0
             };
 
             result.ImageUrl = result.ImageUrl.RemoveLeadingUriScheme();
@@ -536,28 +529,17 @@ namespace VirtoCommerce.Storefront.Domain
                 //ModifiedBy = payment.ModifiedBy,
                 Number = payment.Number,
                 TaxTotal = (double?)payment.Tax.Amount,
-                //TODO ??
-                Price = (double?)payment.Sum.Amount,
-                PriceWithTax = (double?)payment.Sum.Amount,
-                Total = (double?)payment.Sum.Amount,
-                TotalWithTax = (double?)(payment.Sum.Amount + payment.Tax.Amount),
-                DiscountAmount = 0,
-                DiscountAmountWithTax = 0,
-                TaxPercentRate = 0
+                Sum = (double)payment.Sum.Amount,
+                OperationType = payment.OperationType,
+                OrganizationId = payment.OrganizationId,
+                OrganizationName = payment.OrganizationName,
+                OuterId = payment.OuterId,
+                ParentOperationId = payment.ParentOperationId,
+                Purpose = payment.Purpose,
+                Status = payment.Status,
+                Currency = payment.Currency.Code,
+                PaymentStatus = (int)Enum.Parse(typeof(PaymentStatus), payment.Status, true)
             };
-            retVal.IsCancelled = payment.IsCancelled;
-            retVal.Number = payment.Number;
-            retVal.OperationType = payment.OperationType;
-            retVal.OrganizationId = payment.OrganizationId;
-            retVal.OrganizationName = payment.OrganizationName;
-            retVal.OuterId = payment.OuterId;
-            retVal.ParentOperationId = payment.ParentOperationId;
-            retVal.Purpose = payment.Purpose;
-            retVal.Status = payment.Status;
-
-            retVal.Sum = (double)payment.Sum.Amount;
-            retVal.Currency = payment.Currency.Code;
-            retVal.PaymentStatus = (int)Enum.Parse(typeof(PaymentStatus), payment.Status, true);
 
             if (payment.BillingAddress != null)
             {
@@ -721,7 +703,6 @@ namespace VirtoCommerce.Storefront.Domain
             result.SubTotalTaxTotal = (double?)order.SubTotalTaxTotal.Amount;
             result.SubTotalDiscount = (double?)order.SubTotalDiscount.Amount;
             result.SubTotalDiscountWithTax = (double?)order.SubTotalDiscountWithTax.Amount;
-            result.Sum = (double?)order.Total.Amount;
 
             return result;
         }
@@ -756,12 +737,10 @@ namespace VirtoCommerce.Storefront.Domain
                 SubscriptionNumber = order.SubscriptionNumber
             };
 
-
             if (order.Addresses != null)
             {
                 result.Addresses = order.Addresses.Select(ToAddress).ToList();
             }
-
 
             if (order.DynamicProperties != null)
             {
@@ -787,10 +766,12 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 result.Discounts.AddRange(order.Discounts.Select(x => ToDiscount(x, new[] { currency }, language)));
             }
+
             if (order.TaxDetails != null)
             {
                 result.TaxDetails = order.TaxDetails.Select(td => ToTaxDetail(td, currency)).ToList();
             }
+
             result.DiscountAmount = new Money(order.DiscountAmount ?? 0, currency);
             result.DiscountTotal = new Money(order.DiscountTotal ?? 0, currency);
             result.DiscountTotalWithTax = new Money(order.DiscountTotalWithTax ?? 0, currency);
