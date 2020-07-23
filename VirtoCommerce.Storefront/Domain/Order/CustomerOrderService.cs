@@ -65,5 +65,20 @@ namespace VirtoCommerce.Storefront.Domain
         {
             throw new NotImplementedException();
         }
+
+        public Task ChangeOrderStatusAsync(string orderId, string status)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CancelPayment(PaymentIn payment)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ConfirmPayment(PaymentIn payment)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

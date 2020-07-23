@@ -92,21 +92,10 @@ namespace VirtoCommerce.Storefront.Model.Order
         public string ObjectType { get; set; }
 
         /// <summary>
-        /// Gets or sets tax category or type
-        /// </summary>
-        [JsonProperty(PropertyName = "taxType")]
-        public string TaxType { get; set; }
-
-        /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "taxTotal")]
         public double? TaxTotal { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "taxPercentRate")]
-        public double? TaxPercentRate { get; set; }
-
+        
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "taxDetails")]

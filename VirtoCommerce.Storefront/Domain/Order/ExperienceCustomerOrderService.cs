@@ -1,12 +1,9 @@
-using System;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoRest.Core.Utilities;
 using GraphQL;
 using GraphQL.Client.Abstractions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using PagedList.Core;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
@@ -99,8 +96,52 @@ namespace VirtoCommerce.Storefront.Domain
             response.ThrowExceptionOnError();
         }
 
+        public async Task ChangeOrderStatusAsync(string orderId, string status)
+        {
+            var request = new GraphQLRequest
+            {
+                Query = this.ChangeOrderStatusRequest(),
+                Variables = new
+                {
+                    Command = new { orderId, status }
+                }
+            };
+            var response = await _client.SendMutationAsync<ChangeOrderStatusResponseDto>(request);
+            response.ThrowExceptionOnError();
+        }
 
-        //TODO
+        public async Task ConfirmPayment(PaymentIn payment)
+        {
+            var request = new GraphQLRequest
+            {
+                Query = this.ConfirmOrderPaymentRequest(),
+                Variables = new
+                {
+                    Command = new { payment = payment.ToOrderPaymentInDto() }
+                }
+            };
+
+            var response = await _client.SendMutationAsync<object>(request);
+            response.ThrowExceptionOnError();
+        }
+
+        public async Task CancelPayment(PaymentIn payment)
+        {
+            var request = new GraphQLRequest
+            {
+                Query = this.CancelOrderPaymentRequest(),
+                Variables = new
+                {
+                    Command = new { payment = payment.ToOrderPaymentInDto() }
+                }
+            };
+
+            var response = await _client.SendMutationAsync<object>(request);
+            response.ThrowExceptionOnError();
+        }
+                
+
+        //TODO more useful 
         private string PrepareFilter(OrderSearchCriteria criteria)
         {
             var filer = new StringBuilder();
@@ -111,6 +152,6 @@ namespace VirtoCommerce.Storefront.Domain
             filer.Append(!string.IsNullOrEmpty(criteria.Keyword) ? $"{nameof(OrderSearchCriteria.Keyword).ToCamelCase()}:{criteria.Keyword}" : string.Empty);
 
             return filer.ToString();
-        }
+        }        
     }
 }

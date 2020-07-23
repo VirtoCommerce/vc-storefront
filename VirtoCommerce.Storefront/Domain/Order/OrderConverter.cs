@@ -538,7 +538,8 @@ namespace VirtoCommerce.Storefront.Domain
                 Purpose = payment.Purpose,
                 Status = payment.Status,
                 Currency = payment.Currency.Code,
-                PaymentStatus = (int)Enum.Parse(typeof(PaymentStatus), payment.Status, true)
+                PaymentStatus = (int)Enum.Parse(typeof(PaymentStatus), payment.Status, true),
+                OrderId = payment.OrderId
             };
 
             if (payment.BillingAddress != null)

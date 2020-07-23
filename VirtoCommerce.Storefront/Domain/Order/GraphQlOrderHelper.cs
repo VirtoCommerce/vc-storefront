@@ -94,9 +94,24 @@ namespace VirtoCommerce.Storefront.Domain
             }}
         }}";
 
-        public static string UpdateOrderRequest(this ICustomerOrderService service, string selectedFields = null)
+        public static string UpdateOrderRequest(this ICustomerOrderService service)
         => $@"mutation ($command: InputUpdateOrderType!){{
           updateOrder(command: $command)
+        }}";
+
+        public static string ChangeOrderStatusRequest(this ICustomerOrderService service)
+        => $@"mutation ($command: InputChangeOrderStatusType!){{
+          changeOrderStatus(command: $command)
+        }}";
+
+        public static string CancelOrderPaymentRequest(this ICustomerOrderService service)
+        => $@"mutation ($command: InputCancelOrderPaymentType!){{
+          cancelOrderPayment(command: $command)
+        }}";
+
+        public static string ConfirmOrderPaymentRequest(this ICustomerOrderService service)
+        => $@"mutation ($command: InputConfirmOrderPaymentType!){{
+          confirmOrderPayment(command: $command)
         }}";
     }
 }

@@ -111,7 +111,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 return Unauthorized();
             }
             var store = await _storeService.GetStoreByIdAsync(order.StoreId, order.Currency);
-
+            //TODO there is a logic in OrderModuleController
             var paymentDto = await _orderApi.GetNewPaymentAsync(order.Id);
             var payment = paymentDto.ToOrderInPayment(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
 
@@ -144,7 +144,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     payment.CancelReason = "Canceled by customer";
                     payment.CancelledDate = DateTime.UtcNow;
                     payment.Status = "Cancelled";
-                    await _customerOrderService.UpdateOrderAsync(order);
+                    await _customerOrderService.CancelPayment(payment);
                 }
             }
             return Ok();
@@ -169,7 +169,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 {
                     throw new StorefrontException("payment " + paymentNumber + " not found");
                 }
-                //TODO
+
+                //TODO there is a logic in OrderModuleController
                 var processingResult = await _orderApi.ProcessOrderPaymentsAsync(order.Id, payment.Id, bankCardInfo.ToBankCardInfoDto());
                 return new ProcessOrderPaymentResult
                 {
@@ -202,6 +203,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 if (paymentOrder == null)
                 {
                     paymentOrder = payment;
+                    paymentOrder.OrderId = order.Id;
                     paymentOrder.CustomerId = WorkContext.CurrentUser.Id;
                     paymentOrder.CustomerName = WorkContext.CurrentUser.UserName;
                     paymentOrder.Status = "New";
@@ -212,7 +214,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     paymentOrder.BillingAddress = payment.BillingAddress;
                 }
 
-                await _customerOrderService.UpdateOrderAsync(order);
+                await _customerOrderService.ConfirmPayment(paymentOrder);
                 //Need to return payment with generated id
                 order = await _customerOrderService.GetOrderByIdAsync(order.Id);
                 if (string.IsNullOrEmpty(payment.Id))
@@ -269,8 +271,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 {
                     return Unauthorized();
                 }
-                order.Status = changeOrderStatus.NewStatus;
-                await _customerOrderService.UpdateOrderAsync(order);
+                await _customerOrderService.ChangeOrderStatusAsync(order.Id, changeOrderStatus.NewStatus);
             }
 
             return Ok();
