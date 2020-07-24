@@ -65,9 +65,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpGet("categories")]
         public async Task<ActionResult<Category[]>> GetCategoriesByIds(string[] categoryIds, CategoryResponseGroup respGroup = CategoryResponseGroup.Full)
         {
-            var result = await _catalogService.GetCategoriesAsync(categoryIds, respGroup);
-
-            return result;
+            return await _catalogService.GetCategoriesAsync(categoryIds, respGroup);
         }
     }
 }
