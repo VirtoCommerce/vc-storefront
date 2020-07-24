@@ -5,59 +5,29 @@ using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.Client.Abstractions;
 using PagedList.Core;
-using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
 using VirtoCommerce.Storefront.Extensions;
-using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Contracts;
-using VirtoCommerce.Storefront.Model.Customer.Services;
-using VirtoCommerce.Storefront.Model.Inventory.Services;
-using VirtoCommerce.Storefront.Model.Pricing.Services;
-using VirtoCommerce.Storefront.Model.Subscriptions.Services;
+using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Domain.Catalog
 {
-    public class ExperienceCatalogService : CatalogService
+    public class ExperienceCatalogService : ICatalogService
     {
         private readonly IGraphQLClient _graphQlClient;
         private readonly IWorkContextAccessor _workContextAccessor;
 
         public ExperienceCatalogService(
             IGraphQLClient graphQlClient,
-            IWorkContextAccessor workContextAccessor,
-
-            ICatalogModuleCategories catalogModuleCategories,
-            ICatalogModuleProducts catalogModuleProducts,
-            ICatalogModuleIndexedSearch catalogModuleIndexedSearch,
-            IPricingService pricingService,
-            IMemberService memberService,
-            ISubscriptionService subscriptionService,
-            IInventoryService inventoryService,
-            IStorefrontMemoryCache storefrontMemoryCache,
-            IApiChangesWatcher changesWatcher,
-            IStorefrontUrlBuilder storefrontUrlBuilder)
-            : base(
-                workContextAccessor,
-                catalogModuleCategories,
-                catalogModuleProducts,
-                catalogModuleIndexedSearch,
-                pricingService,
-                memberService,
-                subscriptionService,
-                inventoryService,
-                storefrontMemoryCache,
-                changesWatcher,
-                storefrontUrlBuilder
-            )
+            IWorkContextAccessor workContextAccessor)
         {
             _graphQlClient = graphQlClient;
             _workContextAccessor = workContextAccessor;
         }
 
-        public override async Task<Product[]> GetProductsAsync(string[] ids, ItemResponseGroup responseGroup = ItemResponseGroup.None)
+        public virtual async Task<Product[]> GetProductsAsync(string[] ids, ItemResponseGroup responseGroup = ItemResponseGroup.None)
         {
             Product[] result;
 
@@ -77,7 +47,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             return result;
         }
 
-        public override async Task<Category[]> GetCategoriesAsync(string[] ids, CategoryResponseGroup responseGroup = CategoryResponseGroup.Info)
+        public virtual async Task<Category[]> GetCategoriesAsync(string[] ids, CategoryResponseGroup responseGroup = CategoryResponseGroup.Info)
         {
             var request = new GraphQLRequest
             {
@@ -95,27 +65,27 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             return categories;
         }
 
-        public Category[] GetCategories(string[] ids, CategoryResponseGroup responseGroup)
+        public virtual Category[] GetCategories(string[] ids, CategoryResponseGroup responseGroup = CategoryResponseGroup.Info)
         {
             return GetCategoriesAsync(ids, responseGroup).GetAwaiter().GetResult();
         }
 
-        public Task<CatalogSearchResult> SearchProductsAsync(ProductSearchCriteria criteria)
+        public virtual Task<CatalogSearchResult> SearchProductsAsync(ProductSearchCriteria criteria)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IPagedList<Category>> SearchCategoriesAsync(CategorySearchCriteria criteria)
+        public virtual Task<IPagedList<Category>> SearchCategoriesAsync(CategorySearchCriteria criteria)
         {
             throw new NotImplementedException();
         }
 
-        public CatalogSearchResult SearchProducts(ProductSearchCriteria criteria)
+        public virtual CatalogSearchResult SearchProducts(ProductSearchCriteria criteria)
         {
             return SearchProductsAsync(criteria).GetAwaiter().GetResult();
         }
 
-        public IPagedList<Category> SearchCategories(CategorySearchCriteria criteria)
+        public virtual IPagedList<Category> SearchCategories(CategorySearchCriteria criteria)
         {
             return SearchCategoriesAsync(criteria).GetAwaiter().GetResult();
         }
@@ -137,7 +107,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             return productDtos.ToProducts(workContext);
         }
 
-        protected override void EstablishLazyDependenciesForCategories(IEnumerable<Category> categories)
+        protected virtual void EstablishLazyDependenciesForCategories(IEnumerable<Category> categories)
         {
             if (categories == null)
             {
@@ -180,7 +150,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             }
         }
 
-        protected override void EstablishLazyDependenciesForProducts(IEnumerable<Product> products)
+        protected virtual void EstablishLazyDependenciesForProducts(IEnumerable<Product> products)
         {
             if (products == null)
             {
