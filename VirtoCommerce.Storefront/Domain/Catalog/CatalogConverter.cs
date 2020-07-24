@@ -7,6 +7,8 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Catalog.Specifications;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Contracts.Catalog;
+using VirtoCommerce.Storefront.Model.Inventory;
 using VirtoCommerce.Storefront.Model.Stores;
 using catalogDto = VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
@@ -429,6 +431,200 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
+        public static Product[] ToProducts(this ProductDto[] productDtos, WorkContext workContext)
+        {
+            var result = productDtos.Select(x => x.ToProduct(workContext));
+
+            return result.ToArray();
+        }
+
+        public static Product ToProduct(this ProductDto productDto, WorkContext workContext)
+        {
+            var result = new Product(workContext.CurrentCurrency, workContext.CurrentLanguage)
+            {
+                Id = productDto.Id,
+                Name = productDto.Name,
+                CategoryId = productDto.Category?.Id,
+                Sku = productDto.Code,
+                Description = productDto.Descriptions?.FirstOrDefault(d => d.ReviewType.EqualsInvariant("FullReview"))?.Content,
+                CatalogId = productDto.CatalogId,
+                SeoPath = "", //
+                SeoInfo = new SeoInfo(), //
+                Url = "", //
+                IsActive = default(bool), //
+                IsAvailable = productDto.MasterVariation?.AvailabilityData?.IsAvailable ?? false,
+                IsBuyable = productDto.MasterVariation?.AvailabilityData?.IsBuyable ?? false,
+                IsInStock = productDto.MasterVariation?.AvailabilityData?.IsInStock ?? false,
+                DownloadExpiration = DateTime.Now, //
+                DownloadType = "", //
+                Height = decimal.MinValue, //
+                Length = decimal.MinValue, //
+                MeasureUnit = "", //
+                Outline = "", //
+                ProductType = productDto.ProductType,
+                TaxType = "", //
+                TrackInventory = default(bool), //
+                Weight = 0, //
+                WeightUnit = "", //
+                Width = 0, //
+            };
+
+            if (!productDto.MasterVariation?.Assets.IsNullOrEmpty() ?? false)
+            {
+                result.Assets.AddRange(productDto.MasterVariation?.Assets?.Select(ToAsset));
+            }
+
+            if (!productDto.MasterVariation?.Images.IsNullOrEmpty() ?? false)
+            {
+                result.Images.AddRange(productDto.MasterVariation.Images.Select(ToImage));
+
+                result.PrimaryImage = result.Images.FirstOrDefault();
+            }
+
+            if (!productDto.Associations.Items.IsNullOrEmpty())
+            {
+                result.Associations = new MutablePagedList<ProductAssociation>(productDto.Associations.Items.Select(i =>
+                {
+                    var association = new ProductAssociation
+                    {
+                        Priority = i.Priority,
+                        // Product = i.Product
+                        ProductId = i.Product?.Id,
+                        Quantity = i.Quantity,
+                        // Tags =
+                        Type = i.Type,
+                    };
+
+                    return association;
+                }));
+            }
+
+            if (!productDto.Descriptions.IsNullOrEmpty())
+            {
+                result.Descriptions = new MutablePagedList<EditorialReview>(productDto.Descriptions?.Select(d =>
+                    new EditorialReview
+                    {
+                        Value = d.Content,
+                        ReviewType = d.ReviewType,
+                        Language = new Language(d.LanguageCode),
+                    })
+                );
+            }
+
+            if (!productDto.MasterVariation?.AvailabilityData?.Inventories.IsNullOrEmpty() ?? false)
+            {
+                result.InventoryAll = productDto.MasterVariation?.AvailabilityData?.Inventories.Select(x =>
+                {
+                    var inventory = new Inventory
+                    {
+                        AllowBackorder = x.AllowBackorder,
+                        AllowPreorder = x.AllowPreorder,
+                        BackorderAvailabilityDate = x.BackorderAvailableDate,
+                        FulfillmentCenterId = x.FulfillmentCenterId,
+                        InStockQuantity = x.InStockQuantity,
+                        PreorderAvailabilityDate = x.PreorderAvailabilityDate,
+                        ProductId = "", //
+                        ReservedQuantity = 0, //
+                        Status = InventoryStatus.Disabled, //
+                    };
+
+                    return inventory;
+                }).ToArray();
+
+                result.Inventory = workContext.CurrentStore.DefaultFulfillmentCenterId != null ?
+                    result.InventoryAll.FirstOrDefault(x => x.FulfillmentCenterId == workContext.CurrentStore.DefaultFulfillmentCenterId)
+                    : result.InventoryAll.FirstOrDefault();
+            }
+
+            if (!productDto.Variations?.IsNullOrEmpty() ?? false)
+            {
+                result.Variations.AddRange(productDto.Variations.Select(x => new Product(workContext.CurrentCurrency, workContext.CurrentLanguage)
+                {
+                    Id = x.Id,
+                    Sku = x.Code,
+                    Images = x.Images?.Select(ToImage).ToArray(),
+                    Assets = x.Assets?.Select(ToAsset).ToArray(),
+                    //Prices =
+                }));
+            }
+
+            if (!productDto.MasterVariation?.Properties.IsNullOrEmpty() ?? false)
+            {
+                result.Properties = new MutablePagedList<CatalogProperty>(productDto.MasterVariation?.Properties.Select(
+                    x =>
+                    {
+                        var property = new CatalogProperty
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            Value = x.Value,
+                            ValueType = x.ValueType,
+                            ValueId = x.ValueId,
+                            DisplayName = "", //
+                            Hidden = default(bool), //
+                            IsMultivalue = default(bool), //
+                            Type = "", //
+                            Values = new[] {""}, //
+                            LocalizedValues = new List<LocalizedString>(), //
+                        };
+
+                        return property;
+                    }));
+            }
+
+            return result;
+        }
+
+        public static Category[] ToCategories(this CategoryDto[] categoryDtos)
+        {
+            var result = categoryDtos.Select(ToCategory);
+
+            return result.ToArray();
+        }
+
+        public static Category ToCategory(this CategoryDto categoryDto)
+        {
+            var result = new Category
+            {
+                Id = categoryDto.Id,
+                Code = categoryDto.Code,
+                Name = categoryDto.Name,
+                ParentId = categoryDto.Parent?.Id,
+            };
+
+            return result;
+        }
+
+        public static Image ToImage(this ImageDto imageDto)
+        {
+            var result = new Image
+            {
+                // Alt = "",
+                // FullSizeImageUrl = "",
+                // Group = "",
+                // LanguageCode = "",
+                SortOrder = imageDto.SortOrder,
+                Title = imageDto.Name,
+                Url = imageDto.Url,
+            };
+
+            return result;
+        }
+
+        public static Asset ToAsset(this AssetDto assetDto)
+        {
+            var result = new Asset
+            {
+                MimeType = assetDto.MimeType,
+                Name = assetDto.Name,
+                Size = assetDto.Size,
+                // Group
+                Url = assetDto.Url,
+                TypeId = assetDto.TypeId,
+            };
+
+            return result;
+        }
 
         public static marketingDto.ProductPromoEntry ToProductPromoEntryDto(this Product product)
         {

@@ -228,12 +228,12 @@ namespace VirtoCommerce.Storefront.Domain
 
                 if (responseGroup.HasFlag(ItemResponseGroup.ItemWithVendor))
                 {
-                    taskList.Add(LoadProductVendorsAsync(products, workContext));
+                    //taskList.Add(LoadProductVendorsAsync(products, workContext));
                 }
 
                 if (workContext.CurrentStore.SubscriptionEnabled && responseGroup.HasFlag(ItemResponseGroup.ItemWithPaymentPlan))
                 {
-                    taskList.Add(LoadProductPaymentPlanAsync(products, workContext));
+                    //taskList.Add(LoadProductPaymentPlanAsync(products, workContext));
                 }
 
                 await Task.WhenAll(taskList.ToArray());

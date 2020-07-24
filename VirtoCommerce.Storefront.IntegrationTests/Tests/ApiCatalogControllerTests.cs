@@ -69,6 +69,8 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
             // Arrange
             var productIds = new[]
             {
+                "f9330eb5ed78427abb4dc4089bc37d9f",
+                "d154d30d76d548fb8505f5124d18c1f3",
                 Infrastructure.Product.Octocopter,
                 Infrastructure.Product.Quadcopter,
             };
