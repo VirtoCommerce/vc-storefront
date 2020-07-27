@@ -2,6 +2,8 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.IntegrationTests.Infrastructure;
+using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Security;
 using Xunit;
 
 namespace VirtoCommerce.Storefront.IntegrationTests.Tests
@@ -52,7 +54,28 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
 
         public async Task GetCustomerOrder_CreateAndReturn_ReturnOrder()
         {
+            //Arrange
+            await _client.RegisterUserAsync(CreateUserRegistration());
 
+
+
+            _client.Logout();
+        }
+
+
+        private OrganizationUserRegistration CreateUserRegistration()
+        {
+            var ticks = (DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).Ticks;
+
+            return new OrganizationUserRegistration
+            {
+                UserName = $"TestUser{ticks}",
+                FirstName = $"firstName{ticks}",
+                LastName = $"lastName{ticks}",
+                Password = "Somepass123!",
+                Email = $"user{ticks}@us.com",
+                Address = new Address { City = "Los Angeles", CountryCode = "USA", CountryName = "United States", PostalCode = "34535", RegionId = "CA", Line1 = "20945 Devonshire St Suite 102" },
+            };
         }
     }
 }
