@@ -409,7 +409,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 Order = order,
                 OrderProcessingResult = processPaymentTask != null ? (await processPaymentTask).ToProcessPaymentResult(order) : null,
                 //TODO
-                PaymentMethod = new PaymentMethod(order.Currency) { PaymentMethodType = incomingPayment.PaymentMethodType }
+                PaymentMethod = new PaymentMethod(order.Currency) { PaymentMethodType = incomingPayment?.PaymentMethodType }
             };
         }
 

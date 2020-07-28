@@ -82,20 +82,6 @@ namespace VirtoCommerce.Storefront.Domain
             return response.Data?.Order;
         }
 
-        public async Task UpdateOrderAsync(CustomerOrder order)
-        {
-            var request = new GraphQLRequest
-            {
-                Query = this.UpdateOrderRequest(),
-                Variables = new
-                {
-                    Command = order.ToCustomerOrderDto()
-                }
-            };
-            var response = await _client.SendMutationAsync<UpdateOrderResponseDto>(request);
-            response.ThrowExceptionOnError();
-        }
-
         public async Task ChangeOrderStatusAsync(string orderId, string status)
         {
             var request = new GraphQLRequest

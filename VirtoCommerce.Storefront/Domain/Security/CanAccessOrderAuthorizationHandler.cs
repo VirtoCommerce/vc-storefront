@@ -1,8 +1,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Order;
 using VirtoCommerce.Storefront.Model.Security;
 
 namespace VirtoCommerce.Storefront.Domain.Security

@@ -26,6 +26,8 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
         public static string UserEndpoint => "storefrontapi/account";
         public static string OrganizationEndpoint => "storefrontapi/account/organization";
 
+        public static string OrderEndpoint => "storefrontapi/orders";
+
     }
 
     public static class Product
