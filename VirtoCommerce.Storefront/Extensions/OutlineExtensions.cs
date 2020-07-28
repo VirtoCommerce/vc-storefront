@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Tools;
 using catalogDto = VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models;
@@ -39,6 +40,11 @@ namespace VirtoCommerce.Storefront.Common
             }
 
             return result;
+        }
+
+        public static string ToPathString(this catalogDto.Outline outline)
+        {
+            return outline.Items == null ? null : string.Join("/", outline.Items.Select(x => x.Id));
         }
     }
 }

@@ -72,6 +72,10 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// All parent categories ids concatenated with "/". E.g. (1/21/344)
         /// </summary>
         public string Outline { get; set; }
+        ///// <summary>
+        /// All outlines of product
+        /// </summary>
+        public List<string> Outlines { get; set; }
         /// <summary>
         /// Slug path e.g /camcorders/blue-win-camera
         /// </summary>
