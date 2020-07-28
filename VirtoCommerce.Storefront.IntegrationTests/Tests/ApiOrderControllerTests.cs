@@ -1,8 +1,10 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using VirtoCommerce.Storefront.IntegrationTests.Infrastructure;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Security;
 using Xunit;
 
@@ -52,13 +54,26 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
 
         #endregion Disposable
 
-        public async Task GetCustomerOrder_CreateAndReturn_ReturnOrder()
+        [Fact]
+        public async Task CreateOrderFromCart_RegisterAndGetCartAndAddItemAndCreateOrder_ReturnOrder()
         {
             //Arrange
-            await _client.RegisterUserAsync(CreateUserRegistration());
+            var user = CreateUserRegistration();
+            await _client.RegisterUserAsync(user);
 
+            _client.Login(user.UserName, user.Password);
 
+            _client.InsertCartItem(new AddCartItem { ProductId = "f9330eb5ed78427abb4dc4089bc37d9f", Quantity = 1 });
 
+            var cartResponseString = await _client.GetCart();
+            var cart = JsonConvert.DeserializeObject<ShoppingCart>(cartResponseString);
+
+            //Act
+            var result = await _client.CreateOrderFromCartAsync();
+
+            //Assert
+            Assert.NotNull(result.Order);
+            Assert.NotNull(result.Order.Id);
             _client.Logout();
         }
 

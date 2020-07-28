@@ -94,11 +94,6 @@ namespace VirtoCommerce.Storefront.Domain
             }}
         }}";
 
-        public static string UpdateOrderRequest(this ICustomerOrderService service)
-        => $@"mutation ($command: InputUpdateOrderType!){{
-          updateOrder(command: $command)
-        }}";
-
         public static string ChangeOrderStatusRequest(this ICustomerOrderService service)
         => $@"mutation ($command: InputChangeOrderStatusType!){{
           changeOrderStatus(command: $command)
