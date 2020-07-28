@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Tools;
 using catalogDto = VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models;
