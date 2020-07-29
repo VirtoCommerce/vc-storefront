@@ -75,7 +75,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         ///// <summary>
         /// All outlines of product
         /// </summary>
-        public List<string> Outlines { get; set; }
+        public string Outlines { get; set; }
         /// <summary>
         /// Slug path e.g /camcorders/blue-win-camera
         /// </summary>

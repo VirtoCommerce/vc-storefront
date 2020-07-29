@@ -341,7 +341,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Sku = productDto.Code,
                 Outline = productDto.Outlines.GetOutlinePath(store.Catalog),
                 // VP-3582: We need to store all product outlines to use them for promotion evaluation
-                Outlines = productDto.Outlines?.Where(x => x != null).Select(x => x.ToPathString()).ToList() ?? new List<string>(),
+                Outlines = productDto.Outlines.GetOutlinePaths(store.Catalog),
                 SeoPath = productDto.Outlines.GetSeoPath(store, currentLanguage, null),
             };
             result.Url = "/" + (result.SeoPath ?? "product/" + result.Id);
@@ -437,7 +437,7 @@ namespace VirtoCommerce.Storefront.Domain
                 CatalogId = product.CatalogId,
                 CategoryId = product.CategoryId,
                 // VP-3582: We need to pass all product outlines as 1 string to use them for promotion evaluation
-                Outline = string.Join(";", product.Outlines),
+                Outline = product.Outlines,
                 Code = product.Sku,
                 ProductId = product.Id,
                 Quantity = 1,

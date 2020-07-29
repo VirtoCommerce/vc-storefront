@@ -801,7 +801,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Quantity = lineItem.Quantity,
                 InStockQuantity = lineItem.InStockQuantity,
                 // VP-3582: We need to pass all product outlines as 1 string to use them for promotion evaluation
-                Outline = string.Join(";", lineItem.Product.Outlines),
+                Outline = lineItem.Product.Outlines,
                 Variations = null // TODO
             };
 

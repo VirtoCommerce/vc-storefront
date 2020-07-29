@@ -41,7 +41,17 @@ namespace VirtoCommerce.Storefront.Common
             return result;
         }
 
-        public static string ToPathString(this catalogDto.Outline outline)
+        public static string GetOutlinePaths(this IEnumerable<catalogDto.Outline> outlines, string catalogId)
+        {
+            var result = string.Empty;
+            var convertedOutlines = outlines?.Select(o => o.JsonConvert<toolsDto.Outline>());
+            var catalogOutlines = convertedOutlines?.Where(o => o.Items.Any(i => i.SeoObjectType == "Catalog" && i.Id == catalogId));
+            var outlinesList = catalogOutlines?.Where(x => x != null).Select(x => x.ToPathString()).ToList() ?? new List<string>();
+            result = string.Join(";", outlinesList);
+            return result;
+        }
+
+        public static string ToPathString(this toolsDto.Outline outline)
         {
             return outline.Items == null ? null : string.Join("/", outline.Items.Select(x => x.Id));
         }
