@@ -1,0 +1,137 @@
+{
+  "features": [
+    {
+      "Name": "OrdersBrowsing",
+      "IsActive": true,
+      "Requires": [],
+      "Replaces": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "PaymentBrowsing",
+      "IsActive": true,
+      "Requires": [],
+      "Replaces": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "InvoiceBrowsing",
+      "IsActive": true,
+      "Requires": [],
+      "Replaces": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ManageUsers",
+      "IsActive": true,
+      "Requires": [],
+      "Replaces": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ManageRoles",
+      "IsActive": true,
+      "Requires": [],
+      "Replaces": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ContractsInfoBrowsing",
+      "IsActive": true,
+      "Requires": [],
+      "Replaces": [],
+      "Conflicts": [ "RetrieveReordering" ]
+    },
+    {
+      "Name": "RetrieveReordering",
+      "IsActive": true,
+      "Requires": [],
+      "Replaces": [],
+      "Conflicts": [ "SubmitOrder", "ProductInventoryBrowsing", "ManageShipmentDetails", "ManagePaymentDetails" ]
+    },
+    {
+      "Name": "OrderApproval",
+      "IsActive": true,
+      "Requires": [],
+      "Replaces": [],
+      "Conflicts": [ "SubmitOrder", "ProductInventoryBrowsing", "ManageShipmentDetails", "ManagePaymentDetails" ]
+    },
+    {
+      "Name": "ProductTextSearch",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering" ],
+      "Replaces": [],
+      "Conflicts": [ "OrderApproval" ]
+    },
+    {
+      "Name": "ProductsFiltering",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering" ],
+      "Replaces": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ProductDetailsBrowsing",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering" ],
+      "Replaces": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ProductPriceBrowsing",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering", "ProductDetailsBrowsing" ],
+      "Replaces": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ProductRecommendation",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering", "ProductDetailsBrowsing" ],
+      "Replaces": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "OrderDraft",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering", "ProductDetailsBrowsing", "ProductPriceBrowsing" ],
+      "Replaces": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "WishList",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering", "ProductDetailsBrowsing", "ProductPriceBrowsing" ],
+      "Replaces": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "SubmitOrder",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering", "ProductDetailsBrowsing", "ProductPriceBrowsing", "OrderDraft", "ProductInventoryBrowsing" ],
+      "Replaces": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ProductInventoryBrowsing",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering", "ProductDetailsBrowsing", "ProductPriceBrowsing", "OrderDraft", "SubmitOrder" ],
+      "Replaces": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ManageShipmentDetails",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering", "ProductDetailsBrowsing", "ProductPriceBrowsing", "OrderDraft", "SubmitOrder" ],
+      "Replaces": [],
+      "Conflicts": []
+    },
+    {
+      "Name": "ManagePaymentDetails",
+      "IsActive": true,
+      "Requires": [ "ProductTextSearch", "ProductsFiltering", "ProductDetailsBrowsing", "ProductPriceBrowsing", "OrderDraft", "SubmitOrder" ],
+      "Replaces": [],
+      "Conflicts": []
+    }
+  ]
+}

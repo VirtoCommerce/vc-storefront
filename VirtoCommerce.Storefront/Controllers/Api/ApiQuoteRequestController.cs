@@ -123,6 +123,21 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Ok();
         }
 
+        // DELETE: storefrontapi/quoterequest/{number}/items
+        [HttpDelete("quoterequests/{number}/items")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Clear(string number)
+        {
+            await _quoteRequestBuilder.LoadQuoteRequestAsync(number, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
+
+            using (await AsyncLock.GetLockByKey(GetAsyncLockQuoteKey(_quoteRequestBuilder.QuoteRequest.Id)).LockAsync())
+            {
+                _quoteRequestBuilder.Clear();
+                await _quoteRequestBuilder.SaveAsync();
+            }
+            return Ok();
+        }
+
         // POST: storefrontapi/quoterequest/{number}/submit
         [HttpPost("quoterequests/{number}/submit")]
         [ValidateAntiForgeryToken]
@@ -195,7 +210,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/quoterequests/{number}/confirm
         [HttpPost("quoterequests/{number}/confirm")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Confirm([FromRoute]string number, [FromBody] QuoteRequestFormModel quoteRequest)
+        public async Task<ActionResult> Confirm([FromRoute] string number, [FromBody] QuoteRequestFormModel quoteRequest)
         {
             await _quoteRequestBuilder.LoadQuoteRequestAsync(number, WorkContext.CurrentLanguage, WorkContext.CurrentCurrency);
 
