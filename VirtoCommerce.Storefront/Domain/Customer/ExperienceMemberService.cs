@@ -66,6 +66,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                     command = new
                     {
                         Name = organization.Name,
+                        MemberType = nameof(Organization),
                         Addresses = organization.Addresses.Select(x => x.ToDto()).ToList()
                     }
                 }
