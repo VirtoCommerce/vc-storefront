@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.Storefront.Model.Catalog;
+using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Tools;
 using catalogDto = VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models;
 using toolsDto = VirtoCommerce.Tools.Models;
@@ -41,19 +42,41 @@ namespace VirtoCommerce.Storefront.Common
             return result;
         }
 
+        /// <summary>
+        /// Returns all concatinated relative outlines for the given catalog
+        /// </summary>
+        /// <param name="outlines"></param>
+        /// <param name="catalogId"></param>
+        /// <returns></returns>
         public static string GetOutlinePaths(this IEnumerable<catalogDto.Outline> outlines, string catalogId)
         {
             var result = string.Empty;
-            var convertedOutlines = outlines?.Select(o => o.JsonConvert<toolsDto.Outline>());
-            var catalogOutlines = convertedOutlines?.Where(o => o.Items.Any(i => i.SeoObjectType == "Catalog" && i.Id == catalogId));
-            var outlinesList = catalogOutlines?.Where(x => x != null).Select(x => x.ToPathString()).ToList() ?? new List<string>();
-            result = string.Join(";", outlinesList);
+            var catalogOutlines = outlines?.Where(o => o.Items.Any(i => i.SeoObjectType == "Catalog" && i.Id == catalogId));
+            var outlinesList = catalogOutlines?
+                .Where(x => x != null)
+                .Select(x => x.ToCatalogRelativePath())
+                .ToList();
+
+            if (!outlinesList.IsNullOrEmpty())
+            {
+                result = string.Join(";", outlinesList);
+            }
+
             return result;
         }
 
-        public static string ToPathString(this toolsDto.Outline outline)
+        /// <summary>s
+        /// Returns catalog's relative outline path
+        /// </summary>
+        /// <param name="outline"></param>
+        /// <returns></returns>
+        public static string ToCatalogRelativePath(this catalogDto.Outline outline)
         {
-            return outline.Items == null ? null : string.Join("/", outline.Items.Select(x => x.Id));
+            return outline.Items == null ? null : string.Join("/",
+                outline.Items
+                    .Where(x => x != null && x.SeoObjectType != "Catalog")
+                    .Select(x => x.Id)
+                );
         }
     }
 }
