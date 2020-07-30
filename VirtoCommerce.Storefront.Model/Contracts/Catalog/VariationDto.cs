@@ -10,6 +10,7 @@ namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
             Images = Array.Empty<ImageDto>();
             Prices = Array.Empty<PriceDto>();
             Properties = Array.Empty<PropertyDto>();
+            Outlines = Array.Empty<OutlineDto>();
         }
 
         public string Id { get; set; }
@@ -25,5 +26,7 @@ namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
         public PriceDto[] Prices { get; set; }
 
         public PropertyDto[] Properties { get; set; }
+
+        public OutlineDto[] Outlines { get; set; }
     }
 }

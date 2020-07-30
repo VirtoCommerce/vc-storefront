@@ -1,116 +1,189 @@
 using System.Linq;
+using AutoRest.Core.Utilities;
+using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Domain.Catalog
 {
     public static class GraphQlCatalogHelper
     {
-        private const int _maxDepth = 2;
-
-        public static string GetAllProductFields(string cultureName, string currencyCode, int currentDepth = 0)
-        {
-            var result = $@"
-                id code
-                category {{ {AllCategoryFields} parent {{{AllCategoryFields}}} }}
-                catalogId
-                name
-                metaTitle
-                metaDescription
-                metaKeywords
-                brandName
-                slug
-                imgSrc
-                productType
-                descriptions {{
-                    content
-                    id
-                    languageCode
-                    reviewType
+        public static string GetAllProductFields
+        => $@"
+            id
+            code
+            category {{ {AllCategoryFields} parent {{ {AllCategoryFields} }}
+            }}
+            catalogId
+            name
+            metaTitle
+            metaDescription
+            metaKeywords
+            brandName
+            slug
+            imgSrc
+            productType
+            descriptions {{
+                content
+                id
+                languageCode
+                reviewType
+            }}
+            masterVariation {{ { GetAllVariationFields } }}
+            associations {{
+                items {{
+                    associatedObjectId
+                    product {{ id }}
+                    quantity
                 }}
-                masterVariation {{ {GetAllVariationFields(cultureName, currencyCode)} }}
-                properties {{ {PropertyFields} }}
-                associations {{
-                    items {{
-                        associatedObjectId
-                        {(++currentDepth < _maxDepth ? @$"product {{ {GetAllProductFields(cultureName, currencyCode, currentDepth)} }}" : string.Empty)}
-                        quantity
-                    }}
-                    totalCount
+                totalCount
+            }}
+            variations {{ { GetAllVariationFields } }}
+            ";
+
+        public static string GetAllVariationFields
+        => $@"id
+            code
+            images {{ id url name }}
+            assets {{ id size url }}
+            prices {{
+                list {{ {MoneyFields} }}
+                listWithTax {{ {MoneyFields} }}
+                sale {{ {MoneyFields} }}
+                saleWithTax {{ {MoneyFields} }}
+                minQuantity
+                pricelistId
+                tierPrices {{
+                    price {{ {MoneyFields} }}
+                    priceWithTax {{ {MoneyFields} }}
+                    quantity
                 }}
-                variations {{ {GetAllVariationFields(cultureName, currencyCode)} }}";
-
-            return result;
-        }
-
-        public static string GetAllVariationFields(string cultureName, string currencyCode)
-        {
-            var result = $@"id
-                    code
-                    images {{ id url name }}
-                    assets {{ id size url }}
-                    prices( cultureName:""{cultureName}"" ) {{
-                        list {{ {MoneyFields} }}
-                        listWithTax {{ {MoneyFields} }}
-                        sale {{ {MoneyFields} }}
-                        saleWithTax {{ {MoneyFields} }}
-                        minQuantity
-                        pricelistId
-                        tierPrices {{
-                            price {{ {MoneyFields} }}
-                            priceWithTax {{ {MoneyFields} }}
-                            quantity
-                        }}
-                        validFrom
-                        validUntil
-                        currency
-                        discounts {{
-                            coupon
-                            description
-                            promotion {{
-                                id
-                                description
-                                name
-                                type
-                            }}
-                            promotionId
-                            amount(cultureName:""{cultureName}"", currencyCode: ""{currencyCode}"") {{ {MoneyFields} }}
-                        }}
+                validFrom
+                validUntil
+                currency
+                discounts {{
+                    coupon
+                    description
+                    promotion {{
+                        id
+                        description
+                        name
+                        type
                     }}
-                    availabilityData {{
-                        availableQuantity
-                        inventories {{ inStockQuantity fulfillmentCenterId fulfillmentCenterName allowPreorder allowBackorder }}
-                    }}
-                    properties {{ {PropertyFields} }}";
-
-            return result;
-        }
+                    promotionId
+                    amount {{ {MoneyFields} }}
+                    amountWithTax {{ {MoneyFields} }}
+                }}
+            }}
+            availabilityData {{
+                availableQuantity
+                inventories {{ inStockQuantity fulfillmentCenterId fulfillmentCenterName allowPreorder allowBackorder }}
+            }}
+            properties {{ {PropertyFields} }}
+            { OutlineFields }
+            ";
 
         public const string MoneyFields = "amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency";
-        public const string PropertyFields = "id name valueType value valueId";
-        public const string AllCategoryFields = "id code name hasParent slug";
+        public const string PropertyFields = "id name valueType value valueId label hidden";
+        public static string AllCategoryFields = $"id code name hasParent slug {OutlineFields}";
+        public const string OutlineFields = "outlines { items { id name seoObjectType }}";
+        public static string AllFacets = $"{ FilterFacets } { RangeFacets } { TermFacets }";
+        public const string FilterFacets = "filter_facets { count facetType name }";
+        public const string TermFacets = "range_facets { facetType name ranges { count from fromStr includeFrom includeTo max min to toStr total } }";
+        public const string RangeFacets = "term_facets { facetType name terms { count isSelected term } }";
 
-        public static string GetProducts(this ICatalogService catalogService, string[] ids, string cultureName, string currencyCode, string selectedFields = null)
+        public static string GetProducts(this ICatalogService catalogService, string[] ids, string storeId, string userId, string selectedFields = null)
         => $@"
         {{
-            products(productIds: [{string.Join(',', ids.Select(x => $"\"{x}\""))}])
+            products(
+                productIds: [{string.Join(',', ids.Select(x => $"\"{x}\""))}]
+                storeId: ""{storeId}""
+                userId: ""{userId}""
+            )
             {{
-                items
-                {{
-                    { selectedFields ?? GetAllProductFields(cultureName, currencyCode) }
-                }}
+                items {{ { selectedFields ?? GetAllProductFields } }}
             }}
         }}
         ";
 
-        public static string GetCategoriesQuery(this ICatalogService catalogService, string[] ids, string selectedFields = null)
+        public static string SearchProducts(
+            this ICatalogService catalogService,
+            ProductSearchCriteria criteria,
+            string cultureName,
+            string currencyCode,
+            string customerId,
+            string storeId,
+            string catalogId
+            )
+            => $@"
+            {{
+                products(
+                    query: ""{ criteria.Keyword }""
+                    filter: ""{
+                        ( string.IsNullOrEmpty(criteria.Outline) ? string.Empty : $"categories.subtree:{ criteria.Outline }" ) }{
+                        ( criteria.Terms.IsNullOrEmpty() ? string.Empty : $" {string.Join(' ', criteria.Terms.Select(x => $"{x.Name}:{x.Value}"))}" ) }{
+                        (string.IsNullOrEmpty(catalogId) ? string.Empty : $" catalog:{ catalogId }")
+                    }""
+                    fuzzy: { criteria.IsFuzzySearch.ToString().ToLowerInvariant() }
+                    userId: ""{ customerId }""
+                    currencyCode: ""{ currencyCode }""
+                    cultureName: ""{ cultureName }""
+                    sort: ""{ criteria.SortBy }""
+                    storeId: ""{ storeId }""
+                )
+                {{
+                    { AllFacets }
+                    items {{ { GetAllProductFields } }}
+                    totalCount
+                }}
+            }}
+            ";
+
+        public static string SearchCategories(
+            this ICatalogService catalogService,
+            CategorySearchCriteria criteria,
+            string storeId,
+            string cultureName,
+            string currencyCode,
+            string customerId,
+            string catalogId
+            )
+            => $@"
+            {{
+                categories(
+                    query: ""{ criteria.Keyword }""
+                    filter: ""{
+                        (string.IsNullOrEmpty(criteria.Outline) ? string.Empty : $"categories.subtree:{ criteria.Outline }") }{
+                        (string.IsNullOrEmpty(catalogId) ? string.Empty : $" catalog:{catalogId}")
+                    }""
+                    fuzzy: { criteria.IsFuzzySearch.ToString().ToLowerInvariant() }
+                    storeId: ""{ storeId }""
+                    cultureName: ""{ cultureName }""
+                    sort: ""{ criteria.SortBy }""
+                    userId: ""{ customerId }""
+                    currencyCode: ""{ currencyCode }""
+                )
+                {{
+                    items {{
+                        { AllCategoryFields }
+                        parent {{
+                            { AllCategoryFields }
+                        }}
+                    }}
+                    { AllFacets }
+                }}
+            }}
+            ";
+
+        public static string GetCategoriesQuery(this ICatalogService catalogService, string[] ids, string storeId, string userId, string selectedFields = null)
         => $@"
         {{
-            categories(categoryIds: [{string.Join(',', ids.Select(x => $"\"{x}\""))}])
+            categories(
+                categoryIds: [{string.Join(',', ids.Select(x => $"\"{x}\""))}]
+                storeId: ""{storeId}""
+                userId: ""{userId}""
+            )
             {{
-                items
-                {{
-                    { selectedFields ?? AllCategoryFields } parent {{ {AllCategoryFields} }}
-                }}
+                items {{ { selectedFields ?? AllCategoryFields } parent {{ { AllCategoryFields } }} }}
             }}
         }}
         ";

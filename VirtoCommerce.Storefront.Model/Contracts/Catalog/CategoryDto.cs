@@ -13,5 +13,7 @@ namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
         public string Slug { get; set; }
 
         public CategoryDto Parent { get; set; }
+
+        public OutlineDto[] Outlines { get; set; }
     }
 }

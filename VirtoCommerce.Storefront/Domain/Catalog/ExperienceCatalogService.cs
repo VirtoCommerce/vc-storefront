@@ -49,16 +49,17 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
 
         public virtual async Task<Category[]> GetCategoriesAsync(string[] ids, CategoryResponseGroup responseGroup = CategoryResponseGroup.Info)
         {
+            var workContext = _workContextAccessor.WorkContext;
             var request = new GraphQLRequest
             {
-                Query = this.GetCategoriesQuery(ids),
+                Query = this.GetCategoriesQuery(ids, workContext.CurrentStore.Id, workContext.CurrentUser.Id),
             };
 
             var response = await _graphQlClient.SendQueryAsync<GetCategoriestResponseDto>(request);
 
             response.ThrowExceptionOnError();
 
-            var categories = response.Data.Categories.Items.ToCategories();
+            var categories = response.Data.Categories.Items.ToCategories(_workContextAccessor.WorkContext.CurrentStore.Catalog);
 
             EstablishLazyDependenciesForCategories(categories);
 
@@ -70,14 +71,90 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             return GetCategoriesAsync(ids, responseGroup).GetAwaiter().GetResult();
         }
 
-        public virtual Task<CatalogSearchResult> SearchProductsAsync(ProductSearchCriteria criteria)
+        public virtual async Task<CatalogSearchResult> SearchProductsAsync(ProductSearchCriteria criteria)
         {
-            throw new NotImplementedException();
+            var workContext = _workContextAccessor.WorkContext;
+
+            var request = new GraphQLRequest
+            {
+                Query = this.SearchProducts(
+                    criteria,
+                    workContext.CurrentLanguage.CultureName,
+                    workContext.CurrentCurrency.Code,
+                    workContext.Customer.Id,
+                    workContext.CurrentStore.Id,
+                    workContext.CurrentStore.Catalog),
+            };
+
+            var response = await _graphQlClient.SendQueryAsync<GetProductsResponseDto>(request);
+
+            response.ThrowExceptionOnError();
+
+            var products = response.Data.Products.Items.Select(x => x.ToProduct(workContext)).ToArray();
+            var productsWithVariation = products.Concat(products.SelectMany(x => x.Variants)).ToArray();
+
+            if (productsWithVariation.Any())
+            {
+                EstablishLazyDependenciesForProducts(productsWithVariation);
+            }
+
+            var searchResult = new CatalogSearchResult(criteria)
+            {
+                Products = new MutablePagedList<Product>(products, criteria.PageNumber, criteria.PageSize, response.Data.Products.TotalCount ?? 0),
+                //Aggregations = 
+            };
+
+            var associationList = searchResult
+                .Products
+                .Where(x => x.Associations != null)
+                .SelectMany(x => x.Associations)
+                .ToArray();
+
+            if (!associationList.IsNullOrEmpty())
+            {
+                foreach (var association in associationList)
+                {
+                    association.Product = (await GetProductsAsync(new[] { association.Product?.Id })).FirstOrDefault();
+            
+                    if (association.Product != null)
+                    {
+                        EstablishLazyDependenciesForProducts(new[] { association.Product });
+                    }
+                }
+            }
+
+            return searchResult;
         }
 
-        public virtual Task<IPagedList<Category>> SearchCategoriesAsync(CategorySearchCriteria criteria)
+        public virtual async Task<IPagedList<Category>> SearchCategoriesAsync(CategorySearchCriteria criteria)
         {
-            throw new NotImplementedException();
+            var workContext = _workContextAccessor.WorkContext;
+
+            var request = new GraphQLRequest
+            {
+                Query = this.SearchCategories(
+                    criteria,
+                    workContext.CurrentStore.Id,
+                    workContext.CurrentLanguage.CultureName,
+                    workContext.CurrentCurrency.Code,
+                    workContext.Customer.Id,
+                    workContext.CurrentStore.Catalog),
+            };
+
+            var response = await _graphQlClient.SendQueryAsync<GetCategoriestResponseDto>(request);
+
+            response.ThrowExceptionOnError();
+
+            var result = new PagedList<Category>(new List<Category>().AsQueryable(), 1, 1);
+
+            if (!response.Data.Categories.Items.IsNullOrEmpty())
+            {
+                result = new PagedList<Category>(response.Data.Categories.Items.ToCategories(workContext.CurrentStore.Catalog).AsQueryable(), criteria.PageNumber, criteria.PageSize);
+            }
+
+            EstablishLazyDependenciesForCategories(result.ToArray());
+
+            return result;
         }
 
         public virtual CatalogSearchResult SearchProducts(ProductSearchCriteria criteria)
@@ -96,7 +173,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             var currentCurrency = workContext.CurrentCurrency;
             var request = new GraphQLRequest
             {
-                Query = this.GetProducts(ids, currentCurrency.CultureName, currentCurrency.Code),
+                Query = this.GetProducts(ids, workContext.CurrentStore.Id, workContext.CurrentUser.Id),
             };
             var response = await _graphQlClient.SendQueryAsync<GetProductsResponseDto>(request);
 
@@ -130,7 +207,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                     {
                         PageNumber = pageNumber,
                         PageSize = pageSize,
-                        Outline = "",
+                        Outline = "", //+
                     };
 
                     if (!sortInfos.IsNullOrEmpty())

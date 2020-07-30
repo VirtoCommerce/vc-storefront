@@ -15,5 +15,7 @@ namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
         public string TypeId { get; set; }
 
         public string Url { get; set; }
+
+        public string Group { get; set; }
     }
 }

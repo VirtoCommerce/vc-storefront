@@ -449,24 +449,20 @@ namespace VirtoCommerce.Storefront.Domain
                 Description = productDto.Descriptions?.FirstOrDefault(d => d.ReviewType.EqualsInvariant("FullReview"))?.Content,
                 CatalogId = productDto.CatalogId,
                 SeoPath = "", //
-                SeoInfo = new SeoInfo(), //
+                SeoInfo = new SeoInfo { Title = productDto.Id, Language = workContext.CurrentLanguage, Slug = productDto.Slug }, // TODO: Fix it
                 Url = "", //
-                IsActive = default(bool), //
                 IsAvailable = productDto.MasterVariation?.AvailabilityData?.IsAvailable ?? false,
                 IsBuyable = productDto.MasterVariation?.AvailabilityData?.IsBuyable ?? false,
                 IsInStock = productDto.MasterVariation?.AvailabilityData?.IsInStock ?? false,
-                DownloadExpiration = DateTime.Now, //
-                DownloadType = "", //
-                Height = decimal.MinValue, //
-                Length = decimal.MinValue, //
-                MeasureUnit = "", //
-                Outline = "", //
+                //Height = decimal.MinValue, // TBD
+                //Length = decimal.MinValue, // TBD
+                //MeasureUnit = "", // TBD
+                Outline = productDto.MasterVariation?.Outlines.GetOutlinePath(workContext.CurrentStore.Catalog),
                 ProductType = productDto.ProductType,
-                TaxType = "", //
-                TrackInventory = default(bool), //
-                Weight = 0, //
-                WeightUnit = "", //
-                Width = 0, //
+                //TaxType = "", // TBD
+                //Weight = 0, // TBD
+                //WeightUnit = "", // TBD
+                //Width = 0, // TBD
             };
 
             if (!productDto.MasterVariation?.Assets.IsNullOrEmpty() ?? false)
@@ -488,10 +484,10 @@ namespace VirtoCommerce.Storefront.Domain
                     var association = new ProductAssociation
                     {
                         Priority = i.Priority,
-                        // Product = i.Product
-                        ProductId = i.Product?.Id,
+                        Product = new Product { Id = i.Product?.Id },
+                        ProductId = productDto.Id,
                         Quantity = i.Quantity,
-                        // Tags =
+                        // Tags = +
                         Type = i.Type,
                     };
 
@@ -523,9 +519,8 @@ namespace VirtoCommerce.Storefront.Domain
                         FulfillmentCenterId = x.FulfillmentCenterId,
                         InStockQuantity = x.InStockQuantity,
                         PreorderAvailabilityDate = x.PreorderAvailabilityDate,
-                        ProductId = "", //
-                        ReservedQuantity = 0, //
-                        Status = InventoryStatus.Disabled, //
+                        ProductId = productDto.Id,
+                        ReservedQuantity = 0, // +
                     };
 
                     return inventory;
@@ -550,39 +545,46 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (!productDto.MasterVariation?.Properties.IsNullOrEmpty() ?? false)
             {
-                result.Properties = new MutablePagedList<CatalogProperty>(productDto.MasterVariation?.Properties.Select(
+                result.Properties = new MutablePagedList<CatalogProperty>(productDto.MasterVariation?.Properties.GroupBy(x => x.Id).Select(
                     x =>
                     {
+                        var propertyValues = x.Select(p => p.Value);
+                        var propertyDto = x.First();
+
                         var property = new CatalogProperty
                         {
-                            Id = x.Id,
-                            Name = x.Name,
-                            Value = x.Value,
-                            ValueType = x.ValueType,
-                            ValueId = x.ValueId,
-                            DisplayName = "", //
-                            Hidden = default(bool), //
-                            IsMultivalue = default(bool), //
-                            Type = "", //
-                            Values = new[] {""}, //
-                            LocalizedValues = new List<LocalizedString>(), //
+                            Id = propertyDto.Id,
+                            Name = propertyDto.Name,
+                            Value = propertyDto.Value,
+                            ValueType = propertyDto.ValueType,
+                            ValueId = propertyDto.ValueId,
+                            DisplayName = propertyDto.Label,
+                            Hidden = propertyDto.Hidden,
+                            Type = propertyDto.ValueType,
+                            Values = propertyValues.ToArray(),
+                            LocalizedValues = new List<LocalizedString>{ new LocalizedString(workContext.CurrentLanguage, propertyDto.Label) },
                         };
 
                         return property;
                     }));
             }
 
+            if (!productDto.MasterVariation?.Prices.FirstOrDefault()?.Discounts.IsNullOrEmpty() ?? false)
+            {
+                // TODO: Promotions
+            }
+
             return result;
         }
 
-        public static Category[] ToCategories(this CategoryDto[] categoryDtos)
+        public static Category[] ToCategories(this CategoryDto[] categoryDtos, string catalogId)
         {
-            var result = categoryDtos.Select(ToCategory);
+            var result = categoryDtos.Select(x => x.ToCategory(catalogId));
 
             return result.ToArray();
         }
 
-        public static Category ToCategory(this CategoryDto categoryDto)
+        public static Category ToCategory(this CategoryDto categoryDto, string catalogId)
         {
             var result = new Category
             {
@@ -590,6 +592,8 @@ namespace VirtoCommerce.Storefront.Domain
                 Code = categoryDto.Code,
                 Name = categoryDto.Name,
                 ParentId = categoryDto.Parent?.Id,
+                SeoPath = categoryDto.Slug,
+                Outline = categoryDto.Outlines.GetOutlinePath(catalogId),
             };
 
             return result;
@@ -599,10 +603,9 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var result = new Image
             {
-                // Alt = "",
-                // FullSizeImageUrl = "",
-                // Group = "",
-                // LanguageCode = "",
+                Alt = imageDto.Name, //+
+                FullSizeImageUrl = imageDto.Url, //+
+                Group = imageDto.Group,
                 SortOrder = imageDto.SortOrder,
                 Title = imageDto.Name,
                 Url = imageDto.Url,
@@ -618,7 +621,7 @@ namespace VirtoCommerce.Storefront.Domain
                 MimeType = assetDto.MimeType,
                 Name = assetDto.Name,
                 Size = assetDto.Size,
-                // Group
+                Group = assetDto.Group,
                 Url = assetDto.Url,
                 TypeId = assetDto.TypeId,
             };
