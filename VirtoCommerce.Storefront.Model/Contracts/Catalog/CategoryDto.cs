@@ -1,7 +1,16 @@
+using System;
+
 namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
 {
     public class CategoryDto
     {
+        public CategoryDto()
+        {
+            Outlines = Array.Empty<OutlineDto>();
+            SeoInfos = Array.Empty<SeoInfoDto>();
+            Images = Array.Empty<ImageDto>();
+        }
+
         public string Id { get; set; }
 
         public string Code { get; set; }
@@ -15,5 +24,9 @@ namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
         public CategoryDto Parent { get; set; }
 
         public OutlineDto[] Outlines { get; set; }
+
+        public SeoInfoDto[] SeoInfos { get; set; }
+
+        public ImageDto[] Images { get; set; }
     }
 }

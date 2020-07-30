@@ -448,9 +448,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Sku = productDto.Code,
                 Description = productDto.Descriptions?.FirstOrDefault(d => d.ReviewType.EqualsInvariant("FullReview"))?.Content,
                 CatalogId = productDto.CatalogId,
-                SeoPath = "", //
-                SeoInfo = new SeoInfo { Title = productDto.Id, Language = workContext.CurrentLanguage, Slug = productDto.Slug }, // TODO: Fix it
-                Url = "", //
+                SeoPath = productDto.MasterVariation?.Outlines.GetSeoPath(workContext.CurrentStore, workContext.CurrentLanguage, null),
                 IsAvailable = productDto.MasterVariation?.AvailabilityData?.IsAvailable ?? false,
                 IsBuyable = productDto.MasterVariation?.AvailabilityData?.IsBuyable ?? false,
                 IsInStock = productDto.MasterVariation?.AvailabilityData?.IsInStock ?? false,
@@ -465,6 +463,8 @@ namespace VirtoCommerce.Storefront.Domain
                 //Width = 0, // TBD
             };
 
+            result.Url = "/" + (result.SeoPath ?? "product/" + result.Id);
+
             if (!productDto.MasterVariation?.Assets.IsNullOrEmpty() ?? false)
             {
                 result.Assets.AddRange(productDto.MasterVariation?.Assets?.Select(ToAsset));
@@ -477,7 +477,7 @@ namespace VirtoCommerce.Storefront.Domain
                 result.PrimaryImage = result.Images.FirstOrDefault();
             }
 
-            if (!productDto.Associations.Items.IsNullOrEmpty())
+            if (!productDto.Associations?.Items.IsNullOrEmpty() ?? false)
             {
                 result.Associations = new MutablePagedList<ProductAssociation>(productDto.Associations.Items.Select(i =>
                 {
@@ -574,17 +574,39 @@ namespace VirtoCommerce.Storefront.Domain
                 // TODO: Promotions
             }
 
+            if (!productDto.SeoInfos.IsNullOrEmpty())
+            {
+                var seoInfoDto = productDto.SeoInfos.Select(x => x.JsonConvert<SeoInfoDto>())
+                    .GetBestMatchingSeoInfos(workContext.CurrentStore, workContext.CurrentLanguage)
+                    .FirstOrDefault();
+
+                if (seoInfoDto != null)
+                {
+                    result.SeoInfo = seoInfoDto.ToSeoInfo();
+                }
+            }
+
+            if (result.SeoInfo == null)
+            {
+                result.SeoInfo = new SeoInfo
+                {
+                    Title = productDto.Id,
+                    Language = workContext.CurrentLanguage,
+                    Slug = productDto.Code
+                };
+            }
+
             return result;
         }
 
-        public static Category[] ToCategories(this CategoryDto[] categoryDtos, string catalogId)
+        public static Category[] ToCategories(this CategoryDto[] categoryDtos, Store store, Language language)
         {
-            var result = categoryDtos.Select(x => x.ToCategory(catalogId));
+            var result = categoryDtos.Select(x => x.ToCategory(store, language));
 
             return result.ToArray();
         }
 
-        public static Category ToCategory(this CategoryDto categoryDto, string catalogId)
+        public static Category ToCategory(this CategoryDto categoryDto, Store store, Language language)
         {
             var result = new Category
             {
@@ -592,9 +614,38 @@ namespace VirtoCommerce.Storefront.Domain
                 Code = categoryDto.Code,
                 Name = categoryDto.Name,
                 ParentId = categoryDto.Parent?.Id,
-                SeoPath = categoryDto.Slug,
-                Outline = categoryDto.Outlines.GetOutlinePath(catalogId),
+                SeoPath = categoryDto.Outlines.GetSeoPath(store, language, null),
+                Outline = categoryDto.Outlines.GetOutlinePath(store.Catalog),
             };
+
+            if (!categoryDto.SeoInfos.IsNullOrEmpty())
+            {
+                var seoInfoDto = categoryDto
+                    .SeoInfos
+                    .Select(x => x.JsonConvert<SeoInfoDto>())
+                    .GetBestMatchingSeoInfos(store, language)
+                    .FirstOrDefault();
+
+                if (seoInfoDto != null)
+                {
+                    result.SeoInfo = seoInfoDto.ToSeoInfo();
+                }
+            }
+
+            if (result.SeoInfo == null)
+            {
+                result.SeoInfo = new SeoInfo
+                {
+                    Slug = categoryDto.Id,
+                    Title = categoryDto.Name,
+                };
+            }
+
+            if (!categoryDto.Images.IsNullOrEmpty())
+            {
+                result.Images = categoryDto.Images.Select(ToImage).ToArray();
+                result.PrimaryImage = result.Images.FirstOrDefault();
+            }
 
             return result;
         }

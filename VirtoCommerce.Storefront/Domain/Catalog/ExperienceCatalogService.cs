@@ -59,7 +59,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
 
             response.ThrowExceptionOnError();
 
-            var categories = response.Data.Categories.Items.ToCategories(_workContextAccessor.WorkContext.CurrentStore.Catalog);
+            var categories = response.Data.Categories.Items.ToCategories(workContext.CurrentStore, workContext.CurrentLanguage);
 
             EstablishLazyDependenciesForCategories(categories);
 
@@ -149,7 +149,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
 
             if (!response.Data.Categories.Items.IsNullOrEmpty())
             {
-                result = new PagedList<Category>(response.Data.Categories.Items.ToCategories(workContext.CurrentStore.Catalog).AsQueryable(), criteria.PageNumber, criteria.PageSize);
+                result = new PagedList<Category>(response.Data.Categories.Items.ToCategories(workContext.CurrentStore, workContext.CurrentLanguage).AsQueryable(), criteria.PageNumber, criteria.PageSize);
             }
 
             EstablishLazyDependenciesForCategories(result.ToArray());

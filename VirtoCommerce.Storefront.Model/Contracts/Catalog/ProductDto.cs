@@ -10,6 +10,7 @@ namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
             Variations = Array.Empty<VariationDto>();
             Properties = Array.Empty<PropertyDto>();
             Descriptions = Array.Empty<DescriptionDto>();
+            SeoInfos = Array.Empty<SeoInfoDto>();
         }
 
         public string Id { get; set; }
@@ -47,5 +48,7 @@ namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
         public string OuterId { get; set; }
 
         public string CatalogId { get; set; }
+
+        public SeoInfoDto[] SeoInfos { get; set; }
     }
 }
