@@ -50,5 +50,7 @@ namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
         public string CatalogId { get; set; }
 
         public SeoInfoDto[] SeoInfos { get; set; }
+
+        public TaxCategoryDto Tax { get; set; }
     }
 }

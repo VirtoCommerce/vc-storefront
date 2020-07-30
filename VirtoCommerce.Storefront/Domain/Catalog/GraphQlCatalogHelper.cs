@@ -40,13 +40,22 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             }}
             variations {{ { GetAllVariationFields } }}
             { SeoInfoFields }
+            tax {{
+                rates {{
+                    line {{ amount code id name price quantity taxType }}
+                    percentRate
+                    rate
+                    taxDetails {{ amount name rate }}
+                    taxProviderCode
+                }}
+            }}
             ";
 
         public static string GetAllVariationFields
         => $@"id
             code
             { ImagesFields }
-            assets {{ id size url }}
+            assets {{ id size url group }}
             prices {{
                 list {{ {MoneyFields} }}
                 listWithTax {{ {MoneyFields} }}
@@ -75,6 +84,9 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                     amount {{ {MoneyFields} }}
                     amountWithTax {{ {MoneyFields} }}
                 }}
+                discountAmount {{ {MoneyFields} }}
+                discountAmountWithTax {{ {MoneyFields} }}
+                discountPercent
             }}
             availabilityData {{
                 availableQuantity
