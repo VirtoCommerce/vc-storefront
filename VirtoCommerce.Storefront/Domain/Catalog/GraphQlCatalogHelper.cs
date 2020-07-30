@@ -34,6 +34,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                     associatedObjectId
                     product {{ id }}
                     quantity
+                    tags
                 }}
                 totalCount
             }}
@@ -44,7 +45,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
         public static string GetAllVariationFields
         => $@"id
             code
-            images {{ id url name }}
+            { ImagesFields }
             assets {{ id size url }}
             prices {{
                 list {{ {MoneyFields} }}
@@ -77,7 +78,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             }}
             availabilityData {{
                 availableQuantity
-                inventories {{ inStockQuantity fulfillmentCenterId fulfillmentCenterName allowPreorder allowBackorder }}
+                inventories {{ inStockQuantity fulfillmentCenterId fulfillmentCenterName allowPreorder allowBackorder reservedQuantity }}
             }}
             properties {{ {PropertyFields} }}
             { OutlineFields }
@@ -85,13 +86,14 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
 
         public const string MoneyFields = "amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency";
         public const string PropertyFields = "id name valueType value valueId label hidden";
-        public static string AllCategoryFields = $"id code name hasParent slug { OutlineFields } { SeoInfoFields }";
         public static string OutlineFields = $@"outlines {{ items {{ id name seoObjectType { SeoInfoFields }}}}}";
+        public static string AllCategoryFields = $"id code name hasParent slug { OutlineFields } { SeoInfoFields } { ImagesFields }";
         public static string AllFacets = $"{ FilterFacets } { RangeFacets } { TermFacets }";
         public const string FilterFacets = "filter_facets { count facetType name }";
         public const string TermFacets = "range_facets { facetType name ranges { count from fromStr includeFrom includeTo max min to toStr total } }";
         public const string RangeFacets = "term_facets { facetType name terms { count isSelected term } }";
         public const string SeoInfoFields = "seoInfos { id imageAltDescription isActive languageCode metaDescription metaKeywords name objectId objectType pageTitle semanticUrl storeId }";
+        public const string ImagesFields = "images { id url name relativeUrl group }";
 
         public static string GetProducts(this ICatalogService catalogService, string[] ids, string storeId, string userId, string selectedFields = null)
         => $@"

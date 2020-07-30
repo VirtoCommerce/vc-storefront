@@ -170,7 +170,6 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
 
         protected virtual async Task<Product[]> GetProductsAsync(string[] ids, WorkContext workContext)
         {
-            var currentCurrency = workContext.CurrentCurrency;
             var request = new GraphQLRequest
             {
                 Query = this.GetProducts(ids, workContext.CurrentStore.Id, workContext.CurrentUser.Id),

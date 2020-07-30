@@ -487,7 +487,7 @@ namespace VirtoCommerce.Storefront.Domain
                         Product = new Product { Id = i.Product?.Id },
                         ProductId = productDto.Id,
                         Quantity = i.Quantity,
-                        // Tags = +
+                        Tags = i.Tags,
                         Type = i.Type,
                     };
 
@@ -520,7 +520,7 @@ namespace VirtoCommerce.Storefront.Domain
                         InStockQuantity = x.InStockQuantity,
                         PreorderAvailabilityDate = x.PreorderAvailabilityDate,
                         ProductId = productDto.Id,
-                        ReservedQuantity = 0, // +
+                        ReservedQuantity = x.ReservedQuantity,
                     };
 
                     return inventory;

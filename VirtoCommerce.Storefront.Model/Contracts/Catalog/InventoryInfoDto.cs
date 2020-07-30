@@ -17,5 +17,7 @@ namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
         public long? InStockQuantity { get; set; }
 
         public DateTime? PreorderAvailabilityDate { get; set; }
+
+        public long? ReservedQuantity { get; set; }
     }
 }
