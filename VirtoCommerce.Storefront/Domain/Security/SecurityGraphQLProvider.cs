@@ -35,7 +35,12 @@ namespace VirtoCommerce.Storefront.Domain.Security
                         user.StoreId,
                         Logins = user.ExternalLogins.Select(x => new { x.LoginProvider, x.ProviderKey }),
                         memberId = !string.IsNullOrEmpty(user.ContactId) ? user.ContactId : user.Contact?.Id,
-                        roles = user.Roles?.Select(x => new { x.Id, x.Name })
+                        roles = user.Roles?.Select(x => new 
+                        {
+                            x.Id,
+                            x.Name,
+                            permissions = x.Permissions?.Select(p => new { name = p }).ToList()
+                        })
                     }
                 }
             };
