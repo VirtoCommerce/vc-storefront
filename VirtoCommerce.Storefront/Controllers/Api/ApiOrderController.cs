@@ -83,7 +83,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return new CustomerOrderSearchResult
             {
                 Results = result.ToArray(),
-                TotalCount = result.Count
+                TotalCount = result.TotalItemCount
             };
         }
 
