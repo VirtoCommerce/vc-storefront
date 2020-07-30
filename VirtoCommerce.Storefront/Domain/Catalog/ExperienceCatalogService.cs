@@ -196,7 +196,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 category.Parents = new MutablePagedList<Category>((pageNumber, pageSize, sortInfos) =>
                 {
                     var catIds = new[] { category.ParentId };
-                    return new StaticPagedList<Category>(GetCategories(catIds), pageNumber, pageSize, catIds.Length);
+                    return new StaticPagedList<Category>(category.ParentId != null ? GetCategories(catIds) : Array.Empty<Category>(), pageNumber, pageSize, catIds.Length);
                 }, 1, CategorySearchCriteria.DefaultPageSize);
 
                 // Lazy loading child categories

@@ -123,7 +123,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 products(
                     query: ""{ criteria.Keyword }""
                     filter: ""{
-                        ( string.IsNullOrEmpty(criteria.Outline) ? string.Empty : $"categories.subtree:{ criteria.Outline }" ) }{
+                        ( string.IsNullOrEmpty(criteria.Outline) ? string.Empty : $"category.subtree:{catalogId}/{criteria.Outline}" ) }{
                         ( criteria.Terms.IsNullOrEmpty() ? string.Empty : $" {string.Join(' ', criteria.Terms.Select(x => $"{x.Name}:{x.Value}"))}" ) }{
                         (string.IsNullOrEmpty(catalogId) ? string.Empty : $" catalog:{ catalogId }")
                     }""
