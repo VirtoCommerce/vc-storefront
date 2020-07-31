@@ -27,8 +27,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 id
                 languageCode
                 reviewType
-            }}
-            masterVariation {{ { GetAllVariationFields } }}
+            }}           
             associations {{
                 items {{
                     associatedObjectId
@@ -39,6 +38,8 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 totalCount
             }}
             variations {{ { GetAllVariationFields } }}
+
+
             { SeoInfoFields }
             tax {{
                 rates {{
@@ -49,6 +50,49 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                     taxProviderCode
                 }}
             }}
+  { ImagesFields }
+            assets {{ id size url group }}
+            prices {{
+                list {{ {MoneyFields} }}
+                listWithTax {{ {MoneyFields} }}
+                sale {{ {MoneyFields} }}
+                saleWithTax {{ {MoneyFields} }}
+                minQuantity
+                pricelistId
+                tierPrices {{
+                    price {{ {MoneyFields} }}
+                    priceWithTax {{ {MoneyFields} }}
+                    quantity
+                }}
+                validFrom
+                validUntil
+                currency
+                discounts {{
+                    coupon
+                    description
+                    promotion {{
+                        id
+                        description
+                        name
+                        type
+                    }}
+                    promotionId
+                    amount {{ {MoneyFields} }}
+                    amountWithTax {{ {MoneyFields} }}
+                }}
+                discountAmount {{ {MoneyFields} }}
+                discountAmountWithTax {{ {MoneyFields} }}
+                discountPercent
+            }}
+            availabilityData {{
+                availableQuantity
+                inventories {{ inStockQuantity fulfillmentCenterId fulfillmentCenterName allowPreorder allowBackorder reservedQuantity }}
+                isAvailable
+                isBuyable
+                isInStock
+            }}
+            properties {{ {PropertyFields} }}
+            { OutlineFields }
             ";
 
         public static string GetAllVariationFields
@@ -138,8 +182,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 products(
                     query: ""{ criteria.Keyword }""
                     filter: ""{
-                        ( string.IsNullOrEmpty(criteria.Outline) ? string.Empty : $"category.subtree:{catalogId}/{criteria.Outline}" ) }{
-                        ( criteria.Terms.IsNullOrEmpty() ? string.Empty : $" {string.Join(' ', criteria.Terms.Select(x => $"{x.Name}:{x.Value}"))}" ) }{
+                        ( criteria.Terms.IsNullOrEmpty() ? string.Empty : $"{string.Join(" ", criteria.Terms.ToStrings())}" ) }{
                         (string.IsNullOrEmpty(catalogId) ? string.Empty : $" catalog:{ catalogId }")
                     }""
                     fuzzy: { criteria.IsFuzzySearch.ToString().ToLowerInvariant() }

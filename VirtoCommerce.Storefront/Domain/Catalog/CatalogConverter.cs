@@ -448,14 +448,14 @@ namespace VirtoCommerce.Storefront.Domain
                 Sku = productDto.Code,
                 Description = productDto.Descriptions?.FirstOrDefault(d => d.ReviewType.EqualsInvariant("FullReview"))?.Content,
                 CatalogId = productDto.CatalogId,
-                SeoPath = productDto.MasterVariation?.Outlines.GetSeoPath(workContext.CurrentStore, workContext.CurrentLanguage, null),
-                IsAvailable = productDto.MasterVariation?.AvailabilityData?.IsAvailable ?? false,
-                IsBuyable = productDto.MasterVariation?.AvailabilityData?.IsBuyable ?? false,
-                IsInStock = productDto.MasterVariation?.AvailabilityData?.IsInStock ?? false,
+                SeoPath = productDto?.Outlines.GetSeoPath(workContext.CurrentStore, workContext.CurrentLanguage, null),
+                IsAvailable = productDto?.AvailabilityData?.IsAvailable ?? false,
+                IsBuyable = productDto?.AvailabilityData?.IsBuyable ?? false,
+                IsInStock = productDto?.AvailabilityData?.IsInStock ?? false,
                 //Height = decimal.MinValue, // TBD
                 //Length = decimal.MinValue, // TBD
                 //MeasureUnit = "", // TBD
-                Outline = productDto.MasterVariation?.Outlines.GetOutlinePath(workContext.CurrentStore.Catalog),
+                Outline = productDto?.Outlines.GetOutlinePath(workContext.CurrentStore.Catalog),
                 ProductType = productDto.ProductType,
                 //TaxType = "", // TBD
                 //Weight = 0, // TBD
@@ -465,14 +465,14 @@ namespace VirtoCommerce.Storefront.Domain
 
             result.Url = "/" + (result.SeoPath ?? "product/" + result.Id);
 
-            if (!productDto.MasterVariation?.Assets.IsNullOrEmpty() ?? false)
+            if (!productDto?.Assets.IsNullOrEmpty() ?? false)
             {
-                result.Assets.AddRange(productDto.MasterVariation?.Assets?.Select(ToAsset));
+                result.Assets.AddRange(productDto?.Assets?.Select(ToAsset));
             }
 
-            if (!productDto.MasterVariation?.Images.IsNullOrEmpty() ?? false)
+            if (!productDto?.Images.IsNullOrEmpty() ?? false)
             {
-                result.Images.AddRange(productDto.MasterVariation.Images.Select(ToImage));
+                result.Images.AddRange(productDto.Images.Select(ToImage));
 
                 result.PrimaryImage = result.Images.FirstOrDefault();
             }
@@ -507,9 +507,9 @@ namespace VirtoCommerce.Storefront.Domain
                 );
             }
 
-            if (!productDto.MasterVariation?.AvailabilityData?.Inventories.IsNullOrEmpty() ?? false)
+            if (!productDto?.AvailabilityData?.Inventories.IsNullOrEmpty() ?? false)
             {
-                result.InventoryAll = productDto.MasterVariation?.AvailabilityData?.Inventories.Select(x =>
+                result.InventoryAll = productDto?.AvailabilityData?.Inventories.Select(x =>
                 {
                     var inventory = new Inventory
                     {
@@ -543,9 +543,9 @@ namespace VirtoCommerce.Storefront.Domain
                 }));
             }
 
-            if (!productDto.MasterVariation?.Properties.IsNullOrEmpty() ?? false)
+            if (!productDto?.Properties.IsNullOrEmpty() ?? false)
             {
-                result.Properties = new MutablePagedList<CatalogProperty>(productDto.MasterVariation?.Properties.GroupBy(x => x.Id).Select(
+                result.Properties = new MutablePagedList<CatalogProperty>(productDto?.Properties.GroupBy(x => x.Id).Select(
                     x =>
                     {
                         var propertyValues = x.Select(p => p.Value);
@@ -569,7 +569,7 @@ namespace VirtoCommerce.Storefront.Domain
                     }));
             }
 
-            if (!productDto.MasterVariation?.Prices.FirstOrDefault()?.Discounts.IsNullOrEmpty() ?? false)
+            if (!productDto?.Prices.FirstOrDefault()?.Discounts.IsNullOrEmpty() ?? false)
             {
                 // TODO: Promotions
             }
@@ -596,11 +596,11 @@ namespace VirtoCommerce.Storefront.Domain
                 };
             }
 
-            if (!productDto.MasterVariation?.Prices.IsNullOrEmpty() ?? false)
+            if (!productDto?.Prices.IsNullOrEmpty() ?? false)
             {
                 var currencies = workContext.AllCurrencies;
 
-                var productPrices = productDto.MasterVariation.Prices.Select(x =>
+                var productPrices = productDto.Prices.Select(x =>
                 {
                     var currency = currencies.FirstOrDefault(c => c.Code.EqualsInvariant(x.Currency));
 

@@ -35,7 +35,7 @@ namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
 
         public CategoryDto Category { get; set; }
 
-        public VariationDto MasterVariation { get; set; }
+       // public VariationDto MasterVariation { get; set; }
 
         public DescriptionDto[] Descriptions { get; set; }
 
@@ -52,5 +52,15 @@ namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
         public SeoInfoDto[] SeoInfos { get; set; }
 
         public TaxCategoryDto Tax { get; set; }
+
+        public AssetDto[] Assets { get; set; }
+
+        public AvailabilityDataDto AvailabilityData { get; set; }
+
+        public ImageDto[] Images { get; set; }
+
+        public PriceDto[] Prices { get; set; }
+
+        public OutlineDto[] Outlines { get; set; }
     }
 }

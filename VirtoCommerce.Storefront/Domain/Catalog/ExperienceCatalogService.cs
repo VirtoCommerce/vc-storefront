@@ -75,7 +75,11 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
         public virtual async Task<CatalogSearchResult> SearchProductsAsync(ProductSearchCriteria criteria)
         {
             var workContext = _workContextAccessor.WorkContext;
-
+            //Do not add to filter current category if specified category
+            if(criteria.Outline != null)
+            {
+                criteria.Terms.Add(new Term { Name = "__outline", Value = $"{workContext.CurrentStore.Catalog}/{criteria.Outline}" });
+            }
             var request = new GraphQLRequest
             {
                 Query = this.SearchProducts(
@@ -140,9 +144,10 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
 
             if (!associationList.IsNullOrEmpty())
             {
+                var allAssociations = await GetProductsAsync(associationList.Select(x => x.ProductId).ToArray());
                 foreach (var association in associationList)
                 {
-                    association.Product = (await GetProductsAsync(new[] { association.Product?.Id })).FirstOrDefault();
+                    association.Product = allAssociations.FirstOrDefault(x => x.Id == association.ProductId);
 
                     if (association.Product != null)
                     {
