@@ -40,13 +40,22 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             }}
             variations {{ { GetAllVariationFields } }}
             { SeoInfoFields }
+            tax {{
+                rates {{
+                    line {{ amount code id name price quantity taxType }}
+                    percentRate
+                    rate
+                    taxDetails {{ amount name rate }}
+                    taxProviderCode
+                }}
+            }}
             ";
 
         public static string GetAllVariationFields
         => $@"id
             code
             { ImagesFields }
-            assets {{ id size url }}
+            assets {{ id size url group }}
             prices {{
                 list {{ {MoneyFields} }}
                 listWithTax {{ {MoneyFields} }}
@@ -75,10 +84,16 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                     amount {{ {MoneyFields} }}
                     amountWithTax {{ {MoneyFields} }}
                 }}
+                discountAmount {{ {MoneyFields} }}
+                discountAmountWithTax {{ {MoneyFields} }}
+                discountPercent
             }}
             availabilityData {{
                 availableQuantity
                 inventories {{ inStockQuantity fulfillmentCenterId fulfillmentCenterName allowPreorder allowBackorder reservedQuantity }}
+                isAvailable
+                isBuyable
+                isInStock
             }}
             properties {{ {PropertyFields} }}
             { OutlineFields }
@@ -123,7 +138,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 products(
                     query: ""{ criteria.Keyword }""
                     filter: ""{
-                        ( string.IsNullOrEmpty(criteria.Outline) ? string.Empty : $"categories.subtree:{ criteria.Outline }" ) }{
+                        ( string.IsNullOrEmpty(criteria.Outline) ? string.Empty : $"category.subtree:{catalogId}/{criteria.Outline}" ) }{
                         ( criteria.Terms.IsNullOrEmpty() ? string.Empty : $" {string.Join(' ', criteria.Terms.Select(x => $"{x.Name}:{x.Value}"))}" ) }{
                         (string.IsNullOrEmpty(catalogId) ? string.Empty : $" catalog:{ catalogId }")
                     }""

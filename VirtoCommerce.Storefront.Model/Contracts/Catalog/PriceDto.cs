@@ -14,6 +14,12 @@ namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
 
         public CatalogDiscountDto[] Discounts { get; set; }
 
+        public MoneyDto DiscountAmount { get; set; }
+
+        public MoneyDto DiscountAmountWithTax { get; set; }
+
+        public decimal? DiscountsPercent { get; set; }
+
         public MoneyDto List { get; set; }
 
         public MoneyDto ListWithTax { get; set; }

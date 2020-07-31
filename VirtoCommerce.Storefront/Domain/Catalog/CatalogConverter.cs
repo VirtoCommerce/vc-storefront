@@ -596,6 +596,56 @@ namespace VirtoCommerce.Storefront.Domain
                 };
             }
 
+            if (!productDto.MasterVariation?.Prices.IsNullOrEmpty() ?? false)
+            {
+                var currencies = workContext.AllCurrencies;
+
+                var productPrices = productDto.MasterVariation.Prices.Select(x =>
+                {
+                    var currency = currencies.FirstOrDefault(c => c.Code.EqualsInvariant(x.Currency));
+
+                    var price = new ProductPrice(new Currency(workContext.CurrentLanguage, x.Currency))
+                    {
+                        ListPrice = new Money((double?)x.List.Amount ?? 0d, currency),
+                        PricelistId = x.PricelistId,
+                        MinQuantity = x.MinQuantity,
+                        DiscountAmount = new Money((double?)x.DiscountAmount.Amount ?? 0d, currency),
+                        SalePrice = new Money((double?)x.Sale.Amount ?? 0d, currency),
+                        TierPrices = x.TierPrices.Select(t => new TierPrice(new Money((double?)t.Price.Amount ?? 0d, currency), t.Quantity ?? 0)).ToList()
+                    };
+
+                    if (productDto.Tax != null)
+                    {
+                        var taxRates = productDto.Tax.Rates.Select(t =>
+                        {
+                            var rate = new TaxRate(currency)
+                            {
+                                Line = new TaxLine(currency)
+                                {
+                                    Amount = new Money((double?)t.Line.Amount ?? 0d, currency),
+                                    Code = t.Line.Code,
+                                    Id = t.Line.Id,
+                                    Name = t.Line.Name,
+                                    Quantity = t.Line.Quantity ?? 0,
+                                    TaxType = t.Line.TaxType,
+                                    Price = new Money((double?)t.Line.Price ?? 0d, currency),
+                                },
+                                Rate = new Money((double?)t.Rate ?? 0d, currency),
+                                PercentRate = t.PercentRate ?? 0m,
+                            };
+
+                            return rate;
+                        });
+
+                        price.ApplyTaxRates(taxRates);
+                    }
+                    
+                    return price;
+                });
+
+                result.ApplyPrices(productPrices, workContext.CurrentCurrency, workContext.AllCurrencies);
+            }
+
             return result;
         }
 
