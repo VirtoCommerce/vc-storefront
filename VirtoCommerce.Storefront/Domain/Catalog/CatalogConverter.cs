@@ -7,6 +7,8 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Catalog.Specifications;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Contracts.Catalog;
+using VirtoCommerce.Storefront.Model.Inventory;
 using VirtoCommerce.Storefront.Model.Stores;
 using catalogDto = VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
@@ -429,6 +431,354 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
+        public static Product[] ToProducts(this ProductDto[] productDtos, WorkContext workContext)
+        {
+            var result = productDtos.Select(x => x.ToProduct(workContext));
+
+            return result.ToArray();
+        }
+
+        public static Product ToProduct(this ProductDto productDto, WorkContext workContext)
+        {
+            var result = new Product(workContext.CurrentCurrency, workContext.CurrentLanguage)
+            {
+                Id = productDto.Id,
+                Name = productDto.Name,
+                CategoryId = productDto.Category?.Id,
+                Sku = productDto.Code,
+                Description = productDto.Descriptions?.FirstOrDefault(d => d.ReviewType.EqualsInvariant("FullReview"))?.Content,
+                CatalogId = productDto.CatalogId,
+                SeoPath = productDto?.Outlines.GetSeoPath(workContext.CurrentStore, workContext.CurrentLanguage, null),
+                IsAvailable = productDto?.AvailabilityData?.IsAvailable ?? false,
+                IsBuyable = productDto?.AvailabilityData?.IsBuyable ?? false,
+                IsInStock = productDto?.AvailabilityData?.IsInStock ?? false,
+                IsActive = productDto.AvailabilityData?.IsActive ?? false,
+                //Height = decimal.MinValue, // TBD
+                //Length = decimal.MinValue, // TBD
+                //MeasureUnit = "", // TBD
+                Outline = productDto?.Outlines.GetOutlinePath(workContext.CurrentStore.Catalog),
+                ProductType = productDto.ProductType,
+                //TaxType = "", // TBD
+                //Weight = 0, // TBD
+                //WeightUnit = "", // TBD
+                //Width = 0, // TBD
+            };
+
+            result.Url = "/" + (result.SeoPath ?? "product/" + result.Id);
+
+            if (!productDto?.Assets.IsNullOrEmpty() ?? false)
+            {
+                result.Assets.AddRange(productDto?.Assets?.Select(ToAsset));
+            }
+
+            if (!productDto?.Images.IsNullOrEmpty() ?? false)
+            {
+                result.Images.AddRange(productDto.Images.Select(ToImage));
+
+                result.PrimaryImage = result.Images.FirstOrDefault();
+            }
+
+            if (!productDto.Associations?.Items.IsNullOrEmpty() ?? false)
+            {
+                result.Associations = new MutablePagedList<ProductAssociation>(productDto.Associations.Items.Select(i =>
+                {
+                    var association = new ProductAssociation
+                    {
+                        Priority = i.Priority,
+                        Product = new Product { Id = i.Product?.Id },
+                        ProductId = productDto.Id,
+                        Quantity = i.Quantity,
+                        Tags = i.Tags,
+                        Type = i.Type,
+                    };
+
+                    return association;
+                }));
+            }
+
+            if (!productDto.Descriptions.IsNullOrEmpty())
+            {
+                result.Descriptions = new MutablePagedList<EditorialReview>(productDto.Descriptions?.Select(d =>
+                    new EditorialReview
+                    {
+                        Value = d.Content,
+                        ReviewType = d.ReviewType,
+                        Language = new Language(d.LanguageCode),
+                    })
+                );
+            }
+
+            if (!productDto?.AvailabilityData?.Inventories.IsNullOrEmpty() ?? false)
+            {
+                result.InventoryAll = productDto?.AvailabilityData?.Inventories.Select(x =>
+                {
+                    var inventory = new Inventory
+                    {
+                        AllowBackorder = x.AllowBackorder,
+                        AllowPreorder = x.AllowPreorder,
+                        BackorderAvailabilityDate = x.BackorderAvailableDate,
+                        FulfillmentCenterId = x.FulfillmentCenterId,
+                        InStockQuantity = x.InStockQuantity,
+                        PreorderAvailabilityDate = x.PreorderAvailabilityDate,
+                        ProductId = productDto.Id,
+                        ReservedQuantity = x.ReservedQuantity,
+                    };
+
+                    return inventory;
+                }).ToArray();
+
+                result.Inventory = workContext.CurrentStore.DefaultFulfillmentCenterId != null ?
+                    result.InventoryAll.FirstOrDefault(x => x.FulfillmentCenterId == workContext.CurrentStore.DefaultFulfillmentCenterId)
+                    : result.InventoryAll.FirstOrDefault();
+            }
+
+            if (!productDto.Variations?.IsNullOrEmpty() ?? false)
+            {
+                result.Variations.AddRange(productDto.Variations.Select(x => x.ToProduct(workContext)));
+            }
+
+            if (!productDto?.Properties.IsNullOrEmpty() ?? false)
+            {
+                result.Properties = new MutablePagedList<CatalogProperty>(productDto?.Properties.Where(x=>x.Type.EqualsInvariant("Product")).GroupBy(x => x.Id).Select(
+                    x =>
+                    {
+                        var propertyValues = x.Select(p => p.Value);
+                        var propertyDto = x.First();
+
+                        var property = propertyDto.ToProperty(workContext.CurrentLanguage, propertyValues.ToArray());
+
+                        return property;
+                    }));
+
+
+                result.VariationProperties = new MutablePagedList<CatalogProperty>(productDto?.Properties.Where(x => x.Type.EqualsInvariant("Variation")).GroupBy(x => x.Id).Select(
+                 x =>
+                 {
+                     var propertyValues = x.Select(p => p.Value);
+                     var propertyDto = x.First();
+
+                     var property = propertyDto.ToProperty(workContext.CurrentLanguage, propertyValues.ToArray());
+
+                     return property;
+                 }));
+
+
+            }
+
+            if (!productDto?.Prices.FirstOrDefault()?.Discounts.IsNullOrEmpty() ?? false)
+            {
+                var discountsCollection = productDto?.Prices.SelectMany(x =>
+                {
+                    var discounts = x.Discounts.Select(d =>
+                    {
+                        var currency = new Currency(workContext.CurrentLanguage, x.Currency);
+
+                        var discount = new Model.Marketing.Discount
+                        {
+                            Amount = new Money((double?)d.Amount.Amount ?? 0d, currency),
+                            Coupon = d.Coupon,
+                            Description = d.Description,
+                            PromotionId = d.PromotionId,
+                        };
+
+                        return discount;
+                    });
+
+                    return discounts;
+                }).ToArray();
+
+                if (!discountsCollection.IsNullOrEmpty())
+                {
+                    result.Discounts.AddRange(discountsCollection);
+                }
+            }
+
+            if (!productDto.SeoInfos.IsNullOrEmpty())
+            {
+                var seoInfoDto = productDto.SeoInfos.Select(x => x.JsonConvert<SeoInfoDto>())
+                    .GetBestMatchingSeoInfos(workContext.CurrentStore, workContext.CurrentLanguage)
+                    .FirstOrDefault();
+
+                if (seoInfoDto != null)
+                {
+                    result.SeoInfo = seoInfoDto.ToSeoInfo();
+                }
+            }
+
+            if (result.SeoInfo == null)
+            {
+                result.SeoInfo = new SeoInfo
+                {
+                    Title = productDto.Id,
+                    Language = workContext.CurrentLanguage,
+                    Slug = productDto.Code
+                };
+            }
+
+            if (!productDto?.Prices.IsNullOrEmpty() ?? false)
+            {
+
+                var productPrices = productDto.Prices.ToPrices(workContext.AllCurrencies, productDto.Tax?.Rates);
+
+                result.ApplyPrices(productPrices, workContext.CurrentCurrency, workContext.AllCurrencies);
+            }
+
+            return result;
+        }
+
+        public static ProductPrice[] ToPrices(this PriceDto[] priceDtos, IList<Currency> currencies, TaxRateDto[] taxRateDtos)
+        {
+            var result = priceDtos.Select(x =>
+            {
+                var currency = currencies.FirstOrDefault(c => c.Code.EqualsInvariant(x.Currency));
+
+                var price = new ProductPrice(currency)
+                {
+                    ListPrice = new Money((double?)x.List.Amount ?? 0d, currency),
+                    PricelistId = x.PricelistId,
+                    MinQuantity = x.MinQuantity,
+                    DiscountAmount = new Money((double?)x.DiscountAmount.Amount ?? 0d, currency),
+                    SalePrice = new Money((double?)x.Sale.Amount ?? 0d, currency),
+                    TierPrices = x.TierPrices.Select(t => new TierPrice(new Money((double?)t.Price.Amount ?? 0d, currency), t.Quantity ?? 0)).ToList(),
+                };
+
+                if (!taxRateDtos.IsNullOrEmpty())
+                {
+                    var taxRates = taxRateDtos.Select(t =>
+                    {
+                        var rate = new TaxRate(currency)
+                        {
+                            Line = new TaxLine(currency)
+                            {
+                                Amount = new Money((double?)t.Line.Amount ?? 0d, currency),
+                                Code = t.Line.Code,
+                                Id = t.Line.Id,
+                                Name = t.Line.Name,
+                                Quantity = t.Line.Quantity ?? 0,
+                                TaxType = t.Line.TaxType,
+                                Price = new Money((double?)t.Line.Price ?? 0d, currency),
+                            },
+                            Rate = new Money((double?)t.Rate ?? 0d, currency),
+                            PercentRate = t.PercentRate ?? 0m,
+                        };
+
+                        return rate;
+                    });
+
+                    price.ApplyTaxRates(taxRates);
+                }
+
+                return price;
+            });
+
+            return result.ToArray();
+        }
+
+        public static Category[] ToCategories(this CategoryDto[] categoryDtos, Store store, Language language)
+        {
+            var result = categoryDtos.Select(x => x.ToCategory(store, language));
+
+            return result.ToArray();
+        }
+
+        public static CatalogProperty ToProperty(this PropertyDto propertyDto, Language language, string[] values)
+        {
+            return new CatalogProperty
+            {
+                Id = propertyDto.Id,
+                Name = propertyDto.Name,
+                Value = propertyDto.Value,
+                ValueType = propertyDto.ValueType,
+                ValueId = propertyDto.ValueId,
+                DisplayName = propertyDto.Label,
+                Hidden = propertyDto.Hidden,
+                Type = propertyDto.Type,
+                Values = values,
+                LocalizedValues = new List<LocalizedString> { new LocalizedString(language, propertyDto.Label) }
+            };
+
+        }
+
+        public static Category ToCategory(this CategoryDto categoryDto, Store store, Language language)
+        {
+            var result = new Category
+            {
+                Id = categoryDto.Id,
+                Code = categoryDto.Code,
+                Name = categoryDto.Name,
+                ParentId = categoryDto.Parent?.Id,
+                SeoPath = categoryDto.Outlines.GetSeoPath(store, language, null),
+                Outline = categoryDto.Outlines.GetOutlinePath(store.Catalog),
+            };
+
+            if (result.Outline != null)
+            {
+                result.ParentId = result.Outline.Split("/").Reverse().Skip(1).Take(1).FirstOrDefault() ?? result.ParentId;
+            }
+
+            result.Url = "/" + (result.SeoPath ?? "category/" + categoryDto.Id);
+
+            if (!categoryDto.SeoInfos.IsNullOrEmpty())
+            {
+                var seoInfoDto = categoryDto
+                    .SeoInfos
+                    .Select(x => x.JsonConvert<SeoInfoDto>())
+                    .GetBestMatchingSeoInfos(store, language)
+                    .FirstOrDefault();
+
+                if (seoInfoDto != null)
+                {
+                    result.SeoInfo = seoInfoDto.ToSeoInfo();
+                }
+            }
+
+            if (result.SeoInfo == null)
+            {
+                result.SeoInfo = new SeoInfo
+                {
+                    Slug = categoryDto.Id,
+                    Title = categoryDto.Name,
+                };
+            }
+
+            if (!categoryDto.Images.IsNullOrEmpty())
+            {
+                result.Images = categoryDto.Images.Select(ToImage).ToArray();
+                result.PrimaryImage = result.Images.FirstOrDefault();
+            }
+
+            return result;
+        }
+
+        public static Image ToImage(this ImageDto imageDto)
+        {
+            var result = new Image
+            {
+                Alt = imageDto.Name, //+
+                FullSizeImageUrl = imageDto.Url, //+
+                Group = imageDto.Group,
+                SortOrder = imageDto.SortOrder,
+                Title = imageDto.Name,
+                Url = imageDto.Url,
+            };
+
+            return result;
+        }
+
+        public static Asset ToAsset(this AssetDto assetDto)
+        {
+            var result = new Asset
+            {
+                MimeType = assetDto.MimeType,
+                Name = assetDto.Name,
+                Size = assetDto.Size,
+                Group = assetDto.Group,
+                Url = assetDto.Url,
+                TypeId = assetDto.TypeId,
+            };
+
+            return result;
+        }
 
         public static marketingDto.ProductPromoEntry ToProductPromoEntryDto(this Product product)
         {
@@ -509,6 +859,135 @@ namespace VirtoCommerce.Storefront.Domain
             }
 
             return result.ToArray();
+        }
+
+        public static Aggregation ToAggregation(this TermFacet termFacet, string currentLanguage)
+        {
+            var result = new Aggregation
+            {
+                AggregationType = "term",
+                Field = termFacet.Name
+            };
+
+            var aggrItemIsVisbileSpec = new AggregationItemIsVisibleSpecification();
+            if (termFacet.Terms != null)
+            {
+                result.Items = termFacet.Terms.Select(i => i.ToAggregationItem(result, currentLanguage))
+                                                   .Where(x => aggrItemIsVisbileSpec.IsSatisfiedBy(x))
+                                                   .Distinct().ToArray();
+            }
+            //TODO:
+            //if (termFacet.Labels != null)
+            //{
+            //    result.Label =
+            //        aggregationDto.Labels.Where(l => string.Equals(l.Language, currentLanguage, StringComparison.OrdinalIgnoreCase))
+            //            .Select(l => l.Label)
+            //            .FirstOrDefault();
+            //}
+
+            if (string.IsNullOrEmpty(result.Label))
+            {
+                result.Label = termFacet.Name;
+            }
+
+            return result;
+        }
+
+        public static Aggregation ToAggregation(this RangeFacet rangeFacet, string currentLanguage)
+        {
+            var result = new Aggregation
+            {
+                AggregationType = "range",
+                Field = rangeFacet.Name
+            };
+
+
+            var aggrItemIsVisbileSpec = new AggregationItemIsVisibleSpecification();
+            if (rangeFacet.Ranges != null)
+            {
+                result.Items = rangeFacet.Ranges.Select(i => i.ToAggregationItem(result, currentLanguage))
+                                                   .Where(x => aggrItemIsVisbileSpec.IsSatisfiedBy(x))
+                                                   .Distinct().ToArray();
+            }
+            //TODO:
+            //if (aggregationDto.Labels != null)
+            //{
+            //    result.Label =
+            //        aggregationDto.Labels.Where(l => string.Equals(l.Language, currentLanguage, StringComparison.OrdinalIgnoreCase))
+            //            .Select(l => l.Label)
+            //            .FirstOrDefault();
+            //}
+
+            if (string.IsNullOrEmpty(result.Label))
+            {
+                result.Label = rangeFacet.Name;
+            }
+
+            return result;
+        }
+
+        public static AggregationItem ToAggregationItem(this FacetTermDto termDto, Aggregation aggregationGroup, string currentLanguage)
+        {
+            var result = new AggregationItem
+            {
+                Group = aggregationGroup,
+                Value = termDto.Term,
+                IsApplied = termDto.IsSelected ?? false,
+                Count = (int)(termDto.Count ?? 0),            
+            };
+
+            //TODO:
+            //if (itemDto.Labels != null)
+            //{
+            //    result.Label =
+            //        itemDto.Labels.Where(l => string.Equals(l.Language, currentLanguage, StringComparison.OrdinalIgnoreCase))
+            //            .Select(l => l.Label)
+            //            .FirstOrDefault();
+            //}
+
+            if (string.IsNullOrEmpty(result.Label) && termDto.Term != null)
+            {
+                result.Label = termDto.Term.ToString();
+            }
+
+            if (aggregationGroup.Field.EqualsInvariant("__outline"))
+            {
+                result = CategoryAggregationItem.FromAggregationItem(result);
+            }
+
+            return result;
+        }
+        public static AggregationItem ToAggregationItem(this FacetRangeTypeDto itemDto, Aggregation aggregationGroup, string currentLanguage)
+        {
+            var result = new AggregationItem
+            {
+                Group = aggregationGroup,
+                Value = aggregationGroup.Field,
+                IsApplied = itemDto.IsSelected ?? false,
+                Count = (int)(itemDto.Count ?? 0),
+                Lower = itemDto.From?.ToString(),
+                Upper = itemDto.To?.ToString(),
+            };
+
+            //if (itemDto.Labels != null)
+            //{
+            //    result.Label =
+            //        itemDto.Labels.Where(l => string.Equals(l.Language, currentLanguage, StringComparison.OrdinalIgnoreCase))
+            //            .Select(l => l.Label)
+            //            .FirstOrDefault();
+            //}
+
+            if (string.IsNullOrEmpty(result.Label) && aggregationGroup.Field != null)
+            {
+                result.Label = aggregationGroup.Field.ToString();
+            }
+
+            if (aggregationGroup.Field.EqualsInvariant("__outline"))
+            {
+                result = CategoryAggregationItem.FromAggregationItem(result);
+            }
+
+            return result;
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.Storefront.Model.Catalog;
+using VirtoCommerce.Storefront.Model.Contracts.Catalog;
 using VirtoCommerce.Tools;
 using catalogDto = VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models;
 using toolsDto = VirtoCommerce.Tools.Models;
@@ -16,6 +17,11 @@ namespace VirtoCommerce.Storefront.Common
         /// <param name="catalogId"></param>
         /// <returns></returns>
         public static string GetOutlinePath(this IEnumerable<catalogDto.Outline> outlines, string catalogId)
+        {
+            return outlines?.Select(o => o.JsonConvert<toolsDto.Outline>()).GetOutlinePath(catalogId);
+        }
+
+        public static string GetOutlinePath(this IEnumerable<OutlineDto> outlines, string catalogId)
         {
             return outlines?.Select(o => o.JsonConvert<toolsDto.Outline>()).GetOutlinePath(catalogId);
         }
