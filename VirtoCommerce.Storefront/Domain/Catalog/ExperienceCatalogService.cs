@@ -101,7 +101,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             var searchResult = new CatalogSearchResult(criteria)
             {
                 Products = new MutablePagedList<Product>(products, criteria.PageNumber, criteria.PageSize, response.Data.Products.TotalCount ?? 0),
-                //Aggregations = 
+                //Aggregations =
             };
 
             var associationList = searchResult
@@ -115,7 +115,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 foreach (var association in associationList)
                 {
                     association.Product = (await GetProductsAsync(new[] { association.Product?.Id })).FirstOrDefault();
-            
+
                     if (association.Product != null)
                     {
                         EstablishLazyDependenciesForProducts(new[] { association.Product });
@@ -167,7 +167,6 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             return SearchCategoriesAsync(criteria).GetAwaiter().GetResult();
         }
 
-
         protected virtual async Task<Product[]> GetProductsAsync(string[] ids, WorkContext workContext)
         {
             var request = new GraphQLRequest
@@ -206,7 +205,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                     {
                         PageNumber = pageNumber,
                         PageSize = pageSize,
-                        Outline = "", //+
+                        Outline = "/" + category.Outline,
                     };
 
                     if (!sortInfos.IsNullOrEmpty())
@@ -221,7 +220,6 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
 
                     var searchResult = SearchCategories(categorySearchCriteria);
                     return searchResult;
-
                 }, 1, CategorySearchCriteria.DefaultPageSize);
             }
         }
