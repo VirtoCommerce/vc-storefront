@@ -91,6 +91,9 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             availabilityData {{
                 availableQuantity
                 inventories {{ inStockQuantity fulfillmentCenterId fulfillmentCenterName allowPreorder allowBackorder reservedQuantity }}
+                isAvailable
+                isBuyable
+                isInStock
             }}
             properties {{ {PropertyFields} }}
             { OutlineFields }
