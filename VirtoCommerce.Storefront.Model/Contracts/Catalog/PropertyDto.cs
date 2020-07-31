@@ -14,6 +14,8 @@ namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
 
         public bool Hidden { get; set; }
 
+        public string Type { get; set; }
+
         public string Label { get; set; }
     }
 }

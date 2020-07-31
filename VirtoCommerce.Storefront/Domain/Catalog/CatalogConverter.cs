@@ -533,40 +533,35 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (!productDto.Variations?.IsNullOrEmpty() ?? false)
             {
-                result.Variations.AddRange(productDto.Variations.Select(x => new Product(workContext.CurrentCurrency, workContext.CurrentLanguage)
-                {
-                    Id = x.Id,
-                    Sku = x.Code,
-                    Images = x.Images?.Select(ToImage).ToArray(),
-                    Assets = x.Assets?.Select(ToAsset).ToArray(),
-                    //Prices =
-                }));
+                result.Variations.AddRange(productDto.Variations.Select(x => x.ToProduct(workContext)));
             }
 
             if (!productDto?.Properties.IsNullOrEmpty() ?? false)
             {
-                result.Properties = new MutablePagedList<CatalogProperty>(productDto?.Properties.GroupBy(x => x.Id).Select(
+                result.Properties = new MutablePagedList<CatalogProperty>(productDto?.Properties.Where(x=>x.Type.EqualsInvariant("Product")).GroupBy(x => x.Id).Select(
                     x =>
                     {
                         var propertyValues = x.Select(p => p.Value);
                         var propertyDto = x.First();
 
-                        var property = new CatalogProperty
-                        {
-                            Id = propertyDto.Id,
-                            Name = propertyDto.Name,
-                            Value = propertyDto.Value,
-                            ValueType = propertyDto.ValueType,
-                            ValueId = propertyDto.ValueId,
-                            DisplayName = propertyDto.Label,
-                            Hidden = propertyDto.Hidden,
-                            Type = propertyDto.ValueType,
-                            Values = propertyValues.ToArray(),
-                            LocalizedValues = new List<LocalizedString>{ new LocalizedString(workContext.CurrentLanguage, propertyDto.Label) },
-                        };
+                        var property = propertyDto.ToProperty(workContext.CurrentLanguage, propertyValues.ToArray());
 
                         return property;
                     }));
+
+
+                result.VariationProperties = new MutablePagedList<CatalogProperty>(productDto?.Properties.Where(x => x.Type.EqualsInvariant("Variation")).GroupBy(x => x.Id).Select(
+                 x =>
+                 {
+                     var propertyValues = x.Select(p => p.Value);
+                     var propertyDto = x.First();
+
+                     var property = propertyDto.ToProperty(workContext.CurrentLanguage, propertyValues.ToArray());
+
+                     return property;
+                 }));
+
+
             }
 
             if (!productDto?.Prices.FirstOrDefault()?.Discounts.IsNullOrEmpty() ?? false)
@@ -654,6 +649,24 @@ namespace VirtoCommerce.Storefront.Domain
             var result = categoryDtos.Select(x => x.ToCategory(store, language));
 
             return result.ToArray();
+        }
+
+        public static CatalogProperty ToProperty(this PropertyDto propertyDto, Language language, string[] values)
+        {
+            return new CatalogProperty
+            {
+                Id = propertyDto.Id,
+                Name = propertyDto.Name,
+                Value = propertyDto.Value,
+                ValueType = propertyDto.ValueType,
+                ValueId = propertyDto.ValueId,
+                DisplayName = propertyDto.Label,
+                Hidden = propertyDto.Hidden,
+                Type = propertyDto.Type,
+                Values = values,
+                LocalizedValues = new List<LocalizedString> { new LocalizedString(language, propertyDto.Label) }
+            };
+
         }
 
         public static Category ToCategory(this CategoryDto categoryDto, Store store, Language language)
