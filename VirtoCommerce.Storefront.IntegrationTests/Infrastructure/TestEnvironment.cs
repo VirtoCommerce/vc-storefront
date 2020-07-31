@@ -34,6 +34,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
         public static string CatalogSearchCategoriesEndpoint => "storefrontapi/categories/search";
         public static string CatalogGetCategoriesByIdsEndpoint(string[] categoryIds) =>
             $"storefrontapi/categories?{string.Join('&', categoryIds.Select(x => $"categoryIds={x}"))}";
+        public static string OrderEndpoint => "storefrontapi/orders";
     }
 
     public static class Product

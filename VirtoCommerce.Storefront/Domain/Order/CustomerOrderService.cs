@@ -56,5 +56,24 @@ namespace VirtoCommerce.Storefront.Domain
                                                      criteria.PageNumber, criteria.PageSize, result.TotalCount.Value);
         }
 
+        public Task<CustomerOrder> CreateOrderFromCartAsync(string cartId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ChangeOrderStatusAsync(string orderId, string status)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CancelPayment(PaymentIn payment)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ConfirmPayment(PaymentIn payment)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

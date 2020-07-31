@@ -10,6 +10,8 @@ using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.M
 using orderDto = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models;
 using storeDto = VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models;
 using paymentDto = VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models;
+using VirtoCommerce.Storefront.Model.Contracts;
+using System;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -104,6 +106,29 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
+        public static ShipmentPackageDto ToShipmentPackageDto(this ShipmentPackage shipmentPackage)
+        {
+            var result = new ShipmentPackageDto
+            {
+                BarCode = shipmentPackage.BarCode,
+                Id = shipmentPackage.Id,
+
+                Height = shipmentPackage.Height,
+                Weight = shipmentPackage.Weight,
+                Length = shipmentPackage.Length,
+                Width = shipmentPackage.Width,
+                WeightUnit = shipmentPackage.WeightUnit,
+                MeasureUnit = shipmentPackage.MeasureUnit
+            };
+
+            if (shipmentPackage.Items != null)
+            {
+                result.Items = shipmentPackage.Items.Select(i => ToShipmentItemDto(i)).ToList();
+            }
+
+            return result;
+        }
+
         public static ShipmentItem ToShipmentItem(this orderDto.OrderShipmentItem shipmentItemDto, IEnumerable<Currency> availCurrencies, Language language)
         {
             var result = new ShipmentItem();
@@ -116,6 +141,23 @@ namespace VirtoCommerce.Storefront.Domain
             if (shipmentItemDto.LineItem != null)
             {
                 result.LineItem = ToOrderLineItem(shipmentItemDto.LineItem, availCurrencies, language);
+            }
+
+            return result;
+        }
+
+        public static OrderShipmentItemDto ToShipmentItemDto(this ShipmentItem shipmentItem)
+        {
+            var result = new OrderShipmentItemDto();
+
+            result.BarCode = shipmentItem.BarCode;
+            result.Id = shipmentItem.Id;
+            result.LineItemId = shipmentItem.LineItemId;
+            result.Quantity = shipmentItem.Quantity;
+
+            if (shipmentItem.LineItem != null)
+            {
+                result.LineItem = ToOrderLineItemDto(shipmentItem.LineItem);
             }
 
             return result;
@@ -200,6 +242,88 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
+        public static OrderShipmentDto ToOrderShipmentDto(this Shipment shipment)
+        {
+            var result = new OrderShipmentDto()
+            {
+                CancelledDate = shipment.CancelledDate,
+                CancelReason = shipment.CancelReason,
+                Comment = shipment.Comment,
+                EmployeeId = shipment.EmployeeId,
+                EmployeeName = shipment.EmployeeName,
+                FulfillmentCenterId = shipment.FulfillmentCenterId,
+                FulfillmentCenterName = shipment.FulfillmentCenterName,
+                Height = shipment.Height,
+                Id = shipment.Id,
+                IsCancelled = shipment.IsCancelled.GetValueOrDefault(),
+                IsApproved = shipment.IsApproved.GetValueOrDefault(),
+                Length = shipment.Length,
+                MeasureUnit = shipment.MeasureUnit,
+                Number = shipment.Number,
+                OperationType = shipment.OperationType,
+                OrganizationId = shipment.OrganizationId,
+                OrganizationName = shipment.OrganizationName,
+                ShipmentMethodCode = shipment.ShipmentMethodCode,
+                ShipmentMethodOption = shipment.ShipmentMethodOption,
+                Status = shipment.Status,
+                TaxType = shipment.TaxType,
+                Weight = shipment.Weight,
+                WeightUnit = shipment.WeightUnit,
+                Width = shipment.Width,
+                Currency = shipment.Currency.Code,
+                //CreatedBy = shipment.CreatedBy,
+                //CreatedDate = shipment.CreatedDate,
+                //ModifiedDate = shipment.ModifiedDate,
+                //ModifiedBy = shipment.ModifiedBy,
+                Price = (double?)shipment.Price.Amount,
+                PriceWithTax = (double?)shipment.PriceWithTax.Amount,
+                DiscountAmount = (double?)shipment.DiscountAmount.Amount,
+                DiscountAmountWithTax = (double?)shipment.DiscountAmountWithTax.Amount,
+                Total = (double?)shipment.Total.Amount,
+                TotalWithTax = (double?)shipment.TotalWithTax.Amount,
+                TaxTotal = (double?)shipment.TaxTotal.Amount,
+                TaxPercentRate = (double?)shipment.TaxPercentRate,
+            };
+
+            if (shipment.DeliveryAddress != null)
+            {
+                result.DeliveryAddress = shipment.DeliveryAddress.ToDto();
+            }
+
+            if (!shipment.Discounts.IsNullOrEmpty())
+            {
+                result.Discounts.AddRange(shipment.Discounts.Select(x => x.ToDiscountDto()).ToList());
+            }
+
+            //TODO
+            //if (shipment.DynamicProperties != null)
+            //{
+            //    result.DynamicProperties = shipment.DynamicProperties.Select(ToOrderDynamicPropertyDto).ToList();
+            //}
+
+            if (shipment.InPayments != null)
+            {
+                result.InPayments = shipment.InPayments.Select(p => ToOrderPaymentInDto(p)).ToList();
+            }
+
+            if (shipment.Items != null)
+            {
+                result.Items = shipment.Items.Select(i => ToShipmentItemDto(i)).ToList();
+            }
+
+            if (shipment.Packages != null)
+            {
+                result.Packages = shipment.Packages.Select(p => ToShipmentPackageDto(p)).ToList();
+            }
+
+            
+            if (shipment.TaxDetails != null)
+            {
+                result.TaxDetails = shipment.TaxDetails.Select(p => ToTaxDetailDto(p)).ToList();
+            }
+            return result;
+        }
+
         public static LineItem ToOrderLineItem(this orderDto.OrderLineItem lineItemDto, IEnumerable<Currency> availCurrencies, Language language)
         {
             var currency = availCurrencies.FirstOrDefault(x => x.Equals(lineItemDto.Currency)) ?? new Currency(language, lineItemDto.Currency);
@@ -266,6 +390,69 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
+        public static OrderLineItemDto ToOrderLineItemDto(this LineItem lineItem)
+        {
+            var result = new OrderLineItemDto()
+            {
+                CancelledDate = lineItem.CancelledDate,
+                CancelReason = lineItem.CancelReason,
+                CatalogId = lineItem.CatalogId,
+                CategoryId = lineItem.CategoryId,
+                Height = lineItem.Height,
+                Id = lineItem.Id,
+                ImageUrl = lineItem.ImageUrl,
+                IsCancelled = lineItem.IsCancelled,
+                IsGift = lineItem.IsGift,
+                Length = lineItem.Length,
+                MeasureUnit = lineItem.MeasureUnit,
+                Name = lineItem.Name,
+                ProductId = lineItem.ProductId,
+                Quantity = lineItem.Quantity,
+                ReserveQuantity = lineItem.ReserveQuantity,
+                ShippingMethodCode = lineItem.ShippingMethodCode,
+                Sku = lineItem.Sku,
+                TaxType = lineItem.TaxType,
+                Weight = lineItem.Weight,
+                WeightUnit = lineItem.WeightUnit,
+                Width = lineItem.Width,
+                //CreatedBy = lineItem.CreatedBy,
+                //CreatedDate = lineItem.CreatedDate,
+                //ModifiedDate = lineItem.ModifiedDate,
+                //ModifiedBy = lineItem.ModifiedBy,
+                Currency = lineItem.Currency.Code,
+                Price = (double?)lineItem.ListPrice.Amount,
+                PriceWithTax = (double?)lineItem.ListPriceWithTax.Amount,
+                DiscountAmount = (double?)lineItem.DiscountAmount.Amount,
+                DiscountAmountWithTax = (double?)lineItem.DiscountAmountWithTax.Amount,
+                PlacedPrice = (double?)lineItem.PlacedPrice.Amount,
+                PlacedPriceWithTax = (double?)lineItem.PlacedPriceWithTax.Amount,
+                ExtendedPrice = (double?)lineItem.ExtendedPrice.Amount,
+                ExtendedPriceWithTax = (double?)lineItem.ExtendedPriceWithTax.Amount,
+                DiscountTotal = (double?)lineItem.DiscountTotal.Amount,
+                DiscountTotalWithTax = (double?)lineItem.DiscountTotalWithTax.Amount,
+                TaxTotal = (double?)lineItem.TaxTotal.Amount,
+                TaxPercentRate = (double?)lineItem.TaxPercentRate,
+            };
+
+            result.ImageUrl = result.ImageUrl.RemoveLeadingUriScheme();
+
+            //if (!lineItem.DynamicProperties.IsNullOrEmpty())
+            //{
+            //    result.DynamicProperties = lineItem.DynamicProperties.Select(ToOrderDynamicPropertyDto).ToList();
+            //}
+            
+            if (!lineItem.Discounts.IsNullOrEmpty())
+            {
+                result.Discounts = lineItem.Discounts.Select(x => x.ToDiscountDto()).ToList();
+            }
+            if (!lineItem.TaxDetails.IsNullOrEmpty())
+            {
+                result.TaxDetails = lineItem.TaxDetails.Select(p => ToTaxDetailDto(p)).ToList();
+            }
+
+            return result;
+        }
+
         public static PaymentIn ToOrderInPayment(this orderDto.PaymentIn paymentIn, IEnumerable<Currency> availCurrencies, Language language)
         {
             var currency = availCurrencies.FirstOrDefault(x => x.Equals(paymentIn.Currency)) ?? new Currency(language, paymentIn.Currency);
@@ -322,9 +509,9 @@ namespace VirtoCommerce.Storefront.Domain
             return retVal;
         }
 
-        public static orderDto.PaymentIn ToOrderPaymentInDto(this PaymentIn payment)
+        public static OrderPaymentInDto ToOrderPaymentInDto(this PaymentIn payment)
         {
-            var retVal = new orderDto.PaymentIn
+            var retVal = new OrderPaymentInDto
             {
                 CancelledDate = payment.CancelledDate,
                 CancelReason = payment.CancelReason,
@@ -336,35 +523,34 @@ namespace VirtoCommerce.Storefront.Domain
                 IncomingDate = payment.IncomingDate,
                 IsApproved = payment.IsApproved,
                 IsCancelled = payment.IsCancelled,
-                CreatedBy = payment.CreatedBy,
-                CreatedDate = payment.CreatedDate,
-                ModifiedDate = payment.ModifiedDate,
-                ModifiedBy = payment.ModifiedBy,
-                Number = payment.Number
+                //CreatedBy = payment.CreatedBy,
+                //CreatedDate = payment.CreatedDate,
+                //ModifiedDate = payment.ModifiedDate,
+                //ModifiedBy = payment.ModifiedBy,
+                Number = payment.Number,
+                TaxTotal = (double?)payment.Tax.Amount,
+                Sum = (double)payment.Sum.Amount,
+                OperationType = payment.OperationType,
+                OrganizationId = payment.OrganizationId,
+                OrganizationName = payment.OrganizationName,
+                OuterId = payment.OuterId,
+                ParentOperationId = payment.ParentOperationId,
+                Purpose = payment.Purpose,
+                Status = payment.Status,
+                Currency = payment.Currency.Code,
+                PaymentStatus = (int)Enum.Parse(typeof(PaymentStatus), payment.Status, true),
+                OrderId = payment.OrderId
             };
-            retVal.IsCancelled = payment.IsCancelled;
-            retVal.Number = payment.Number;
-            retVal.OperationType = payment.OperationType;
-            retVal.OrganizationId = payment.OrganizationId;
-            retVal.OrganizationName = payment.OrganizationName;
-            retVal.OuterId = payment.OuterId;
-            retVal.ParentOperationId = payment.ParentOperationId;
-            retVal.Purpose = payment.Purpose;
-            retVal.Status = payment.Status;
-
-            retVal.Sum = (double)payment.Sum.Amount;
-            retVal.Currency = payment.Currency.Code;
-            retVal.PaymentStatus = payment.Status;
 
             if (payment.BillingAddress != null)
             {
-                retVal.BillingAddress = payment.BillingAddress.ToOrderAddressDto();
+                retVal.BillingAddress = payment.BillingAddress.ToDto();
             }
 
-            if (payment.DynamicProperties != null)
-            {
-                retVal.DynamicProperties = payment.DynamicProperties.Select(ToOrderDynamicPropertyDto).ToList();
-            }
+            //if (payment.DynamicProperties != null)
+            //{
+            //    retVal.DynamicProperties = payment.DynamicProperties.Select(ToOrderDynamicPropertyDto).ToList();
+            //}
 
             //if (payment.GatewayCode != null)
             //{
@@ -407,6 +593,121 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
+        public static DiscountDto ToDiscountDto(this Discount discount)
+        {
+            var result = new DiscountDto()
+            {
+                Coupon = discount.Coupon,
+                Description = discount.Description,
+                PromotionId = discount.PromotionId,
+                Currency = discount.Amount.Currency.Code,
+                DiscountAmount = (double?)discount.Amount.Amount,
+                DiscountAmountWithTax = (double?)discount.Amount.Amount
+            };
+
+            return result;
+        }
+
+        public static CustomerOrderRequestDto ToCustomerOrderDto(this CustomerOrder order)
+        {
+            var result = new CustomerOrderRequestDto()
+            {
+                CancelledDate = order.CancelledDate,
+                CancelReason = order.CancelReason,
+                ChannelId = order.ChannelId,
+                Comment = order.Comment,
+                //CreatedBy = order.CreatedBy,
+                //CreatedDate = order.CreatedDate,
+                CustomerId = order.CustomerId,
+                CustomerName = order.CustomerName,
+                EmployeeId = order.EmployeeId,
+                EmployeeName = order.EmployeeName,
+                Id = order.Id,
+                IsApproved = order.IsApproved,
+                IsCancelled = order.IsCancelled,
+                //ModifiedBy = order.ModifiedBy,
+                //ModifiedDate = order.ModifiedDate,
+                Number = order.Number,
+                OrganizationId = order.OrganizationId,
+                OrganizationName = order.OrganizationName,
+                Status = order.Status,
+                StoreId = order.StoreId,
+                StoreName = order.StoreName,
+                SubscriptionNumber = order.SubscriptionNumber,
+                Currency = order.Currency.Code
+            };
+
+            if (!order.Addresses.IsNullOrEmpty())
+            {
+                result.Addresses = order.Addresses.Select(x => x.ToDto()).ToList();
+            }
+
+            //TODO
+            //if (!order.DynamicProperties.IsNullOrEmpty())
+            //{
+            //    result.DynamicProperties = order.DynamicProperties;
+            //}
+
+            if (!order.InPayments.IsNullOrEmpty())
+            {
+                result.InPayments = order.InPayments.Select(x => x.ToOrderPaymentInDto()).ToList();
+            }
+
+            if (!order.Items.IsNullOrEmpty())
+            {
+                result.Items = order.Items.Select(x => x.ToOrderLineItemDto()).ToList();
+            }
+
+            if (!order.Shipments.IsNullOrEmpty())
+            {
+                result.Shipments = order.Shipments.Select(x =>
+                {
+                    var result = x.ToOrderShipmentDto();
+                    result.CustomerOrderId = order.Id;
+                    return result;
+                }).ToList();
+            }
+
+            if (!order.Discounts.IsNullOrEmpty())
+            {
+                result.Discounts = order.Discounts.Select(x => x.ToDiscountDto()).ToList();
+            }
+
+            if (!order.TaxDetails.IsNullOrEmpty())
+            {
+                result.TaxDetails = order.TaxDetails.Select(p => ToTaxDetailDto(p)).ToList();
+            }
+
+            result.DiscountAmount = (double?)order.DiscountAmount.Amount;
+            result.DiscountTotal = (double?)order.DiscountTotal.Amount;
+            result.DiscountTotalWithTax = (double?)order.DiscountTotalWithTax.Amount;
+
+            result.PaymentTotal = (double?)order.PaymentTotal.Amount;
+            result.PaymentTotalWithTax = (double?)order.PaymentTotalWithTax.Amount;
+            result.PaymentDiscountTotal = (double?)order.PaymentDiscountTotal.Amount;
+            result.PaymentDiscountTotalWithTax = (double?)order.PaymentDiscountTotalWithTax.Amount;
+            result.PaymentTaxTotal = (double?)order.PaymentTaxTotal.Amount;
+            result.PaymentSubTotal = (double?)order.PaymentPrice?.Amount;
+            result.PaymentSubTotalWithTax = (double?)order.PaymentPriceWithTax?.Amount;
+
+            result.Total = (double?)order.Total.Amount;
+            result.SubTotal = (double?)order.SubTotal.Amount;
+            result.SubTotalWithTax = (double?)order.SubTotalWithTax.Amount;
+            result.TaxTotal = (double?)order.TaxTotal.Amount;
+
+            result.ShippingTotal = (double?)order.ShippingTotal.Amount;
+            result.ShippingTotalWithTax = (double?)order.ShippingTotalWithTax.Amount;
+            result.ShippingTaxTotal = (double?)order.ShippingTaxTotal.Amount;
+            result.ShippingSubTotal = (double?)order.ShippingPrice?.Amount;
+            result.ShippingSubTotalWithTax = (double?)order.ShippingPriceWithTax?.Amount;
+
+            result.SubTotalTaxTotal = (double?)order.SubTotalTaxTotal.Amount;
+            result.SubTotalDiscount = (double?)order.SubTotalDiscount.Amount;
+            result.SubTotalDiscountWithTax = (double?)order.SubTotalDiscountWithTax.Amount;
+
+            return result;
+        }
+
         public static CustomerOrder ToCustomerOrder(this orderDto.CustomerOrder order, IEnumerable<Currency> availCurrencies, Language language)
         {
             var currency = availCurrencies.FirstOrDefault(x => x.Equals(order.Currency)) ?? new Currency(language, order.Currency);
@@ -437,12 +738,10 @@ namespace VirtoCommerce.Storefront.Domain
                 SubscriptionNumber = order.SubscriptionNumber
             };
 
-
             if (order.Addresses != null)
             {
                 result.Addresses = order.Addresses.Select(ToAddress).ToList();
             }
-
 
             if (order.DynamicProperties != null)
             {
@@ -468,10 +767,12 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 result.Discounts.AddRange(order.Discounts.Select(x => ToDiscount(x, new[] { currency }, language)));
             }
+
             if (order.TaxDetails != null)
             {
                 result.TaxDetails = order.TaxDetails.Select(td => ToTaxDetail(td, currency)).ToList();
             }
+
             result.DiscountAmount = new Money(order.DiscountAmount ?? 0, currency);
             result.DiscountTotal = new Money(order.DiscountTotal ?? 0, currency);
             result.DiscountTotalWithTax = new Money(order.DiscountTotalWithTax ?? 0, currency);
@@ -514,7 +815,23 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
+        public static TaxDetailDto ToTaxDetailDto(this TaxDetail taxDetailDto)
+        {
+            var result = new TaxDetailDto()
+            {
+                Name = taxDetailDto.Name,
+                Amount = (double?)taxDetailDto.Amount.Amount,
+                Rate = (double?)taxDetailDto.Rate.Amount,
+            };
+            return result;
+        }
+
         public static PaymentMethod ToPaymentMethod(this orderDto.PaymentMethod paymentMethodDto, CustomerOrder order)
+        {
+            return paymentMethodDto.JsonConvert<paymentDto.PaymentMethod>().ToStorePaymentMethod(order.Currency);
+        }
+
+        public static PaymentMethod ToPaymentMethod(this PaymentMethod paymentMethodDto, CustomerOrder order)
         {
             return paymentMethodDto.JsonConvert<paymentDto.PaymentMethod>().ToStorePaymentMethod(order.Currency);
         }
