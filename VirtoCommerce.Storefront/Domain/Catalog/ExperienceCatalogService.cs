@@ -8,6 +8,7 @@ using PagedList.Core;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
+using VirtoCommerce.Storefront.Model.Catalog.Specifications;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Contracts;
 using VirtoCommerce.Storefront.Model.Services;
@@ -97,12 +98,39 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             {
                 EstablishLazyDependenciesForProducts(productsWithVariation);
             }
+            var aggrIsVisbileSpec = new AggregationIsVisibleSpecification();
+            var aggregations = new List<Aggregation>();
+            if (response.Data.Products.TermFacets != null)
+            {
+                aggregations.AddRange(response.Data.Products.TermFacets.Select(x => x.ToAggregation(workContext.CurrentLanguage.CultureName)));
+            }
+            if (response.Data.Products.RangeFacets != null)
+            {
+                aggregations.AddRange(response.Data.Products.RangeFacets.Select(x => x.ToAggregation(workContext.CurrentLanguage.CultureName)));
+            }
 
             var searchResult = new CatalogSearchResult(criteria)
             {
                 Products = new MutablePagedList<Product>(products, criteria.PageNumber, criteria.PageSize, response.Data.Products.TotalCount ?? 0),
-                //Aggregations = 
+                Aggregations = !aggregations.IsNullOrEmpty() ? aggregations.Where(x => aggrIsVisbileSpec.IsSatisfiedBy(x)).ToArray() : new Aggregation[] { }
             };
+
+           
+
+            //Post loading initialization of the resulting aggregations
+            var aggrContext = new AggregationPostLoadContext
+            {
+                ProductSearchCriteria = criteria
+            };
+            var aggrItemCatIds = searchResult.Aggregations.SelectMany(x => x.Items).OfType<CategoryAggregationItem>().Select(x => x.CategoryId).Distinct().ToArray();
+            if (aggrItemCatIds.Any())
+            {
+                aggrContext.CategoryByIdDict = (await GetCategoriesAsync(aggrItemCatIds, CategoryResponseGroup.Info))
+                                                            .Distinct().ToDictionary(x => x.Id)
+                                                            .WithDefaultValue(null);
+            }
+            searchResult.Aggregations.Apply(x => x.PostLoadInit(aggrContext));
+
 
             var associationList = searchResult
                 .Products

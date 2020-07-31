@@ -810,5 +810,134 @@ namespace VirtoCommerce.Storefront.Domain
 
             return result.ToArray();
         }
+
+        public static Aggregation ToAggregation(this TermFacet termFacet, string currentLanguage)
+        {
+            var result = new Aggregation
+            {
+                AggregationType = "term",
+                Field = termFacet.Name
+            };
+
+            var aggrItemIsVisbileSpec = new AggregationItemIsVisibleSpecification();
+            if (termFacet.Terms != null)
+            {
+                result.Items = termFacet.Terms.Select(i => i.ToAggregationItem(result, currentLanguage))
+                                                   .Where(x => aggrItemIsVisbileSpec.IsSatisfiedBy(x))
+                                                   .Distinct().ToArray();
+            }
+            //TODO:
+            //if (termFacet.Labels != null)
+            //{
+            //    result.Label =
+            //        aggregationDto.Labels.Where(l => string.Equals(l.Language, currentLanguage, StringComparison.OrdinalIgnoreCase))
+            //            .Select(l => l.Label)
+            //            .FirstOrDefault();
+            //}
+
+            if (string.IsNullOrEmpty(result.Label))
+            {
+                result.Label = termFacet.Name;
+            }
+
+            return result;
+        }
+
+        public static Aggregation ToAggregation(this RangeFacet rangeFacet, string currentLanguage)
+        {
+            var result = new Aggregation
+            {
+                AggregationType = "range",
+                Field = rangeFacet.Name
+            };
+
+
+            var aggrItemIsVisbileSpec = new AggregationItemIsVisibleSpecification();
+            if (rangeFacet.Ranges != null)
+            {
+                result.Items = rangeFacet.Ranges.Select(i => i.ToAggregationItem(result, currentLanguage))
+                                                   .Where(x => aggrItemIsVisbileSpec.IsSatisfiedBy(x))
+                                                   .Distinct().ToArray();
+            }
+            //TODO:
+            //if (aggregationDto.Labels != null)
+            //{
+            //    result.Label =
+            //        aggregationDto.Labels.Where(l => string.Equals(l.Language, currentLanguage, StringComparison.OrdinalIgnoreCase))
+            //            .Select(l => l.Label)
+            //            .FirstOrDefault();
+            //}
+
+            if (string.IsNullOrEmpty(result.Label))
+            {
+                result.Label = rangeFacet.Name;
+            }
+
+            return result;
+        }
+
+        public static AggregationItem ToAggregationItem(this FacetTermDto termDto, Aggregation aggregationGroup, string currentLanguage)
+        {
+            var result = new AggregationItem
+            {
+                Group = aggregationGroup,
+                Value = termDto.Term,
+                IsApplied = termDto.IsSelected ?? false,
+                Count = (int)(termDto.Count ?? 0),            
+            };
+
+            //TODO:
+            //if (itemDto.Labels != null)
+            //{
+            //    result.Label =
+            //        itemDto.Labels.Where(l => string.Equals(l.Language, currentLanguage, StringComparison.OrdinalIgnoreCase))
+            //            .Select(l => l.Label)
+            //            .FirstOrDefault();
+            //}
+
+            if (string.IsNullOrEmpty(result.Label) && termDto.Term != null)
+            {
+                result.Label = termDto.Term.ToString();
+            }
+
+            if (aggregationGroup.Field.EqualsInvariant("__outline"))
+            {
+                result = CategoryAggregationItem.FromAggregationItem(result);
+            }
+
+            return result;
+        }
+        public static AggregationItem ToAggregationItem(this FacetRangeTypeDto itemDto, Aggregation aggregationGroup, string currentLanguage)
+        {
+            var result = new AggregationItem
+            {
+                Group = aggregationGroup,
+                Value = aggregationGroup.Field,
+                IsApplied = itemDto.IsSelected ?? false,
+                Count = (int)(itemDto.Count ?? 0),
+                Lower = itemDto.From?.ToString(),
+                Upper = itemDto.To?.ToString(),
+            };
+
+            //if (itemDto.Labels != null)
+            //{
+            //    result.Label =
+            //        itemDto.Labels.Where(l => string.Equals(l.Language, currentLanguage, StringComparison.OrdinalIgnoreCase))
+            //            .Select(l => l.Label)
+            //            .FirstOrDefault();
+            //}
+
+            if (string.IsNullOrEmpty(result.Label) && aggregationGroup.Field != null)
+            {
+                result.Label = aggregationGroup.Field.ToString();
+            }
+
+            if (aggregationGroup.Field.EqualsInvariant("__outline"))
+            {
+                result = CategoryAggregationItem.FromAggregationItem(result);
+            }
+
+            return result;
+        }
     }
 }
