@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Contracts.Catalog;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Tools;
 using catalogDto = VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models;
@@ -28,6 +29,13 @@ namespace VirtoCommerce.Storefront.Common
                 .GetSeoPath(store.ToToolsStore(), language.CultureName, defaultValue);
         }
 
+        public static string GetSeoPath(this IEnumerable<OutlineDto> outlines, Store store, Language language, string defaultValue)
+        {
+            return outlines
+                ?.Select(o => o.JsonConvert<toolsDto.Outline>())
+                .GetSeoPath(store.ToToolsStore(), language.CultureName, defaultValue);
+        }
+
         /// <summary>
         /// Returns SEO records with highest score
         /// http://docs.virtocommerce.com/display/vc2devguide/SEO
@@ -43,6 +51,15 @@ namespace VirtoCommerce.Storefront.Common
                 ?.Select(s => s.JsonConvert<toolsDto.SeoInfo>())
                 .GetBestMatchingSeoInfos(store.Id, store.DefaultLanguage.CultureName, language.CultureName, slug)
                 .Select(s => s.JsonConvert<coreDto.SeoInfo>())
+                .ToList();
+        }
+
+        public static IList<SeoInfoDto> GetBestMatchingSeoInfos(this IEnumerable<SeoInfoDto> seoRecords, Store store, Language language, string slug = null)
+        {
+            return seoRecords
+                ?.Select(s => s.JsonConvert<toolsDto.SeoInfo>())
+                .GetBestMatchingSeoInfos(store.Id, store.DefaultLanguage.CultureName, language.CultureName, slug)
+                .Select(s => s.JsonConvert<SeoInfoDto>())
                 .ToList();
         }
     }
