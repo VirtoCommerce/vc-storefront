@@ -38,8 +38,6 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 totalCount
             }}
             variations {{ { GetAllVariationFields } }}
-
-
             { SeoInfoFields }
             tax {{
                 rates {{
@@ -50,7 +48,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                     taxProviderCode
                 }}
             }}
-  { ImagesFields }
+            { ImagesFields }
             assets {{ id size url group }}
             prices {{
                 list {{ {MoneyFields} }}
@@ -214,7 +212,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 categories(
                     query: ""{ criteria.Keyword }""
                     filter: ""{
-                        (string.IsNullOrEmpty(criteria.Outline) ? string.Empty : $"categories.subtree:{ criteria.Outline }") }{
+                        (string.IsNullOrEmpty(criteria.Outline) ? string.Empty : $"category.subtree:{ catalogId }/{ criteria.Outline }") }{
                         (string.IsNullOrEmpty(catalogId) ? string.Empty : $" catalog:{catalogId}")
                     }""
                     fuzzy: { criteria.IsFuzzySearch.ToString().ToLowerInvariant() }

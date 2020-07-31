@@ -566,7 +566,30 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (!productDto?.Prices.FirstOrDefault()?.Discounts.IsNullOrEmpty() ?? false)
             {
-                // TODO: Promotions
+                var discountsCollection = productDto?.Prices.SelectMany(x =>
+                {
+                    var discounts = x.Discounts.Select(d =>
+                    {
+                        var currency = new Currency(workContext.CurrentLanguage, x.Currency);
+
+                        var discount = new Model.Marketing.Discount
+                        {
+                            Amount = new Money((double?)d.Amount.Amount ?? 0d, currency),
+                            Coupon = d.Coupon,
+                            Description = d.Description,
+                            PromotionId = d.PromotionId,
+                        };
+
+                        return discount;
+                    });
+
+                    return discounts;
+                }).ToArray();
+
+                if (!discountsCollection.IsNullOrEmpty())
+                {
+                    result.Discounts.AddRange(discountsCollection);
+                }
             }
 
             if (!productDto.SeoInfos.IsNullOrEmpty())
@@ -593,55 +616,87 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (!productDto?.Prices.IsNullOrEmpty() ?? false)
             {
-                var currencies = workContext.AllCurrencies;
 
-                var productPrices = productDto.Prices.Select(x =>
-                {
-                    var currency = currencies.FirstOrDefault(c => c.Code.EqualsInvariant(x.Currency));
-
-                    var price = new ProductPrice(new Currency(workContext.CurrentLanguage, x.Currency))
-                    {
-                        ListPrice = new Money((double?)x.List.Amount ?? 0d, currency),
-                        PricelistId = x.PricelistId,
-                        MinQuantity = x.MinQuantity,
-                        DiscountAmount = new Money((double?)x.DiscountAmount.Amount ?? 0d, currency),
-                        SalePrice = new Money((double?)x.Sale.Amount ?? 0d, currency),
-                        TierPrices = x.TierPrices.Select(t => new TierPrice(new Money((double?)t.Price.Amount ?? 0d, currency), t.Quantity ?? 0)).ToList()
-                    };
-
-                    if (productDto.Tax != null)
-                    {
-                        var taxRates = productDto.Tax.Rates.Select(t =>
-                        {
-                            var rate = new TaxRate(currency)
-                            {
-                                Line = new TaxLine(currency)
-                                {
-                                    Amount = new Money((double?)t.Line.Amount ?? 0d, currency),
-                                    Code = t.Line.Code,
-                                    Id = t.Line.Id,
-                                    Name = t.Line.Name,
-                                    Quantity = t.Line.Quantity ?? 0,
-                                    TaxType = t.Line.TaxType,
-                                    Price = new Money((double?)t.Line.Price ?? 0d, currency),
-                                },
-                                Rate = new Money((double?)t.Rate ?? 0d, currency),
-                                PercentRate = t.PercentRate ?? 0m,
-                            };
-
-                            return rate;
-                        });
-
-                        price.ApplyTaxRates(taxRates);
-                    }
-                    
-                    return price;
-                });
+                var productPrices = productDto.Prices.ToPrices(workContext.AllCurrencies, productDto.Tax?.Rates);
 
                 result.ApplyPrices(productPrices, workContext.CurrentCurrency, workContext.AllCurrencies);
             }
 
             return result;
+        }
+
+        public static ProductPrice[] ToPrices(this PriceDto[] priceDtos, IList<Currency> currencies, TaxRateDto[] taxRateDtos)
+        {
+            var result = priceDtos.Select(x =>
+            {
+                var currency = currencies.FirstOrDefault(c => c.Code.EqualsInvariant(x.Currency));
+
+                var price = new ProductPrice(currency)
+                {
+                    ListPrice = new Money((double?)x.List.Amount ?? 0d, currency),
+                    PricelistId = x.PricelistId,
+                    MinQuantity = x.MinQuantity,
+                    DiscountAmount = new Money((double?)x.DiscountAmount.Amount ?? 0d, currency),
+                    SalePrice = new Money((double?)x.Sale.Amount ?? 0d, currency),
+                    TierPrices = x.TierPrices.Select(t => new TierPrice(new Money((double?)t.Price.Amount ?? 0d, currency), t.Quantity ?? 0)).ToList(),
+                };
+
+                if (!taxRateDtos.IsNullOrEmpty())
+                {
+                    var taxRates = taxRateDtos.Select(t =>
+                    {
+                        var rate = new TaxRate(currency)
+                        {
+                            Line = new TaxLine(currency)
+                            {
+                                Amount = new Money((double?)t.Line.Amount ?? 0d, currency),
+                                Code = t.Line.Code,
+                                Id = t.Line.Id,
+                                Name = t.Line.Name,
+                                Quantity = t.Line.Quantity ?? 0,
+                                TaxType = t.Line.TaxType,
+                                Price = new Money((double?)t.Line.Price ?? 0d, currency),
+                            },
+                            Rate = new Money((double?)t.Rate ?? 0d, currency),
+                            PercentRate = t.PercentRate ?? 0m,
+                        };
+
+                        return rate;
+                    });
+
+                    price.ApplyTaxRates(taxRates);
+                }
+
+                return price;
+            });
+
+            return result.ToArray();
+        }
+
+        public static TaxRate[] ToTaxRates(this TaxRateDto[] taxRateDtos, Currency currency)
+        {
+            var result = taxRateDtos.Select(x =>
+            {
+                var rate = new TaxRate(currency)
+                {
+                    Line = new TaxLine(currency)
+                    {
+                        Amount = new Money((double?)x.Line.Amount ?? 0d, currency),
+                        Code = x.Line.Code,
+                        Id = x.Line.Id,
+                        Name = x.Line.Name,
+                        Quantity = x.Line.Quantity ?? 0,
+                        TaxType = x.Line.TaxType,
+                        Price = new Money((double?)x.Line.Price ?? 0d, currency),
+                    },
+                    Rate = new Money((double?)x.Rate ?? 0d, currency),
+                    PercentRate = x.PercentRate ?? 0m,
+                };
+
+                return rate;
+            });
+
+            return result.ToArray();
         }
 
         public static Category[] ToCategories(this CategoryDto[] categoryDtos, Store store, Language language)
@@ -680,6 +735,13 @@ namespace VirtoCommerce.Storefront.Domain
                 SeoPath = categoryDto.Outlines.GetSeoPath(store, language, null),
                 Outline = categoryDto.Outlines.GetOutlinePath(store.Catalog),
             };
+
+            if (result.Outline != null)
+            {
+                result.ParentId = result.Outline.Split("/").Reverse().Skip(1).Take(1).FirstOrDefault() ?? result.ParentId;
+            }
+
+            result.Url = "/" + (result.SeoPath ?? "category/" + categoryDto.Id);
 
             if (!categoryDto.SeoInfos.IsNullOrEmpty())
             {
