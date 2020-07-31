@@ -797,7 +797,8 @@ namespace VirtoCommerce.Storefront.Domain
                 ListPrice = (double)lineItem.ListPrice.Amount,
                 Quantity = lineItem.Quantity,
                 InStockQuantity = lineItem.InStockQuantity,
-                Outline = lineItem.Product.Outline,
+                // VP-3582: We need to pass all product outlines as 1 string to use them for promotion evaluation
+                Outline = lineItem.Product.Outlines,
                 Variations = null // TODO
             };
 
