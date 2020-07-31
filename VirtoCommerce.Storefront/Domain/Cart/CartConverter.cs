@@ -794,6 +794,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Discount = (double)lineItem.DiscountTotal.Amount,
                 //Use only base price for discount evaluation
                 Price = (double)lineItem.SalePrice.Amount,
+                ListPrice = (double)lineItem.ListPrice.Amount,
                 Quantity = lineItem.Quantity,
                 InStockQuantity = lineItem.InStockQuantity,
                 Outline = lineItem.Product.Outline,
