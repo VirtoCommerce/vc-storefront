@@ -448,6 +448,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 result.Discount = (double)product.Price.DiscountAmount.Amount;
                 result.Price = (double)product.Price.SalePrice.Amount;
+                result.ListPrice = (double)product.Price.ListPrice.Amount;
             }
 
             return result;
