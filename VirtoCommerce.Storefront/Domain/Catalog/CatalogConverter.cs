@@ -673,32 +673,6 @@ namespace VirtoCommerce.Storefront.Domain
             return result.ToArray();
         }
 
-        public static TaxRate[] ToTaxRates(this TaxRateDto[] taxRateDtos, Currency currency)
-        {
-            var result = taxRateDtos.Select(x =>
-            {
-                var rate = new TaxRate(currency)
-                {
-                    Line = new TaxLine(currency)
-                    {
-                        Amount = new Money((double?)x.Line.Amount ?? 0d, currency),
-                        Code = x.Line.Code,
-                        Id = x.Line.Id,
-                        Name = x.Line.Name,
-                        Quantity = x.Line.Quantity ?? 0,
-                        TaxType = x.Line.TaxType,
-                        Price = new Money((double?)x.Line.Price ?? 0d, currency),
-                    },
-                    Rate = new Money((double?)x.Rate ?? 0d, currency),
-                    PercentRate = x.PercentRate ?? 0m,
-                };
-
-                return rate;
-            });
-
-            return result.ToArray();
-        }
-
         public static Category[] ToCategories(this CategoryDto[] categoryDtos, Store store, Language language)
         {
             var result = categoryDtos.Select(x => x.ToCategory(store, language));
