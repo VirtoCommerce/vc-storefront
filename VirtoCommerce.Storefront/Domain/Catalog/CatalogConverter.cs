@@ -452,6 +452,7 @@ namespace VirtoCommerce.Storefront.Domain
                 IsAvailable = productDto?.AvailabilityData?.IsAvailable ?? false,
                 IsBuyable = productDto?.AvailabilityData?.IsBuyable ?? false,
                 IsInStock = productDto?.AvailabilityData?.IsInStock ?? false,
+                IsActive = productDto.AvailabilityData?.IsActive ?? false,
                 //Height = decimal.MinValue, // TBD
                 //Length = decimal.MinValue, // TBD
                 //MeasureUnit = "", // TBD

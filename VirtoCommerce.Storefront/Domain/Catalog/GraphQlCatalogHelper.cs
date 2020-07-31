@@ -88,6 +88,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 isAvailable
                 isBuyable
                 isInStock
+                isActive
             }}
             properties {{ {PropertyFields} }}
             { OutlineFields }
@@ -136,6 +137,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 isAvailable
                 isBuyable
                 isInStock
+                isActive
             }}
             properties {{ {PropertyFields} }}
             { OutlineFields }
