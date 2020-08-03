@@ -74,6 +74,10 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// </summary>
         public string Outline { get; set; }
         /// <summary>
+        /// All relative product outlines for the given catalog
+        /// </summary>
+        public string Outlines { get; set; }
+        /// <summary>
         /// Slug path e.g /camcorders/blue-win-camera
         /// </summary>
         public string SeoPath { get; set; }
