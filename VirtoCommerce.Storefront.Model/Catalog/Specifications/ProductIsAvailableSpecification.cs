@@ -1,3 +1,4 @@
+using System;
 using VirtoCommerce.Storefront.Model.Common.Specifications;
 
 namespace VirtoCommerce.Storefront.Model.Catalog
@@ -16,13 +17,14 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
             if (result && _product.TrackInventory && _product.Inventory != null)
             {
-                result = _product.Inventory.AllowPreorder == true ||
-                              _product.Inventory.AllowBackorder == true ||
-                              _product.AvailableQuantity >= requestedQuantity;
+                result = _product.AvailableQuantity +
+                    (Convert.ToInt32(_product.Inventory.AllowPreorder) * _product.Inventory.PreorderQuantity) +
+                    (Convert.ToInt32(_product.Inventory.AllowBackorder) * _product.Inventory.BackorderQuantity)
+                    >= requestedQuantity;
             }
 
             return result;
         }
-        
+
     }
 }
