@@ -8,6 +8,7 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Contracts;
 using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
@@ -141,7 +142,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/lists/search
         [HttpPost("search")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<ShoppingCartSearchResult>> SearchLists([FromBody] CartSearchCriteria searchCriteria)
+        public async Task<ActionResult<IList<WishListDto>>> SearchLists([FromBody] CartSearchCriteria searchCriteria)
         {
             if (searchCriteria == null)
             {
@@ -154,13 +155,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             searchCriteria.Currency = WorkContext.CurrentCurrency;
             searchCriteria.Language = WorkContext.CurrentLanguage;
 
-            var cartPagedList = await _cartService.SearchCartsAsync(searchCriteria);
+            var accountLists = await _cartService.SearchAccountListsAsync(searchCriteria);
+            return accountLists.ToList();
 
-            return new ShoppingCartSearchResult
-            {
-                Results = cartPagedList.ToArray(),
-                TotalCount = cartPagedList.TotalItemCount
-            };
         }
 
         // POST: storefrontapi/lists/{listName}/{type}/create

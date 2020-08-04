@@ -11,6 +11,13 @@ namespace VirtoCommerce.Storefront.Infrastructure
             }}
         }}";
 
+        public static string GetWishLists(string storeId, string userId, string cultureName, string currencyCode, string type, string selectedFields = null)
+            => $@"
+        {{
+            wishLists(storeId:""{storeId}"",userId:""{userId}"",cultureName:""{cultureName}"",currencyCode:""{currencyCode}"",type:""{type}"")
+        }}";
+
+
         public static string ClearCart(string selectedFields = null)
         => $@"mutation ($command:InputClearCartType!)
         {{

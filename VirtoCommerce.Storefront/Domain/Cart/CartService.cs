@@ -130,6 +130,28 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             });
         }
 
+        public virtual async Task<IPagedList<WishListDto>> SearchAccountListsAsync(CartSearchCriteria criteria)
+        {
+            if (criteria == null)
+            {
+                throw new ArgumentNullException(nameof(criteria));
+            }
+
+            var cacheKey = CacheKey.With(GetType(), "SearchCartsAsync", criteria.GetCacheKey());
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+            {
+                var query = QueryHelper.GetWishLists(storeId: criteria.StoreId,
+                    userId: criteria.Customer.Id,
+                    cultureName: criteria.Language?.CultureName ?? "en-US",
+                    currencyCode: criteria.Currency.Code,
+                    type: criteria.Type);
+                var response = await _client.SendQueryAsync<GetWishListResponseDto>(new GraphQLRequest { Query = query });
+
+                return new StaticPagedList<WishListDto>(response.Data.WishLists, criteria.PageNumber, criteria.PageSize, response.Data.WishLists.Count);
+            });
+        }
+
+
         private async Task<ShoppingCartDto> SearchCartAsync(CartSearchCriteria criteria)
         {
             var query = QueryHelper.GetCart(
