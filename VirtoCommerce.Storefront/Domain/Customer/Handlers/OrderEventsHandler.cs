@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Order.Events;
@@ -25,8 +26,8 @@ namespace VirtoCommerce.Storefront.Domain.Customer.Handlers
                 if (contact != null)
                 {
                     var addresses = contact.Addresses
-                        .Concat(@event.Order.Addresses)
-                        .Concat(@event.Order.Shipments.Select(shipment => shipment.DeliveryAddress))
+                        .Concat(@event.Order.Addresses.Select(x => new Address().CopyFrom(x, @event.WorkContext.Countries?.ToArray() ?? Array.Empty<Country>())))
+                        .Concat(@event.Order.Shipments.Select(shipment => new Address().CopyFrom(shipment.DeliveryAddress, @event.WorkContext.Countries?.ToArray() ?? Array.Empty<Country>())))
                         .Where(address => address != null)
                         .Distinct()
                         .ToList();
@@ -37,7 +38,6 @@ namespace VirtoCommerce.Storefront.Domain.Customer.Handlers
                         {
                             address.Name = address.ToString();
                             address.Name = address.Name.Substring(0, Math.Min(1800, address.Name.Length));
-                            address.Key = null;
                         }
                         await _memberService.UpdateContactAddressesAsync(contact.Id, addresses);
                     }
