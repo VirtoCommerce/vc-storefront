@@ -89,6 +89,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 isBuyable
                 isInStock
                 isActive
+                isTrackInventory
             }}
             properties {{ {PropertyFields} }}
             { OutlineFields }
@@ -152,7 +153,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
         public const string TermFacets = "range_facets { facetType name ranges { count from fromStr includeFrom includeTo max min to toStr total } }";
         public const string RangeFacets = "term_facets { facetType name terms { count isSelected term } }";
         public const string SeoInfoFields = "seoInfos { id imageAltDescription isActive languageCode metaDescription metaKeywords name objectId objectType pageTitle semanticUrl storeId }";
-        public const string ImagesFields = "images { id url name relativeUrl group }";
+        public const string ImagesFields = "images { id url name relativeUrl group sortOrder }";
 
         public static string GetProducts(this ICatalogService catalogService, string[] ids, string storeId, string userId, string selectedFields = null)
         => $@"

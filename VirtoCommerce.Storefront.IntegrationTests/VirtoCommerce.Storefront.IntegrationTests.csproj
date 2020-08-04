@@ -11,11 +11,13 @@
     <None Remove="Requests\AddOrUpdateCartPaymentIsRegistered.json" />
     <None Remove="Requests\AddOrUpdateCartShipmentIsNotRegistered.json" />
     <None Remove="Requests\AddOrUpdateCartShipmentIsRegistered.json" />
+    <None Remove="Responses\GetCategoriesByIds.json" />
     <None Remove="Responses\GetEmptyCart.json" />
     <None Remove="Responses\GetEmptyCartForAdmin.json" />
     <None Remove="Responses\GetFilledCartWithItem.json" />
     <None Remove="Responses\GetMergedAnonymousCartWithAdmin.json" />
     <None Remove="Responses\GetPaymentMethodsForAdmin.json" />
+    <None Remove="Responses\GetProductsByIds.json" />
     <None Remove="Responses\GetShipmentMethodsForAdmin.json" />
   </ItemGroup>
 
@@ -32,6 +34,9 @@
     <Content Include="Requests\AddOrUpdateCartShipmentIsRegistered.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Responses\GetCategoriesByIds.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -45,6 +50,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Responses\GetPaymentMethodsForAdmin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Responses\GetProductsByIds.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Responses\GetShipmentMethodsForAdmin.json">

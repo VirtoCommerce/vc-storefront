@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using FluentAssertions;
+using JsonDiffPatchDotNet;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using VirtoCommerce.Storefront.IntegrationTests.Infrastructure;
@@ -12,7 +15,7 @@ using Xunit;
 
 namespace VirtoCommerce.Storefront.IntegrationTests.Tests
 {
-    [Trait("Category", "CI")]
+    [Trait("Category", "IntegrationTest")]
     [CollectionDefinition(nameof(ApiCatalogControllerTests), DisableParallelization = true)]
     public class ApiCatalogControllerTests : IClassFixture<StorefrontApplicationFactory>, IDisposable
     {
@@ -78,28 +81,15 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
 
             var source = await response.Content.ReadAsStringAsync();
 
-            var result = JArray.Parse(source)
-                .RemovePropertyInChildren(
-                    new[] { "$" },
-                    new[] { "properties", "variationProperties", "price", "prices", "descriptions" }
-                )
-                .ToString();
-            var products = JsonConvert.DeserializeObject<List<Model.Catalog.Product>>(result);
-
-            var quadrocopter = products.FirstOrDefault(x => x.Name.Contains("quadcopter", StringComparison.InvariantCultureIgnoreCase));
-            var octocopter = products.FirstOrDefault(x => x.Name.Contains("octocopter", StringComparison.InvariantCultureIgnoreCase));
+            var result = LoadSourceAndCompareResult(
+                "GetProductsByIds",
+                source,
+                new[] { "$", "$.price", "$.prices", "$.properties" },
+                new [] { "minQuantity", "productId", "taxDetails", "localizedValues" }
+                    );
 
             // Assert
-            Assert.NotNull(quadrocopter);
-            Assert.NotNull(octocopter);
-            Assert.Equal(Infrastructure.Product.Quadcopter, quadrocopter.Id);
-            Assert.Equal(Infrastructure.Product.Octocopter, octocopter.Id);
-            Assert.NotEmpty(quadrocopter.Name);
-            Assert.NotEmpty(octocopter.Name);
-            Assert.NotEmpty(quadrocopter.CatalogId);
-            Assert.NotEmpty(octocopter.CatalogId);
-            Assert.NotEmpty(quadrocopter.CategoryId);
-            Assert.NotEmpty(octocopter.CategoryId);
+            result.Should().BeNull();
         }
 
         [Fact]
@@ -155,20 +145,15 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
 
             var source = await response.Content.ReadAsStringAsync();
 
-            var result = JArray.Parse(source).RemovePropertyInChildren(
-                new[] { "$" },
-                new[] { "properties", "categories" }
-                )
-                .ToString();
-            var categories = JsonConvert.DeserializeObject<List<Model.Catalog.Category>>(result);
-            var category = categories.FirstOrDefault();
+            var result = LoadSourceAndCompareResult(
+                "GetCategoriesByIds",
+                source,
+                new[] {"$"},
+                new[] {"catalogId"}
+                );
 
             // Assert
-            Assert.NotNull(category);
-            Assert.Equal(Infrastructure.Category.CopterCategoryId, category.Id);
-            Assert.NotEmpty(category.Code);
-            Assert.NotEmpty(category.Name);
-            Assert.NotEmpty(category.CatalogId);
+            result.Should().BeNull();
         }
 
         public void Dispose()
@@ -176,6 +161,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
 
         protected virtual void Dispose(bool disposing)
         {
@@ -190,6 +176,21 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
             }
 
             _isDisposed = true;
+        }
+
+        private string LoadSourceAndCompareResult(string expectedSourceFile, string actualResult, IList<string> pathsForExclusion = null, IList<string> excludedProperties = null)
+        {
+            var expectedResult = File.ReadAllText($"Responses\\{expectedSourceFile}.json");
+
+            return CompareResult(actualResult, expectedResult, pathsForExclusion, excludedProperties);
+        }
+
+        private string CompareResult(string actualJson, string expectedJson, IList<string> pathsForExclusion = null, IList<string> excludedProperties = null)
+        {
+            var actualResult = JToken.Parse(actualJson).RemovePropertyInChildren(pathsForExclusion, excludedProperties).ToString();
+            var expectedResult = JToken.Parse(expectedJson).RemovePropertyInChildren(pathsForExclusion, excludedProperties).ToString();
+
+            return new JsonDiffPatch().Diff(actualResult, expectedResult);
         }
 
         ~ApiCatalogControllerTests()

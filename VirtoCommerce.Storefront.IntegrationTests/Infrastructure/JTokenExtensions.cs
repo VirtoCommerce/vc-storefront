@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using AutoRest.Core.Utilities;
 using Newtonsoft.Json.Linq;
 
 namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
@@ -15,31 +17,43 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
 
             foreach (var path in jsonPaths)
             {
-                var foundTokens = token.SelectTokens(path);
-                foreach (var itemToken in foundTokens)
-                {
-                    foreach (var propertyName in propertyNames)
-                    {
-                        switch (itemToken)
-                        {
-                            case JObject foundObject:
-                                TryRemoveProperty(foundObject, propertyName);
-                                break;
-                            case JArray arrayObject:
-                            {
-                                foreach (var obj in arrayObject)
-                                {
-                                    TryRemoveProperty(obj, propertyName);
-                                }
 
-                                break;
+                var foundTokens = token.SelectTokens(path).ToArray();
+
+                if (foundTokens.IsNullOrEmpty() && token is JArray arrayToken)
+                {
+                    foundTokens = arrayToken.SelectMany(x => x.SelectTokens(path)).ToArray();
+                }
+
+                FindAndRemoveTokens(foundTokens, propertyNames.ToArray());
+            }
+
+            return token;
+        }
+
+        private static void FindAndRemoveTokens(IEnumerable<JToken> foundTokens, IList<string> propertyNames)
+        {
+            foreach (var itemToken in foundTokens)
+            {
+                foreach (var propertyName in propertyNames)
+                {
+                    switch (itemToken)
+                    {
+                        case JObject foundObject:
+                            TryRemoveProperty(foundObject, propertyName);
+                            break;
+                        case JArray arrayObject:
+                        {
+                            foreach (var obj in arrayObject)
+                            {
+                                TryRemoveProperty(obj, propertyName);
                             }
+
+                            break;
                         }
                     }
                 }
             }
-
-            return token;
         }
 
         private static void TryRemoveProperty(JToken @object, string propertyName)
