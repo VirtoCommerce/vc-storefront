@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Customer
@@ -30,6 +32,9 @@ namespace VirtoCommerce.Storefront.Model.Customer
         /// User groups such as VIP, Wholesaler etc
         /// </summary>
         public IList<string> UserGroups { get; set; } = new List<string>();
+
+        [JsonIgnore]
+        [IgnoreDataMember]
         public IMutablePagedList<DynamicProperty> DynamicProperties { get; set; } = new MutablePagedList<DynamicProperty>(Enumerable.Empty<DynamicProperty>());
 
         public override string ToString()
