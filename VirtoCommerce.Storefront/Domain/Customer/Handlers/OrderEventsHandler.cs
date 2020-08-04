@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Order.Events;
@@ -24,9 +25,10 @@ namespace VirtoCommerce.Storefront.Domain.Customer.Handlers
                 var contact = @event.WorkContext.CurrentUser?.Contact;
                 if (contact != null)
                 {
+                    var countries = @event.WorkContext.Countries?.ToArray() ?? Array.Empty<Country>();
                     var addresses = contact.Addresses
-                        .Concat(@event.Order.Addresses)
-                        .Concat(@event.Order.Shipments.Select(shipment => shipment.DeliveryAddress))
+                        .Concat(@event.Order.Addresses.Select(x => new Address().CopyFrom(x, countries)))
+                        .Concat(@event.Order.Shipments.Select(shipment => new Address().CopyFrom(shipment.DeliveryAddress, countries)))
                         .Where(address => address != null)
                         .Distinct()
                         .ToList();

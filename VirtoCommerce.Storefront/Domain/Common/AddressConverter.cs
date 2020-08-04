@@ -104,6 +104,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             result.City = address.City;
             result.CountryCode = address.CountryCode;
+            result.RegionId = address.RegionId;
             result.FirstName = address.FirstName;
             result.LastName = address.LastName;
             result.Name = address.Name;
@@ -111,7 +112,7 @@ namespace VirtoCommerce.Storefront.Domain
             result.Zip = address.Zip;
             result.Organization = address.Company;
             result.CountryName = address.Country;
-            result.PostalCode = address.Zip;
+            result.PostalCode = address.PostalCode;
             result.Line1 = address.Address1;
             result.Line2 = address.Address2;
             result.RegionName = address.Province;
