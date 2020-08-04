@@ -15,8 +15,10 @@ namespace VirtoCommerce.Storefront.Infrastructure
             => $@"
         {{
             wishLists(storeId:""{storeId}"",userId:""{userId}"",cultureName:""{cultureName}"",currencyCode:""{currencyCode}"",type:""{type}"")
+            {{
+            {selectedFields ?? AllWishListFields()}
+            }}
         }}";
-
 
         public static string ClearCart(string selectedFields = null)
         => $@"mutation ($command:InputClearCartType!)
@@ -380,5 +382,16 @@ namespace VirtoCommerce.Storefront.Infrastructure
             discountTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
             discountTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
             taxTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}";
+
+        public static string AllWishListFields()
+            => $@"
+            id
+            name
+            status
+            storeId
+            customerId
+            currency
+            languageCode
+            type";
     }
 }

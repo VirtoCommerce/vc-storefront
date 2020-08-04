@@ -5,7 +5,7 @@ namespace VirtoCommerce.Storefront.Model.Contracts
 {
     public class GetWishListResponseDto
     {
-        [JsonProperty(PropertyName = "lists")]
+        [JsonProperty(PropertyName = "wishLists")]
         public List<WishListDto> WishLists { get; set; }
     }
 }
