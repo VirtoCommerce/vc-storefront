@@ -25,9 +25,10 @@ namespace VirtoCommerce.Storefront.Domain.Customer.Handlers
                 var contact = @event.WorkContext.CurrentUser?.Contact;
                 if (contact != null)
                 {
+                    var countries = @event.WorkContext.Countries?.ToArray() ?? Array.Empty<Country>();
                     var addresses = contact.Addresses
-                        .Concat(@event.Order.Addresses.Select(x => new Address().CopyFrom(x, @event.WorkContext.Countries?.ToArray() ?? Array.Empty<Country>())))
-                        .Concat(@event.Order.Shipments.Select(shipment => new Address().CopyFrom(shipment.DeliveryAddress, @event.WorkContext.Countries?.ToArray() ?? Array.Empty<Country>())))
+                        .Concat(@event.Order.Addresses.Select(x => new Address().CopyFrom(x, countries)))
+                        .Concat(@event.Order.Shipments.Select(shipment => new Address().CopyFrom(shipment.DeliveryAddress, countries)))
                         .Where(address => address != null)
                         .Distinct()
                         .ToList();
