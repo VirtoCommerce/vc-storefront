@@ -19,6 +19,8 @@
     <None Remove="Responses\GetPaymentMethodsForAdmin.json" />
     <None Remove="Responses\GetProductsByIds.json" />
     <None Remove="Responses\GetShipmentMethodsForAdmin.json" />
+    <None Remove="Responses\SearchCategories.json" />
+    <None Remove="Responses\SearchProducts.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,6 +58,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Responses\GetShipmentMethodsForAdmin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Responses\SearchCategories.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Responses\SearchProducts.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

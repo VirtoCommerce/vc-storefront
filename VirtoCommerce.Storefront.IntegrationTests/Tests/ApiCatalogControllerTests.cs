@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,6 +33,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
             var searchCriteria = new ProductSearchCriteria
             {
                 Keyword = Infrastructure.Product.OctocopterSku,
+                ResponseGroup = ItemResponseGroup.ItemLarge,
             };
             var content = new StringContent(
                 JsonConvert.SerializeObject(searchCriteria),
@@ -48,22 +48,24 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
 
             var source = await response.Content.ReadAsStringAsync();
 
-            var jobj = JObject.Parse(source).RemovePropertyInChildren(
+            var result = LoadSourceAndCompareResult(
+                "SearchProducts",
+                source,
                 new[] { "$.products" },
-                new[] { "properties", "variationProperties", "price", "prices" }
-            );
-            var products = jobj["products"]?.ToString() ?? string.Empty;
-
-            var result = JsonConvert.DeserializeObject<List<Model.Catalog.Product>>(products);
-            var product = result.FirstOrDefault();
+                new[]
+                {
+                    "minQuantity",
+                    "price.productId",
+                    "prices.productId",
+                    "price.taxDetails",
+                    "prices.taxDetails",
+                    "properties.localizedValues",
+                    "properties.displayNames",
+                }
+                );
 
             // Assert
-            Assert.NotNull(product);
-            Assert.NotEmpty(product.Id);
-            Assert.NotEmpty(product.Name);
-            Assert.NotEmpty(product.CatalogId);
-            Assert.NotEmpty(product.CategoryId);
-            Assert.Equal(Infrastructure.Product.OctocopterSku, product.Sku);
+            result.Should().BeNull();
         }
 
         [Fact]
@@ -85,7 +87,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
                 "GetProductsByIds",
                 source,
                 new[] { "$", "$.price", "$.prices", "$.properties" },
-                new [] { "minQuantity", "productId", "taxDetails", "localizedValues" }
+                new [] { "minQuantity", "productId", "taxDetails", "localizedValues", "displayNames" }
                     );
 
             // Assert
@@ -113,22 +115,15 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
 
             var source = await response.Content.ReadAsStringAsync();
 
-            var jObject = JObject.Parse(source).RemovePropertyInChildren(
+            var result = LoadSourceAndCompareResult(
+                "SearchCategories",
+                source,
                 new[] { "$.categories" },
-                new[] { "properties", "categories" }
+                new[] { "catalogId" }
                 );
-            var categories = jObject["categories"]?.ToString() ?? string.Empty;
-
-            var result = JsonConvert.DeserializeObject<List<Model.Catalog.Category>>(categories);
-
-            var category = result.FirstOrDefault();
 
             // Assert
-            Assert.NotNull(category);
-            Assert.NotEmpty(category.Id);
-            Assert.NotEmpty(category.Name);
-            Assert.Equal(Infrastructure.Category.CopterCategoryCode, category.Code);
-            Assert.NotEmpty(category.ParentId);
+            result.Should().BeNull();
         }
 
         [Fact]

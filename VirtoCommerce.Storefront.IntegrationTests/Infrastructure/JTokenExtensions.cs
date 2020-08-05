@@ -58,6 +58,18 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Infrastructure
 
         private static void TryRemoveProperty(JToken @object, string propertyName)
         {
+            if (propertyName.Contains('.'))
+            {
+                var splitted = propertyName.Split('.');
+                var pathToSearch = splitted.FirstOrDefault() ?? string.Empty;
+                var propertyToDelete = splitted.Skip(1).FirstOrDefault() ?? string.Empty;
+
+                if (@object is JObject jObject1 && jObject1.ContainsKey(pathToSearch))
+                {
+                    FindAndRemoveTokens(jObject1.SelectTokens(pathToSearch), new [] { propertyToDelete });
+                }
+            }
+
             if (@object is JObject jObject && jObject.ContainsKey(propertyName))
             {
                 jObject.Property(propertyName)?.Remove();
