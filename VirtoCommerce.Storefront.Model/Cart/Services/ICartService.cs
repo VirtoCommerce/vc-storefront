@@ -8,7 +8,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
     public interface ICartService
     {
         Task<IPagedList<ShoppingCart>> SearchCartsAsync(CartSearchCriteria criteria);
-        Task<IPagedList<WishListDto>> SearchAccountListsAsync(CartSearchCriteria criteria);
+        Task<IPagedList<CartDescriptionDto>> SearchAccountListsAsync(CartSearchCriteria criteria);
         Task<ShoppingCart> SaveChanges(ShoppingCart cart);
         Task<ShoppingCart> GetByIdAsync(string cartId);
         Task DeleteCartByIdAsync(string cartId);

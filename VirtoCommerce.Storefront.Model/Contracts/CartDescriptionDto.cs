@@ -1,6 +1,6 @@
 namespace VirtoCommerce.Storefront.Model.Contracts
 {
-    public class WishListDto
+    public class CartDescriptionDto
     {
         public string Id { get; set; }
         public string Name { get; set; }

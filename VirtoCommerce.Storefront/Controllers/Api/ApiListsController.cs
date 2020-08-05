@@ -142,7 +142,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/lists/search
         [HttpPost("search")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<IList<WishListDto>>> SearchLists([FromBody] CartSearchCriteria searchCriteria)
+        public async Task<ActionResult<IList<CartDescriptionDto>>> SearchLists([FromBody] CartSearchCriteria searchCriteria)
         {
             if (searchCriteria == null)
             {

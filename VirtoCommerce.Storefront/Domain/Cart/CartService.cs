@@ -130,7 +130,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             });
         }
 
-        public virtual async Task<IPagedList<WishListDto>> SearchAccountListsAsync(CartSearchCriteria criteria)
+        public virtual async Task<IPagedList<CartDescriptionDto>> SearchAccountListsAsync(CartSearchCriteria criteria)
         {
             if (criteria == null)
             {
@@ -140,14 +140,17 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             var cacheKey = CacheKey.With(GetType(), "SearchCartsAsync", criteria.GetCacheKey());
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
-                var query = QueryHelper.GetWishLists(storeId: criteria.StoreId,
+                var query = QueryHelper.SearchCart(storeId: criteria.StoreId,
                     userId: criteria.Customer.Id,
                     cultureName: criteria.Language?.CultureName ?? "en-US",
                     currencyCode: criteria.Currency.Code,
-                    type: criteria.Type);
-                var response = await _client.SendQueryAsync<GetWishListResponseDto>(new GraphQLRequest { Query = query });
+                    type: criteria.Type,
+                    sort: criteria.Sort,
+                    skip: (criteria.PageNumber - 1) * criteria.PageSize,
+                    take:criteria.PageSize);
+                var response = await _client.SendQueryAsync<SearchCartDescriptionResponseDto>(new GraphQLRequest { Query = query });
 
-                return new StaticPagedList<WishListDto>(response.Data.WishLists, criteria.PageNumber, criteria.PageSize, response.Data.WishLists.Count);
+                return new StaticPagedList<CartDescriptionDto>(response.Data.Carts, criteria.PageNumber, criteria.PageSize, response.Data.Carts.Count);
             });
         }
 

@@ -11,12 +11,12 @@ namespace VirtoCommerce.Storefront.Infrastructure
             }}
         }}";
 
-        public static string GetWishLists(string storeId, string userId, string cultureName, string currencyCode, string type, string selectedFields = null)
+        public static string SearchCart(string storeId, string userId, string cultureName, string currencyCode, string type, string sort, int skip, int take, string selectedFields = null)
             => $@"
         {{
-            wishLists(storeId:""{storeId}"",userId:""{userId}"",cultureName:""{cultureName}"",currencyCode:""{currencyCode}"",type:""{type}"")
+            carts(storeId:""{storeId}"",userId:""{userId}"",cultureName:""{cultureName}"",currencyCode:""{currencyCode}"",type:""{type}"",sort:""{sort}"",skip:{skip},take:{take})
             {{
-            {selectedFields ?? AllWishListFields()}
+            {selectedFields ?? AllSearchCartFields()}
             }}
         }}";
 
@@ -383,15 +383,16 @@ namespace VirtoCommerce.Storefront.Infrastructure
             discountTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
             taxTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}";
 
-        public static string AllWishListFields()
+        public static string AllSearchCartFields()
             => $@"
-            id
-            name
-            status
-            storeId
-            customerId
-            currency
-            languageCode
-            type";
+                id
+                name
+                status
+                storeId
+                customerId
+                currency
+                languageCode
+                type
+             ";
     }
 }
