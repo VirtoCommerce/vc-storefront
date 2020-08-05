@@ -872,7 +872,7 @@
       "allowBackorder": false,
       "status": 0,
       "fulfillmentCenterId": "vendor-fulfillment",
-      "inStockQuantity": 6,
+      "inStockQuantity": 7,
       "reservedQuantity": 0,
       "productId": "9cbd8f316e254a679ba34a900fccb076"
     },
@@ -882,12 +882,12 @@
         "allowBackorder": false,
         "status": 0,
         "fulfillmentCenterId": "vendor-fulfillment",
-        "inStockQuantity": 6,
+        "inStockQuantity": 7,
         "reservedQuantity": 0,
         "productId": "9cbd8f316e254a679ba34a900fccb076"
       }
     ],
-    "availableQuantity": 6,
+    "availableQuantity": 7,
     "seoInfo": {
       "slug": "3dr-solo-quadcopter-no-gimbal",
       "language": {
