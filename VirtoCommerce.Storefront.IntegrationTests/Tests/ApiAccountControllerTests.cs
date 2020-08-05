@@ -5,20 +5,17 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.IntegrationTests.Infrastructure;
 using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Security;
 using Xunit;
 
 namespace VirtoCommerce.Storefront.IntegrationTests.Tests
 {
-    [Trait("Category", "CI")]
+    [Trait("Category", "IntegrationTest")]
     [CollectionDefinition("ApiAccountControlleTests", DisableParallelization = true)]
     public class ApiAccountControllerTests : IClassFixture<StorefrontApplicationFactory>, IDisposable
     {

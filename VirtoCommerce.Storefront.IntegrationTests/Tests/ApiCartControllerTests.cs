@@ -18,7 +18,7 @@ using Xunit;
 
 namespace VirtoCommerce.Storefront.IntegrationTests.Cart
 {
-    [Trait("Category", "CI")]
+    [Trait("Category", "IntegrationTest")]
     [CollectionDefinition("ApiCartControllerTests", DisableParallelization = true)]
     public class ApiCartControllerTests : IClassFixture<StorefrontApplicationFactory>, IDisposable
     {

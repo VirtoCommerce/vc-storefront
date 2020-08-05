@@ -446,13 +446,13 @@ namespace VirtoCommerce.Storefront.Domain
                 Name = productDto.Name,
                 CategoryId = productDto.Category?.Id,
                 Sku = productDto.Code,
-                Description = productDto.Descriptions?.FirstOrDefault(d => d.ReviewType.EqualsInvariant("FullReview"))?.Content,
                 CatalogId = productDto.CatalogId,
-                SeoPath = productDto?.Outlines.GetSeoPath(workContext.CurrentStore, workContext.CurrentLanguage, null),
-                IsAvailable = productDto?.AvailabilityData?.IsAvailable ?? false,
-                IsBuyable = productDto?.AvailabilityData?.IsBuyable ?? false,
-                IsInStock = productDto?.AvailabilityData?.IsInStock ?? false,
+                SeoPath = productDto.Outlines?.GetSeoPath(workContext.CurrentStore, workContext.CurrentLanguage, null),
+                IsAvailable = productDto.AvailabilityData?.IsAvailable ?? false,
+                IsBuyable = productDto.AvailabilityData?.IsBuyable ?? false,
+                IsInStock = productDto.AvailabilityData?.IsInStock ?? false,
                 IsActive = productDto.AvailabilityData?.IsActive ?? false,
+                TrackInventory = productDto.AvailabilityData?.IsTrackInventory ?? false,
                 //Height = decimal.MinValue, // TBD
                 //Length = decimal.MinValue, // TBD
                 //MeasureUnit = "", // TBD
@@ -498,14 +498,23 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (!productDto.Descriptions.IsNullOrEmpty())
             {
-                result.Descriptions = new MutablePagedList<EditorialReview>(productDto.Descriptions?.Select(d =>
-                    new EditorialReview
+                // Reviews for currentLanguage (or Invariant language as fall-back) for each ReviewType
+                var descriptions = productDto.Descriptions
+                    .Where(r => !string.IsNullOrEmpty(r.Content))
+                    .Select(r => new EditorialReview
                     {
-                        Value = d.Content,
-                        ReviewType = d.ReviewType,
-                        Language = new Language(d.LanguageCode),
-                    })
-                );
+                        Language = new Language(r.LanguageCode),
+                        ReviewType = r.ReviewType,
+                        Value = Markdown.ToHtml(r.Content, _markdownPipeline)
+                    });
+                //Select only best matched description for current language in the each description type
+                var tmpDescriptionList = descriptions
+                    .GroupBy(x => x.ReviewType)
+                    .Select(descriptionGroup => descriptionGroup.FindWithLanguage(workContext.CurrentLanguage))
+                    .Where(description => description != null);
+
+                result.Descriptions = new MutablePagedList<EditorialReview>(tmpDescriptionList);
+                result.Description = (result.Descriptions.FirstOrDefault(x => x.ReviewType.EqualsInvariant("FullReview")) ?? result.Descriptions.FirstOrDefault())?.Value;
             }
 
             if (!productDto?.AvailabilityData?.Inventories.IsNullOrEmpty() ?? false)
@@ -621,6 +630,8 @@ namespace VirtoCommerce.Storefront.Domain
                 var productPrices = productDto.Prices.ToPrices(workContext.AllCurrencies, productDto.Tax?.Rates);
 
                 result.ApplyPrices(productPrices, workContext.CurrentCurrency, workContext.AllCurrencies);
+                //result.Prices = productPrices;
+                //result.Price = result.Prices.FirstOrDefault(x => x.Currency == workContext.CurrentCurrency);
             }
 
             return result;
@@ -639,7 +650,7 @@ namespace VirtoCommerce.Storefront.Domain
                     MinQuantity = x.MinQuantity,
                     DiscountAmount = new Money((double?)x.DiscountAmount.Amount ?? 0d, currency),
                     SalePrice = new Money((double?)x.Sale.Amount ?? 0d, currency),
-                    TierPrices = x.TierPrices.Select(t => new TierPrice(new Money((double?)t.Price.Amount ?? 0d, currency), t.Quantity ?? 0)).ToList(),
+                    //TierPrices = x.TierPrices.Select(t => new TierPrice(new Money((double?)t.Price.Amount ?? 0d, currency), t.Quantity ?? 0)).ToList(),
                 };
 
                 if (!taxRateDtos.IsNullOrEmpty())
@@ -693,7 +704,8 @@ namespace VirtoCommerce.Storefront.Domain
                 DisplayName = propertyDto.Label,
                 Hidden = propertyDto.Hidden,
                 Type = propertyDto.Type,
-                Values = values,
+                Values = propertyDto.IsMultiValue ? values : Array.Empty<string>(),
+                IsMultivalue = propertyDto.IsMultiValue,
                 LocalizedValues = new List<LocalizedString> { new LocalizedString(language, propertyDto.Label) }
             };
 
@@ -754,12 +766,9 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var result = new Image
             {
-                Alt = imageDto.Name, //+
-                FullSizeImageUrl = imageDto.Url, //+
                 Group = imageDto.Group,
                 SortOrder = imageDto.SortOrder,
-                Title = imageDto.Name,
-                Url = imageDto.Url,
+                Url = imageDto.Url.RemoveLeadingUriScheme(),
             };
 
             return result;
