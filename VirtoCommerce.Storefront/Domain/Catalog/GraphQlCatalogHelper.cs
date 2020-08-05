@@ -27,7 +27,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 id
                 languageCode
                 reviewType
-            }}           
+            }}
             associations {{
                 items {{
                     associatedObjectId
@@ -75,8 +75,8 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                         type
                     }}
                     promotionId
-                    amount {{ {MoneyFields} }}
-                    amountWithTax {{ {MoneyFields} }}
+                    amount
+                    amountWithTax
                 }}
                 discountAmount {{ {MoneyFields} }}
                 discountAmountWithTax {{ {MoneyFields} }}
@@ -182,7 +182,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 products(
                     query: ""{ criteria.Keyword }""
                     filter: ""{
-                        ( criteria.Terms.IsNullOrEmpty() ? string.Empty : $"{string.Join(" ", criteria.Terms.ToStrings())}" ) }{
+                        (criteria.Terms.IsNullOrEmpty() ? string.Empty : $"{string.Join(" ", criteria.Terms.ToStrings())}") }{
                         (string.IsNullOrEmpty(catalogId) ? string.Empty : $" catalog:{ catalogId }")
                     }""
                     fuzzy: { criteria.IsFuzzySearch.ToString().ToLowerInvariant() }

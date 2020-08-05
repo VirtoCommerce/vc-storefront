@@ -19,7 +19,7 @@ namespace VirtoCommerce.Storefront.Domain
     public static partial class CatalogConverter
     {
         private static MarkdownPipeline _markdownPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-    
+
         public static SeoInfo ToSeoInfo(this catalogDto.SeoInfo seoDto)
         {
             return seoDto.JsonConvert<coreDto.SeoInfo>().ToSeoInfo();
@@ -218,7 +218,6 @@ namespace VirtoCommerce.Storefront.Domain
 
             return result;
         }
-
 
         public static Category ToCategory(this catalogDto.Category categoryDto, Language currentLanguage, Store store)
         {
@@ -427,7 +426,6 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Description = (result.Descriptions.FirstOrDefault(x => x.ReviewType.EqualsInvariant("FullReview")) ?? result.Descriptions.FirstOrDefault())?.Value;
             }
 
-
             return result;
         }
 
@@ -510,25 +508,27 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (!productDto?.AvailabilityData?.Inventories.IsNullOrEmpty() ?? false)
             {
-                result.InventoryAll = productDto?.AvailabilityData?.Inventories.Select(x =>
-                {
-                    var inventory = new Inventory
+                result.InventoryAll = productDto?.AvailabilityData?.Inventories
+                    .Select(x =>
                     {
-                        AllowBackorder = x.AllowBackorder,
-                        AllowPreorder = x.AllowPreorder,
-                        BackorderAvailabilityDate = x.BackorderAvailableDate,
-                        FulfillmentCenterId = x.FulfillmentCenterId,
-                        InStockQuantity = x.InStockQuantity,
-                        PreorderAvailabilityDate = x.PreorderAvailabilityDate,
-                        ProductId = productDto.Id,
-                        ReservedQuantity = x.ReservedQuantity,
-                    };
+                        var inventory = new Inventory
+                        {
+                            AllowBackorder = x.AllowBackorder,
+                            AllowPreorder = x.AllowPreorder,
+                            BackorderAvailabilityDate = x.BackorderAvailableDate,
+                            FulfillmentCenterId = x.FulfillmentCenterId,
+                            InStockQuantity = x.InStockQuantity,
+                            PreorderAvailabilityDate = x.PreorderAvailabilityDate,
+                            ProductId = productDto.Id,
+                            ReservedQuantity = x.ReservedQuantity,
+                        };
 
-                    return inventory;
-                }).ToArray();
+                        return inventory;
+                    })
+                    .ToArray();
 
-                result.Inventory = workContext.CurrentStore.DefaultFulfillmentCenterId != null ?
-                    result.InventoryAll.FirstOrDefault(x => x.FulfillmentCenterId == workContext.CurrentStore.DefaultFulfillmentCenterId)
+                result.Inventory = workContext.CurrentStore.DefaultFulfillmentCenterId != null
+                    ? result.InventoryAll.FirstOrDefault(x => x.FulfillmentCenterId == workContext.CurrentStore.DefaultFulfillmentCenterId)
                     : result.InventoryAll.FirstOrDefault();
             }
 
@@ -539,30 +539,27 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (!productDto?.Properties.IsNullOrEmpty() ?? false)
             {
-                result.Properties = new MutablePagedList<CatalogProperty>(productDto?.Properties.Where(x=>x.Type.EqualsInvariant("Product")).GroupBy(x => x.Id).Select(
-                    x =>
+                result.Properties = new MutablePagedList<CatalogProperty>(productDto?.Properties
+                    .Where(x => x.Type.EqualsInvariant("Product"))
+                    .GroupBy(x => x.Id)
+                    .Select(x =>
                     {
                         var propertyValues = x.Select(p => p.Value);
                         var propertyDto = x.First();
-
                         var property = propertyDto.ToProperty(workContext.CurrentLanguage, propertyValues.ToArray());
-
                         return property;
                     }));
 
-
-                result.VariationProperties = new MutablePagedList<CatalogProperty>(productDto?.Properties.Where(x => x.Type.EqualsInvariant("Variation")).GroupBy(x => x.Id).Select(
-                 x =>
-                 {
-                     var propertyValues = x.Select(p => p.Value);
-                     var propertyDto = x.First();
-
-                     var property = propertyDto.ToProperty(workContext.CurrentLanguage, propertyValues.ToArray());
-
-                     return property;
-                 }));
-
-
+                result.VariationProperties = new MutablePagedList<CatalogProperty>(productDto?.Properties
+                    .Where(x => x.Type.EqualsInvariant("Variation"))
+                    .GroupBy(x => x.Id)
+                    .Select(x =>
+                    {
+                        var propertyValues = x.Select(p => p.Value);
+                        var propertyDto = x.First();
+                        var property = propertyDto.ToProperty(workContext.CurrentLanguage, propertyValues.ToArray());
+                        return property;
+                    }));
             }
 
             if (!productDto?.Prices.FirstOrDefault()?.Discounts.IsNullOrEmpty() ?? false)
@@ -575,7 +572,7 @@ namespace VirtoCommerce.Storefront.Domain
 
                         var discount = new Model.Marketing.Discount
                         {
-                            Amount = new Money((double?)d.Amount.Amount ?? 0d, currency),
+                            Amount = new Money((double)d.Amount, currency),
                             Coupon = d.Coupon,
                             Description = d.Description,
                             PromotionId = d.PromotionId,
@@ -617,7 +614,6 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (!productDto?.Prices.IsNullOrEmpty() ?? false)
             {
-
                 var productPrices = productDto.Prices.ToPrices(workContext.AllCurrencies, productDto.Tax?.Rates);
 
                 result.ApplyPrices(productPrices, workContext.CurrentCurrency, workContext.AllCurrencies);
@@ -694,9 +690,11 @@ namespace VirtoCommerce.Storefront.Domain
                 Hidden = propertyDto.Hidden,
                 Type = propertyDto.Type,
                 Values = values,
-                LocalizedValues = new List<LocalizedString> { new LocalizedString(language, propertyDto.Label) }
+                LocalizedValues = new List<LocalizedString>
+                {
+                    new LocalizedString(language, propertyDto.Label)
+                }
             };
-
         }
 
         public static Category ToCategory(this CategoryDto categoryDto, Store store, Language language)
@@ -813,6 +811,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Skip = criteria.Start,
                 Take = criteria.PageSize
             };
+
             return result;
         }
 
@@ -826,6 +825,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Quantity = associationDto.Quantity,
                 Tags = associationDto.Tags
             };
+
             return result;
         }
 
@@ -901,7 +901,6 @@ namespace VirtoCommerce.Storefront.Domain
                 Field = rangeFacet.Name
             };
 
-
             var aggrItemIsVisbileSpec = new AggregationItemIsVisibleSpecification();
             if (rangeFacet.Ranges != null)
             {
@@ -933,7 +932,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Group = aggregationGroup,
                 Value = termDto.Term,
                 IsApplied = termDto.IsSelected ?? false,
-                Count = (int)(termDto.Count ?? 0),            
+                Count = (int)(termDto.Count ?? 0),
             };
 
             //TODO:
@@ -957,6 +956,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             return result;
         }
+
         public static AggregationItem ToAggregationItem(this FacetRangeTypeDto itemDto, Aggregation aggregationGroup, string currentLanguage)
         {
             var result = new AggregationItem
