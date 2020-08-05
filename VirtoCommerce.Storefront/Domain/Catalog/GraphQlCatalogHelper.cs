@@ -125,8 +125,8 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                         type
                     }}
                     promotionId
-                    amount {{ {MoneyFields} }}
-                    amountWithTax {{ {MoneyFields} }}
+                    amount
+                    amountWithTax
                 }}
                 discountAmount {{ {MoneyFields} }}
                 discountAmountWithTax {{ {MoneyFields} }}
