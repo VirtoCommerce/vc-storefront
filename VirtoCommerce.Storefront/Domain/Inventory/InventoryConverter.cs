@@ -13,10 +13,12 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 AllowBackorder = inventoryDto.AllowBackorder,
                 AllowPreorder = inventoryDto.AllowPreorder,
+                PreorderQuantity = inventoryDto.PreorderQuantity,
+                BackorderQuantity = inventoryDto.BackorderQuantity,
+                PreorderAvailabilityDate = inventoryDto.PreorderAvailabilityDate,
                 BackorderAvailabilityDate = inventoryDto.BackorderAvailabilityDate,
                 FulfillmentCenterId = inventoryDto.FulfillmentCenterId,
-                InStockQuantity = inventoryDto.InStockQuantity,
-                PreorderAvailabilityDate = inventoryDto.PreorderAvailabilityDate,
+                InStockQuantity = inventoryDto.InStockQuantity,                
                 ProductId = inventoryDto.ProductId,
                 ReservedQuantity = inventoryDto.ReservedQuantity,
 
