@@ -166,7 +166,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Pricelists = workContext.CurrentPricelists.Where(p => p.Currency.Equals(currency)).Select(p => p.Id).ToList(),
                 PriceRange = criteria.PriceRange?.ToNumericRangeDto(),
                 UserGroups = criteria.UserGroups,
-                Terms = criteria.Terms.ToStrings(),
+                Terms = criteria.Terms.ToStrings(true),
                 Sort = criteria.SortBy,
                 Skip = criteria.Start,
                 Take = criteria.PageSize,

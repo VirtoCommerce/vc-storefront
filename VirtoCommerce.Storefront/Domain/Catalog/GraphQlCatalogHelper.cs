@@ -183,7 +183,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 products(
                     query: ""{ criteria.Keyword }""
                     filter: ""{
-                        ( criteria.Terms.IsNullOrEmpty() ? string.Empty : $"{string.Join(" ", criteria.Terms.ToStrings())}" ) }{
+                        (criteria.Terms.IsNullOrEmpty() ? string.Empty : $"{string.Join(" ", criteria.Terms.ToStrings(true))}") }{
                         (string.IsNullOrEmpty(catalogId) ? string.Empty : $" catalog:{ catalogId }")
                     }""
                     fuzzy: { criteria.IsFuzzySearch.ToString().ToLowerInvariant() }
