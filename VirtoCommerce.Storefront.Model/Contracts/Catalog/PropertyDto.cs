@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
 {
     public class PropertyDto
@@ -17,5 +19,8 @@ namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
         public string Type { get; set; }
 
         public string Label { get; set; }
+
+        [JsonProperty(PropertyName = "multivalue")]
+        public bool IsMultiValue { get; set; }
     }
 }

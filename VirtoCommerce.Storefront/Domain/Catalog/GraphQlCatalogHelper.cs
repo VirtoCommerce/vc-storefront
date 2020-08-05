@@ -145,7 +145,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             ";
 
         public const string MoneyFields = "amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency";
-        public const string PropertyFields = "id name valueType value valueId label hidden type";
+        public const string PropertyFields = "id name valueType value valueId label hidden type multivalue";
         public static string OutlineFields = $@"outlines {{ items {{ id name seoObjectType { SeoInfoFields }}}}}";
         public static string AllCategoryFields = $"id code name hasParent slug { OutlineFields } { SeoInfoFields } { ImagesFields }";
         public static string AllFacets = $"{ FilterFacets } { RangeFacets } { TermFacets }";
