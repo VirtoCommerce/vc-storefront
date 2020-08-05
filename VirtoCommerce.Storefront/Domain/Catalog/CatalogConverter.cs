@@ -555,7 +555,7 @@ namespace VirtoCommerce.Storefront.Domain
                     {
                         var propertyValues = x.Select(p => p.Value);
                         var propertyDto = x.First();
-                        var property = propertyDto.ToProperty(workContext.CurrentLanguage, propertyValues.ToArray());
+                        var property = propertyDto.ToProperty(workContext.CurrentLanguage, propertyValues.Where(p => p != null).ToArray());
                         return property;
                     }));
 
@@ -566,7 +566,7 @@ namespace VirtoCommerce.Storefront.Domain
                     {
                         var propertyValues = x.Select(p => p.Value);
                         var propertyDto = x.First();
-                        var property = propertyDto.ToProperty(workContext.CurrentLanguage, propertyValues.ToArray());
+                        var property = propertyDto.ToProperty(workContext.CurrentLanguage, propertyValues.Where(p => p != null).ToArray());
                         return property;
                     }));
             }
