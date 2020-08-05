@@ -704,7 +704,7 @@ namespace VirtoCommerce.Storefront.Domain
                 DisplayName = propertyDto.Label,
                 Hidden = propertyDto.Hidden,
                 Type = propertyDto.Type,
-                Values = values.Length > 1 ? values : Array.Empty<string>(),
+                Values = propertyDto.IsMultiValue ? values : Array.Empty<string>(),
                 IsMultivalue = propertyDto.IsMultiValue,
                 LocalizedValues = new List<LocalizedString> { new LocalizedString(language, propertyDto.Label) }
             };
