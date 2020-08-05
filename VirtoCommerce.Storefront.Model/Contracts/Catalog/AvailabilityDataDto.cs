@@ -19,6 +19,8 @@ namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
 
         public bool IsActive { get; set; }
 
+        public bool IsTrackInventory { get; set; }
+
         public InventoryInfoDto[] Inventories { get; set; }
     }
 }
