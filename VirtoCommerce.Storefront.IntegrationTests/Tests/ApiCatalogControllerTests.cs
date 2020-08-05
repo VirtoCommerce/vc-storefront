@@ -87,8 +87,8 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
                 "GetProductsByIds",
                 source,
                 new[] { "$", "$.price", "$.prices", "$.properties" },
-                new [] { "minQuantity", "productId", "taxDetails", "localizedValues", "displayNames" }
-                    );
+                new[] { "minQuantity", "productId", "taxDetails", "localizedValues", "displayNames" }
+            );
 
             // Assert
             result.Should().BeNull();
@@ -143,8 +143,8 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
             var result = LoadSourceAndCompareResult(
                 "GetCategoriesByIds",
                 source,
-                new[] {"$"},
-                new[] {"catalogId"}
+                new[] { "$" },
+                new[] { "catalogId" }
                 );
 
             // Assert
@@ -156,7 +156,6 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
 
         protected virtual void Dispose(bool disposing)
         {

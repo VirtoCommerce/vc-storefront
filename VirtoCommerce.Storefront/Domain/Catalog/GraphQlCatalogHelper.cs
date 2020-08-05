@@ -27,7 +27,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 id
                 languageCode
                 reviewType
-            }}           
+            }}
             associations {{
                 items {{
                     associatedObjectId
@@ -75,8 +75,8 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                         type
                     }}
                     promotionId
-                    amount {{ {MoneyFields} }}
-                    amountWithTax {{ {MoneyFields} }}
+                    amount
+                    amountWithTax
                 }}
                 discountAmount {{ {MoneyFields} }}
                 discountAmountWithTax {{ {MoneyFields} }}
@@ -125,8 +125,8 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                         type
                     }}
                     promotionId
-                    amount {{ {MoneyFields} }}
-                    amountWithTax {{ {MoneyFields} }}
+                    amount
+                    amountWithTax
                 }}
                 discountAmount {{ {MoneyFields} }}
                 discountAmountWithTax {{ {MoneyFields} }}

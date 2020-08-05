@@ -1024,44 +1024,6 @@
         "id": "34dba1c9-03cc-42e5-aa58-f1de40cd8556"
       },
       {
-        "name": "Multivalue",
-        "type": "Product",
-        "valueType": "ShortText",
-        "valueId": "ec5e4852-f299-434c-ae41-622cac8756ee",
-        "localizedValues": [],
-        "value": "1",
-        "displayName": "Multivalue",
-        "displayNames": [
-          {
-            "language": {
-              "isInvariant": false,
-              "cultureName": "de-DE",
-              "nativeName": "Deutsch (Deutschland)",
-              "threeLeterLanguageName": "deu",
-              "twoLetterLanguageName": "de",
-              "twoLetterRegionName": "DE",
-              "threeLetterRegionName": "DEU"
-            }
-          },
-          {
-            "language": {
-              "isInvariant": false,
-              "cultureName": "en-US",
-              "nativeName": "English (United States)",
-              "threeLeterLanguageName": "eng",
-              "twoLetterLanguageName": "en",
-              "twoLetterRegionName": "US",
-              "threeLetterRegionName": "USA"
-            }
-          }
-        ],
-        "isMultivalue": true,
-        "values": [ "1", "2" ],
-        "indexKey": "Multivalue",
-        "hidden": false,
-        "id": "87601557-6b20-4fd5-91b7-0ac7eae9a806"
-      },
-      {
         "name": "Skill Level",
         "type": "Product",
         "valueType": "ShortText",
@@ -2085,42 +2047,6 @@
         "indexKey": "Flight Time (min)",
         "hidden": false,
         "id": "34dba1c9-03cc-42e5-aa58-f1de40cd8556"
-      },
-      {
-        "name": "Multivalue",
-        "type": "Product",
-        "valueType": "ShortText",
-        "localizedValues": [],
-        "displayName": "Multivalue",
-        "displayNames": [
-          {
-            "language": {
-              "isInvariant": false,
-              "cultureName": "de-DE",
-              "nativeName": "Deutsch (Deutschland)",
-              "threeLeterLanguageName": "deu",
-              "twoLetterLanguageName": "de",
-              "twoLetterRegionName": "DE",
-              "threeLetterRegionName": "DEU"
-            }
-          },
-          {
-            "language": {
-              "isInvariant": false,
-              "cultureName": "en-US",
-              "nativeName": "English (United States)",
-              "threeLeterLanguageName": "eng",
-              "twoLetterLanguageName": "en",
-              "twoLetterRegionName": "US",
-              "threeLetterRegionName": "USA"
-            }
-          }
-        ],
-        "isMultivalue": true,
-        "values": [],
-        "indexKey": "Multivalue",
-        "hidden": false,
-        "id": "87601557-6b20-4fd5-91b7-0ac7eae9a806"
       },
       {
         "name": "Skill Level",
