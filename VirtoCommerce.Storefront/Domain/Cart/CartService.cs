@@ -136,7 +136,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
         private async Task<SearchCartResponseDto> InnerSearchCartsAsync(CartSearchCriteria criteria)
         {
-            var query = QueryHelper.SearchCart(storeId: criteria.StoreId,
+            var query = QueryHelper.SearchCarts(storeId: criteria.StoreId,
                 userId: criteria.Customer.Id,
                 cultureName: criteria.Language?.CultureName ?? "en-US",
                 currencyCode: criteria.Currency.Code,

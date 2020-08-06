@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
@@ -142,7 +143,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/lists/search
         [HttpPost("search")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<IList<ShoppingCart>>> SearchLists([FromBody] CartSearchCriteria searchCriteria)
+        public async Task<ActionResult<ShoppingCartSearchResult>> SearchLists([FromBody] CartSearchCriteria searchCriteria)
         {
             if (searchCriteria == null)
             {
@@ -155,8 +156,13 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             searchCriteria.Currency = WorkContext.CurrentCurrency;
             searchCriteria.Language = WorkContext.CurrentLanguage;
 
-            var accountLists = await _cartService.SearchCartsAsync(searchCriteria);
-            return accountLists.ToList();
+            var cartPagedList = await _cartService.SearchCartsAsync(searchCriteria);
+
+            return new ShoppingCartSearchResult
+            {
+                Results = cartPagedList.ToArray(),
+                TotalCount = cartPagedList.TotalItemCount
+            };
         }
 
         // POST: storefrontapi/lists/{listName}/{type}/create
@@ -185,6 +191,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 {
                     await _cartBuilder.TakeCartAsync(cart);
                     await _cartBuilder.RemoveCartAsync(cart.Id);
+                    CartCacheRegion.ExpireCart(cart);
                 }
             }
             return Ok();
