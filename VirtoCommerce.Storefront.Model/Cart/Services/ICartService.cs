@@ -10,9 +10,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         Task<ShoppingCart> SaveChanges(ShoppingCart cart);
         Task<ShoppingCart> GetByIdAsync(string cartId);
         Task DeleteCartByIdAsync(string cartId);
-
         Task<IEnumerable<ShippingMethod>> GetAvailableShippingMethodsAsync(ShoppingCart cart);
         Task<IEnumerable<PaymentMethod>> GetAvailablePaymentMethodsAsync(ShoppingCart cart);
-
     }
 }

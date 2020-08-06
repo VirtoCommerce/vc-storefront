@@ -361,7 +361,7 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
-        public virtual async Task RemoveCartAsync(string cartId = null)
+        public virtual async Task RemoveCartAsync(ShoppingCart cart = null)
         {
             EnsureCartExists();
             //Evict cart from cache

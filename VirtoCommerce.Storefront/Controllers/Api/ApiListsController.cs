@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Contracts;
 using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
@@ -188,7 +190,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 if (cart != null && cart.CustomerId == WorkContext.CurrentUser.Id)
                 {
                     await _cartBuilder.TakeCartAsync(cart);
-                    await _cartBuilder.RemoveCartAsync(cart.Id);
+                    await _cartBuilder.RemoveCartAsync(cart);
                 }
             }
             return Ok();

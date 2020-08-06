@@ -11,6 +11,19 @@ namespace VirtoCommerce.Storefront.Infrastructure
             }}
         }}";
 
+        public static string SearchCarts(string storeId, string userId, string cultureName, string currencyCode, string type, string sort, int skip, int take, string selectedFields = null)
+            => $@"
+        {{
+            carts(storeId:""{storeId}"",userId:""{userId}"",cultureName:""{cultureName}"",currencyCode:""{currencyCode}"",cartType:""{type}"",sort:""{sort}"",skip:{skip},take:{take})
+            {{
+            items
+               {{
+               {selectedFields ?? SearchCartFields()}
+               }}
+            totalCount
+            }}
+        }}";
+
         public static string ClearCart(string selectedFields = null)
         => $@"mutation ($command:InputClearCartType!)
         {{
@@ -373,5 +386,36 @@ namespace VirtoCommerce.Storefront.Infrastructure
             discountTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
             discountTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
             taxTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}";
-    }
+
+        private static string SearchCartFields()
+            => $@"
+            id
+            name
+            hasPhysicalProducts
+            status
+            storeId
+            channelId
+            customerId
+            organizationId
+            currency {{code symbol exchangeRate customFormatting}}
+            items
+            {{
+              id
+              createdDate
+              productId
+              productType
+              catalogId
+              categoryId
+              sku
+              name
+              quantity
+              thumbnailImageUrl
+              imageUrl
+              isGift
+            }}
+            itemsCount
+            itemsQuantity
+            type";
+
+}
 }
