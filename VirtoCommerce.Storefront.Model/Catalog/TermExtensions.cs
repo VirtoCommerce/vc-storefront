@@ -25,11 +25,13 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         /// </summary>
         /// <param name="terms"></param>
         /// <returns></returns>
-        public static List<string> ToStrings(this IEnumerable<Term> terms)
+        public static List<string> ToStrings(this IEnumerable<Term> terms, bool encode = false)
         {
             List<string> result = null;
 
             const string commaEscapeString = "%x2C";
+            const string spaceEscapeString = "%x20";
+
             if (terms != null)
             {
                 var strings = terms
@@ -37,9 +39,10 @@ namespace VirtoCommerce.Storefront.Model.Catalog
                     .OrderBy(g => g.Key)
                     .Select(
                         g =>
-                            string.Join(":", g.Key,
+                        // VP-3940: Need to encode spaces to allow search engine treat them differently - as delimiters and as pure spaces in name/values
+                            string.Join(":", encode ? g.Key?.Replace(" ", spaceEscapeString) : g.Key,
                                 string.Join(",",
-                                    g.Select(t => t.Value?.Replace(",", commaEscapeString))
+                                    g.Select(t => encode ? t.Value?.Replace(",", commaEscapeString)?.Replace(" ", spaceEscapeString) : t.Value)
                                         .Distinct(StringComparer.OrdinalIgnoreCase)
                                         .OrderBy(v => v))))
                     .ToList();

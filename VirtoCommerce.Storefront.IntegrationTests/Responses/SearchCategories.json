@@ -1,0 +1,62 @@
+{
+  "categories": [
+    {
+      "catalogId": "4974648a41df4e6ea67ef2ad76d7bbd4",
+      "parentId": "45d3fc9a913d4610a5c7d0470558c4b2",
+      "code": "33228",
+      "defaultSortBy": "manual",
+      "title": "Aerial Imaging & Drones",
+      "name": "Aerial Imaging & Drones",
+      "outline": "45d3fc9a913d4610a5c7d0470558c4b2/e51b5f9eea094a44939c11d4d4fa3bb1",
+      "level": 2,
+      "seoPath": "camcorders/aerial-imaging-drones",
+      "url": "/en-US/camcorders/aerial-imaging-drones",
+      "seoInfo": {
+        "slug": "aerial-imaging-drones",
+        "language": {
+          "isInvariant": false,
+          "cultureName": "en-US",
+          "nativeName": "English (United States)",
+          "threeLeterLanguageName": "eng",
+          "twoLetterLanguageName": "en",
+          "twoLetterRegionName": "US",
+          "threeLetterRegionName": "USA"
+        }
+      },
+      "primaryImage": {
+        "url": "//localhost:5000/assets/catalog/33228/1419605414000_1106906.jpg",
+        "sortOrder": 0,
+        "group": "images"
+      },
+      "image": {
+        "url": "//localhost:5000/assets/catalog/33228/1419605414000_1106906.jpg",
+        "sortOrder": 0,
+        "group": "images"
+      },
+      "images": [
+        {
+          "url": "//localhost:5000/assets/catalog/33228/1419605414000_1106906.jpg",
+          "sortOrder": 0,
+          "group": "images"
+        }
+      ],
+      "categories": [],
+      "properties": [],
+      "handle": "aerial-imaging-drones",
+      "indexKey": "aerial-imaging-drones",
+      "id": "e51b5f9eea094a44939c11d4d4fa3bb1"
+    }
+  ],
+  "metaData": {
+    "pageCount": 1,
+    "totalItemCount": 1,
+    "pageNumber": 1,
+    "pageSize": 20,
+    "hasPreviousPage": false,
+    "hasNextPage": false,
+    "isFirstPage": true,
+    "isLastPage": true,
+    "firstItemOnPage": 1,
+    "lastItemOnPage": 1
+  }
+}

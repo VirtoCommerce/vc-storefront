@@ -10,7 +10,7 @@ using Xunit;
 
 namespace VirtoCommerce.Storefront.IntegrationTests.Tests
 {
-    [Trait("Category", "CI")]
+    [Trait("Category", "IntegrationTest")]
     [CollectionDefinition("ApiOrderControllerTests", DisableParallelization = true)]
     public class ApiOrderControllerTests : IClassFixture<StorefrontApplicationFactory>, IDisposable
     {

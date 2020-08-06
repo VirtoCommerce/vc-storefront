@@ -19,7 +19,7 @@ namespace VirtoCommerce.Storefront.Domain
     public static partial class CatalogConverter
     {
         private static MarkdownPipeline _markdownPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-    
+
         public static SeoInfo ToSeoInfo(this catalogDto.SeoInfo seoDto)
         {
             return seoDto.JsonConvert<coreDto.SeoInfo>().ToSeoInfo();
@@ -166,7 +166,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Pricelists = workContext.CurrentPricelists.Where(p => p.Currency.Equals(currency)).Select(p => p.Id).ToList(),
                 PriceRange = criteria.PriceRange?.ToNumericRangeDto(),
                 UserGroups = criteria.UserGroups,
-                Terms = criteria.Terms.ToStrings(),
+                Terms = criteria.Terms.ToStrings(true),
                 Sort = criteria.SortBy,
                 Skip = criteria.Start,
                 Take = criteria.PageSize,
@@ -218,7 +218,6 @@ namespace VirtoCommerce.Storefront.Domain
 
             return result;
         }
-
 
         public static Category ToCategory(this catalogDto.Category categoryDto, Language currentLanguage, Store store)
         {
@@ -427,7 +426,6 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Description = (result.Descriptions.FirstOrDefault(x => x.ReviewType.EqualsInvariant("FullReview")) ?? result.Descriptions.FirstOrDefault())?.Value;
             }
 
-
             return result;
         }
 
@@ -446,13 +444,13 @@ namespace VirtoCommerce.Storefront.Domain
                 Name = productDto.Name,
                 CategoryId = productDto.Category?.Id,
                 Sku = productDto.Code,
-                Description = productDto.Descriptions?.FirstOrDefault(d => d.ReviewType.EqualsInvariant("FullReview"))?.Content,
                 CatalogId = productDto.CatalogId,
-                SeoPath = productDto?.Outlines.GetSeoPath(workContext.CurrentStore, workContext.CurrentLanguage, null),
-                IsAvailable = productDto?.AvailabilityData?.IsAvailable ?? false,
-                IsBuyable = productDto?.AvailabilityData?.IsBuyable ?? false,
-                IsInStock = productDto?.AvailabilityData?.IsInStock ?? false,
+                SeoPath = productDto.Outlines?.GetSeoPath(workContext.CurrentStore, workContext.CurrentLanguage, null),
+                IsAvailable = productDto.AvailabilityData?.IsAvailable ?? false,
+                IsBuyable = productDto.AvailabilityData?.IsBuyable ?? false,
+                IsInStock = productDto.AvailabilityData?.IsInStock ?? false,
                 IsActive = productDto.AvailabilityData?.IsActive ?? false,
+                TrackInventory = productDto.AvailabilityData?.IsTrackInventory ?? false,
                 //Height = decimal.MinValue, // TBD
                 //Length = decimal.MinValue, // TBD
                 //MeasureUnit = "", // TBD
@@ -498,37 +496,48 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (!productDto.Descriptions.IsNullOrEmpty())
             {
-                result.Descriptions = new MutablePagedList<EditorialReview>(productDto.Descriptions?.Select(d =>
-                    new EditorialReview
+                // Reviews for currentLanguage (or Invariant language as fall-back) for each ReviewType
+                var descriptions = productDto.Descriptions
+                    .Where(r => !string.IsNullOrEmpty(r.Content))
+                    .Select(r => new EditorialReview
                     {
-                        Value = d.Content,
-                        ReviewType = d.ReviewType,
-                        Language = new Language(d.LanguageCode),
-                    })
-                );
+                        Language = new Language(r.LanguageCode),
+                        ReviewType = r.ReviewType,
+                        Value = Markdown.ToHtml(r.Content, _markdownPipeline)
+                    });
+                //Select only best matched description for current language in the each description type
+                var tmpDescriptionList = descriptions
+                    .GroupBy(x => x.ReviewType)
+                    .Select(descriptionGroup => descriptionGroup.FindWithLanguage(workContext.CurrentLanguage))
+                    .Where(description => description != null);
+
+                result.Descriptions = new MutablePagedList<EditorialReview>(tmpDescriptionList);
+                result.Description = (result.Descriptions.FirstOrDefault(x => x.ReviewType.EqualsInvariant("FullReview")) ?? result.Descriptions.FirstOrDefault())?.Value;
             }
 
             if (!productDto?.AvailabilityData?.Inventories.IsNullOrEmpty() ?? false)
             {
-                result.InventoryAll = productDto?.AvailabilityData?.Inventories.Select(x =>
-                {
-                    var inventory = new Inventory
+                result.InventoryAll = productDto?.AvailabilityData?.Inventories
+                    .Select(x =>
                     {
-                        AllowBackorder = x.AllowBackorder,
-                        AllowPreorder = x.AllowPreorder,
-                        BackorderAvailabilityDate = x.BackorderAvailableDate,
-                        FulfillmentCenterId = x.FulfillmentCenterId,
-                        InStockQuantity = x.InStockQuantity,
-                        PreorderAvailabilityDate = x.PreorderAvailabilityDate,
-                        ProductId = productDto.Id,
-                        ReservedQuantity = x.ReservedQuantity,
-                    };
+                        var inventory = new Inventory
+                        {
+                            AllowBackorder = x.AllowBackorder,
+                            AllowPreorder = x.AllowPreorder,
+                            BackorderAvailabilityDate = x.BackorderAvailableDate,
+                            FulfillmentCenterId = x.FulfillmentCenterId,
+                            InStockQuantity = x.InStockQuantity,
+                            PreorderAvailabilityDate = x.PreorderAvailabilityDate,
+                            ProductId = productDto.Id,
+                            ReservedQuantity = x.ReservedQuantity,
+                        };
 
-                    return inventory;
-                }).ToArray();
+                        return inventory;
+                    })
+                    .ToArray();
 
-                result.Inventory = workContext.CurrentStore.DefaultFulfillmentCenterId != null ?
-                    result.InventoryAll.FirstOrDefault(x => x.FulfillmentCenterId == workContext.CurrentStore.DefaultFulfillmentCenterId)
+                result.Inventory = workContext.CurrentStore.DefaultFulfillmentCenterId != null
+                    ? result.InventoryAll.FirstOrDefault(x => x.FulfillmentCenterId == workContext.CurrentStore.DefaultFulfillmentCenterId)
                     : result.InventoryAll.FirstOrDefault();
             }
 
@@ -539,30 +548,27 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (!productDto?.Properties.IsNullOrEmpty() ?? false)
             {
-                result.Properties = new MutablePagedList<CatalogProperty>(productDto?.Properties.Where(x=>x.Type.EqualsInvariant("Product")).GroupBy(x => x.Id).Select(
-                    x =>
+                result.Properties = new MutablePagedList<CatalogProperty>(productDto?.Properties
+                    .Where(x => x.Type.EqualsInvariant("Product"))
+                    .GroupBy(x => x.Id)
+                    .Select(x =>
                     {
                         var propertyValues = x.Select(p => p.Value);
                         var propertyDto = x.First();
-
-                        var property = propertyDto.ToProperty(workContext.CurrentLanguage, propertyValues.ToArray());
-
+                        var property = propertyDto.ToProperty(workContext.CurrentLanguage, propertyValues.Where(p => p != null).ToArray());
                         return property;
                     }));
 
-
-                result.VariationProperties = new MutablePagedList<CatalogProperty>(productDto?.Properties.Where(x => x.Type.EqualsInvariant("Variation")).GroupBy(x => x.Id).Select(
-                 x =>
-                 {
-                     var propertyValues = x.Select(p => p.Value);
-                     var propertyDto = x.First();
-
-                     var property = propertyDto.ToProperty(workContext.CurrentLanguage, propertyValues.ToArray());
-
-                     return property;
-                 }));
-
-
+                result.VariationProperties = new MutablePagedList<CatalogProperty>(productDto?.Properties
+                    .Where(x => x.Type.EqualsInvariant("Variation"))
+                    .GroupBy(x => x.Id)
+                    .Select(x =>
+                    {
+                        var propertyValues = x.Select(p => p.Value);
+                        var propertyDto = x.First();
+                        var property = propertyDto.ToProperty(workContext.CurrentLanguage, propertyValues.Where(p => p != null).ToArray());
+                        return property;
+                    }));
             }
 
             if (!productDto?.Prices.FirstOrDefault()?.Discounts.IsNullOrEmpty() ?? false)
@@ -575,7 +581,7 @@ namespace VirtoCommerce.Storefront.Domain
 
                         var discount = new Model.Marketing.Discount
                         {
-                            Amount = new Money((double?)d.Amount.Amount ?? 0d, currency),
+                            Amount = new Money((double)d.Amount, currency),
                             Coupon = d.Coupon,
                             Description = d.Description,
                             PromotionId = d.PromotionId,
@@ -617,10 +623,11 @@ namespace VirtoCommerce.Storefront.Domain
 
             if (!productDto?.Prices.IsNullOrEmpty() ?? false)
             {
-
                 var productPrices = productDto.Prices.ToPrices(workContext.AllCurrencies, productDto.Tax?.Rates);
 
                 result.ApplyPrices(productPrices, workContext.CurrentCurrency, workContext.AllCurrencies);
+                //result.Prices = productPrices;
+                //result.Price = result.Prices.FirstOrDefault(x => x.Currency == workContext.CurrentCurrency);
             }
 
             return result;
@@ -639,7 +646,7 @@ namespace VirtoCommerce.Storefront.Domain
                     MinQuantity = x.MinQuantity,
                     DiscountAmount = new Money((double?)x.DiscountAmount.Amount ?? 0d, currency),
                     SalePrice = new Money((double?)x.Sale.Amount ?? 0d, currency),
-                    TierPrices = x.TierPrices.Select(t => new TierPrice(new Money((double?)t.Price.Amount ?? 0d, currency), t.Quantity ?? 0)).ToList(),
+                    //TierPrices = x.TierPrices.Select(t => new TierPrice(new Money((double?)t.Price.Amount ?? 0d, currency), t.Quantity ?? 0)).ToList(),
                 };
 
                 if (!taxRateDtos.IsNullOrEmpty())
@@ -693,10 +700,10 @@ namespace VirtoCommerce.Storefront.Domain
                 DisplayName = propertyDto.Label,
                 Hidden = propertyDto.Hidden,
                 Type = propertyDto.Type,
-                Values = values,
+                Values = propertyDto.IsMultiValue ? values : Array.Empty<string>(),
+                IsMultivalue = propertyDto.IsMultiValue,
                 LocalizedValues = new List<LocalizedString> { new LocalizedString(language, propertyDto.Label) }
             };
-
         }
 
         public static Category ToCategory(this CategoryDto categoryDto, Store store, Language language)
@@ -754,12 +761,9 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var result = new Image
             {
-                Alt = imageDto.Name, //+
-                FullSizeImageUrl = imageDto.Url, //+
                 Group = imageDto.Group,
                 SortOrder = imageDto.SortOrder,
-                Title = imageDto.Name,
-                Url = imageDto.Url,
+                Url = imageDto.Url.RemoveLeadingUriScheme(),
             };
 
             return result;
@@ -813,6 +817,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Skip = criteria.Start,
                 Take = criteria.PageSize
             };
+
             return result;
         }
 
@@ -826,6 +831,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Quantity = associationDto.Quantity,
                 Tags = associationDto.Tags
             };
+
             return result;
         }
 
@@ -901,7 +907,6 @@ namespace VirtoCommerce.Storefront.Domain
                 Field = rangeFacet.Name
             };
 
-
             var aggrItemIsVisbileSpec = new AggregationItemIsVisibleSpecification();
             if (rangeFacet.Ranges != null)
             {
@@ -933,7 +938,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Group = aggregationGroup,
                 Value = termDto.Term,
                 IsApplied = termDto.IsSelected ?? false,
-                Count = (int)(termDto.Count ?? 0),            
+                Count = (int)(termDto.Count ?? 0),
             };
 
             //TODO:
@@ -957,6 +962,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             return result;
         }
+
         public static AggregationItem ToAggregationItem(this FacetRangeTypeDto itemDto, Aggregation aggregationGroup, string currentLanguage)
         {
             var result = new AggregationItem
