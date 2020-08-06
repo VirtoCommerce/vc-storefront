@@ -190,8 +190,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 if (cart != null && cart.CustomerId == WorkContext.CurrentUser.Id)
                 {
                     await _cartBuilder.TakeCartAsync(cart);
-                    await _cartBuilder.RemoveCartAsync(cart.Id);
-                    CartCacheRegion.ExpireCart(cart);
+                    await _cartBuilder.RemoveCartAsync(cart);
                 }
             }
             return Ok();

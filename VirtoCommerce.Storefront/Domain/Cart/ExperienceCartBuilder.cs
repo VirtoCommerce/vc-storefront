@@ -444,12 +444,12 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             Cart = response.Data.MergeCart.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
-        public async Task RemoveCartAsync(string cartId = null)
+        public async Task RemoveCartAsync(ShoppingCart cart = null)
         {
             // Guardian, nullable argument added for backward compatibility
-            if (cartId == null)
+            if (cart == null)
             {
-                cartId = this.Cart.Id;
+                cart = this.Cart;
             }
 
             var request = new GraphQLRequest
@@ -459,11 +459,11 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                 {
                     Command = new RemoveCartCommand
                     {
-                        CartId = cartId
+                        CartId = cart.Id
                     }
                 }
             };
-
+            CartCacheRegion.ExpireCart(cart);
             await _client.SendMutationAsync<object>(request);
         }
 
