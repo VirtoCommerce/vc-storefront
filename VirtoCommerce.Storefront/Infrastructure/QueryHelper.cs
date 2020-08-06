@@ -16,7 +16,11 @@ namespace VirtoCommerce.Storefront.Infrastructure
         {{
             carts(storeId:""{storeId}"",userId:""{userId}"",cultureName:""{cultureName}"",currencyCode:""{currencyCode}"",type:""{type}"",sort:""{sort}"",skip:{skip},take:{take})
             {{
-            {selectedFields ?? AllSearchCartFields()}
+            items
+               {{
+               {selectedFields ?? SearchCartFields()}
+               }}
+            totalCount
             }}
         }}";
 
@@ -383,16 +387,52 @@ namespace VirtoCommerce.Storefront.Infrastructure
             discountTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
             taxTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}";
 
-        public static string AllSearchCartFields()
+        private static string SearchCartFields()
             => $@"
-                id
-                name
-                status
-                storeId
-                customerId
-                currency
-                languageCode
-                type
-             ";
-    }
+            id
+            name
+            hasPhysicalProducts
+            status
+            storeId
+            channelId
+            customerId
+            organizationId
+            currency {{code symbol exchangeRate customFormatting}}
+            items
+            {{
+              id
+              inStockQuantity
+              createdDate
+              productId
+              productType
+              catalogId
+              categoryId
+              sku
+              name
+              quantity
+              thumbnailImageUrl
+              imageUrl
+              isGift
+            }}
+            itemsCount
+            itemsQuantity
+            type
+            handlingTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            handlingTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            total {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            subTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            subTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            shippingPrice {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            shippingPriceWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            shippingTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            shippingTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            paymentPrice {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            paymentPriceWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            paymentTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            paymentTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            discountTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            discountTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
+            taxTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}";
+
+}
 }

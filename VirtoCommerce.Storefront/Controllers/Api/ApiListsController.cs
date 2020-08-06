@@ -142,7 +142,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/lists/search
         [HttpPost("search")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<IList<CartDescriptionDto>>> SearchLists([FromBody] CartSearchCriteria searchCriteria)
+        public async Task<ActionResult<IList<ShoppingCart>>> SearchLists([FromBody] CartSearchCriteria searchCriteria)
         {
             if (searchCriteria == null)
             {
@@ -155,9 +155,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             searchCriteria.Currency = WorkContext.CurrentCurrency;
             searchCriteria.Language = WorkContext.CurrentLanguage;
 
-            var accountLists = await _cartService.SearchAccountListsAsync(searchCriteria);
+            var accountLists = await _cartService.SearchCartsAsync(searchCriteria);
             return accountLists.ToList();
-
         }
 
         // POST: storefrontapi/lists/{listName}/{type}/create

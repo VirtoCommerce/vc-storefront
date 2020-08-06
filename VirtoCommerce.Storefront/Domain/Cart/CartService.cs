@@ -13,7 +13,6 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
-using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Contracts;
 using VirtoCommerce.Storefront.Model.Security;
@@ -120,56 +119,33 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             {
                 cacheEntry.AddExpirationToken(CartCacheRegion.CreateCustomerChangeToken(criteria.Customer?.Id));
 
-                var cartDto = await SearchCartAsync(criteria);
-                var currency = _workContextAccessor.WorkContext.AllCurrencies.FirstOrDefault(x => x.Equals(cartDto.Currency));
-                var language = cartDto.Language ?? Language.InvariantLanguage;
-                var user = await _userManager.FindByIdAsync(cartDto.CustomerId) ?? criteria.Customer;
-                var cart = cartDto.ToShoppingCart(currency, language, user);
+                var shoppingCarts = new List<ShoppingCart>();
+                var response = await InnerSearchCartsAsync(criteria);
 
-                return new StaticPagedList<ShoppingCart>(new[] { cart }, criteria.PageNumber, criteria.PageSize, cartDto.ItemsCount);
+                foreach (var cartDto in response.Carts.Items)
+                {
+                    var currency = _workContextAccessor.WorkContext.AllCurrencies.FirstOrDefault(x => x.Equals(cartDto.Currency));
+                    var language = cartDto.Language ?? Language.InvariantLanguage;
+                    var user = await _userManager.FindByIdAsync(cartDto.CustomerId) ?? criteria.Customer;
+                    shoppingCarts.Add(cartDto.ToShoppingCart(currency, language, user));
+                }
+
+                return new StaticPagedList<ShoppingCart>(shoppingCarts, criteria.PageNumber, criteria.PageSize, response.Carts.TotalCount);
             });
         }
 
-        public virtual async Task<IPagedList<CartDescriptionDto>> SearchAccountListsAsync(CartSearchCriteria criteria)
+        private async Task<SearchCartResponseDto> InnerSearchCartsAsync(CartSearchCriteria criteria)
         {
-            if (criteria == null)
-            {
-                throw new ArgumentNullException(nameof(criteria));
-            }
-
-            var cacheKey = CacheKey.With(GetType(), "SearchCartsAsync", criteria.GetCacheKey());
-            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-            {
-                var query = QueryHelper.SearchCart(storeId: criteria.StoreId,
-                    userId: criteria.Customer.Id,
-                    cultureName: criteria.Language?.CultureName ?? "en-US",
-                    currencyCode: criteria.Currency.Code,
-                    type: criteria.Type,
-                    sort: criteria.Sort,
-                    skip: (criteria.PageNumber - 1) * criteria.PageSize,
-                    take:criteria.PageSize);
-                var response = await _client.SendQueryAsync<SearchCartDescriptionResponseDto>(new GraphQLRequest { Query = query });
-
-                return new StaticPagedList<CartDescriptionDto>(response.Data.Carts, criteria.PageNumber, criteria.PageSize, response.Data.Carts.Count);
-            });
-        }
-
-
-        private async Task<ShoppingCartDto> SearchCartAsync(CartSearchCriteria criteria)
-        {
-            var query = QueryHelper.GetCart(
-                storeId: criteria.StoreId,
-                cartName: criteria.Name,
+            var query = QueryHelper.SearchCart(storeId: criteria.StoreId,
                 userId: criteria.Customer.Id,
                 cultureName: criteria.Language?.CultureName ?? "en-US",
                 currencyCode: criteria.Currency.Code,
-                type: criteria.Type ?? string.Empty);
-
-            var response = await _client.SendQueryAsync<GetCartResponseDto>(new GraphQLRequest { Query = query });
-
-            return response.Data.Cart;
+                type: criteria.Type,
+                sort: criteria.Sort,
+                skip: (criteria.PageNumber - 1) * criteria.PageSize,
+                take: criteria.PageSize);
+            var result = await _client.SendQueryAsync<SearchCartResponseDto>(new GraphQLRequest { Query = query });
+            return result.Data;
         }
-
-
     }
 }
