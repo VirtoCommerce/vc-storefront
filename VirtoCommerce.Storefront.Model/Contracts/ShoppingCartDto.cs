@@ -38,6 +38,7 @@ namespace VirtoCommerce.Storefront.Model.Contracts
         public bool? IsRecuring { get; set; }
 
         public string Comment { get; set; }
+
         [JsonIgnore]
         public string Note => Comment;
 
@@ -115,19 +116,22 @@ namespace VirtoCommerce.Storefront.Model.Contracts
         public PaymentPlan PaymentPlan { get; set; }
 
         #region IValidatable Members
+
         public bool IsValid { get; set; } = true;
         public IList<ValidationError> ValidationErrors { get; set; }
-        #endregion
+
+        #endregion IValidatable Members
 
         #region IDiscountable Members
-        public IList<Discount> Discounts { get; set; }
+
+        public IList<DiscountDto> Discounts { get; set; }
 
         public Currency Currency { get; set; }
 
-        #endregion
-
+        #endregion IDiscountable Members
 
         #region ITaxable Members
+
         public Money TaxTotal { get; set; }
 
         public decimal TaxPercentRate { get; set; }
@@ -138,11 +142,13 @@ namespace VirtoCommerce.Storefront.Model.Contracts
 
         public string Type { get; set; }
 
-        #endregion
+        #endregion ITaxable Members
 
         #region IHasLanguage Members
+
         public Language Language { get; set; }
-        #endregion
+
+        #endregion IHasLanguage Members
 
         public IList<ShippingMethod> AvailableShippingMethods { get; set; }
     }
