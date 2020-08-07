@@ -74,12 +74,12 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                     {
                         Command = new AddCartItemCommand
                         {
-                            StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
-                            CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
-                            UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
-                            Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
-                            Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
-                            CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
+                            StoreId = Cart.StoreId,
+                            UserId = Cart.CustomerId,
+                            CartName = Cart.Name,
+                            Language = Cart.Language.CultureName,
+                            Currency = Cart.Currency.Code,
+                            CartType = Cart.Type,
                             ProductId = addCartItem.ProductId,
                             Quantity = addCartItem.Quantity
                         }

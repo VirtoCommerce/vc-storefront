@@ -221,7 +221,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         {
             get
             {
-                var extendedPriceTotal = Items.Sum(i => i.ExtendedPrice.Amount);
+                var extendedPriceTotal = Items.Sum(i => i.ExtendedPrice?.Amount ?? 0);
                 return new Money(extendedPriceTotal, Currency);
             }
         }
@@ -230,7 +230,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
         {
             get
             {
-                var extendedPriceWithTaxTotal = Items.Sum(i => i.ExtendedPriceWithTax.Amount);
+                var extendedPriceWithTaxTotal = Items.Sum(i => i.ExtendedPriceWithTax?.Amount ?? 0);
                 return new Money(extendedPriceWithTaxTotal, Currency);
             }
         }
