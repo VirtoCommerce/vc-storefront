@@ -21,12 +21,6 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 UserGroups = workContext.CurrentUser?.Contact?.UserGroups ?? new List<string>()
             };
-            //Add default search terms
-            if (productSearchcriteria.Terms.Count == 0)
-            {
-                //Only priced products appearing at pages
-                productSearchcriteria.Terms.Add(new Term() { Name = "is", Value = "priced" });
-            }
             if (string.IsNullOrEmpty(productSearchcriteria.SortBy))
             {
                 productSearchcriteria.SortBy = defaultSort;
