@@ -415,6 +415,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             response.ThrowExceptionOnError();
 
             Cart = response.Data.Cart.ToShoppingCart(currency, language, user);
+            CartCacheRegion.ExpireCart(Cart);
         }
 
         public async Task MergeWithCartAsync(ShoppingCart cart)
