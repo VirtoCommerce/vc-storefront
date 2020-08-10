@@ -171,10 +171,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         public async Task<ActionResult<ShoppingCart>> CreateList(string listName, string type)
         {
             var cartBuilder = await LoadOrCreateCartAsync(Uri.UnescapeDataString(listName), type);
-            if (cartBuilder.Cart.IsTransient())
-            {
-                await cartBuilder.SaveAsync();
-            }
+            await cartBuilder.SaveAsync();
             return cartBuilder.Cart;
         }
 
