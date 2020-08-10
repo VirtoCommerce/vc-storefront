@@ -15,7 +15,6 @@ using System;
 
 namespace VirtoCommerce.Storefront.Domain
 {
-
     public static partial class OrderConverter
     {
         public static orderDto.CustomerOrderSearchCriteria ToSearchCriteriaDto(this OrderSearchCriteria criteria)
@@ -61,7 +60,6 @@ namespace VirtoCommerce.Storefront.Domain
 
             return result;
         }
-
 
         public static DynamicProperty ToDynamicProperty(this orderDto.DynamicObjectProperty propertyDto)
         {
@@ -316,7 +314,6 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Packages = shipment.Packages.Select(p => ToShipmentPackageDto(p)).ToList();
             }
 
-            
             if (shipment.TaxDetails != null)
             {
                 result.TaxDetails = shipment.TaxDetails.Select(p => ToTaxDetailDto(p)).ToList();
@@ -356,7 +353,6 @@ namespace VirtoCommerce.Storefront.Domain
                 ModifiedDate = lineItemDto.ModifiedDate,
                 ModifiedBy = lineItemDto.ModifiedBy
             };
-
 
             result.ImageUrl = result.ImageUrl.RemoveLeadingUriScheme();
             result.Currency = currency;
@@ -440,7 +436,7 @@ namespace VirtoCommerce.Storefront.Domain
             //{
             //    result.DynamicProperties = lineItem.DynamicProperties.Select(ToOrderDynamicPropertyDto).ToList();
             //}
-            
+
             if (!lineItem.Discounts.IsNullOrEmpty())
             {
                 result.Discounts = lineItem.Discounts.Select(x => x.ToDiscountDto()).ToList();
@@ -487,7 +483,6 @@ namespace VirtoCommerce.Storefront.Domain
             retVal.AuthorizedDate = paymentIn.AuthorizedDate;
             retVal.VoidedDate = paymentIn.VoidedDate;
             retVal.OrderId = paymentIn.OrderId;
-
 
             if (paymentIn.BillingAddress != null)
             {
@@ -559,6 +554,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             return retVal;
         }
+
         public static orderDto.BankCardInfo ToBankCardInfoDto(this BankCardInfo model)
         {
             orderDto.BankCardInfo retVal = null;
@@ -601,8 +597,8 @@ namespace VirtoCommerce.Storefront.Domain
                 Description = discount.Description,
                 PromotionId = discount.PromotionId,
                 Currency = discount.Amount.Currency.Code,
-                DiscountAmount = (double?)discount.Amount.Amount,
-                DiscountAmountWithTax = (double?)discount.Amount.Amount
+                Amount = (double?)discount.Amount.Amount,
+                AmountWithTax = (double?)discount.Amount.Amount
             };
 
             return result;
@@ -799,7 +795,6 @@ namespace VirtoCommerce.Storefront.Domain
             result.SubTotalTaxTotal = new Money(order.SubTotalTaxTotal ?? 0, currency);
             result.SubTotalDiscount = new Money(order.SubTotalDiscount ?? 0, currency);
             result.SubTotalDiscountWithTax = new Money(order.SubTotalDiscountWithTax ?? 0, currency);
-
 
             return result;
         }
