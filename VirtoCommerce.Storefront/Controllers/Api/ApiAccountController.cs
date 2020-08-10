@@ -518,8 +518,15 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 return new UpdatePhoneNumberResult { Succeeded = false, Error = "Phone number is not valid" };
             }
 
-            var result = await _signInManager.UserManager.SetPhoneNumberAsync(WorkContext.CurrentUser, model.PhoneNumber);
-            await _signInManager.SignInAsync(WorkContext.CurrentUser, isPersistent: false);
+            var user = await _userManager.FindByIdAsync(WorkContext.CurrentUser.Id);
+
+            if (user.Contact != null)
+            {
+                user.Contact.Phones = new[] { model.PhoneNumber };
+            }
+
+            var result = await _signInManager.UserManager.SetPhoneNumberAsync(user, model.PhoneNumber);
+            await _signInManager.SignInAsync(user, isPersistent: false);
 
             return new UpdatePhoneNumberResult { Succeeded = result.Succeeded };
 

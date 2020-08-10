@@ -176,6 +176,12 @@ namespace VirtoCommerce.Storefront.Domain
                     UserName = x.UserName,
                 });
             }
+
+            if (!contactDto.Phones.IsNullOrEmpty())
+            {
+                result.Phones = contactDto.Phones;
+            }
+
             return result;
         }
 
@@ -265,6 +271,11 @@ namespace VirtoCommerce.Storefront.Domain
             if (customer.OrganizationsIds != null)
             {
                 retVal.Organizations = customer.OrganizationsIds.Concat(retVal.Organizations ?? Array.Empty<string>()).Distinct().ToArray();
+            }
+
+            if (!customer.Phones.IsNullOrEmpty())
+            {
+                retVal.Phones = customer.Phones;
             }
 
             return retVal;
