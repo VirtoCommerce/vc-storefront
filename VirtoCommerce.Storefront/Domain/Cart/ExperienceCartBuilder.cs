@@ -415,7 +415,6 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             response.ThrowExceptionOnError();
 
             Cart = response.Data.Cart.ToShoppingCart(currency, language, user);
-            CartCacheRegion.ExpireCart(Cart);
         }
 
         public async Task MergeWithCartAsync(ShoppingCart cart)
@@ -549,11 +548,11 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             Cart = response.Data.RemoveShipment.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
-        /// <summary>
-        /// Backward compatibility
-        /// </summary>
-        [Obsolete("Do not use this method")]
-        public Task SaveAsync() => Task.CompletedTask;
+        public Task SaveAsync()
+        {
+            CartCacheRegion.ExpireCart(Cart);
+            return Task.CompletedTask;
+        } 
 
         /// <summary>
         /// Backward compatibility
