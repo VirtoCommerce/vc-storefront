@@ -8,13 +8,13 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public virtual bool IsSatisfiedBy(Product product)
         {
             var result = true;
-            if (product.TrackInventory && product.Inventory != null)
+            if (product.TrackInventory)
             {
-                result = product.AvailableQuantity +
+                result = product.Inventory != null &&
+                    product.AvailableQuantity +
                     (Convert.ToInt32(product.Inventory.AllowPreorder) * product.Inventory.PreorderQuantity) +
                     (Convert.ToInt32(product.Inventory.AllowBackorder) * product.Inventory.BackorderQuantity)
                     > 0;
-
             }
             return result;
         }
