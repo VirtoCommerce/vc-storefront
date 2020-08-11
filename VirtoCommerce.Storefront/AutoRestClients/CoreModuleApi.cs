@@ -2720,7 +2720,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the Currency class.
         /// </summary>
-        /// <param name="code">the currency code</param>
+        /// <param name="code">Currency code may be used ISO 4217.</param>
         /// <param name="name">name of the currency</param>
         /// <param name="isPrimary">Flag specifies that this is the primary
         /// currency</param>
@@ -2728,9 +2728,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// exchange rate of the currency.</param>
         /// <param name="symbol">Currency symbol</param>
         /// <param name="customFormatting">Custom formatting pattern</param>
-        public Currency(string code = default(string), string name = default(string), bool? isPrimary = default(bool?), double? exchangeRate = default(double?), string symbol = default(string), string customFormatting = default(string))
+        public Currency(string code = default(string), string cultureName = default(string), string englishName = default(string), string name = default(string), bool? isPrimary = default(bool?), double? exchangeRate = default(double?), string symbol = default(string), string customFormatting = default(string))
         {
             Code = code;
+            CultureName = cultureName;
+            EnglishName = englishName;
             Name = name;
             IsPrimary = isPrimary;
             ExchangeRate = exchangeRate;
@@ -2745,10 +2747,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets the currency code
+        /// Gets or sets currency code may be used ISO 4217.
         /// </summary>
         [JsonProperty(PropertyName = "code")]
         public string Code { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "cultureName")]
+        public string CultureName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "englishName")]
+        public string EnglishName { get; set; }
 
         /// <summary>
         /// Gets or sets name of the currency
@@ -2901,7 +2913,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// Initializes a new instance of the Address class.
         /// </summary>
         /// <param name="addressType">Possible values include: 'Billing',
-        /// 'Shipping', 'Pickup', 'BillingAndShipping'</param>
+        /// 'Shipping', 'BillingAndShipping', 'Pickup'</param>
         public Address(string addressType = default(string), string key = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
         {
             AddressType = addressType;
@@ -2932,7 +2944,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'Billing', 'Shipping',
-        /// 'Pickup', 'BillingAndShipping'
+        /// 'BillingAndShipping', 'Pickup'
         /// </summary>
         [JsonProperty(PropertyName = "addressType")]
         public string AddressType { get; set; }

@@ -12,7 +12,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
@@ -331,7 +330,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
@@ -1551,7 +1549,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Stream>> GenerateSitemapWithHttpMessagesAsync(string storeId = default(string), string baseUrl = default(string), string sitemapUrl = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<string>> GenerateSitemapWithHttpMessagesAsync(string storeId = default(string), string baseUrl = default(string), string sitemapUrl = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1620,7 +1618,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
                 ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
             }
             cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             if (_shouldTrace)
             {
                 ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
@@ -1651,13 +1649,26 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<Stream>();
+            var _result = new HttpOperationResponse<string>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
             if ((int)_statusCode == 200)
             {
-                _result.Body = await _httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<string>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
             }
             if (_shouldTrace)
             {
@@ -1824,7 +1835,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
@@ -1981,7 +1991,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<Stream>> GenerateSitemapWithHttpMessagesAsync(string storeId = default(string), string baseUrl = default(string), string sitemapUrl = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<string>> GenerateSitemapWithHttpMessagesAsync(string storeId = default(string), string baseUrl = default(string), string sitemapUrl = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='storeId'>
         /// </param>
         /// <param name='baseUrl'>
@@ -2015,7 +2025,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
@@ -2258,7 +2267,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
             /// </param>
             /// <param name='sitemapUrl'>
             /// </param>
-            public static Stream GenerateSitemap(this ISitemapsModuleApiOperations operations, string storeId = default(string), string baseUrl = default(string), string sitemapUrl = default(string))
+            public static string GenerateSitemap(this ISitemapsModuleApiOperations operations, string storeId = default(string), string baseUrl = default(string), string sitemapUrl = default(string))
             {
                 return operations.GenerateSitemapAsync(storeId, baseUrl, sitemapUrl).GetAwaiter().GetResult();
             }
@@ -2275,11 +2284,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Stream> GenerateSitemapAsync(this ISitemapsModuleApiOperations operations, string storeId = default(string), string baseUrl = default(string), string sitemapUrl = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<string> GenerateSitemapAsync(this ISitemapsModuleApiOperations operations, string storeId = default(string), string baseUrl = default(string), string sitemapUrl = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
-                var _result = await operations.GenerateSitemapWithHttpMessagesAsync(storeId, baseUrl, sitemapUrl, null, cancellationToken).ConfigureAwait(false);
-                _result.Request.Dispose();
-                return _result.Body;
+                using (var _result = await operations.GenerateSitemapWithHttpMessagesAsync(storeId, baseUrl, sitemapUrl, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
 
             /// <param name='operations'>
@@ -2327,7 +2337,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -2392,7 +2401,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -2467,7 +2475,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -2584,7 +2591,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -2644,7 +2650,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -2767,7 +2772,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -2878,7 +2882,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -2935,7 +2938,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -3052,7 +3054,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -3109,7 +3110,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -3131,7 +3131,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
         /// Initializes a new instance of the SitemapDownloadNotification
         /// class.
         /// </summary>
-        public SitemapDownloadNotification(System.DateTime? finished = default(System.DateTime?), long? totalCount = default(long?), long? processedCount = default(long?), long? errorCount = default(long?), IList<string> errors = default(IList<string>), string downloadUrl = default(string), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?), string id = default(string))
+        public SitemapDownloadNotification(System.DateTime? finished = default(System.DateTime?), long? totalCount = default(long?), long? processedCount = default(long?), long? errorCount = default(long?), IList<string> errors = default(IList<string>), string downloadUrl = default(string), string serverId = default(string), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?), string id = default(string))
         {
             Finished = finished;
             TotalCount = totalCount;
@@ -3139,6 +3139,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
             ErrorCount = errorCount;
             Errors = errors;
             DownloadUrl = downloadUrl;
+            ServerId = serverId;
             Creator = creator;
             Created = created;
             IsNew = isNew;
@@ -3184,6 +3185,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.SitemapsModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "downloadUrl")]
         public string DownloadUrl { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "serverId")]
+        public string ServerId { get; set; }
 
         /// <summary>
         /// </summary>

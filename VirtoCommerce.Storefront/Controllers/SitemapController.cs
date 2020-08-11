@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.LiquidThemeEngine;
@@ -67,7 +68,8 @@ namespace VirtoCommerce.Storefront.Controllers
                 var storeUrl = new Uri(WorkContext.RequestUrl, absUrl).ToString();
                 //remove language from base url SitemapAPI will add it automatically
                 storeUrl = storeUrl.Replace("/" + WorkContext.CurrentLanguage.CultureName + "/", "/");
-                stream = await _siteMapApi.GenerateSitemapAsync(WorkContext.CurrentStore.Id, storeUrl, filePath);
+                var contents = await _siteMapApi.GenerateSitemapAsync(WorkContext.CurrentStore.Id, storeUrl, filePath);
+                stream = new MemoryStream(Encoding.UTF8.GetBytes(contents));
             }
             return stream;
         }

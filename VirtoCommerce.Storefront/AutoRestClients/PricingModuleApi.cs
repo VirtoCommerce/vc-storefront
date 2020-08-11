@@ -7766,6 +7766,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         /// <param name="type">Association type (Accessories, Up-Sales,
         /// Cross-Sales, Related etc)</param>
+        /// <param name="itemId">Is a primary key of associating object</param>
         /// <param name="associatedObjectId">Each link element can have an
         /// associated object like Product, Category, etc.
         /// Is a primary key of associated object</param>
@@ -7775,11 +7776,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// object</param>
         /// <param name="associatedObjectImg">Associated object image
         /// URL</param>
-        public ProductAssociation(string type = default(string), int? priority = default(int?), int? quantity = default(int?), string associatedObjectId = default(string), string associatedObjectType = default(string), string outerId = default(string), string associatedObjectName = default(string), string associatedObjectImg = default(string), IList<string> tags = default(IList<string>), string imgSrc = default(string), IList<Image> images = default(IList<Image>))
+        public ProductAssociation(string type = default(string), int? priority = default(int?), int? quantity = default(int?), string itemId = default(string), string associatedObjectId = default(string), string associatedObjectType = default(string), string outerId = default(string), string associatedObjectName = default(string), string associatedObjectImg = default(string), IList<string> tags = default(IList<string>), string imgSrc = default(string), IList<Image> images = default(IList<Image>), string id = default(string))
         {
             Type = type;
             Priority = priority;
             Quantity = quantity;
+            ItemId = itemId;
             AssociatedObjectId = associatedObjectId;
             AssociatedObjectType = associatedObjectType;
             OuterId = outerId;
@@ -7788,6 +7790,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             Tags = tags;
             ImgSrc = imgSrc;
             Images = images;
+            Id = id;
             CustomInit();
         }
 
@@ -7812,6 +7815,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "quantity")]
         public int? Quantity { get; set; }
+
+        /// <summary>
+        /// Gets or sets is a primary key of associating object
+        /// </summary>
+        [JsonProperty(PropertyName = "itemId")]
+        public string ItemId { get; set; }
 
         /// <summary>
         /// Gets or sets each link element can have an associated object like
@@ -7858,6 +7867,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "images")]
         public IList<Image> Images { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
     }
 }
