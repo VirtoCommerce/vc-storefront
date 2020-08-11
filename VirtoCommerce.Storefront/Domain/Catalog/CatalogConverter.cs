@@ -693,7 +693,7 @@ namespace VirtoCommerce.Storefront.Domain
             return new CatalogProperty
             {
                 Id = propertyDto.Id,
-                Name = propertyDto.Name,
+                Name = propertyDto.Label ?? propertyDto.Name,
                 Value = propertyDto.Value,
                 ValueType = propertyDto.ValueType,
                 ValueId = propertyDto.ValueId,
