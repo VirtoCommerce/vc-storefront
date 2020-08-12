@@ -52,7 +52,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         public async Task<ActionResult<ShoppingCart>> GetCart()
         {
             var cartBuilder = await LoadOrCreateCartAsync();
-            await cartBuilder.ValidateAsync();
             return cartBuilder.Cart;
         }
 

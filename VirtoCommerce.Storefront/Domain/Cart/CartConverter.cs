@@ -4,6 +4,7 @@ using System.Linq;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
+using VirtoCommerce.Storefront.Model.Cart.ValidationErrors;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Contracts;
@@ -501,50 +502,78 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
         public static ShoppingCart ToShoppingCart(this ShoppingCartDto cartDto, Currency currency, Language language, User user)
-         => new ShoppingCart(currency, language)
-         {
-             HasPhysicalProducts = cartDto.HasPhysicalProducts,
-             ChannelId = cartDto.ChannelId,
-             Comment = cartDto.Comment,
-             CustomerId = cartDto.CustomerId,
-             CustomerName = cartDto.CustomerName,
-             Id = cartDto.Id,
-             Name = cartDto.Name,
-             ObjectType = cartDto.ObjectType,
-             OrganizationId = cartDto.OrganizationId,
-             Status = cartDto.Status,
-             StoreId = cartDto.StoreId,
-             Type = cartDto.Type,
-             Customer = user,
-             Coupons = cartDto.Coupons ?? new List<Coupon>(),
-             Items = cartDto.Items,
-             Addresses = cartDto.Addresses,
-             Payments = cartDto.Payments,
-             Shipments = cartDto.Shipments,
-             DynamicProperties = cartDto.DynamicProperties,
-             TaxDetails = cartDto.TaxDetails,
-             DiscountAmount = cartDto.DiscountTotal,
-             HandlingTotal = cartDto.HandlingTotal,
-             HandlingTotalWithTax = cartDto.HandlingTotalWithTax,
-             Total = cartDto.Total,
-             SubTotal = cartDto.SubTotal,
-             SubTotalWithTax = cartDto.SubTotalWithTax,
-             ShippingPrice = cartDto.ShippingPrice,
-             ShippingPriceWithTax = cartDto.ShippingPriceWithTax,
-             ShippingTotal = cartDto.ShippingTotal,
-             ShippingTotalWithTax = cartDto.ShippingTotalWithTax,
-             PaymentPrice = cartDto.PaymentPrice,
-             PaymentPriceWithTax = cartDto.PaymentPriceWithTax,
-             PaymentTotal = cartDto.PaymentTotal,
-             PaymentTotalWithTax = cartDto.PaymentTotalWithTax,
-             DiscountTotal = cartDto.DiscountTotal,
-             DiscountTotalWithTax = cartDto.DiscountTotalWithTax,
-             TaxTotal = cartDto.TaxTotal,
-             IsAnonymous = cartDto.IsAnonymous,
-             IsRecuring = cartDto.IsRecuring.GetValueOrDefault(),
-             VolumetricWeight = cartDto.VolumetricWeight.GetValueOrDefault(),
-             Weight = cartDto.Weight.GetValueOrDefault()
-         };
+        {
+            var cart = new ShoppingCart(currency, language)
+            {
+                HasPhysicalProducts = cartDto.HasPhysicalProducts,
+                ChannelId = cartDto.ChannelId,
+                Comment = cartDto.Comment,
+                CustomerId = cartDto.CustomerId,
+                CustomerName = cartDto.CustomerName,
+                Id = cartDto.Id,
+                Name = cartDto.Name,
+                ObjectType = cartDto.ObjectType,
+                OrganizationId = cartDto.OrganizationId,
+                Status = cartDto.Status,
+                StoreId = cartDto.StoreId,
+                Type = cartDto.Type,
+                Customer = user,
+                Coupons = cartDto.Coupons ?? new List<Coupon>(),
+                Items = cartDto.Items,
+                Addresses = cartDto.Addresses,
+                Payments = cartDto.Payments,
+                Shipments = cartDto.Shipments,
+                DynamicProperties = cartDto.DynamicProperties,
+                TaxDetails = cartDto.TaxDetails,
+                DiscountAmount = cartDto.DiscountTotal,
+                HandlingTotal = cartDto.HandlingTotal,
+                HandlingTotalWithTax = cartDto.HandlingTotalWithTax,
+                Total = cartDto.Total,
+                SubTotal = cartDto.SubTotal,
+                SubTotalWithTax = cartDto.SubTotalWithTax,
+                ShippingPrice = cartDto.ShippingPrice,
+                ShippingPriceWithTax = cartDto.ShippingPriceWithTax,
+                ShippingTotal = cartDto.ShippingTotal,
+                ShippingTotalWithTax = cartDto.ShippingTotalWithTax,
+                PaymentPrice = cartDto.PaymentPrice,
+                PaymentPriceWithTax = cartDto.PaymentPriceWithTax,
+                PaymentTotal = cartDto.PaymentTotal,
+                PaymentTotalWithTax = cartDto.PaymentTotalWithTax,
+                DiscountTotal = cartDto.DiscountTotal,
+                DiscountTotalWithTax = cartDto.DiscountTotalWithTax,
+                TaxTotal = cartDto.TaxTotal,
+                IsAnonymous = cartDto.IsAnonymous,
+                IsRecuring = cartDto.IsRecuring.GetValueOrDefault(),
+                VolumetricWeight = cartDto.VolumetricWeight.GetValueOrDefault(),
+                Weight = cartDto.Weight.GetValueOrDefault()
+            };
+
+            foreach (var error in cartDto.ValidationErrors)
+            {
+                if (error.ObjectType == "CartProduct" && !string.IsNullOrWhiteSpace(error.ObjectId))
+                {
+                    var lineItem = cart.Items.FirstOrDefault(x => x.ProductId == error.ObjectId);
+                    if (lineItem != null)
+                    {
+                        lineItem.ValidationErrors ??= new List<ValidationError>();
+                        lineItem.ValidationErrors.Add(error);
+                    }
+                }
+                if (error.ObjectType == "LineItem" && !string.IsNullOrWhiteSpace(error.ObjectId))
+                {
+                    var lineItem = cart.Items.FirstOrDefault(x => x.Id == error.ObjectId);
+                    if (lineItem != null)
+                    {
+                        lineItem.ValidationErrors ??= new List<ValidationError>();
+                        lineItem.ValidationErrors.Add(error);
+                    }
+                }
+
+            }
+
+            return cart;
+        }
+         
 
         public static ShipmentDto ToDto(this Shipment shipment)
             => new ShipmentDto

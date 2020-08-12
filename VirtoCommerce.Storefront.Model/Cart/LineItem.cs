@@ -261,7 +261,8 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
         //TODO: implement ValidationError deserialization
         #region IValidatable Members
-        public bool IsValid => ValidationErrors?.Any() ?? true;
+
+        public bool IsValid => ValidationErrors.IsNullOrEmpty();
         public IList<ValidationError> ValidationErrors { get; set; }
         #endregion
 

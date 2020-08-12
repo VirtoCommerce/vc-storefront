@@ -16,12 +16,15 @@ namespace VirtoCommerce.Storefront.JsonConverters
         {
             var obj = JObject.Load(reader);
             var errorCode = obj["errorCode"].Value<string>();
+            var errorObjectId = obj["objectId"].Value<string>();
+            var errorObjectType = obj["objectType"].Value<string>();
+            var errorMessage = obj["errorMessage"].Value<string>();
             if (errorCode == null)
             {
                 throw new NotSupportedException("ErrorCode should be filled for ValidationError instance");
             }
 
-            return new ValidationErrorDto { ErrorCode = errorCode };
+            return new ValidationErrorDto { ErrorCode = errorCode, ErrorMessage = errorMessage, ObjectId = errorObjectId, ObjectType = errorObjectType};
         }
 
         public override void WriteJson(JsonWriter writer, [AllowNull] ValidationError value, JsonSerializer serializer)
