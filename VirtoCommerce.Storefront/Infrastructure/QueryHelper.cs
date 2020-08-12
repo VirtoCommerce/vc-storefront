@@ -1,21 +1,7 @@
-using VirtoCommerce.Storefront.Model.Cart;
-
 namespace VirtoCommerce.Storefront.Infrastructure
 {
     public class QueryHelper
     {
-        public static string GetCartQuery(ShoppingCart cart, string selectedFields = null)
-        {
-            return QueryHelper.GetCart(
-                storeId: cart.StoreId,
-                cartName: cart.Name,
-                userId: cart.CustomerId,
-                cultureName: cart.Language?.CultureName ?? "en-US",
-                currencyCode: cart.Currency.Code,
-                type: cart.Type,
-                selectedFields: selectedFields);
-        }
-
         public static string GetCart(string storeId, string cartName, string userId, string cultureName, string currencyCode, string type, string selectedFields = null)
         => $@"
         {{
