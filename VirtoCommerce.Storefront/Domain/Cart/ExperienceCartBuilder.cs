@@ -548,11 +548,11 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             Cart = response.Data.RemoveShipment.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
-        /// <summary>
-        /// Backward compatibility
-        /// </summary>
-        [Obsolete("Do not use this method")]
-        public Task SaveAsync() => Task.CompletedTask;
+        public Task SaveAsync()
+        {
+            CartCacheRegion.ExpireCart(Cart);
+            return Task.CompletedTask;
+        } 
 
         /// <summary>
         /// Backward compatibility

@@ -51,9 +51,17 @@ namespace VirtoCommerce.Storefront.Domain.Security
         public static User ToUser(this OrganizationUserRegistration registerForm)
         {
             var result = ((UserRegistration)registerForm).ToUser();
-            if (!string.IsNullOrEmpty(registerForm.Role) && Roles.FindRoleById(registerForm.Role) != null)
+            if (!string.IsNullOrEmpty(registerForm.Role))
             {
-                result.Roles = new[] { (Role)Roles.FindRoleById(registerForm.Role).Clone() };
+                var role = Roles.FindRoleById(registerForm.Role);
+                if (role != null)
+                {
+                    result.Roles = new[] { role };
+                }
+                else
+                {
+                    result.Roles = new[] { new Role { Id = registerForm.Role, Name = registerForm.Role } };
+                }
             }
             return result;
         }

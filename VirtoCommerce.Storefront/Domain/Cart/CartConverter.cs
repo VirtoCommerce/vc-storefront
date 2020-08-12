@@ -923,9 +923,11 @@ namespace VirtoCommerce.Storefront.Domain
                 Discount = (double)lineItem.DiscountTotal.Amount,
                 //Use only base price for discount evaluation
                 Price = (double)lineItem.SalePrice.Amount,
+                ListPrice = (double)lineItem.ListPrice.Amount,
                 Quantity = lineItem.Quantity,
                 InStockQuantity = lineItem.InStockQuantity,
-                Outline = lineItem.Product.Outline,
+                // VP-3582: We need to pass all product outlines as 1 string to use them for promotion evaluation
+                Outline = lineItem.Product.Outlines,
                 Variations = null // TODO
             };
 

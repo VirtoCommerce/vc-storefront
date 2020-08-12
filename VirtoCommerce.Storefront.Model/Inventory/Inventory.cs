@@ -26,6 +26,16 @@ namespace VirtoCommerce.Storefront.Model.Inventory
         public bool? AllowBackorder { get; set; }
 
         /// <summary>
+        /// Gets or Sets Preorder qty
+        /// </summary>
+        public long? PreorderQuantity { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Backorder qty
+        /// </summary>
+        public long? BackorderQuantity { get; set; }
+
+        /// <summary>
         /// Gets or Sets Status
         /// </summary>
         public InventoryStatus Status { get; set; }
