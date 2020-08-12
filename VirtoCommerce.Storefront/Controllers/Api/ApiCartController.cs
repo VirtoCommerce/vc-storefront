@@ -147,6 +147,25 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Ok();
         }
 
+        // PUT: storefrontapi/cart/items/bulk
+        [HttpPut("items/bulk")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeCartItem([FromBody] ChangeCartItemQty[] changeQty)
+        {
+            EnsureCartExists();
+
+            //Need lock to prevent concurrent access to same cart
+            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
+            {
+                var cartBuilder = await LoadOrCreateCartAsync();
+
+                foreach (var change in changeQty)
+                    await cartBuilder.ChangeItemQuantityAsync(change);
+                await cartBuilder.SaveAsync();
+            }
+            return Ok();
+        }
+
         // DELETE: storefrontapi/cart/items?lineItemId=...
         [HttpDelete("items")]
         [ValidateAntiForgeryToken]

@@ -15,7 +15,6 @@ namespace VirtoCommerce.Storefront.Caching.Redis
     {
         public static string ServerId { get; } = $"{Environment.MachineName}_{Guid.NewGuid():N}";
 
-        private readonly ILogger _logger;
         private readonly ISubscriber _bus;
         private readonly RedisCachingOptions _redisCachingOptions;
         private readonly StorefrontOptions _storefrontOptions;
@@ -30,7 +29,6 @@ namespace VirtoCommerce.Storefront.Caching.Redis
             , ILoggerFactory loggerFactory
             ) : base(memoryCache, cachingOptions, loggerFactory, workContextAccessor)
         {
-            _logger = loggerFactory.CreateLogger(this.GetType());
             _connection = ConnectionMultiplexer.Connect(redisCachingOptions.Value.Configuration);
 
             _redisCachingOptions = redisCachingOptions.Value;
@@ -68,12 +66,10 @@ namespace VirtoCommerce.Storefront.Caching.Redis
         {
             var message = JsonConvert.DeserializeObject<RedisCachingMessage>(redisValue);
 
-            _logger.LogTrace($"Received message {message.Id} from Redis channel {channel}");
             if (!string.IsNullOrEmpty(message.Id) && !message.Id.EqualsInvariant(ServerId))
             {
                 foreach (var item in message.CacheKeys)
                 {
-                    _logger.LogTrace($"Evict cached item with key {item} from memory cache");
                     base.Remove(item);
                 }
             }
@@ -82,7 +78,6 @@ namespace VirtoCommerce.Storefront.Caching.Redis
         protected override void EvictionCallback(object key, object value, EvictionReason reason, object state)
         {
             var message = new RedisCachingMessage { Id = ServerId, CacheKeys = new[] { key } };
-            _logger.LogTrace($"Publishing  message {message.Id} with cache key {key} to Redis channel {_redisCachingOptions.ChannelName}");
             _bus.Publish(_redisCachingOptions.ChannelName, JsonConvert.SerializeObject(message), CommandFlags.FireAndForget);
 
             base.EvictionCallback(key, value, reason, state);

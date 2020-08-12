@@ -133,10 +133,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     return UserActionIdentityResult.Failed(error);
                 }
 
-                var organization = orgRegistration.ToOrganization();
-                organization = await _memberService.CreateOrganizationAsync(organization);
                 var contact = orgRegistration.ToContact();
-                contact.OrganizationId = organization.Id;
+
+                if (!string.IsNullOrEmpty(orgRegistration.OrganizationName))
+                {
+                    var organization = orgRegistration.ToOrganization();
+                    organization = await _memberService.CreateOrganizationAsync(organization);
+                    contact.OrganizationId = organization.Id;
+                }
 
                 user = orgRegistration.ToUser();
                 user.Contact = contact;
@@ -502,7 +506,13 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<UpdatePhoneNumberResult>> UpdatePhoneNumber([FromBody] UpdatePhoneNumberModel model)
         {
-            // TODO: check/restore the functionality
+            var twoFactorAuthEnabled = await _signInManager.UserManager.GetTwoFactorEnabledAsync(WorkContext.CurrentUser);
+
+            if (twoFactorAuthEnabled)
+            {
+                return Forbid();
+            }
+
             TryValidateModel(model);
 
             if (!ModelState.IsValid)
@@ -510,8 +520,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 return new UpdatePhoneNumberResult { Succeeded = false, Error = "Phone number is not valid" };
             }
 
-            var code = await _signInManager.UserManager.GenerateChangePhoneNumberTokenAsync(WorkContext.CurrentUser, model.PhoneNumber);
-            var result = await _signInManager.UserManager.ChangePhoneNumberAsync(WorkContext.CurrentUser, model.PhoneNumber, code);
+            var result = await _signInManager.UserManager.SetPhoneNumberAsync(WorkContext.CurrentUser, model.PhoneNumber);
             await _signInManager.SignInAsync(WorkContext.CurrentUser, isPersistent: false);
 
             return new UpdatePhoneNumberResult { Succeeded = result.Succeeded };
