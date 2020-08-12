@@ -76,7 +76,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
         {
             var workContext = _workContextAccessor.WorkContext;
             //Do not add to filter current category if specified category
-            if(criteria.Outline != null)
+            if (criteria.Outline != null)
             {
                 criteria.Terms.Add(new Term { Name = "__outline", Value = $"{workContext.CurrentStore.Catalog}/{criteria.Outline}" });
             }
@@ -102,12 +102,15 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             {
                 EstablishLazyDependenciesForProducts(productsWithVariation);
             }
+
             var aggrIsVisbileSpec = new AggregationIsVisibleSpecification();
+
             var aggregations = new List<Aggregation>();
             if (response.Data.Products.TermFacets != null)
             {
                 aggregations.AddRange(response.Data.Products.TermFacets.Select(x => x.ToAggregation(workContext.CurrentLanguage.CultureName)));
             }
+
             if (response.Data.Products.RangeFacets != null)
             {
                 aggregations.AddRange(response.Data.Products.RangeFacets.Select(x => x.ToAggregation(workContext.CurrentLanguage.CultureName)));
@@ -119,13 +122,12 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 Aggregations = !aggregations.IsNullOrEmpty() ? aggregations.Where(x => aggrIsVisbileSpec.IsSatisfiedBy(x)).ToArray() : new Aggregation[] { }
             };
 
-           
-
             //Post loading initialization of the resulting aggregations
             var aggrContext = new AggregationPostLoadContext
             {
                 ProductSearchCriteria = criteria
             };
+
             var aggrItemCatIds = searchResult.Aggregations.SelectMany(x => x.Items).OfType<CategoryAggregationItem>().Select(x => x.CategoryId).Distinct().ToArray();
             if (aggrItemCatIds.Any())
             {
@@ -133,30 +135,38 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                                                             .Distinct().ToDictionary(x => x.Id)
                                                             .WithDefaultValue(null);
             }
+
             searchResult.Aggregations.Apply(x => x.PostLoadInit(aggrContext));
 
-
-            var associationList = searchResult
+            var productAssociations = searchResult
                 .Products
                 .Where(x => x.Associations != null)
                 .SelectMany(x => x.Associations)
                 .ToArray();
 
-            if (!associationList.IsNullOrEmpty())
-            {
-                var allAssociations = await GetProductsAsync(associationList.Select(x => x.ProductId).ToArray());
-                foreach (var association in associationList)
-                {
-                    association.Product = allAssociations.FirstOrDefault(x => x.Id == association.ProductId);
-
-                    if (association.Product != null)
-                    {
-                        EstablishLazyDependenciesForProducts(new[] { association.Product });
-                    }
-                }
-            }
+            await LoadAssociations(productAssociations);
 
             return searchResult;
+        }
+
+        public virtual async Task LoadAssociations(ProductAssociation[] productAssociations)
+        {
+            if (productAssociations.IsNullOrEmpty())
+            {
+                return;
+            }
+
+            var allAssociations = await GetProductsAsync(productAssociations.Select(x => x.Product.Id).ToArray());
+
+            foreach (var association in productAssociations)
+            {
+                association.Product = allAssociations.FirstOrDefault(x => x.Id == association.Product.Id);
+
+                if (association.Product != null)
+                {
+                    EstablishLazyDependenciesForProducts(new[] { association.Product });
+                }
+            }
         }
 
         public virtual async Task<IPagedList<Category>> SearchCategoriesAsync(CategorySearchCriteria criteria)
@@ -204,7 +214,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
         {
             var request = new GraphQLRequest
             {
-                Query = this.GetProducts(ids, workContext.CurrentStore.Id, workContext.CurrentUser.Id),
+                Query = this.GetProducts(ids, workContext.CurrentStore.Id, workContext.CurrentUser.Id, workContext.CurrentLanguage.CultureName),
             };
             var response = await _graphQlClient.SendQueryAsync<GetProductsResponseDto>(request);
 
