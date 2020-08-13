@@ -1,6 +1,6 @@
-using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Services;
@@ -19,12 +19,12 @@ namespace VirtoCommerce.Storefront.Domain
             //Initialize catalog search criteria
             var productSearchcriteria = new ProductSearchCriteria(workContext.CurrentLanguage, workContext.CurrentCurrency, workContext.QueryString)
             {
-                UserGroups = workContext.CurrentUser?.Contact?.UserGroups ?? new List<string>()             
+                UserGroups = workContext.CurrentUser?.Contact?.UserGroups ?? new List<string>()
             };
             if (string.IsNullOrEmpty(productSearchcriteria.SortBy))
             {
                 productSearchcriteria.SortBy = defaultSort;
-            }            
+            }
             workContext.CurrentProductSearchCriteria = productSearchcriteria;
             //Initialize product response group.
             //TODO: Need to find possibility to set this response group in theme
