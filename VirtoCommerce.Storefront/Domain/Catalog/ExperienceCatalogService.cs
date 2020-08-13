@@ -45,6 +45,15 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 EstablishLazyDependenciesForProducts(result);
             }
 
+            foreach (var product in result)
+            {
+                var associations = product.Associations;
+                if (associations != null)
+                {
+                    await LoadAssociations(associations.ToArray());
+                }
+            }
+
             return result;
         }
 
@@ -149,7 +158,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             return searchResult;
         }
 
-        public virtual async Task LoadAssociations(ProductAssociation[] productAssociations)
+        private async Task LoadAssociations(ProductAssociation[] productAssociations)
         {
             if (productAssociations.IsNullOrEmpty())
             {

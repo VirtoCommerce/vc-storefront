@@ -76,12 +76,6 @@ namespace VirtoCommerce.Storefront.Controllers
                         }, 1, ProductSearchCriteria.DefaultPageSize);
                     }
                 }
-
-                var associations = product.Associations;
-                if (associations != null)
-                {
-                    await _catalogSearchService.LoadAssociations(associations.ToArray());
-                }
             }
             return View("product", WorkContext);
         }

@@ -22,7 +22,5 @@ namespace VirtoCommerce.Storefront.Model.Services
         CatalogSearchResult SearchProducts(ProductSearchCriteria criteria);
 
         IPagedList<Category> SearchCategories(CategorySearchCriteria criteria);
-
-        Task LoadAssociations(ProductAssociation[] productAssociations);
     }
 }
