@@ -223,8 +223,9 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
         {
             var request = new GraphQLRequest
             {
-                Query = this.GetProducts(ids, workContext.CurrentStore.Id, workContext.CurrentUser.Id, workContext.CurrentLanguage.CultureName),
+                Query = this.GetProducts(ids, workContext.CurrentStore.Id, workContext.CurrentUser.Id),
             };
+
             var response = await _graphQlClient.SendQueryAsync<GetProductsResponseDto>(request);
 
             response.ThrowExceptionOnError();
