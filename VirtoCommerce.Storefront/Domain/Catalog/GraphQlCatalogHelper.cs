@@ -155,13 +155,14 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
         public const string SeoInfoFields = "seoInfos { id imageAltDescription isActive languageCode metaDescription metaKeywords name objectId objectType pageTitle semanticUrl storeId }";
         public const string ImagesFields = "images { id url name relativeUrl group sortOrder }";
 
-        public static string GetProducts(this ICatalogService catalogService, string[] ids, string storeId, string userId, string selectedFields = null)
+        public static string GetProducts(this ICatalogService catalogService, string[] ids, string storeId, string userId, string cultureName, string selectedFields = null)
         => $@"
         {{
             products(
                 productIds: [{string.Join(',', ids.Select(x => $"\"{x}\""))}]
                 storeId: ""{storeId}""
                 userId: ""{userId}""
+                cultureName : ""{cultureName}""
             )
             {{
                 items {{ { selectedFields ?? GetAllProductFields } }}

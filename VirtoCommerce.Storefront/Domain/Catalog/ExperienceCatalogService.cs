@@ -76,7 +76,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
         {
             var workContext = _workContextAccessor.WorkContext;
             //Do not add to filter current category if specified category
-            if(criteria.Outline != null)
+            if (criteria.Outline != null)
             {
                 criteria.Terms.Add(new Term { Name = "__outline", Value = $"{workContext.CurrentStore.Catalog}/{criteria.Outline}" });
             }
@@ -119,8 +119,6 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 Aggregations = !aggregations.IsNullOrEmpty() ? aggregations.Where(x => aggrIsVisbileSpec.IsSatisfiedBy(x)).ToArray() : new Aggregation[] { }
             };
 
-           
-
             //Post loading initialization of the resulting aggregations
             var aggrContext = new AggregationPostLoadContext
             {
@@ -134,7 +132,6 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                                                             .WithDefaultValue(null);
             }
             searchResult.Aggregations.Apply(x => x.PostLoadInit(aggrContext));
-
 
             var associationList = searchResult
                 .Products
@@ -204,7 +201,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
         {
             var request = new GraphQLRequest
             {
-                Query = this.GetProducts(ids, workContext.CurrentStore.Id, workContext.CurrentUser.Id),
+                Query = this.GetProducts(ids, workContext.CurrentStore.Id, workContext.CurrentUser.Id, workContext.CurrentLanguage.CultureName),
             };
             var response = await _graphQlClient.SendQueryAsync<GetProductsResponseDto>(request);
 
