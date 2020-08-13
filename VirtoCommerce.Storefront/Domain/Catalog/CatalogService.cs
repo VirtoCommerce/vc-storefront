@@ -106,13 +106,13 @@ namespace VirtoCommerce.Storefront.Domain
                 return await _categoriesApi.GetCategoriesByPlentyIdsAsync(ids.ToList(), ((int)responseGroup).ToString());
             });
             var result = categoriesDto.Select(x => x.ToCategory(workContext.CurrentLanguage, workContext.CurrentStore)).ToArray();
-            //Set  lazy loading for child categories 
-            EstablishLazyDependenciesForCategories(result);        
+            //Set  lazy loading for child categories
+            EstablishLazyDependenciesForCategories(result);
             return result;
         }
 
         /// <summary>
-        /// Search categories by given criteria 
+        /// Search categories by given criteria
         /// </summary>
         /// <param name="criteria"></param>
         /// <returns></returns>
@@ -122,7 +122,7 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
         /// <summary>
-        /// Async search categories by given criteria 
+        /// Async search categories by given criteria
         /// </summary>
         /// <param name="criteria"></param>
         /// <returns></returns>
@@ -138,21 +138,19 @@ namespace VirtoCommerce.Storefront.Domain
                 criteria = criteria.Clone() as CategorySearchCriteria;
                 var searchCriteria = criteria.ToCategorySearchCriteriaDto(workContext);
                 return await _searchApi.SearchCategoriesAsync(searchCriteria);
-
-
             });
             var result = new PagedList<Category>(new List<Category>().AsQueryable(), 1, 1);
             if (searchResult.Items != null)
             {
                 result = new PagedList<Category>(searchResult.Items.Select(x => x.ToCategory(workContext.CurrentLanguage, workContext.CurrentStore)).AsQueryable(), criteria.PageNumber, criteria.PageSize);
             }
-            //Set  lazy loading for child categories 
+            //Set  lazy loading for child categories
             EstablishLazyDependenciesForCategories(result.ToArray());
             return result;
         }
 
         /// <summary>
-        /// Search products by given criteria 
+        /// Search products by given criteria
         /// </summary>
         /// <param name="criteria"></param>
         /// <returns></returns>
@@ -162,7 +160,7 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
         /// <summary>
-        /// Async search products by given criteria 
+        /// Async search products by given criteria
         /// </summary>
         /// <param name="criteria"></param>
         /// <returns></returns>
@@ -185,7 +183,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 Products = new MutablePagedList<Product>(products, criteria.PageNumber, criteria.PageSize, (int?)result.TotalCount ?? 0),
                 Aggregations = !result.Aggregations.IsNullOrEmpty() ? result.Aggregations.Select(x => x.ToAggregation(workContext.CurrentLanguage.CultureName))
-                                                                                         .Where(x => aggrIsVisbileSpec.IsSatisfiedBy(x))                                                                                         
+                                                                                         .Where(x => aggrIsVisbileSpec.IsSatisfiedBy(x))
                                                                                          .ToArray() : new Aggregation[] { }
             };
             //Post loading initialization of the resulting aggregations
@@ -199,11 +197,12 @@ namespace VirtoCommerce.Storefront.Domain
                 aggrContext.CategoryByIdDict = (await GetCategoriesAsync(aggrItemCatIds, CategoryResponseGroup.Info))
                                                             .Distinct().ToDictionary(x => x.Id)
                                                             .WithDefaultValue(null);
-            }          
+            }
             searchResult.Aggregations.Apply(x => x.PostLoadInit(aggrContext));
             return searchResult;
         }
-        #endregion
+
+        #endregion ICatalogSearchService Members
 
         protected virtual async Task LoadProductDependencies(List<Product> products, ItemResponseGroup responseGroup, WorkContext workContext)
         {
@@ -309,7 +308,6 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
-      
         protected virtual async Task LoadProductInventoriesAsync(List<Product> products, WorkContext workContext)
         {
             await _inventoryService.EvaluateProductInventoriesAsync(products, workContext);
@@ -333,7 +331,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             foreach (var product in products)
             {
-                //Associations 
+                //Associations
                 product.Associations = new MutablePagedList<ProductAssociation>((pageNumber, pageSize, sortInfos, @params) =>
                 {
                     var criteria = new ProductAssociationSearchCriteria
@@ -385,7 +383,7 @@ namespace VirtoCommerce.Storefront.Domain
                 //Lazy loading for parents categories
                 category.Parents = new MutablePagedList<Category>((pageNumber, pageSize, sortInfos) =>
                 {
-                    var catIds = category.Outline.Split('/').Where(x =>  x != null && !x.EqualsInvariant(category.Id)).ToArray();
+                    var catIds = category.Outline.Split('/').Where(x => x != null && !x.EqualsInvariant(category.Id)).ToArray();
                     return new StaticPagedList<Category>(GetCategories(catIds, CategoryResponseGroup.Small), pageNumber, pageSize, catIds.Length);
                 }, 1, CategorySearchCriteria.DefaultPageSize);
 
@@ -421,7 +419,7 @@ namespace VirtoCommerce.Storefront.Domain
             foreach (var product in products.Where(x => !string.IsNullOrEmpty(x.CategoryId)))
             {
                 product.Category = new Lazy<Category>(() => GetCategories(new[] { product.CategoryId }, CategoryResponseGroup.Small).FirstOrDefault());
-            }            
+            }
         }
     }
 }
