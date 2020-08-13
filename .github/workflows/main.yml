@@ -11,7 +11,7 @@ on:
       - 'build/**'
       - 'README.md'
       - 'LICENSE'
-    branches: [ master, dev ]
+    branches: [ master, dev, feature/x-api ]
   pull_request:
     paths-ignore:
       - '.github/**'
@@ -82,6 +82,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
 
     - name: Get Image Version
       uses: VirtoCommerce/vc-github-actions/get-image-version@dev
