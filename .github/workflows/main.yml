@@ -82,6 +82,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
 
     - name: Get Image Version
       uses: VirtoCommerce/vc-github-actions/get-image-version@dev
