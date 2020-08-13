@@ -421,10 +421,5 @@ namespace VirtoCommerce.Storefront.Domain
                 product.Category = new Lazy<Category>(() => GetCategories(new[] { product.CategoryId }, CategoryResponseGroup.Small).FirstOrDefault());
             }
         }
-
-        public Task LoadAssociations(ProductAssociation[] productAssociations)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
