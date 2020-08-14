@@ -1,6 +1,6 @@
 using System.Linq;
-using AutoRest.Core.Utilities;
 using VirtoCommerce.Storefront.Model.Catalog;
+using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Domain.Catalog
@@ -148,10 +148,10 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
         public const string PropertyFields = "id name valueType value valueId label hidden type multivalue";
         public static string OutlineFields = $@"outlines {{ items {{ id name seoObjectType { SeoInfoFields }}}}}";
         public static string AllCategoryFields = $"id code name hasParent slug { OutlineFields } { SeoInfoFields } { ImagesFields }";
-        public static string AllFacets = $"{ FilterFacets } { RangeFacets } { TermFacets }";
+        public static string AllFacets => $"{ FilterFacets } { RangeFacets } { TermFacets }";
         public const string FilterFacets = "filter_facets { count facetType name }";
-        public const string TermFacets = "range_facets { facetType name ranges { count from fromStr includeFrom includeTo max min to toStr total } }";
-        public const string RangeFacets = "term_facets { facetType name terms { count isSelected term } }";
+        public const string RangeFacets = "range_facets { facetType name ranges { count from fromStr includeFrom includeTo max min to toStr total label } }";
+        public const string TermFacets = "term_facets { facetType name terms { count isSelected term } }";
         public const string SeoInfoFields = "seoInfos { id imageAltDescription isActive languageCode metaDescription metaKeywords name objectId objectType pageTitle semanticUrl storeId }";
         public const string ImagesFields = "images { id url name relativeUrl group sortOrder }";
 
@@ -192,8 +192,11 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 products(
                     query: ""{ criteria.Keyword }""
                     filter: ""{
-                        (criteria.Terms.IsNullOrEmpty() ? string.Empty : $"{string.Join(" ", criteria.Terms.ToStrings(true))}") }{
+                        (string.IsNullOrEmpty(criteria.Outline) ? string.Empty : $"__outline:{catalogId}/{criteria.Outline}")}{
                         (string.IsNullOrEmpty(catalogId) ? string.Empty : $" catalog:{ catalogId }")
+                    }""
+                    facet: ""{
+                        (criteria.Terms.IsNullOrEmpty() ? string.Empty : $"{string.Join(" ", criteria.Terms.ToStrings(true))}")
                     }""
                     fuzzy: { criteria.IsFuzzySearch.ToString().ToLowerInvariant() }
                     userId: ""{ customerId }""
