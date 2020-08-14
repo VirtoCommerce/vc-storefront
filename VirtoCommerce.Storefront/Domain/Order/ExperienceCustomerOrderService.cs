@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using AutoRest.Core.Utilities;
 using GraphQL;
 using GraphQL.Client.Abstractions;
-using Newtonsoft.Json;
 using PagedList.Core;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
@@ -28,7 +27,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var request = new GraphQLRequest
             {
-                Query = this.GetOrderByIdRequest(id)
+                Query = this.GetOrderByIdRequest(id, _workContextAccessor.WorkContext.CurrentUser.Id)
             };
             var response = await _client.SendQueryAsync<OrderResponseDto>(request);
 
@@ -39,7 +38,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var request = new GraphQLRequest
             {
-                Query = this.GetOrderByNumberRequest(number)
+                Query = this.GetOrderByNumberRequest(number, _workContextAccessor.WorkContext.CurrentUser.Id)
             };
             var response = await _client.SendQueryAsync<OrderResponseDto>(request);
 
@@ -58,12 +57,13 @@ namespace VirtoCommerce.Storefront.Domain
                 Query = this.SearchOrdersRequest(criteria.Sort,
                                                 PrepareFilter(criteria),
                                                 _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                                                _workContextAccessor.WorkContext.CurrentUser.Id,
                                                 criteria.PageSize,
                                                 (criteria.PageNumber - 1) * criteria.PageSize)
             };
             var searchResult = await _client.SendQueryAsync<OrdersResponseDto>(request);
 
-            return new StaticPagedList<CustomerOrder>(searchResult.Data?.Orders.Items, criteria.PageNumber, criteria.PageSize, searchResult.Data.Orders.TotalCount);
+            return new StaticPagedList<CustomerOrder>(searchResult.Data?.Orders?.Items, criteria.PageNumber, criteria.PageSize, searchResult.Data.Orders.TotalCount);
         }
 
         public async Task<CustomerOrder> CreateOrderFromCartAsync(string cartId)
@@ -125,7 +125,7 @@ namespace VirtoCommerce.Storefront.Domain
             var response = await _client.SendMutationAsync<object>(request);
             response.ThrowExceptionOnError();
         }
-                
+
 
         //TODO more useful 
         private string PrepareFilter(OrderSearchCriteria criteria)
@@ -138,6 +138,6 @@ namespace VirtoCommerce.Storefront.Domain
             filer.Append(!string.IsNullOrEmpty(criteria.Keyword) ? $"{nameof(OrderSearchCriteria.Keyword).ToCamelCase()}:{criteria.Keyword}" : string.Empty);
 
             return filer.ToString();
-        }        
+        }
     }
 }
