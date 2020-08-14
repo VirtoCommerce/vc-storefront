@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Cart.ValidationErrors
@@ -10,5 +11,9 @@ namespace VirtoCommerce.Storefront.Model.Cart.ValidationErrors
         }
 
         public string ErrorCode { get; set; }
+        public string ObjectType { get; set; }
+        public string ObjectId { get; set; }
+        public string ErrorMessage { get; set; }
+        public List<ErrorParameter> ErrorParameters { get; set; }
     }
 }

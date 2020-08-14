@@ -368,7 +368,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
             itemsQuantity
             coupons {{code isAppliedSuccessfully}}
             isValid
-            validationErrors{{errorCode}}
+            validationErrors{{objectId objectType errorCode errorMessage errorParameters {{ key value }} }}
             type
             handlingTotal {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
             handlingTotalWithTax {{amount decimalDigits formattedAmount formattedAmountWithoutPoint formattedAmountWithoutCurrency formattedAmountWithoutPointAndCurrency}}
