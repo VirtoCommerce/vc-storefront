@@ -123,7 +123,7 @@ namespace VirtoCommerce.Storefront
             services.AddTransient<AngularAntiforgeryCookieResultFilter>();
             services.AddTransient<AnonymousUserForStoreAuthorizationFilter>();
             services.AddScoped<IGraphQLClient>(s =>
-                new GraphQLHttpClient(Configuration.GetSection("VirtoCommerce:Endpoint:Url").Value + "/graphql",
+                new GraphQLHttpClient(Configuration.GetSection("VirtoCommerce:Endpoint:Url").Value.TrimEnd('/') + "/graphql",
             new NewtonsoftJsonSerializer(p =>
             {
                 p.Converters.Add(new GraphQlMoneyJsonConverter(s.GetService<IWorkContextAccessor>()));
@@ -145,7 +145,7 @@ namespace VirtoCommerce.Storefront
             {
                 Configuration.GetSection("VirtoCommerce:Redis").Bind(o);
             });
-          
+
 
             //Register platform API clients
             services.AddPlatformEndpoint(options =>
