@@ -12,8 +12,8 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             {
                 result = product.Inventory != null &&
                     product.AvailableQuantity +
-                    (Convert.ToInt32(product.Inventory.AllowPreorder) * product.Inventory.PreorderQuantity) +
-                    (Convert.ToInt32(product.Inventory.AllowBackorder) * product.Inventory.BackorderQuantity)
+                    (Convert.ToInt32(product.Inventory.AllowPreorder) * Convert.ToInt32(product.Inventory.PreorderQuantity)) +
+                    (Convert.ToInt32(product.Inventory.AllowBackorder) * Convert.ToInt32(product.Inventory.BackorderQuantity))
                     > 0;
             }
             return result;
