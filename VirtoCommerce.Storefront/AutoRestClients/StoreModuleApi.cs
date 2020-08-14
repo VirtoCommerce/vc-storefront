@@ -2206,7 +2206,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
         /// <param name="objectId">SEO related object id</param>
         /// <param name="objectType">SEO related object type name</param>
         /// <param name="isActive">Active/Inactive</param>
-        public SeoInfo(string name = default(string), string semanticUrl = default(string), string pageTitle = default(string), string metaDescription = default(string), string imageAltDescription = default(string), string metaKeywords = default(string), string storeId = default(string), string objectId = default(string), string objectType = default(string), bool? isActive = default(bool?), string languageCode = default(string), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public SeoInfo(string name = default(string), string semanticUrl = default(string), string pageTitle = default(string), string metaDescription = default(string), string imageAltDescription = default(string), string metaKeywords = default(string), string storeId = default(string), string objectId = default(string), string objectType = default(string), bool? isActive = default(bool?), string languageCode = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             SemanticUrl = semanticUrl;
@@ -2219,7 +2219,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
             ObjectType = objectType;
             IsActive = isActive;
             LanguageCode = languageCode;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
@@ -2295,11 +2294,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "languageCode")]
         public string LanguageCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>

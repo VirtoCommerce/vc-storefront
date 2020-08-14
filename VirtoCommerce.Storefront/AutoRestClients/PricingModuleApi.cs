@@ -1035,7 +1035,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             List<string> _queryParameters = new List<string>();
             if (currencies != null)
             {
-                _queryParameters.Add(string.Format("Currencies={0}", System.Uri.EscapeDataString(string.Join(",", currencies))));
+                if (currencies.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("Currencies={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in currencies)
+                    {
+                        _queryParameters.Add(string.Format("Currencies={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
             }
             if (responseGroup != null)
             {
@@ -1047,11 +1057,31 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             }
             if (objectTypes != null)
             {
-                _queryParameters.Add(string.Format("ObjectTypes={0}", System.Uri.EscapeDataString(string.Join(",", objectTypes))));
+                if (objectTypes.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("ObjectTypes={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in objectTypes)
+                    {
+                        _queryParameters.Add(string.Format("ObjectTypes={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
             }
             if (objectIds != null)
             {
-                _queryParameters.Add(string.Format("ObjectIds={0}", System.Uri.EscapeDataString(string.Join(",", objectIds))));
+                if (objectIds.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("ObjectIds={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in objectIds)
+                    {
+                        _queryParameters.Add(string.Format("ObjectIds={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
             }
             if (keyword != null)
             {
@@ -1071,7 +1101,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             }
             if (sortInfos != null)
             {
-                _queryParameters.Add(string.Format("SortInfos={0}", System.Uri.EscapeDataString(string.Join(",", sortInfos))));
+                if (sortInfos.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("SortInfos={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in sortInfos)
+                    {
+                        _queryParameters.Add(string.Format("SortInfos={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
             }
             if (skip != null)
             {
@@ -1633,11 +1673,31 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             }
             if (catalogIds != null)
             {
-                _queryParameters.Add(string.Format("CatalogIds={0}", System.Uri.EscapeDataString(string.Join(",", catalogIds))));
+                if (catalogIds.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("CatalogIds={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in catalogIds)
+                    {
+                        _queryParameters.Add(string.Format("CatalogIds={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
             }
             if (priceListIds != null)
             {
-                _queryParameters.Add(string.Format("PriceListIds={0}", System.Uri.EscapeDataString(string.Join(",", priceListIds))));
+                if (priceListIds.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("PriceListIds={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in priceListIds)
+                    {
+                        _queryParameters.Add(string.Format("PriceListIds={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
             }
             if (responseGroup != null)
             {
@@ -1649,11 +1709,31 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             }
             if (objectTypes != null)
             {
-                _queryParameters.Add(string.Format("ObjectTypes={0}", System.Uri.EscapeDataString(string.Join(",", objectTypes))));
+                if (objectTypes.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("ObjectTypes={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in objectTypes)
+                    {
+                        _queryParameters.Add(string.Format("ObjectTypes={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
             }
             if (objectIds != null)
             {
-                _queryParameters.Add(string.Format("ObjectIds={0}", System.Uri.EscapeDataString(string.Join(",", objectIds))));
+                if (objectIds.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("ObjectIds={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in objectIds)
+                    {
+                        _queryParameters.Add(string.Format("ObjectIds={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
             }
             if (keyword != null)
             {
@@ -1673,7 +1753,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             }
             if (sortInfos != null)
             {
-                _queryParameters.Add(string.Format("SortInfos={0}", System.Uri.EscapeDataString(string.Join(",", sortInfos))));
+                if (sortInfos.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("SortInfos={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in sortInfos)
+                    {
+                        _queryParameters.Add(string.Format("SortInfos={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
             }
             if (skip != null)
             {
@@ -2250,7 +2340,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             }
             if (priceListIds != null)
             {
-                _queryParameters.Add(string.Format("PriceListIds={0}", System.Uri.EscapeDataString(string.Join(",", priceListIds))));
+                if (priceListIds.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("PriceListIds={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in priceListIds)
+                    {
+                        _queryParameters.Add(string.Format("PriceListIds={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
             }
             if (productId != null)
             {
@@ -2258,7 +2358,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             }
             if (productIds != null)
             {
-                _queryParameters.Add(string.Format("ProductIds={0}", System.Uri.EscapeDataString(string.Join(",", productIds))));
+                if (productIds.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("ProductIds={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in productIds)
+                    {
+                        _queryParameters.Add(string.Format("ProductIds={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
             }
             if (modifiedSince != null)
             {
@@ -2274,11 +2384,31 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             }
             if (objectTypes != null)
             {
-                _queryParameters.Add(string.Format("ObjectTypes={0}", System.Uri.EscapeDataString(string.Join(",", objectTypes))));
+                if (objectTypes.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("ObjectTypes={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in objectTypes)
+                    {
+                        _queryParameters.Add(string.Format("ObjectTypes={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
             }
             if (objectIds != null)
             {
-                _queryParameters.Add(string.Format("ObjectIds={0}", System.Uri.EscapeDataString(string.Join(",", objectIds))));
+                if (objectIds.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("ObjectIds={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in objectIds)
+                    {
+                        _queryParameters.Add(string.Format("ObjectIds={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
             }
             if (keyword != null)
             {
@@ -2298,7 +2428,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi
             }
             if (sortInfos != null)
             {
-                _queryParameters.Add(string.Format("SortInfos={0}", System.Uri.EscapeDataString(string.Join(",", sortInfos))));
+                if (sortInfos.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("SortInfos={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in sortInfos)
+                    {
+                        _queryParameters.Add(string.Format("SortInfos={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
             }
             if (skip != null)
             {
@@ -5460,6 +5600,145 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
+    public partial class PropertyValue
+    {
+        /// <summary>
+        /// Initializes a new instance of the PropertyValue class.
+        /// </summary>
+        public PropertyValue()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the PropertyValue class.
+        /// </summary>
+        /// <param name="valueType">Possible values include: 'ShortText',
+        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
+        /// 'GeoPoint'</param>
+        public PropertyValue(string propertyName = default(string), string propertyId = default(string), string languageCode = default(string), string alias = default(string), string valueType = default(string), string valueId = default(string), object value = default(object), bool? propertyMultivalue = default(bool?), string outerId = default(string), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        {
+            PropertyName = propertyName;
+            PropertyId = propertyId;
+            LanguageCode = languageCode;
+            Alias = alias;
+            ValueType = valueType;
+            ValueId = valueId;
+            Value = value;
+            PropertyMultivalue = propertyMultivalue;
+            OuterId = outerId;
+            IsInherited = isInherited;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "propertyName")]
+        public string PropertyName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "propertyId")]
+        public string PropertyId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "languageCode")]
+        public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "alias")]
+        public string Alias { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'ShortText', 'LongText',
+        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
+        /// </summary>
+        [JsonProperty(PropertyName = "valueType")]
+        public string ValueType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "valueId")]
+        public string ValueId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "value")]
+        public object Value { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "propertyMultivalue")]
+        public bool? PropertyMultivalue { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isInherited")]
+        public bool? IsInherited { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public partial class IConditionTree
     {
         /// <summary>
@@ -6072,151 +6351,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class PropertyValue
-    {
-        /// <summary>
-        /// Initializes a new instance of the PropertyValue class.
-        /// </summary>
-        public PropertyValue()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PropertyValue class.
-        /// </summary>
-        /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Number', 'DateTime', 'Boolean', 'Integer',
-        /// 'GeoPoint'</param>
-        public PropertyValue(string propertyName = default(string), string propertyId = default(string), string languageCode = default(string), string alias = default(string), string valueType = default(string), string valueId = default(string), object value = default(object), bool? propertyMultivalue = default(bool?), string outerId = default(string), bool? isInherited = default(bool?), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            PropertyName = propertyName;
-            PropertyId = propertyId;
-            LanguageCode = languageCode;
-            Alias = alias;
-            ValueType = valueType;
-            ValueId = valueId;
-            Value = value;
-            PropertyMultivalue = propertyMultivalue;
-            OuterId = outerId;
-            IsInherited = isInherited;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyName")]
-        public string PropertyName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyId")]
-        public string PropertyId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "languageCode")]
-        public string LanguageCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "alias")]
-        public string Alias { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Number', 'DateTime', 'Boolean', 'Integer', 'GeoPoint'
-        /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "valueId")]
-        public string ValueId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "value")]
-        public object Value { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "propertyMultivalue")]
-        public bool? PropertyMultivalue { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "outerId")]
-        public string OuterId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isInherited")]
-        public bool? IsInherited { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public partial class PropertyAttribute
     {
         /// <summary>
@@ -6489,7 +6623,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// 'GeoPoint'</param>
         /// <param name="type">Possible values include: 'Product', 'Variation',
         /// 'Category', 'Catalog'</param>
-        public Property(bool? isReadOnly = default(bool?), bool? isManageable = default(bool?), bool? isNew = default(bool?), string catalogId = default(string), string categoryId = default(string), string name = default(string), bool? required = default(bool?), bool? dictionary = default(bool?), bool? multivalue = default(bool?), bool? multilanguage = default(bool?), bool? hidden = default(bool?), string valueType = default(string), string type = default(string), string outerId = default(string), IList<PropertyValue> values = default(IList<PropertyValue>), IList<PropertyAttribute> attributes = default(IList<PropertyAttribute>), IList<PropertyDisplayName> displayNames = default(IList<PropertyDisplayName>), IList<PropertyValidationRule> validationRules = default(IList<PropertyValidationRule>), PropertyValidationRule validationRule = default(PropertyValidationRule), bool? isInherited = default(bool?), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Property(bool? isReadOnly = default(bool?), bool? isManageable = default(bool?), bool? isNew = default(bool?), string catalogId = default(string), string categoryId = default(string), string name = default(string), bool? required = default(bool?), bool? dictionary = default(bool?), bool? multivalue = default(bool?), bool? multilanguage = default(bool?), bool? hidden = default(bool?), string valueType = default(string), string type = default(string), string outerId = default(string), IList<PropertyValue> values = default(IList<PropertyValue>), IList<PropertyAttribute> attributes = default(IList<PropertyAttribute>), IList<PropertyDisplayName> displayNames = default(IList<PropertyDisplayName>), IList<PropertyValidationRule> validationRules = default(IList<PropertyValidationRule>), PropertyValidationRule validationRule = default(PropertyValidationRule), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             IsReadOnly = isReadOnly;
             IsManageable = isManageable;
@@ -6511,7 +6645,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             ValidationRules = validationRules;
             ValidationRule = validationRule;
             IsInherited = isInherited;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
@@ -6642,11 +6775,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "createdDate")]
         public System.DateTime? CreatedDate { get; set; }
 
@@ -6713,7 +6841,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <param name="objectId">SEO related object id</param>
         /// <param name="objectType">SEO related object type name</param>
         /// <param name="isActive">Active/Inactive</param>
-        public SeoInfo(string name = default(string), string semanticUrl = default(string), string pageTitle = default(string), string metaDescription = default(string), string imageAltDescription = default(string), string metaKeywords = default(string), string storeId = default(string), string objectId = default(string), string objectType = default(string), bool? isActive = default(bool?), string languageCode = default(string), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public SeoInfo(string name = default(string), string semanticUrl = default(string), string pageTitle = default(string), string metaDescription = default(string), string imageAltDescription = default(string), string metaKeywords = default(string), string storeId = default(string), string objectId = default(string), string objectType = default(string), bool? isActive = default(bool?), string languageCode = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             SemanticUrl = semanticUrl;
@@ -6726,7 +6854,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             ObjectType = objectType;
             IsActive = isActive;
             LanguageCode = languageCode;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
@@ -6805,11 +6932,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "createdDate")]
         public System.DateTime? CreatedDate { get; set; }
 
@@ -6874,7 +6996,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <param name="languageCode">Gets or sets the asset language.</param>
         /// <param name="isInherited">System flag used to mark that object was
         /// inherited from other</param>
-        public Image(int? sortOrder = default(int?), byte[] binaryData = default(byte[]), string relativeUrl = default(string), string url = default(string), string typeId = default(string), string group = default(string), string name = default(string), string outerId = default(string), string languageCode = default(string), bool? isInherited = default(bool?), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Image(int? sortOrder = default(int?), byte[] binaryData = default(byte[]), string relativeUrl = default(string), string url = default(string), string typeId = default(string), string group = default(string), string name = default(string), string outerId = default(string), string languageCode = default(string), bool? isInherited = default(bool?), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             SortOrder = sortOrder;
             BinaryData = binaryData;
@@ -6888,7 +7010,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             IsInherited = isInherited;
             SeoObjectType = seoObjectType;
             SeoInfos = seoInfos;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
@@ -6969,11 +7090,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "createdDate")]
         public System.DateTime? CreatedDate { get; set; }
 
@@ -7038,7 +7154,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <param name="languageCode">Gets or sets the asset language.</param>
         /// <param name="isInherited">System flag used to mark that object was
         /// inherited from other</param>
-        public Asset(string mimeType = default(string), long? size = default(long?), string readableSize = default(string), byte[] binaryData = default(byte[]), string relativeUrl = default(string), string url = default(string), string typeId = default(string), string group = default(string), string name = default(string), string outerId = default(string), string languageCode = default(string), bool? isInherited = default(bool?), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Asset(string mimeType = default(string), long? size = default(long?), string readableSize = default(string), byte[] binaryData = default(byte[]), string relativeUrl = default(string), string url = default(string), string typeId = default(string), string group = default(string), string name = default(string), string outerId = default(string), string languageCode = default(string), bool? isInherited = default(bool?), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             MimeType = mimeType;
             Size = size;
@@ -7054,7 +7170,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             IsInherited = isInherited;
             SeoObjectType = seoObjectType;
             SeoInfos = seoInfos;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
@@ -7142,11 +7257,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "seoInfos")]
         public IList<SeoInfo> SeoInfos { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -7660,13 +7770,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the EditorialReview class.
         /// </summary>
-        public EditorialReview(string content = default(string), string reviewType = default(string), string languageCode = default(string), bool? isInherited = default(bool?), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public EditorialReview(string content = default(string), string reviewType = default(string), string languageCode = default(string), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Content = content;
             ReviewType = reviewType;
             LanguageCode = languageCode;
             IsInherited = isInherited;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
@@ -7699,11 +7808,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "isInherited")]
         public bool? IsInherited { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -7766,6 +7870,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         /// <param name="type">Association type (Accessories, Up-Sales,
         /// Cross-Sales, Related etc)</param>
+        /// <param name="itemId">Is a primary key of associating object</param>
         /// <param name="associatedObjectId">Each link element can have an
         /// associated object like Product, Category, etc.
         /// Is a primary key of associated object</param>
@@ -7775,11 +7880,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// object</param>
         /// <param name="associatedObjectImg">Associated object image
         /// URL</param>
-        public ProductAssociation(string type = default(string), int? priority = default(int?), int? quantity = default(int?), string associatedObjectId = default(string), string associatedObjectType = default(string), string outerId = default(string), string associatedObjectName = default(string), string associatedObjectImg = default(string), IList<string> tags = default(IList<string>), string imgSrc = default(string), IList<Image> images = default(IList<Image>))
+        public ProductAssociation(string type = default(string), int? priority = default(int?), int? quantity = default(int?), string itemId = default(string), string associatedObjectId = default(string), string associatedObjectType = default(string), string outerId = default(string), string associatedObjectName = default(string), string associatedObjectImg = default(string), IList<string> tags = default(IList<string>), string imgSrc = default(string), IList<Image> images = default(IList<Image>), string id = default(string))
         {
             Type = type;
             Priority = priority;
             Quantity = quantity;
+            ItemId = itemId;
             AssociatedObjectId = associatedObjectId;
             AssociatedObjectType = associatedObjectType;
             OuterId = outerId;
@@ -7788,6 +7894,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
             Tags = tags;
             ImgSrc = imgSrc;
             Images = images;
+            Id = id;
             CustomInit();
         }
 
@@ -7812,6 +7919,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "quantity")]
         public int? Quantity { get; set; }
+
+        /// <summary>
+        /// Gets or sets is a primary key of associating object
+        /// </summary>
+        [JsonProperty(PropertyName = "itemId")]
+        public string ItemId { get; set; }
 
         /// <summary>
         /// Gets or sets each link element can have an associated object like
@@ -7858,6 +7971,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "images")]
         public IList<Image> Images { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
     }
 }
@@ -9081,234 +9199,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "results")]
         public IList<PricelistAssignment> Results { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class CatalogLanguage
-    {
-        /// <summary>
-        /// Initializes a new instance of the CatalogLanguage class.
-        /// </summary>
-        public CatalogLanguage()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CatalogLanguage class.
-        /// </summary>
-        public CatalogLanguage(string catalogId = default(string), bool? isDefault = default(bool?), string languageCode = default(string), string id = default(string))
-        {
-            CatalogId = catalogId;
-            IsDefault = isDefault;
-            LanguageCode = languageCode;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "catalogId")]
-        public string CatalogId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isDefault")]
-        public bool? IsDefault { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "languageCode")]
-        public string LanguageCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Catalog
-    {
-        /// <summary>
-        /// Initializes a new instance of the Catalog class.
-        /// </summary>
-        public Catalog()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Catalog class.
-        /// </summary>
-        public Catalog(string name = default(string), bool? isVirtual = default(bool?), string outerId = default(string), CatalogLanguage defaultLanguage = default(CatalogLanguage), IList<CatalogLanguage> languages = default(IList<CatalogLanguage>), IList<Property> properties = default(IList<Property>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            Name = name;
-            IsVirtual = isVirtual;
-            OuterId = outerId;
-            DefaultLanguage = defaultLanguage;
-            Languages = languages;
-            Properties = properties;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isVirtual")]
-        public bool? IsVirtual { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "outerId")]
-        public string OuterId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "defaultLanguage")]
-        public CatalogLanguage DefaultLanguage { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "languages")]
-        public IList<CatalogLanguage> Languages { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "properties")]
-        public IList<Property> Properties { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PricingModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Entity
-    {
-        /// <summary>
-        /// Initializes a new instance of the Entity class.
-        /// </summary>
-        public Entity()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Entity class.
-        /// </summary>
-        public Entity(string id = default(string))
-        {
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
 
     }
 }
