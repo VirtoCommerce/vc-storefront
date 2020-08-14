@@ -111,6 +111,7 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new CatalogModuleClient(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
             services.AddSingleton<ICatalogModuleCategories>(sp => new CatalogModuleCategories(sp.GetRequiredService<CatalogModuleClient>()));
             services.AddSingleton<ICatalogModuleProducts>(sp => new CatalogModuleProducts(sp.GetRequiredService<CatalogModuleClient>()));
+            services.AddSingleton<ICatalogModuleAssociations>(sp => new CatalogModuleAssociations(sp.GetRequiredService<CatalogModuleClient>()));
             services.AddSingleton<ICatalogModuleIndexedSearch>(sp => new CatalogModuleIndexedSearch(sp.GetRequiredService<CatalogModuleClient>()));
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new PlatformModuleClient(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
             services.AddSingleton<ISecurity>(sp => new Security(sp.GetRequiredService<PlatformModuleClient>()));

@@ -16586,7 +16586,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "id")]
-        public string Id { get; private set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// </summary>
@@ -16872,7 +16872,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "authenticationType")]
-        public string AuthenticationType { get; private set; }
+        public string AuthenticationType { get; set; }
 
         /// <summary>
         /// </summary>
@@ -16892,7 +16892,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "claims")]
-        public IList<Claim> Claims { get; private set; }
+        public IList<Claim> Claims { get; set; }
 
         /// <summary>
         /// </summary>
@@ -16968,12 +16968,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "issuer")]
-        public string Issuer { get; private set; }
+        public string Issuer { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "originalIssuer")]
-        public string OriginalIssuer { get; private set; }
+        public string OriginalIssuer { get; set; }
 
         /// <summary>
         /// </summary>
@@ -16988,17 +16988,17 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "type")]
-        public string Type { get; private set; }
+        public string Type { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "value")]
-        public string Value { get; private set; }
+        public string Value { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; private set; }
+        public string ValueType { get; set; }
 
     }
 }
@@ -18053,8 +18053,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the ChangeLogSearchCriteria class.
         /// </summary>
-        public ChangeLogSearchCriteria(System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public ChangeLogSearchCriteria(IList<string> operationTypes = default(IList<string>), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
+            OperationTypes = operationTypes;
             StartDate = startDate;
             EndDate = endDate;
             ResponseGroup = responseGroup;
@@ -18075,6 +18076,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "operationTypes")]
+        public IList<string> OperationTypes { get; set; }
 
         /// <summary>
         /// </summary>
@@ -19305,11 +19311,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the ModulePushNotification class.
         /// </summary>
-        public ModulePushNotification(System.DateTime? started = default(System.DateTime?), System.DateTime? finished = default(System.DateTime?), IList<ProgressMessage> progressLog = default(IList<ProgressMessage>), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?), string id = default(string))
+        public ModulePushNotification(System.DateTime? started = default(System.DateTime?), System.DateTime? finished = default(System.DateTime?), IList<ProgressMessage> progressLog = default(IList<ProgressMessage>), string serverId = default(string), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?), string id = default(string))
         {
             Started = started;
             Finished = finished;
             ProgressLog = progressLog;
+            ServerId = serverId;
             Creator = creator;
             Created = created;
             IsNew = isNew;
@@ -19340,6 +19347,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "progressLog")]
         public IList<ProgressMessage> ProgressLog { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "serverId")]
+        public string ServerId { get; set; }
 
         /// <summary>
         /// </summary>
@@ -19417,11 +19429,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// Initializes a new instance of the ModuleAutoInstallPushNotification
         /// class.
         /// </summary>
-        public ModuleAutoInstallPushNotification(System.DateTime? started = default(System.DateTime?), System.DateTime? finished = default(System.DateTime?), IList<ProgressMessage> progressLog = default(IList<ProgressMessage>), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?), string id = default(string))
+        public ModuleAutoInstallPushNotification(System.DateTime? started = default(System.DateTime?), System.DateTime? finished = default(System.DateTime?), IList<ProgressMessage> progressLog = default(IList<ProgressMessage>), string serverId = default(string), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?), string id = default(string))
         {
             Started = started;
             Finished = finished;
             ProgressLog = progressLog;
+            ServerId = serverId;
             Creator = creator;
             Created = created;
             IsNew = isNew;
@@ -19452,6 +19465,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "progressLog")]
         public IList<ProgressMessage> ProgressLog { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "serverId")]
+        public string ServerId { get; set; }
 
         /// <summary>
         /// </summary>
@@ -19787,8 +19805,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the PushNotification class.
         /// </summary>
-        public PushNotification(string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?), string id = default(string))
+        public PushNotification(string serverId = default(string), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?), string id = default(string))
         {
+            ServerId = serverId;
             Creator = creator;
             Created = created;
             IsNew = isNew;
@@ -19804,6 +19823,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "serverId")]
+        public string ServerId { get; set; }
 
         /// <summary>
         /// </summary>
