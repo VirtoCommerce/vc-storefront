@@ -549,9 +549,18 @@ namespace VirtoCommerce.Storefront.Domain
                 Weight = cartDto.Weight.GetValueOrDefault()
             };
 
+            if (!cartDto.ValidationErrors.IsNullOrEmpty())
+            {
+                ParseErrors(cartDto, cart);
+            }
+            
+            return cart;
+        }
+
+        private static void ParseErrors(ShoppingCartDto cartDto, ShoppingCart cart)
+        {
             foreach (var error in cartDto.ValidationErrors)
             {
-
                 if (error.ObjectId != null)
                 {
                     switch (error.ErrorCode)
@@ -566,7 +575,6 @@ namespace VirtoCommerce.Storefront.Domain
                     }
                 }
             }
-            return cart;
         }
 
         private static void AddPriceError(ValidationError error, ShoppingCart cart)
