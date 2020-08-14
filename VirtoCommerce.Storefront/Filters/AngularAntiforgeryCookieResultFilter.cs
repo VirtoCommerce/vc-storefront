@@ -30,7 +30,7 @@ namespace VirtoCommerce.Storefront.Filters
             if (context.Result is ViewResult viewResult && statusCodeReExecuteFeature == null)
             {
                 var tokens = antiforgery.GetAndStoreTokens(context.HttpContext);
-                context.HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false, IsEssential = true });
+                context.HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false, IsEssential = true, SameSite = SameSiteMode.Lax });
             }
         }
 
