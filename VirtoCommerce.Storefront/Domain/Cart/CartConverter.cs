@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
@@ -550,30 +551,59 @@ namespace VirtoCommerce.Storefront.Domain
 
             foreach (var error in cartDto.ValidationErrors)
             {
-                if (error.ObjectType == "CartProduct" && !string.IsNullOrWhiteSpace(error.ObjectId))
-                {
-                    var lineItem = cart.Items.FirstOrDefault(x => x.ProductId == error.ObjectId);
-                    if (lineItem != null)
-                    {
-                        lineItem.ValidationErrors ??= new List<ValidationError>();
-                        lineItem.ValidationErrors.Add(error);
-                    }
-                }
-                if (error.ObjectType == "LineItem" && !string.IsNullOrWhiteSpace(error.ObjectId))
-                {
-                    var lineItem = cart.Items.FirstOrDefault(x => x.Id == error.ObjectId);
-                    if (lineItem != null)
-                    {
-                        lineItem.ValidationErrors ??= new List<ValidationError>();
-                        lineItem.ValidationErrors.Add(error);
-                    }
-                }
 
+                if (error.ObjectId != null)
+                {
+                    switch (error.ErrorCode)
+                    {
+                        case "PRODUCT_QTY_INSUFFICIENT":
+                        case "PRODUCT_QTY_CHANGED":
+                            AddQuantityError(error, cart);
+                            break;
+                        case "PRODUCT_PRICE_CHANGED":
+                            AddPriceError(error, cart);
+                            break;
+                    }
+                }
             }
-
             return cart;
         }
-         
+
+        private static void AddPriceError(ValidationError error, ShoppingCart cart)
+        {
+            var lineItem = cart.Items.FirstOrDefault(x => x.Id == error.ObjectId);
+            if (lineItem != null)
+            {
+                var oldPrice = new Money(Convert.ToDecimal(error.ErrorParameters.FirstOrDefault(x => x.Key == "old_price")?.Value), cart.Currency);
+                var oldPriceWithTax = new Money(Convert.ToDecimal(error.ErrorParameters.FirstOrDefault(x => x.Key == "old_price_with_tax")?.Value), cart.Currency);
+                var newPrice = new Money(Convert.ToDecimal(error.ErrorParameters.FirstOrDefault(x => x.Key == "new_price")?.Value), cart.Currency);
+                var newPriceWithTax = new Money(Convert.ToDecimal(error.ErrorParameters.FirstOrDefault(x => x.Key == "new_price_with_tax")?.Value), cart.Currency);
+
+                lineItem.ValidationErrors ??= new List<ValidationError>();
+                lineItem.ValidationErrors.Add(new PriceError(oldPrice, oldPriceWithTax, newPrice, newPriceWithTax));
+            }
+        }
+
+        private static void AddQuantityError(ValidationError error, ShoppingCart cart)
+        {
+            LineItem lineItem = null;
+            if (error.ObjectType == "CartProduct" )
+            {
+                lineItem = cart.Items.FirstOrDefault(x => x.ProductId == error.ObjectId);
+            }
+
+            if (error.ObjectType == "LineItem")
+            {
+                lineItem = cart.Items.FirstOrDefault(x => x.Id == error.ObjectId);
+            }
+
+            if (lineItem != null)
+            {
+                lineItem.ValidationErrors ??= new List<ValidationError>();
+                lineItem.ValidationErrors.Add(new QuantityError(Convert.ToInt64(error.ErrorParameters.FirstOrDefault(x => x.Key == "availQty")?.Value)));
+            }
+
+        }
 
         public static ShipmentDto ToDto(this Shipment shipment)
             => new ShipmentDto
