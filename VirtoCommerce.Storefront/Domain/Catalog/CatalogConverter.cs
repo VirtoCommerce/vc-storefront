@@ -875,7 +875,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var result = new Aggregation
             {
-                AggregationType = "term",
+                AggregationType = "attr",
                 Field = termFacet.Name
             };
 
@@ -907,7 +907,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var result = new Aggregation
             {
-                AggregationType = "range",
+                AggregationType = "pricerange",
                 Field = rangeFacet.Name
             };
 
@@ -972,11 +972,11 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new AggregationItem
             {
                 Group = aggregationGroup,
-                Value = aggregationGroup.Field,
+                Value = itemDto.Label,
                 IsApplied = itemDto.IsSelected ?? false,
                 Count = (int)(itemDto.Count ?? 0),
-                Lower = itemDto.From?.ToString(),
-                Upper = itemDto.To?.ToString(),
+                Lower = itemDto.From?.ToString() == "0" ? null : itemDto.From.ToString(),
+                Upper = itemDto.To?.ToString() == "0" ? null : itemDto.To.ToString(),
             };
 
             //if (itemDto.Labels != null)
@@ -987,9 +987,9 @@ namespace VirtoCommerce.Storefront.Domain
             //            .FirstOrDefault();
             //}
 
-            if (string.IsNullOrEmpty(result.Label) && aggregationGroup.Field != null)
+            if (string.IsNullOrEmpty(result.Label) && !string.IsNullOrEmpty(itemDto.Label))
             {
-                result.Label = aggregationGroup.Field.ToString();
+                result.Label = itemDto.Label;
             }
 
             if (aggregationGroup.Field.EqualsInvariant("__outline"))
