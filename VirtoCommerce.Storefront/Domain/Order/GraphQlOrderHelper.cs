@@ -21,7 +21,7 @@ namespace VirtoCommerce.Storefront.Domain
             $" billingAddress {{{AllAddressFields}}} paymentMethod currency {{{AllCurrencyFields}}}";
 
         public const string AllShipmentPackageFields = "barCode height id items {quantity} length measureUnit packageType weight weightUnit width";
-        
+
         public static readonly string AllLineItemFields = $" cancelledDate cancelReason catalogId categoryId comment currency {{{AllCurrencyFields}}} " +
             $" discountAmount{{{AllMoneyFields}}} discountAmountWithTax{{{AllMoneyFields}}} discountTotal{{{AllMoneyFields}}} discountTotalWithTax{{{AllMoneyFields}}} " +
             $" extendedPrice{{{AllMoneyFields}}} extendedPriceWithTax{{{AllMoneyFields}}} placedPrice{{{AllMoneyFields}}} placedPriceWithTax{{{AllMoneyFields}}} taxTotal{{{AllMoneyFields}}} " +
@@ -59,28 +59,28 @@ namespace VirtoCommerce.Storefront.Domain
 
         public static readonly string AllOrderSearchFields = $"totalCount items {{ {AllOrderFields } }}";
 
-        public static string GetOrderByIdRequest(this ICustomerOrderService service, string id, string selectedFields = null)
+        public static string GetOrderByIdRequest(this ICustomerOrderService service, string id, string userId, string selectedFields = null)
         => $@"
         {{
-            order(id:""{id}"")
+            order(id:""{id}"", userId:""{userId}"")
             {{
             { selectedFields ?? AllOrderFields }
             }}
         }}";
 
-        public static string GetOrderByNumberRequest(this ICustomerOrderService service, string number, string selectedFields = null)
+        public static string GetOrderByNumberRequest(this ICustomerOrderService service, string number, string userId, string selectedFields = null)
         => $@"
         {{
-            order(number:""{number}"")
+            order(number:""{number}"", userId:""{userId}"")
             {{
             { selectedFields ?? AllOrderFields }
             }}
         }}";
 
-        public static string SearchOrdersRequest(this ICustomerOrderService service, string sort, string filter, string language, int first = 20, int after = 0, string selectedFields = null)
+        public static string SearchOrdersRequest(this ICustomerOrderService service, string sort, string filter, string language, string userId, int first = 20, int after = 0, string selectedFields = null)
         => $@"
         {{
-            orders(first:{first}, after:""{after}"", sort:""{sort}"", filter:""{filter}"", language:""{language}"")
+            orders(first:{first}, after:""{after}"", sort:""{sort}"", filter:""{filter}"", language:""{language}"", userId:""{userId}"")
             {{
              { selectedFields ?? AllOrderSearchFields }
             }}
