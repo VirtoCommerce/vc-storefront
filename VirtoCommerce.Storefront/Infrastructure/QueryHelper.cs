@@ -11,10 +11,10 @@ namespace VirtoCommerce.Storefront.Infrastructure
             }}
         }}";
 
-        public static string SearchCarts(string storeId, string userId, string cultureName, string currencyCode, string type, string sort, int skip, int take, string selectedFields = null)
+        public static string SearchCarts(string storeId, string userId, string cultureName, string currencyCode, string type, string sort, string selectedFields = null, int first = 20, int after = 0)
             => $@"
         {{
-            carts(storeId:""{storeId}"",userId:""{userId}"",cultureName:""{cultureName}"",currencyCode:""{currencyCode}"",cartType:""{type}"",sort:""{sort}"",skip:{skip},take:{take})
+            carts(storeId:""{storeId}"",userId:""{userId}"",cultureName:""{cultureName}"",currencyCode:""{currencyCode}"",cartType:""{type}"",sort:""{sort}"",first:{first}, after:""{after}"")
             {{
             items
                {{
