@@ -1,4 +1,4 @@
-<Project>
+<?xml version="1.0" encoding="utf-8"?><Project>
   <!-- These properties will be shared for all projects -->
 
   <PropertyGroup>
@@ -7,7 +7,7 @@
     <Authors>VirtoCommerce</Authors>
   </PropertyGroup>
    <PropertyGroup>
-    <VersionPrefix>5.1.0</VersionPrefix>
+    <VersionPrefix>5.2.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <VersionSuffix Condition=" '$(VersionSuffix)' != '' AND '$(BuildNumber)' != '' ">$(VersionSuffix)-$(BuildNumber)</VersionSuffix>
   </PropertyGroup>
