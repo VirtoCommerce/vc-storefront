@@ -27,6 +27,7 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IStorefrontUrlBuilder _storefrontUrlBuilder;
         private readonly ICatalogModuleCategories _categoriesApi;
         private readonly ICatalogModuleProducts _productsApi;
+        private readonly ICatalogModuleAssociations _associationsApi;
         private readonly ICatalogModuleIndexedSearch _searchApi;
         private readonly IPricingService _pricingService;
         private readonly IMemberService _customerService;
@@ -38,6 +39,7 @@ namespace VirtoCommerce.Storefront.Domain
         public CatalogService(IWorkContextAccessor workContextAccessor
             , ICatalogModuleCategories categoriesApi
             , ICatalogModuleProducts productsApi
+            , ICatalogModuleAssociations associationsApi
             , ICatalogModuleIndexedSearch searchApi
             , IPricingService pricingService
             , IMemberService customerService
@@ -50,6 +52,7 @@ namespace VirtoCommerce.Storefront.Domain
             _workContextAccessor = workContextAccessor;
             _categoriesApi = categoriesApi;
             _productsApi = productsApi;
+            _associationsApi = associationsApi;
             _searchApi = searchApi;
             _categoriesApi = categoriesApi;
             _pricingService = pricingService;
@@ -356,7 +359,7 @@ namespace VirtoCommerce.Storefront.Domain
                        {
                            cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
                            cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
-                           return _productsApi.SearchProductAssociations(criteria.ToProductAssociationSearchCriteriaDto());
+                           return _associationsApi.Search(criteria.ToProductAssociationSearchCriteriaDto());
                        });
                     //Load products for resulting associations
                     var associatedProducts = GetProductsAsync(searchResult.Results.Select(x => x.AssociatedObjectId).ToArray(), criteria.ResponseGroup).GetAwaiter().GetResult();

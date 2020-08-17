@@ -1,0 +1,9 @@
+directive:
+- from: swagger-document
+  where: $.paths.*.get.parameters[?(@.schema.type === "array")]
+  transform: |    
+    if ($.in === "query") {
+        $.style = "form";
+        $.explode = true;
+    }
+  reason: polyfill
