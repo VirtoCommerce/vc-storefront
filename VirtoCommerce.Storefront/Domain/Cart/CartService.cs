@@ -142,8 +142,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                 currencyCode: criteria.Currency.Code,
                 type: criteria.Type,
                 sort: criteria.Sort,
-                skip: (criteria.PageNumber - 1) * criteria.PageSize,
-                take: criteria.PageSize);
+                first: criteria.PageSize,
+                after: (criteria.PageNumber - 1) * criteria.PageSize);
             var result = await _client.SendQueryAsync<SearchCartResponseDto>(new GraphQLRequest { Query = query });
             return result.Data;
         }
