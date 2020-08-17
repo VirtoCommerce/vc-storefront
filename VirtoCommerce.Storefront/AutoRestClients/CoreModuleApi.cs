@@ -2563,7 +2563,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// <param name="objectId">SEO related object id</param>
         /// <param name="objectType">SEO related object type name</param>
         /// <param name="isActive">Active/Inactive</param>
-        public SeoInfo(string name = default(string), string semanticUrl = default(string), string pageTitle = default(string), string metaDescription = default(string), string imageAltDescription = default(string), string metaKeywords = default(string), string storeId = default(string), string objectId = default(string), string objectType = default(string), bool? isActive = default(bool?), string languageCode = default(string), bool? shouldSerializeAuditableProperties = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public SeoInfo(string name = default(string), string semanticUrl = default(string), string pageTitle = default(string), string metaDescription = default(string), string imageAltDescription = default(string), string metaKeywords = default(string), string storeId = default(string), string objectId = default(string), string objectType = default(string), bool? isActive = default(bool?), string languageCode = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             SemanticUrl = semanticUrl;
@@ -2576,7 +2576,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
             ObjectType = objectType;
             IsActive = isActive;
             LanguageCode = languageCode;
-            ShouldSerializeAuditableProperties = shouldSerializeAuditableProperties;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
@@ -2655,11 +2654,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "shouldSerializeAuditableProperties")]
-        public bool? ShouldSerializeAuditableProperties { get; private set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "createdDate")]
         public System.DateTime? CreatedDate { get; set; }
 
@@ -2704,6 +2698,222 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
+    public partial class NumberFormatInfo
+    {
+        /// <summary>
+        /// Initializes a new instance of the NumberFormatInfo class.
+        /// </summary>
+        public NumberFormatInfo()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the NumberFormatInfo class.
+        /// </summary>
+        /// <param name="digitSubstitution">Possible values include: 'Context',
+        /// 'None', 'NativeNational'</param>
+        public NumberFormatInfo(int? currencyDecimalDigits = default(int?), string currencyDecimalSeparator = default(string), bool? isReadOnly = default(bool?), IList<int?> currencyGroupSizes = default(IList<int?>), IList<int?> numberGroupSizes = default(IList<int?>), IList<int?> percentGroupSizes = default(IList<int?>), string currencyGroupSeparator = default(string), string currencySymbol = default(string), string naNSymbol = default(string), int? currencyNegativePattern = default(int?), int? numberNegativePattern = default(int?), int? percentPositivePattern = default(int?), int? percentNegativePattern = default(int?), string negativeInfinitySymbol = default(string), string negativeSign = default(string), int? numberDecimalDigits = default(int?), string numberDecimalSeparator = default(string), string numberGroupSeparator = default(string), int? currencyPositivePattern = default(int?), string positiveInfinitySymbol = default(string), string positiveSign = default(string), int? percentDecimalDigits = default(int?), string percentDecimalSeparator = default(string), string percentGroupSeparator = default(string), string percentSymbol = default(string), string perMilleSymbol = default(string), IList<string> nativeDigits = default(IList<string>), string digitSubstitution = default(string))
+        {
+            CurrencyDecimalDigits = currencyDecimalDigits;
+            CurrencyDecimalSeparator = currencyDecimalSeparator;
+            IsReadOnly = isReadOnly;
+            CurrencyGroupSizes = currencyGroupSizes;
+            NumberGroupSizes = numberGroupSizes;
+            PercentGroupSizes = percentGroupSizes;
+            CurrencyGroupSeparator = currencyGroupSeparator;
+            CurrencySymbol = currencySymbol;
+            NaNSymbol = naNSymbol;
+            CurrencyNegativePattern = currencyNegativePattern;
+            NumberNegativePattern = numberNegativePattern;
+            PercentPositivePattern = percentPositivePattern;
+            PercentNegativePattern = percentNegativePattern;
+            NegativeInfinitySymbol = negativeInfinitySymbol;
+            NegativeSign = negativeSign;
+            NumberDecimalDigits = numberDecimalDigits;
+            NumberDecimalSeparator = numberDecimalSeparator;
+            NumberGroupSeparator = numberGroupSeparator;
+            CurrencyPositivePattern = currencyPositivePattern;
+            PositiveInfinitySymbol = positiveInfinitySymbol;
+            PositiveSign = positiveSign;
+            PercentDecimalDigits = percentDecimalDigits;
+            PercentDecimalSeparator = percentDecimalSeparator;
+            PercentGroupSeparator = percentGroupSeparator;
+            PercentSymbol = percentSymbol;
+            PerMilleSymbol = perMilleSymbol;
+            NativeDigits = nativeDigits;
+            DigitSubstitution = digitSubstitution;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "currencyDecimalDigits")]
+        public int? CurrencyDecimalDigits { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "currencyDecimalSeparator")]
+        public string CurrencyDecimalSeparator { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isReadOnly")]
+        public bool? IsReadOnly { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "currencyGroupSizes")]
+        public IList<int?> CurrencyGroupSizes { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "numberGroupSizes")]
+        public IList<int?> NumberGroupSizes { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "percentGroupSizes")]
+        public IList<int?> PercentGroupSizes { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "currencyGroupSeparator")]
+        public string CurrencyGroupSeparator { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "currencySymbol")]
+        public string CurrencySymbol { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "naNSymbol")]
+        public string NaNSymbol { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "currencyNegativePattern")]
+        public int? CurrencyNegativePattern { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "numberNegativePattern")]
+        public int? NumberNegativePattern { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "percentPositivePattern")]
+        public int? PercentPositivePattern { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "percentNegativePattern")]
+        public int? PercentNegativePattern { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "negativeInfinitySymbol")]
+        public string NegativeInfinitySymbol { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "negativeSign")]
+        public string NegativeSign { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "numberDecimalDigits")]
+        public int? NumberDecimalDigits { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "numberDecimalSeparator")]
+        public string NumberDecimalSeparator { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "numberGroupSeparator")]
+        public string NumberGroupSeparator { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "currencyPositivePattern")]
+        public int? CurrencyPositivePattern { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "positiveInfinitySymbol")]
+        public string PositiveInfinitySymbol { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "positiveSign")]
+        public string PositiveSign { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "percentDecimalDigits")]
+        public int? PercentDecimalDigits { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "percentDecimalSeparator")]
+        public string PercentDecimalSeparator { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "percentGroupSeparator")]
+        public string PercentGroupSeparator { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "percentSymbol")]
+        public string PercentSymbol { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "perMilleSymbol")]
+        public string PerMilleSymbol { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "nativeDigits")]
+        public IList<string> NativeDigits { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Context', 'None',
+        /// 'NativeNational'
+        /// </summary>
+        [JsonProperty(PropertyName = "digitSubstitution")]
+        public string DigitSubstitution { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// Currency
     /// </summary>
@@ -2720,7 +2930,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the Currency class.
         /// </summary>
-        /// <param name="code">the currency code</param>
+        /// <param name="code">Currency code may be used ISO 4217.</param>
         /// <param name="name">name of the currency</param>
         /// <param name="isPrimary">Flag specifies that this is the primary
         /// currency</param>
@@ -2728,9 +2938,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// exchange rate of the currency.</param>
         /// <param name="symbol">Currency symbol</param>
         /// <param name="customFormatting">Custom formatting pattern</param>
-        public Currency(string code = default(string), string name = default(string), bool? isPrimary = default(bool?), double? exchangeRate = default(double?), string symbol = default(string), string customFormatting = default(string))
+        public Currency(string code = default(string), string cultureName = default(string), string englishName = default(string), NumberFormatInfo numberFormat = default(NumberFormatInfo), string name = default(string), bool? isPrimary = default(bool?), double? exchangeRate = default(double?), string symbol = default(string), string customFormatting = default(string))
         {
             Code = code;
+            CultureName = cultureName;
+            EnglishName = englishName;
+            NumberFormat = numberFormat;
             Name = name;
             IsPrimary = isPrimary;
             ExchangeRate = exchangeRate;
@@ -2745,10 +2958,25 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets the currency code
+        /// Gets or sets currency code may be used ISO 4217.
         /// </summary>
         [JsonProperty(PropertyName = "code")]
         public string Code { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "cultureName")]
+        public string CultureName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "englishName")]
+        public string EnglishName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "numberFormat")]
+        public NumberFormatInfo NumberFormat { get; set; }
 
         /// <summary>
         /// Gets or sets name of the currency
@@ -2901,7 +3129,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
         /// Initializes a new instance of the Address class.
         /// </summary>
         /// <param name="addressType">Possible values include: 'Billing',
-        /// 'Shipping', 'Pickup', 'BillingAndShipping'</param>
+        /// 'Shipping', 'BillingAndShipping', 'Pickup'</param>
         public Address(string addressType = default(string), string key = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
         {
             AddressType = addressType;
@@ -2932,7 +3160,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'Billing', 'Shipping',
-        /// 'Pickup', 'BillingAndShipping'
+        /// 'BillingAndShipping', 'Pickup'
         /// </summary>
         [JsonProperty(PropertyName = "addressType")]
         public string AddressType { get; set; }
