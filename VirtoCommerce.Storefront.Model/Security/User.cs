@@ -28,6 +28,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         public string UserName { get; set; }
         public string NormalizedUserName { get; set; }
         public string Password { get; set; }
+        public bool PasswordExpired { get; set; }
         [JsonIgnore]
         [IgnoreDataMember]
         public string PasswordHash { get; set; }
