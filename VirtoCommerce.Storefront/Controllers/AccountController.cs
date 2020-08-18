@@ -259,7 +259,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpGet("impersonate/{userId}")]
         public async Task<IActionResult> ImpersonateUser(string userId)
         {
-            if (User.Identity.Name == SecurityConstants.AnonymousUsername)
+            if (User.Identity.Name == SecurityConstants.AnonymousUsername || User.Claims.Any(x => x.Type == SecurityConstants.Claims.OperatorUserNameClaimType))
             {
                 return StoreFrontRedirect($"~/account/login?ReturnUrl={Request.Path}");
             }
