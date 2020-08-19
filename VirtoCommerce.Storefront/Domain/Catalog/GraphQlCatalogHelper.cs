@@ -193,10 +193,8 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                     query: ""{ criteria.Keyword }""
                     filter: ""{
                         (string.IsNullOrEmpty(criteria.Outline) ? string.Empty : $"__outline:{catalogId}/{criteria.Outline}")}{
-                        (string.IsNullOrEmpty(catalogId) ? string.Empty : $" catalog:{ catalogId }")
-                    }""
-                    facet: ""{
-                        (criteria.Terms.IsNullOrEmpty() ? string.Empty : $"{string.Join(" ", criteria.Terms.ToStrings(true))}")
+                        (string.IsNullOrEmpty(catalogId) ? string.Empty : $" catalog:{ catalogId }")}{
+                        (criteria.Terms.IsNullOrEmpty() ? string.Empty : $" {string.Join(" ", criteria.Terms.ToStrings(true))}")
                     }""
                     fuzzy: { criteria.IsFuzzySearch.ToString().ToLowerInvariant() }
                     userId: ""{ customerId }""

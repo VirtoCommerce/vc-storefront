@@ -85,6 +85,12 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
         {
             var workContext = _workContextAccessor.WorkContext;
 
+            /* Convert price term to intermediate language */
+            foreach (var priceTerm in criteria.Terms.Where(x => x.Name.EqualsInvariant("price")))
+            {
+                priceTerm.ConvertTerm();
+            }
+
             var request = new GraphQLRequest
             {
                 Query = this.SearchProducts(
