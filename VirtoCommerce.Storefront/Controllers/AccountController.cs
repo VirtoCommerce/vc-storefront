@@ -259,7 +259,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpGet("impersonate/{userId}")]
         public async Task<IActionResult> ImpersonateUser(string userId)
         {
-            if (User.Identity.Name == SecurityConstants.AnonymousUsername)
+            if (User.Identity.Name == SecurityConstants.AnonymousUsername || User.Claims.Any(x => x.Type == SecurityConstants.Claims.OperatorUserNameClaimType))
             {
                 return StoreFrontRedirect($"~/account/login?ReturnUrl={Request.Path}");
             }
@@ -342,6 +342,17 @@ namespace VirtoCommerce.Storefront.Controllers
 
             if (loginResult.Succeeded)
             {
+                if (new IsUserPasswordExpiredSpecification().IsSatisfiedBy(user))
+                {
+                    WorkContext.Form = Form.FromObject(new ResetPassword
+                    {
+                        Token = await _signInManager.UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, "ResetPassword"),
+                        Email = user.Email,
+                        UserName = user.UserName
+                    });
+                    return View("customers/reset_password", WorkContext);
+                }
+
                 await _publisher.Publish(new UserLoginEvent(WorkContext, user));
                 return StoreFrontRedirect(returnUrl);
             }
