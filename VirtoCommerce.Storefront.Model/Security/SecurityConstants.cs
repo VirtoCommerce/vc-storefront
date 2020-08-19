@@ -35,7 +35,7 @@ namespace VirtoCommerce.Storefront.Model.Security
             {
                 Id = "purchasing-agent",
                 Name = "Purchasing agent",
-                Permissions = new string[] { }
+                Permissions = new string[] { Permissions.CanSeeOrganizationDetail }
             };
 
             public static readonly Role StoreAdministrator = new Role
