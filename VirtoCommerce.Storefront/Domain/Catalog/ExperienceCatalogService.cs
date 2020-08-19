@@ -88,7 +88,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             /* Convert price term to intermediate language */
             foreach (var priceTerm in criteria.Terms.Where(x => x.Name.EqualsInvariant("price")))
             {
-                priceTerm.ConvertTerm();
+                priceTerm.ConvertTerm(workContext.CurrentCurrency.Code);
             }
 
             var request = new GraphQLRequest
