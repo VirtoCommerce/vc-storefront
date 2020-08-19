@@ -59,7 +59,7 @@ jobs:
       run: vc-build Compile
 
     - name: Unit Tests
-      run: vc-build Test -skip
+      run: vc-build Test -TestsFilter "Category=Unit|Category=CI" -skip
 
     - name: SonarCloud End
       uses: VirtoCommerce/vc-github-actions/sonar-scanner-end@dev
