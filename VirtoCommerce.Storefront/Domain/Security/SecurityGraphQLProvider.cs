@@ -4,6 +4,7 @@ using GraphQL;
 using GraphQL.Client.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Security.Contracts;
 
@@ -12,10 +13,12 @@ namespace VirtoCommerce.Storefront.Domain.Security
     public class SecurityGraphQLProvider
     {
         private readonly IGraphQLClient _client;
+        private readonly IWorkContextAccessor _workContextAccessor;
 
-        public SecurityGraphQLProvider(IGraphQLClient client)
+        public SecurityGraphQLProvider(IGraphQLClient client, IWorkContextAccessor workContextAccessor)
         {
             _client = client;
+            _workContextAccessor = workContextAccessor;
         }
 
         #region User
@@ -74,7 +77,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
                         user.StoreId,
                         user.TwoFactorEnabled,
                         user.PasswordHash,
-                        user.SecurityStamp
+                        user.SecurityStamp,
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id
                     }
                 }
             };
@@ -92,7 +96,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 {
                     Command = new
                     {
-                        UserNames = new[] { userName }
+                        UserNames = new[] { userName },
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id
                     }
                 }
             };

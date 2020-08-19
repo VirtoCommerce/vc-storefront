@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoRest.Core.Utilities;
 using GraphQL;
 using GraphQL.Client.Abstractions;
+using Microsoft.AspNetCore.Http;
 using PagedList.Core;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
@@ -20,11 +22,13 @@ namespace VirtoCommerce.Storefront.Domain.Customer
     {
         private readonly IGraphQLClient _client;
         private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ExperienceMemberService(IGraphQLClient client, IWorkContextAccessor workContextAccessor)
+        public ExperienceMemberService(IGraphQLClient client, IWorkContextAccessor workContextAccessor, IHttpContextAccessor httpContextAccessor)
         {
             _client = client;
             _workContextAccessor = workContextAccessor;
+            _httpContextAccessor = httpContextAccessor;
         }
 
 
@@ -47,7 +51,8 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                         contact.TimeZone,
                         contact.DefaultLanguage,
                         organizations = !string.IsNullOrEmpty(contact.OrganizationId) ? new[] { contact.OrganizationId } : contact.OrganizationsIds,
-                        Addresses = contact.Addresses.Select(x => x.ToDto())
+                        Addresses = contact.Addresses.Select(x => x.ToDto()),
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id
                     }
                 }
             };
@@ -67,7 +72,8 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                     {
                         Name = organization.Name,
                         MemberType = nameof(Organization),
-                        Addresses = organization.Addresses.Select(x => x.ToDto()).ToList()
+                        Addresses = organization.Addresses.Select(x => x.ToDto()).ToList(),
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id
                     }
                 }
             };
@@ -83,7 +89,11 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                 Query = this.DeleteContactRequest(),
                 Variables = new
                 {
-                    Command = new { contactId }
+                    command = new
+                    {
+                        ContactId = contactId,
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id
+                    }
                 }
             };
             var response = await _client.SendMutationAsync<DeleteContactResponseDto>(request);
@@ -92,9 +102,15 @@ namespace VirtoCommerce.Storefront.Domain.Customer
 
         public async Task<Contact> GetContactByIdAsync(string contactId)
         {
+            var userId = _workContextAccessor.WorkContext?.CurrentUser?.Id;
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                var principal = _httpContextAccessor.HttpContext.User;
+                userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
             var request = new GraphQLRequest
             {
-                Query = this.GetContactRequest(contactId)
+                Query = this.GetContactRequest(contactId, userId)
             };
             var response = await _client.SendQueryAsync<ContactResponseDto>(request);
 
@@ -120,7 +136,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         {
             var request = new GraphQLRequest
             {
-                Query = this.GetOrganizationRequest(organizationId)
+                Query = this.GetOrganizationRequest(organizationId, _workContextAccessor.WorkContext.CurrentUser.Id)
             };
             var response = await _client.SendQueryAsync<OrganizationResponseDto>(request);
 
@@ -157,7 +173,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         {
             var request = new GraphQLRequest
             {
-                Query = this.OrganizationWithContactsRequest(criteria)
+                Query = this.OrganizationWithContactsRequest(criteria, _workContextAccessor.WorkContext.CurrentUser.Id)
             };
             var searchResult = await _client.SendQueryAsync<OrganizationContactsResponseDto>(request);
 
@@ -182,7 +198,8 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                     Command = new
                     {
                         contactId,
-                        addresses = addresses.Select(x => x.ToDto())
+                        addresses = addresses.Select(x => x.ToDto()),
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id
                     }
                 }
             };
@@ -221,7 +238,8 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                         contact.Phones,
                         contact.PhotoUrl,
                         contact.Salutation,
-                        contact.TimeZone
+                        contact.TimeZone,
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id
                     }
                 }
             };
@@ -248,7 +266,8 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                         organization.Phones,
                         organization.Groups,
                         organization.Emails,
-                        organization.Addresses
+                        organization.Addresses,
+                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id
                     }
                 }
             };

@@ -28,10 +28,10 @@ namespace VirtoCommerce.Storefront.Domain.Customer
           }}
         }}";
 
-        public static string GetContactRequest(this IMemberService service, string id, string selectedFields = null)
+        public static string GetContactRequest(this IMemberService service, string id, string userId, string selectedFields = null)
         => $@"
         {{
-            contact(id:""{id}"")
+            contact(id:""{id}"", userId:""{userId}"")
             {{
             { selectedFields ?? AllContactFields }
             }}
@@ -62,17 +62,17 @@ namespace VirtoCommerce.Storefront.Domain.Customer
           }}
         }}";
 
-        public static string OrganizationWithContactsRequest(this IMemberService service, OrganizationContactsSearchCriteria criteria, string selectedFields = null)
-        => $@"{{organization(id:""{criteria.OrganizationId}""){{
+        public static string OrganizationWithContactsRequest(this IMemberService service, OrganizationContactsSearchCriteria criteria, string userId, string selectedFields = null)
+        => $@"{{organization(id:""{criteria.OrganizationId}"", userId:""{userId}""){{
                 contacts(first: {criteria.PageSize}, after: ""{(criteria.PageNumber - 1) * criteria.PageSize}"", searchPhrase: ""{criteria.SearchPhrase}""){{
             { selectedFields ?? AllMemberSearchFields }
             }}
         }} }}";
 
-        public static string GetOrganizationRequest(this IMemberService service, string id, string selectedFields = null)
+        public static string GetOrganizationRequest(this IMemberService service, string id,  string userId, string selectedFields = null)
         => $@"
         {{
-            organization(id:""{id}"")
+            organization(id:""{id}"", userId: ""{userId}"")
             {{
             { selectedFields ?? AllOrganizationFields }
             }}
