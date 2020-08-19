@@ -62,10 +62,15 @@ jobs:
       run: vc-build Test -skip
 
     - name: SonarCloud End
-      run: vc-build SonarQubeEnd -SonarAuthToken ${{ secrets.SONAR_TOKEN }} -skip
+      uses: VirtoCommerce/vc-github-actions/sonar-scanner-end@dev
 
     - name: Packaging
       run: vc-build Compress -skip Clean+Restore+Compile+Test
+
+    - name: Publish Github Release
+      with:
+        changelog: ${{ steps.changelog.outputs.changelog }}
+      uses: VirtoCommerce/vc-github-actions/publish-github-release@dev
 
     - name: Build Docker Image
       if: ${{ github.ref == 'ref/head/master' }}
