@@ -83,7 +83,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                         user.TwoFactorEnabled,
                         user.PasswordHash,
                         user.SecurityStamp,
-                        UserId = GetCurrentUserId()
+                        UserId = user.Id
                     }
                 }
             };
