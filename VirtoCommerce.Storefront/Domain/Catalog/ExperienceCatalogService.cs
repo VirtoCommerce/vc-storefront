@@ -84,11 +84,13 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
         public virtual async Task<CatalogSearchResult> SearchProductsAsync(ProductSearchCriteria criteria)
         {
             var workContext = _workContextAccessor.WorkContext;
-            //Do not add to filter current category if specified category
-            if (criteria.Outline != null)
+
+            /* Convert price term to intermediate language */
+            foreach (var priceTerm in criteria.Terms.Where(x => x.Name.EqualsInvariant("price")))
             {
-                criteria.Terms.Add(new Term { Name = "__outline", Value = $"{workContext.CurrentStore.Catalog}/{criteria.Outline}" });
+                priceTerm.ConvertTerm(workContext.CurrentCurrency.Code);
             }
+
             var request = new GraphQLRequest
             {
                 Query = this.SearchProducts(

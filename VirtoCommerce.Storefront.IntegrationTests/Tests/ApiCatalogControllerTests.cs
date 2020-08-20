@@ -51,7 +51,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
             var result = LoadSourceAndCompareResult(
                 "SearchProducts",
                 source,
-                new[] { "$.products" },
+                new[] { "$.products", "$" },
                 new[]
                 {
                     "minQuantity",
@@ -61,6 +61,7 @@ namespace VirtoCommerce.Storefront.IntegrationTests.Tests
                     "prices.taxDetails",
                     "properties.localizedValues",
                     "properties.displayNames",
+                    "aggregations"
                 }
                 );
 

@@ -23,5 +23,7 @@ namespace VirtoCommerce.Storefront.Model.Contracts.Catalog
         public long? Total { get; set; }
 
         public bool? IsSelected { get; set; }
+
+        public string Label { get; set; }
     }
 }
