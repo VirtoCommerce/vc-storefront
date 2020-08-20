@@ -52,7 +52,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                         contact.DefaultLanguage,
                         organizations = !string.IsNullOrEmpty(contact.OrganizationId) ? new[] { contact.OrganizationId } : contact.OrganizationsIds,
                         Addresses = contact.Addresses.Select(x => x.ToDto()),
-                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id
+                        UserId = GetCurrentUserId()
                     }
                 }
             };
@@ -73,7 +73,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                         Name = organization.Name,
                         MemberType = nameof(Organization),
                         Addresses = organization.Addresses.Select(x => x.ToDto()).ToList(),
-                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id
+                        UserId = GetCurrentUserId()
                     }
                 }
             };
@@ -92,7 +92,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                     command = new
                     {
                         ContactId = contactId,
-                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id
+                        UserId = GetCurrentUserId()
                     }
                 }
             };
@@ -102,15 +102,9 @@ namespace VirtoCommerce.Storefront.Domain.Customer
 
         public async Task<Contact> GetContactByIdAsync(string contactId)
         {
-            var userId = _workContextAccessor.WorkContext?.CurrentUser?.Id;
-            if (string.IsNullOrWhiteSpace(userId))
-            {
-                var principal = _httpContextAccessor.HttpContext.User;
-                userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
-            }
             var request = new GraphQLRequest
             {
-                Query = this.GetContactRequest(contactId, userId)
+                Query = this.GetContactRequest(contactId, GetCurrentUserId())
             };
             var response = await _client.SendQueryAsync<ContactResponseDto>(request);
 
@@ -136,7 +130,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         {
             var request = new GraphQLRequest
             {
-                Query = this.GetOrganizationRequest(organizationId, _workContextAccessor.WorkContext.CurrentUser.Id)
+                Query = this.GetOrganizationRequest(organizationId, GetCurrentUserId())
             };
             var response = await _client.SendQueryAsync<OrganizationResponseDto>(request);
 
@@ -173,7 +167,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
         {
             var request = new GraphQLRequest
             {
-                Query = this.OrganizationWithContactsRequest(criteria, _workContextAccessor.WorkContext.CurrentUser.Id)
+                Query = this.OrganizationWithContactsRequest(criteria, GetCurrentUserId())
             };
             var searchResult = await _client.SendQueryAsync<OrganizationContactsResponseDto>(request);
 
@@ -199,7 +193,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                     {
                         contactId,
                         addresses = addresses.Select(x => x.ToDto()),
-                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id
+                        UserId = GetCurrentUserId()
                     }
                 }
             };
@@ -239,7 +233,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                         contact.PhotoUrl,
                         contact.Salutation,
                         contact.TimeZone,
-                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id
+                        UserId = GetCurrentUserId()
                     }
                 }
             };
@@ -267,7 +261,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                         organization.Groups,
                         organization.Emails,
                         organization.Addresses,
-                        UserId = _workContextAccessor.WorkContext.CurrentUser.Id
+                        UserId = GetCurrentUserId()
                     }
                 }
             };
@@ -275,6 +269,18 @@ namespace VirtoCommerce.Storefront.Domain.Customer
             response.ThrowExceptionOnError();
 
             CustomerCacheRegion.ExpireMember(organization.Id);
+        }
+
+        private string GetCurrentUserId()
+        {
+            var userId = _workContextAccessor.WorkContext?.CurrentUser?.Id;
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                var principal = _httpContextAccessor.HttpContext.User;
+                userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+
+            return userId;
         }
     }
 }
