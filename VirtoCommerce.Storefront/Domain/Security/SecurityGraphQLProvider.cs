@@ -1,9 +1,12 @@
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.Client.Abstractions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Security.Contracts;
 
@@ -12,10 +15,14 @@ namespace VirtoCommerce.Storefront.Domain.Security
     public class SecurityGraphQLProvider
     {
         private readonly IGraphQLClient _client;
+        private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public SecurityGraphQLProvider(IGraphQLClient client)
+        public SecurityGraphQLProvider(IGraphQLClient client, IWorkContextAccessor workContextAccessor, IHttpContextAccessor httpContextAccessor)
         {
             _client = client;
+            _workContextAccessor = workContextAccessor;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         #region User
@@ -28,6 +35,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 {
                     Command = new
                     {
+                        UserId = GetCurrentUserId(),
                         user.UserName,
                         UserType = user.UserType ?? "Customer",
                         user.Password,
@@ -74,7 +82,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
                         user.StoreId,
                         user.TwoFactorEnabled,
                         user.PasswordHash,
-                        user.SecurityStamp
+                        user.SecurityStamp,
+                        UserId = user.Id
                     }
                 }
             };
@@ -92,7 +101,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 {
                     Command = new
                     {
-                        UserNames = new[] { userName }
+                        UserNames = new[] { userName },
+                        UserId = GetCurrentUserId()
                     }
                 }
             };
@@ -178,5 +188,17 @@ namespace VirtoCommerce.Storefront.Domain.Security
         }
 
         #endregion Role 
+        private string GetCurrentUserId()
+        {
+            var userId = _workContextAccessor.WorkContext?.CurrentUser?.Id;
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                var principal = _httpContextAccessor.HttpContext.User;
+                userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+
+            return userId;
+        }
+
     }
 }
