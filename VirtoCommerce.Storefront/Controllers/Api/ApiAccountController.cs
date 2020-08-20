@@ -457,7 +457,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> UpdateAddresses([FromBody] IList<Address> addresses)
         {
-            await _memberService.UpdateContactAddressesAsync(WorkContext.CurrentUser.ContactId, addresses);
+            await _memberService.UpdateContactAddressesAsync(WorkContext.CurrentUser.Id, addresses);
 
             return Ok();
         }

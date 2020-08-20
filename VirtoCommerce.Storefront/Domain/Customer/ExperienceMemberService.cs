@@ -191,7 +191,7 @@ namespace VirtoCommerce.Storefront.Domain.Customer
                 {
                     Command = new
                     {
-                        contactId,
+                        contactId = contactId,
                         addresses = addresses.Select(x => x.ToDto()),
                         UserId = GetCurrentUserId()
                     }
