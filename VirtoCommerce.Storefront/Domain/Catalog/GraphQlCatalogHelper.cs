@@ -242,7 +242,6 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                             { AllCategoryFields }
                         }}
                     }}
-                    { AllFacets }
                 }}
             }}
             ";
