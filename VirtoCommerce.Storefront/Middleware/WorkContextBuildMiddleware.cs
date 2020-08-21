@@ -87,6 +87,7 @@ namespace VirtoCommerce.Storefront.Middleware
                 workContext.ConsentCookie = consentFeature?.CreateConsentCookie();
             }
             workContext.AvailableRoles = SecurityConstants.Roles.AllRoles;
+            workContext.BusinessToBusinessRoles = SecurityConstants.Roles.B2BRoles;
             _workContextAccessor.WorkContext = workContext;
 
 

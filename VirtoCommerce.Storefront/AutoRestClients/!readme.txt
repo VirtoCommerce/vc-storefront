@@ -1,5 +1,5 @@
 See there, how to generate AutoRest-generated clients with the Platform v.3:
-https://github.com/VirtoCommerce/vc-platform/blob/release/3.0.0/docs/using-autorest-with-v3.md
+https://github.com/VirtoCommerce/vc-platform/blob/dev/docs/developer-guide/using-autorest-with-v3.md
 
 Simplest example to refresh all clients:
 
