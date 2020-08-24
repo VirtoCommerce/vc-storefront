@@ -47,8 +47,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                         StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
                         CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
                         UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
-                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
-                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CultureName = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        CurrencyCode = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
                         CouponCode = couponCode
                     }
@@ -77,8 +77,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                             StoreId = Cart.StoreId,
                             UserId = Cart.CustomerId,
                             CartName = Cart.Name,
-                            Language = Cart.Language.CultureName,
-                            Currency = Cart.Currency.Code,
+                            CultureName = Cart.Language.CultureName,
+                            CurrencyCode = Cart.Currency.Code,
                             CartType = Cart.Type,
                             ProductId = addCartItem.ProductId,
                             Quantity = addCartItem.Quantity
@@ -109,8 +109,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                         StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
                         CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
                         UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
-                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
-                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CultureName = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        CurrencyCode = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
                         Payment = payment.ToDto()
                     }
@@ -138,8 +138,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                         StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
                         CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
                         UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
-                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
-                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CultureName = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        CurrencyCode = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
                         Shipment = shipment.ToDto()
                     }
@@ -173,8 +173,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                         StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
                         CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
                         UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
-                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
-                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CultureName = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        CurrencyCode = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
                         LineItemId = newItemComment.LineItemId,
                         Comment = newItemComment.Comment,
@@ -206,8 +206,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                         StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
                         CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
                         UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
-                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
-                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CultureName = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        CurrencyCode = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
                         ProductId = newPrice.LineItemId,
                         Price = newPrice.NewPrice
@@ -278,8 +278,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                         StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
                         CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
                         UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
-                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
-                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CultureName = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        CurrencyCode = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
                     }
                 }
@@ -304,8 +304,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                         StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
                         CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
                         UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
-                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
-                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CultureName = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        CurrencyCode = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
                     }
                 }
@@ -330,8 +330,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                         StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
                         CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
                         UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
-                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
-                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CultureName = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        CurrencyCode = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
                     }
                 }
@@ -429,8 +429,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                         StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
                         CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
                         UserId = Cart.CustomerId.ToString(),
-                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
-                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CultureName = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        CurrencyCode = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
                         SecondCartId = cart.Id
                     }
@@ -479,8 +479,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                         StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
                         CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
                         UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
-                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
-                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CultureName = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        CurrencyCode = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
                         CouponCode = couponCode
                     }
@@ -506,8 +506,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                         StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
                         CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
                         UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
-                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
-                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CultureName = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        CurrencyCode = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
                         LineItemId = lineItemId
                     }
@@ -533,8 +533,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                         StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
                         CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
                         UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
-                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
-                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CultureName = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        CurrencyCode = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
                         ShipmentId = shipmentId
                     }
@@ -543,8 +543,6 @@ namespace VirtoCommerce.Storefront.Domain.Cart
 
             var response = await _client.SendMutationAsync<RemoveShipmentResponceDto>(request);
 
-
-
             Cart = response.Data.RemoveShipment.ToShoppingCart(_workContextAccessor.WorkContext.CurrentCurrency, _workContextAccessor.WorkContext.CurrentLanguage, _workContextAccessor.WorkContext.CurrentUser);
         }
 
@@ -552,7 +550,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
         {
             CartCacheRegion.ExpireCart(Cart);
             return Task.CompletedTask;
-        } 
+        }
 
         /// <summary>
         /// Backward compatibility
@@ -572,8 +570,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                         StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
                         CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
                         UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
-                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
-                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CultureName = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        CurrencyCode = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
                         Comment = comment
                     }
@@ -608,8 +606,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                         StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
                         CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
                         UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
-                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
-                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CultureName = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        CurrencyCode = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
                         Coupon = coupon.Code
                     }
@@ -655,8 +653,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                         StoreId = _workContextAccessor.WorkContext.CurrentStore.Id,
                         CartName = _workContextAccessor.WorkContext.CurrentCart.Value.Name,
                         UserId = _workContextAccessor.WorkContext.CurrentUser.Id,
-                        Language = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
-                        Currency = _workContextAccessor.WorkContext.CurrentCurrency.Code,
+                        CultureName = _workContextAccessor.WorkContext.CurrentLanguage.CultureName,
+                        CurrencyCode = _workContextAccessor.WorkContext.CurrentCurrency.Code,
                         CartType = _workContextAccessor.WorkContext.CurrentCart.Value.Type,
                         LineItemId = lineItemId,
                         Quantity = quantity
