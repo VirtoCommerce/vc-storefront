@@ -259,7 +259,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpGet("impersonate/{userId}")]
         public async Task<IActionResult> ImpersonateUser(string userId)
         {
-            if (User.Identity.Name == SecurityConstants.AnonymousUsername)
+            if (User.Identity.Name == SecurityConstants.AnonymousUsername || User.Claims.Any(x => x.Type == SecurityConstants.Claims.OperatorUserNameClaimType))
             {
                 return StoreFrontRedirect($"~/account/login?ReturnUrl={Request.Path}");
             }
@@ -343,6 +343,22 @@ namespace VirtoCommerce.Storefront.Controllers
             if (loginResult.Succeeded)
             {
                 await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+
+                if (new IsUserPasswordExpiredSpecification().IsSatisfiedBy(user))
+                {
+                    //the sign in operation doesn't change the current request user principal, this only happens on incoming requests when the cookie or bearer token is set.
+                    //Need to manually set User in the HttpContext to avoid issues such as Antiforegery cookies generated for anonymous within this request despite the user has already signed in.
+                    HttpContext.User = await _signInManager.ClaimsFactory.CreateAsync(user);
+
+                    WorkContext.Form = Form.FromObject(new ResetPassword
+                    {
+                        Token = await _signInManager.UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, "ResetPassword"),
+                        Email = user.Email,
+                        UserName = user.UserName
+                    });
+                    return View("customers/reset_password", WorkContext);
+                }
+
                 return StoreFrontRedirect(returnUrl);
             }
 

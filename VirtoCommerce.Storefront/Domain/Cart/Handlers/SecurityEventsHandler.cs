@@ -39,11 +39,12 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Handlers
             //If previous user was anonymous and it has not empty cart need merge anonymous cart to personal
             if (!prevUser.IsRegisteredUser && prevUserCart != null && prevUserCart.Items.Any())
             {
+                var prevUserCartId = @event.WorkContext.CurrentCart.Value.Id;
                 //we load or create cart for new user
                 await _cartBuilder.LoadOrCreateNewTransientCartAsync(prevUserCart.Name, workContext.CurrentStore, newUser, workContext.CurrentLanguage, workContext.CurrentCurrency);
                 await _cartBuilder.MergeWithCartAsync(prevUserCart);
                 await _cartBuilder.SaveAsync();
-                await _cartApi.DeleteCartsAsync(new[] { prevUserCart.Id }.ToList());
+                await _cartApi.DeleteCartsAsync(new[] { prevUserCartId }.ToList());
             }
         }
 

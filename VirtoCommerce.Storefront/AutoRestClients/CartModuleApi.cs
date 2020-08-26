@@ -4690,7 +4690,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// Initializes a new instance of the CartAddress class.
         /// </summary>
         /// <param name="addressType">Possible values include: 'Billing',
-        /// 'Shipping', 'Pickup', 'BillingAndShipping'</param>
+        /// 'Shipping', 'BillingAndShipping', 'Pickup'</param>
         public CartAddress(string addressType = default(string), string key = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
         {
             AddressType = addressType;
@@ -4721,7 +4721,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'Billing', 'Shipping',
-        /// 'Pickup', 'BillingAndShipping'
+        /// 'BillingAndShipping', 'Pickup'
         /// </summary>
         [JsonProperty(PropertyName = "addressType")]
         public string AddressType { get; set; }

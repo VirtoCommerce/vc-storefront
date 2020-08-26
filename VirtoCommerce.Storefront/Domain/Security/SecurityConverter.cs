@@ -129,6 +129,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 LockoutEnabled = userDto.LockoutEnabled ?? false,
                 EmailConfirmed = userDto.EmailConfirmed ?? false,
                 LockoutEndDateUtc = userDto.LockoutEndDateUtc,
+                PasswordExpired = userDto.PasswordExpired ?? false,
                 PasswordHash = userDto.PasswordHash,
                 SecurityStamp = userDto.SecurityStamp,
                 UserState = EnumUtility.SafeParse(userDto.UserState, AccountState.Approved),
