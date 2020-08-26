@@ -26,10 +26,11 @@ namespace VirtoCommerce.Storefront.Filters
             //Reissue antiforgery cookies for follow cases:
             //- when is requested only an ASP.NET View. Since set cookies for each requests such Assets or file resources can leads to stop working the output cache middleware for that controllers
             //- when there are no errors or inner status codes ReExecute occurs (404, 500 etc) (IStatusCodeReExecuteFeature is presents). Since this can leads for reissue an antiforgery cookies .AspNetCore.Antiforgery without AspNetCore.Identity.Application
-            //that can leads for 400 errors for antiforgery validation due to different User and passed antiforgery tokens from cookies and request headers or form field
+            //that can leads for 400 errors for antiforgery validation due to different User in the  antiforgery tokens are received as  cookies and request headers
             if (context.Result is ViewResult viewResult && statusCodeReExecuteFeature == null)
             {
                 var tokens = antiforgery.GetAndStoreTokens(context.HttpContext);
+                //We need to set this Cookies XSRF-TOKEN which can be used on the client's side. The most web frameworks such angular can automatically read this cookie add X-XSRF-TOKEN header to each request.
                 context.HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false, IsEssential = true, SameSite = SameSiteMode.Lax });
             }
         }
