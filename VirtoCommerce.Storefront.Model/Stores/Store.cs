@@ -9,6 +9,8 @@ namespace VirtoCommerce.Storefront.Model.Stores
     /// </summary>
     public partial class Store : Entity, IHasSettings
     {
+        const string FILE_SCHEME = "file";
+
         public Store()
         {
             Languages = new List<Language>();
@@ -37,7 +39,7 @@ namespace VirtoCommerce.Storefront.Model.Stores
             get
             {
                 string result = null;
-                if (!string.IsNullOrEmpty(Url) && Uri.TryCreate(Url, UriKind.Absolute, out var url))
+                if (!string.IsNullOrEmpty(Url) && (Uri.TryCreate(Url, UriKind.Absolute, out var url) && url.Scheme != FILE_SCHEME))
                 {
                     result = url.Host;
                 }
