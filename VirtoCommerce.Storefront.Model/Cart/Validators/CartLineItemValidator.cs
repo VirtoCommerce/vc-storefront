@@ -38,7 +38,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Validators
                         }
 
                         var tierPrice = lineItem.Product.Price.GetTierPrice(lineItem.Quantity);
-                        if (tierPrice.Price > lineItem.SalePrice)
+                        if (tierPrice.Price != lineItem.SalePrice)
                         {
                             var priceError = new PriceError(lineItem.SalePrice, lineItem.SalePriceWithTax, tierPrice.Price, tierPrice.PriceWithTax);
                             lineItem.ValidationErrors.Add(priceError);

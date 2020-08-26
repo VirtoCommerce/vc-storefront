@@ -50,7 +50,7 @@ namespace VirtoCommerce.Storefront.Middleware
                     //Need to extract AutoRest errors
                     if (httpException != null)
                     {
-                       throw new HttpOperationException(httpException.Message + httpException.Response.Content);
+                       throw new HttpOperationException(httpException.Message + httpException.Response.Content, ex);
                     }
                     //Continue default error handling
                     throw;
