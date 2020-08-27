@@ -64,7 +64,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.3.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.3.3" />
 	<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.3.3" />
-    <PackageReference Include="VirtoCommerce.Tools" Version="3.0.2" />
+	<PackageReference Include="VirtoCommerce.Tools" Version="3.4.0" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
   </ItemGroup>
 
