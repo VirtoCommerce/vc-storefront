@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
 using VirtoCommerce.Storefront.Model;
@@ -8,6 +9,9 @@ namespace VirtoCommerce.Storefront.Extensions
 {
     public static class PathStringExtensions
     {
+
+        const string FILE_SCHEME = "file";
+
         private static Regex _storeLangeExpr = new Regex(@"^/\b\S+\b/[a-zA-Z]{2}-[a-zA-Z]{2}/");
         public static PathString GetStoreAndLangSegment(this PathString path)
         {
@@ -74,10 +78,10 @@ namespace VirtoCommerce.Storefront.Extensions
                 throw new ArgumentNullException(nameof(store));
             }
 
-            // Need to remove store path only if store has url
+            // Need to remove store path only if store has URL
             var storeUrl = !string.IsNullOrWhiteSpace(store.Url) ? store.Url : store.SecureUrl;
 
-            if (!string.IsNullOrWhiteSpace(storeUrl) && Uri.TryCreate(storeUrl, UriKind.Absolute, out var storeUri))
+            if (!string.IsNullOrWhiteSpace(storeUrl) && (Uri.TryCreate(storeUrl, UriKind.Absolute, out var storeUri) && storeUri.Scheme != FILE_SCHEME))
             {
                 var storeUriPath = storeUri.AbsolutePath.Trim('/');
 
@@ -95,7 +99,7 @@ namespace VirtoCommerce.Storefront.Extensions
         public static PathString ToAbsolutePath(this string path)
         {
             // Checks whether path is absolute path (starts with scheme), and extract local path if it is
-            if (Uri.TryCreate(path, UriKind.Absolute, out var absoluteUri))
+            if (Uri.TryCreate(path, UriKind.Absolute, out var absoluteUri) && absoluteUri.Scheme != FILE_SCHEME)
             {
                 return absoluteUri.AbsolutePath;
             }
