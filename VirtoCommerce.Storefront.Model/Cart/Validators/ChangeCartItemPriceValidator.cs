@@ -22,7 +22,12 @@ namespace VirtoCommerce.Storefront.Model.Cart.Validators
                     if (lineItem != null)
                     {
                         var newSalePrice = new Money(newPriceRequest.NewPrice, cart.Currency);
-                        if (lineItem.SalePrice > newSalePrice)
+                        var oldPrice = lineItem.SalePrice;
+                        if (lineItem.Product?.Price != null)
+                        {
+                            oldPrice = lineItem.Product.Price.GetTierPrice(lineItem.Quantity).Price;
+                        }
+                        if (oldPrice > newSalePrice)
                         {
                             context.AddFailure(new ValidationFailure(nameof(lineItem.SalePrice), "Unable to set less price"));
                         }
