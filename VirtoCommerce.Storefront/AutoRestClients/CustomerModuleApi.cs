@@ -3706,39 +3706,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
         /// <remarks>
         /// Get array of contacts satisfied search criteria.
         /// </remarks>
-        /// <param name='memberType'>
-        /// </param>
-        /// <param name='memberTypes'>
-        /// </param>
-        /// <param name='group'>
-        /// </param>
-        /// <param name='groups'>
-        /// </param>
-        /// <param name='memberId'>
-        /// </param>
-        /// <param name='deepSearch'>
-        /// </param>
-        /// <param name='responseGroup'>
-        /// </param>
-        /// <param name='objectType'>
-        /// </param>
-        /// <param name='objectTypes'>
-        /// </param>
-        /// <param name='objectIds'>
-        /// </param>
-        /// <param name='keyword'>
-        /// </param>
-        /// <param name='searchPhrase'>
-        /// </param>
-        /// <param name='languageCode'>
-        /// </param>
-        /// <param name='sort'>
-        /// </param>
-        /// <param name='sortInfos'>
-        /// </param>
-        /// <param name='skip'>
-        /// </param>
-        /// <param name='take'>
+        /// <param name='body'>
+        /// concrete instance of SearchCriteria type type will be created by using
+        /// PolymorphicMemberSearchCriteriaJsonConverter
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -3755,7 +3725,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ContactSearchResult>> SearchContactsWithHttpMessagesAsync(string memberType = default(string), IList<string> memberTypes = default(IList<string>), string group = default(string), IList<string> groups = default(IList<string>), string memberId = default(string), bool? deepSearch = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ContactSearchResult>> SearchContactsWithHttpMessagesAsync(MembersSearchCriteria body = default(MembersSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -3764,102 +3734,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("memberType", memberType);
-                tracingParameters.Add("memberTypes", memberTypes);
-                tracingParameters.Add("group", group);
-                tracingParameters.Add("groups", groups);
-                tracingParameters.Add("memberId", memberId);
-                tracingParameters.Add("deepSearch", deepSearch);
-                tracingParameters.Add("responseGroup", responseGroup);
-                tracingParameters.Add("objectType", objectType);
-                tracingParameters.Add("objectTypes", objectTypes);
-                tracingParameters.Add("objectIds", objectIds);
-                tracingParameters.Add("keyword", keyword);
-                tracingParameters.Add("searchPhrase", searchPhrase);
-                tracingParameters.Add("languageCode", languageCode);
-                tracingParameters.Add("sort", sort);
-                tracingParameters.Add("sortInfos", sortInfos);
-                tracingParameters.Add("skip", skip);
-                tracingParameters.Add("take", take);
+                tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "SearchContacts", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
             var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/contacts/search").ToString();
-            List<string> _queryParameters = new List<string>();
-            if (memberType != null)
-            {
-                _queryParameters.Add(string.Format("MemberType={0}", System.Uri.EscapeDataString(memberType)));
-            }
-            if (memberTypes != null)
-            {
-                _queryParameters.Add(string.Format("MemberTypes={0}", System.Uri.EscapeDataString(string.Join(",", memberTypes))));
-            }
-            if (group != null)
-            {
-                _queryParameters.Add(string.Format("Group={0}", System.Uri.EscapeDataString(group)));
-            }
-            if (groups != null)
-            {
-                _queryParameters.Add(string.Format("Groups={0}", System.Uri.EscapeDataString(string.Join(",", groups))));
-            }
-            if (memberId != null)
-            {
-                _queryParameters.Add(string.Format("MemberId={0}", System.Uri.EscapeDataString(memberId)));
-            }
-            if (deepSearch != null)
-            {
-                _queryParameters.Add(string.Format("DeepSearch={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(deepSearch, Client.SerializationSettings).Trim('"'))));
-            }
-            if (responseGroup != null)
-            {
-                _queryParameters.Add(string.Format("ResponseGroup={0}", System.Uri.EscapeDataString(responseGroup)));
-            }
-            if (objectType != null)
-            {
-                _queryParameters.Add(string.Format("ObjectType={0}", System.Uri.EscapeDataString(objectType)));
-            }
-            if (objectTypes != null)
-            {
-                _queryParameters.Add(string.Format("ObjectTypes={0}", System.Uri.EscapeDataString(string.Join(",", objectTypes))));
-            }
-            if (objectIds != null)
-            {
-                _queryParameters.Add(string.Format("ObjectIds={0}", System.Uri.EscapeDataString(string.Join(",", objectIds))));
-            }
-            if (keyword != null)
-            {
-                _queryParameters.Add(string.Format("Keyword={0}", System.Uri.EscapeDataString(keyword)));
-            }
-            if (searchPhrase != null)
-            {
-                _queryParameters.Add(string.Format("SearchPhrase={0}", System.Uri.EscapeDataString(searchPhrase)));
-            }
-            if (languageCode != null)
-            {
-                _queryParameters.Add(string.Format("LanguageCode={0}", System.Uri.EscapeDataString(languageCode)));
-            }
-            if (sort != null)
-            {
-                _queryParameters.Add(string.Format("Sort={0}", System.Uri.EscapeDataString(sort)));
-            }
-            if (sortInfos != null)
-            {
-                _queryParameters.Add(string.Format("SortInfos={0}", System.Uri.EscapeDataString(string.Join(",", sortInfos))));
-            }
-            if (skip != null)
-            {
-                _queryParameters.Add(string.Format("Skip={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(skip, Client.SerializationSettings).Trim('"'))));
-            }
-            if (take != null)
-            {
-                _queryParameters.Add(string.Format("Take={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(take, Client.SerializationSettings).Trim('"'))));
-            }
-            if (_queryParameters.Count > 0)
-            {
-                _url += "?" + string.Join("&", _queryParameters);
-            }
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -3882,6 +3763,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
 
             // Serialize Request
             string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
             // Set Credentials
             if (Client.Credentials != null)
             {
@@ -5585,39 +5472,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
         /// <remarks>
         /// Get array of contacts satisfied search criteria.
         /// </remarks>
-        /// <param name='memberType'>
-        /// </param>
-        /// <param name='memberTypes'>
-        /// </param>
-        /// <param name='group'>
-        /// </param>
-        /// <param name='groups'>
-        /// </param>
-        /// <param name='memberId'>
-        /// </param>
-        /// <param name='deepSearch'>
-        /// </param>
-        /// <param name='responseGroup'>
-        /// </param>
-        /// <param name='objectType'>
-        /// </param>
-        /// <param name='objectTypes'>
-        /// </param>
-        /// <param name='objectIds'>
-        /// </param>
-        /// <param name='keyword'>
-        /// </param>
-        /// <param name='searchPhrase'>
-        /// </param>
-        /// <param name='languageCode'>
-        /// </param>
-        /// <param name='sort'>
-        /// </param>
-        /// <param name='sortInfos'>
-        /// </param>
-        /// <param name='skip'>
-        /// </param>
-        /// <param name='take'>
+        /// <param name='body'>
+        /// concrete instance of SearchCriteria type type will be created by
+        /// using PolymorphicMemberSearchCriteriaJsonConverter
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -5631,7 +5488,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<ContactSearchResult>> SearchContactsWithHttpMessagesAsync(string memberType = default(string), IList<string> memberTypes = default(IList<string>), string group = default(string), IList<string> groups = default(IList<string>), string memberId = default(string), bool? deepSearch = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ContactSearchResult>> SearchContactsWithHttpMessagesAsync(MembersSearchCriteria body = default(MembersSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Get vendor
         /// </summary>
@@ -6687,43 +6544,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='memberType'>
+            /// <param name='body'>
+            /// concrete instance of SearchCriteria type type will be created by using
+            /// PolymorphicMemberSearchCriteriaJsonConverter
             /// </param>
-            /// <param name='memberTypes'>
-            /// </param>
-            /// <param name='group'>
-            /// </param>
-            /// <param name='groups'>
-            /// </param>
-            /// <param name='memberId'>
-            /// </param>
-            /// <param name='deepSearch'>
-            /// </param>
-            /// <param name='responseGroup'>
-            /// </param>
-            /// <param name='objectType'>
-            /// </param>
-            /// <param name='objectTypes'>
-            /// </param>
-            /// <param name='objectIds'>
-            /// </param>
-            /// <param name='keyword'>
-            /// </param>
-            /// <param name='searchPhrase'>
-            /// </param>
-            /// <param name='languageCode'>
-            /// </param>
-            /// <param name='sort'>
-            /// </param>
-            /// <param name='sortInfos'>
-            /// </param>
-            /// <param name='skip'>
-            /// </param>
-            /// <param name='take'>
-            /// </param>
-            public static ContactSearchResult SearchContacts(this ICustomerModule operations, string memberType = default(string), IList<string> memberTypes = default(IList<string>), string group = default(string), IList<string> groups = default(IList<string>), string memberId = default(string), bool? deepSearch = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+            public static ContactSearchResult SearchContacts(this ICustomerModule operations, MembersSearchCriteria body = default(MembersSearchCriteria))
             {
-                return operations.SearchContactsAsync(memberType, memberTypes, group, groups, memberId, deepSearch, responseGroup, objectType, objectTypes, objectIds, keyword, searchPhrase, languageCode, sort, sortInfos, skip, take).GetAwaiter().GetResult();
+                return operations.SearchContactsAsync(body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -6735,46 +6562,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='memberType'>
-            /// </param>
-            /// <param name='memberTypes'>
-            /// </param>
-            /// <param name='group'>
-            /// </param>
-            /// <param name='groups'>
-            /// </param>
-            /// <param name='memberId'>
-            /// </param>
-            /// <param name='deepSearch'>
-            /// </param>
-            /// <param name='responseGroup'>
-            /// </param>
-            /// <param name='objectType'>
-            /// </param>
-            /// <param name='objectTypes'>
-            /// </param>
-            /// <param name='objectIds'>
-            /// </param>
-            /// <param name='keyword'>
-            /// </param>
-            /// <param name='searchPhrase'>
-            /// </param>
-            /// <param name='languageCode'>
-            /// </param>
-            /// <param name='sort'>
-            /// </param>
-            /// <param name='sortInfos'>
-            /// </param>
-            /// <param name='skip'>
-            /// </param>
-            /// <param name='take'>
+            /// <param name='body'>
+            /// concrete instance of SearchCriteria type type will be created by using
+            /// PolymorphicMemberSearchCriteriaJsonConverter
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ContactSearchResult> SearchContactsAsync(this ICustomerModule operations, string memberType = default(string), IList<string> memberTypes = default(IList<string>), string group = default(string), IList<string> groups = default(IList<string>), string memberId = default(string), bool? deepSearch = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ContactSearchResult> SearchContactsAsync(this ICustomerModule operations, MembersSearchCriteria body = default(MembersSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SearchContactsWithHttpMessagesAsync(memberType, memberTypes, group, groups, memberId, deepSearch, responseGroup, objectType, objectTypes, objectIds, keyword, searchPhrase, languageCode, sort, sortInfos, skip, take, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SearchContactsWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -8849,65 +8646,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class SortInfo
-    {
-        /// <summary>
-        /// Initializes a new instance of the SortInfo class.
-        /// </summary>
-        public SortInfo()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the SortInfo class.
-        /// </summary>
-        /// <param name="sortDirection">Possible values include: 'Ascending',
-        /// 'Descending'</param>
-        public SortInfo(string sortColumn = default(string), string sortDirection = default(string))
-        {
-            SortColumn = sortColumn;
-            SortDirection = sortDirection;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "sortColumn")]
-        public string SortColumn { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Ascending', 'Descending'
-        /// </summary>
-        [JsonProperty(PropertyName = "sortDirection")]
-        public string SortDirection { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public partial class Vendor
     {
         /// <summary>
@@ -9280,6 +9018,65 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class SortInfo
+    {
+        /// <summary>
+        /// Initializes a new instance of the SortInfo class.
+        /// </summary>
+        public SortInfo()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the SortInfo class.
+        /// </summary>
+        /// <param name="sortDirection">Possible values include: 'Ascending',
+        /// 'Descending'</param>
+        public SortInfo(string sortColumn = default(string), string sortDirection = default(string))
+        {
+            SortColumn = sortColumn;
+            SortDirection = sortDirection;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sortColumn")]
+        public string SortColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Ascending', 'Descending'
+        /// </summary>
+        [JsonProperty(PropertyName = "sortDirection")]
+        public string SortDirection { get; set; }
 
     }
 }
