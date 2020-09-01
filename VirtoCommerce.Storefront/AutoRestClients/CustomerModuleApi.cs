@@ -8423,7 +8423,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the Contact class.
         /// </summary>
-        public Contact(string salutation = default(string), string fullName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), System.DateTime? birthDate = default(System.DateTime?), string defaultLanguage = default(string), string timeZone = default(string), IList<string> organizations = default(IList<string>), IList<string> associatedOrganizations = default(IList<string>), string taxPayerId = default(string), string preferredDelivery = default(string), string preferredCommunication = default(string), string photoUrl = default(string), string objectType = default(string), IList<ApplicationUser> securityAccounts = default(IList<ApplicationUser>), string name = default(string), string memberType = default(string), string outerId = default(string), IList<CustomerAddress> addresses = default(IList<CustomerAddress>), IList<string> phones = default(IList<string>), IList<string> emails = default(IList<string>), IList<Note> notes = default(IList<Note>), IList<string> groups = default(IList<string>), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Contact(string salutation = default(string), string fullName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), System.DateTime? birthDate = default(System.DateTime?), string defaultLanguage = default(string), string timeZone = default(string), IList<string> organizations = default(IList<string>), IList<string> associatedOrganizations = default(IList<string>), string taxPayerId = default(string), string preferredDelivery = default(string), string preferredCommunication = default(string), string defaultShippingAddressId = default(string), string defaultBillingAddressId = default(string), string photoUrl = default(string), string objectType = default(string), IList<ApplicationUser> securityAccounts = default(IList<ApplicationUser>), string name = default(string), string memberType = default(string), string outerId = default(string), IList<CustomerAddress> addresses = default(IList<CustomerAddress>), IList<string> phones = default(IList<string>), IList<string> emails = default(IList<string>), IList<Note> notes = default(IList<Note>), IList<string> groups = default(IList<string>), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Salutation = salutation;
             FullName = fullName;
@@ -8438,6 +8438,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
             TaxPayerId = taxPayerId;
             PreferredDelivery = preferredDelivery;
             PreferredCommunication = preferredCommunication;
+            DefaultShippingAddressId = defaultShippingAddressId;
+            DefaultBillingAddressId = defaultBillingAddressId;
             PhotoUrl = photoUrl;
             ObjectType = objectType;
             SecurityAccounts = securityAccounts;
@@ -8529,6 +8531,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "preferredCommunication")]
         public string PreferredCommunication { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "defaultShippingAddressId")]
+        public string DefaultShippingAddressId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "defaultBillingAddressId")]
+        public string DefaultBillingAddressId { get; set; }
 
         /// <summary>
         /// </summary>
