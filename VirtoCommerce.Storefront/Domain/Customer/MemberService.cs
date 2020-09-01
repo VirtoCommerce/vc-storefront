@@ -201,7 +201,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         public async Task<IPagedList<Contact>> SearchOrganizationContactsAsync(OrganizationContactsSearchCriteria criteria)
         {
-            var crtiteriaDto = new customerDto.MembersSearchCriteria
+            var criteriaDto = new customerDto.MembersSearchCriteria
             {
                 MemberId = criteria.OrganizationId,
                 Skip = (criteria.PageNumber - 1) * criteria.PageSize,
@@ -210,7 +210,7 @@ namespace VirtoCommerce.Storefront.Domain
                 SearchPhrase = criteria.SearchPhrase,
                 ObjectType = "Member"
             };
-            var searchResult = await _customerApi.SearchContactsAsync(crtiteriaDto);
+            var searchResult = await _customerApi.SearchContactsAsync(criteriaDto);
             var contacts = searchResult.Results.Select(x => x.ToContact()).ToList();
 
             return new StaticPagedList<Contact>(contacts, criteria.PageNumber, criteria.PageSize, searchResult.TotalCount ?? 0);
