@@ -80,7 +80,8 @@ namespace VirtoCommerce.Storefront.Domain
                     .Select(pm =>
                     {
                         var paymentMethod = pm.ToStorePaymentMethod(currency);
-                        paymentMethod.Name = pm.Name;
+                        paymentMethod.Name = pm.TypeName;
+                        paymentMethod.DisplayName = pm.Name;
                         return paymentMethod;
                     }).ToArray();
             }

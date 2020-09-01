@@ -30,6 +30,11 @@ namespace VirtoCommerce.Storefront.Model
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the value of payment method name for displaying
+        /// </summary>
+        public string DisplayName { get; set; }
+
+        /// <summary>
         /// Gets or sets the value of payment method logo absolute URL
         /// </summary>
         public string LogoUrl { get; set; }
