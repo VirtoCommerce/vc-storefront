@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.WebUtilities;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Stores;
 
@@ -35,21 +34,6 @@ namespace VirtoCommerce.Storefront.Domain
             }
 
             return result;
-        }
-
-        public static void ReplaceThemeForPreviewIfRequired(this Store store, HttpContext context)
-        {
-            if (context.Request.QueryString.HasValue)
-            {
-                var themePreview = QueryHelpers.ParseQuery(context.Request.QueryString.Value);
-
-                if (store != null && themePreview.ContainsKey("previewtheme"))
-                {
-                    var previewTheme = themePreview["previewtheme"].FirstOrDefault();
-
-                    store.ThemeName = previewTheme;
-                }
-            }
         }
     }
 }

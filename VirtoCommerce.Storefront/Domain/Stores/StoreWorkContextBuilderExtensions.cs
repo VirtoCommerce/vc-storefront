@@ -23,7 +23,7 @@ namespace VirtoCommerce.Storefront.Domain
             builder.WorkContext.AllStores = stores.ToArray();
             var currentStore = builder.HttpContext.GetCurrentStore(stores, defaultStoreId);
 
-            currentStore.ReplaceThemeForPreviewIfRequired(builder.HttpContext);
+            currentStore.ThemeName = builder.WorkContext.QueryString.Get("previewtheme") ?? currentStore.ThemeName;
 
             //Very important workaround. If left  Null or Empty as Url for default store with condition of multiple stores present, will be generated a relative url '/store_name/' instead of
             // '/' thats can  leads to invalid urls to default store and other issue with  <base href=""> that contains invalid relative  url
