@@ -48,7 +48,7 @@ namespace VirtoCommerce.Storefront.Domain
             _promotionEvaluator = promotionEvaluator;
             _taxEvaluator = taxEvaluator;
             _subscriptionService = subscriptionService;
-       }
+        }
 
         #region ICartBuilder Members
 
@@ -141,18 +141,18 @@ namespace VirtoCommerce.Storefront.Domain
                 await AddLineItemAsync(lineItem);
             }
             return result.IsValid;
-        }        
-        
+        }
+
         public virtual async Task ChangeItemPriceAsync(ChangeCartItemPrice newPrice)
         {
-            EnsureCartExists();            
+            EnsureCartExists();
 
             var lineItem = Cart.Items.FirstOrDefault(x => x.Id == newPrice.LineItemId);
             if (lineItem != null)
             {
-                await ChangeItemPriceAsync(lineItem, newPrice);                
+                await ChangeItemPriceAsync(lineItem, newPrice);
             }
-        }        
+        }
 
         public virtual Task ChangeItemCommentAsync(ChangeCartItemComment newItemComment)
         {
@@ -332,17 +332,11 @@ namespace VirtoCommerce.Storefront.Domain
         {
             EnsureCartExists();
 
-            //Reset primary keys for all aggregated entities before merge
-            //To prevent insertions same Ids for target cart
-            //exclude user because it might be the current one
-            var entities = cart.GetFlatObjectsListWithInterface<IEntity>();
-            foreach (var entity in entities.Where(x => !(x is User)).ToList())
-            {
-                entity.Id = null;
-            }
 
-            foreach (var lineItem in cart.Items)
+
+            foreach (var lineItem in cart.Items.Select(x => (LineItem)x.Clone()))
             {
+                lineItem.Id = null;
                 await AddLineItemAsync(lineItem);
             }
 
@@ -555,7 +549,7 @@ namespace VirtoCommerce.Storefront.Domain
             return cart;
         }
 
-    
+
         protected virtual Task RemoveExistingPaymentAsync(Payment payment)
         {
             if (payment != null)
@@ -587,7 +581,7 @@ namespace VirtoCommerce.Storefront.Domain
         protected virtual async Task ChangeItemQuantityAsync(LineItem lineItem, int quantity)
         {
             if (lineItem != null && !lineItem.IsReadOnly)
-            {               
+            {
                 if (lineItem.Product != null)
                 {
                     var salePrice = lineItem.Product.Price.GetTierPrice(quantity).Price;
@@ -617,7 +611,7 @@ namespace VirtoCommerce.Storefront.Domain
             var existingLineItem = Cart.Items.FirstOrDefault(li => li.ProductId == lineItem.ProductId);
             if (existingLineItem != null)
             {
-                await ChangeItemQuantityAsync(existingLineItem, existingLineItem.Quantity + Math.Max(1, lineItem.Quantity));                
+                await ChangeItemQuantityAsync(existingLineItem, existingLineItem.Quantity + Math.Max(1, lineItem.Quantity));
                 await ChangeItemPriceAsync(existingLineItem, new ChangeCartItemPrice() { LineItemId = existingLineItem.Id, NewPrice = lineItem.ListPrice.Amount });
                 existingLineItem.Comment = lineItem.Comment;
                 existingLineItem.DynamicProperties = lineItem.DynamicProperties;
