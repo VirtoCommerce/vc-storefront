@@ -342,8 +342,14 @@ namespace VirtoCommerce.Storefront.Controllers
 
             if (loginResult.Succeeded)
             {
+                await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+
                 if (new IsUserPasswordExpiredSpecification().IsSatisfiedBy(user))
                 {
+                    //the sign in operation doesn't change the current request user principal, this only happens on incoming requests when the cookie or bearer token is set.
+                    //Need to manually set User in the HttpContext to avoid issues such as Antiforegery cookies generated for anonymous within this request despite the user has already signed in.
+                    HttpContext.User = await _signInManager.ClaimsFactory.CreateAsync(user);
+
                     WorkContext.Form = Form.FromObject(new ResetPassword
                     {
                         Token = await _signInManager.UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, "ResetPassword"),
@@ -353,7 +359,6 @@ namespace VirtoCommerce.Storefront.Controllers
                     return View("customers/reset_password", WorkContext);
                 }
 
-                await _publisher.Publish(new UserLoginEvent(WorkContext, user));
                 return StoreFrontRedirect(returnUrl);
             }
 

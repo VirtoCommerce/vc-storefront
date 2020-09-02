@@ -10,5 +10,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         public string FullName { get; set; }
         public string Email { get; set; }
         public IList<string> Roles { get; set; }
+        public Address DefaultShippingAddress { get; set; }
+        public Address DefaultBillingAddress { get; set; }
     }
 }
