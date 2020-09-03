@@ -261,7 +261,7 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             if (User.Identity.Name == SecurityConstants.AnonymousUsername || User.Claims.Any(x => x.Type == SecurityConstants.Claims.OperatorUserNameClaimType))
             {
-                return StoreFrontRedirect($"~/account/login?ReturnUrl={Request.Path}");
+                return StoreFrontRedirect($"~/account/login?ReturnUrl={System.Uri.EscapeDataString(Request.Path)}");
             }
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, null, CanImpersonateAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
