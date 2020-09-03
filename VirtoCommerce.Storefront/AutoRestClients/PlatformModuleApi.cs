@@ -2775,7 +2775,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            if ((int)_statusCode != 204 && (int)_statusCode != 400 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -11320,7 +11320,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/security/users/login/external").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/security/users/login/external/{loginProvider}/{providerKey}").ToString();
             _url = _url.Replace("{loginProvider}", System.Uri.EscapeDataString(loginProvider));
             _url = _url.Replace("{providerKey}", System.Uri.EscapeDataString(providerKey));
             // Create HTTP transport objects
@@ -17277,7 +17277,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// <param name="valueType">Possible values include: 'ShortText',
         /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean',
         /// 'SecureString', 'Json'</param>
-        public ObjectSettingEntry(bool? itHasValues = default(bool?), string objectId = default(string), string objectType = default(string), object value = default(object), bool? restartRequired = default(bool?), string moduleId = default(string), string groupName = default(string), string name = default(string), string valueType = default(string), IList<object> allowedValues = default(IList<object>), object defaultValue = default(object), bool? isDictionary = default(bool?))
+        public ObjectSettingEntry(bool? itHasValues = default(bool?), string objectId = default(string), string objectType = default(string), object value = default(object), bool? restartRequired = default(bool?), string moduleId = default(string), string groupName = default(string), string name = default(string), bool? isHidden = default(bool?), string valueType = default(string), IList<object> allowedValues = default(IList<object>), object defaultValue = default(object), bool? isDictionary = default(bool?))
         {
             ItHasValues = itHasValues;
             ObjectId = objectId;
@@ -17287,6 +17287,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
             ModuleId = moduleId;
             GroupName = groupName;
             Name = name;
+            IsHidden = isHidden;
             ValueType = valueType;
             AllowedValues = allowedValues;
             DefaultValue = defaultValue;
@@ -17338,6 +17339,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isHidden")]
+        public bool? IsHidden { get; set; }
 
         /// <summary>
         /// Gets or sets possible values include: 'ShortText', 'LongText',
