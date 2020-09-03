@@ -332,11 +332,20 @@ namespace VirtoCommerce.Storefront.Domain
         {
             EnsureCartExists();
 
+            // Clone source cart to prevent its damage
+            cart = (ShoppingCart)cart.Clone();
 
-
-            foreach (var lineItem in cart.Items.Select(x => (LineItem)x.Clone()))
+            // Reset primary keys for all aggregated entities before merge
+            // To prevent insertions same Ids for target cart
+            // exclude user because it might be the current one
+            var entities = cart.GetFlatObjectsListWithInterface<IEntity>();
+            foreach (var entity in entities.Where(x => !(x is User)).ToList())
             {
-                lineItem.Id = null;
+                entity.Id = null;
+            }
+
+            foreach (var lineItem in cart.Items)
+            {
                 await AddLineItemAsync(lineItem);
             }
 
