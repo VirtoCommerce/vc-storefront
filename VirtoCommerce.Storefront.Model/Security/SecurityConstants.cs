@@ -29,13 +29,13 @@ namespace VirtoCommerce.Storefront.Model.Security
             {
                 Id = "org-employee",
                 Name = "Organization employee",
-                Permissions = new string[] { Permissions.CanSeeOrganizationDetail }
+                Permissions = new string[] { Permissions.CanSeeOrganizationDetail, Permissions.CanViewUsers }
             };
             public static readonly Role PurchasingAgent = new Role
             {
                 Id = "purchasing-agent",
                 Name = "Purchasing agent",
-                Permissions = new string[] { Permissions.CanSeeOrganizationDetail }
+                Permissions = new string[] { Permissions.CanSeeOrganizationDetail, Permissions.CanViewUsers }
             };
 
             public static readonly Role StoreAdministrator = new Role
