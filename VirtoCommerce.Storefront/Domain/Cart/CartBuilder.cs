@@ -109,6 +109,15 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.CompletedTask;
         }
 
+        public Task UpdatePurchaseOrderNumberAsync(string purchaseOrderNumber)
+        {
+            EnsureCartExists();
+
+            Cart.PurchaseOrderNumber = purchaseOrderNumber;
+
+            return Task.CompletedTask;
+        }
+
         public virtual async Task<bool> AddItemAsync(AddCartItem addCartItem)
         {
             EnsureCartExists();
