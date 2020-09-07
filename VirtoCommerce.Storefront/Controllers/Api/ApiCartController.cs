@@ -71,6 +71,22 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Ok();
         }
 
+        [HttpPut("purchaseOrderNumber")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdatePurchaseOrderNumber([FromBody] UpdatePurchaseOrderNumberRequest request)
+        {
+            EnsureCartExists();
+
+            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
+            {
+                var cartBuilder = await LoadOrCreateCartAsync();
+                await cartBuilder.UpdatePurchaseOrderNumberAsync(request?.PurchaseOrderNumber);
+                await cartBuilder.SaveAsync();
+            }
+
+            return Ok();
+        }
+
         // GET: storefrontapi/cart/itemscount
         [HttpGet("itemscount")]
         public async Task<ActionResult<int>> GetCartItemsCount()
