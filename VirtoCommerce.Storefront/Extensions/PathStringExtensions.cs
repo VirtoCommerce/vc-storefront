@@ -101,7 +101,7 @@ namespace VirtoCommerce.Storefront.Extensions
             // Checks whether path is absolute path (starts with scheme), and extract local path if it is
             if (Uri.TryCreate(path, UriKind.Absolute, out var absoluteUri) && absoluteUri.Scheme != FILE_SCHEME)
             {
-                return absoluteUri.AbsolutePath;
+                return absoluteUri.PathAndQuery;
             }
 
             return path;

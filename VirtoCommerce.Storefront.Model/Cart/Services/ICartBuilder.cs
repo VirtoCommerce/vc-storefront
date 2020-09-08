@@ -32,6 +32,13 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         Task UpdateCartComment(string comment);
 
         /// <summary>
+        /// Update purchase order number
+        /// </summary>
+        /// <param name="purchaseOrderNumber"></param>
+        /// <returns></returns>
+        Task UpdatePurchaseOrderNumberAsync(string purchaseOrderNumber);
+
+        /// <summary>
         /// Load or created new cart for specified parameters and capture it.  All next changes will be implemented on it
         /// </summary>
         /// <param name="cartName"></param>
