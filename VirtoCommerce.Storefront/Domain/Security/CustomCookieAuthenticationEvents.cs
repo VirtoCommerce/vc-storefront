@@ -24,7 +24,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 return Task.CompletedTask;
             }
 
-            context.RedirectUri = _storefrontUrlBuilder.ToStoreAbsolute(context.RedirectUri).ToAbsolutePath();
+            var absolutePath = _storefrontUrlBuilder.ToStoreAbsolute(context.RedirectUri).ToAbsolutePath();
+            context.RedirectUri = WebUtility.UrlDecode(absolutePath);
 
             return base.RedirectToLogin(context);
         }

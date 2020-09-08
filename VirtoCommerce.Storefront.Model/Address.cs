@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model
 {
     public partial class Address : ValueObject
     {
+        [JsonConverter(typeof(StringEnumConverter))]
         public AddressType Type { get; set; }
         public string Key { get; set; }
         public string Name { get; set; }
