@@ -761,10 +761,10 @@ namespace VirtoCommerce.Storefront.Domain
                 Currency = lineItem.Currency.Code,
                 Discounts = lineItem.Discounts.Select(ToCartDiscountDto).ToList(),
 
-                ListPrice = (double)lineItem.ListPrice.InternalAmount,
-                SalePrice = (double)lineItem.SalePrice.InternalAmount,
+                ListPrice = (double)lineItem.ListPrice.Amount,
+                SalePrice = (double)lineItem.SalePrice.Amount,
                 TaxPercentRate = (double)lineItem.TaxPercentRate,
-                DiscountAmount = (double)lineItem.DiscountAmount.InternalAmount,
+                DiscountAmount = (double)lineItem.DiscountAmount.Amount,
                 TaxDetails = lineItem.TaxDetails.Select(ToCartTaxDetailDto).ToList(),
                 DynamicProperties = lineItem.DynamicProperties.Select(ToCartDynamicPropertyDto).ToList(),
                 VolumetricWeight = (double)(lineItem.VolumetricWeight ?? 0)
