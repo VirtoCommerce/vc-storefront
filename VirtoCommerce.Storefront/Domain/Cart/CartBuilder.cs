@@ -491,7 +491,21 @@ namespace VirtoCommerce.Storefront.Domain
         public async Task ValidateAsync()
         {
             EnsureCartExists();
-            var result = await new CartValidator(_cartService).ValidateAsync(Cart, ruleSet: Cart.ValidationRuleSet);
+            //TODO: Remove cart object modification from the validation rules
+            //This clone is dirty workaround, because the validator rules might change  ValidationErrors collection for same Cart instance and this produces exception
+            //Collection was modified; enumeration operation may not execute 
+            var clonedCart = Cart.Clone() as ShoppingCart;
+
+            var result = await new CartValidator(_cartService).ValidateAsync(clonedCart, ruleSet: clonedCart.ValidationRuleSet);
+
+            var clonedValidatables = clonedCart.GetFlatObjectsListWithInterface<IValidatable>();
+            var origValidatables = Cart.GetFlatObjectsListWithInterface<IValidatable>();
+            foreach(var origValidatable in origValidatables)
+            {
+                var clonedValidatable = clonedValidatables.First(x => x.Equals(origValidatable));
+                origValidatable.ValidationErrors.Clear();
+                origValidatable.ValidationErrors.AddRange(clonedValidatable.ValidationErrors);
+            }
             Cart.IsValid = result.IsValid;
         }
 
