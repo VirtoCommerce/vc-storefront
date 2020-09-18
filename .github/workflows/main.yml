@@ -73,7 +73,9 @@ jobs:
       id: dockerBuild
       uses: VirtoCommerce/vc-github-actions/build-docker-image@master
       with:
+        imageName: "storefront"
         tag: ${{ steps.image.outputs.taggedVersion }}
+        dockerFiles: "https://raw.githubusercontent.com/VirtoCommerce/vc-docker/master/linux/storefront/Dockerfile"
 
     # Step runs only on commit to master or dev brunch
     - name: Publish Github Release
