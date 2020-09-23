@@ -286,7 +286,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             Uri result = null;
             result = BuildUriWithSearchQueryString(context, criteria =>
             {
-                var term = new Term { Name = aggregationItem.GroupLabel, Value = aggregationItem.Value.ToString() };
+                var term = new Term { Name = aggregationItem.Group.Field, Value = aggregationItem.Value.ToString() };
                 criteria.Terms.Add(term);
                 //Need to reset page number every time when criteria changed
                 criteria.PageNumber = 1;
@@ -308,7 +308,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
             result = BuildUriWithSearchQueryString(context, criteria =>
             {
-                var term = new Term { Name = aggregationItem.GroupLabel, Value = aggregationItem.Value.ToString() };
+                var term = new Term { Name = aggregationItem.Group.Field, Value = aggregationItem.Value.ToString() };
                 criteria.Terms.Remove(term);
                 //Need to reset page number every time when criteria changed
                 criteria.PageNumber = 1;
