@@ -590,7 +590,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
                 if (string.IsNullOrEmpty(phoneNumber))
                 {
-                    WorkContext.Form.Errors.Add(SecurityErrorDescriber.OperationFailed());
+                    WorkContext.Form.Errors.Add(SecurityErrorDescriber.PhoneNumberNotFound());
                     return View("customers/forgot_password", WorkContext);
                 }
 
@@ -627,7 +627,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View(successViewName, WorkContext);
             }
 
-            WorkContext.Form.Errors.Add(new FormError { Description = sendingResult.ErrorMessage });
+            WorkContext.Form.Errors.Add(SecurityErrorDescriber.ErrorSendNotification(sendingResult.ErrorMessage));
             return View("customers/forgot_password", WorkContext);
         }
 
