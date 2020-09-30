@@ -20,10 +20,5 @@ namespace VirtoCommerce.Storefront.Controllers
             return View();
         }
 
-        [HttpGet("contact")]
-        public IActionResult Contact()
-        {
-            return NotFound();
-        }
     }
 }
