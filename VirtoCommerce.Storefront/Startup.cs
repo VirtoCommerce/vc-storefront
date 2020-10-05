@@ -21,6 +21,9 @@ using Microsoft.Extensions.WebEncoders;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
+using ProxyKit;
 using StackExchange.Redis;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using VirtoCommerce.LiquidThemeEngine;
@@ -90,7 +93,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IWorkContextAccessor, WorkContextAccessor>();
             services.AddSingleton<IUrlBuilder, UrlBuilder>();
             services.AddSingleton<IStorefrontUrlBuilder, StorefrontUrlBuilder>();
-
+            services.AddSingleton<IRecommendationsProvider, AssociationRecommendationsProvider>();
             services.AddSingleton<IStoreService, StoreService>();
             services.AddSingleton<ICurrencyService, CurrencyService>();
             services.AddSingleton<ISlugRouteService, SlugRouteService>();
@@ -364,6 +367,7 @@ namespace VirtoCommerce.Storefront
 
             services.AddResponseCompression();
 
+            services.AddProxy();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -390,6 +394,8 @@ namespace VirtoCommerce.Storefront
             app.UseRouting();
 
             app.UseAuthentication();
+
+
             // WorkContextBuildMiddleware must  always be registered first in  the Middleware chain
             app.UseMiddleware<WorkContextBuildMiddleware>();
             app.UseMiddleware<StoreMaintenanceMiddleware>();
@@ -442,15 +448,23 @@ namespace VirtoCommerce.Storefront
                 await next();
             });
 
+            var platformEndpointOptions = app.ApplicationServices.GetRequiredService<IOptions<PlatformEndpointOptions>>().Value;
+            // Forwards the request only when the host is set to the specified value
+            app.UseWhen(
+                context => context.Request.Path.Value.EndsWith("xapi/graphql"),
+                appInner => appInner.RunProxy(context => {
+                context.Request.Path = PathString.Empty;
+                    return context.ForwardTo($"{platformEndpointOptions.Url}/graphql")
+                        .AddXForwardedHeaders()
+                        .Send();
+                }));
 
             // It will be good to rewrite endpoint routing as described here, but it's not easy to do:
             // https://docs.microsoft.com/en-us/aspnet/core/migration/22-to-30?view=aspnetcore-3.1&tabs=visual-studio#routing-startup-code
-
             app.UseMvc(routes =>
             {
                 routes.MapSlugRoute("{*path}", defaults: new { controller = "Home", action = "Index" });
             });
-
         }
     }
 }
