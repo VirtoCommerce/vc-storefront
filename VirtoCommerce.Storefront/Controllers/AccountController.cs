@@ -567,11 +567,11 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View("customers/forgot_password", WorkContext);
             }
 
-            var user = await _signInManager.UserManager.FindByEmailAsync(formModel.Email);
+            var user = await _signInManager.UserManager.FindByEmailAsync(formModel.EmailLogin);
 
             if (user == null)
             {
-                user = await _signInManager.UserManager.FindByNameAsync(formModel.Email);
+                user = await _signInManager.UserManager.FindByNameAsync(formModel.EmailLogin);
             }
 
             if (user == null)
@@ -641,7 +641,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpPost("forgotlogin")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ForgotLogin(ForgotPassword formModel)
+        public async Task<ActionResult> ForgotLogin(ForgotLogin formModel)
         {
             TryValidateModel(formModel);
             if (!ModelState.IsValid)
