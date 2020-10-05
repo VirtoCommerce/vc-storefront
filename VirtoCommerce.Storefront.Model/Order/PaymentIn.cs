@@ -193,5 +193,8 @@ namespace VirtoCommerce.Storefront.Model.Order
         public BankCardInfo BankCardInfo { get; set; }
 
         public Address BillingAddress { get; set; }
+
+        public string ShipmentId { get; set; }
+
     }
 }

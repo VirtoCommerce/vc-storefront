@@ -26,40 +26,13 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private readonly IOrderModule _orderApi;
         private readonly IStoreService _storeService;
         private readonly IAuthorizationService _authorizationService;
-        private readonly IPaymentSearchService _paymentSearchService;
 
-        public ApiOrderController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IOrderModule orderApi, IStoreService storeService, IAuthorizationService authorizationService, IPaymentSearchService paymentSearchService)
+        public ApiOrderController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IOrderModule orderApi, IStoreService storeService, IAuthorizationService authorizationService)
             : base(workContextAccessor, urlBuilder)
         {
             _orderApi = orderApi;
             _storeService = storeService;
             _authorizationService = authorizationService;
-            _paymentSearchService = paymentSearchService;
-        }
-
-
-        // POST: storefrontapi/orders/payments/search
-        [HttpPost("payments/search")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<PaymentSearchResult>> SearchPayments([FromBody] PaymentSearchCriteria criteria)
-        {
-            if (criteria == null)
-            {
-                criteria = new PaymentSearchCriteria();
-            }
-            var authorizationResult = await _authorizationService.AuthorizeAsync(User, null, SecurityConstants.Permissions.CanViewOrders);
-            if (!authorizationResult.Succeeded)
-            {
-                //Does not allow to see a other customer orders
-                return Unauthorized();
-            }
-            var result = await _paymentSearchService.SearchPaymentsAsync(criteria);
-
-            return new PaymentSearchResult
-            {
-                Results = result.ToArray(),
-                TotalCount = result.TotalItemCount
-            };
         }
 
         // POST: storefrontapi/orders/search

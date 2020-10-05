@@ -565,127 +565,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
             return _result;
         }
 
-
-        public async Task<HttpOperationResponse<PaymentSearchResult>> SearchPaymentsWithHttpMessagesAsync(PaymentSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (criteria == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "criteria");
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("criteria", criteria);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "Search", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/order/payments/search").ToString();
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("POST");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach (var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if (criteria != null)
-            {
-                _requestContent = SafeJsonConvert.SerializeObject(criteria, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null)
-                {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else
-                {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<PaymentSearchResult>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<PaymentSearchResult>(_responseContent, Client.DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
         /// <summary>
         /// Find customer order by number
         /// </summary>
@@ -2732,9 +2611,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
     /// </summary>
     public partial interface IOrderModule
     {
-        Task<HttpOperationResponse<PaymentSearchResult>> SearchPaymentsWithHttpMessagesAsync(PaymentSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
-
         /// <summary>
         /// Search customer orders by given criteria
         /// </summary>
@@ -3146,30 +3022,22 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
                 }
             }
 
-            public static async Task<PaymentSearchResult> SearchPaymentsAsync(this IOrderModule operations, PaymentSearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.SearchPaymentsWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-        /// <summary>
-        /// Find customer order by number
-        /// </summary>
-        /// <remarks>
-        /// Return a single customer order with all nested documents or null if order
-        /// was not found
-        /// </remarks>
-        /// <param name='operations'>
-        /// The operations group for this extension method.
-        /// </param>
-        /// <param name='number'>
-        /// customer order number
-        /// </param>
-        /// <param name='respGroup'>
-        /// </param>
-        public static CustomerOrder GetByNumber(this IOrderModule operations, string number, string respGroup = default(string))
+            /// <summary>
+            /// Find customer order by number
+            /// </summary>
+            /// <remarks>
+            /// Return a single customer order with all nested documents or null if order
+            /// was not found
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='number'>
+            /// customer order number
+            /// </param>
+            /// <param name='respGroup'>
+            /// </param>
+            public static CustomerOrder GetByNumber(this IOrderModule operations, string number, string respGroup = default(string))
             {
                 return operations.GetByNumberAsync(number, respGroup).GetAwaiter().GetResult();
             }
@@ -3772,7 +3640,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// Initializes a new instance of the CustomerOrderSearchCriteria
         /// class.
         /// </summary>
-        public CustomerOrderSearchCriteria(string keyword = default(string), string number = default(string), IList<string> numbers = default(IList<string>), bool? withPrototypes = default(bool?), bool? onlyRecurring = default(bool?), string subscriptionId = default(string), IList<string> subscriptionIds = default(IList<string>), string status = default(string), IList<string> statuses = default(IList<string>), string operationId = default(string), string organizationId = default(string), string customerId = default(string), string employeeId = default(string), IList<string> storeIds = default(IList<string>), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public CustomerOrderSearchCriteria(string keyword = default(string), string number = default(string), IList<string> numbers = default(IList<string>), bool? withPrototypes = default(bool?), bool? onlyRecurring = default(bool?), string subscriptionId = default(string), IList<string> subscriptionIds = default(IList<string>), string status = default(string), IList<string> statuses = default(IList<string>), string operationId = default(string), string organizationId = default(string), string customerId = default(string), IList<string> customerIds = default(IList<string>), string employeeId = default(string), IList<string> storeIds = default(IList<string>), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
             Keyword = keyword;
             Number = number;
@@ -3786,6 +3654,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
             OperationId = operationId;
             OrganizationId = organizationId;
             CustomerId = customerId;
+            CustomerIds = customerIds;
             EmployeeId = employeeId;
             StoreIds = storeIds;
             StartDate = startDate;
@@ -3800,8 +3669,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
             SortInfos = sortInfos;
             Skip = skip;
             Take = take;
-            StartDate = startDate;
-            EndDate = endDate;
             CustomInit();
         }
 
@@ -3872,6 +3739,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "customerIds")]
+        public IList<string> CustomerIds { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "employeeId")]
         public string EmployeeId { get; set; }
 
@@ -3939,197 +3811,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "take")]
         public int? Take { get; set; }
-
-    }
-}
-
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class PaymentSearchCriteria
-    {
-        /// <summary>
-        /// Initializes a new instance of the CustomerOrderSearchCriteria
-        /// class.
-        /// </summary>
-        public PaymentSearchCriteria()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CustomerOrderSearchCriteria
-        /// class.
-        /// </summary>
-        public PaymentSearchCriteria(string keyword = default(string), string orderNumber = default(string), IList<string> numbers = default(IList<string>), string orderId = default(string), string status = default(string), IList<string> statuses = default(IList<string>), string employeeId = default(string), IList<string> storeIds = default(IList<string>), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
-        {
-            Keyword = keyword;
-            OrderNumber = orderNumber;
-            Numbers = numbers;
-            OrderId = orderId;           
-            Status = status;
-            Statuses = statuses;           
-            EmployeeId = employeeId;
-            StoreIds = storeIds;
-            ResponseGroup = responseGroup;
-            ObjectType = objectType;
-            ObjectTypes = objectTypes;
-            ObjectIds = objectIds;
-            SearchPhrase = searchPhrase;
-            LanguageCode = languageCode;
-            Sort = sort;
-            SortInfos = sortInfos;
-            Skip = skip;
-            Take = take;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "keyword")]
-        public string Keyword { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "orderId")]
-        public string OrderId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "orderNumber")]
-        public string OrderNumber { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "numbers")]
-        public IList<string> Numbers { get; set; }
-
-       
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "status")]
-        public string Status { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "statuses")]
-        public IList<string> Statuses { get; set; }
-
-       
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "employeeId")]
-        public string EmployeeId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "storeIds")]
-        public IList<string> StoreIds { get; set; }
-
-    
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "responseGroup")]
-        public string ResponseGroup { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectTypes")]
-        public IList<string> ObjectTypes { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectIds")]
-        public IList<string> ObjectIds { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "searchPhrase")]
-        public string SearchPhrase { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "languageCode")]
-        public string LanguageCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "sort")]
-        public string Sort { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "sortInfos")]
-        public IList<SortInfo> SortInfos { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "skip")]
-        public int? Skip { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "take")]
-        public int? Take { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "startDate")]
-        public System.DateTime? StartDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "endDate")]
-        public System.DateTime? EndDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "capturedStartDate")]
-        public System.DateTime? CapturedStartDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "capturedEndDate")]
-        public System.DateTime? CapturedEndDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "authorizedStartDate")]
-        public System.DateTime? AuthorizedStartDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "authorizedEndDate")]
-        public System.DateTime? AuthorizedEndDate { get; set; }
 
     }
 }
@@ -4725,7 +4406,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// </summary>
         /// <param name="newPaymentStatus">Possible values include: 'New',
         /// 'Pending', 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded',
-        /// 'Voided', 'Custom', 'Cancelled'</param>
+        /// 'Voided', 'Custom', 'Cancelled', 'Declined', 'Error'</param>
         public ProcessPaymentResult(PaymentMethod paymentMethod = default(PaymentMethod), string newPaymentStatus = default(string), string redirectUrl = default(string), string htmlForm = default(string), bool? isSuccess = default(bool?), string error = default(string), string outerId = default(string))
         {
             PaymentMethod = paymentMethod;
@@ -4751,7 +4432,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// Gets or sets possible values include: 'New', 'Pending',
         /// 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded', 'Voided',
-        /// 'Custom', 'Cancelled'
+        /// 'Custom', 'Cancelled', 'Declined', 'Error'
         /// </summary>
         [JsonProperty(PropertyName = "newPaymentStatus")]
         public string NewPaymentStatus { get; set; }
@@ -5563,9 +5244,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// </summary>
         /// <param name="paymentStatus">Possible values include: 'New',
         /// 'Pending', 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded',
-        /// 'Voided', 'Custom', 'Cancelled'</param>
-        public PaymentIn(string purpose = default(string), string gatewayCode = default(string), PaymentMethod paymentMethod = default(PaymentMethod), string organizationId = default(string), string organizationName = default(string), string customerId = default(string), string customerName = default(string), System.DateTime? incomingDate = default(System.DateTime?), string outerId = default(string), Address billingAddress = default(Address), string paymentStatus = default(string), System.DateTime? authorizedDate = default(System.DateTime?), System.DateTime? capturedDate = default(System.DateTime?), System.DateTime? voidedDate = default(System.DateTime?), ProcessPaymentResult processPaymentResult = default(ProcessPaymentResult), double? amount = default(double?), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), IList<Discount> discounts = default(IList<Discount>), IList<PaymentGatewayTransaction> transactions = default(IList<PaymentGatewayTransaction>), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), IList<IOperation> childrenOperations = default(IList<IOperation>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        /// 'Voided', 'Custom', 'Cancelled', 'Declined', 'Error'</param>
+        public PaymentIn(string orderId = default(string), string shipmentId = default(string), string purpose = default(string), string gatewayCode = default(string), PaymentMethod paymentMethod = default(PaymentMethod), string organizationId = default(string), string organizationName = default(string), string customerId = default(string), string customerName = default(string), System.DateTime? incomingDate = default(System.DateTime?), string outerId = default(string), Address billingAddress = default(Address), string paymentStatus = default(string), System.DateTime? authorizedDate = default(System.DateTime?), System.DateTime? capturedDate = default(System.DateTime?), System.DateTime? voidedDate = default(System.DateTime?), ProcessPaymentResult processPaymentResult = default(ProcessPaymentResult), double? amount = default(double?), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), IList<Discount> discounts = default(IList<Discount>), IList<PaymentGatewayTransaction> transactions = default(IList<PaymentGatewayTransaction>), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), IList<IOperation> childrenOperations = default(IList<IOperation>), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
+            OrderId = orderId;
+            ShipmentId = shipmentId;
             Purpose = purpose;
             GatewayCode = gatewayCode;
             PaymentMethod = paymentMethod;
@@ -5629,6 +5312,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "shipmentId")]
+        public string ShipmentId { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "purpose")]
         public string Purpose { get; set; }
 
@@ -5680,7 +5368,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// Gets or sets possible values include: 'New', 'Pending',
         /// 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded', 'Voided',
-        /// 'Custom', 'Cancelled'
+        /// 'Custom', 'Cancelled', 'Declined', 'Error'
         /// </summary>
         [JsonProperty(PropertyName = "paymentStatus")]
         public string PaymentStatus { get; set; }
@@ -7028,7 +6716,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// 'GeoPoint'</param>
         /// <param name="type">Possible values include: 'Product', 'Variation',
         /// 'Category', 'Catalog'</param>
-        public Property(string catalogId = default(string), Catalog catalog = default(Catalog), string categoryId = default(string), Category category = default(Category), string name = default(string), bool? required = default(bool?), bool? dictionary = default(bool?), bool? multivalue = default(bool?), bool? multilanguage = default(bool?), string valueType = default(string), string type = default(string), IList<PropertyAttribute> attributes = default(IList<PropertyAttribute>), IList<PropertyDisplayName> displayNames = default(IList<PropertyDisplayName>), IList<PropertyValidationRule> validationRules = default(IList<PropertyValidationRule>), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Property(string catalogId = default(string), Catalog catalog = default(Catalog), string categoryId = default(string), Category category = default(Category), string name = default(string), bool? required = default(bool?), bool? dictionary = default(bool?), bool? multivalue = default(bool?), bool? multilanguage = default(bool?), bool? hidden = default(bool?), string valueType = default(string), string type = default(string), IList<PropertyAttribute> attributes = default(IList<PropertyAttribute>), IList<PropertyDisplayName> displayNames = default(IList<PropertyDisplayName>), IList<PropertyValidationRule> validationRules = default(IList<PropertyValidationRule>), bool? isInherited = default(bool?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             CatalogId = catalogId;
             Catalog = catalog;
@@ -7039,6 +6727,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
             Dictionary = dictionary;
             Multivalue = multivalue;
             Multilanguage = multilanguage;
+            Hidden = hidden;
             ValueType = valueType;
             Type = type;
             Attributes = attributes;
@@ -7102,6 +6791,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "multilanguage")]
         public bool? Multilanguage { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "hidden")]
+        public bool? Hidden { get; set; }
 
         /// <summary>
         /// Gets or sets possible values include: 'ShortText', 'LongText',
@@ -8264,13 +7958,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// </summary>
         /// <param name="status">Possible values include: 'Disabled',
         /// 'Enabled', 'Ignored'</param>
-        public InventoryInfo(System.DateTime? createdDate = default(System.DateTime?), string createdBy = default(string), System.DateTime? modifiedDate = default(System.DateTime?), string modifiedBy = default(string), string fulfillmentCenterId = default(string), FulfillmentCenter fulfillmentCenter = default(FulfillmentCenter), string productId = default(string), long? inStockQuantity = default(long?), long? reservedQuantity = default(long?), long? reorderMinQuantity = default(long?), long? preorderQuantity = default(long?), long? backorderQuantity = default(long?), bool? allowBackorder = default(bool?), bool? allowPreorder = default(bool?), long? inTransit = default(long?), System.DateTime? preorderAvailabilityDate = default(System.DateTime?), System.DateTime? backorderAvailabilityDate = default(System.DateTime?), string status = default(string))
+        public InventoryInfo(System.DateTime? createdDate = default(System.DateTime?), string createdBy = default(string), System.DateTime? modifiedDate = default(System.DateTime?), string modifiedBy = default(string), string fulfillmentCenterId = default(string), string fulfillmentCenterName = default(string), FulfillmentCenter fulfillmentCenter = default(FulfillmentCenter), string productId = default(string), long? inStockQuantity = default(long?), long? reservedQuantity = default(long?), long? reorderMinQuantity = default(long?), long? preorderQuantity = default(long?), long? backorderQuantity = default(long?), bool? allowBackorder = default(bool?), bool? allowPreorder = default(bool?), long? inTransit = default(long?), System.DateTime? preorderAvailabilityDate = default(System.DateTime?), System.DateTime? backorderAvailabilityDate = default(System.DateTime?), string status = default(string))
         {
             CreatedDate = createdDate;
             CreatedBy = createdBy;
             ModifiedDate = modifiedDate;
             ModifiedBy = modifiedBy;
             FulfillmentCenterId = fulfillmentCenterId;
+            FulfillmentCenterName = fulfillmentCenterName;
             FulfillmentCenter = fulfillmentCenter;
             ProductId = productId;
             InStockQuantity = inStockQuantity;
@@ -8316,6 +8011,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "fulfillmentCenterId")]
         public string FulfillmentCenterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "fulfillmentCenterName")]
+        public string FulfillmentCenterName { get; set; }
 
         /// <summary>
         /// </summary>
@@ -10336,58 +10036,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
 
     }
 }
-
-namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class PaymentSearchResult
-    {
-        /// <summary>
-        /// Initializes a new instance of the CustomerOrderSearchResult class.
-        /// </summary>
-        public PaymentSearchResult()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PaymentSearchResult class.
-        /// </summary>
-        public PaymentSearchResult(int? totalCount = default(int?), IList<PaymentIn> results = default(IList<PaymentIn>))
-        {
-            TotalCount = totalCount;
-            Results = results;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "totalCount")]
-        public int? TotalCount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "results")]
-        public IList<PaymentIn> Results { get; set; }
-
-    }
-}
 // <auto-generated>
 // Code generated by Microsoft (R) AutoRest Code Generator.
 // Changes may cause incorrect behavior and will be lost if the code is
@@ -10849,7 +10497,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// </summary>
         /// <param name="newPaymentStatus">Possible values include: 'New',
         /// 'Pending', 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded',
-        /// 'Voided', 'Custom', 'Cancelled'</param>
+        /// 'Voided', 'Custom', 'Cancelled', 'Declined', 'Error'</param>
         public PostProcessPaymentResult(string newPaymentStatus = default(string), bool? isSuccess = default(bool?), string errorMessage = default(string), string returnUrl = default(string), string orderId = default(string), string outerId = default(string))
         {
             NewPaymentStatus = newPaymentStatus;
@@ -10869,7 +10517,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// <summary>
         /// Gets or sets possible values include: 'New', 'Pending',
         /// 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded', 'Voided',
-        /// 'Custom', 'Cancelled'
+        /// 'Custom', 'Cancelled', 'Declined', 'Error'
         /// </summary>
         [JsonProperty(PropertyName = "newPaymentStatus")]
         public string NewPaymentStatus { get; set; }

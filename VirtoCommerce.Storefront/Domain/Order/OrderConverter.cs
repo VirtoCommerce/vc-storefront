@@ -34,31 +34,6 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static orderDto.PaymentSearchCriteria ToPaymentSearchCriteriaDto(this PaymentSearchCriteria criteria)
-        {
-            var result = new orderDto.PaymentSearchCriteria
-            {
-                OrderId = criteria.OrderId,
-                OrderNumber = criteria.OrderNumber,
-                Keyword = criteria.Keyword,
-                Status = criteria.Status,
-                Statuses = criteria.Statuses,
-                StoreIds = criteria.StoreIds,
-                StartDate = criteria.StartDate,
-                EndDate = criteria.EndDate,
-                CapturedStartDate = criteria.CapturedStartDate,
-                CapturedEndDate = criteria.CapturedEndDate,
-                AuthorizedStartDate = criteria.AuthorizedStartDate,
-                AuthorizedEndDate = criteria.AuthorizedEndDate,
-                Skip = criteria.Start,
-                Take = criteria.PageSize,
-                Sort = criteria.Sort
-            };
-
-            return result;
-        }
-
-
         public static DynamicProperty ToDynamicProperty(this orderDto.DynamicObjectProperty propertyDto)
         {
             return propertyDto.JsonConvert<coreDto.DynamicObjectProperty>().ToDynamicProperty();
@@ -298,6 +273,7 @@ namespace VirtoCommerce.Storefront.Domain
             retVal.AuthorizedDate = paymentIn.AuthorizedDate;
             retVal.VoidedDate = paymentIn.VoidedDate;
             retVal.OrderId = paymentIn.OrderId;
+            retVal.ShipmentId = paymentIn.ShipmentId;
 
 
             if (paymentIn.BillingAddress != null)
