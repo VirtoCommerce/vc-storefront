@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using PagedList.Core;
 using Scriban;
+using Scriban.Runtime;
 using Scriban.Syntax;
 using VirtoCommerce.LiquidThemeEngine.Extensions;
 using VirtoCommerce.LiquidThemeEngine.JsonConverters;
@@ -110,6 +111,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             Paginate result = null;
             var collection = source as ICollection;
             var pagedList = source as IPagedList;
+            var scriptObject = source as ScriptObject;
+
             var requestUrl = context.GetValue(new ScriptVariableGlobal("request_url")) as Uri;
             var pageNumber = context.GetValue(new ScriptVariableGlobal("page_number"))?.ToString().SafeParseInt(1) ?? 1;
             var effectivePageSize = context.GetValue(new ScriptVariableGlobal("page_size"))?.ToString().SafeParseInt(pageSize) ?? pageSize;
@@ -128,6 +131,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             {
                 mutablePagedList.Slice(pageNumber, effectivePageSize, mutablePagedList.SortInfos, @params);
                 pagedList = mutablePagedList;
+            }
+            else if (scriptObject != null && scriptObject.Keys.Contains("total_count"))
+            {
+                pagedList = new StaticPagedList<object>(Array.Empty<object>(), pageNumber, effectivePageSize, scriptObject["total_count"].ToString().SafeParseInt(0));
             }
             else if (collection != null)
             {

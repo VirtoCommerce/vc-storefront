@@ -149,8 +149,6 @@ namespace VirtoCommerce.Storefront.Model.Stores
 
         public SeoLinksType SeoLinksType { get; set; }
 
-        public IList<PaymentMethod> PaymentMethods { get; set; }
-
         /// <summary>
         /// Checks if specified URL starts with store URL or store secure URL.
         /// </summary>

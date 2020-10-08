@@ -69,24 +69,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("customers/account", WorkContext);
         }
 
-        [HttpGet("order/{number}")]
-        public async Task<ActionResult> GetOrderDetails(string number)
-        {
-            var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
-            if (!authorizationResult.Succeeded)
-            {
-                return Challenge();
-            }
-
-            var order = WorkContext.CurrentUser?.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(number));
-            if (order != null)
-            {
-                WorkContext.CurrentOrder = order;
-            }
-
-            return View("customers/order", WorkContext);
-        }
-
+    
         [HttpGet("addresses")]
         public async Task<ActionResult> GetAddresses()
         {

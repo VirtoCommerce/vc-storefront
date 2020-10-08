@@ -33,11 +33,6 @@ namespace VirtoCommerce.Storefront.Middleware
             _options = options.Value;
             _configuration = configuration;
 
-            //Load a user-defined  settings from the special section.
-            //All of these settings are accessible from the themes and through access to WorkContext.ApplicationSettings property
-            //Trim of the VirtoCommerce:AppSettings added for backward compatibility with old themes
-            _applicationSettings = _configuration.GetSection("VirtoCommerce:AppSettings").AsEnumerable().Where(x => x.Value != null)
-                                                                                      .ToDictionary(x => x.Key.Replace("VirtoCommerce:AppSettings:", ""), x => (object)x.Value);
         }
 
         public async Task Invoke(HttpContext context)
@@ -62,25 +57,10 @@ namespace VirtoCommerce.Storefront.Middleware
             await builder.WithCurrentUserAsync();
             await builder.WithCurrenciesAsync(workContext.CurrentLanguage, workContext.CurrentStore);
 
-            await builder.WithCatalogsAsync();
-            await builder.WithDefaultShoppingCartAsync("default", workContext.CurrentStore, workContext.CurrentUser, workContext.CurrentCurrency, workContext.CurrentLanguage);
             await builder.WithMenuLinksAsync(workContext.CurrentStore, workContext.CurrentLanguage);
             await builder.WithPagesAsync(workContext.CurrentStore, workContext.CurrentLanguage);
             await builder.WithBlogsAsync(workContext.CurrentStore, workContext.CurrentLanguage);
-            await builder.WithPricelistsAsync();
-
-            if (workContext.CurrentStore.QuotesEnabled)
-            {
-                await builder.WithQuotesAsync(workContext.CurrentStore, workContext.CurrentUser, workContext.CurrentCurrency, workContext.CurrentLanguage);
-                await builder.WithUserQuotesAsync();
-            }
-            await builder.WithUserOrdersAsync();
-            if (workContext.CurrentStore.SubscriptionEnabled)
-            {
-                await builder.WithUserSubscriptionsAsync();
-            }
-            await builder.WithVendorsAsync(workContext.CurrentStore, workContext.CurrentLanguage);
-            await builder.WithFulfillmentCentersAsync();
+       
 
             //EU General Data Protection Regulation (GDPR) support 
             var consentFeature = context.Features.Get<ITrackingConsentFeature>();

@@ -39,57 +39,7 @@ namespace VirtoCommerce.Storefront.Domain
             return address.ToCoreAddressDto().JsonConvert<customerDto.CustomerAddress>();
         }
 
-        public static Vendor ToVendor(this customerDto.Vendor vendorDto, Language currentLanguage, Store store)
-        {
-            Vendor result = null;
-
-            if (vendorDto != null)
-            {
-                result = new Vendor
-                {
-                    Id = vendorDto.Id,
-                    Name = vendorDto.Name,
-                    Description = vendorDto.Description,
-                    LogoUrl = vendorDto.LogoUrl,
-                    SiteUrl = vendorDto.SiteUrl,
-                    GroupName = vendorDto.GroupName
-                };
-
-                if (!vendorDto.SeoInfos.IsNullOrEmpty())
-                {
-                    var seoInfoDto = vendorDto.SeoInfos.Select(x => x.JsonConvert<coreDto.SeoInfo>())
-                        .GetBestMatchingSeoInfos(store, currentLanguage)
-                        .FirstOrDefault();
-
-                    if (seoInfoDto != null)
-                    {
-                        result.SeoInfo = seoInfoDto.ToSeoInfo();
-                    }
-                }
-
-                if (result.SeoInfo == null)
-                {
-                    result.SeoInfo = new SeoInfo
-                    {
-                        Title = vendorDto.Name,
-                        Slug = string.Concat("/vendor/", result.Id)
-                    };
-                }
-
-                if (vendorDto.Addresses != null)
-                {
-                    result.Addresses = vendorDto.Addresses.Select(ToAddress).ToList();
-                }
-
-                if (vendorDto.DynamicProperties != null)
-                {
-                    result.DynamicProperties = new MutablePagedList<DynamicProperty>(vendorDto.DynamicProperties.Select(ToDynamicProperty).ToList());                     
-                }
-            }
-
-            return result;
-        }
-
+    
         public static Organization ToOrganization(this OrganizationRegistration orgRegistration)
         {
             var organization = new Organization

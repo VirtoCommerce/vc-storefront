@@ -23,7 +23,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Scriban
             scriptObject.Import(typeof(MathFilters));
             scriptObject.Import(typeof(StandardFilters));
             scriptObject.Import(typeof(FeatureFilter));
+            scriptObject.Import(typeof(DataSourceFilter));
 
+            scriptObject.SetValue("context", scriptObject, true);
             //TODO: blank isn't same as was in previous version now it is only represents a null check, need to find out solution or replace in themes == blank check to to .empty? == false expression
             scriptObject.SetValue("blank", EmptyScriptObject.Default, true);
             //Store special layout setter action in the context, it is allows to set the WorkContext.Layout property from template during rendering in the CommonFilters.Layout function

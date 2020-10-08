@@ -295,7 +295,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
         private ShopifyLiquidThemeEngine GetThemeEngine(bool useThemesInheritance, LiquidThemeEngineOptions options)
         {
             return new ShopifyLiquidThemeEngine(MemoryCache, GetWorkContextAccessor(useThemesInheritance), HttpContextAccessor,
-                null, ContentBlobProvider, null, new OptionsWrapper<LiquidThemeEngineOptions>(options), new FeaturesAgent());
+                null, ContentBlobProvider, null, new OptionsWrapper<LiquidThemeEngineOptions>(options), new FeaturesAgent(), null);
         }
 
         public void Dispose()
