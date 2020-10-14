@@ -413,7 +413,7 @@ namespace VirtoCommerce.Storefront
                 context => context.Request.Path.Value.EndsWith("xapi/graphql"),
                 appInner => appInner.RunProxy(context => {
                 context.Request.Path = PathString.Empty;
-                    return context.ForwardTo($"{platformEndpointOptions.Url}/graphql")
+                    return context.ForwardTo(new Uri(platformEndpointOptions.Url, "graphql"))
                         .AddXForwardedHeaders()
                         .Send();
                 }));

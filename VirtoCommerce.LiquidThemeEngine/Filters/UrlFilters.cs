@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Scriban;
+using VirtoCommerce.LiquidThemeEngine.Extensions;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Stores;
 using storefrontModel = VirtoCommerce.Storefront.Model;
@@ -208,12 +209,33 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         }
 
 
-        private enum TagAction
+        /// <summary>
+        ///  Generates an relative url with query string that contains serialized ProductSearchCriteria as parameters
+        ///  and add a new given aggregation item value  to  terms parameter
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="aggregationItem">aggregation item</param>
+        /// <returns>example: /collection?terms=color:Red</returns>
+        public static string AddTermUrl(TemplateContext context, string facetName, string term)
         {
-            Add,
-            Remove,
-            Replace
+            var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
+            var result = themeAdaptor.WorkContext.RequestUrl.SetQueryParameter("filter", $"{facetName}:{term}");         
+            return result?.PathAndQuery;
         }
 
+        /// <summary>
+        ///  Generates an relative url with query string that contains serialized ProductSearchCriteria as parameters
+        ///  and remove a given aggregation item value  from  terms parameter
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="aggregationItem">aggregation item</param>
+        /// <returns>example: /collection</returns>
+        public static string RemoveTermUrl(TemplateContext context, string facetName, string term)
+        {
+            var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
+            var result = themeAdaptor.WorkContext.RequestUrl.SetQueryParameter("filter", null);
+            return result?.PathAndQuery;
+        }
+             
     }
 }
