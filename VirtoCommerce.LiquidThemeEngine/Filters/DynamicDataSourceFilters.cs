@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -8,20 +7,21 @@ using System.Text;
 using GraphQL;
 using Scriban;
 using Scriban.Runtime;
+using VirtoCommerce.LiquidThemeEngine.Extensions;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
     public static class DataSourceFilter
     {
-        public static object GraphqlDataSource(TemplateContext context, string fileName)
+        public static ScriptObject GraphqlDataSource(TemplateContext context, string fileName)
         {
-            //TODO: replace all @placeholders to values from context using regexp
-
             var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
             var query = themeAdaptor.GetAssetStreamAsync(Path.Combine("graphql", fileName)).GetAwaiter().GetResult().ReadToString();
             var graphQLRequest = new GraphQLRequest(query);
-            var response = themeAdaptor.GraphQLClient.SendQueryAsync<ExpandoObject>(graphQLRequest).GetAwaiter().GetResult();
+            //TODO: try call async
+            var response =  themeAdaptor.GraphQLClient.SendQueryAsync<ExpandoObject>(graphQLRequest).GetAwaiter().GetResult();
+            response.ThrowIfHasErrors();
             var result = BuildScriptObject(response.Data);
             return result;
         }
