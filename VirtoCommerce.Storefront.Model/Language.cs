@@ -30,7 +30,7 @@ namespace VirtoCommerce.Storefront.Model
             ThreeLeterLanguageName = culture.ThreeLetterISOLanguageName;
             TwoLetterLanguageName = culture.TwoLetterISOLanguageName;
             NativeName = culture.NativeName;
-            if (culture != CultureInfo.InvariantCulture)
+            if (!culture.IsNeutralCulture && culture != CultureInfo.InvariantCulture)
             {
                 var regionInfo = new RegionInfo(cultureName);
                 TwoLetterRegionName = regionInfo.TwoLetterISORegionName;
