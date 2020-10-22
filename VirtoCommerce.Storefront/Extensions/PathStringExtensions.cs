@@ -12,10 +12,10 @@ namespace VirtoCommerce.Storefront.Extensions
 
         const string FILE_SCHEME = "file";
 
-        private static Regex _storeLangeExpr = new Regex(@"^/\b\S+\b/[a-zA-Z]{2}-[a-zA-Z]{2}/");
+        private static string _storeLangeExpr = @"^/\b\S+\b/[a-zA-Z]{2}/";
         public static PathString GetStoreAndLangSegment(this PathString path)
         {
-            var matches = _storeLangeExpr.Match(path);
+            var matches = Regex.Match(path, _storeLangeExpr);
             return matches.Success ? matches.Value : "/";
         }
 
