@@ -64,26 +64,36 @@ jobs:
     - name: SonarCloud End
       uses: VirtoCommerce/vc-github-actions/sonar-scanner-end@master
 
+    - name: Quality Gate
+      uses: VirtoCommerce/vc-github-actions/sonar-quality-gate@master
+      with:
+        login: ${{secrets.SONAR_TOKEN}}
+
     - name: Packaging
       run: vc-build Compress -skip Clean+Restore+Compile+Test
 
-    # Step runs only on commit to master or dev brunch
     - name: Build Docker Image
       if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' }}
       id: dockerBuild
       uses: VirtoCommerce/vc-github-actions/build-docker-image@master
       with:
-        imageName: "storefront"
         tag: ${{ steps.image.outputs.taggedVersion }}
+        imageName: "storefront"
         dockerFiles: "https://raw.githubusercontent.com/VirtoCommerce/vc-docker/master/linux/storefront/Dockerfile"
 
-    # Step runs only on commit to master or dev brunch
+    - name: Publish to Blob
+      if: ${{ github.ref == 'refs/heads/dev' }}
+      id: blobRelease
+      uses: VirtoCommerce/vc-github-actions/publish-blob-release@master
+      with:
+        blobSAS: ${{ secrets.BLOB_TOKEN }}
+
     - name: Publish Github Release
+      if: ${{ github.ref == 'refs/heads/master' }}
       with:
         changelog: ${{ steps.changelog.outputs.changelog }}
       uses: VirtoCommerce/vc-github-actions/publish-github-release@master
 
-    # Step runs only on commit to master or dev brunch
     - name: Docker Login
       if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' }}
       uses: azure/docker-login@v1
@@ -92,7 +102,6 @@ jobs:
         username: $GITHUB_ACTOR
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    # Step runs only on commit to master or dev brunch
     - name: Publish Docker Image
       if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' }}
       uses: VirtoCommerce/vc-github-actions/publish-docker-image@master
