@@ -1,7 +1,19 @@
+using System;
+using System.Linq;
+
 namespace VirtoCommerce.Storefront.Caching.Redis
 {
     internal class RedisCachingMessage
     {
+        public RedisCachingMessage()
+        {
+            Id = $"{Guid.NewGuid():N}";
+            CreationDate = DateTime.UtcNow;
+        }
+
+        public DateTime? CreationDate { get; set; }
+
+        public string InstanceId { get; set; }
         public string Id { get; set; }
 
         public object[] CacheKeys { get; set; }
@@ -9,5 +21,10 @@ namespace VirtoCommerce.Storefront.Caching.Redis
         public bool IsPrefix { get; set; }
 
         public bool IsToken { get; set; }
+
+        public override string ToString()
+        {
+            return $"{InstanceId}:{(IsToken ? "token" : "key")}:{string.Join(", ", CacheKeys?.Select(x => x) ?? Array.Empty<object>())}";
+        }
     }
 }

@@ -22,7 +22,9 @@ namespace VirtoCommerce.Storefront.Caching.Redis
         private readonly IConnectionMultiplexer _connection;
         private readonly ILogger<RedisStorefrontMemoryCache> _log;
 
+        private bool _isSubscribed;
         private bool _disposed;
+        private readonly object _lock = new object();
 
         public RedisStorefrontMemoryCache(IMemoryCache memoryCache
             , IOptions<StorefrontOptions> cachingOptions
@@ -33,24 +35,17 @@ namespace VirtoCommerce.Storefront.Caching.Redis
         {
             _connection = ConnectionMultiplexer.Connect(redisCachingOptions.Value.Configuration);
             _log = loggerFactory?.CreateLogger<RedisStorefrontMemoryCache>();
+            _bus = _connection.GetSubscriber();
 
             _redisCachingOptions = redisCachingOptions.Value;
             _storefrontOptions = cachingOptions.Value;
 
-            _connection.ConnectionFailed += OnConnectionFailed;
-            _connection.ConnectionRestored += OnConnectionRestored;
-
             CacheCancellableTokensRegistry.OnTokenCancelled = CacheCancellableTokensRegistry_OnTokenCancelled;
-
-            _bus = _connection.GetSubscriber();
-            _bus.Subscribe(_redisCachingOptions.ChannelName, OnMessage, CommandFlags.FireAndForget);
-
-            _log.LogTrace($"Subscribe to Redis backplane channel {_redisCachingOptions.ChannelName } with instance id:{ _instanceId }");
         }
 
         private void CacheCancellableTokensRegistry_OnTokenCancelled(TokenCancelledEventArgs e)
         {
-            var message = new RedisCachingMessage { Id = _instanceId, IsToken = true, CacheKeys = new[] { e.TokenKey } };
+            var message = new RedisCachingMessage { InstanceId = _instanceId, IsToken = true, CacheKeys = new[] { e.TokenKey } };
             Publish(message);
             _log.LogTrace($"Published token cancellation message {message}");
         }
@@ -84,9 +79,9 @@ namespace VirtoCommerce.Storefront.Caching.Redis
         {
             var message = JsonConvert.DeserializeObject<RedisCachingMessage>(redisValue);
 
-            if (!string.IsNullOrEmpty(message.Id) && !message.Id.EqualsInvariant(_instanceId))
+            if (!string.IsNullOrEmpty(message.InstanceId) && !message.InstanceId.EqualsInvariant(_instanceId))
             {
-                _log.LogInformation($"Received RedisCachingMessage from instance: {message.Id}");
+                _log.LogTrace($"Received message {message}");
 
                 foreach (var key in message.CacheKeys?.OfType<string>() ?? Array.Empty<string>())
                 {
@@ -104,19 +99,48 @@ namespace VirtoCommerce.Storefront.Caching.Redis
             }
         }
 
+        public override bool TryGetValue(object key, out object value)
+        {
+            //We can't do subscription in the ctor due to the fact that it can be called multiple times despite the fact that it registered as a singleton.
+            //So we have delayed the connection and subscription to the Redis server until the first cache call.
+            EnsureRedisServerConnection();
+            return base.TryGetValue(key, out value);
+        }
+
         protected override void EvictionCallback(object key, object value, EvictionReason reason, object state)
         {
-            _log.LogTrace($"Publishing a message with key:{key} from instance:{ _instanceId } to all subscribers");
-
-            var message = new RedisCachingMessage { Id = _instanceId, CacheKeys = new[] { key } };
+            var message = new RedisCachingMessage { InstanceId = _instanceId, CacheKeys = new[] { key } };
             Publish(message);
+            _log.LogTrace($"Published message {message} to the Redis backplane");
 
             base.EvictionCallback(key, value, reason, state);
         }
 
         private void Publish(RedisCachingMessage message)
         {
+            EnsureRedisServerConnection();
             _bus.Publish(_redisCachingOptions.ChannelName, JsonConvert.SerializeObject(message), CommandFlags.FireAndForget);
+        }
+
+        private void EnsureRedisServerConnection()
+        {
+            if (!_isSubscribed)
+            {
+                lock (_lock)
+                {
+                    if (!_isSubscribed)
+                    {
+                        _connection.ConnectionFailed += OnConnectionFailed;
+                        _connection.ConnectionRestored += OnConnectionRestored;
+
+                        _bus.Subscribe(_redisCachingOptions.ChannelName, OnMessage, CommandFlags.FireAndForget);
+
+                        _log.LogTrace($"Successfully subscribed to Redis backplane channel {_redisCachingOptions.ChannelName } with instance id:{ _instanceId }");
+                        _isSubscribed = true;
+                    }
+                }
+            }
+
         }
 
         protected override void Dispose(bool disposing)
