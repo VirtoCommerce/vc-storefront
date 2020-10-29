@@ -1,7 +1,5 @@
-using Microsoft.Extensions.Primitives;
 using System;
-using System.Collections.Concurrent;
-using System.Threading;
+using Microsoft.Extensions.Primitives;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 
@@ -9,9 +7,6 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public class CartCacheRegion : CancellableCacheRegion<CartCacheRegion>
     {
-        private static readonly ConcurrentDictionary<string, CancellationTokenSource> _cartRegionTokenLookup = new ConcurrentDictionary<string, CancellationTokenSource>();
-        private static readonly ConcurrentDictionary<string, CancellationTokenSource> _cartSearchRegionLookup = new ConcurrentDictionary<string, CancellationTokenSource>();
-
         public static IChangeToken CreateCustomerChangeToken(string customerId)
         {
             if (customerId == null)
@@ -19,8 +14,7 @@ namespace VirtoCommerce.Storefront.Domain
                 throw new ArgumentNullException(nameof(customerId));
             }
 
-            var cancellationTokenSource = _cartSearchRegionLookup.GetOrAdd(customerId, new CancellationTokenSource());
-            return new CompositeChangeToken(new[] { CreateChangeToken(), new CancellationChangeToken(cancellationTokenSource.Token) });
+            return CreateChangeTokenForKey(customerId);
         }
 
 
@@ -30,30 +24,22 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 throw new ArgumentNullException(nameof(cart));
             }
-            var cancellationTokenSource = _cartRegionTokenLookup.GetOrAdd(cart.GetCacheKey(), new CancellationTokenSource());
-            return new CompositeChangeToken(new[] { CreateChangeToken(), new CancellationChangeToken(cancellationTokenSource.Token) });
+
+            return CreateChangeTokenForKey(cart.GetCacheKey());
         }
 
         public static void ExpireCart(ShoppingCart cart)
         {
             if (cart != null)
             {
-                if (_cartRegionTokenLookup.TryRemove(cart.GetCacheKey(), out var token))
-                {
-                    token.Cancel();
-                    token.Dispose();
-                }
+                ExpireTokenForKey(cart.GetCacheKey());
                 ExpireCustomerCarts(cart.CustomerId);
             }
         }
 
         public static void ExpireCustomerCarts(string customerId)
         {
-            if (_cartSearchRegionLookup.TryRemove(customerId, out var token))
-            {
-                token.Cancel();
-                token.Dispose();
-            }
+            ExpireTokenForKey(customerId);
         }
 
     }
