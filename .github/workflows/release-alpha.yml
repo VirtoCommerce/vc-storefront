@@ -3,9 +3,7 @@ name: Storefront Release alpha CI
 
 on:
   workflow_dispatch:
-  pull_request_review:
-    types: 
-      - submitted
+
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -52,7 +50,7 @@ jobs:
         id: dockerBuild
         uses: VirtoCommerce/vc-github-actions/build-docker-image@master
         with:
-          imageName: "demo-storefront"
+          imageName: "storefront"
           tag: ${{ steps.image.outputs.taggedVersion }}
           dockerFiles: "https://raw.githubusercontent.com/VirtoCommerce/vc-docker/master/linux/storefront/Dockerfile"
 
