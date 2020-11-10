@@ -1,4 +1,5 @@
-name: CI
+# v1.1
+name: Storefront CI
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -42,18 +43,21 @@ jobs:
       run: dotnet tool install --global dotnet-sonarscanner
 
     - name: Get Image Version
-      uses: VirtoCommerce/vc-github-actions/get-image-version@dev
+      uses: VirtoCommerce/vc-github-actions/get-image-version@master
       id: image
 
     - name: Get changelog
       id: changelog
-      uses: VirtoCommerce/vc-github-actions/changelog-generator@dev
+      uses: VirtoCommerce/vc-github-actions/changelog-generator@master
 
     - name: Add version suffix
-      uses: VirtoCommerce/vc-github-actions/add-version-suffix@dev
+      if: ${{ github.ref != 'refs/heads/master' }}
+      uses: VirtoCommerce/vc-github-actions/add-version-suffix@master
+      with:
+        versionSuffix: ${{ steps.image.outputs.suffix }}
 
     - name: SonarCloud Begin
-      uses: VirtoCommerce/vc-github-actions/sonar-scanner-begin@dev
+      uses: VirtoCommerce/vc-github-actions/sonar-scanner-begin@master
 
     - name: Build
       run: vc-build Compile
@@ -62,7 +66,12 @@ jobs:
       run: vc-build Test -TestsFilter "Category=Unit|Category=CI" -skip
 
     - name: SonarCloud End
-      uses: VirtoCommerce/vc-github-actions/sonar-scanner-end@dev
+      uses: VirtoCommerce/vc-github-actions/sonar-scanner-end@master
+
+    - name: Quality Gate
+      uses: VirtoCommerce/vc-github-actions/sonar-quality-gate@master
+      with:
+        login: ${{secrets.SONAR_TOKEN}}
 
     - name: Packaging
       run: vc-build Compress -skip Clean+Restore+Compile+Test
@@ -70,14 +79,24 @@ jobs:
     - name: Build Docker Image
       if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' }}
       id: dockerBuild
-      uses: VirtoCommerce/vc-github-actions/build-docker-image@dev
+      uses: VirtoCommerce/vc-github-actions/build-docker-image@master
       with:
         tag: ${{ steps.image.outputs.taggedVersion }}
+        imageName: "storefront"
+        dockerFiles: "https://raw.githubusercontent.com/VirtoCommerce/vc-docker/master/linux/storefront/Dockerfile"
+
+    - name: Publish to Blob
+      if: ${{ github.ref == 'refs/heads/dev' }}
+      id: blobRelease
+      uses: VirtoCommerce/vc-github-actions/publish-blob-release@master
+      with:
+        blobSAS: ${{ secrets.BLOB_TOKEN }}
 
     - name: Publish Github Release
+      if: ${{ github.ref == 'refs/heads/master' }}
       with:
         changelog: ${{ steps.changelog.outputs.changelog }}
-      uses: VirtoCommerce/vc-github-actions/publish-github-release@dev
+      uses: VirtoCommerce/vc-github-actions/publish-github-release@master
 
     - name: Docker Login
       if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' }}
@@ -89,7 +108,7 @@ jobs:
 
     - name: Publish Docker Image
       if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' }}
-      uses: VirtoCommerce/vc-github-actions/publish-docker-image@dev
+      uses: VirtoCommerce/vc-github-actions/publish-docker-image@master
       with:
           image: ${{ steps.dockerBuild.outputs.imageName }}
           tag: ${{ steps.image.outputs.taggedVersion }}

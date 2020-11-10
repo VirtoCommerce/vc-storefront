@@ -261,7 +261,7 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             if (User.Identity.Name == SecurityConstants.AnonymousUsername || User.Claims.Any(x => x.Type == SecurityConstants.Claims.OperatorUserNameClaimType))
             {
-                return StoreFrontRedirect($"~/account/login?ReturnUrl={Request.Path}");
+                return StoreFrontRedirect($"~/account/login?ReturnUrl={System.Uri.EscapeDataString(Request.Path)}");
             }
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, null, CanImpersonateAuthorizationRequirement.PolicyName);
             if (!authorizationResult.Succeeded)
@@ -590,7 +590,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
                 if (string.IsNullOrEmpty(phoneNumber))
                 {
-                    WorkContext.Form.Errors.Add(SecurityErrorDescriber.OperationFailed());
+                    WorkContext.Form.Errors.Add(SecurityErrorDescriber.PhoneNumberNotFound());
                     return View("customers/forgot_password", WorkContext);
                 }
 
@@ -627,7 +627,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View(successViewName, WorkContext);
             }
 
-            WorkContext.Form.Errors.Add(new FormError { Description = sendingResult.ErrorMessage });
+            WorkContext.Form.Errors.Add(SecurityErrorDescriber.ErrorSendNotification(sendingResult.ErrorMessage));
             return View("customers/forgot_password", WorkContext);
         }
 
