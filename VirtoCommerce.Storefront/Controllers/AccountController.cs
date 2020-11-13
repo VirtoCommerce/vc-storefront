@@ -34,6 +34,7 @@ namespace VirtoCommerce.Storefront.Controllers
         private readonly StorefrontOptions _options;
         private readonly INotifications _platformNotificationApi;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IdentityOptions _identityOptions;
 
         private readonly string[] _firstNameClaims = { ClaimTypes.GivenName, "urn:github:name", ClaimTypes.Name };
 
@@ -44,7 +45,8 @@ namespace VirtoCommerce.Storefront.Controllers
             IEventPublisher publisher,
             INotifications platformNotificationApi,
             IAuthorizationService authorizationService,
-            IOptions<StorefrontOptions> options)
+            IOptions<StorefrontOptions> options,
+            IOptions<IdentityOptions> identityOptions)
             : base(workContextAccessor, urlBuilder)
         {
             _urlBuilder = urlBuilder;
@@ -53,6 +55,7 @@ namespace VirtoCommerce.Storefront.Controllers
             _options = options.Value;
             _platformNotificationApi = platformNotificationApi;
             _authorizationService = authorizationService;
+            _identityOptions = identityOptions.Value;
         }
 
         // GET: /account
@@ -129,8 +132,11 @@ namespace VirtoCommerce.Storefront.Controllers
                     user = await _signInManager.UserManager.FindByNameAsync(user.UserName);
                     await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, registration));
 
-                    await _signInManager.SignInAsync(user, isPersistent: true);
-                    await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                    if (!_identityOptions.SignIn.RequireConfirmedEmail)
+                    {
+                        await _signInManager.SignInAsync(user, isPersistent: true);
+                        await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                    }
 
                     // Send new user registration notification
                     var registrationEmailNotification = new RegistrationEmailNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
