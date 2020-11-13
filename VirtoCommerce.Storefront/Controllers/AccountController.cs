@@ -132,13 +132,11 @@ namespace VirtoCommerce.Storefront.Controllers
                     user = await _signInManager.UserManager.FindByNameAsync(user.UserName);
                     await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, registration));
 
-                    if (_identityOptions.SignIn.RequireConfirmedEmail)
+                    if (!_identityOptions.SignIn.RequireConfirmedEmail)
                     {
-                        return StoreFrontRedirect("~/account");
+                        await _signInManager.SignInAsync(user, isPersistent: true);
+                        await _publisher.Publish(new UserLoginEvent(WorkContext, user));
                     }
-
-                    await _signInManager.SignInAsync(user, isPersistent: true);
-                    await _publisher.Publish(new UserLoginEvent(WorkContext, user));
 
                     // Send new user registration notification
                     var registrationEmailNotification = new RegistrationEmailNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
