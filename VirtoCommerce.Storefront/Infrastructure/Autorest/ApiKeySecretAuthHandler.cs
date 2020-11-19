@@ -9,17 +9,13 @@ using VirtoCommerce.Storefront.Model;
 
 namespace VirtoCommerce.Storefront.Infrastructure.Autorest
 {
-    public class ApiKeySecretAuthHandler : DelegatingHandler
+    public class ApiKeySecretAuthHandler : BaseAuthHandler
     {
         private readonly PlatformEndpointOptions _options;
-        private readonly IWorkContextAccessor _workContextAccessor;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ApiKeySecretAuthHandler(IOptions<PlatformEndpointOptions> options, IWorkContextAccessor workContextAccessor, IHttpContextAccessor httpContextAccessor)
+        public ApiKeySecretAuthHandler(IOptions<PlatformEndpointOptions> options, IWorkContextAccessor workContextAccessor, IHttpContextAccessor httpContextAccessor) : base(workContextAccessor, httpContextAccessor)
         {
             _options = options.Value;
-            _workContextAccessor = workContextAccessor;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -53,41 +49,6 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
 
                 signature.Hash = HmacUtility.GetHashString(key => new HMACSHA256(key), _options.SecretKey, parameters);
                 request.Headers.Authorization = new AuthenticationHeaderValue("HMACSHA256", signature.ToString());
-            }
-        }
-
-        private void AddCurrentUser(HttpRequestMessage request)
-        {
-            var worContex = _workContextAccessor.WorkContext;
-            if (worContex != null)
-            {
-                var currentUser = worContex.CurrentUser;
-
-                //Add special header with user name to each API request for future audit and logging
-                if (currentUser != null && currentUser.IsRegisteredUser)
-                {
-                    var userName = currentUser.OperatorUserName;
-
-                    if (string.IsNullOrEmpty(userName))
-                    {
-                        userName = currentUser.UserName;
-                    }
-
-                    if (!string.IsNullOrEmpty(userName))
-                    {
-                        request.Headers.Add("VirtoCommerce-User-Name", userName);
-                    }
-                }
-            }
-        }
-
-        private void AddUserIp(HttpRequestMessage request)
-        {
-            var userIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
-
-            if (!string.IsNullOrEmpty(userIp))
-            {
-                request.Headers.Add("True-Client-IP", userIp);
             }
         }
     }

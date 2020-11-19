@@ -5,14 +5,16 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using IdentityModel.Client;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using VirtoCommerce.Storefront.Model;
 
 namespace VirtoCommerce.Storefront.Infrastructure.Autorest
 {
     /// <summary>
     /// HTTP message delegating handler that encapsulates access token handling and renewment
     /// </summary>
-    public class UserPasswordAuthHandler : DelegatingHandler
+    public class UserPasswordAuthHandler : BaseAuthHandler
     {
         private static readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
         private static string _accessToken;
@@ -53,7 +55,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// </summary>
         /// <param name="options"></param>
         /// <param name="clientFactory"></param>
-        public UserPasswordAuthHandler(IOptions<PlatformEndpointOptions> options, IHttpClientFactory clientFactory)
+        public UserPasswordAuthHandler(IOptions<PlatformEndpointOptions> options, IHttpClientFactory clientFactory, IWorkContextAccessor workContextAccessor, IHttpContextAccessor httpContextAccessor) : base(workContextAccessor, httpContextAccessor)
         {
             _options = options.Value;
             _clientFactory = clientFactory;
@@ -69,6 +71,8 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// </returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            AddCurrentUser(request);
+            AddUserIp(request);
 
             var accessToken = await GetAccessTokenAsync(cancellationToken);
             if (string.IsNullOrWhiteSpace(accessToken) && (!(await RenewTokensAsync(cancellationToken))))
@@ -118,7 +122,6 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
 
             return false;
         }
-
         private async Task<string> GetAccessTokenAsync(CancellationToken cancellationToken)
         {
             if (await _lock.WaitAsync(Timeout, cancellationToken).ConfigureAwait(false))
