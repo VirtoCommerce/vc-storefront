@@ -13,6 +13,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
 {
     /// <summary>
     /// HTTP message delegating handler that encapsulates access token handling and renewment
+    /// Implements user-password authorization to the Platform API 
     /// </summary>
     public class UserPasswordAuthHandler : BaseAuthHandler
     {
@@ -71,16 +72,12 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// </returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            AddCurrentUser(request);
-            AddUserIp(request);
-
             var accessToken = await GetAccessTokenAsync(cancellationToken);
             if (string.IsNullOrWhiteSpace(accessToken) && (!(await RenewTokensAsync(cancellationToken))))
             {
                 return new HttpResponseMessage(HttpStatusCode.Unauthorized) { RequestMessage = request };
             }
 
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
             var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
             if (response.StatusCode != HttpStatusCode.Unauthorized)
@@ -95,8 +92,12 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
 
             response.Dispose(); // This 401 response will not be used for anything so is disposed to unblock the socket.
 
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
             return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+
+        protected override void AddAuthentication(HttpRequestMessage request)
+        {
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
         }
 
         private async Task<bool> RenewTokensAsync(CancellationToken cancellationToken)

@@ -1,20 +1,43 @@
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using VirtoCommerce.Storefront.Model;
 
 namespace VirtoCommerce.Storefront.Infrastructure.Autorest
 {
-    public class BaseAuthHandler : DelegatingHandler
+    /// <summary>
+    /// Basic implementation of authorization handlers to the Platform API 
+    /// </summary>
+    public abstract class BaseAuthHandler : DelegatingHandler
     {
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public BaseAuthHandler(IWorkContextAccessor workContextAccessor, IHttpContextAccessor httpContextAccessor)
+        protected BaseAuthHandler(IWorkContextAccessor workContextAccessor, IHttpContextAccessor httpContextAccessor)
         {
             _workContextAccessor = workContextAccessor;
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// Add platform-specific headers and authentification, then call basic SendAsync
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            AddCurrentUser(request);
+            AddUserIp(request);
+            AddAuthentication(request);
+            return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Add end-user name to the reqiest header
+        /// </summary>
+        /// <param name="request"></param>
         protected void AddCurrentUser(HttpRequestMessage request)
         {
             var worContex = _workContextAccessor.WorkContext;
@@ -40,6 +63,10 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
             }
         }
 
+        /// <summary>
+        /// Add end-user IP to the reqiest header
+        /// </summary>
+        /// <param name="request"></param>
         protected void AddUserIp(HttpRequestMessage request)
         {
             var userIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
@@ -49,5 +76,12 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
                 request.Headers.Add("True-Client-IP", userIp);
             }
         }
+
+        /// <summary>
+        /// Add authentication details to the request.
+        /// This method should be implemented depending on authorization way
+        /// </summary>
+        /// <param name="request"></param>
+        protected abstract void AddAuthentication(HttpRequestMessage request);
     }
 }

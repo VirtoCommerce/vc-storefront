@@ -1,14 +1,16 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.Model;
 
 namespace VirtoCommerce.Storefront.Infrastructure.Autorest
 {
+    /// <summary>
+    /// HTTP message delegating handler that encapsulates access token handling and renewment
+    /// Implements key-secret authorization to the Platform API 
+    /// </summary>
     public class ApiKeySecretAuthHandler : BaseAuthHandler
     {
         private readonly PlatformEndpointOptions _options;
@@ -18,24 +20,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
             _options = options.Value;
         }
 
-        /// <summary>
-        /// Sends an HTTP request to the inner handler to send to the server as an asynchronous operation.
-        /// </summary>
-        /// <param name="request">The HTTP request message to send to the server.</param>
-        /// <param name="cancellationToken">A cancellation token to cancel operation.</param>
-        /// <returns>
-        /// Returns <see cref="T:System.Threading.Tasks.Task`1" />. The task object representing the asynchronous operation.
-        /// </returns>
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            AddAuthorization(request);
-            AddCurrentUser(request);
-            AddUserIp(request);
-
-            return await base.SendAsync(request, cancellationToken);
-        }
-
-        private void AddAuthorization(HttpRequestMessage request)
+        protected override void AddAuthentication(HttpRequestMessage request)
         {
             if (_options != null)
             {
