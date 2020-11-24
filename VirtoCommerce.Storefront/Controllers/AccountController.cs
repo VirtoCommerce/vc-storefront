@@ -255,10 +255,26 @@ namespace VirtoCommerce.Storefront.Controllers
 
         [HttpGet("confirmemail")]
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string token)
+        public async Task<ActionResult> ConfirmEmail(string userId, string token)
         {
-            var result = await _signInManager.UserManager.ConfirmEmailAsync(WorkContext.CurrentUser, token);
+            if (string.IsNullOrEmpty(userId))
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserNotFound());
+                return View("error", WorkContext);
+            }
+
+            var user = await _signInManager.UserManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserNotFound());
+                return View("error", WorkContext);
+            }
+
+            var result = await _signInManager.UserManager.ConfirmEmailAsync(user, token);
+
             var viewName = result.Succeeded ? "confirmation-done" : "error";
+
             return View(viewName);
         }
 
