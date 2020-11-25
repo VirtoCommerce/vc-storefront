@@ -170,7 +170,7 @@ On Mac OS and Linux:
 1. If you did not install sample data with your platform, you need to create new store in platform manager and download themes as it described in this article: [Theme development](../fundamentals/theme-development.md)
 
 #### Running the Storefront only on HTTP schema
- 
+
 * In order to run the platform only at HTTP schema in production mode, it's enough to pass only HTTP URLs in `--urls` argument of the `dotnet` command.
 
 ```console
@@ -197,7 +197,13 @@ Read more about [enforcing HTTPS in ASP.NET Core](https://docs.microsoft.com/en-
 
 * Trust the .Net Core Development Self-Signed Certificate. More details on trusting the self-signed certificate can be found [here](https://blogs.msdn.microsoft.com/robert_mcmurray/2013/11/15/how-to-trust-the-iis-express-self-signed-certificate/)
 
+#### Forward the scheme for Linux and non-IIS reverse proxies
 
+Apps that call UseHttpsRedirection and UseHsts put a site into an infinite loop if deployed to an Azure Linux App Service, Azure Linux virtual machine (VM), Linux container or behind any other reverse proxy besides IIS. TLS is terminated by the reverse proxy, and Kestrel isn't made aware of the correct request scheme. OAuth and OIDC also fail in this configuration because they generate incorrect redirects. UseIISIntegration adds and configures Forwarded Headers Middleware when running behind IIS, but there's no matching automatic configuration for Linux (Apache or Nginx integration).
+
+To forward the scheme from the proxy in non-IIS scenarios, set `ASPNETCORE_FORWARDEDHEADERS_ENABLED` environment variable to `true`.
+
+For more details on how it works, see the Microsoft [documentation](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-5.0#forward-the-scheme-for-linux-and-non-iis-reverse-proxies).
 
 ## License
 Copyright (c) Virto Solutions LTD.  All rights reserved.
