@@ -5,14 +5,17 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using IdentityModel.Client;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using VirtoCommerce.Storefront.Model;
 
 namespace VirtoCommerce.Storefront.Infrastructure.Autorest
 {
     /// <summary>
     /// HTTP message delegating handler that encapsulates access token handling and renewment
+    /// Implements user-password authorization to the Platform API 
     /// </summary>
-    public class UserPasswordAuthHandler : DelegatingHandler
+    public class UserPasswordAuthHandler : BaseAuthHandler
     {
         private static readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
         private static string _accessToken;
@@ -53,7 +56,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// </summary>
         /// <param name="options"></param>
         /// <param name="clientFactory"></param>
-        public UserPasswordAuthHandler(IOptions<PlatformEndpointOptions> options, IHttpClientFactory clientFactory)
+        public UserPasswordAuthHandler(IOptions<PlatformEndpointOptions> options, IHttpClientFactory clientFactory, IWorkContextAccessor workContextAccessor, IHttpContextAccessor httpContextAccessor) : base(workContextAccessor, httpContextAccessor)
         {
             _options = options.Value;
             _clientFactory = clientFactory;
@@ -69,14 +72,12 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// </returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-
             var accessToken = await GetAccessTokenAsync(cancellationToken);
             if (string.IsNullOrWhiteSpace(accessToken) && (!(await RenewTokensAsync(cancellationToken))))
             {
                 return new HttpResponseMessage(HttpStatusCode.Unauthorized) { RequestMessage = request };
             }
 
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
             var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
             if (response.StatusCode != HttpStatusCode.Unauthorized)
@@ -91,8 +92,12 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
 
             response.Dispose(); // This 401 response will not be used for anything so is disposed to unblock the socket.
 
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
             return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+
+        protected override void AddAuthentication(HttpRequestMessage request)
+        {
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
         }
 
         private async Task<bool> RenewTokensAsync(CancellationToken cancellationToken)
@@ -118,7 +123,6 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
 
             return false;
         }
-
         private async Task<string> GetAccessTokenAsync(CancellationToken cancellationToken)
         {
             if (await _lock.WaitAsync(Timeout, cancellationToken).ConfigureAwait(false))
