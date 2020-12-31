@@ -1,45 +1,54 @@
+using System;
 using Microsoft.Extensions.Primitives;
-using System.Threading;
 
 namespace VirtoCommerce.Storefront.Model.Common.Caching
 {
+    /// <summary>
+    /// Represents strongly typed cache region containing cancellation token for a concrete cache region type
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class CancellableCacheRegion<T>
     {
-        private static CancellationTokenSource _regionTokenSource;
-        private static CancellationChangeToken _regionChangeToken;
-        private static object _lock = new object();
-       
-        public static IChangeToken CreateChangeToken()
+        private static readonly string _regionName = typeof(T).Name;
+
+        protected CancellableCacheRegion()
         {
-            if(_regionChangeToken == null)
-            {
-                lock (_lock)
-                {
-                    if (_regionChangeToken == null)
-                    {
-                        _regionTokenSource = new CancellationTokenSource();
-                        _regionChangeToken = new CancellationChangeToken(_regionTokenSource.Token);
-                    }
-                }
-            }
-            return _regionChangeToken;
         }
 
+        public static IChangeToken CreateChangeTokenForKey(string key)
+        {
+            if (key is null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+            return new CompositeChangeToken(new[] { CreateChangeToken(), CacheCancellableTokensRegistry.CreateChangeToken(GenerateRegionTokenKey(key)) });
+        }
+
+        public static IChangeToken CreateChangeToken()
+        {
+            return CacheCancellableTokensRegistry.CreateChangeToken(GenerateRegionTokenKey());
+        }
+
+        public static void ExpireTokenForKey(string key)
+        {
+            if (!(key is null))
+            {
+                CacheCancellableTokensRegistry.TryCancelToken(GenerateRegionTokenKey(key));
+            }
+        }
 
         public static void ExpireRegion()
         {
-            lock (_lock)
-            {
-                if (_regionTokenSource != null)
-                {
-                    _regionTokenSource.Cancel();
-                    _regionTokenSource.Dispose();
-                    //Need to reset cached tokens because they are already changed
-                    _regionTokenSource = null;
-                    _regionChangeToken = null;
-                }
-            }
+            CacheCancellableTokensRegistry.TryCancelToken(GenerateRegionTokenKey());
+        }
 
+        private static string GenerateRegionTokenKey(string key = null)
+        {
+            if (!(key is null))
+            {
+                return $"{_regionName}:{key}";
+            }
+            return $"{_regionName}";
         }
 
     }

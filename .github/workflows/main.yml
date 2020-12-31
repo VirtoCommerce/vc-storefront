@@ -49,6 +49,7 @@ jobs:
       run: |
         echo "PUBLISH_TO_DOCKER=false" >> $GITHUB_ENV
         echo "UPDATE_LATEST_TAG=false" >> $GITHUB_ENV 
+
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
@@ -74,6 +75,7 @@ jobs:
         else
           echo "VERSION_SUFFIX=${{ steps.image.outputs.suffix }}" >> $GITHUB_ENV
         fi;
+
     - name: Add version suffix
       if: ${{ github.ref != 'refs/heads/master' }}
       uses: VirtoCommerce/vc-github-actions/add-version-suffix@master

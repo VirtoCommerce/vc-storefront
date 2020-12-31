@@ -47,16 +47,27 @@ namespace VirtoCommerce.Storefront.Domain.Security
         }
 
         #region IUserStore<User> members
+
         public async Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken)
         {
+            var newContactCreated = false;
             if (user.Contact != null)
             {
                 user.Contact = await _memberService.CreateContactAsync(user.Contact);
+                newContactCreated = true;
             }
+
             var dtoUser = user.ToUserDto();
             var resultDto = await _platformSecurityApi.CreateAsync(dtoUser);
+
+            if (resultDto.Succeeded != true && newContactCreated)
+            {
+                await _memberService.DeleteContactAsync(user.Contact.Id);
+            }
+
             return resultDto.ToIdentityResult();
         }
+
         public async Task<IdentityResult> CreateAsync(Role role, CancellationToken cancellationToken)
         {
             var result = IdentityResult.Success;
@@ -66,11 +77,12 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public async Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
         {
-            await _platformSecurityApi.DeleteAsync(new[] { user.UserName });
+            await _platformSecurityApi.DeleteAsync(new[] {user.UserName});
             //Evict user from the cache
             SecurityCacheRegion.ExpireUser(user.Id);
             return IdentityResult.Success;
         }
+
         public Task<IdentityResult> DeleteAsync(Role role, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -98,6 +110,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             {
                 result.Contact = await _memberService.GetContactByIdAsync(result.ContactId);
             }
+
             return result;
         }
 
@@ -116,6 +129,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             {
                 result.Contact = await _memberService.GetContactByIdAsync(result.ContactId);
             }
+
             return result;
         }
 
@@ -171,6 +185,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         #endregion
 
         #region IUserLockoutStore<User> members
+
         public Task<int> GetAccessFailedCountAsync(User user, CancellationToken cancellationToken)
         {
             return Task.FromResult(user.AccessFailedCount);
@@ -185,6 +200,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         {
             return Task.FromResult((DateTimeOffset?)user.LockoutEndDateUtc);
         }
+
         public Task<int> IncrementAccessFailedCountAsync(User user, CancellationToken cancellationToken)
         {
             user.AccessFailedCount++;
@@ -208,6 +224,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             user.LockoutEndDateUtc = lockoutEnd?.UtcDateTime;
             return Task.CompletedTask;
         }
+
         #endregion
 
         #region IUserEmailStore<User> members
@@ -267,6 +284,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         #endregion
 
         #region IUserLoginStore<User> members
+
         public Task AddLoginAsync(User user, UserLoginInfo login, CancellationToken cancellationToken)
         {
             user.ExternalLogins.Add(new ExternalUserLoginInfo
@@ -294,6 +312,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             {
                 result.Contact = await _memberService.GetContactByIdAsync(result.ContactId);
             }
+
             return result;
         }
 
@@ -310,15 +329,19 @@ namespace VirtoCommerce.Storefront.Domain.Security
             {
                 user.ExternalLogins.Remove(existUserLogin);
             }
+
             return Task.CompletedTask;
         }
+
         #endregion
 
         #region IUserPasswordStore<User> members
+
         public Task<string> GetPasswordHashAsync(User user, CancellationToken cancellationToken)
         {
             return Task.FromResult(user.PasswordHash);
         }
+
         public Task<bool> HasPasswordAsync(User user, CancellationToken cancellationToken)
         {
             return Task.FromResult(user.PasswordHash != null);
@@ -329,9 +352,11 @@ namespace VirtoCommerce.Storefront.Domain.Security
             user.PasswordHash = passwordHash;
             return Task.CompletedTask;
         }
+
         #endregion
 
         #region IUserSecurityStampStore<User> members
+
         public Task SetSecurityStampAsync(User user, string stamp, CancellationToken cancellationToken)
         {
             user.SecurityStamp = stamp;
@@ -342,9 +367,11 @@ namespace VirtoCommerce.Storefront.Domain.Security
         {
             return Task.FromResult(user.SecurityStamp);
         }
+
         #endregion
 
         #region IUserPhoneNumberStore<User> members
+
         public Task SetPhoneNumberAsync(User user, string phoneNumber, CancellationToken cancellationToken)
         {
             user.PhoneNumber = phoneNumber;
@@ -381,6 +408,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         }
 
         #region IUserClaimStore<User> members
+
         public Task<IList<Claim>> GetClaimsAsync(User user, CancellationToken cancellationToken)
         {
             IList<Claim> result = new List<Claim>();
@@ -412,6 +440,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                     result.Add(new Claim(SecurityConstants.Claims.PermissionClaimType, permission));
                 }
             }
+
             if (!user.Roles.IsNullOrEmpty())
             {
                 foreach (var role in user.Roles)
@@ -419,6 +448,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                     result.Add(new Claim(ClaimTypes.Role, role.Id));
                 }
             }
+
             return Task.FromResult(result);
         }
 
@@ -442,6 +472,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             IList<User> result = new List<User>();
             return Task.FromResult(result);
         }
+
         #endregion
 
         #region IRoleStore<Role> members
@@ -483,9 +514,11 @@ namespace VirtoCommerce.Storefront.Domain.Security
         {
             throw new NotImplementedException();
         }
+
         #endregion
 
         #region IUserAuthenticatorKeyStore<User>
+
         public Task SetAuthenticatorKeyAsync(User user, string key, CancellationToken cancellationToken)
         {
             user.TwoFactorAuthenticatorKey = key;
@@ -496,6 +529,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         {
             return Task.FromResult(user.TwoFactorAuthenticatorKey);
         }
+
         #endregion IUserAuthenticatorKeyStore<User>
 
         public void Dispose()
@@ -513,6 +547,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
                 return Task.FromResult(user);
             }
+
             return null;
         }
     }
