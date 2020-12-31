@@ -539,16 +539,15 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         private Task<User> PrepareUserResultAsync(MemoryCacheEntryOptions options, AutoRestClients.PlatformModuleApi.Models.ApplicationUser userDto)
         {
+            User result = null;
             if (userDto != null)
             {
-                var user = userDto.ToUser();
+                result = userDto.ToUser();
                 options.AddExpirationToken(new PollingApiUserChangeToken(_platformSecurityApi, _options.ChangesPollingInterval));
                 options.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
 
-                return Task.FromResult(user);
             }
-
-            return null;
+            return Task.FromResult(result);
         }
     }
 }
