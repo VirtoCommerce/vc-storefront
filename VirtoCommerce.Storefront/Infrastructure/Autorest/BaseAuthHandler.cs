@@ -60,6 +60,10 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
                         request.Headers.Add("VirtoCommerce-User-Name", userName);
                     }
                 }
+                else
+                {
+                    request.Headers.Add("VirtoCommerce-User-Name", "Anonymous");
+                }
             }
         }
 

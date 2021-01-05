@@ -122,6 +122,14 @@ namespace VirtoCommerce.Storefront.Model.Security
                 Description = error
             };
         }
+        public static FormError UserIsLockedOut()
+        {
+            return new FormError
+            {
+                Code = nameof(UserIsLockedOut).PascalToKebabCase(),
+                Description = "User is locked out"
+            };
+        }
 
     }
 }
