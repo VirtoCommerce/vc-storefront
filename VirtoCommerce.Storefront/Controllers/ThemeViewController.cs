@@ -20,5 +20,11 @@ namespace VirtoCommerce.Storefront.Controllers
             WorkContext.SlugRoutingData = RouteData.Values.GetValueOrDefault("routing") as SlugRoutingData;
             return View(viewName);
         }
+
+        [HttpGet("checkout")]
+        public IActionResult CheckoutView()
+        {          
+            return View("checkout");
+        }
     }
 }
