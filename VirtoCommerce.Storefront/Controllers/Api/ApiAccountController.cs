@@ -179,7 +179,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
 
             return result;
-        }
+        }     
 
 
         // POST: storefrontapi/account/password

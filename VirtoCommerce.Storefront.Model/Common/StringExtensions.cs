@@ -10,7 +10,7 @@ namespace VirtoCommerce.Storefront.Model.Common
 {
     public static class StringExtensions
     {
-        private static readonly Regex _validJsonPath = new Regex(@"^[a-zA-Z_]\w*(\.@?[a-zA-Z_]\w*)*$", RegexOptions.Compiled);
+        private static readonly Regex _validJsonPath = new Regex(@"^[a-zA-Z0-9]\w*(\.@?[a-zA-Z_]\w*)*$", RegexOptions.Compiled);
         private static readonly Regex _regexIllegal = new Regex(@"[\[, \]]", RegexOptions.Compiled);
         private static readonly Regex _regex1 = new Regex(@"([A-Z]+)([A-Z][a-z])", RegexOptions.Compiled);
         private static readonly Regex _regex2 = new Regex(@"([a-z\d])([A-Z])", RegexOptions.Compiled);
