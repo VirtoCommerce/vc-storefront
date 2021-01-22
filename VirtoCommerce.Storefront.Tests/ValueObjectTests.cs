@@ -52,7 +52,7 @@ namespace VirtoCommerce.Storefront.Tests
 
                         var equals = object1.Equals(object2);
 
-                        Assert.False(equals);
+                        Assert.False(equals, $"Objects #{i} and #{j} must not be equal.");
                     }
                 }
             }
