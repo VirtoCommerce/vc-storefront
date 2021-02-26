@@ -134,6 +134,8 @@ namespace VirtoCommerce.Storefront.Model.Stores
         /// </summary>
         public bool IsSpa { get; set; }
 
+        public bool EmailVerificationEnabled { get; set; }
+
         public decimal FixedTaxRate { get; set; }
 
         public string CartValidationRuleSet { get; set; }

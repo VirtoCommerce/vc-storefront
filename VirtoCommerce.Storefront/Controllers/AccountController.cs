@@ -149,7 +149,7 @@ namespace VirtoCommerce.Storefront.Controllers
                     };
                     await SendNotificationAsync(registrationEmailNotification);
 
-                    if (_options.SendAccountConfirmation)
+                    if (_options.SendAccountConfirmation || WorkContext.CurrentStore.EmailVerificationEnabled)
                     {
                         var token = await _signInManager.UserManager.GenerateEmailConfirmationTokenAsync(user);
                         var callbackUrl = Url.Action("ConfirmEmail", "Account", new { UserId = user.Id, Token = token }, protocol: Request.Scheme, host: WorkContext.CurrentStore.Host);

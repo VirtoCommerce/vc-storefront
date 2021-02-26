@@ -1,14 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Stores;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
+using paymentDto = VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models;
 using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using storeDto = VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models;
-using paymentDto = VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -89,13 +88,14 @@ namespace VirtoCommerce.Storefront.Domain
             result.TaxCalculationEnabled = result.Settings.GetSettingValue("Stores.TaxCalculationEnabled", true);
             result.AnonymousUsersAllowed = result.Settings.GetSettingValue("Stores.AllowAnonymousUsers", true);
             result.IsSpa = result.Settings.GetSettingValue("Stores.IsSpa", false);
+            result.EmailVerificationEnabled = result.Settings.GetSettingValue("Stores.EmailVerificationEnabled", false);
 
             result.CartValidationRuleSet = result.Settings.GetSettingValue<string>("Stores.CartValidationRuleSet", null);
-            if(string.IsNullOrEmpty(result.CartValidationRuleSet))
+            if (string.IsNullOrEmpty(result.CartValidationRuleSet))
             {
                 result.CartValidationRuleSet = result.DynamicProperties?.GetDynamicPropertyValue("CartValidationRuleSet");
             }
-    
+
             return result;
         }
 
