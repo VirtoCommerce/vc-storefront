@@ -21,12 +21,10 @@ using Microsoft.Extensions.WebEncoders;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using StackExchange.Redis;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Binders;
 using VirtoCommerce.Storefront.Caching;
-using VirtoCommerce.Storefront.Caching.Redis;
 using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Cart;
@@ -39,7 +37,6 @@ using VirtoCommerce.Storefront.Infrastructure.Swagger;
 using VirtoCommerce.Storefront.JsonConverters;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Bus;
@@ -135,7 +132,7 @@ namespace VirtoCommerce.Storefront
             {
                 Configuration.GetSection("VirtoCommerce:Redis").Bind(o);
             });
-          
+
 
             //Register platform API clients
             services.AddPlatformEndpoint(options =>
@@ -247,6 +244,10 @@ namespace VirtoCommerce.Storefront
             services.Configure<PasswordHasherOptions>(option => option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2);
             services.Configure<IdentityOptions>(Configuration.GetSection("IdentityOptions"));
             services.AddIdentity<User, Role>(options => { }).AddDefaultTokenProviders();
+            services.AddDataProtection(options =>
+            {
+                options.ApplicationDiscriminator = "VirtoCommerceGroup";
+            });
 
             services.AddScoped<CustomCookieAuthenticationEvents>();
             services.ConfigureApplicationCookie(options =>
