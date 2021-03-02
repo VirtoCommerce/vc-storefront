@@ -437,7 +437,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
                     if (!user.Email.EqualsInvariant(userUpdateInfo.Email))
                     {
-                        user.EmailConfirmed = false;
                         user.Email = userUpdateInfo.Email;
                     }
 
