@@ -435,10 +435,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         user.Contact.DefaultBillingAddress = userUpdateInfo.DefaultBillingAddress;
                     }
 
-                    if (!user.Email.EqualsInvariant(userUpdateInfo.Email))
-                    {
-                        user.Email = userUpdateInfo.Email;
-                    }
+                    user.Email = userUpdateInfo.Email;
 
                     await _userManager.UpdateAsync(user);
                 }
