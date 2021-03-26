@@ -7,6 +7,7 @@ using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.StaticContent;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Tools;
 
@@ -23,16 +24,18 @@ namespace VirtoCommerce.Storefront.Infrastructure
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IWebHostEnvironment _hostEnv;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IImageProcessor _imageProcessor;
 
         private static readonly string[] UrlContainingQueryParameters = { "ReturnUrl", };
 
-        public StorefrontUrlBuilder(IUrlBuilder urlBuilder, IWorkContextAccessor workContextAccessor, IWebHostEnvironment hostEnv, IHttpContextAccessor httpContextAccessor)
+        public StorefrontUrlBuilder(IUrlBuilder urlBuilder, IWorkContextAccessor workContextAccessor, IWebHostEnvironment hostEnv, IHttpContextAccessor httpContextAccessor, IImageProcessor imageProcessor)
         {
             _urlBuilder = urlBuilder;
             _workContextAccessor = workContextAccessor;
             //_urlBuilderContext = workContext.ToToolsContext();
             _hostEnv = hostEnv;
             _httpContextAccessor = httpContextAccessor;
+            _imageProcessor = imageProcessor;
         }
 
         #region IStorefrontUrlBuilder members
@@ -126,6 +129,12 @@ namespace VirtoCommerce.Storefront.Infrastructure
         {
             return _hostEnv.MapPath(virtualPath);
         }
+
+        public string ToImageAbsolute(string virtualPath, int? width, int? height)
+        {
+            return _imageProcessor.ResolveUrl(virtualPath, width, height);
+        }
+
         #endregion
     }
 }

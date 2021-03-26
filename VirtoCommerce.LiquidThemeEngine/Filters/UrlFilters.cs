@@ -211,6 +211,20 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         }
 
         /// <summary>
+        /// Generate corrected with Image Processor URL to image (with optional transform width and height)
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="inputUrl">raw image URL</param>
+        /// <param name="width">new width (optional)</param>
+        /// <param name="height">new height (optional)</param>
+        /// <returns></returns>
+        public static string ImageUrl(TemplateContext context, string inputUrl, int? width = null, int? height = null)
+        {
+            var themeEngine = (ShopifyLiquidThemeEngine)context.TemplateLoader;
+            return themeEngine.UrlBuilder.ToImageAbsolute(inputUrl, width, height);
+        }
+
+        /// <summary>
         /// Generates an relative url with query string that contains serialized ProductSearchCriteria as parameters
         /// and adds to it sort_by expression with given sortBy value
         /// <param name="context"></param>
