@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using VirtoCommerce.Storefront.Domain.Security;
+using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -66,7 +67,7 @@ namespace VirtoCommerce.Storefront.Controllers
             }
 
             var contentPage = page as ContentPage;
-            SetCurrentPage(contentPage);
+            WorkContext.SetCurrentPage(contentPage);
 
             return View(contentPage.Template, WorkContext);
         }
@@ -88,7 +89,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 {
                     return Challenge();
                 }
-                SetCurrentPage(contentPage);
+                WorkContext.SetCurrentPage(contentPage);
                 return View(contentPage.Template, WorkContext);
             }
 
@@ -220,19 +221,6 @@ namespace VirtoCommerce.Storefront.Controllers
 
             return Content(sw.ToString(), "text/xml");
 
-        }
-
-        private void SetCurrentPage(ContentPage contentPage)
-        {
-            WorkContext.Layout = contentPage.Layout;
-            WorkContext.CurrentPage = contentPage;
-            WorkContext.CurrentPageSeo = new SeoInfo
-            {
-                Language = contentPage.Language,
-                MetaDescription = string.IsNullOrEmpty(contentPage.Description) ? contentPage.Title : contentPage.Description,
-                Title = contentPage.Title,
-                Slug = contentPage.Permalink
-            };
         }
     }
 }
