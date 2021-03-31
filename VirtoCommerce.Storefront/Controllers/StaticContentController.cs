@@ -63,7 +63,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 WorkContext.CurrentBlogArticle = blogArticle;
                 WorkContext.CurrentBlog = WorkContext.Blogs.SingleOrDefault(x => x.Name.EqualsInvariant(blogArticle.BlogName));
                 WorkContext.Layout = string.IsNullOrEmpty(blogArticle.Layout) ? WorkContext.CurrentBlog.Layout : blogArticle.Layout;
-                return View("article", WorkContext);
+                return View("json-article", WorkContext);
             }
 
             var contentPage = page as ContentPage;
@@ -130,6 +130,13 @@ namespace VirtoCommerce.Storefront.Controllers
                     Slug = context.RequestUrl.AbsolutePath
                 };
                 WorkContext.Layout = WorkContext.CurrentBlog.Layout;
+
+                var contentPage = WorkContext.FindContentPageByName("blog");
+                if (contentPage != null)
+                {
+                    WorkContext.SetCurrentPage(contentPage);
+                    return View(contentPage.Template, WorkContext);
+                }
                 return View("blog", WorkContext);
             }
             return NotFound();

@@ -1,12 +1,8 @@
-using System;
-using System.IO;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
@@ -20,10 +16,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var contentPage = WorkContext.Pages
-                .OfType<ContentPage>()
-                .Where(x => string.Equals(x.Url, "index", StringComparison.OrdinalIgnoreCase) && Path.GetExtension(x.FileName) == ".page")
-                .FindWithLanguage(WorkContext.CurrentLanguage);
+            var contentPage = WorkContext.FindContentPageByName("index");
 
             if (contentPage != null)
             {
