@@ -446,6 +446,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return result;
         }
 
+        public static int DateDaysDifference(string date)
+        {
+            if (DateTime.TryParse(date, out var datetime))
+            {
+                return (DateTime.Now - datetime).Days;
+            }
+            return 0;
+        }
+
         /// <summary>
         /// Get the first element of the passed in array 
         /// 
