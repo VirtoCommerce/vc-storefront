@@ -24,6 +24,8 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
 
         public bool IsTrending { get; set; }
 
+        public new Dictionary<string, object> MetaFields { get; set; }
+
         public override void LoadContent(string content, IDictionary<string, IEnumerable<string>> metaInfoMap)
         {
             var parts = content.Split(new[] { _excerpToken }, StringSplitOptions.None);
@@ -60,6 +62,19 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
                 bool.TryParse(metaInfoMap["is-trending"].FirstOrDefault(), out isTrending);
 
                 IsTrending = isTrending;
+            }
+
+            MetaFields = new Dictionary<string, object>();
+            foreach (var meta in metaInfoMap)
+            {
+                if (meta.Value.Count() == 1)
+                {
+                    MetaFields.Add(meta.Key, meta.Value.FirstOrDefault());
+                }
+                else
+                {
+                    MetaFields.Add(meta.Key, meta.Value);
+                }
             }
 
             base.LoadContent(content, metaInfoMap);
