@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using FluentValidation.AspNetCore;
@@ -47,6 +48,7 @@ using VirtoCommerce.Storefront.Model.Common.Bus;
 using VirtoCommerce.Storefront.Model.Common.Events;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Features;
+using VirtoCommerce.Storefront.Model.Feedback;
 using VirtoCommerce.Storefront.Model.Inventory.Services;
 using VirtoCommerce.Storefront.Model.LinkList.Services;
 using VirtoCommerce.Storefront.Model.Marketing.Services;
@@ -121,6 +123,8 @@ namespace VirtoCommerce.Storefront
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<AngularAntiforgeryCookieResultFilter>();
             services.AddTransient<AnonymousUserForStoreAuthorizationFilter>();
+            services.AddSingleton<IFeedbackItemFactory, FeedbackItemFactory>(provider => new FeedbackItemFactory(Configuration.GetSection("FeedbackServices")));
+            services.AddSingleton<IFeedbackItemService<FeedbackItem, (HttpStatusCode StatusCode, string Content)>, HttpFeedbackItemService>();
 
             //Register events framework dependencies
             services.AddSingleton(new InProcessBus());
