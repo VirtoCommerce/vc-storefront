@@ -443,7 +443,6 @@ namespace VirtoCommerce.Storefront.Domain
                     string.IsNullOrEmpty(i.ProductType) ||
                     !string.IsNullOrEmpty(i.ProductType) &&
                     (i.ProductType.EqualsInvariant("Physical") || i.ProductType.EqualsInvariant("BillOfMaterials")));
-
             }
 
             if (cartDto.Addresses != null)
