@@ -3,11 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using VirtoCommerce.LiquidThemeEngine;
-using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.Domain;
-using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
@@ -23,9 +20,9 @@ namespace VirtoCommerce.Storefront.Controllers
     {
         private readonly IStoreModule _storeApi;
         private readonly SignInManager<User> _signInManager;
-        public CommonController(IWorkContextAccessor workContextAccesor, IStorefrontUrlBuilder urlBuilder, IStoreModule storeApi,
-                                 ISecurity platformSecurityApi, SignInManager<User> signInManager)
-              : base(workContextAccesor, urlBuilder)
+
+        public CommonController(IWorkContextAccessor workContextAccesor, IStorefrontUrlBuilder urlBuilder, IStoreModule storeApi, SignInManager<User> signInManager)
+            : base(workContextAccesor, urlBuilder)
         {
             _storeApi = storeApi;
             _signInManager = signInManager;
@@ -53,9 +50,9 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpPost("contact/{viewName?}")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ContactForm([FromForm]ContactForm model, string viewName = "page.contact")
+        public async Task<ActionResult> ContactForm([FromForm] ContactForm model, string viewName = "page.contact")
         {
-            //TODO: Test with exist contact us form 
+            //TODO: Test with exist contact us form
             await _storeApi.SendDynamicNotificationAnStoreEmailAsync(model.ToServiceModel(WorkContext));
             if (model.Contact.ContainsKey("RedirectUrl") && model.Contact["RedirectUrl"].Any())
             {
@@ -110,6 +107,7 @@ namespace VirtoCommerce.Storefront.Controllers
                     country = WorkContext.AllCountries.FirstOrDefault(c => c.Code2.EqualsInvariant(countryCode));
                 }
             }
+
             if (country != null)
             {
                 return Json(country.Regions);
@@ -126,10 +124,14 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("Maintenance");
         }
 
-        //An internal special method for handling permanent redirection from routing rules
+        /// <summary>
+        /// An internal special method for handling permanent redirection from routing rules
+        /// </summary>
+        /// <param name="url">URL to redirect</param>
+        /// <returns>Redirect to URL</returns>
         public ActionResult InternalRedirect([FromRoute] string url)
         {
-            return RedirectPermanent(url);
+            return StoreFrontRedirectPermanent(url);
         }
 
         // GET: common/notheme
@@ -140,8 +142,8 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 viewModel = new NoThemeViewModel();
             }
+
             return View("NoTheme", viewModel);
         }
-
     }
 }
