@@ -42,11 +42,16 @@ namespace VirtoCommerce.Storefront.Domain
             var baseStoreContentPath = string.Concat(_basePath, "/", store.Id);
             var cacheKey = CacheKey.With(GetType(), "LoadStoreStaticContent", store.Id);
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
-            {
-                cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { StaticContentCacheRegion.CreateChangeToken(), _contentBlobProvider.Watch(baseStoreContentPath + "/**/*") }));
-
+            {            
                 var retVal = new List<ContentItem>();
                 const string searchPattern = "*.*";
+
+                if (!_contentBlobProvider.PathExists(baseStoreContentPath))
+                {
+                    baseStoreContentPath = Path.Combine("Themes", store.Id, "default", "Pages");
+                }
+
+                cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { StaticContentCacheRegion.CreateChangeToken(), _contentBlobProvider.Watch(baseStoreContentPath + "/**/*") }));
 
                 if (_contentBlobProvider.PathExists(baseStoreContentPath))
                 {
