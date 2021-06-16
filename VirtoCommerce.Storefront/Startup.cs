@@ -132,7 +132,6 @@ namespace VirtoCommerce.Storefront
             {
                 Configuration.GetSection("VirtoCommerce:Redis").Bind(o);
             });
-          
 
             //Register platform API clients
             services.AddPlatformEndpoint(options =>
