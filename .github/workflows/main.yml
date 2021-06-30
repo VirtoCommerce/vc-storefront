@@ -128,7 +128,7 @@ jobs:
       if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
       uses: azure/docker-login@v1
       with:
-        login-server: docker.pkg.github.com
+        login-server: ghcr.io
         username: $GITHUB_ACTOR
         password: ${{ secrets.GITHUB_TOKEN }}
 
