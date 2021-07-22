@@ -28,7 +28,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// </summary>
         public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(5);
 
-              /// <summary>
+        /// <summary>
         ///  Initializes a new instance of the <see cref="UserPasswordAuthHandler"/> class.
         /// </summary>
         /// <param name="options"></param>
@@ -57,12 +57,13 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         {
             var response = await base.SendAsync(request, cancellationToken);
 
-            if (response.StatusCode != HttpStatusCode.Unauthorized)
+            if (response.StatusCode == HttpStatusCode.Unauthorized ||
+                (IsGraphQLRequest(request) && await IsGraphQLResponseUnauthorizedAsync(response)))
             {
-                return response;
+                return await base.SendAsync(request, cancellationToken);
             }
 
-            return await base.SendAsync(request, cancellationToken);
+            return response;
         }
 
         protected override async Task AddAuthenticationAsync(HttpRequestMessage request)
@@ -87,7 +88,5 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
             }, cacheNullValue: false);
             return token;
         }
-
-  
     }
 }

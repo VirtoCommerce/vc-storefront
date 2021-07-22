@@ -1,7 +1,9 @@
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using VirtoCommerce.Storefront.Model;
 
 namespace VirtoCommerce.Storefront.Infrastructure.Autorest
@@ -87,5 +89,17 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// </summary>
         /// <param name="request"></param>
         protected abstract Task AddAuthenticationAsync(HttpRequestMessage request);
+
+        protected bool IsGraphQLRequest(HttpRequestMessage request)
+        {
+            return request.RequestUri.AbsolutePath.Contains("graphql");
+        }
+
+        protected async Task<bool> IsGraphQLResponseUnauthorizedAsync(HttpResponseMessage response)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<GraphQLExecutionResult>(content);
+            return result?.Errors?.FirstOrDefault()?.Extensions?.Code == "Unauthorized";
+        }
     }
 }
