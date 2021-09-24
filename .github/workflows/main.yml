@@ -10,6 +10,7 @@ on:
       - 'build/**'
       - 'README.md'
       - 'LICENSE'
+      - '**/argoDeploy.json'
     branches: [ master, dev ]
   pull_request:
     paths-ignore:
@@ -18,6 +19,7 @@ on:
       - 'build/**'
       - 'README.md'
       - 'LICENSE'
+      - '**/argoDeploy.json'
     branches: [ master, dev ]
 
 jobs:
