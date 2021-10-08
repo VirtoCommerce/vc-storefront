@@ -80,6 +80,7 @@ namespace VirtoCommerce.Storefront
             services.AddResponseCaching();
 
             services.Configure<StorefrontOptions>(Configuration.GetSection("VirtoCommerce"));
+            services.Configure<FormFileStorageOptions>(Configuration.GetSection(FormFileStorageOptions.SectionName));
 
             //The IHttpContextAccessor service is not registered by default
             //https://github.com/aspnet/Hosting/issues/793
@@ -181,9 +182,9 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IAuthorizationHandler, CanReadContentItemAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, OnlyRegisteredUserAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, AnonymousUserForStoreAuthorizationHandler>();
-            // register the AuthorizationPolicyProvider which dynamically registers authorization policies for each permission defined in the platform 
+            // register the AuthorizationPolicyProvider which dynamically registers authorization policies for each permission defined in the platform
             services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
-            //Storefront authorization handler for policy based on permissions 
+            //Storefront authorization handler for policy based on permissions
             services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, CanEditOrganizationResourceAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, CanAccessOrderAuthorizationHandler>();
@@ -376,7 +377,7 @@ namespace VirtoCommerce.Storefront
                 app.UseExceptionHandler("/error/500");
                 app.UseHsts();
             }
-            // Do not write telemetry to debug output 
+            // Do not write telemetry to debug output
             TelemetryDebugWriter.IsTracingDisabled = true;
 
             app.UseResponseCaching();
