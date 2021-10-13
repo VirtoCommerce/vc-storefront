@@ -94,6 +94,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             var model = new ContactForm { FormType = formType };
             using var sendForm = new MultipartFormDataContent();
+            var fileKeys = new List<string>();
 
             try
             {
@@ -125,6 +126,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     }
                     else if (contentDisposition.IsFileDisposition())
                     {
+                        var key = HeaderUtilities.RemoveQuotes(contentDisposition.Name).Value;
                         // Don't trust the file name sent by the client. To display the file name, HTML-encode the value.
                         var trustedFileName = WebUtility.HtmlEncode(contentDisposition.FileName.Value);
                         trustedFileName =
@@ -135,7 +137,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                                 _formFileStorageOptions.PermittedExtensions, _formFileStorageOptions.FileSizeLimit));
                         fileContent.Headers.ContentType =
                             System.Net.Http.Headers.MediaTypeHeaderValue.Parse("multipart/form-data");
-                        sendForm.Add(fileContent, "file", Path.GetFileName(trustedFileName));
+                        sendForm.Add(fileContent, key, Path.GetFileName(trustedFileName));
+                        fileKeys.Add(key);
                     }
 
                     // Drain any remaining section body that hasn't been consumed and
@@ -146,9 +149,10 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 if (sendForm.Any())
                 {
                     var blobs = await UploadAssetAsync(sendForm);
+                    var index = 0;
                     foreach (var blob in blobs)
                     {
-                        model.Contact.Add("File", new[] { blob.Url });
+                        model.Contact.Add(fileKeys[index++], new[] { blob.Url });
                     }
                 }
 
