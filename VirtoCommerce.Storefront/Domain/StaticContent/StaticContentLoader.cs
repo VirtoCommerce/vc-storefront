@@ -16,7 +16,7 @@ namespace VirtoCommerce.Storefront.Domain
             return RemoveYamlHeader(content);
         }
 
-        public virtual void ReadMetaData(string content, IDictionary<string, IEnumerable<string>> metadata)
+        public virtual void ReadMetaData(string content, IDictionary<string, object> metadata)
         {
             ReadYamlHeader(content, metadata);
         }
@@ -35,7 +35,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        private static void ReadYamlHeader(string text, IDictionary<string, IEnumerable<string>> metadata)
+        private static void ReadYamlHeader(string text, IDictionary<string, object> metadata)
         {
             var headerMatches = _headerRegExp.Matches(text);
 

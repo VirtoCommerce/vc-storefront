@@ -94,7 +94,7 @@ namespace VirtoCommerce.Storefront.Domain
                 content = stream.ReadToString();
             }
 
-            IDictionary<string, IEnumerable<string>> metaHeaders = new Dictionary<string, IEnumerable<string>>();
+            var metaHeaders = new Dictionary<string, object>();
             var metadataReader = _metadataFactory.CreateLoader(contentItem);
 
             try

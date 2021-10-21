@@ -13,7 +13,7 @@ namespace VirtoCommerce.Storefront.Domain
             return content;
         }
 
-        public void ReadMetaData(string content, IDictionary<string, IEnumerable<string>> metadata)
+        public void ReadMetaData(string content, IDictionary<string, object> metadata)
         {
             var page = JsonConvert.DeserializeObject<JArray>(content);
             var settings = page.FirstOrDefault(x => (x as JObject)?.GetValue("type")?.Value<string>() == "settings");
@@ -23,10 +23,36 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 if (item.Value.HasValues)
                 {
-                    foreach (var itemProp in item.Value)
+                    if (item.Value.Type == JTokenType.Array)
                     {
-                        var property = itemProp.ToObject<JProperty>();
-                        metadata.Add($"{item.Name}.{property.Name}", new List<string> { property.Value.Value<string>() });
+                        metadata.Add(item.Name, item.Value.ToArray());
+                        continue;
+                    }
+
+                    if (item.Value.Type == JTokenType.Object)
+                    {
+                        var objectProperties = item.Value.Select(i => i.ToObject<JProperty>()).ToList();
+                        var propertiesNames = objectProperties.Select(i => i.Name).ToList();
+                        if (propertiesNames.Contains("url") && propertiesNames.Contains("altText"))
+                        {
+                            metadata.Add(item.Name, item.Value);
+                        }
+                        else
+                        {
+                            foreach (var property in objectProperties)
+                            {
+                                metadata.Add($"{item.Name}.{property.Name}", property.Value.Value<string>());
+                            }
+                        }
+                    }
+
+                    if (item.Value.Type == JTokenType.Property)
+                    {
+                        var value = item.Value.Value<string>();
+                        if (value != null)
+                        {
+                            metadata.Add(item.Name, value);
+                        }
                     }
                 }
                 else
@@ -34,12 +60,12 @@ namespace VirtoCommerce.Storefront.Domain
                     var value = item.Value.Value<string>();
                     if (value != null)
                     {
-                        metadata.Add(item.Name, new List<string> { value });
+                        metadata.Add(item.Name, value);
                     }
                 }
             }
 
-            metadata.Add("template", new List<string> { "json-page" });
+            metadata.Add("template", "json-page");
         }
     }
 }
