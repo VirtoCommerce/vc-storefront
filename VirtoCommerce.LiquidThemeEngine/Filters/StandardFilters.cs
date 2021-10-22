@@ -455,6 +455,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return 0;
         }
 
+        public static bool IsNotEmpty(string input)
+        {
+            return !string.IsNullOrEmpty(input);
+        }
+
         /// <summary>
         /// Get the first element of the passed in array 
         /// 

@@ -75,73 +75,73 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
         public bool Authorize { get; set; }
 
         public virtual string Handle => Url;
-        public IDictionary<string, IEnumerable<string>> MetaInfo { get; set; }
-        public IDictionary<string, IEnumerable<string>> MetaFields => MetaInfo;
+        public IDictionary<string, object> MetaInfo { get; set; }
+        public IDictionary<string, object> MetaFields => MetaInfo;
 
         public virtual string IndexKey => Handle;
 
-        public virtual void LoadContent(string content, IDictionary<string, IEnumerable<string>> metaInfoMap)
+        public virtual void LoadContent(string content, IDictionary<string, object> metaInfoMap)
         {
             if (metaInfoMap != null)
             {
                 foreach (var setting in metaInfoMap)
                 {
-                    var settingValue = setting.Value.FirstOrDefault();
+                    var settingValue = setting.Value;
                     switch (setting.Key.ToLower())
                     {
                         case "permalink":
-                            Permalink = settingValue;
+                            Permalink = settingValue.ToString();
                             break;
 
                         case "aliases":
-                            Aliases = setting.Value.ToList();
+                            Aliases = setting.Value as List<string>;
                             break;
 
                         case "title":
-                            Title = settingValue;
+                            Title = settingValue.ToString();
                             break;
 
                         case "author":
-                            Author = settingValue;
+                            Author = settingValue.ToString();
                             break;
 
                         case "published":
                             bool isPublished;
-                            IsPublished = bool.TryParse(settingValue, out isPublished) ? isPublished : true;
+                            IsPublished = bool.TryParse(settingValue.ToString(), out isPublished) ? isPublished : true;
                             break;
 
                         case "date":
                             DateTime date;
-                            PublishedDate = CreatedDate = DateTime.TryParse(settingValue, out date) ? date : new DateTime();
+                            PublishedDate = CreatedDate = DateTime.TryParse(settingValue.ToString(), out date) ? date : new DateTime();
                             break;
                         case "tags":
-                            Tags = setting.Value.OrderBy(t => t).Select(t => t.Handelize()).ToList();
+                            Tags = (setting.Value as List<string>).OrderBy(t => t).Select(t => t.Handelize()).ToList();
                             break;
 
                         case "categories":
-                            Categories = setting.Value?.Select(x => x.Handelize()).ToList();
+                            Categories = (setting.Value as List<string>).Select(x => x.Handelize()).ToList();
                             break;
 
                         case "category":
-                            Category = settingValue?.Handelize();
+                            Category = settingValue.ToString()?.Handelize();
                             break;
 
                         case "layout":
-                            Layout = settingValue;
+                            Layout = settingValue.ToString();
                             break;
 
                         case "priority":
                             int priority;
-                            Priority = int.TryParse(settingValue, out priority) ? priority : 0;
+                            Priority = int.TryParse(settingValue.ToString(), out priority) ? priority : 0;
                             break;
 
                         case "description":
-                            Description = settingValue;
+                            Description = settingValue.ToString();
                             break;
 
                         case "authorize":
                             bool isAuthorize;
-                            if (bool.TryParse(settingValue, out isAuthorize))
+                            if (bool.TryParse(settingValue.ToString(), out isAuthorize))
                             {
                                 Authorize = isAuthorize;
                             }
