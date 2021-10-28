@@ -6,6 +6,7 @@ using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Tools;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 using toolsDto = VirtoCommerce.Tools.Models;
+using catalogDto = VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Common
 {
@@ -20,13 +21,12 @@ namespace VirtoCommerce.Storefront.Common
         /// <param name="language"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        //TODO: Move to Core module
-        //public static string GetSeoPath(this IEnumerable<catalogDto.Outline> outlines, Store store, Language language, string defaultValue)
-        //{
-        //    return outlines
-        //        ?.Select(o => o.JsonConvert<toolsDto.Outline>())
-        //        .GetSeoPath(store.ToToolsStore(), language.CultureName, defaultValue);
-        //}
+        public static string GetSeoPath(this IEnumerable<catalogDto.Outline> outlines, Store store, Language language, string defaultValue)
+        {
+            return outlines
+                ?.Select(o => o.JsonConvert<toolsDto.Outline>())
+                .GetSeoPath(store.ToToolsStore(), language.CultureName, defaultValue);
+        }
 
         /// <summary>
         /// Returns SEO records with highest score

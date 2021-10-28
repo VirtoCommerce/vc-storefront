@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Rest;
 using VirtoCommerce.LiquidThemeEngine;
+using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
@@ -95,7 +96,12 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddSingleton<IStoreModule>(sp => new StoreModule(sp.GetRequiredService<StoreModuleClient>()));
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new CoreModuleClient(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
             services.AddSingleton<ICommerce>(sp => new Commerce(sp.GetRequiredService<CoreModuleClient>()));
-    
+
+            services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new CatalogModuleClient(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
+            services.AddSingleton<ICatalogModuleCategories>(sp => new CatalogModuleCategories(sp.GetRequiredService<CatalogModuleClient>()));
+            services.AddSingleton<ICatalogModuleProducts>(sp => new CatalogModuleProducts(sp.GetRequiredService<CatalogModuleClient>()));
+
+
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new PlatformModuleClient(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
             services.AddSingleton<ISecurity>(sp => new Security(sp.GetRequiredService<PlatformModuleClient>()));
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new NotificationsModuleClient(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
