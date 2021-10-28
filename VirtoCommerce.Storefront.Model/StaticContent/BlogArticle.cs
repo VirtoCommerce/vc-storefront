@@ -68,11 +68,6 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
             MetaFields = new Dictionary<string, object>();
             foreach (var meta in metaInfoMap)
             {
-                if (meta.Value is JToken[])
-                {
-                    MetaFields.Add(meta.Key, meta.Value);
-                    continue;
-                }
                 if (meta.Value is string)
                 {
                     MetaFields.Add(meta.Key, meta.Value.ToString());

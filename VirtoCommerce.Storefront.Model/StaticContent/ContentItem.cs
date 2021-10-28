@@ -87,7 +87,7 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
                 foreach (var setting in metaInfoMap)
                 {
                     var settingValue = setting.Value;
-                    switch (setting.Key.ToLower())
+                    switch (setting.Key.ToLowerInvariant())
                     {
                         case "permalink":
                             Permalink = settingValue.ToString();

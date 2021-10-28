@@ -19,29 +19,27 @@ namespace VirtoCommerce.Storefront.Domain
             foreach (var service in services)
             {
                 var url = service.GetSection("Url");
-                if (url != null)
-                {
-                    bool.TryParse(service.GetSection("AllowAdditionalParams").Value, out var allowAdditionalParams);
-                    var item = new FeedbackItem(url.Value)
-                    {
-                        HttpMethod = service.GetSection("Method").Value,
-                        AllowAdditionalParams = allowAdditionalParams
-                    };
-
-                    var parameters = service.GetSection("Params");
-                    if (parameters != null)
-                    {
-                        item.Parameters = parameters.GetChildren()
-                            .ToList()
-                            .Select(p => $"{p.GetValue<string>("Name")}={p.GetValue<string>("Value")}")
-                            .ToList();
-                    }
-                    _items.Add(service.Key, item);
-                }
-                else
+                if (url == null)
                 {
                     throw new KeyNotFoundException("Url segment not found in config object with specified key.");
                 }
+
+                bool.TryParse(service.GetSection("AllowAdditionalParams").Value, out var allowAdditionalParams);
+                var item = new FeedbackItem(url.Value)
+                {
+                    HttpMethod = service.GetSection("Method").Value,
+                    AllowAdditionalParams = allowAdditionalParams
+                };
+
+                var parameters = service.GetSection("Params");
+                if (parameters != null)
+                {
+                    item.Parameters = parameters.GetChildren()
+                        .ToList()
+                        .Select(p => $"{p.GetValue<string>("Name")}={p.GetValue<string>("Value")}")
+                        .ToList();
+                }
+                _items.Add(service.Key, item);
             }
         }
     }
