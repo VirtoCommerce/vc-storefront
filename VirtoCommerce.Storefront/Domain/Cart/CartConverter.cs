@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.Storefront.Common;
@@ -442,7 +441,8 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Items = cartDto.Items.Select(i => ToLineItem(i, currency, language)).ToList();
                 result.HasPhysicalProducts = result.Items.Any(i =>
                     string.IsNullOrEmpty(i.ProductType) ||
-                    !string.IsNullOrEmpty(i.ProductType) && i.ProductType.Equals("Physical", StringComparison.OrdinalIgnoreCase));
+                    !string.IsNullOrEmpty(i.ProductType) &&
+                    (i.ProductType.EqualsInvariant("Physical") || i.ProductType.EqualsInvariant("BillOfMaterials")));
             }
 
             if (cartDto.Addresses != null)
