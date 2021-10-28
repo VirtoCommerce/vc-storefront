@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using VirtoCommerce.Storefront.Domain;
+using VirtoCommerce.Storefront.Domain.Feedback;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Feedback;
 

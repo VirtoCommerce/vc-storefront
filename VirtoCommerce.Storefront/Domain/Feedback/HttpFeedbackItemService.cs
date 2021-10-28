@@ -4,8 +4,9 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using VirtoCommerce.Storefront.Model.Feedback;
 
-namespace VirtoCommerce.Storefront.Model.Feedback
+namespace VirtoCommerce.Storefront.Domain.Feedback
 {
     public class HttpFeedbackItemService : IFeedbackItemService<FeedbackItem, (HttpStatusCode StatusCode, string Content)>
     {

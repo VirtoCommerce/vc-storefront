@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Extensions.Configuration;
 using VirtoCommerce.Storefront.Model.Feedback;
 
-namespace VirtoCommerce.Storefront.Domain
+namespace VirtoCommerce.Storefront.Domain.Feedback
 {
     public class FeedbackItemFactory : IFeedbackItemFactory
     {

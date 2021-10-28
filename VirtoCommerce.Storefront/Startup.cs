@@ -31,6 +31,7 @@ using VirtoCommerce.Storefront.Caching.Redis;
 using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Cart;
+using VirtoCommerce.Storefront.Domain.Feedback;
 using VirtoCommerce.Storefront.Domain.ImageProcessing;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Extensions;

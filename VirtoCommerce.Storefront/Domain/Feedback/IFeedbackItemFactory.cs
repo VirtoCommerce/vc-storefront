@@ -1,6 +1,6 @@
 using VirtoCommerce.Storefront.Model.Feedback;
 
-namespace VirtoCommerce.Storefront.Domain
+namespace VirtoCommerce.Storefront.Domain.Feedback
 {
     public interface IFeedbackItemFactory
     {
