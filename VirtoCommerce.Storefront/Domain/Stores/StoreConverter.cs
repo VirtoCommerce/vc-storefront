@@ -5,7 +5,6 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Stores;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
-using paymentDto = VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models;
 using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using storeDto = VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models;
 
