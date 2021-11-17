@@ -24,13 +24,18 @@ namespace VirtoCommerce.Storefront.Filters
             _policyProvider = policyProvider;
         }
 
-        public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
+        public Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
+            return OnAuthorizationInternalAsync(context);
+        }
+
+        protected async Task OnAuthorizationInternalAsync(AuthorizationFilterContext context)
+        {
             // Don not call filter for  ReExecute requests (such as status code pages) and skips all paths marked as AllowAnonymous attribute
             if (context.HttpContext.Features.Get<IStatusCodeReExecuteFeature>() != null || context.Filters.Any(x => x is IAllowAnonymousFilter))
             {

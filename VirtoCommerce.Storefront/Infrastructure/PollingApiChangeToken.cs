@@ -11,15 +11,25 @@ namespace VirtoCommerce.Storefront.Infrastructure
         private readonly IChangeLog _cacheApi;
         private static DateTime _previousChangeTimeUtcStatic;
         private static DateTime _lastCheckedTimeUtcStatic;
-        private DateTime _previousChangeTimeUtc;
+        private readonly DateTime _previousChangeTimeUtc;
         private readonly TimeSpan _pollingInterval;
-        private static object _lock = new object();
+        private static readonly object _lock = new object();
 
         public PollingApiChangeToken(IChangeLog cacheApi, TimeSpan pollingInterval)
         {
             _pollingInterval = pollingInterval;
             _cacheApi = cacheApi;
             _previousChangeTimeUtc = _previousChangeTimeUtcStatic;
+        }
+
+        public static void UpdatePreviousChangeTimeUtcStatic(DateTime currentTime)
+        {
+            _previousChangeTimeUtcStatic = currentTime;
+        }
+
+        public static void UpdateLastCheckedTimeUtcStatic(DateTime currentTime)
+        {
+            _lastCheckedTimeUtcStatic = currentTime;
         }
 
         private DateTime GetLastChangeTimeUtc()
@@ -45,7 +55,8 @@ namespace VirtoCommerce.Storefront.Infrastructure
                 }
 
                 //Need to prevent API flood for multiple token instances
-                bool lockTaken = Monitor.TryEnter(_lock);
+                var lockTaken = Monitor.TryEnter(_lock);
+
                 try
                 {
                     if (lockTaken)
@@ -53,16 +64,19 @@ namespace VirtoCommerce.Storefront.Infrastructure
                         var lastChangeTimeUtc = GetLastChangeTimeUtc();
                         if (_previousChangeTimeUtcStatic < lastChangeTimeUtc)
                         {
-                            _previousChangeTimeUtcStatic = lastChangeTimeUtc;
+                            UpdatePreviousChangeTimeUtcStatic(lastChangeTimeUtc);
                             hasChanged = true;
                         }
-                        _lastCheckedTimeUtcStatic = currentTime;
+
+                        UpdateLastCheckedTimeUtcStatic(currentTime);
                     }
                 }
                 finally
                 {
                     if (lockTaken)
+                    {
                         Monitor.Exit(_lock);
+                    }
                 }
 
                 return hasChanged;

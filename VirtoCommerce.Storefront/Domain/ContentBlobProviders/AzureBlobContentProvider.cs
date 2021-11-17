@@ -20,7 +20,6 @@ namespace VirtoCommerce.Storefront.Domain
     public class AzureBlobContentProvider : IContentBlobProvider
     {
         private readonly CloudBlobClient _cloudBlobClient;
-        private readonly CloudStorageAccount _cloudStorageAccount;
         private readonly CloudBlobContainer _container;
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly AzureBlobContentOptions _options;
@@ -31,11 +30,11 @@ namespace VirtoCommerce.Storefront.Domain
             _options = options.Value;
             _memoryCache = memoryCache;
 
-            if (!CloudStorageAccount.TryParse(_options.ConnectionString, out _cloudStorageAccount))
+            if (!CloudStorageAccount.TryParse(_options.ConnectionString, out var cloudStorageAccount))
             {
                 throw new StorefrontException("Failed to get valid connection string");
             }
-            _cloudBlobClient = _cloudStorageAccount.CreateCloudBlobClient();
+            _cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
             _container = _cloudBlobClient.GetContainerReference(_options.Container);
             _watcher = watcher;
         }
@@ -51,12 +50,19 @@ namespace VirtoCommerce.Storefront.Domain
             return OpenReadAsync(path).GetAwaiter().GetResult();
         }
 
-        public async virtual Task<Stream> OpenReadAsync(string path)
+        public virtual Task<Stream> OpenReadAsync(string path)
         {
             if (string.IsNullOrEmpty(path))
             {
                 throw new ArgumentNullException(nameof(path));
             }
+            path = NormalizePath(path);
+
+            return OpenReadInternalAsync(path);
+        }
+
+        protected virtual async Task<Stream> OpenReadInternalAsync(string path)
+        {
             path = NormalizePath(path);
 
             Stream result = null;
@@ -87,7 +93,7 @@ namespace VirtoCommerce.Storefront.Domain
             return OpenWriteAsync(path).GetAwaiter().GetResult();
         }
 
-        public async virtual Task<Stream> OpenWriteAsync(string path)
+        public virtual async Task<Stream> OpenWriteAsync(string path)
         {
             //Container name
             path = NormalizePath(path);
@@ -106,7 +112,7 @@ namespace VirtoCommerce.Storefront.Domain
             return PathExistsAsync(path).GetAwaiter().GetResult();
         }
 
-        public async virtual Task<bool> PathExistsAsync(string path)
+        public virtual async Task<bool> PathExistsAsync(string path)
         {
             path = NormalizePath(path);
             var cacheKey = CacheKey.With(GetType(), "PathExistsAsync", path);

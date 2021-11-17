@@ -26,7 +26,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
         private DateTime _lastModifiedUtc;
         private DateTime _prevModifiedUtc;
         private static DateTime _lastCheckedTimeUtcStatic;
-        private static object _lock = new object();
+        private static readonly object _lock = new object();
 
         public BlobChangeToken(string blobName, CloudBlobContainer container, AzureBlobContentOptions options)
         {
@@ -36,6 +36,11 @@ namespace VirtoCommerce.Storefront.Infrastructure
             _options = options;
 
             _lastModifiedUtc = _prevModifiedUtc = DateTime.UtcNow;
+        }
+
+        public static void UpdateLastCheckedTimeUtcStatic(DateTime currentTime)
+        {
+            _lastCheckedTimeUtcStatic = currentTime;
         }
 
         public bool HasChanged
@@ -59,13 +64,14 @@ namespace VirtoCommerce.Storefront.Infrastructure
                     return _hasChanged;
                 }
 
-                bool lockTaken = Monitor.TryEnter(_lock);
+                var lockTaken = Monitor.TryEnter(_lock);
+
                 try
                 {
                     if (lockTaken)
                     {
                         Task.Run(() => EvaluateBlobsModifiedDate());
-                        _lastCheckedTimeUtcStatic = currentTime;
+                        UpdateLastCheckedTimeUtcStatic(currentTime);
                     }
                 }
                 finally
@@ -110,11 +116,13 @@ namespace VirtoCommerce.Storefront.Infrastructure
             foreach (var file in files)
             {
                 if (cancellationToken.IsCancellationRequested)
+                {
                     break;
+                }
 
                 var lastModifiedUtc = file.Properties.LastModified?.UtcDateTime ?? DateTime.UtcNow;
 
-                if (!_previousChangeTimeUtcTokenLookup.TryGetValue(file.Name, out DateTime dt))
+                if (!_previousChangeTimeUtcTokenLookup.TryGetValue(file.Name, out var dt))
                 {
                     _previousChangeTimeUtcTokenLookup.GetOrAdd(file.Name, lastModifiedUtc);
                 }

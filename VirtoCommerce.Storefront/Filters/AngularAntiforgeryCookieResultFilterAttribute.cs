@@ -11,10 +11,10 @@ namespace VirtoCommerce.Storefront.Filters
     ///  if it can find the token value as a cookie with the name XSRF-TOKEN.
     ///  This filter automatically set XSRF-TOKEN cookies for each request routed to the view
     /// </summary>
-    public class AngularAntiforgeryCookieResultFilter : ResultFilterAttribute
+    public class AngularAntiforgeryCookieResultFilterAttribute : ResultFilterAttribute
     {
-        private IAntiforgery antiforgery;
-        public AngularAntiforgeryCookieResultFilter(IAntiforgery antiforgery)
+        private readonly IAntiforgery antiforgery;
+        public AngularAntiforgeryCookieResultFilterAttribute(IAntiforgery antiforgery)
         {
             this.antiforgery = antiforgery;
         }

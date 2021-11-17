@@ -91,7 +91,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IStaticContentLoaderFactory, StaticContentLoaderFactory>();
             services.AddSingleton<IApiChangesWatcher, ApiChangesWatcher>();
             services.AddSingleton<IBlobChangesWatcher, BlobChangesWatcher>();
-            services.AddTransient<AngularAntiforgeryCookieResultFilter>();
+            services.AddTransient<AngularAntiforgeryCookieResultFilterAttribute>();
             services.AddTransient<AnonymousUserForStoreAuthorizationFilter>();
 
             //Register events framework dependencies
@@ -265,7 +265,7 @@ namespace VirtoCommerce.Storefront
                     Location = ResponseCacheLocation.None
                 });
 
-                options.Filters.AddService(typeof(AngularAntiforgeryCookieResultFilter));
+                options.Filters.AddService(typeof(AngularAntiforgeryCookieResultFilterAttribute));
 
                 // To include only Api controllers to swagger document
                 options.Conventions.Add(new ApiExplorerApiControllersConvention());

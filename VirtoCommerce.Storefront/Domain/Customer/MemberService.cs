@@ -30,13 +30,18 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
         #region ICustomerService Members
-        public virtual async Task<Contact> GetContactByIdAsync(string contactId)
+        public virtual Task<Contact> GetContactByIdAsync(string contactId)
         {
             if (contactId == null)
             {
                 throw new ArgumentNullException(nameof(contactId));
             }
 
+            return GetContactByIdInternalAsync(contactId);
+        }
+
+        protected virtual async Task<Contact> GetContactByIdInternalAsync(string contactId)
+        {
             Contact result = null;
             var cacheKey = CacheKey.With(GetType(), "GetContactByIdAsync", contactId);
             var dto = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
@@ -50,17 +55,21 @@ namespace VirtoCommerce.Storefront.Domain
                 return contactDto;
             });
 
-            if (dto != null)
+            if (dto == null)
             {
-                result = dto.ToContact();
-                if (!dto.Organizations.IsNullOrEmpty())
-                {
-                    //Load contact organization
-                    result.Organization = await GetOrganizationByIdAsync(dto.Organizations.FirstOrDefault());
-                }
+                return null;
             }
+
+            result = dto.ToContact();
+            if (!dto.Organizations.IsNullOrEmpty())
+            {
+                //Load contact organization
+                result.Organization = await GetOrganizationByIdAsync(dto.Organizations.FirstOrDefault());
+            }
+
             return result;
         }
+
 
         public virtual async Task<Contact> CreateContactAsync(Contact contact)
         {

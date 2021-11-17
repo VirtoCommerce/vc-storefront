@@ -30,12 +30,18 @@ namespace VirtoCommerce.Storefront.Domain
             return LoadAllStoreLinkListsAsync(store, language).GetAwaiter().GetResult();
         }
 
-        public async Task<IList<MenuLinkList>> LoadAllStoreLinkListsAsync(Store store, Language language)
+        public Task<IList<MenuLinkList>> LoadAllStoreLinkListsAsync(Store store, Language language)
         {
             if (store == null)
             {
                 throw new ArgumentNullException(nameof(store));
             }
+
+            return LoadAllStoreLinkListsInternalAsync(store, language);
+        }
+
+        public async Task<IList<MenuLinkList>> LoadAllStoreLinkListsInternalAsync(Store store, Language language)
+        {
             var cacheKey = CacheKey.With(GetType(), "LoadAllStoreLinkLists", store.Id, language.CultureName);
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
@@ -49,12 +55,7 @@ namespace VirtoCommerce.Storefront.Domain
                     result.AddRange(listsDto.Select(x => x.ToMenuLinkList()));
                 }
 
-                result = result.GroupBy(x => x.Name).Select(x => x.FindWithLanguage(language)).Where(x => x != null).ToList().ToList();
-
-                var allMenuLinks = result.SelectMany(x => x.MenuLinks).ToList();
-                var productLinks = allMenuLinks.OfType<ProductMenuLink>().ToList();
-                var categoryLinks = allMenuLinks.OfType<CategoryMenuLink>().ToList();
-
+                result = result.GroupBy(x => x.Name).Select(x => x.FindWithLanguage(language)).Where(x => x != null).ToList();
 
 
                 return result.ToList();
