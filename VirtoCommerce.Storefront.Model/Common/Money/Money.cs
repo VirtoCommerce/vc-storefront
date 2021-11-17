@@ -338,7 +338,7 @@ namespace VirtoCommerce.Storefront.Model.Common
             return ToString(true, true);
         }
 
-        public virtual string ToString(bool showDecimalDigits, bool showCurrencySymbol)
+        public string ToString(bool showDecimalDigits, bool showCurrencySymbol)
         {
             string result = null;
 
