@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -60,7 +59,7 @@ namespace VirtoCommerce.Storefront.Middleware
             await builder.WithMenuLinksAsync(workContext.CurrentStore, workContext.CurrentLanguage);
             await builder.WithPagesAsync(workContext.CurrentStore, workContext.CurrentLanguage);
             await builder.WithBlogsAsync(workContext.CurrentStore, workContext.CurrentLanguage);
-       
+
 
             //EU General Data Protection Regulation (GDPR) support 
             var consentFeature = context.Features.Get<ITrackingConsentFeature>();

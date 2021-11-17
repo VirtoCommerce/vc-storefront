@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
 using Scriban;
 using VirtoCommerce.Storefront.Model.Common;
 

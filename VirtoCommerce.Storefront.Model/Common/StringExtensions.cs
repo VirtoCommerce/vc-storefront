@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -96,7 +95,7 @@ namespace VirtoCommerce.Storefront.Model.Common
 
         public static string AddIfNotContains(this string inputStr, string str, char separator = ',')
         {
-            if(inputStr == null)
+            if (inputStr == null)
             {
                 throw new ArgumentNullException(nameof(inputStr));
             }

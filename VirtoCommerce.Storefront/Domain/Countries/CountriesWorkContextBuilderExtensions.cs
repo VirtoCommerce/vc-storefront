@@ -1,6 +1,6 @@
-using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using VirtoCommerce.Storefront.Model;
 
 namespace VirtoCommerce.Storefront.Domain
@@ -19,8 +19,8 @@ namespace VirtoCommerce.Storefront.Domain
             var countryService = serviceProvider.GetRequiredService<ICountriesService>();
             var countries = await countryService.GetCountriesAsync();
             await builder.WithCountriesAsync(countries);
-        }     
-     
+        }
+
 
     }
 }

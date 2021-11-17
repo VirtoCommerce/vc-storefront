@@ -479,7 +479,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static object Plus(object input, object operand)
         {
-           
+
             return DoMathsOperation(input, operand, Expression.Add);
         }
 
@@ -502,7 +502,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static object Times(object input, object operand)
         {
-           
+
             return DoMathsOperation(input, operand, Expression.Multiply);
 
         }
@@ -551,7 +551,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             {
                 //Swallow any exception 
             }
-        }       
+        }
     }
 
     /// <summary>

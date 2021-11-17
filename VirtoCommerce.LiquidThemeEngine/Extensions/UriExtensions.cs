@@ -45,12 +45,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Extensions
             {
                 throw new ArgumentNullException(nameof(hasQueryKeyValues));
             }
-          
+
             foreach (var keyValue in hasQueryKeyValues.GetQueryKeyValues())
             {
                 uri = uri.SetQueryParameter(keyValue.Key, keyValue.Value);
             }
             return uri;
-        }       
+        }
     }
 }

@@ -1,6 +1,5 @@
 using System.Linq;
 using VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models;
-using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using VirtoCommerce.Storefront.Model.Common.Notifications;
 
 namespace VirtoCommerce.Storefront.Domain.Common

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace VirtoCommerce.Storefront.Model.Security
 {
     public class UpdatePhoneNumberResult

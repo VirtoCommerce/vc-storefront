@@ -40,7 +40,7 @@ namespace VirtoCommerce.Storefront.Domain
                     retVal = new ContentPage();
                 }
             }
-                
+
             return retVal;
         }
     }

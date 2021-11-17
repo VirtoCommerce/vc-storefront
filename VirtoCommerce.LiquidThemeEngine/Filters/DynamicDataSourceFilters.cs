@@ -20,7 +20,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             var query = themeAdaptor.GetAssetStreamAsync(Path.Combine("graphql", fileName)).GetAwaiter().GetResult().ReadToString();
             var graphQLRequest = new GraphQLRequest(query);
             //TODO: try call async
-            var response =  themeAdaptor.GraphQLClient.SendQueryAsync<ExpandoObject>(graphQLRequest).GetAwaiter().GetResult();
+            var response = themeAdaptor.GraphQLClient.SendQueryAsync<ExpandoObject>(graphQLRequest).GetAwaiter().GetResult();
             response.ThrowIfHasErrors();
             var result = BuildScriptObject(response.Data);
             return result;

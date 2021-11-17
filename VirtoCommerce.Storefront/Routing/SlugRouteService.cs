@@ -214,18 +214,19 @@ namespace VirtoCommerce.Storefront.Routing
         protected virtual async Task<IDictionary<string, string>> GetFullSeoPathsAsync(string objectType, string[] objectIds, Store store, Language language)
         {
             var cacheKey = CacheKey.With(GetType(), "GetFullSeoPaths", store.Id, objectType, string.Join("-", objectIds.OrderBy(x => x)));
-            var result =  await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-            {
-                cacheEntry.AddExpirationToken(RoutingCacheRegion.CreateChangeToken());
-                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
-                switch (objectType)
-                {   case "Category":
-                        return await GetCategorySeoPathsAsync(objectIds, store, language);
-                    case "CatalogProduct":
-                        return await GetProductSeoPathsAsync(objectIds, store, language);
-                }
-                return new Dictionary<string, string>().WithDefaultValue(null);
-            });
+            var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
+           {
+               cacheEntry.AddExpirationToken(RoutingCacheRegion.CreateChangeToken());
+               cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
+               switch (objectType)
+               {
+                   case "Category":
+                       return await GetCategorySeoPathsAsync(objectIds, store, language);
+                   case "CatalogProduct":
+                       return await GetProductSeoPathsAsync(objectIds, store, language);
+               }
+               return new Dictionary<string, string>().WithDefaultValue(null);
+           });
             return result;
         }
 

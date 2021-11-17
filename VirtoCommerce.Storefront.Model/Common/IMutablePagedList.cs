@@ -1,6 +1,6 @@
-using PagedList.Core;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using PagedList.Core;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {

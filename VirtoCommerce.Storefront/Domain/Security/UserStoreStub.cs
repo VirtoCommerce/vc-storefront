@@ -70,14 +70,12 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public async Task<IdentityResult> CreateAsync(Role role, CancellationToken cancellationToken)
         {
-            var result = IdentityResult.Success;
-            await _platformSecurityApi.UpdateRoleAsync(role.ToRoleDto());
-            return result;
+            return await SaveAsync(role, cancellationToken);
         }
 
         public async Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
         {
-            await _platformSecurityApi.DeleteAsync(new[] {user.UserName});
+            await _platformSecurityApi.DeleteAsync(new[] { user.UserName });
             //Evict user from the cache
             SecurityCacheRegion.ExpireUser(user.Id);
             return IdentityResult.Success;
@@ -90,9 +88,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public async Task<IdentityResult> UpdateAsync(Role role, CancellationToken cancellationToken)
         {
-            var result = IdentityResult.Success;
-            await _platformSecurityApi.UpdateRoleAsync(role.ToRoleDto());
-            return result;
+            return await SaveAsync(role, cancellationToken);
         }
 
         public async Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)
@@ -537,6 +533,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             // Cleanup
         }
 
+
         private Task<User> PrepareUserResultAsync(MemoryCacheEntryOptions options, AutoRestClients.PlatformModuleApi.Models.ApplicationUser userDto)
         {
             User result = null;
@@ -549,5 +546,12 @@ namespace VirtoCommerce.Storefront.Domain.Security
             }
             return Task.FromResult(result);
         }
+        private async Task<IdentityResult> SaveAsync(Role role, CancellationToken cancellationToken)
+        {
+            var result = IdentityResult.Success;
+            await _platformSecurityApi.UpdateRoleAsync(role.ToRoleDto());
+            return result;
+        }
+
     }
 }

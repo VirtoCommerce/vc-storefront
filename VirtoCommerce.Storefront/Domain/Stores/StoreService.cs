@@ -23,9 +23,9 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly StorefrontOptions _storefrontOptions;
 
         public StoreService(IStoreModule storeApi
-            ,IStorefrontMemoryCache memoryCache
-            ,IApiChangesWatcher apiChangesWatcher
-            ,IOptions<StorefrontOptions> storefrontOptions)
+            , IStorefrontMemoryCache memoryCache
+            , IApiChangesWatcher apiChangesWatcher
+            , IOptions<StorefrontOptions> storefrontOptions)
         {
             _storeApi = storeApi;
             _memoryCache = memoryCache;
@@ -60,8 +60,8 @@ namespace VirtoCommerce.Storefront.Domain
 
         protected virtual Task<Store> ConvertStoreAndLoadDependeciesAsync(StoreApi.Store storeDto, Currency currency = null)
         {
-            var result = storeDto.ToStore();          
-        
+            var result = storeDto.ToStore();
+
             //use url for stores from configuration file with hight priority than store url defined in manager
             result.Url = _storefrontOptions.StoreUrls[result.Id] ?? result.Url;
 

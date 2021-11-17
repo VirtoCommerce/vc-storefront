@@ -1,13 +1,11 @@
 using System;
 using System.IO;
-using LibSassHost;
-using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.LiquidThemeEngine
 {
-    public class SassFileManager: ISassFileManager
+    public class SassFileManager : ISassFileManager
     {
         private readonly IContentBlobProvider _contentBlobProvider;
 

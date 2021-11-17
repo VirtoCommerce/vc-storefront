@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Customer

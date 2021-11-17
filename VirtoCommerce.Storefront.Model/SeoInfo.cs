@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model
@@ -21,6 +20,6 @@ namespace VirtoCommerce.Storefront.Model
         #region IHasLanguage Members
         public Language Language { get; set; }
         #endregion
-      
+
     }
 }

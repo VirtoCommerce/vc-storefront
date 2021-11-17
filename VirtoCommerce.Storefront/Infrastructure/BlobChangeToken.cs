@@ -101,7 +101,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
 
         private bool IsRegularFileName(string pattern)
         {
-            return !new [] { '?', '*' }.Any(pattern.Contains);
+            return !new[] { '?', '*' }.Any(pattern.Contains);
         }
 
         private void EvaluateBlobsModifiedDate(CancellationToken cancellationToken = default(CancellationToken))

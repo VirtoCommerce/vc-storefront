@@ -25,14 +25,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 return input;
             }
 
-            string result = "";
+            var result = new StringBuilder();
 
-            string[] strArray = input.Split('_', '-');
-            foreach (string word in strArray)
+            var strArray = input.Split(separator: '_', '-');
+            foreach (var word in strArray)
             {
-                result += word.Substring(0, 1).ToUpper() + word.Substring(1);
+                result.Append(word.Substring(0, 1).ToUpper() + word.Substring(1));
             }
-            return result;
+
+            return result.ToString();
         }
 
         public static string Handle(string input)

@@ -72,7 +72,7 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("customers/account", WorkContext);
         }
 
-    
+
         [HttpGet("addresses")]
         public async Task<ActionResult> GetAddresses()
         {

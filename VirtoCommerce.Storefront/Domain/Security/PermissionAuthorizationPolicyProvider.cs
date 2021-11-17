@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
-using VirtoCommerce.Storefront.Caching;
-using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Security;
@@ -58,7 +56,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 {
                     resultLookup[permission] = new AuthorizationPolicyBuilder().AddRequirements(new PermissionAuthorizationRequirement { Permission = permission }).Build();
                 }
-              
+
                 return resultLookup;
             });
             return result;

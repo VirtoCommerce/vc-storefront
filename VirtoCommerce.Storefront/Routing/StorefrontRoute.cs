@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing;
 
 namespace VirtoCommerce.Storefront.Routing
@@ -21,7 +18,7 @@ namespace VirtoCommerce.Storefront.Routing
 
         public StorefrontRoute(IRouter target, string routeName, string routeTemplate, RouteValueDictionary defaults, IDictionary<string, object> constraints, RouteValueDictionary dataTokens, IInlineConstraintResolver inlineConstraintResolver)
             : base(target, routeName, _regexp + routeTemplate, defaults, constraints, dataTokens, inlineConstraintResolver)
-        {          
+        {
         }
 
     }

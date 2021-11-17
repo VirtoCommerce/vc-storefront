@@ -37,7 +37,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }
 
             var retVal = input.ToString();
-           
+
             if (!string.IsNullOrEmpty(retVal))
             {
                 if (!string.IsNullOrEmpty(type))
@@ -61,7 +61,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string LinkTo(object input, string link, string title = "")
         {
             return string.Format("<a href=\"{0}\" title=\"{1}\">{2}</a>", link, title, input);
-        }   
+        }
 
         /// <summary>
         /// Returns the URL of a file in the "assets" folder of a theme.
@@ -219,7 +219,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string AddTermUrl(TemplateContext context, string facetName, string term)
         {
             var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
-            var result = themeAdaptor.WorkContext.RequestUrl.SetQueryParameter("filter", $"{facetName}:{term}");         
+            var result = themeAdaptor.WorkContext.RequestUrl.SetQueryParameter("filter", $"{facetName}:{term}");
             return result?.PathAndQuery;
         }
 
@@ -236,6 +236,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             var result = themeAdaptor.WorkContext.RequestUrl.SetQueryParameter("filter", null);
             return result?.PathAndQuery;
         }
-             
+
     }
 }

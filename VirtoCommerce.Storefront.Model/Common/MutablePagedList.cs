@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using Newtonsoft.Json;
 using PagedList.Core;
 
 namespace VirtoCommerce.Storefront.Model.Common
@@ -238,10 +237,10 @@ namespace VirtoCommerce.Storefront.Model.Common
         {
             get
             {
-               ReloadPagedData();
-               var dictionary = _pagedList.OfType<IAccessibleByIndexKey>().ToDictionary(x => x.IndexKey, x => x);
-               return dictionary.Keys;
-               
+                ReloadPagedData();
+                var dictionary = _pagedList.OfType<IAccessibleByIndexKey>().ToDictionary(x => x.IndexKey, x => x);
+                return dictionary.Keys;
+
             }
         }
         public ICollection Values
@@ -269,7 +268,7 @@ namespace VirtoCommerce.Storefront.Model.Common
             }
         }
 
-        
+
         IDictionaryEnumerator IDictionary.GetEnumerator()
         {
             ReloadPagedData();

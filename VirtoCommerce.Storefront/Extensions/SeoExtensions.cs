@@ -4,9 +4,9 @@ using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Tools;
+using catalogDto = VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 using toolsDto = VirtoCommerce.Tools.Models;
-using catalogDto = VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Common
 {

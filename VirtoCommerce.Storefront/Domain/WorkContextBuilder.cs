@@ -1,7 +1,6 @@
 using System.Linq;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Http;
-using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -14,7 +13,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             HttpContext = httpContext;
 
-            var qs = HttpContext.Request.Query.ToDictionary(x=> x.Key, x=> x.Value.ToString()).WithDefaultValue(null);
+            var qs = HttpContext.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString()).WithDefaultValue(null);
 
             WorkContext = new WorkContext
             {

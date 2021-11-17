@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Stores;
@@ -12,7 +12,7 @@ namespace VirtoCommerce.Storefront.Domain
     public static class SelectCurrentCurrencyPolicy
     {
         public static Currency GetCurrentCurrency(this HttpContext context, IEnumerable<Currency> currencies, Store store)
-        {          
+        {
             //Try get default store currency first
             var result = currencies.FirstOrDefault(x => x.Equals(store.DefaultCurrencyCode));
             //Try get currency from request url  

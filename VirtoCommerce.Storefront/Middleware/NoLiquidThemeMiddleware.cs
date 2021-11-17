@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Http;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Models;

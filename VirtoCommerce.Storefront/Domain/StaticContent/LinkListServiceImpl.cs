@@ -55,7 +55,7 @@ namespace VirtoCommerce.Storefront.Domain
                 var productLinks = allMenuLinks.OfType<ProductMenuLink>().ToList();
                 var categoryLinks = allMenuLinks.OfType<CategoryMenuLink>().ToList();
 
-               
+
 
                 return result.ToList();
             });

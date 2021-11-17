@@ -42,7 +42,7 @@ namespace VirtoCommerce.Storefront.Domain
             var baseStoreContentPath = string.Concat(_basePath, "/", store.Id);
             var cacheKey = CacheKey.With(GetType(), "LoadStoreStaticContent", store.Id);
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
-            {            
+            {
                 var retVal = new List<ContentItem>();
                 const string searchPattern = "*.*";
 

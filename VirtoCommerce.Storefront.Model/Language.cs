@@ -1,9 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model
@@ -14,7 +10,7 @@ namespace VirtoCommerce.Storefront.Model
     public partial class Language : ValueObject
     {
         private Language()
-            :this(CultureInfo.InvariantCulture.Name)
+            : this(CultureInfo.InvariantCulture.Name)
         {
         }
 
@@ -25,7 +21,7 @@ namespace VirtoCommerce.Storefront.Model
             {
                 culture = CultureInfo.GetCultureInfo(cultureName);
             }
-          
+
             CultureName = culture.Name;
             ThreeLeterLanguageName = culture.ThreeLetterISOLanguageName;
             TwoLetterLanguageName = culture.TwoLetterISOLanguageName;

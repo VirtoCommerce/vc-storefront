@@ -11,8 +11,8 @@ namespace VirtoCommerce.Storefront.Domain
     public static class SelectCurrentStorePolicy
     {
         public static Store GetCurrentStore(this HttpContext context, IEnumerable<Store> stores, string defaultStoreId)
-        {      
-            if(stores == null)
+        {
+            if (stores == null)
             {
                 throw new ArgumentNullException(nameof(stores));
             }
@@ -28,7 +28,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 result = stores.FirstOrDefault(x => x.Id.EqualsInvariant(defaultStoreId));
             }
-            if(result == null)
+            if (result == null)
             {
                 result = stores.FirstOrDefault();
             }

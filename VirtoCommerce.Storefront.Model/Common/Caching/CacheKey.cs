@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace VirtoCommerce.Storefront.Model.Common.Caching
 {
-    public static class CacheKey 
+    public static class CacheKey
     {
         public static string With(params string[] keys)
         {
@@ -16,6 +14,6 @@ namespace VirtoCommerce.Storefront.Model.Common.Caching
             return With($"{ownerType.GetCacheKey()}:{string.Join("-", keys)}");
         }
 
-   
+
     }
 }

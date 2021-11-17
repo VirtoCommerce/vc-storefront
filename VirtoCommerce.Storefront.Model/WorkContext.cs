@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using Newtonsoft.Json;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Security;
@@ -110,7 +109,7 @@ namespace VirtoCommerce.Storefront.Model
 
         public string ErrorMessage { get; set; }
 
-        
+
         #region Static Content Properties
         public ContentPage CurrentPage { get; set; }
         public ContentPage Page => CurrentPage;

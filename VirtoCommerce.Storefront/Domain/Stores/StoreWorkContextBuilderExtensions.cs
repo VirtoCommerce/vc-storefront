@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using VirtoCommerce.Storefront.Infrastructure;
+using VirtoCommerce.Storefront.Infrastructure.Exceptions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Stores;

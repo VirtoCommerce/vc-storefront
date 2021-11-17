@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using GraphQL;
 using Newtonsoft.Json;
 using VirtoCommerce.Storefront.Model.Common;

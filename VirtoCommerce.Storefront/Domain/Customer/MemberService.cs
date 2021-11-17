@@ -97,7 +97,7 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
-   
+
         public async Task<Organization> GetOrganizationByIdAsync(string organizationId)
         {
             Organization result = null;

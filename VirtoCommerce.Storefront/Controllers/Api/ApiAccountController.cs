@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -179,7 +178,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
 
             return result;
-        }     
+        }
 
 
         // POST: storefrontapi/account/password

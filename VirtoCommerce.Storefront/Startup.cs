@@ -414,8 +414,9 @@ namespace VirtoCommerce.Storefront
             // Forwards the request only when the host is set to the specified value
             app.UseWhen(
                 context => context.Request.Path.Value.EndsWith("xapi/graphql"),
-                appInner => appInner.RunProxy(context => {
-                context.Request.Path = PathString.Empty;
+                appInner => appInner.RunProxy(context =>
+                {
+                    context.Request.Path = PathString.Empty;
                     return context.ForwardTo(new Uri(platformEndpointOptions.Url, "graphql"))
                         .AddXForwardedHeaders()
                         .Send();

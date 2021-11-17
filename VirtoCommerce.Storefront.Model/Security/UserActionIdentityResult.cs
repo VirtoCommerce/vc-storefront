@@ -67,7 +67,7 @@ namespace VirtoCommerce.Storefront.Model.Security
             var result = new UserActionIdentityResult { Succeeded = false };
             if (errors != null)
             {
-                result._errors.AddRange(errors.Select(x=> new IdentityError { Code = x.Code, Description = x.Description }));
+                result._errors.AddRange(errors.Select(x => new IdentityError { Code = x.Code, Description = x.Description }));
             }
             return result;
         }

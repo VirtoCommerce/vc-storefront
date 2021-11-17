@@ -63,6 +63,6 @@ namespace VirtoCommerce.Storefront.Model.Common
         public string SortColumn { get; set; }
 
         public SortDirection SortDirection { get; set; }
-       
+
     }
 }

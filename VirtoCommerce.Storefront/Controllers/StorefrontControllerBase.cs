@@ -23,8 +23,8 @@ namespace VirtoCommerce.Storefront.Controllers
 
             return base.Redirect(appRelativeUrl);
         }
-		
-		protected RedirectResult StoreFrontRedirectPermanent(string url)
+
+        protected RedirectResult StoreFrontRedirectPermanent(string url)
         {
             var newUrl = Url.IsLocalUrl(url) ? url : "~/";
             var appRelativeUrl = UrlBuilder.ToAppRelative(newUrl, WorkContext.CurrentStore, WorkContext.CurrentLanguage);

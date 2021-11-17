@@ -108,7 +108,7 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddSingleton<INotifications>(sp => new Notifications(sp.GetRequiredService<NotificationsModuleClient>()));
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new CustomerModuleClient(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
             services.AddSingleton<ICustomerModule>(sp => new CustomerModule(sp.GetRequiredService<CustomerModuleClient>()));
-        
+
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new ContentModuleClient(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
             services.AddSingleton<IMenu>(sp => new Menu(sp.GetRequiredService<ContentModuleClient>()));
             services.AddSingleton<IContent>(sp => new Content(sp.GetRequiredService<ContentModuleClient>()));

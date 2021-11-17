@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Stores;
 

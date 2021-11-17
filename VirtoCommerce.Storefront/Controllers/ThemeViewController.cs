@@ -11,7 +11,7 @@ namespace VirtoCommerce.Storefront.Controllers
     public class ThemeViewController : StorefrontControllerBase
     {
         public ThemeViewController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder)
-            :base(workContextAccessor, urlBuilder)
+            : base(workContextAccessor, urlBuilder)
         {
         }
 
@@ -23,7 +23,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
         [HttpGet("checkout")]
         public IActionResult CheckoutView()
-        {          
+        {
             return View("checkout");
         }
     }

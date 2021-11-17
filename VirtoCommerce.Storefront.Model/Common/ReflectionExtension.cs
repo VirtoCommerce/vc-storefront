@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
@@ -19,7 +17,7 @@ namespace VirtoCommerce.Storefront.Model.Common
         {
             var props = baseType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
 
-            foreach (var property in props.Where(x=> predicate(x)))
+            foreach (var property in props.Where(x => predicate(x)))
             {
                 var type = ListTypesOrSelf(property.PropertyType);
 

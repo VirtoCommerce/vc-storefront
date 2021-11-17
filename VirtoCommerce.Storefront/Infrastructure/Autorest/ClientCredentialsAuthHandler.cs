@@ -23,7 +23,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         private readonly PlatformEndpointOptions _options;
         private readonly IHttpClientFactory _clientFactory;
         private readonly IStorefrontMemoryCache _memoryCache;
-      
+
         /// <summary>
         ///  Initializes a new instance of the <see cref="ClientCredentialsAuthHandler"/> class.
         /// </summary>
@@ -51,7 +51,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// </returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-             var response = await base.SendAsync(request, cancellationToken);
+            var response = await base.SendAsync(request, cancellationToken);
 
             if (response.StatusCode != HttpStatusCode.Unauthorized)
             {
