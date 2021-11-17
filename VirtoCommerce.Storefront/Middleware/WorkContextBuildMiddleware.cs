@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.Domain;
@@ -17,7 +16,6 @@ namespace VirtoCommerce.Storefront.Middleware
 {
     public class WorkContextBuildMiddleware
     {
-        private readonly IConfiguration _configuration;
         private readonly RequestDelegate _next;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly StorefrontOptions _options;
@@ -25,14 +23,12 @@ namespace VirtoCommerce.Storefront.Middleware
         private readonly Dictionary<string, object> _applicationSettings = null;
 
         public WorkContextBuildMiddleware(RequestDelegate next, IWebHostEnvironment hostingEnvironment,
-                                          IOptions<StorefrontOptions> options, IWorkContextAccessor workContextAccessor, IConfiguration configuration)
+                                          IOptions<StorefrontOptions> options, IWorkContextAccessor workContextAccessor)
         {
             _next = next;
             _hostingEnvironment = hostingEnvironment;
             _workContextAccessor = workContextAccessor;
             _options = options.Value;
-            _configuration = configuration;
-
         }
 
         public async Task Invoke(HttpContext context)
@@ -72,7 +68,6 @@ namespace VirtoCommerce.Storefront.Middleware
             workContext.AvailableRoles = SecurityConstants.Roles.AllRoles;
             workContext.BusinessToBusinessRoles = SecurityConstants.Roles.B2BRoles;
             _workContextAccessor.WorkContext = workContext;
-
 
             await _next(context);
         }

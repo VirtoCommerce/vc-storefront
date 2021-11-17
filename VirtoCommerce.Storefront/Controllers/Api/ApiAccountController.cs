@@ -70,6 +70,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                       .Select(x => new IdentityError { Description = x.ErrorMessage })
                       .ToArray());
             }
+
             login.UserName = login.UserName?.Trim();
 
             var user = await _signInManager.UserManager.FindByNameAsync(login.UserName);
@@ -101,11 +102,13 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 else
                 {
                     await _publisher.Publish(new UserLoginEvent(WorkContext, user));
-                    if (!string.IsNullOrEmpty(returnUrl))
+                    if (string.IsNullOrEmpty(returnUrl))
                     {
-                        var newUrl = Url.IsLocalUrl(returnUrl) ? returnUrl : "~/";
-                        result.ReturnUrl = UrlBuilder.ToAppRelative(newUrl, WorkContext.CurrentStore, WorkContext.CurrentLanguage);
+                        return result;
                     }
+
+                    var newUrl = Url.IsLocalUrl(returnUrl) ? returnUrl : "~/";
+                    result.ReturnUrl = UrlBuilder.ToAppRelative(newUrl, WorkContext.CurrentStore, WorkContext.CurrentLanguage);
                 }
             }
             return result;

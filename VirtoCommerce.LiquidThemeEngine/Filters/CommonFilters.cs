@@ -108,11 +108,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
         public static Paginate Paginate(TemplateContext context, object source, int pageSize = 20, string filterJson = null)
         {
-            Paginate result = null;
-            var collection = source as ICollection;
             var pagedList = source as IPagedList;
-            var scriptObject = source as ScriptObject;
-
             var requestUrl = context.GetValue(new ScriptVariableGlobal("request_url")) as Uri;
             var pageNumber = context.GetValue(new ScriptVariableGlobal("page_number"))?.ToString().SafeParseInt(1) ?? 1;
             var effectivePageSize = context.GetValue(new ScriptVariableGlobal("page_size"))?.ToString().SafeParseInt(pageSize) ?? pageSize;
@@ -127,40 +123,42 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 }
             }
 
-            if (source is IMutablePagedList mutablePagedList)
+            switch (source)
             {
-                mutablePagedList.Slice(pageNumber, effectivePageSize, mutablePagedList.SortInfos, @params);
-                pagedList = mutablePagedList;
-            }
-            else if (scriptObject != null && scriptObject.Keys.Contains("total_count"))
-            {
-                pagedList = new StaticPagedList<object>(Array.Empty<object>(), pageNumber, effectivePageSize, scriptObject["total_count"].ToString().SafeParseInt(0));
-            }
-            else if (collection != null)
-            {
-                pagedList = new PagedList<object>(collection.OfType<object>().AsQueryable(), pageNumber, effectivePageSize);
-                //TODO: Need find way to replace ICollection instance in liquid context to paged instance
-                //var hash = context.Environments.FirstOrDefault(s => s.ContainsKey(_collectionName));
-                //hash[_collectionName] = pagedList;
+                case IMutablePagedList mutablePagedList:
+                    mutablePagedList.Slice(pageNumber, effectivePageSize, mutablePagedList.SortInfos, @params);
+                    pagedList = mutablePagedList;
+                    break;
+                case ScriptObject scriptObject when scriptObject.Keys.Contains("total_count"):
+                    pagedList = new StaticPagedList<object>(Array.Empty<object>(), pageNumber, effectivePageSize, scriptObject["total_count"].ToString().SafeParseInt(0));
+                    break;
+                case ICollection collection:
+                    pagedList = new PagedList<object>(collection.OfType<object>().AsQueryable(), pageNumber, effectivePageSize);
+                    //TODO: Need find way to replace ICollection instance in liquid context to paged instance
+                    //var hash = context.Environments.FirstOrDefault(s => s.ContainsKey(_collectionName));
+                    //hash[_collectionName] = pagedList;
+                    break;
             }
 
-            if (pagedList != null)
+            if (pagedList == null)
             {
-                result = new Paginate(pagedList);
+                return null;
+            }
 
-                for (var i = 1; i <= pagedList.PageCount; i++)
+            var result = new Paginate(pagedList);
+
+            for (var i = 1; i <= pagedList.PageCount; i++)
+            {
+                var page = i > 1 ? i.ToString() : null;
+
+                var part = new Part
                 {
-                    var page = i > 1 ? i.ToString() : null;
+                    IsLink = i != pagedList.PageNumber,
+                    Title = i.ToString(),
+                    Url = requestUrl != null ? requestUrl.SetQueryParameter("page", page).ToString() : i.ToString()
+                };
 
-                    var part = new Part
-                    {
-                        IsLink = i != pagedList.PageNumber,
-                        Title = i.ToString(),
-                        Url = requestUrl != null ? requestUrl.SetQueryParameter("page", page).ToString() : i.ToString()
-                    };
-
-                    result.Parts.Add(part);
-                }
+                result.Parts.Add(part);
             }
 
             return result;

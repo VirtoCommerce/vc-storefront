@@ -2,7 +2,7 @@ using System;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
-    public class EmptyDisposable : IDisposable
+    public sealed class EmptyDisposable : IDisposable
     {
         public static readonly EmptyDisposable Instance = new EmptyDisposable();
 

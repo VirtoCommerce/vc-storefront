@@ -31,7 +31,9 @@ namespace VirtoCommerce.Storefront.Model.Common
             }
         }
 
+#pragma warning disable S3875 // "operator==" should not be overloaded on reference types
         public static bool operator ==(ValueObject left, ValueObject right)
+#pragma warning restore S3875 // "operator==" should not be overloaded on reference types
         {
             return Equals(left, right);
         }

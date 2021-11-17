@@ -11,7 +11,7 @@ namespace VirtoCommerce.Storefront.Model
     /// <summary>
     /// Main working context contains all data which could be used in presentation logic
     /// </summary>
-    public partial class WorkContext : IDisposable, ICloneable
+    public class WorkContext : IDisposable, ICloneable
     {
         public WorkContext()
         {
@@ -215,12 +215,14 @@ namespace VirtoCommerce.Storefront.Model
         public void Dispose()
         {
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
+                // cleanup
             }
         }
 

@@ -17,7 +17,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
     /// </summary>
     public class StorefrontUrlBuilder : IStorefrontUrlBuilder
     {
-        const string FILE_SCHEME = "file";
+        const string FileScheme = "file";
 
         private readonly IUrlBuilder _urlBuilder;
         private readonly IWorkContextAccessor _workContextAccessor;
@@ -30,7 +30,6 @@ namespace VirtoCommerce.Storefront.Infrastructure
         {
             _urlBuilder = urlBuilder;
             _workContextAccessor = workContextAccessor;
-            //_urlBuilderContext = workContext.ToToolsContext();
             _hostEnv = hostEnv;
             _httpContextAccessor = httpContextAccessor;
         }

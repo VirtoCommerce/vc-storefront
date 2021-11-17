@@ -14,15 +14,6 @@ namespace VirtoCommerce.Storefront.Model.Interaction
 
         public string Content { get; set; }
 
-        //        clientPosition: {
-        //    x: e.clientX,
-        //            y: e.clientY
-        //        },
-        //        screenPosition: {
-        //    x: e.screenX,
-        //            y: e.screenY
-        //        },
-
         public DateTime? CreatedAt { get; set; }
     }
 }

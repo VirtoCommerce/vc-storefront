@@ -22,7 +22,9 @@ namespace VirtoCommerce.Storefront.Model.Common
                 var type = ListTypesOrSelf(property.PropertyType);
 
                 foreach (var info in IteratePropsInner(type, predicate))
+                {
                     yield return info;
+                }
 
                 yield return property;
             }
@@ -30,81 +32,64 @@ namespace VirtoCommerce.Storefront.Model.Common
 
         public static Type ListTypesOrSelf(Type type)
         {
-            if (!type.IsGenericType)
-                return type;
-            return type.GetGenericArguments()[0];
+            return !type.IsGenericType ? type : type.GetGenericArguments()[0];
         }
 
         public static Type GetEnumerableType(this Type type)
         {
-            foreach (Type intType in type.GetInterfaces())
-            {
-                if (intType.IsGenericType
-                    && intType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
-                {
-                    return intType.GetGenericArguments()[0];
-                }
-            }
-            return null;
+            return (from intType in type.GetInterfaces() where intType.IsGenericType && intType.GetGenericTypeDefinition() == typeof(IEnumerable<>) select intType.GetGenericArguments()[0]).FirstOrDefault();
         }
 
         public static bool IsAssignableFromGenericList(this Type type)
         {
-            foreach (var intType in type.GetInterfaces())
-            {
-                if (intType.IsGenericType
-                    && intType.GetGenericTypeDefinition() == typeof(IList<>))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return type.GetInterfaces().Any(intType => intType.IsGenericType && intType.GetGenericTypeDefinition() == typeof(IList<>));
         }
 
         public static T[] GetFlatObjectsListWithInterface<T>(this object obj, List<T> resultList = null)
         {
             var retVal = new List<T>();
 
-            if (resultList == null)
-            {
-                resultList = new List<T>();
-            }
+            resultList ??= new List<T>();
             //Ignore cycling references
-            if (!resultList.Any(x => object.ReferenceEquals(x, obj)))
+            if (resultList.Any(x => object.ReferenceEquals(x, obj)))
             {
-                var objectType = obj.GetType();
+                return retVal.ToArray();
+            }
 
-                if (objectType.GetInterface(typeof(T).Name) != null)
+            var objectType = obj.GetType();
+
+            if (objectType.GetInterface(typeof(T).Name) != null)
+            {
+                retVal.Add((T)obj);
+                resultList.Add((T)obj);
+            }
+
+            var properties = objectType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            var objects = properties.Where(x => x.PropertyType.GetInterface(typeof(T).Name) != null)
+                .Select(x => (T)x.GetValue(obj)).ToList();
+
+            //Recursive call for single properties
+            retVal.AddRange(
+                objects.Where(x => x != null).SelectMany(x => x.GetFlatObjectsListWithInterface(resultList)));
+
+            //Handle collection and arrays
+            var collections = properties.Where(p => p.GetIndexParameters().Length == 0)
+                .Select(x => x.GetValue(obj, null))
+                .Where(x => x is IEnumerable && !(x is string))
+                .Cast<IEnumerable>();
+
+            foreach (var collection in collections)
+            {
+                foreach (var collectionObject in collection)
                 {
-                    retVal.Add((T)obj);
-                    resultList.Add((T)obj);
-                }
-
-                var properties = objectType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-                var objects = properties.Where(x => x.PropertyType.GetInterface(typeof(T).Name) != null)
-                                        .Select(x => (T)x.GetValue(obj)).ToList();
-
-                //Recursive call for single properties
-                retVal.AddRange(objects.Where(x => x != null).SelectMany(x => x.GetFlatObjectsListWithInterface(resultList)));
-
-                //Handle collection and arrays
-                var collections = properties.Where(p => p.GetIndexParameters().Length == 0)
-                                            .Select(x => x.GetValue(obj, null))
-                                            .Where(x => x is IEnumerable && !(x is String))
-                                            .Cast<IEnumerable>();
-
-                foreach (var collection in collections)
-                {
-                    foreach (var collectionObject in collection)
+                    if (collectionObject is T)
                     {
-                        if (collectionObject is T)
-                        {
-                            retVal.AddRange(collectionObject.GetFlatObjectsListWithInterface(resultList));
-                        }
+                        retVal.AddRange(collectionObject.GetFlatObjectsListWithInterface(resultList));
                     }
                 }
             }
+
             return retVal.ToArray();
         }
 

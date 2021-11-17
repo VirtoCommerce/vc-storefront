@@ -18,7 +18,7 @@ using Xunit;
 
 namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
 {
-    public class ShopifyLiquidThemeEngineTests : IDisposable
+    public sealed class ShopifyLiquidThemeEngineTests : IDisposable
     {
         private enum DefaultThemeType
         {

@@ -87,9 +87,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static string Capitalize(string input)
         {
-            return input.IsNullOrWhiteSpace()
-                ? input
-                : string.IsNullOrEmpty(input)
+            if (input.IsNullOrWhiteSpace())
+            {
+                return input;
+            }
+
+            return string.IsNullOrEmpty(input)
                 ? input
                 : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(input);
         }
@@ -191,8 +194,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return input.IsNullOrWhiteSpace()
                 ? input
                 : Regex.Replace(input, @"(\r?\n)", string.Empty);
-
-            //: Regex.Replace(input, Environment.NewLine, string.Empty);
         }
 
         /// <summary>
@@ -290,15 +291,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 return input.ToString();
             }
 
-            //try
-            {
-                input = input.ToString().Replace(@string, replacement);
-                //input = Regex.Replace(input, @string, replacement);
-            }
-            //catch (Exception)
-            {
-
-            }
+            input = input.ToString().Replace(@string, replacement);
 
             return input.ToString();
         }

@@ -33,7 +33,7 @@ namespace VirtoCommerce.Storefront.Tests.OutputCache
     }
 
     [Trait("Category", "CI")]
-    public class ResponseCachingTests : IClassFixture<AppTestFixture>, IDisposable
+    public sealed class ResponseCachingTests : IClassFixture<AppTestFixture>, IDisposable
     {
         private readonly AppTestFixture _factory;
         public ResponseCachingTests(AppTestFixture factory)

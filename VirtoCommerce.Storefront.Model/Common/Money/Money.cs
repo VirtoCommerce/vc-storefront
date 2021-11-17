@@ -33,7 +33,7 @@ using System.Globalization;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
-    public class Money : IComparable<Money>, IEquatable<Money>, IComparable, IConvertible<Money>, ICloneable
+    public sealed class Money : IComparable<Money>, IEquatable<Money>, IComparable, IConvertible<Money>, ICloneable
     {
         #region Constructors
 

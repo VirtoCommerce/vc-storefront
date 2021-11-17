@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Routing;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
