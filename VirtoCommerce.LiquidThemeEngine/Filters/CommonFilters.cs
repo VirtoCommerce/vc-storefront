@@ -150,11 +150,13 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
                 for (var i = 1; i <= pagedList.PageCount; i++)
                 {
+                    var page = i > 1 ? i.ToString() : null;
+
                     var part = new Part
                     {
                         IsLink = i != pagedList.PageNumber,
                         Title = i.ToString(),
-                        Url = requestUrl != null ? requestUrl.SetQueryParameter("page", i > 1 ? i.ToString() : null).ToString() : i.ToString()
+                        Url = requestUrl != null ? requestUrl.SetQueryParameter("page", page).ToString() : i.ToString()
                     };
 
                     result.Parts.Add(part);

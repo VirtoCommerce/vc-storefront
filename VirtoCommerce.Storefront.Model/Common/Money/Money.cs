@@ -371,12 +371,12 @@ namespace VirtoCommerce.Storefront.Model.Common
 
         #region IConvertible<Money> Members
 
-        public Money ConvertTo(Currency toCurrency)
+        public Money ConvertTo(Currency currency)
         {
-            if (Currency == toCurrency)
+            if (Currency == currency)
                 return this;
 
-            return new Money(InternalAmount * Currency.ExchangeRate / toCurrency.ExchangeRate, toCurrency);
+            return new Money(InternalAmount * Currency.ExchangeRate / currency.ExchangeRate, currency);
         }
         #endregion
 

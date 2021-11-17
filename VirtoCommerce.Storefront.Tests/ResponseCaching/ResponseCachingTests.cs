@@ -59,7 +59,7 @@ namespace VirtoCommerce.Storefront.Tests.OutputCache
                     })
                 ).CreateClient();
             //Make initial request to get anonymous cookies
-            var initialRequest = Client.GetAsync("/Electronics/en-US/common/notheme").GetAwaiter().GetResult();
+            Client.GetAsync("/Electronics/en-US/common/notheme").GetAwaiter().GetResult();
         }
         public HttpClient Client { get; }
 

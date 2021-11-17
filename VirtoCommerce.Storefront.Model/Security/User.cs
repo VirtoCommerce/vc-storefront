@@ -52,7 +52,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         {
             get
             {
-                return LockoutEndDateUtc != null ? LockoutEndDateUtc.Value > DateTime.UtcNow : false;
+                return LockoutEndDateUtc != null && LockoutEndDateUtc.Value > DateTime.UtcNow;
             }
         }
 

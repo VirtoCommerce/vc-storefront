@@ -278,13 +278,18 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <param name="templateName"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public async ValueTask<string> RenderTemplateByNameAsync(string templateName, object context)
+        public ValueTask<string> RenderTemplateByNameAsync(string templateName, object context)
         {
             if (string.IsNullOrEmpty(templateName))
             {
                 throw new ArgumentNullException(nameof(templateName));
             }
 
+            return RenderTemplateByNameInternalAsync(templateName, context);
+        }
+
+        private async ValueTask<string> RenderTemplateByNameInternalAsync(string templateName, object context)
+        {
             var templatePath = ResolveTemplatePath(templateName);
             if (string.IsNullOrEmpty(templatePath))
             {
@@ -373,9 +378,8 @@ namespace VirtoCommerce.LiquidThemeEngine
             {
                 cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeSettingPath) }));
 
-                JObject result;
                 var baseThemeSettings = new JObject();
-                var currentThemeSettings = result = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
+                var currentThemeSettings = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
 
                 //Try to load settings from base theme path and merge them with resources for local theme
                 if ((_options.MergeBaseSettings || currentThemeSettings == null) && !string.IsNullOrEmpty(BaseThemeSettingPath))
@@ -384,7 +388,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                     baseThemeSettings = InnerGetAllSettings(_themeBlobProvider, BaseThemeSettingPath);
                 }
 
-                result = _options.MergeBaseSettings
+                var result = _options.MergeBaseSettings
                     ? SettingsManager.Merge(baseThemeSettings, currentThemeSettings ?? new JObject())
                     : SettingsManager.ReadSettings(currentThemeSettings ?? new JObject()).CurrentPreset.Json;
 

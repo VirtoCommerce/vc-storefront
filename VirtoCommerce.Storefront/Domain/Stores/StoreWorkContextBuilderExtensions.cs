@@ -74,13 +74,18 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.CompletedTask;
         }
 
-        public static async Task WithCurrenciesAsync(this IWorkContextBuilder builder, Language language, Store store)
+        public static Task WithCurrenciesAsync(this IWorkContextBuilder builder, Language language, Store store)
         {
             if (language == null)
             {
                 throw new ArgumentNullException(nameof(language));
             }
 
+            return WithCurrenciesInternalAsync(builder, language, store);
+        }
+
+        private static async Task WithCurrenciesInternalAsync(this IWorkContextBuilder builder, Language language, Store store)
+        {
             var serviceProvider = builder.HttpContext.RequestServices;
             var currencyService = serviceProvider.GetRequiredService<ICurrencyService>();
 

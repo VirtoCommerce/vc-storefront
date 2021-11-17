@@ -115,7 +115,7 @@ namespace VirtoCommerce.Storefront.Tests.Scriban
         public string Upper { get; set; }
 
     }
-    public class MyFunctions
+    public static class MyFunctions
     {
         public static string T(object input, params object[] variables)
         {

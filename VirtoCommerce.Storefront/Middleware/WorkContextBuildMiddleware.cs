@@ -22,7 +22,8 @@ namespace VirtoCommerce.Storefront.Middleware
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly StorefrontOptions _options;
         private readonly IWorkContextAccessor _workContextAccessor;
-        private readonly Dictionary<string, object> _applicationSettings;
+        private readonly Dictionary<string, object> _applicationSettings = null;
+
         public WorkContextBuildMiddleware(RequestDelegate next, IWebHostEnvironment hostingEnvironment,
                                           IOptions<StorefrontOptions> options, IWorkContextAccessor workContextAccessor, IConfiguration configuration)
         {

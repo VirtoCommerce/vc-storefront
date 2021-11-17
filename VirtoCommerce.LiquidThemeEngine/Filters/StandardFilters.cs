@@ -132,8 +132,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
             var l = length - truncateString.Length;
 
+            var startIndex = l < 0 ? 0 : l;
+
             return input.Length > length
-                ? input.Substring(0, l < 0 ? 0 : l) + truncateString
+                ? input.Substring(0, startIndex) + truncateString
                 : input;
         }
 
@@ -252,7 +254,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         {
             if (input == null)
             {
-                return null;
+                return input;
             }
 
             var ary = input.Cast<object>().ToList();
@@ -653,7 +655,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }
 
             var propertyInfo = type.GetProperty(member);
-            return propertyInfo != null && propertyInfo.CanRead ? true : false;
+            return propertyInfo != null && propertyInfo.CanRead;
         }
 
         public static object Send(this object value, string member, object[] parameters = null)
@@ -761,11 +763,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 {
                     yield return item;
                 }
-                else if (item is IEnumerable)
+                else if (item is IEnumerable enumerableItem)
                 {
-                    foreach (var subitem in Flatten((IEnumerable)item))
+                    foreach (var subItem in Flatten(enumerableItem))
                     {
-                        yield return subitem;
+                        yield return subItem;
                     }
                 }
                 else

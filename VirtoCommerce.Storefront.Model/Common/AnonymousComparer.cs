@@ -17,15 +17,6 @@ namespace VirtoCommerce.Storefront.Model.Common
     {
         #region IComparer<T>
 
-        /// <summary>Example:AnonymousComparer.Create&lt;int&gt;((x, y) => y - x)</summary>
-        public static IComparer<T> Create<T>(Func<T, T, int> compare)
-        {
-            if (compare == null)
-                throw new ArgumentNullException("compare");
-
-            return new Comparer<T>(compare);
-        }
-
         private class Comparer<T> : IComparer<T>
         {
             private readonly Func<T, T, int> compare;
@@ -39,6 +30,15 @@ namespace VirtoCommerce.Storefront.Model.Common
             {
                 return compare(x, y);
             }
+        }
+
+        /// <summary>Example:AnonymousComparer.Create&lt;int&gt;((x, y) => y - x)</summary>
+        public static IComparer<T> Create<T>(Func<T, T, int> compare)
+        {
+            if (compare == null)
+                throw new ArgumentNullException("compare");
+
+            return new Comparer<T>(compare);
         }
 
         #endregion

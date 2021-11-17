@@ -72,46 +72,6 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return result;
         }
 
-        public static dto.ApplicationUser ToUserDto(this User user)
-        {
-            var result = new dto.ApplicationUser
-            {
-                Id = user.Id,
-                Email = user.Email,
-                Password = user.Password,
-                UserName = user.UserName,
-                StoreId = user.StoreId,
-                MemberId = user.Contact?.Id ?? user.ContactId,
-                AccessFailedCount = user.AccessFailedCount,
-                EmailConfirmed = user.EmailConfirmed,
-                LockoutEnabled = user.LockoutEnabled,
-                LockoutEndDateUtc = user.LockoutEndDateUtc,
-                TwoFactorEnabled = user.TwoFactorEnabled,
-                SecurityStamp = user.SecurityStamp,
-                PasswordHash = user.PasswordHash,
-                UserState = user.UserState.ToString(),
-                UserType = user.UserType,
-                IsAdministrator = user.IsAdministrator,
-                PhoneNumber = user.PhoneNumber,
-                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
-            };
-
-            if (!user.Roles.IsNullOrEmpty())
-            {
-                //Need to convert role names to the registered in the platform roles entities 
-                result.Roles = user.Roles.Select(ToRoleDto).ToList();
-            }
-            if (!user.ExternalLogins.IsNullOrEmpty())
-            {
-                result.Logins = user.ExternalLogins.Select(x => new dto.ApplicationUserLogin
-                {
-                    LoginProvider = x.LoginProvider,
-                    ProviderKey = x.ProviderKey
-                }).ToList();
-            }
-            return result;
-        }
-
         public static User ToUser(this dto.ApplicationUser userDto)
         {
             var result = new User()
@@ -158,6 +118,45 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
             return result;
         }
-    }
 
+        public static dto.ApplicationUser ToUserDto(this User user)
+        {
+            var result = new dto.ApplicationUser
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Password = user.Password,
+                UserName = user.UserName,
+                StoreId = user.StoreId,
+                MemberId = user.Contact?.Id ?? user.ContactId,
+                AccessFailedCount = user.AccessFailedCount,
+                EmailConfirmed = user.EmailConfirmed,
+                LockoutEnabled = user.LockoutEnabled,
+                LockoutEndDateUtc = user.LockoutEndDateUtc,
+                TwoFactorEnabled = user.TwoFactorEnabled,
+                SecurityStamp = user.SecurityStamp,
+                PasswordHash = user.PasswordHash,
+                UserState = user.UserState.ToString(),
+                UserType = user.UserType,
+                IsAdministrator = user.IsAdministrator,
+                PhoneNumber = user.PhoneNumber,
+                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+            };
+
+            if (!user.Roles.IsNullOrEmpty())
+            {
+                //Need to convert role names to the registered in the platform roles entities 
+                result.Roles = user.Roles.Select(ToRoleDto).ToList();
+            }
+            if (!user.ExternalLogins.IsNullOrEmpty())
+            {
+                result.Logins = user.ExternalLogins.Select(x => new dto.ApplicationUserLogin
+                {
+                    LoginProvider = x.LoginProvider,
+                    ProviderKey = x.ProviderKey
+                }).ToList();
+            }
+            return result;
+        }
+    }
 }

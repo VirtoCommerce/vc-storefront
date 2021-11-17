@@ -7,28 +7,25 @@ namespace VirtoCommerce.Storefront.Model.Common
 {
     public static class LocalizationExtensions
     {
-        private static readonly RegionInfo[] _cachedRegionInfos;
-        static LocalizationExtensions()
-        {
-            _cachedRegionInfos = CultureInfo.GetCultures(CultureTypes.AllCultures)
-                                            .Where(c => !c.IsNeutralCulture && c.LCID != 127)
-                .Select(x =>
+        private static readonly RegionInfo[] _cachedRegionInfos = CultureInfo.GetCultures(CultureTypes.AllCultures)
+            .Where(c => !c.IsNeutralCulture && c.LCID != 127)
+            .Select(x =>
+            {
+                try
                 {
-                    try
-                    {
-                        return new RegionInfo(x.LCID);
-                    }
-                    catch
-                    {
-                        return null;
-                    }
-                }).Where(x => x != null).ToArray();
-        }
+                    return new RegionInfo(x.LCID);
+                }
+                catch
+                {
+                    return null;
+                }
+            }).Where(x => x != null).ToArray();
 
         public static T FindWithLanguage<T>(this IEnumerable<T> items, Language language)
          where T : IHasLanguage
         {
             var retVal = items.FirstOrDefault(i => i.Language.Equals(language));
+
             if (retVal == null)
             {
                 retVal = items.FirstOrDefault(x => x.Language.IsInvariant);

@@ -549,7 +549,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         private async Task<IdentityResult> SaveAsync(Role role, CancellationToken cancellationToken)
         {
             var result = IdentityResult.Success;
-            await _platformSecurityApi.UpdateRoleAsync(role.ToRoleDto());
+            await _platformSecurityApi.UpdateRoleAsync(role.ToRoleDto(), cancellationToken);
             return result;
         }
 

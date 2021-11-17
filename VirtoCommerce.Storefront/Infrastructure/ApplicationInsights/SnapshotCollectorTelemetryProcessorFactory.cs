@@ -18,10 +18,10 @@ namespace VirtoCommerce.Storefront.Infrastructure.ApplicationInsights
             _serviceProvider = serviceProvider;
         }
 
-        public ITelemetryProcessor Create(ITelemetryProcessor next)
+        public ITelemetryProcessor Create(ITelemetryProcessor nextProcessor)
         {
             var snapshotConfigurationOptions = _serviceProvider.GetService<IOptions<SnapshotCollectorConfiguration>>();
-            return new SnapshotCollectorTelemetryProcessor(next, configuration: snapshotConfigurationOptions.Value);
+            return new SnapshotCollectorTelemetryProcessor(nextProcessor, configuration: snapshotConfigurationOptions.Value);
         }
     }
 }
