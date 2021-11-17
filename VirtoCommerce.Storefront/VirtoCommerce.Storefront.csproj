@@ -19,7 +19,6 @@
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>1701;1702;1591;1573;1570</NoWarn>
-    <CodeAnalysisRuleSet>..\.sonarlint\virtocommerce_vc-storefrontcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   
   <ItemGroup>
@@ -33,7 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="..\.sonarlint\virtocommerce_vc-storefront\CSharp\SonarLint.xml" Link="SonarLint.xml" />
     <Content Include="IISUrlRewrite.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

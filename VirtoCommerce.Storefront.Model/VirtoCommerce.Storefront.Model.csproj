@@ -13,12 +13,7 @@
     <RepositoryUrl>https://github.com/VirtoCommerce/vc-storefront-core</RepositoryUrl>
     <IsPackable>False</IsPackable>
     <OutputType>Library</OutputType>
-    <CodeAnalysisRuleSet>..\.sonarlint\virtocommerce_vc-storefrontcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="..\.sonarlint\virtocommerce_vc-storefront\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-  </ItemGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
