@@ -190,7 +190,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         {
             return input.IsNullOrWhiteSpace()
                 ? input
-                : Regex.Replace(input, @"(\r?\n)", String.Empty);
+                : Regex.Replace(input, @"(\r?\n)", string.Empty);
 
             //: Regex.Replace(input, Environment.NewLine, string.Empty);
         }

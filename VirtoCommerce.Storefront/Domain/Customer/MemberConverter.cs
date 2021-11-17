@@ -38,21 +38,6 @@ namespace VirtoCommerce.Storefront.Domain
             return address.ToCoreAddressDto().JsonConvert<customerDto.CustomerAddress>();
         }
 
-
-        public static Organization ToOrganization(this OrganizationRegistration orgRegistration)
-        {
-            var organization = new Organization
-            {
-                Name = orgRegistration.OrganizationName,
-            };
-            if (organization.Addresses != null)
-            {
-                organization.Addresses.Add(orgRegistration.Address);
-            }
-            return organization;
-        }
-
-
         public static Contact ToContact(this UserRegistration userRegistration)
         {
             var result = new Contact
@@ -134,6 +119,19 @@ namespace VirtoCommerce.Storefront.Domain
                 });
             }
             return result;
+        }
+
+        public static Organization ToOrganization(this OrganizationRegistration orgRegistration)
+        {
+            var organization = new Organization
+            {
+                Name = orgRegistration.OrganizationName,
+            };
+            if (organization.Addresses != null)
+            {
+                organization.Addresses.Add(orgRegistration.Address);
+            }
+            return organization;
         }
 
         public static Organization ToOrganization(this customerDto.Organization organizaionDto)
