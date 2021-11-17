@@ -36,7 +36,6 @@ namespace VirtoCommerce.Storefront.Model
         [EmailAddress]
         public string Email { get; set; }
 
-        //TODO: Need to move out how to move from domain model 
         #region Shopify model compatible properties
         public string Id => Key;
         [JsonIgnore]

@@ -228,7 +228,6 @@ namespace VirtoCommerce.Storefront.Model
 
         public object Clone()
         {
-            //TODO: Implement deep clone
             var result = MemberwiseClone() as WorkContext;
             return result;
         }

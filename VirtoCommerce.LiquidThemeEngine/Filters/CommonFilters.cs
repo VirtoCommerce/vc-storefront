@@ -134,9 +134,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                     break;
                 case ICollection collection:
                     pagedList = new PagedList<object>(collection.OfType<object>().AsQueryable(), pageNumber, effectivePageSize);
-                    //TODO: Need find way to replace ICollection instance in liquid context to paged instance
-                    //var hash = context.Environments.FirstOrDefault(s => s.ContainsKey(_collectionName));
-                    //hash[_collectionName] = pagedList;
                     break;
             }
 
