@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DotLiquid.ViewEngine.Exceptions;
+using GraphQL.Client.Abstractions;
 using LibSassHost;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
@@ -49,9 +50,18 @@ namespace VirtoCommerce.LiquidThemeEngine
         private readonly IContentBlobProvider _themeBlobProvider;
         private readonly ISassFileManager _sassFileManager;
         private readonly IFeaturesAgent _featuresAgent;
+        private readonly IGraphQLClient _graphQLClient;
 
-        public ShopifyLiquidThemeEngine(IStorefrontMemoryCache memoryCache, IWorkContextAccessor workContextAccessor, IHttpContextAccessor httpContextAccessor,
-                                        IStorefrontUrlBuilder storeFrontUrlBuilder, IContentBlobProvider contentBlobProvider, ISassFileManager sassFileManager, IOptions<LiquidThemeEngineOptions> options, IFeaturesAgent featuresAgent)
+        public ShopifyLiquidThemeEngine(
+            IStorefrontMemoryCache memoryCache
+            , IWorkContextAccessor workContextAccessor
+            , IHttpContextAccessor httpContextAccessor
+            , IStorefrontUrlBuilder storeFrontUrlBuilder
+            , IContentBlobProvider contentBlobProvider
+            , ISassFileManager sassFileManager
+            , IOptions<LiquidThemeEngineOptions> options
+            , IFeaturesAgent featuresAgent
+            , IGraphQLClient graphQLClient)
         {
             _workContextAccessor = workContextAccessor;
             _httpContextAccessor = httpContextAccessor;
@@ -61,6 +71,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             _themeBlobProvider = contentBlobProvider;
             _sassFileManager = sassFileManager;
             _featuresAgent = featuresAgent;
+            _graphQLClient = graphQLClient;
             SassCompiler.FileManager = sassFileManager;
         }
 
@@ -73,6 +84,8 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// Current HttpContext
         /// </summary>
         public HttpContext HttpContext => _httpContextAccessor.HttpContext;
+
+        public IGraphQLClient GraphQLClient => _graphQLClient;
 
         /// <summary>
         /// Store url builder
@@ -97,12 +110,23 @@ namespace VirtoCommerce.LiquidThemeEngine
         private string CurrentThemePath => Path.Combine("Themes", WorkContext.CurrentStore.Id, CurrentThemeName);
 
         //Relative path to the discovery of theme resources that weren't found by the current path.
-        private string BaseThemePath =>
-            !string.IsNullOrEmpty(_options.BaseThemePath) ? Path.Combine("Themes", _options.BaseThemePath) :
+        private string BaseThemePath
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(_options.BaseThemePath))
+                {
+                    return Path.Combine("Themes", _options.BaseThemePath);
+                }
+
 #pragma warning disable 618
-            // We need to use obsolete value here for backward compatibility.
-            !string.IsNullOrEmpty(_options.BaseThemeName) ? Path.Combine("Themes", _options.BaseThemeName, "default") : null;
+                // We need to use obsolete value here for backward compatibility.
+                return !string.IsNullOrEmpty(_options.BaseThemeName) ? Path.Combine("Themes", _options.BaseThemeName, "default") : null;
 #pragma warning restore 618
+            }
+
+        }
+
         private string BaseThemeSettingPath => BaseThemePath != null ? Path.Combine(BaseThemePath, "config", "settings_data.json") : null;
         public string BaseThemeLocalePath => BaseThemePath != null ? Path.Combine(BaseThemePath, "locales") : null;
 
@@ -153,7 +177,7 @@ namespace VirtoCommerce.LiquidThemeEngine
         {
             Stream retVal = null;
             var filePathWithoutExtension = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
-            //file.ext => file.ext || file.liquid || file.ext.liquid || file     
+
             var searchPatterns = new[] { filePath, string.Format(_liquidTemplateFormat, filePathWithoutExtension), string.Format(_liquidTemplateFormat, filePath), filePathWithoutExtension };
 
 
@@ -222,15 +246,13 @@ namespace VirtoCommerce.LiquidThemeEngine
             {
                 cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(filePath), _themeBlobProvider.Watch(CurrentThemeSettingPath) }));
 
-                using (var stream = GetAssetStreamAsync(filePath).GetAwaiter().GetResult())
+                using var stream = GetAssetStreamAsync(filePath).GetAwaiter().GetResult();
+                if (stream == null)
                 {
-                    if (stream == null)
-                    {
-                        throw new StorefrontException($"Theme resource for path '{filePath}' not found");
-                    }
-                    var hashAlgorithm = CryptoConfig.AllowOnlyFipsAlgorithms ? (SHA256)new SHA256CryptoServiceProvider() : new SHA256Managed();
-                    return WebEncoders.Base64UrlEncode(hashAlgorithm.ComputeHash(stream));
+                    throw new StorefrontException($"Theme resource for path '{filePath}' not found");
                 }
+                var hashAlgorithm = CryptoConfig.AllowOnlyFipsAlgorithms ? (SHA256)new SHA256CryptoServiceProvider() : new SHA256Managed();
+                return WebEncoders.Base64UrlEncode(hashAlgorithm.ComputeHash(stream));
             });
         }
 
@@ -264,13 +286,18 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <param name="templateName"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public async ValueTask<string> RenderTemplateByNameAsync(string templateName, object context)
+        public ValueTask<string> RenderTemplateByNameAsync(string templateName, object context)
         {
             if (string.IsNullOrEmpty(templateName))
             {
                 throw new ArgumentNullException(nameof(templateName));
             }
 
+            return RenderTemplateByNameInternalAsync(templateName, context);
+        }
+
+        private async ValueTask<string> RenderTemplateByNameInternalAsync(string templateName, object context)
+        {
             var templatePath = ResolveTemplatePath(templateName);
             if (string.IsNullOrEmpty(templatePath))
             {
@@ -310,7 +337,6 @@ namespace VirtoCommerce.LiquidThemeEngine
                 return new ValueTask<string>(templateContent);
             }
 
-            //TODO: Handle _options.RethrowLiquidRenderErrors
             var cacheKey = CacheKey.With(GetType(), "ParseTemplate", templatePath ?? templateContent);
             var parsedTemplate = _memoryCache.GetOrCreate(cacheKey, (cacheItem) =>
             {
@@ -359,9 +385,8 @@ namespace VirtoCommerce.LiquidThemeEngine
             {
                 cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(CurrentThemeSettingPath) }));
 
-                JObject result;
                 var baseThemeSettings = new JObject();
-                var currentThemeSettings = result = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
+                var currentThemeSettings = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
 
                 //Try to load settings from base theme path and merge them with resources for local theme
                 if ((_options.MergeBaseSettings || currentThemeSettings == null) && !string.IsNullOrEmpty(BaseThemeSettingPath))
@@ -370,7 +395,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                     baseThemeSettings = InnerGetAllSettings(_themeBlobProvider, BaseThemeSettingPath);
                 }
 
-                result = _options.MergeBaseSettings
+                var result = _options.MergeBaseSettings
                     ? SettingsManager.Merge(baseThemeSettings, currentThemeSettings ?? new JObject())
                     : SettingsManager.ReadSettings(currentThemeSettings ?? new JObject()).CurrentPreset.Json;
 
@@ -409,7 +434,8 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// <returns></returns>
         public string GetAssetAbsoluteUrl(string assetName)
         {
-            return UrlBuilder.ToAppAbsolute(_options.ThemesAssetsRelativeUrl.TrimEnd('/') + "/" + assetName.TrimStart('/'), WorkContext.CurrentStore, WorkContext.CurrentLanguage);
+            const char delimiter = '/';
+            return UrlBuilder.ToAppAbsolute(_options.ThemesAssetsRelativeUrl.TrimEnd(delimiter) + delimiter + assetName.TrimStart(delimiter), WorkContext.CurrentStore, WorkContext.CurrentLanguage);
         }
 
         #endregion
@@ -429,10 +455,8 @@ namespace VirtoCommerce.LiquidThemeEngine
 
                     if (themeBlobProvider.PathExists(currentLocalePath))
                     {
-                        using (var stream = themeBlobProvider.OpenRead(currentLocalePath))
-                        {
-                            localeJson = JsonConvert.DeserializeObject<dynamic>(stream.ReadToString());
-                        }
+                        using var stream = themeBlobProvider.OpenRead(currentLocalePath);
+                        localeJson = JsonConvert.DeserializeObject<dynamic>(stream.ReadToString());
                         break;
                     }
                 }
@@ -441,10 +465,8 @@ namespace VirtoCommerce.LiquidThemeEngine
 
                 if (localeDefaultPath != null && themeBlobProvider.PathExists(localeDefaultPath))
                 {
-                    using (var stream = themeBlobProvider.OpenRead(localeDefaultPath))
-                    {
-                        defaultJson = JsonConvert.DeserializeObject<dynamic>(stream.ReadToString());
-                    }
+                    using var stream = themeBlobProvider.OpenRead(localeDefaultPath);
+                    defaultJson = JsonConvert.DeserializeObject<dynamic>(stream.ReadToString());
                 }
 
                 //Need merge default and requested localization json to resulting object
@@ -469,10 +491,8 @@ namespace VirtoCommerce.LiquidThemeEngine
 
             if (themeBlobProvider.PathExists(settingsPath))
             {
-                using (var stream = themeBlobProvider.OpenRead(settingsPath))
-                {
-                    result = JsonConvert.DeserializeObject<JObject>(stream.ReadToString());
-                }
+                using var stream = themeBlobProvider.OpenRead(settingsPath);
+                result = JsonConvert.DeserializeObject<JObject>(stream.ReadToString());
             }
             return result;
         }
@@ -490,10 +510,8 @@ namespace VirtoCommerce.LiquidThemeEngine
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheItem) =>
             {
                 cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(templatePath) }));
-                using (var stream = _themeBlobProvider.OpenRead(templatePath))
-                {
-                    return stream.ReadToString();
-                }
+                using var stream = _themeBlobProvider.OpenRead(templatePath);
+                return stream.ReadToString();
             });
         }
 

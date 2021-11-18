@@ -107,7 +107,7 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
 
                         case "published":
                             bool isPublished;
-                            IsPublished = bool.TryParse(settingValue, out isPublished) ? isPublished : true;
+                            IsPublished = !bool.TryParse(settingValue, out isPublished) || isPublished;
                             break;
 
                         case "date":

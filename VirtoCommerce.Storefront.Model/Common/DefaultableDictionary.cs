@@ -21,8 +21,8 @@ namespace VirtoCommerce.Storefront.Model.Common
 
         public DefaultableDictionary(IDictionary<TKey, TValue> dictionary, TValue defaultValue)
         {
-            this._dictionary = dictionary;
-            this._defaultValue = defaultValue;
+            _dictionary = dictionary;
+            _defaultValue = defaultValue;
         }
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
@@ -88,7 +88,9 @@ namespace VirtoCommerce.Storefront.Model.Common
         public bool TryGetValue(TKey key, out TValue value)
         {
             if (!_dictionary.TryGetValue(key, out value))
+            {
                 value = _defaultValue;
+            }
 
             return true;
         }
@@ -97,8 +99,7 @@ namespace VirtoCommerce.Storefront.Model.Common
         {
             get
             {
-                TValue result;
-                if (!_dictionary.TryGetValue(key, out result))
+                if (!_dictionary.TryGetValue(key, out var result))
                 {
                     result = _defaultValue;
                 }

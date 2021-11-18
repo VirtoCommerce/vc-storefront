@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Markdig;
 
 namespace VirtoCommerce.Storefront.Domain
 {
-    public class MarkdownContentLoader: StaticContentLoader
+    public class MarkdownContentLoader : StaticContentLoader
     {
         private readonly MarkdownPipeline _markdownPipeline;
 

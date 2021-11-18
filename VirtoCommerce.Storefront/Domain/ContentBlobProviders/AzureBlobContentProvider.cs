@@ -1,29 +1,25 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using VirtoCommerce.Storefront.Caching;
-using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Infrastructure;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 using VirtoCommerce.Storefront.Model.StaticContent;
-using VirtoCommerce.Storefront.Infrastructure;
-using VirtoCommerce.Storefront.Model.Caching;
-using System.Linq;
 
 namespace VirtoCommerce.Storefront.Domain
 {
     public class AzureBlobContentProvider : IContentBlobProvider
     {
         private readonly CloudBlobClient _cloudBlobClient;
-        private readonly CloudStorageAccount _cloudStorageAccount;
         private readonly CloudBlobContainer _container;
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly AzureBlobContentOptions _options;
@@ -34,11 +30,11 @@ namespace VirtoCommerce.Storefront.Domain
             _options = options.Value;
             _memoryCache = memoryCache;
 
-            if (!CloudStorageAccount.TryParse(_options.ConnectionString, out _cloudStorageAccount))
+            if (!CloudStorageAccount.TryParse(_options.ConnectionString, out var cloudStorageAccount))
             {
                 throw new StorefrontException("Failed to get valid connection string");
             }
-            _cloudBlobClient = _cloudStorageAccount.CreateCloudBlobClient();
+            _cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
             _container = _cloudBlobClient.GetContainerReference(_options.Container);
             _watcher = watcher;
         }
@@ -54,12 +50,19 @@ namespace VirtoCommerce.Storefront.Domain
             return OpenReadAsync(path).GetAwaiter().GetResult();
         }
 
-        public async virtual Task<Stream> OpenReadAsync(string path)
+        public virtual Task<Stream> OpenReadAsync(string path)
         {
             if (string.IsNullOrEmpty(path))
             {
                 throw new ArgumentNullException(nameof(path));
             }
+            path = NormalizePath(path);
+
+            return OpenReadInternalAsync(path);
+        }
+
+        protected virtual async Task<Stream> OpenReadInternalAsync(string path)
+        {
             path = NormalizePath(path);
 
             Stream result = null;
@@ -90,7 +93,7 @@ namespace VirtoCommerce.Storefront.Domain
             return OpenWriteAsync(path).GetAwaiter().GetResult();
         }
 
-        public async virtual Task<Stream> OpenWriteAsync(string path)
+        public virtual async Task<Stream> OpenWriteAsync(string path)
         {
             //Container name
             path = NormalizePath(path);
@@ -109,7 +112,7 @@ namespace VirtoCommerce.Storefront.Domain
             return PathExistsAsync(path).GetAwaiter().GetResult();
         }
 
-        public async virtual Task<bool> PathExistsAsync(string path)
+        public virtual async Task<bool> PathExistsAsync(string path)
         {
             path = NormalizePath(path);
             var cacheKey = CacheKey.With(GetType(), "PathExistsAsync", path);
@@ -175,6 +178,7 @@ namespace VirtoCommerce.Storefront.Domain
             //Try to check that passed search pattern doesn't contain mask wildcard characters
             //this means that a direct link to the resource is passed, and we do not need to perform any search
             var directPath = Path.Combine(path, searchPattern);
+
             if (!searchPattern.FilePathHasMaskChars() && await PathExistsAsync(directPath))
             {
                 retVal.Add(directPath);
@@ -185,6 +189,7 @@ namespace VirtoCommerce.Storefront.Domain
                 BlobContinuationToken token = null;
                 var operationContext = new OperationContext();
                 var directory = GetCloudBlobDirectory(path);
+
                 do
                 {
                     var resultSegment = await directory.ListBlobsSegmentedAsync(recursive, BlobListingDetails.Metadata, null, token, _options.BlobRequestOptions, operationContext);
@@ -195,14 +200,17 @@ namespace VirtoCommerce.Storefront.Domain
                 // Loop over items within the container and output the length and URI.
                 foreach (var item in blobItems)
                 {
-                    if (item is CloudBlockBlob block)
+                    if (!(item is CloudBlockBlob block))
                     {
-                        var blobRelativePath = GetRelativeUrl(block.Uri.ToString());
-                        var fileName = Path.GetFileName(Uri.UnescapeDataString(block.Uri.ToString()));
-                        if (fileName.FitsMask(searchPattern))
-                        {
-                            retVal.Add(blobRelativePath);
-                        }
+                        continue;
+                    }
+
+                    var blobRelativePath = GetRelativeUrl(block.Uri.ToString());
+                    var fileName = Path.GetFileName(Uri.UnescapeDataString(block.Uri.ToString()));
+
+                    if (fileName.FitsMask(searchPattern))
+                    {
+                        retVal.Add(blobRelativePath);
                     }
                 }
             }

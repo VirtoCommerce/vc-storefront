@@ -8,7 +8,7 @@ namespace VirtoCommerce.Storefront.Model.Common.Caching
 {
     public static class MemoryCacheExtensions
     {
-        private static ConcurrentDictionary<string, object> _lockLookup = new ConcurrentDictionary<string, object>();
+        private static readonly ConcurrentDictionary<string, object> _lockLookup = new ConcurrentDictionary<string, object>();
         public static async Task<TItem> GetOrCreateExclusiveAsync<TItem>(this IMemoryCache cache, string key, Func<MemoryCacheEntryOptions, Task<TItem>> factory, bool cacheNullValue = true)
         {
             if (!cache.TryGetValue(key, out var result))

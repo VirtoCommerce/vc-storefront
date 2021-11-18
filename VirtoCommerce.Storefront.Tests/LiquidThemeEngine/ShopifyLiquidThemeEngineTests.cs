@@ -18,7 +18,7 @@ using Xunit;
 
 namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
 {
-    public class ShopifyLiquidThemeEngineTests : IDisposable
+    public sealed class ShopifyLiquidThemeEngineTests : IDisposable
     {
         private enum DefaultThemeType
         {
@@ -192,21 +192,13 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
 
         private void InitializeStreams(DefaultThemeType defaultThemeType, bool currentThemeHasSelectedPreset)
         {
-            JObject defaultThemeJson;
-            switch (defaultThemeType)
+            var defaultThemeJson = defaultThemeType switch
             {
-                case DefaultThemeType.WithoutPresets:
-                    defaultThemeJson = DefaultSettingsWithoutPresets;
-                    break;
-                case DefaultThemeType.WithPresets:
-                    defaultThemeJson = DefaultSettingsWithPresets;
-                    break;
-                case DefaultThemeType.WithPresetsAndCurrentObject:
-                    defaultThemeJson = DefaultSettingsWithPresetsAndCurrentObject;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(defaultThemeType), defaultThemeType, null);
-            }
+                DefaultThemeType.WithoutPresets => DefaultSettingsWithoutPresets,
+                DefaultThemeType.WithPresets => DefaultSettingsWithPresets,
+                DefaultThemeType.WithPresetsAndCurrentObject => DefaultSettingsWithPresetsAndCurrentObject,
+                _ => throw new ArgumentOutOfRangeException(nameof(defaultThemeType), defaultThemeType, null)
+            };
 
             InitializeStream(_defaultThemeStreamWriter, out var defaultThemeStream, defaultThemeJson);
             DefaultThemeStream = defaultThemeStream;
@@ -295,7 +287,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
         private ShopifyLiquidThemeEngine GetThemeEngine(bool useThemesInheritance, LiquidThemeEngineOptions options)
         {
             return new ShopifyLiquidThemeEngine(MemoryCache, GetWorkContextAccessor(useThemesInheritance), HttpContextAccessor,
-                null, ContentBlobProvider, null, new OptionsWrapper<LiquidThemeEngineOptions>(options), new FeaturesAgent());
+                null, ContentBlobProvider, null, new OptionsWrapper<LiquidThemeEngineOptions>(options), new FeaturesAgent(), null);
         }
 
         public void Dispose()

@@ -17,8 +17,6 @@ namespace VirtoCommerce.Storefront.Infrastructure
     /// </summary>
     public class StorefrontUrlBuilder : IStorefrontUrlBuilder
     {
-        const string FILE_SCHEME = "file";
-
         private readonly IUrlBuilder _urlBuilder;
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IWebHostEnvironment _hostEnv;
@@ -30,7 +28,6 @@ namespace VirtoCommerce.Storefront.Infrastructure
         {
             _urlBuilder = urlBuilder;
             _workContextAccessor = workContextAccessor;
-            //_urlBuilderContext = workContext.ToToolsContext();
             _hostEnv = hostEnv;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -46,14 +43,15 @@ namespace VirtoCommerce.Storefront.Infrastructure
         public string ToAppAbsolute(string virtualPath, Store store, Language language)
         {
             var appRelativePath = ToAppRelative(virtualPath, store, language);
-            //TODO:
+
             var result = appRelativePath != null && appRelativePath.StartsWith("~")
                 ? _httpContextAccessor.HttpContext.Request.PathBase + appRelativePath.Replace("~", string.Empty)
                 : appRelativePath;
+
             return result;
         }
 
-        public string ToStoreAbsolute(string url, Store store = null, Language language = null)
+        public string ToStoreAbsolute(string virtualPath, Store store = null, Language language = null)
         {
             // Need to build from an host absolute url a  relative  store-based url
             // http://localhost/Account/Login -> http://localhost/{store}/{lang}/Account/Login
@@ -63,8 +61,8 @@ namespace VirtoCommerce.Storefront.Infrastructure
             // 1. Should trim store path "/store" from the url path "/store/Account/Login" => path should become "/Account/Login"
             // 2. Check for url params (e.g. ReturnUrl) in query string and trim store url for them too. ReturnUrl=%2Fstore%2FElectronics%2Fen-US%2Faccount => ReturnUrl=%2FElectronics%2Fen-US%2Faccount
 
-            var uri = new Uri(url, UriKind.RelativeOrAbsolute);
-            var absolutePathOrUrl = ConvertPathToStoreAbsolutePathOrUrl(uri.IsAbsoluteUri ? uri.AbsolutePath : url, store, language);
+            var uri = new Uri(virtualPath, UriKind.RelativeOrAbsolute);
+            var absolutePathOrUrl = ConvertPathToStoreAbsolutePathOrUrl(uri.IsAbsoluteUri ? uri.AbsolutePath : virtualPath, store, language);
             var storeRelativeOrAbsoluteUrl = new Uri(absolutePathOrUrl, UriKind.RelativeOrAbsolute);
             var urlBuilder = new UriBuilder(new Uri(uri, storeRelativeOrAbsoluteUrl))
             {

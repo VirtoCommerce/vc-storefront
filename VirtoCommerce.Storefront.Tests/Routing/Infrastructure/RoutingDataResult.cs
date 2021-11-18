@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace VirtoCommerce.Storefront.Tests.Routing.Infrastructure
 {
     /// <summary>

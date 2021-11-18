@@ -10,22 +10,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
     public static class AnonymousComparer
     {
         #region IComparer<T>
-
-        /// <summary>Example:AnonymousComparer.Create&lt;int&gt;((x, y) => y - x)</summary>
-        public static IComparer<T> Create<T>(Func<T, T, int> compare)
-        {
-            if (compare == null)
-                throw new ArgumentNullException("compare");
-
-            return new Comparer<T>(compare);
-        }
 
         private class Comparer<T> : IComparer<T>
         {
@@ -42,6 +32,17 @@ namespace VirtoCommerce.Storefront.Model.Common
             }
         }
 
+        /// <summary>Example:AnonymousComparer.Create&lt;int&gt;((x, y) => y - x)</summary>
+        public static IComparer<T> Create<T>(Func<T, T, int> compare)
+        {
+            if (compare == null)
+            {
+                throw new ArgumentNullException("compare");
+            }
+
+            return new Comparer<T>(compare);
+        }
+
         #endregion
 
         #region IEqualityComparer<T>
@@ -50,22 +51,34 @@ namespace VirtoCommerce.Storefront.Model.Common
         public static IEqualityComparer<T> Create<T, TKey>(Func<T, TKey> compareKeySelector)
         {
             if (compareKeySelector == null)
+            {
                 throw new ArgumentNullException("compareKeySelector");
+            }
 
             return new EqualityComparer<T>(
                 (x, y) =>
                 {
                     if (object.ReferenceEquals(x, y))
+                    {
                         return true;
+                    }
+
                     if (x == null || y == null)
+                    {
                         return false;
+                    }
+
                     return compareKeySelector(x).Equals(compareKeySelector(y));
                 },
                 obj =>
                 {
                     if (obj == null)
+                    {
                         return 0;
+                    }
+
                     var retVal = compareKeySelector(obj);
+
                     if (retVal == null)
                     {
                         return 0;
@@ -77,9 +90,14 @@ namespace VirtoCommerce.Storefront.Model.Common
         public static IEqualityComparer<T> Create<T>(Func<T, T, bool> equals, Func<T, int> getHashCode)
         {
             if (equals == null)
+            {
                 throw new ArgumentNullException("equals");
+            }
+
             if (getHashCode == null)
+            {
                 throw new ArgumentNullException("getHashCode");
+            }
 
             return new EqualityComparer<T>(equals, getHashCode);
         }

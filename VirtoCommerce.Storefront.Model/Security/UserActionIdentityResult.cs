@@ -30,6 +30,7 @@ namespace VirtoCommerce.Storefront.Model.Security
 
         public string MemberId { get; set; }
 
+        public string ReturnUrl { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -57,6 +58,16 @@ namespace VirtoCommerce.Storefront.Model.Security
             if (errors != null)
             {
                 result._errors.AddRange(errors);
+            }
+            return result;
+        }
+
+        public static UserActionIdentityResult Failed(params FormError[] errors)
+        {
+            var result = new UserActionIdentityResult { Succeeded = false };
+            if (errors != null)
+            {
+                result._errors.AddRange(errors.Select(x => new IdentityError { Code = x.Code, Description = x.Description }));
             }
             return result;
         }

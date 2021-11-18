@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using VirtoCommerce.Storefront.Infrastructure;
+using VirtoCommerce.Storefront.Infrastructure.Exceptions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Stores;
@@ -23,7 +23,7 @@ namespace VirtoCommerce.Storefront.Domain
             builder.WorkContext.AllStores = stores.ToArray();
             var currentStore = builder.HttpContext.GetCurrentStore(stores, defaultStoreId);
 
-            currentStore.ThemeName = builder.WorkContext.QueryString.Get("previewtheme") ?? currentStore.ThemeName;
+            currentStore.ThemeName = builder.WorkContext.QueryString["previewtheme"] ?? currentStore.ThemeName;
 
             //Very important workaround. If left  Null or Empty as Url for default store with condition of multiple stores present, will be generated a relative url '/store_name/' instead of
             // '/' thats can  leads to invalid urls to default store and other issue with  <base href=""> that contains invalid relative  url
@@ -74,13 +74,18 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.CompletedTask;
         }
 
-        public static async Task WithCurrenciesAsync(this IWorkContextBuilder builder, Language language, Store store)
+        public static Task WithCurrenciesAsync(this IWorkContextBuilder builder, Language language, Store store)
         {
             if (language == null)
             {
                 throw new ArgumentNullException(nameof(language));
             }
 
+            return WithCurrenciesInternalAsync(builder, language, store);
+        }
+
+        private static async Task WithCurrenciesInternalAsync(this IWorkContextBuilder builder, Language language, Store store)
+        {
             var serviceProvider = builder.HttpContext.RequestServices;
             var currencyService = serviceProvider.GetRequiredService<ICurrencyService>();
 

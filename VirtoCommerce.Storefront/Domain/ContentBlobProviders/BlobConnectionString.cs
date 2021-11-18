@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web;
 
 namespace VirtoCommerce.Storefront.Domain
 {
@@ -28,7 +27,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             var retVal = new BlobConnectionString();
             var pairs = ToDictionary(inputString, ";", "=");
-            if(pairs.ContainsKey("provider"))
+            if (pairs.ContainsKey("provider"))
             {
                 retVal.Provider = pairs["provider"];
                 pairs.Remove("provider");

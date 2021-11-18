@@ -72,23 +72,6 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("customers/account", WorkContext);
         }
 
-        [HttpGet("order/{number}")]
-        public async Task<ActionResult> GetOrderDetails(string number)
-        {
-            var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
-            if (!authorizationResult.Succeeded)
-            {
-                return Challenge();
-            }
-
-            var order = WorkContext.CurrentUser?.Orders.FirstOrDefault(x => x.Number.EqualsInvariant(number));
-            if (order != null)
-            {
-                WorkContext.CurrentOrder = order;
-            }
-
-            return View("customers/order", WorkContext);
-        }
 
         [HttpGet("addresses")]
         public async Task<ActionResult> GetAddresses()
@@ -513,7 +496,6 @@ namespace VirtoCommerce.Storefront.Controllers
             var externalLoginResult = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (!externalLoginResult.Succeeded)
             {
-                // TODO: Locked out not work. Need to add some API methods to support lockout data.
                 if (externalLoginResult.IsLockedOut)
                 {
                     return View("lockedout", WorkContext);
@@ -603,7 +585,7 @@ namespace VirtoCommerce.Storefront.Controllers
             }
 
             var successViewName = "customers/forgot_password";
-            NotificationBase resetPasswordNotification = null;
+            NotificationBase resetPasswordNotification;
 
             if (_options.ResetPasswordNotificationGateway.EqualsInvariant("Phone"))
             {

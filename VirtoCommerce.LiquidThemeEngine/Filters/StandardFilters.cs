@@ -13,7 +13,6 @@ using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
-    //TODO: Left only unique filters don't presents in Scriban
     public static partial class StandardFilters
     {
         /// <summary>
@@ -87,9 +86,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static string Capitalize(string input)
         {
-            return input.IsNullOrWhiteSpace()
-                ? input
-                : string.IsNullOrEmpty(input)
+            if (input.IsNullOrWhiteSpace())
+            {
+                return input;
+            }
+
+            return string.IsNullOrEmpty(input)
                 ? input
                 : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(input);
         }
@@ -132,8 +134,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
             var l = length - truncateString.Length;
 
+            var startIndex = l < 0 ? 0 : l;
+
             return input.Length > length
-                ? input.Substring(0, l < 0 ? 0 : l) + truncateString
+                ? input.Substring(0, startIndex) + truncateString
                 : input;
         }
 
@@ -188,9 +192,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         {
             return input.IsNullOrWhiteSpace()
                 ? input
-                : Regex.Replace(input, @"(\r?\n)", String.Empty);
-
-            //: Regex.Replace(input, Environment.NewLine, string.Empty);
+                : Regex.Replace(input, @"(\r?\n)", string.Empty);
         }
 
         /// <summary>
@@ -220,7 +222,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static IEnumerable Sort(object input, string property = null)
         {
-            var ary = input is IEnumerable ? ((IEnumerable)input).Flatten().Cast<object>().ToList() : new List<object>(new[] { input });
+            var ary = input is IEnumerable enumerable ? enumerable.Flatten().Cast<object>().ToList() : new List<object>(new[] { input });
+
             if (!ary.Any())
             {
                 return ary;
@@ -252,7 +255,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         {
             if (input == null)
             {
-                return null;
+                return input;
             }
 
             var ary = input.Cast<object>().ToList();
@@ -288,15 +291,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 return input.ToString();
             }
 
-            //try
-            {
-                input = input.ToString().Replace(@string, replacement);
-                //input = Regex.Replace(input, @string, replacement);
-            }
-            //catch (Exception)
-            {
-
-            }
+            input = input.ToString().Replace(@string, replacement);
 
             return input.ToString();
         }
@@ -408,8 +403,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             switch (format)
             {
                 case "long":
-                    //TODO: define which way to use. IMHO using modern style is more prefered
-                    //format = "%d %b %Y %X";
                     format = "f";
                     break;
             }
@@ -455,7 +448,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static object First(IEnumerable array)
         {
-            return array == null ? null : array.Cast<object>().FirstOrDefault();
+            return array?.Cast<object>().FirstOrDefault();
         }
 
         /// <summary>
@@ -468,7 +461,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static object Last(IEnumerable array)
         {
-            return array == null ? null : array.Cast<object>().LastOrDefault();
+            return array?.Cast<object>().LastOrDefault();
         }
 
         /// <summary>
@@ -479,7 +472,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static object Plus(object input, object operand)
         {
-           
+
             return DoMathsOperation(input, operand, Expression.Add);
         }
 
@@ -502,7 +495,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static object Times(object input, object operand)
         {
-           
+
             return DoMathsOperation(input, operand, Expression.Multiply);
 
         }
@@ -551,7 +544,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             {
                 //Swallow any exception 
             }
-        }       
+        }
     }
 
     /// <summary>
@@ -653,7 +646,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }
 
             var propertyInfo = type.GetProperty(member);
-            return propertyInfo != null && propertyInfo.CanRead ? true : false;
+            return propertyInfo != null && propertyInfo.CanRead;
         }
 
         public static object Send(this object value, string member, object[] parameters = null)
@@ -672,7 +665,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }
 
             var propertyInfo = type.GetProperty(member);
-            return propertyInfo != null ? propertyInfo.GetValue(value, null) : null;
+            return propertyInfo?.GetValue(value, null);
         }
     }
 
@@ -718,9 +711,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                     // For cultures with "," as the decimal separator, allow
                     // both "," and "." to be used as the separator.
                     // First try to parse using current culture.
-                    float result;
-                    if (float.TryParse(match.Groups[1].Value, out result))
+
+                    if (float.TryParse(match.Groups[1].Value, out var result))
+                    {
                         return result;
+                    }
 
                     // If that fails, try to parse using invariant culture.
                     return float.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture);
@@ -761,11 +756,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 {
                     yield return item;
                 }
-                else if (item is IEnumerable)
+                else if (item is IEnumerable enumerableItem)
                 {
-                    foreach (var subitem in Flatten((IEnumerable)item))
+                    foreach (var subItem in Flatten(enumerableItem))
                     {
-                        yield return subitem;
+                        yield return subItem;
                     }
                 }
                 else

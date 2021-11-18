@@ -1,11 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi.Models;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Common;
 using VirtoCommerce.Storefront.Domain.Security;
@@ -14,10 +15,10 @@ using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Events;
-using VirtoCommerce.Storefront.Model.Customer;
-using VirtoCommerce.Storefront.Model.Customer.Services;
+using VirtoCommerce.Storefront.Model.Common.Notifications;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Security.Events;
+using VirtoCommerce.Storefront.Model.Security.Specifications;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
@@ -25,23 +26,26 @@ namespace VirtoCommerce.Storefront.Controllers.Api
     [ResponseCache(CacheProfileName = "None")]
     public class ApiAccountController : StorefrontControllerBase
     {
-        private readonly IEventPublisher _publisher;
-        private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly IMemberService _memberService;
+        private readonly IEventPublisher _publisher;
+        private readonly StorefrontOptions _options;
         private readonly INotifications _platformNotificationApi;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly IdentityOptions _identityOptions;
 
-        public ApiAccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, UserManager<User> userManager, SignInManager<User> signInManager, IAuthorizationService authorizationService,
-        IMemberService memberService, IEventPublisher publisher, INotifications platformNotificationApi)
+        public ApiAccountController(IWorkContextAccessor workContextAccessor,
+            IStorefrontUrlBuilder urlBuilder,
+            SignInManager<User> signInManager,
+            IEventPublisher publisher,
+            INotifications platformNotificationApi,
+            IOptions<StorefrontOptions> options,
+            IOptions<IdentityOptions> identityOptions)
             : base(workContextAccessor, urlBuilder)
         {
-            _userManager = userManager;
-            _memberService = memberService;
-            _publisher = publisher;
-            _platformNotificationApi = platformNotificationApi;
-            _authorizationService = authorizationService;
             _signInManager = signInManager;
+            _publisher = publisher;
+            _options = options.Value;
+            _platformNotificationApi = platformNotificationApi;
+            _identityOptions = identityOptions.Value;
         }
 
         // GET: storefrontapi/account
@@ -52,419 +56,156 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return WorkContext.CurrentUser;
         }
 
-        /// <summary>
-        /// // GET: storefrontapi/account/{userId}
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        [HttpGet("{userId}")]
-        [Authorize(SecurityConstants.Permissions.CanViewUsers)]
-        public async Task<ActionResult<User>> GetUserById(string userId)
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserActionIdentityResult>> Login([FromBody] Login login, [FromQuery] string returnUrl)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user != null && !string.IsNullOrEmpty(user.ContactId))
+            TryValidateModel(login);
+
+            if (!ModelState.IsValid)
             {
-                var authorizationResult = await _authorizationService.AuthorizeAsync(User, user?.Contact?.Organization, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
-                if (!authorizationResult.Succeeded)
-                {
-                    return Unauthorized();
-                }
+                return UserActionIdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors)
+                      .Select(x => new IdentityError { Description = x.ErrorMessage })
+                      .ToArray());
             }
-            return user;
-        }
 
-        // DELETE: storefrontapi/account/{userId}
-        [HttpDelete("{userId}")]
-        [Authorize(SecurityConstants.Permissions.CanDeleteUsers)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserActionIdentityResult>> DeleteUser([FromRoute] string userId)
-        {
-            //TODO: Authorization check
-            var result = UserActionIdentityResult.Success;
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user != null)
+            login.UserName = login.UserName?.Trim();
+
+            var user = await _signInManager.UserManager.FindByNameAsync(login.UserName);
+            var result = CheckLoginUser(user);
+            
+            if (result != UserActionIdentityResult.Success)
             {
-                var authorizationResult = await _authorizationService.AuthorizeAsync(User, user?.Contact?.Organization, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
-                if (!authorizationResult.Succeeded)
-                {
-                    return Unauthorized();
-                }
-
-                result = UserActionIdentityResult.Instance(await _userManager.DeleteAsync(user));
-                if (result.Succeeded)
-                {
-                    await _publisher.Publish(new UserDeletedEvent(WorkContext, user));
-                }
+                return result;
             }
-            return result;
-        }
 
-        // POST: storefrontapi/account/organization
-        [HttpPost("organization")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserActionIdentityResult>> RegisterOrganization([FromBody] OrganizationRegistration orgRegistration)
-        {
-            UserActionIdentityResult result;
+            var loginResult = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, login.RememberMe, lockoutOnFailure: true);
 
-            TryValidateModel(orgRegistration);
-
-            if (ModelState.IsValid)
+            if (!loginResult.Succeeded)
             {
-                var user = await _userManager.FindByEmailAsync(orgRegistration.Email);
-                if (user != null)
-                {
-                    var error = new IdentityError
-                    {
-                        Description = $"Email '{orgRegistration.Email}' is already taken."
-                    };
-
-                    return UserActionIdentityResult.Failed(error);
-                }
-
-                user = await _userManager.FindByNameAsync(orgRegistration.UserName);
-                if (user != null)
-                {
-                    var error = new IdentityError
-                    {
-                        Description = $"User name '{orgRegistration.UserName}' is already taken."
-                    };
-
-                    return UserActionIdentityResult.Failed(error);
-                }
-
-                var contact = orgRegistration.ToContact();
-
-                if (!string.IsNullOrEmpty(orgRegistration.OrganizationName))
-                {
-                    var organization = orgRegistration.ToOrganization();
-                    organization = await _memberService.CreateOrganizationAsync(organization);
-                    contact.OrganizationId = organization.Id;
-                }
-
-                user = orgRegistration.ToUser();
-                user.Contact = contact;
-                user.StoreId = WorkContext.CurrentStore.Id;
-                user.Roles = new[]
-                             {
-                                 SecurityConstants.Roles.OrganizationMaintainer
-                             };
-
-                var creatingResult = await _userManager.CreateAsync(user, orgRegistration.Password);
-                result = UserActionIdentityResult.Instance(creatingResult);
-                if (result.Succeeded)
-                {
-                    user = await _userManager.FindByNameAsync(user.UserName);
-                    await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, orgRegistration));
-                    await _signInManager.SignInAsync(user, isPersistent: true);
-                    await _publisher.Publish(new UserLoginEvent(WorkContext, user));
-                    result.MemberId = user.Id;
-                }
+                result = UserActionIdentityResult.Failed(SecurityErrorDescriber.LoginFailed());
             }
             else
             {
-                result = UserActionIdentityResult
-                            .Failed(ModelState.Values.SelectMany(x => x.Errors)
-                            .Select(x => new IdentityError { Description = x.ErrorMessage })
-                            .ToArray());
-            }
+                await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                if (string.IsNullOrEmpty(returnUrl))
+                {
+                    return result;
+                }
 
+                var newUrl = Url.IsLocalUrl(returnUrl) ? returnUrl : "~/";
+                result.ReturnUrl = UrlBuilder.ToAppRelative(newUrl, WorkContext.CurrentStore, WorkContext.CurrentLanguage);
+            }
             return result;
         }
+
+        private UserActionIdentityResult CheckLoginUser(User user)
+        {
+            if (user == null)
+            {
+                return UserActionIdentityResult.Failed(SecurityErrorDescriber.LoginFailed());
+            }
+
+            if (!new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore))
+            {
+                return UserActionIdentityResult.Failed(SecurityErrorDescriber.UserCannotLoginInStore());
+            }
+
+            if (new IsUserLockedOutSpecification().IsSatisfiedBy(user))
+            {
+                return  UserActionIdentityResult.Failed(SecurityErrorDescriber.UserIsLockedOut());
+            }
+
+            if (new IsUserSuspendedSpecification().IsSatisfiedBy(user))
+            {
+                return UserActionIdentityResult.Failed(SecurityErrorDescriber.AccountIsBlocked());
+            }
+
+            return UserActionIdentityResult.Success;
+        }
+        
 
         // POST: storefrontapi/account/user
         [HttpPost("user")]
-        [Authorize(SecurityConstants.Permissions.CanCreateUsers)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserActionIdentityResult>> RegisterUser([FromBody] OrganizationUserRegistration registration)
+        public async Task<ActionResult<UserActionIdentityResult>> RegisterUser([FromBody] UserRegistration registration)
         {
-            UserActionIdentityResult result;
+            var result = UserActionIdentityResult.Success;
 
             TryValidateModel(registration);
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                //Allow to register new users only within own organization
-                var authorizationResult = await _authorizationService.AuthorizeAsync(User, new Organization { Id = registration.OrganizationId }, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
-                if (!authorizationResult.Succeeded)
+                return UserActionIdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors)
+                       .Select(x => new IdentityError { Description = x.ErrorMessage })
+                       .ToArray());
+            }
+            // Register user
+            var user = registration.ToUser();
+            user.Contact = registration.ToContact();
+            user.StoreId = WorkContext.CurrentStore.Id;
+
+            var identityResult = await _signInManager.UserManager.CreateAsync(user, registration.Password);
+            if (identityResult.Succeeded)
+            {
+                user = await _signInManager.UserManager.FindByNameAsync(user.UserName);
+                await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, registration));
+
+                if (!_identityOptions.SignIn.RequireConfirmedEmail)
                 {
-                    return Unauthorized();
+                    await _signInManager.SignInAsync(user, isPersistent: true);
+                    await _publisher.Publish(new UserLoginEvent(WorkContext, user));
                 }
 
-                var contact = registration.ToContact();
-                contact.OrganizationId = registration.OrganizationId;
-
-                var user = registration.ToUser();
-                user.Contact = contact;
-                user.StoreId = WorkContext.CurrentStore.Id;
-
-                var creatingResult = await _userManager.CreateAsync(user, registration.Password);
-                result = UserActionIdentityResult.Instance(creatingResult);
-                if (result.Succeeded)
+                // Send new user registration notification
+                var registrationEmailNotification = new RegistrationEmailNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
                 {
-                    user = await _userManager.FindByNameAsync(user.UserName);
-                    await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, registration));
-                    result.MemberId = user.Id;
-                }
-            }
-            else
-            {
-                result = UserActionIdentityResult
-                            .Failed(ModelState.Values.SelectMany(x => x.Errors)
-                            .Select(x => new IdentityError { Description = x.ErrorMessage })
-                            .ToArray());
-            }
-            return result;
-        }
-
-        // POST: storefrontapi/account/invitation
-        [HttpPost("invitation")]
-        [ValidateAntiForgeryToken]
-        [ProducesResponseType(401)]
-        public async Task<ActionResult<UserActionIdentityResult>> CreateUserInvitation([FromBody] UsersInvitation invitation)
-        {
-            var result = UserActionIdentityResult.Success;
-            TryValidateModel(invitation);
-
-            if (ModelState.IsValid)
-            {
-                var organizationId = WorkContext.CurrentUser?.Contact?.Organization?.Id;
-                //If it is organization invitation need to check authorization for this action
-                if (!string.IsNullOrEmpty(organizationId))
-                {
-                    var authorizationResult = await _authorizationService.AuthorizeAsync(User, null, SecurityConstants.Permissions.CanInviteUsers);
-                    if (!authorizationResult.Succeeded)
-                    {
-                        return Unauthorized();
-                    }
-                }
-
-                foreach (var email in invitation.Emails)
-                {
-                    var user = await _userManager.FindByEmailAsync(email);
-                    if (user == null)
-                    {
-                        user = new User
-                        {
-                            UserName = email,
-                            StoreId = WorkContext.CurrentStore.Id,
-                            Email = email,
-                        };
-                        var roles = invitation.Roles?.Select(x => new Model.Security.Role { Id = x }).ToList();
-                        //Add default role for organization member invitation
-                        if (roles.IsNullOrEmpty() && !string.IsNullOrEmpty(organizationId))
-                        {
-                            roles = new[] { SecurityConstants.Roles.OrganizationEmployee }.ToList();
-                        }
-                        user.Roles = roles;
-                        result = UserActionIdentityResult.Instance(await _userManager.CreateAsync(user));
-                    }
-
-                    if (result.Succeeded)
-                    {
-                        user = await _userManager.FindByNameAsync(user.UserName);
-                        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                        var callbackUrl = Url.Action("ConfirmInvitation", "Account", new { OrganizationId = organizationId, user.Email, Token = token }, Request.Scheme, host: WorkContext.CurrentStore.Host);
-                        var inviteNotification = new RegistrationInvitationNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
-                        {
-                            InviteUrl = callbackUrl,
-                            Sender = WorkContext.CurrentStore.Email,
-                            Recipient = user.Email
-                        };
-                        var sendingResult = await _platformNotificationApi.SendNotificationByRequestAsync(inviteNotification.ToNotificationDto());
-                        if (sendingResult.IsSuccess != true)
-                        {
-                            var errors = result.Errors.Concat(new IdentityError[] { new IdentityError() { Description = sendingResult.ErrorMessage } }).ToArray();
-                            result = UserActionIdentityResult.Failed(errors);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                result = UserActionIdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors).Select(x => new IdentityError { Description = x.ErrorMessage }).ToArray());
-            }
-            return result;
-        }
-
-        // PUT: storefrontapi/account/organization
-        [HttpPut("organization")]
-        [Authorize(SecurityConstants.Permissions.CanEditOrganization)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UpdateOrganization([FromBody] Organization organization)
-        {
-            //Allow to register new users only within own organization
-            var authorizationResult = await _authorizationService.AuthorizeAsync(User, organization, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
-            if (!authorizationResult.Succeeded)
-            {
-                return Unauthorized();
-            }
-            await _memberService.UpdateOrganizationAsync(organization);
-
-            return Ok();
-        }
-
-        // GET: storefrontapi/account/organization/current
-        [HttpGet("organization/current")]
-        public ActionResult<Organization> GetCustomerOrganization()
-        {
-            var result = WorkContext.CurrentUser?.Contact?.Organization;
-            return result;
-        }
-
-        // POST: storefrontapi/account/organization/users/search
-        [HttpPost("organization/users/search")]
-        [Authorize(SecurityConstants.Permissions.CanViewUsers)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserSearchResult>> SearchOrganizationUsersAsync([FromBody] OrganizationContactsSearchCriteria searchCriteria)
-        {
-            searchCriteria.OrganizationId = searchCriteria.OrganizationId ?? WorkContext.CurrentUser?.Contact?.Organization?.Id;
-            //Allow to register new users only within own organization
-            var authorizationResult = await _authorizationService.AuthorizeAsync(User, new Organization { Id = searchCriteria.OrganizationId }, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
-            if (!authorizationResult.Succeeded)
-            {
-                return Unauthorized();
-            }
-            if (searchCriteria.OrganizationId != null)
-            {
-                var contactsSearchResult = await _memberService.SearchOrganizationContactsAsync(searchCriteria);
-                var userIds = contactsSearchResult.Select(x => x.SecurityAccounts?.FirstOrDefault()).Select(x => x.Id);
-                var users = new List<User>();
-                foreach (var userId in userIds)
-                {
-                    var user = await _userManager.FindByIdAsync(userId);
-                    if (user != null)
-                    {
-                        users.Add(user);
-                    }
-                }
-                return new UserSearchResult
-                {
-                    TotalCount = contactsSearchResult.TotalItemCount,
-                    Results = users
+                    FirstName = registration.FirstName,
+                    LastName = registration.LastName,
+                    Login = registration.UserName,
+                    Sender = WorkContext.CurrentStore.Email,
+                    Recipient = GetUserEmail(user)
                 };
-            }
-            return Ok();
-        }
+                await SendNotificationAsync(registrationEmailNotification);
 
-        // POST: storefrontapi/account/{userId}/lock
-        [HttpPost("{userId}/lock")]
-        [Authorize(SecurityConstants.Permissions.CanEditUsers)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserActionIdentityResult>> LockUser([FromRoute] string userId)
-        {
-            //TODO: Add authorization checks
-            var result = UserActionIdentityResult.Success;
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user != null)
-            {
-                //Allow to register new users only within own organization
-                var authorizationResult = await _authorizationService.AuthorizeAsync(User, user?.Contact?.Organization, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
-                if (!authorizationResult.Succeeded)
+                if (_options.SendAccountConfirmation)
                 {
-                    return Unauthorized();
+                    var token = await _signInManager.UserManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { UserId = user.Id, Token = token }, protocol: Request.Scheme, host: WorkContext.CurrentStore.Host);
+                    var emailConfirmationNotification = new EmailConfirmationNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                    {
+                        Url = callbackUrl,
+                        Sender = WorkContext.CurrentStore.Email,
+                        Recipient = GetUserEmail(user)
+                    };
+                    var sendNotifcationResult = await SendNotificationAsync(emailConfirmationNotification);
+                    if (sendNotifcationResult.IsSuccess == false)
+                    {
+                        var error = SecurityErrorDescriber.ErrorSendNotification(sendNotifcationResult.ErrorMessage);
+                        result = UserActionIdentityResult.Failed(new IdentityError { Code = error.Code, Description = error.Description });
+                    }
                 }
-
-                await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
             }
+            else
+            {
+                result = UserActionIdentityResult.Failed(identityResult.Errors.ToArray());
+
+            }
+
             return result;
         }
 
-        // POST: storefrontapi/account/{userId}/unlock
-        [HttpPost("{userId}/unlock")]
-        [Authorize(SecurityConstants.Permissions.CanEditUsers)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserActionIdentityResult>> UnlockUser([FromRoute] string userId)
-        {
-            //TODO: Add authorization checks
-            var result = UserActionIdentityResult.Success;
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user != null)
-            {
-                //Allow to register new users only within own organization
-                var authorizationResult = await _authorizationService.AuthorizeAsync(User, user?.Contact?.Organization, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
-                if (!authorizationResult.Succeeded)
-                {
-                    return Unauthorized();
-                }
-                await _userManager.ResetAccessFailedCountAsync(user);
-                await _userManager.SetLockoutEndDateAsync(user, null);
-            }
-            return result;
-        }
-
-        // POST: storefrontapi/account
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ProducesResponseType(401)]
-        public async Task<ActionResult> UpdateAccount([FromBody] UserUpdateInfo userUpdateInfo)
-        {
-            //TODO:Check authorization
-            if (string.IsNullOrEmpty(userUpdateInfo.Id))
-            {
-                userUpdateInfo.Id = WorkContext.CurrentUser.Id;
-            }
-            var isSelfEditing = userUpdateInfo.Id == WorkContext.CurrentUser.Id;
-
-
-            if (!string.IsNullOrEmpty(userUpdateInfo.Id))
-            {
-                var user = await _userManager.FindByIdAsync(userUpdateInfo.Id);
-                if (user != null)
-                {
-                    if (!isSelfEditing)
-                    {
-                        var authorizationResult = await _authorizationService.AuthorizeAsync(User, null, SecurityConstants.Permissions.CanEditUsers);
-                        if (authorizationResult.Succeeded)
-                        {
-                            authorizationResult = await _authorizationService.AuthorizeAsync(User, user?.Contact?.Organization, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
-                        }
-                        if (!authorizationResult.Succeeded)
-                        {
-                            return Unauthorized();
-                        }
-                        //Doesn't allow change self roles
-                        user.Roles = userUpdateInfo.Roles?.Select(x => new Role { Id = x, Name = x });
-                    }
-
-                    if (user.Contact != null)
-                    {
-                        user.Contact.FirstName = userUpdateInfo.FirstName;
-                        user.Contact.LastName = userUpdateInfo.LastName;
-                        user.Contact.FullName = userUpdateInfo.FullName;
-                        user.Contact.DefaultShippingAddress = userUpdateInfo.DefaultShippingAddress;
-                        user.Contact.DefaultBillingAddress = userUpdateInfo.DefaultBillingAddress;
-                    }
-
-                    user.Email = userUpdateInfo.Email;
-
-                    await _userManager.UpdateAsync(user);
-                }
-            }
-            return Ok();
-        }
 
         // POST: storefrontapi/account/password
         [HttpPost("password")]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult<PasswordChangeResult>> ChangePassword([FromBody] ChangePassword formModel)
         {
-            var result = await _userManager.ChangePasswordAsync(WorkContext.CurrentUser, formModel.OldPassword, formModel.NewPassword);
+            var result = await _signInManager.UserManager.ChangePasswordAsync(WorkContext.CurrentUser, formModel.OldPassword, formModel.NewPassword);
             return new PasswordChangeResult { Succeeded = result.Succeeded, Errors = result.Errors.Select(x => new FormError { Code = x.Code.PascalToKebabCase(), Description = x.Description }).ToList() };
         }
 
-        // POST: storefrontapi/account/addresses
-        [HttpPost("addresses")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UpdateAddresses([FromBody] IList<Address> addresses)
-        {
-            await _memberService.UpdateContactAddressesAsync(WorkContext.CurrentUser.ContactId, addresses);
-
-            return Ok();
-        }
 
         // DELETE: storefrontapi/account/phonenumber
         [HttpDelete("phonenumber")]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult<RemovePhoneNumberResult>> RemovePhoneNumber()
         {
             var twoFactorAuthEnabled = await _signInManager.UserManager.GetTwoFactorEnabledAsync(WorkContext.CurrentUser);
@@ -481,7 +222,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/twofactorauthentification
         [HttpPost("twofactorauthentification")]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult<ChangeTwoFactorAuthenticationResult>> ChangeTwoFactorAuthentication([FromBody] ChangeTwoFactorAuthenticationModel model)
         {
             if (model.Enabled)
@@ -503,7 +243,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/account/phonenumber
         [HttpPost("phonenumber")]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult<UpdatePhoneNumberResult>> UpdatePhoneNumber([FromBody] UpdatePhoneNumberModel model)
         {
             var twoFactorAuthEnabled = await _signInManager.UserManager.GetTwoFactorEnabledAsync(WorkContext.CurrentUser);
@@ -527,5 +266,39 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         }
 
+        private static string GetUserEmail(User user)
+        {
+            string email = null;
+            if (user != null)
+            {
+                email = user.Email ?? user.UserName;
+                if (user.Contact != null)
+                {
+                    email = user.Contact?.Email ?? email;
+                }
+            }
+            return email;
+        }
+
+
+        private async Task<NotificationSendResult> SendNotificationAsync(NotificationBase notification)
+        {
+            NotificationSendResult result;
+
+            try
+            {
+                result = await _platformNotificationApi.SendNotificationByRequestAsync(notification.ToNotificationDto());
+            }
+            catch (Exception exception)
+            {
+                result = new NotificationSendResult
+                {
+                    IsSuccess = false,
+                    ErrorMessage = $"Error occurred while sending notification: {exception.Message}"
+                };
+            }
+
+            return result;
+        }
     }
 }

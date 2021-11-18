@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using VirtoCommerce.Storefront.Model;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
-using shopifyModel = VirtoCommerce.LiquidThemeEngine.Objects;
 
 namespace VirtoCommerce.Storefront.Domain
 {

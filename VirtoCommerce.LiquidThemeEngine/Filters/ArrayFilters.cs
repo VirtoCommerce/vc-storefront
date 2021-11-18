@@ -105,12 +105,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                     Expression expr = null;
                     if (propInfo.PropertyType == typeof(string))
                     {
-                        var containsMethod = typeof(string).GetMethods().Where(x => x.Name == "Contains").First();
+                        var containsMethod = typeof(string).GetMethods().First(x => x.Name == "Contains");
                         expr = Expression.Call(left, containsMethod, right);
                     }
                     else
                     {
-                        var containsMethod = typeof(Enumerable).GetMethods().Where(x => x.Name == "Contains" && x.GetParameters().Count() == 2).First().MakeGenericMethod(new Type[] { objValue.GetType() });
+                        var containsMethod = typeof(Enumerable).GetMethods().First(x => x.Name == "Contains" && x.GetParameters().Count() == 2).MakeGenericMethod(new Type[] { objValue.GetType() });
                         expr = Expression.Call(containsMethod, left, right);
                     }
 
@@ -173,7 +173,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 //Queryable.Cast<T>(input).OrderBySortInfos(sortInfos) call by reflection
                 var queryable = enumerable.AsQueryable();
                 var elementType = enumerable.GetType().GetEnumerableType();
-                MethodInfo castMethodInfo = typeof(Queryable).GetMethods().Where(x => x.Name == "Cast" && x.IsGenericMethod).First();
+                MethodInfo castMethodInfo = typeof(Queryable).GetMethods().First(x => x.Name == "Cast" && x.IsGenericMethod);
                 castMethodInfo = castMethodInfo.MakeGenericMethod(new Type[] { elementType });
 
                 var genericQueryable = castMethodInfo.Invoke(null, new object[] { queryable });

@@ -34,13 +34,13 @@ namespace VirtoCommerce.Storefront.Domain
             var serviceProvider = builder.HttpContext.RequestServices;
             var linkListService = serviceProvider.GetRequiredService<IMenuLinkListService>();
 
-            Func<int, int, IEnumerable<SortInfo>, IPagedList<MenuLinkList>> factory = (pageNumber, pageSize, sorInfos) =>
+            IPagedList<MenuLinkList> Factory(int pageNumber, int pageSize, IEnumerable<SortInfo> sorInfos)
             {
                 var linkLists = linkListService.LoadAllStoreLinkLists(store, language);
                 return new StaticPagedList<MenuLinkList>(linkLists, pageNumber, pageSize, linkLists.Count());
-            };
+            }
 
-            return builder.WithMenuLinksAsync(new MutablePagedList<MenuLinkList>(factory, 1, 20));
+            return builder.WithMenuLinksAsync(new MutablePagedList<MenuLinkList>((Func<int, int, IEnumerable<SortInfo>, IPagedList<MenuLinkList>>) Factory, 1, 20));
         }
 
         public static Task WithPagesAsync(this IWorkContextBuilder builder, IMutablePagedList<ContentItem> pages)
@@ -64,13 +64,13 @@ namespace VirtoCommerce.Storefront.Domain
             var staticContentService = serviceProvider.GetRequiredService<IStaticContentService>();
 
             // all static content items
-            Func<int, int, IEnumerable<SortInfo>, IPagedList<ContentItem>> factory = (pageNumber, pageSize, sorInfos) =>
+            IPagedList<ContentItem> Factory(int pageNumber, int pageSize, IEnumerable<SortInfo> sorInfos)
             {
-                //TODO: performance and DDD specification instead if statements
                 var contentItems = staticContentService.LoadStoreStaticContent(store).Where(x => x.Language.IsInvariant || x.Language == language);
                 return new StaticPagedList<ContentItem>(contentItems, pageNumber, pageSize, contentItems.Count());
-            };
-            return builder.WithPagesAsync(new MutablePagedList<ContentItem>(factory, 1, 20));
+            }
+
+            return builder.WithPagesAsync(new MutablePagedList<ContentItem>((Func<int, int, IEnumerable<SortInfo>, IPagedList<ContentItem>>) Factory, 1, 20));
         }
 
         public static Task WithBlogsAsync(this IWorkContextBuilder builder, IMutablePagedList<Blog> blogs)
@@ -93,9 +93,8 @@ namespace VirtoCommerce.Storefront.Domain
             var serviceProvider = builder.HttpContext.RequestServices;
             var staticContentService = serviceProvider.GetRequiredService<IStaticContentService>();
 
-            Func<int, int, IEnumerable<SortInfo>, IPagedList<Blog>> factory = (pageNumber, pageSize, sorInfos) =>
+            IPagedList<Blog> Factory(int pageNumber, int pageSize, IEnumerable<SortInfo> sorInfos)
             {
-                //TODO: performance and DDD specification instead if statements
                 var contentItems = staticContentService.LoadStoreStaticContent(store).Where(x => x.Language.IsInvariant || x.Language == language);
                 var blogs = contentItems.OfType<Blog>().ToArray();
                 var blogArticlesGroup = contentItems.OfType<BlogArticle>().GroupBy(x => x.BlogName, x => x).ToList();
@@ -107,13 +106,14 @@ namespace VirtoCommerce.Storefront.Domain
                         blog.Articles = new MutablePagedList<BlogArticle>(blogArticles);
                     }
                 }
+
                 return new StaticPagedList<Blog>(blogs, pageNumber, pageSize, blogs.Count());
-            };
+            }
 
             // Initialize blogs search criteria 
             builder.WorkContext.CurrentBlogSearchCritera = new BlogSearchCriteria(builder.WorkContext.QueryString);
 
-            return builder.WithBlogsAsync(new MutablePagedList<Blog>(factory, 1, 20));
+            return builder.WithBlogsAsync(new MutablePagedList<Blog>((Func<int, int, IEnumerable<SortInfo>, IPagedList<Blog>>) Factory, 1, 20));
         }
     }
 }

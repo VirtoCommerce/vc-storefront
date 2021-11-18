@@ -14,11 +14,20 @@ namespace VirtoCommerce.Storefront.Model.Common
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(this, obj))
+            {
                 return true;
-            if (ReferenceEquals(null, obj))
+            }
+
+            if (obj is null)
+            {
                 return false;
+            }
+
             if (GetType() != obj.GetType())
+            {
                 return false;
+            }
+
             var other = obj as ValueObject;
             return other != null && GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
         }
@@ -31,7 +40,9 @@ namespace VirtoCommerce.Storefront.Model.Common
             }
         }
 
+#pragma warning disable S3875 // "operator==" should not be overloaded on reference types
         public static bool operator ==(ValueObject left, ValueObject right)
+#pragma warning restore S3875 // "operator==" should not be overloaded on reference types
         {
             return Equals(left, right);
         }

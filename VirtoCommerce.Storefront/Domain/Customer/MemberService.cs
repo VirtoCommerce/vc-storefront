@@ -12,7 +12,6 @@ using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Services;
-using VirtoCommerce.Storefront.Model.Stores;
 using customerDto = VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
@@ -31,13 +30,18 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
         #region ICustomerService Members
-        public virtual async Task<Contact> GetContactByIdAsync(string contactId)
+        public virtual Task<Contact> GetContactByIdAsync(string contactId)
         {
             if (contactId == null)
             {
                 throw new ArgumentNullException(nameof(contactId));
             }
 
+            return GetContactByIdInternalAsync(contactId);
+        }
+
+        protected virtual async Task<Contact> GetContactByIdInternalAsync(string contactId)
+        {
             Contact result = null;
             var cacheKey = CacheKey.With(GetType(), "GetContactByIdAsync", contactId);
             var dto = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
@@ -51,17 +55,21 @@ namespace VirtoCommerce.Storefront.Domain
                 return contactDto;
             });
 
-            if (dto != null)
+            if (dto == null)
             {
-                result = dto.ToContact();
-                if (!dto.Organizations.IsNullOrEmpty())
-                {
-                    //Load contact organization
-                    result.Organization = await GetOrganizationByIdAsync(dto.Organizations.FirstOrDefault());
-                }
+                return null;
             }
+
+            result = dto.ToContact();
+            if (!dto.Organizations.IsNullOrEmpty())
+            {
+                //Load contact organization
+                result.Organization = await GetOrganizationByIdAsync(dto.Organizations.FirstOrDefault());
+            }
+
             return result;
         }
+
 
         public virtual async Task<Contact> CreateContactAsync(Contact contact)
         {
@@ -98,43 +106,6 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
-        public virtual async Task<Vendor[]> GetVendorsByIdsAsync(Store store, Language language, params string[] vendorIds)
-        {
-            var cacheKey = CacheKey.With(GetType(), "GetVendorsByIdsAsync", string.Join("-", vendorIds.OrderBy(x => x)));
-            var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-            {
-                return await _customerApi.GetVendorsByIdsAsync(vendorIds);
-            });
-            return result?.Select(x => x.ToVendor(language, store)).ToArray();
-        }
-
-        public virtual Vendor[] GetVendorsByIds(Store store, Language language, params string[] vendorIds)
-        {
-            return GetVendorsByIdsAsync(store, language, vendorIds).GetAwaiter().GetResult();
-        }
-
-        public virtual IPagedList<Vendor> SearchVendors(Store store, Language language, string keyword, int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos)
-        {
-            // TODO: implement indexed search for vendors
-            var criteria = new customerDto.MembersSearchCriteria
-            {
-                SearchPhrase = keyword,
-                DeepSearch = true,
-                Skip = (pageNumber - 1) * pageSize,
-                Take = pageSize
-            };
-            if (!sortInfos.IsNullOrEmpty())
-            {
-                criteria.Sort = SortInfo.ToString(sortInfos);
-            }
-            var cacheKey = CacheKey.With(GetType(), "SearchVendors", keyword, pageNumber.ToString(), pageSize.ToString(), criteria.Sort);
-            var result = _memoryCache.GetOrCreateExclusive(cacheKey, cacheEntry =>
-            {
-                return _customerApi.SearchVendors(criteria);
-            });
-            var vendors = result.Vendors.Select(x => x.ToVendor(language, store));
-            return new StaticPagedList<Vendor>(vendors, pageNumber, pageSize, result.TotalCount.Value);
-        }
 
         public async Task<Organization> GetOrganizationByIdAsync(string organizationId)
         {

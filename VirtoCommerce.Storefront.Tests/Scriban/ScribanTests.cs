@@ -1,15 +1,9 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Scriban;
-using Scriban.Parsing;
 using Scriban.Runtime;
-using VirtoCommerce.LiquidThemeEngine.Scriban;
-using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Stores;
 using Xunit;
 
 namespace VirtoCommerce.Storefront.Tests.Scriban
@@ -93,7 +87,7 @@ namespace VirtoCommerce.Storefront.Tests.Scriban
             Assert.False(parsedTemplate.HasErrors);
 
             var scriptObject = new ScriptObject();
-            scriptObject.Import(new TestContext { Products = new MutablePagedList<Product>(new List<Product> { new Product { Id = "headphones" } }) });
+            scriptObject.Import(new TestContext { Products = new MutablePagedList<Store>(new List<Store> { new Store { Id = "headphones" } }) });
             var context = new TemplateContext();
             context.PushGlobal(scriptObject);
 
@@ -112,7 +106,7 @@ namespace VirtoCommerce.Storefront.Tests.Scriban
 
     public class TestContext
     {
-        public IMutablePagedList<Product> Products { get; set; }
+        public IMutablePagedList<Store> Products { get; set; }
     }
     public class Tag
     {
@@ -121,7 +115,7 @@ namespace VirtoCommerce.Storefront.Tests.Scriban
         public string Upper { get; set; }
 
     }
-    public class MyFunctions
+    public static class MyFunctions
     {
         public static string T(object input, params object[] variables)
         {

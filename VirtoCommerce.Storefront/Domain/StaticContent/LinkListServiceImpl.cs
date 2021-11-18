@@ -1,34 +1,27 @@
-using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi;
-using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Model.Catalog;
+using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.LinkList.Services;
-using VirtoCommerce.Storefront.Model.Services;
 using VirtoCommerce.Storefront.Model.Stores;
-using VirtoCommerce.Storefront.Infrastructure;
-using System.Threading;
-using VirtoCommerce.Storefront.Caching;
-using VirtoCommerce.Storefront.Model.Caching;
 
 namespace VirtoCommerce.Storefront.Domain
 {
     public class MenuLinkListServiceImpl : IMenuLinkListService
     {
         private readonly IMenu _cmsApi;
-        private readonly ICatalogService _catalogService;
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
-        public MenuLinkListServiceImpl(IMenu cmsApi, ICatalogService catalogService, IStorefrontMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
+        public MenuLinkListServiceImpl(IMenu cmsApi, IStorefrontMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
         {
             _cmsApi = cmsApi;
-            _catalogService = catalogService;
             _memoryCache = memoryCache;
             _apiChangesWatcher = apiChangesWatcher;
         }
@@ -37,12 +30,18 @@ namespace VirtoCommerce.Storefront.Domain
             return LoadAllStoreLinkListsAsync(store, language).GetAwaiter().GetResult();
         }
 
-        public async Task<IList<MenuLinkList>> LoadAllStoreLinkListsAsync(Store store, Language language)
+        public Task<IList<MenuLinkList>> LoadAllStoreLinkListsAsync(Store store, Language language)
         {
             if (store == null)
             {
                 throw new ArgumentNullException(nameof(store));
             }
+
+            return LoadAllStoreLinkListsInternalAsync(store, language);
+        }
+
+        public async Task<IList<MenuLinkList>> LoadAllStoreLinkListsInternalAsync(Store store, Language language)
+        {
             var cacheKey = CacheKey.With(GetType(), "LoadAllStoreLinkLists", store.Id, language.CultureName);
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
@@ -56,44 +55,8 @@ namespace VirtoCommerce.Storefront.Domain
                     result.AddRange(listsDto.Select(x => x.ToMenuLinkList()));
                 }
 
-                result = result.GroupBy(x => x.Name).Select(x => x.FindWithLanguage(language)).Where(x => x != null).ToList().ToList();
+                result = result.GroupBy(x => x.Name).Select(x => x.FindWithLanguage(language)).Where(x => x != null).ToList();
 
-                var allMenuLinks = result.SelectMany(x => x.MenuLinks).ToList();
-                var productLinks = allMenuLinks.OfType<ProductMenuLink>().ToList();
-                var categoryLinks = allMenuLinks.OfType<CategoryMenuLink>().ToList();
-
-                Task<Product[]> productsLoadingTask = null;
-                Task<Category[]> categoriesLoadingTask = null;
-
-                //Parallel loading associated objects
-                var productIds = productLinks.Select(x => x.AssociatedObjectId).ToArray();
-                if (productIds.Any())
-                {
-                    productsLoadingTask = _catalogService.GetProductsAsync(productIds, ItemResponseGroup.ItemSmall);
-                }
-                var categoriesIds = categoryLinks.Select(x => x.AssociatedObjectId).ToArray();
-                if (categoriesIds.Any())
-                {
-                    categoriesLoadingTask = _catalogService.GetCategoriesAsync(categoriesIds, CategoryResponseGroup.Info | CategoryResponseGroup.WithImages | CategoryResponseGroup.WithSeo | CategoryResponseGroup.WithOutlines);
-                }
-                //Populate link by associated product
-                if (productsLoadingTask != null)
-                {
-                    var products = await productsLoadingTask;
-                    foreach (var productLink in productLinks)
-                    {
-                        productLink.Product = products.FirstOrDefault(x => x.Id == productLink.AssociatedObjectId);
-                    }
-                }
-                //Populate link by associated category
-                if (categoriesLoadingTask != null)
-                {
-                    var categories = await categoriesLoadingTask;
-                    foreach (var categoryLink in categoryLinks)
-                    {
-                        categoryLink.Category = categories.FirstOrDefault(x => x.Id == categoryLink.AssociatedObjectId);
-                    }
-                }
 
                 return result.ToList();
             });

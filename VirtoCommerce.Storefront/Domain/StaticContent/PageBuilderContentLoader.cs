@@ -19,7 +19,7 @@ namespace VirtoCommerce.Storefront.Domain
             var settings = page.FirstOrDefault(x => (x as JObject)?.GetValue("type")?.Value<string>() == "settings");
             var items = settings.AsJEnumerable();
 
-            foreach (JProperty item in items)
+            foreach (var item in items.OfType<JProperty>())
             {
                 metadata.Add(item.Name, new List<string> { item.Value.Value<string>() });
             }

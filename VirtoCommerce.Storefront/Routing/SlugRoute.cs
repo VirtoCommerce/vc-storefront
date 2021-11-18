@@ -1,16 +1,16 @@
-using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using VirtoCommerce.Storefront.Model;
-using VirtoCommerce.Storefront.Model.Common;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using VirtoCommerce.Storefront.Extensions;
+using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Routing
 {
@@ -37,6 +37,7 @@ namespace VirtoCommerce.Storefront.Routing
             if (!string.IsNullOrEmpty(path))
             {
                 var seoRouteResponse = await seoRouteService.HandleSlugRequestAsync(path, workContext);
+
                 if (seoRouteResponse != null)
                 {
                     if (seoRouteResponse.Redirect)
@@ -55,6 +56,7 @@ namespace VirtoCommerce.Storefront.Routing
                     }
 
                     var actionDescriptor = FindMatchingActionDescriptor(context.RouteData.Values, serviceProvider);
+
                     if (actionDescriptor != null)
                     {
                         context.Handler = httpContext =>

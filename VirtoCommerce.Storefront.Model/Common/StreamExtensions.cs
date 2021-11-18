@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace VirtoCommerce.Storefront.Model.Common
@@ -31,33 +28,27 @@ namespace VirtoCommerce.Storefront.Model.Common
         public static byte[] ReadFully(this Stream stream)
         {
             var buffer = new byte[16 * 1024];
-            using (var ms = new MemoryStream())
+            using var ms = new MemoryStream();
+            int read;
+            while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
             {
-                int read;
-                while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    ms.Write(buffer, 0, read);
-                }
-                return ms.ToArray();
+                ms.Write(buffer, 0, read);
             }
+            return ms.ToArray();
         }
 
         public static string ReadToString(this Stream stream)
         {
             // convert stream to string
-            using (var reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
-            }
+            using var reader = new StreamReader(stream);
+            return reader.ReadToEnd();
         }
 
         public static async Task<string> ReadToStringAsync(this Stream stream)
         {
             // convert stream to string
-            using (var reader = new StreamReader(stream))
-            {
-                return await reader.ReadToEndAsync();
-            }
+            using var reader = new StreamReader(stream);
+            return await reader.ReadToEndAsync();
         }
     }
 }

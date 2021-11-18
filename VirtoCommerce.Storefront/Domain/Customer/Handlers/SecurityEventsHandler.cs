@@ -5,7 +5,7 @@ using VirtoCommerce.Storefront.Model.Security.Events;
 
 namespace VirtoCommerce.Storefront.Domain.Customer.Handlers
 {
-    public  class SecurityEventsHandler : IEventHandler<UserDeletedEvent>
+    public class SecurityEventsHandler : IEventHandler<UserDeletedEvent>
     {
         private readonly IMemberService _memberService;
         public SecurityEventsHandler(IMemberService memberService)
@@ -14,10 +14,10 @@ namespace VirtoCommerce.Storefront.Domain.Customer.Handlers
         }
 
         #region IEventHandler<UserRegisteredEvent> members
-      
+
         public async Task Handle(UserDeletedEvent message)
         {
-            if(message.User.ContactId != null)
+            if (message.User.ContactId != null)
             {
                 await _memberService.DeleteContactAsync(message.User.ContactId);
             }

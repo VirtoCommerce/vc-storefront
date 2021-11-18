@@ -1,14 +1,23 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace VirtoCommerce.Storefront.Model.Common.Exceptions
 {
+    [Serializable]
     public class StorefrontException : Exception
     {
         public string View { get; set; }
+
+        protected StorefrontException(SerializationInfo info,
+            StreamingContext context) : base(info, context)
+        {
+            View = info.GetString("View");
+        }
+
+        public StorefrontException()
+        {
+
+        }
 
         public StorefrontException(string message)
            : this(message, null)
@@ -23,6 +32,13 @@ namespace VirtoCommerce.Storefront.Model.Common.Exceptions
             : base(message, innerException)
         {
             View = view;
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+
+            info.AddValue("View", View);
         }
     }
 }

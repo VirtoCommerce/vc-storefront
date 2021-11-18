@@ -7,7 +7,7 @@ using Xunit;
 namespace VirtoCommerce.Storefront.Tests
 {
     public class JsonConverterTests
-    {    
+    {
         [Fact]
         public void SerializeUser()
         {

@@ -71,7 +71,7 @@ namespace VirtoCommerce.Storefront.Caching
         {
             var result = _memoryCache.TryGetValue(key, out value);
             //Do not use value from cache for preview mode
-            if(_workContextAccessor.WorkContext != null && _workContextAccessor.WorkContext.IsPreviewMode)
+            if (_workContextAccessor.WorkContext != null && _workContextAccessor.WorkContext.IsPreviewMode)
             {
                 result = false;
             }

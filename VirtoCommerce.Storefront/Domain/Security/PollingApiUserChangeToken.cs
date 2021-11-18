@@ -11,22 +11,28 @@ namespace VirtoCommerce.Storefront.Domain.Security
     public sealed class PollingApiUserChangeToken : IChangeToken
     {
         private readonly ISecurity _platformSecurityApi;
-        private static DateTime _previousChangeTimeUtcStatic;
+        private static DateTime _previousChangeTimeUtcStatic = DateTime.UtcNow;
         private static DateTime _lastCheckedTimeUtcStatic;
         private readonly TimeSpan _pollingInterval;
 
         private readonly object _lock = new object();
-
-        static PollingApiUserChangeToken()
-        {
-            _previousChangeTimeUtcStatic = _lastCheckedTimeUtcStatic = DateTime.UtcNow;
-        }
 
         public PollingApiUserChangeToken(ISecurity platformSecurityApi, TimeSpan pollingInterval)
         {
             _pollingInterval = pollingInterval;
             _platformSecurityApi = platformSecurityApi;
         }
+
+        public static void UpdatePreviousChangeTimeUtcStatic(DateTime currentTime)
+        {
+            _previousChangeTimeUtcStatic = currentTime;
+        }
+
+        public static void UpdateLastCheckedTimeUtcStatic(DateTime currentTime)
+        {
+            _lastCheckedTimeUtcStatic = currentTime;
+        }
+
 
         /// <summary>
         /// Always false.
@@ -58,13 +64,15 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
                         if (result.Result.TotalCount > 0)
                         {
-                            _previousChangeTimeUtcStatic = currentTime;
+                            UpdatePreviousChangeTimeUtcStatic(currentTime);
+
                             foreach (var userId in result.Result.Users.Select(x => x.Id))
                             {
                                 SecurityCacheRegion.ExpireUser(userId);
                             }
                         }
-                        _lastCheckedTimeUtcStatic = currentTime;
+
+                        UpdateLastCheckedTimeUtcStatic(currentTime);
                     }
                 }
                 finally

@@ -5,9 +5,6 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
-using VirtoCommerce.Storefront.Model.Order;
-using VirtoCommerce.Storefront.Model.Quote;
-using VirtoCommerce.Storefront.Model.Subscriptions;
 
 namespace VirtoCommerce.Storefront.Model.Security
 {
@@ -55,7 +52,7 @@ namespace VirtoCommerce.Storefront.Model.Security
         {
             get
             {
-                return LockoutEndDateUtc != null ? LockoutEndDateUtc.Value > DateTime.UtcNow : false;
+                return LockoutEndDateUtc != null && LockoutEndDateUtc.Value > DateTime.UtcNow;
             }
         }
 
@@ -121,26 +118,6 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// </summary>
         public IEnumerable<Role> Roles { get; set; }
 
-        /// <summary>
-        /// All user orders
-        /// </summary>
-        [JsonIgnore]
-        [IgnoreDataMember]
-        public IMutablePagedList<CustomerOrder> Orders { get; set; }
-
-        /// <summary>
-        /// All user RFQ
-        /// </summary>
-        [JsonIgnore]
-        [IgnoreDataMember]
-        public IMutablePagedList<QuoteRequest> QuoteRequests { get; set; }
-
-        /// <summary>
-        /// All user subscriptions
-        /// </summary>
-        [JsonIgnore]
-        [IgnoreDataMember]
-        public IMutablePagedList<Subscription> Subscriptions { get; set; }
 
         public IMutablePagedList<DynamicProperty> DynamicProperties => Contact?.DynamicProperties;
 

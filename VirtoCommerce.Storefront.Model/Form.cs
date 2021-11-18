@@ -50,7 +50,7 @@ namespace VirtoCommerce.Storefront.Model
 
         public bool Contains(object key)
         {
-            return TryGetValue(key, out var dummy);
+            return TryGetValue(key, out _);
         }
 
         public IDictionaryEnumerator GetEnumerator()

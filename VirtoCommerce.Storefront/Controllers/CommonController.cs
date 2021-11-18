@@ -52,7 +52,6 @@ namespace VirtoCommerce.Storefront.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ContactForm([FromForm] ContactForm model, string viewName = "page.contact")
         {
-            //TODO: Test with exist contact us form
             await _storeApi.SendDynamicNotificationAnStoreEmailAsync(model.ToServiceModel(WorkContext));
             if (model.Contact.ContainsKey("RedirectUrl") && model.Contact["RedirectUrl"].Any())
             {

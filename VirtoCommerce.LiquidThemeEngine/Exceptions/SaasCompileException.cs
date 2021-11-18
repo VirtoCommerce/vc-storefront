@@ -1,14 +1,18 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Web;
+using System.Runtime.Serialization;
 
 namespace DotLiquid.ViewEngine.Exceptions
 {
-
+    [Serializable]
     public class SaasCompileException : Exception
     {
+        protected SaasCompileException(SerializationInfo info,
+            StreamingContext context) : base(info, context)
+        {
+            SassLine = info.GetString("SassLine");
+        }
+
         public override string Message
         {
             get
@@ -56,6 +60,13 @@ namespace DotLiquid.ViewEngine.Exceptions
             while (line != null && currentLineNumber < lineNumber);
 
             return (currentLineNumber == lineNumber) ? line : string.Empty;
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+
+            info.AddValue("SassLine", SassLine);
         }
     }
 

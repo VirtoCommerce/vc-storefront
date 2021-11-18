@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
-    public class FeatureFilter
+    public static class FeatureFilter
     {
         public static bool IsFeatureActive(TemplateContext context, string key, params object[] variables)
         {

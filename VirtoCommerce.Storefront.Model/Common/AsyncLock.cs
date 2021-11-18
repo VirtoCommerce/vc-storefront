@@ -5,7 +5,7 @@ namespace VirtoCommerce.Storefront.Model.Common
 
     public static class AsyncLock
     {
-        private static ConcurrentDictionary<string, Nito.AsyncEx.AsyncLock> _lockMap = new ConcurrentDictionary<string, Nito.AsyncEx.AsyncLock>();
+        private static readonly ConcurrentDictionary<string, Nito.AsyncEx.AsyncLock> _lockMap = new ConcurrentDictionary<string, Nito.AsyncEx.AsyncLock>();
 
         public static Nito.AsyncEx.AsyncLock GetLockByKey(string key)
         {

@@ -36,8 +36,11 @@ namespace VirtoCommerce.Storefront.Model.Common
         public static IEnumerable<SortInfo> Parse(string sortExpr)
         {
             var retVal = new List<SortInfo>();
-            if (String.IsNullOrEmpty(sortExpr))
+
+            if (string.IsNullOrEmpty(sortExpr))
+            {
                 return retVal;
+            }
 
             var sortInfoStrings = sortExpr.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var sortInfoString in sortInfoStrings)
@@ -63,6 +66,6 @@ namespace VirtoCommerce.Storefront.Model.Common
         public string SortColumn { get; set; }
 
         public SortDirection SortDirection { get; set; }
-       
+
     }
 }

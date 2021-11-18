@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using Scriban;
-using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
@@ -49,10 +48,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             if (input is Money money)
             {
                 return money;
-            }
-            else if (input is ProductPrice productPrice)
-            {
-                return productPrice.ActualPrice;
             }
             else
             {

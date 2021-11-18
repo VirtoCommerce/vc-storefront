@@ -10,7 +10,7 @@ namespace VirtoCommerce.Storefront.Model.Common
     /// </summary>
     public class Currency : ValueObject
     {
-        private static IDictionary<string, string> _isoCurrencySymbolDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase).WithDefaultValue(null);
+        private static readonly IDictionary<string, string> _isoCurrencySymbolDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase).WithDefaultValue(null);
         static Currency()
         {
             foreach (var ci in CultureInfo.GetCultures(CultureTypes.SpecificCultures))
@@ -75,7 +75,7 @@ namespace VirtoCommerce.Storefront.Model.Common
         {
             get
             {
-                return _language != null ? _language.CultureName : null;
+                return _language?.CultureName;
             }
             set
             {
@@ -106,9 +106,13 @@ namespace VirtoCommerce.Storefront.Model.Common
                 {
                     var cultureInfo = CultureInfo.GetCultureInfo(_language.CultureName);
                     NumberFormat = (NumberFormatInfo)cultureInfo.NumberFormat.Clone();
-                    var region = new RegionInfo(cultureInfo.LCID);
-                    EnglishName = region.CurrencyEnglishName;
+                    EnglishName = cultureInfo.NumberFormat.CurrencySymbol;
 
+                    if (!cultureInfo.IsNeutralCulture)
+                    {
+                        var region = new RegionInfo(_language.CultureName);
+                        EnglishName = region.CurrencyEnglishName;
+                    }
                     if (_code != null)
                     {
                         Symbol = _isoCurrencySymbolDict[_code] ?? "N/A";

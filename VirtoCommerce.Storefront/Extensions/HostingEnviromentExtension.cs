@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace VirtoCommerce.Storefront.Extensions
 {
@@ -16,7 +16,7 @@ namespace VirtoCommerce.Storefront.Extensions
             else if (Path.IsPathRooted(path))
             {
                 result = path;
-            }        
+            }
 
             return result;
         }

@@ -1,5 +1,4 @@
 using VirtoCommerce.Storefront.Model.Common.Events;
-using VirtoCommerce.Storefront.Model.Customer;
 
 namespace VirtoCommerce.Storefront.Model.Security.Events
 {

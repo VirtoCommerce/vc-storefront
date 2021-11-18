@@ -136,37 +136,33 @@ namespace VirtoCommerce.Storefront.Infrastructure
         public static bool TryParse(string input, out ApiRequestSignature parsedValue)
         {
             parsedValue = null;
-            var success = false;
 
-            if (input != null)
+            if (input == null)
             {
-                var parts = input.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                if (parts.Length == 3)
-                {
-                    if (parts[2].Length == 64)
-                    {
-                        DateTime timestamp;
-                        if (DateTime.TryParseExact(
-                            parts[1],
-                            "o",
-                            CultureInfo.InvariantCulture,
-                            DateTimeStyles.AdjustToUniversal,
-                            out timestamp))
-                        {
-                            parsedValue = new ApiRequestSignature
-                            {
-                                AppId = parts[0],
-                                TimestampString = parts[1],
-                                Hash = parts[2],
-                                Timestamp = timestamp,
-                            };
-                            success = true;
-                        }
-                    }
-                }
+                return false;
             }
 
-            return success;
+            var parts = input.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (parts.Length != 3 || parts[2].Length != 64 || !DateTime.TryParseExact(
+                parts[1],
+                "o",
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.AdjustToUniversal,
+                out var timestamp))
+            {
+                return false;
+            }
+
+            parsedValue = new ApiRequestSignature
+            {
+                AppId = parts[0],
+                TimestampString = parts[1],
+                Hash = parts[2],
+                Timestamp = timestamp,
+            };
+
+            return true;
         }
 
         public override string ToString()

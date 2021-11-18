@@ -21,9 +21,9 @@ namespace VirtoCommerce.Storefront.Model.Security.Specifications
             }
             //Allow to login to store for administrators or for users not assigned to store
             var result = _user.IsAdministrator || _user.StoreId.IsNullOrEmpty();
-            if(!result)
-            {   
-                result = obj.TrustedGroups.Concat(new[] { obj.Id } ).Contains(_user.StoreId);
+            if (!result)
+            {
+                result = obj.TrustedGroups.Concat(new[] { obj.Id }).Contains(_user.StoreId);
             }
             return result;
         }

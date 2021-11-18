@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace VirtoCommerce.Storefront.Model.Security
 {
 
-    public partial class Login 
+    public partial class Login
     {
         [EmailAddress]
         public string Email { get; set; }

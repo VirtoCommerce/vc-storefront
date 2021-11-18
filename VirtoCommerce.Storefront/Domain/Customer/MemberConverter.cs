@@ -6,18 +6,15 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Security;
-using VirtoCommerce.Storefront.Model.Stores;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
-using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using customerDto = VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models;
+using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
 
     public static partial class MemberConverter
     {
-        private static readonly char[] _nameSeparator = { ' ' };
-
         public static DynamicProperty ToDynamicProperty(this customerDto.DynamicObjectProperty propertyDto)
         {
             return propertyDto.JsonConvert<platformDto.DynamicObjectProperty>().ToDynamicProperty();
@@ -38,71 +35,6 @@ namespace VirtoCommerce.Storefront.Domain
         {
             return address.ToCoreAddressDto().JsonConvert<customerDto.CustomerAddress>();
         }
-
-        public static Vendor ToVendor(this customerDto.Vendor vendorDto, Language currentLanguage, Store store)
-        {
-            Vendor result = null;
-
-            if (vendorDto != null)
-            {
-                result = new Vendor
-                {
-                    Id = vendorDto.Id,
-                    Name = vendorDto.Name,
-                    Description = vendorDto.Description,
-                    LogoUrl = vendorDto.LogoUrl,
-                    SiteUrl = vendorDto.SiteUrl,
-                    GroupName = vendorDto.GroupName
-                };
-
-                if (!vendorDto.SeoInfos.IsNullOrEmpty())
-                {
-                    var seoInfoDto = vendorDto.SeoInfos.Select(x => x.JsonConvert<coreDto.SeoInfo>())
-                        .GetBestMatchingSeoInfos(store, currentLanguage)
-                        .FirstOrDefault();
-
-                    if (seoInfoDto != null)
-                    {
-                        result.SeoInfo = seoInfoDto.ToSeoInfo();
-                    }
-                }
-
-                if (result.SeoInfo == null)
-                {
-                    result.SeoInfo = new SeoInfo
-                    {
-                        Title = vendorDto.Name,
-                        Slug = string.Concat("/vendor/", result.Id)
-                    };
-                }
-
-                if (vendorDto.Addresses != null)
-                {
-                    result.Addresses = vendorDto.Addresses.Select(ToAddress).ToList();
-                }
-
-                if (vendorDto.DynamicProperties != null)
-                {
-                    result.DynamicProperties = new MutablePagedList<DynamicProperty>(vendorDto.DynamicProperties.Select(ToDynamicProperty).ToList());                     
-                }
-            }
-
-            return result;
-        }
-
-        public static Organization ToOrganization(this OrganizationRegistration orgRegistration)
-        {
-            var organization = new Organization
-            {
-                Name = orgRegistration.OrganizationName,
-            };
-            if (organization.Addresses != null)
-            {
-                organization.Addresses.Add(orgRegistration.Address);
-            }
-            return organization;
-        }
-
 
         public static Contact ToContact(this UserRegistration userRegistration)
         {
@@ -185,6 +117,19 @@ namespace VirtoCommerce.Storefront.Domain
                 });
             }
             return result;
+        }
+
+        public static Organization ToOrganization(this OrganizationRegistration orgRegistration)
+        {
+            var organization = new Organization
+            {
+                Name = orgRegistration.OrganizationName,
+            };
+            if (organization.Addresses != null)
+            {
+                organization.Addresses.Add(orgRegistration.Address);
+            }
+            return organization;
         }
 
         public static Organization ToOrganization(this customerDto.Organization organizaionDto)
@@ -275,7 +220,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 retVal.Emails = customer.Emails;
             }
-            //TODO: It needs to be rework to support only a multiple  organizations for a customer by design.
+
             if (customer.OrganizationId != null)
             {
                 retVal.Organizations = new List<string>() { customer.OrganizationId };

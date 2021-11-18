@@ -1,6 +1,6 @@
-using PagedList.Core;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using PagedList.Core;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
@@ -21,7 +21,7 @@ namespace VirtoCommerce.Storefront.Model.Common
         void Slice(int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos, NameValueCollection @params = null);
     }
 
-    public interface IMutablePagedList<T> : IMutablePagedList, IPagedList<T>
+    public interface IMutablePagedList<out T> : IMutablePagedList, IPagedList<T>
     {
     }
 }

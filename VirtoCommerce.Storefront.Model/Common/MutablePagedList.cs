@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using Newtonsoft.Json;
 using PagedList.Core;
 
 namespace VirtoCommerce.Storefront.Model.Common
@@ -59,9 +58,14 @@ namespace VirtoCommerce.Storefront.Model.Common
         public void Slice(int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos, NameValueCollection @params = null)
         {
             if (pageNumber < 1)
+            {
                 throw new ArgumentOutOfRangeException("pageNumber", pageNumber, "PageNumber cannot be below 1.");
+            }
+
             if (pageSize < 1)
+            {
                 throw new ArgumentOutOfRangeException("pageSize", pageSize, "PageSize cannot be less than 1.");
+            }
 
             if (pageNumber != PageNumber)
             {
@@ -190,7 +194,7 @@ namespace VirtoCommerce.Storefront.Model.Common
 
         public bool Contains(object value)
         {
-            return TryGetValue(value, out var dummy);
+            return TryGetValue(value, out _);
         }
 
 
@@ -238,10 +242,10 @@ namespace VirtoCommerce.Storefront.Model.Common
         {
             get
             {
-               ReloadPagedData();
-               var dictionary = _pagedList.OfType<IAccessibleByIndexKey>().ToDictionary(x => x.IndexKey, x => x);
-               return dictionary.Keys;
-               
+                ReloadPagedData();
+                var dictionary = _pagedList.OfType<IAccessibleByIndexKey>().ToDictionary(x => x.IndexKey, x => x);
+                return dictionary.Keys;
+
             }
         }
         public ICollection Values
@@ -269,7 +273,7 @@ namespace VirtoCommerce.Storefront.Model.Common
             }
         }
 
-        
+
         IDictionaryEnumerator IDictionary.GetEnumerator()
         {
             ReloadPagedData();

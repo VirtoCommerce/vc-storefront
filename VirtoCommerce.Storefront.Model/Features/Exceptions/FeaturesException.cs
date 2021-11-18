@@ -1,9 +1,16 @@
+using System;
+using System.Runtime.Serialization;
+
 namespace VirtoCommerce.Storefront.Model.Features.Exceptions
 {
-    using System;
-
+    [Serializable]
     public class FeaturesException : Exception
     {
+        protected FeaturesException(SerializationInfo info,
+            StreamingContext context) : base(info, context)
+        {
+        }
+
         public FeaturesException(string message)
             : base(message)
         {

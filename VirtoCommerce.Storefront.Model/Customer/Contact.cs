@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace VirtoCommerce.Storefront.Model.Customer
 {
@@ -32,7 +31,7 @@ namespace VirtoCommerce.Storefront.Model.Customer
 
         public string OrganizationId { get; set; }
         public Organization Organization { get; set; }
-        //TODO: It needs to be rework to support only a multiple  organizations for a customer by design.
+
         public IList<string> OrganizationsIds { get; set; } = new List<string>();
 
         /// <summary>

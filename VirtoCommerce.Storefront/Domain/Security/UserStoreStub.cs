@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
-using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Caching;
@@ -36,19 +34,16 @@ namespace VirtoCommerce.Storefront.Domain.Security
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IMemberService _memberService;
         private readonly StorefrontOptions _options;
-        private readonly IOrderModule _orderModule;
 
         public UserStoreStub(ISecurity platformSecurityApi,
             IMemberService memberService,
             IStorefrontMemoryCache memoryCache,
-            IOptions<StorefrontOptions> options,
-            IOrderModule orderModule)
+            IOptions<StorefrontOptions> options)
         {
             _platformSecurityApi = platformSecurityApi;
             _memoryCache = memoryCache;
             _memberService = memberService;
             _options = options.Value;
-            _orderModule = orderModule;
         }
 
         #region IUserStore<User> members
@@ -75,14 +70,12 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public async Task<IdentityResult> CreateAsync(Role role, CancellationToken cancellationToken)
         {
-            var result = IdentityResult.Success;
-            await _platformSecurityApi.UpdateRoleAsync(role.ToRoleDto());
-            return result;
+            return await SaveAsync(role, cancellationToken);
         }
 
         public async Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
         {
-            await _platformSecurityApi.DeleteAsync(new[] {user.UserName});
+            await _platformSecurityApi.DeleteAsync(new[] { user.UserName });
             //Evict user from the cache
             SecurityCacheRegion.ExpireUser(user.Id);
             return IdentityResult.Success;
@@ -95,9 +88,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public async Task<IdentityResult> UpdateAsync(Role role, CancellationToken cancellationToken)
         {
-            var result = IdentityResult.Success;
-            await _platformSecurityApi.UpdateRoleAsync(role.ToRoleDto());
-            return result;
+            return await SaveAsync(role, cancellationToken);
         }
 
         public async Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)
@@ -542,27 +533,25 @@ namespace VirtoCommerce.Storefront.Domain.Security
             // Cleanup
         }
 
-        private async Task<User> PrepareUserResultAsync(MemoryCacheEntryOptions options, AutoRestClients.PlatformModuleApi.Models.ApplicationUser userDto)
+
+        private Task<User> PrepareUserResultAsync(MemoryCacheEntryOptions options, AutoRestClients.PlatformModuleApi.Models.ApplicationUser userDto)
         {
+            User result = null;
             if (userDto != null)
             {
-                var user = userDto.ToUser();
-                var orderSearchResult = await _orderModule.SearchCustomerOrderAsync(new CustomerOrderSearchCriteria
-                {
-                    CustomerId = user.Id,
-                    Take = 0,
-                    Skip = 0,
-                });
-
-                user.IsFirstTimeBuyer = orderSearchResult.TotalCount == 0;
-
+                result = userDto.ToUser();
                 options.AddExpirationToken(new PollingApiUserChangeToken(_platformSecurityApi, _options.ChangesPollingInterval));
                 options.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
 
-                return user;
             }
-
-            return null;
+            return Task.FromResult(result);
         }
+        private async Task<IdentityResult> SaveAsync(Role role, CancellationToken cancellationToken)
+        {
+            var result = IdentityResult.Success;
+            await _platformSecurityApi.UpdateRoleAsync(role.ToRoleDto(), cancellationToken);
+            return result;
+        }
+
     }
 }

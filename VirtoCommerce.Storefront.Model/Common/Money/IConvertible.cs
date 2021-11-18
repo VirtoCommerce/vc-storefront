@@ -1,6 +1,6 @@
 namespace VirtoCommerce.Storefront.Model.Common
 {
-    public interface IConvertible<T>
+    public interface IConvertible<out T>
     {
         T ConvertTo(Currency currency);
     }

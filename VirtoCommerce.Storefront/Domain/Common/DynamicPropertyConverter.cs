@@ -2,7 +2,6 @@ using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using VirtoCommerce.Storefront.Model;
-using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain

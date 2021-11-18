@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
     public class PagedSearchCriteria : ValueObject
     {
-        public PagedSearchCriteria(NameValueCollection queryString, int defaultPageSize)
+        public PagedSearchCriteria(IDictionary<string, string> queryString, int defaultPageSize)
         {
-            PageNumber = Convert.ToInt32(queryString.Get("page") ?? 1.ToString());
-            PageSize = Convert.ToInt32(queryString.Get("count") ?? queryString.Get("page_size") ?? defaultPageSize.ToString());
+            PageNumber = Convert.ToInt32(queryString["page"] ?? 1.ToString());
+            PageSize = Convert.ToInt32(queryString["count"] ?? queryString["page_size"] ?? defaultPageSize.ToString());
         }
 
         public int Start

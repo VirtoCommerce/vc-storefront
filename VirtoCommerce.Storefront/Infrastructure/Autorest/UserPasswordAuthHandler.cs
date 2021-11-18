@@ -8,6 +8,8 @@ using IdentityModel.Client;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.Model;
+using VirtoCommerce.Storefront.Model.Caching;
+using VirtoCommerce.Storefront.Model.Common.Caching;
 
 namespace VirtoCommerce.Storefront.Infrastructure.Autorest
 {
@@ -17,11 +19,9 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
     /// </summary>
     public class UserPasswordAuthHandler : BaseAuthHandler
     {
-        private static readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
-        private static string _accessToken;
-        private bool _disposed;
         private readonly PlatformEndpointOptions _options;
         private readonly IHttpClientFactory _clientFactory;
+        private readonly IStorefrontMemoryCache _memoryCache;
 
         /// <summary>
         /// Gets or sets the timeout
@@ -29,37 +29,20 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(5);
 
         /// <summary>
-        /// Gets the current access token
-        /// </summary>
-        public string AccessToken
-        {
-            get
-            {
-                if (_lock.Wait(Timeout))
-                {
-                    try
-                    {
-                        return _accessToken;
-                    }
-                    finally
-                    {
-                        _lock.Release();
-                    }
-                }
-
-                return null;
-            }
-        }
-
-        /// <summary>
         ///  Initializes a new instance of the <see cref="UserPasswordAuthHandler"/> class.
         /// </summary>
         /// <param name="options"></param>
         /// <param name="clientFactory"></param>
-        public UserPasswordAuthHandler(IOptions<PlatformEndpointOptions> options, IHttpClientFactory clientFactory, IWorkContextAccessor workContextAccessor, IHttpContextAccessor httpContextAccessor) : base(workContextAccessor, httpContextAccessor)
+        public UserPasswordAuthHandler(
+            IStorefrontMemoryCache memoryCache
+            , IOptions<PlatformEndpointOptions> options
+            , IHttpClientFactory clientFactory
+            , IWorkContextAccessor workContextAccessor
+            , IHttpContextAccessor httpContextAccessor) : base(workContextAccessor, httpContextAccessor)
         {
             _options = options.Value;
             _clientFactory = clientFactory;
+            _memoryCache = memoryCache;
         }
 
         /// <summary>
@@ -72,87 +55,39 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// </returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var accessToken = await GetAccessTokenAsync(cancellationToken);
-            if (string.IsNullOrWhiteSpace(accessToken) && (!(await RenewTokensAsync(cancellationToken))))
-            {
-                return new HttpResponseMessage(HttpStatusCode.Unauthorized) { RequestMessage = request };
-            }
-
-            var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            var response = await base.SendAsync(request, cancellationToken);
 
             if (response.StatusCode != HttpStatusCode.Unauthorized)
             {
                 return response;
             }
 
-            if (!(await RenewTokensAsync(cancellationToken)))
-            {
-                return response;
-            }
-
-            response.Dispose(); // This 401 response will not be used for anything so is disposed to unblock the socket.
-
-            return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            return await base.SendAsync(request, cancellationToken);
         }
 
-        protected override void AddAuthentication(HttpRequestMessage request)
+        protected override async Task AddAuthenticationAsync(HttpRequestMessage request)
         {
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await GetOrRenewTokenAsync());
         }
 
-        private async Task<bool> RenewTokensAsync(CancellationToken cancellationToken)
+        private async Task<string> GetOrRenewTokenAsync()
         {
-            if (await _lock.WaitAsync(Timeout, cancellationToken).ConfigureAwait(false))
+            var cacheKey = CacheKey.With(GetType(), "token");
+            var token = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
-                try
-                {
-                    var client = _clientFactory.CreateClient();
-                    var response = await client.RequestPasswordTokenAsync(new PasswordTokenRequest { Address = $"{_options.Url?.ToString().TrimEnd('/')}/connect/token", UserName = _options.UserName, Password = _options.Password });
+                var client = _clientFactory.CreateClient();
 
-                    if (!response.IsError)
-                    {
-                        _accessToken = response.AccessToken;
-                        return true;
-                    }
-                }
-                finally
+                var response = await client.RequestPasswordTokenAsync(new PasswordTokenRequest { Address = $"{_options.Url?.ToString().TrimEnd('/')}/connect/token", UserName = _options.UserName, Password = _options.Password });
+                if (!response.IsError)
                 {
-                    _lock.Release();
+                    cacheEntry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(response.ExpiresIn);
+                    return response.AccessToken;
                 }
-            }
-
-            return false;
-        }
-        private async Task<string> GetAccessTokenAsync(CancellationToken cancellationToken)
-        {
-            if (await _lock.WaitAsync(Timeout, cancellationToken).ConfigureAwait(false))
-            {
-                try
-                {
-                    return _accessToken;
-                }
-                finally
-                {
-                    _lock.Release();
-                }
-            }
-
-            return null;
+                return null;
+            }, cacheNullValue: false);
+            return token;
         }
 
-        /// <summary>
-        /// Releases the unmanaged resources used by the <see cref="T:System.Net.Http.DelegatingHandler" />, and optionally disposes of the managed resources.
-        /// </summary>
-        /// <param name="disposing">true to release both managed and unmanaged resources; false to releases only unmanaged resources.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && !_disposed)
-            {
-                _disposed = true;
-                _lock.Dispose();
-            }
 
-            base.Dispose(disposing);
-        }
     }
 }

@@ -1,8 +1,6 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+using System.Linq;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
@@ -21,8 +19,15 @@ namespace VirtoCommerce.Storefront.Model.Common
         /// <exception cref="System.ArgumentNullException">An <see cref="System.ArgumentNullException"/> is thrown if <paramref name="collection"/> or <paramref name="items"/> is <see langword="null"/>.</exception>
 		public static ICollection<T> AddRange<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
-            if (collection == null) throw new System.ArgumentNullException("collection");
-            if (items == null) throw new System.ArgumentNullException("items");
+            if (collection == null)
+            {
+                throw new System.ArgumentNullException("collection");
+            }
+
+            if (items == null)
+            {
+                throw new System.ArgumentNullException("items");
+            }
 
             foreach (var each in items)
             {
@@ -40,16 +45,22 @@ namespace VirtoCommerce.Storefront.Model.Common
         public static void AddDistinct<T>(this ICollection<T> obj, IEqualityComparer<T> comparer, params T[] items)
         {
             if (obj == null)
-                throw new ArgumentNullException("obj");
-
-            if (items != null)
             {
-                foreach (var item in items)
-                {
-                    var contains = comparer != null ? obj.Contains(item, comparer) : obj.Contains(item);
+                throw new ArgumentNullException("obj");
+            }
 
-                    if (!contains)
-                        obj.Add(item);
+            if (items == null)
+            {
+                return;
+            }
+
+            foreach (var item in items)
+            {
+                var contains = comparer != null ? obj.Contains(item, comparer) : obj.Contains(item);
+
+                if (!contains)
+                {
+                    obj.Add(item);
                 }
             }
         }
@@ -58,7 +69,9 @@ namespace VirtoCommerce.Storefront.Model.Common
         public static void Replace<T>(this ICollection<T> obj, IEnumerable<T> newItems)
         {
             if (obj == null)
+            {
                 throw new ArgumentNullException("obj");
+            }
 
             obj.Clear();
             obj.AddRange(newItems);
@@ -72,7 +85,7 @@ namespace VirtoCommerce.Storefront.Model.Common
 
         public static void Patch<T>(this ICollection<T> source, ICollection<T> target, IEqualityComparer<T> comparer, Action<T, T> patch)
         {
-            Action<EntryState, T, T> patchAction = (state, x, y) =>
+            void PatchAction(EntryState state, T x, T y)
             {
                 if (state == EntryState.Modified)
                 {
@@ -86,9 +99,9 @@ namespace VirtoCommerce.Storefront.Model.Common
                 {
                     target.Remove(x);
                 }
-            };
+            }
 
-            source.CompareTo(target, comparer, patchAction);
+            source.CompareTo(target, comparer, PatchAction);
         }
 
         public static void CompareTo<T>(this ICollection<T> source, ICollection<T> target, IEqualityComparer<T> comparer, Action<EntryState, T, T> action)

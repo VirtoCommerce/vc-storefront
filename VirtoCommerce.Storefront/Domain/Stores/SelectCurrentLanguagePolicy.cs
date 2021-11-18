@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Stores;
 
@@ -18,7 +18,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             //Try to get language from request
             var result = store.DefaultLanguage;
-            var regexpPattern = string.Format(@"\/({0})\/?", string.Join("|", store.Languages.Select(x=>x.CultureName)));
+            var regexpPattern = string.Format(@"\/({0})\/?", string.Join("|", store.Languages.Select(x => x.CultureName)));
             var match = Regex.Match(context.Request.Path, regexpPattern, RegexOptions.IgnoreCase);
             if (match.Success && match.Groups.Count > 1)
             {
@@ -26,7 +26,7 @@ namespace VirtoCommerce.Storefront.Domain
                 //Get store default language if language not in the supported by stores list
                 result = store.Languages.Contains(language) ? language : result;
             }
-          
+
             return result;
         }
     }

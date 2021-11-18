@@ -22,8 +22,12 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <Compile Remove="JsonConverters\**" />
     <Compile Remove="wwwroot\cms-content\**" />
+    <Content Remove="JsonConverters\**" />
     <Content Remove="wwwroot\cms-content\**" />
+    <EmbeddedResource Remove="JsonConverters\**" />
+    <None Remove="JsonConverters\**" />
     <Content Update="wwwroot\cms-content\**" CopyToPublishDirectory="Never" />
   </ItemGroup>
 
@@ -36,6 +40,8 @@
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="3.1.0" />
     <PackageReference Include="AspNet.Security.OAuth.StackExchange" Version="3.1.0" />
+    <PackageReference Include="GraphQL.Client" Version="3.1.9" />
+    <PackageReference Include="GraphQL.Client.Serializer.Newtonsoft" Version="3.1.9" />
     <PackageReference Include="IdentityModel" Version="4.2.0" />
     <PackageReference Include="FluentValidation" Version="8.6.2" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.6.2" />
@@ -59,6 +65,7 @@
     <PackageReference Include="Nito.AsyncEx" Version="5.0.0" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
     <PackageReference Include="Polly" Version="7.2.0" />
+    <PackageReference Include="ProxyKit" Version="2.3.3" />
     <PackageReference Include="Scrutor" Version="3.2.1" />
     <PackageReference Include="StackExchange.Redis" Version="2.1.30" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.3.3" />
@@ -75,6 +82,10 @@
 
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\cms-content\Themes\Electronics\default\" />
   </ItemGroup>
 
 </Project>

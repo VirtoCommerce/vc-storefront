@@ -17,6 +17,6 @@ namespace VirtoCommerce.Storefront.Caching.Redis
         public string ChannelName { get; set; }
 
         [Obsolete("Use Redis connection string parameters for retry policy configration")]
-        public int BusRetryCount { get; set; } = 3;     
+        public int BusRetryCount { get; set; } = 3;
     }
 }

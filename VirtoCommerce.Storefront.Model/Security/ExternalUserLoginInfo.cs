@@ -5,7 +5,7 @@ namespace VirtoCommerce.Storefront.Model.Security
 {
     public class ExternalUserLoginInfo : ValueObject
     {
-     
+
         //  Examples of the provider may be Local, Facebook, Google, etc.
         public string LoginProvider { get; set; }
         //

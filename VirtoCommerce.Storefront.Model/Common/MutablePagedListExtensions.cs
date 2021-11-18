@@ -12,11 +12,14 @@ namespace VirtoCommerce.Storefront.Model.Common
         {
             var result = 0;
 
-            if (list != null)
+            if (list == null)
             {
-                using (list.GetEnumerator()) { }
-                result = list.TotalItemCount;
+                return result;
             }
+
+            using var enumerator = list.GetEnumerator();
+
+            result = list.TotalItemCount;
 
             return result;
         }

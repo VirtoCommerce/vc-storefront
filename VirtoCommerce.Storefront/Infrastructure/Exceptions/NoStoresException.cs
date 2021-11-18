@@ -1,13 +1,17 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 using VirtoCommerce.Storefront.Model.Common.Exceptions;
 
-namespace VirtoCommerce.Storefront.Infrastructure
+namespace VirtoCommerce.Storefront.Infrastructure.Exceptions
 {
+    [Serializable]
     public class NoStoresException : StorefrontException
     {
+        protected NoStoresException(SerializationInfo info,
+            StreamingContext context) : base(info, context)
+        {
+        }
+
         public NoStoresException() : base("No stores defined", "NoStore")
         {
         }
