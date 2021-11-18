@@ -205,6 +205,7 @@ namespace VirtoCommerce.Storefront
                 });
             }
             var stackexchangeSection = Configuration.GetSection("Authentication:Stackexchange");
+
             if (stackexchangeSection.GetChildren().Any())
             {
                 auth.AddStackExchange(StackExchangeAuthenticationOptions =>
@@ -213,9 +214,6 @@ namespace VirtoCommerce.Storefront
                 });
             }
 
-            // This line is required in order to use the old Identity V2 hashes to prevent rehashes passwords for platform users which login in the storefront
-            // and it can lead to platform access denied for them. (TODO: Need to remove after platform migration to .NET Core)
-            services.Configure<PasswordHasherOptions>(option => option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2);
             services.Configure<IdentityOptions>(Configuration.GetSection("IdentityOptions"));
             services.AddIdentity<User, Role>(options => { }).AddDefaultTokenProviders();
 

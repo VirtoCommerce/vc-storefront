@@ -11,14 +11,12 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         public static string T(TemplateContext context, string key, params object[] variables)
         {
             var result = key;
-            //TODO: find out more elegant way to access localization resources
             var themeAdaptor = (ShopifyLiquidThemeEngine)context.TemplateLoader;
             var localization = themeAdaptor.ReadLocalization();
 
             if (localization != null)
             {
                 //Backward compatibility "" | t returns entire localization JSON
-                //TODO: remove later
                 if (string.IsNullOrEmpty(key))
                 {
                     result = localization.ToString();

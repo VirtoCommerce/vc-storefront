@@ -13,7 +13,6 @@ using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.LiquidThemeEngine.Filters
 {
-    //TODO: Left only unique filters don't presents in Scriban
     public static partial class StandardFilters
     {
         /// <summary>
@@ -403,8 +402,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             switch (format)
             {
                 case "long":
-                    //TODO: define which way to use. IMHO using modern style is more prefered
-                    //format = "%d %b %Y %X";
                     format = "f";
                     break;
             }

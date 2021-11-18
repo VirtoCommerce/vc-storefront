@@ -60,7 +60,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [AllowAnonymous]
         public async Task<ActionResult<UserActionIdentityResult>> Login([FromBody] Login login, [FromQuery] string returnUrl)
         {
-            //TODO: Two factor auth
             var result = UserActionIdentityResult.Success;
             TryValidateModel(login);
 

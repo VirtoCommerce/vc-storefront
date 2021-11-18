@@ -496,7 +496,6 @@ namespace VirtoCommerce.Storefront.Controllers
             var externalLoginResult = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (!externalLoginResult.Succeeded)
             {
-                // TODO: Locked out not work. Need to add some API methods to support lockout data.
                 if (externalLoginResult.IsLockedOut)
                 {
                     return View("lockedout", WorkContext);

@@ -118,7 +118,6 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual IChangeToken Watch(string path)
         {
-            //TODO: Test with symbolic links
             if (_fileSystemWatcher != null)
             {
                 // Absolute paths not permitted for watcher, need to convert it to relative

@@ -222,7 +222,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 retVal.Emails = customer.Emails;
             }
-            //TODO: It needs to be rework to support only a multiple  organizations for a customer by design.
+
             if (customer.OrganizationId != null)
             {
                 retVal.Organizations = new List<string>() { customer.OrganizationId };

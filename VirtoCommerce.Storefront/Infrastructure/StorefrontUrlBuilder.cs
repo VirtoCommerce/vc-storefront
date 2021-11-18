@@ -45,10 +45,11 @@ namespace VirtoCommerce.Storefront.Infrastructure
         public string ToAppAbsolute(string virtualPath, Store store, Language language)
         {
             var appRelativePath = ToAppRelative(virtualPath, store, language);
-            //TODO:
+
             var result = appRelativePath != null && appRelativePath.StartsWith("~")
                 ? _httpContextAccessor.HttpContext.Request.PathBase + appRelativePath.Replace("~", string.Empty)
                 : appRelativePath;
+
             return result;
         }
 

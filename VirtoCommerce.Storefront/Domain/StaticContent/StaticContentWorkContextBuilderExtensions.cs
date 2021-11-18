@@ -66,7 +66,6 @@ namespace VirtoCommerce.Storefront.Domain
             // all static content items
             Func<int, int, IEnumerable<SortInfo>, IPagedList<ContentItem>> factory = (pageNumber, pageSize, sorInfos) =>
             {
-                //TODO: performance and DDD specification instead if statements
                 var contentItems = staticContentService.LoadStoreStaticContent(store).Where(x => x.Language.IsInvariant || x.Language == language);
                 return new StaticPagedList<ContentItem>(contentItems, pageNumber, pageSize, contentItems.Count());
             };
@@ -95,7 +94,6 @@ namespace VirtoCommerce.Storefront.Domain
 
             Func<int, int, IEnumerable<SortInfo>, IPagedList<Blog>> factory = (pageNumber, pageSize, sorInfos) =>
             {
-                //TODO: performance and DDD specification instead if statements
                 var contentItems = staticContentService.LoadStoreStaticContent(store).Where(x => x.Language.IsInvariant || x.Language == language);
                 var blogs = contentItems.OfType<Blog>().ToArray();
                 var blogArticlesGroup = contentItems.OfType<BlogArticle>().GroupBy(x => x.BlogName, x => x).ToList();

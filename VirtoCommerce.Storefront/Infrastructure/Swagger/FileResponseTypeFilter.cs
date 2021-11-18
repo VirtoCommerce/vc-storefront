@@ -32,8 +32,6 @@ namespace VirtoCommerce.Storefront.Infrastructure.Swagger
                 response.Description = "OK";
                 response.Content = new Dictionary<string, OpenApiMediaType>
                 {
-
-                    // TODO: (AK) ? Consider to correct content key depending on real MIME
                     { "multipart/form-data", new OpenApiMediaType() { Schema = responseSchema } }
                 };
             }

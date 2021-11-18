@@ -85,7 +85,6 @@ namespace VirtoCommerce.LiquidThemeEngine
         /// </summary>
         public HttpContext HttpContext => _httpContextAccessor.HttpContext;
 
-        //TODO: move from here
         public IGraphQLClient GraphQLClient => _graphQLClient;
 
         /// <summary>
@@ -340,7 +339,6 @@ namespace VirtoCommerce.LiquidThemeEngine
                 return new ValueTask<string>(templateContent);
             }
 
-            //TODO: Handle _options.RethrowLiquidRenderErrors
             var cacheKey = CacheKey.With(GetType(), "ParseTemplate", templatePath ?? templateContent);
             var parsedTemplate = _memoryCache.GetOrCreate(cacheKey, (cacheItem) =>
             {
