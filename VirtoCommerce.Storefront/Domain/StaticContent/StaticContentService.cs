@@ -53,35 +53,36 @@ namespace VirtoCommerce.Storefront.Domain
 
                 cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { StaticContentCacheRegion.CreateChangeToken(), _contentBlobProvider.Watch(baseStoreContentPath + "/**/*") }));
 
-                if (_contentBlobProvider.PathExists(baseStoreContentPath))
+                if (!_contentBlobProvider.PathExists(baseStoreContentPath))
                 {
+                    return retVal.ToArray();
+                }
 
-                    // Search files by requested search pattern
-                    var contentBlobs = _contentBlobProvider.Search(baseStoreContentPath, searchPattern, true)
-                                                 .Where(x => _extensions.Any(x.EndsWith))
-                                                 .Select(x => x.Replace("\\\\", "\\"));
+                // Search files by requested search pattern
+                var contentBlobs = _contentBlobProvider.Search(baseStoreContentPath, searchPattern, true)
+                    .Where(x => _extensions.Any(x.EndsWith))
+                    .Select(x => x.Replace("\\\\", "\\"));
 
-                    // each content file  has a name pattern {name}.{language?}.{ext}
-                    var localizedBlobs = contentBlobs.Select(x => new LocalizedBlobInfo(x));
+                // each content file  has a name pattern {name}.{language?}.{ext}
+                var localizedBlobs = contentBlobs.Select(x => new LocalizedBlobInfo(x));
 
-                    foreach (var localizedBlob in localizedBlobs.OrderBy(x => x.Name))
+                foreach (var localizedBlob in localizedBlobs.OrderBy(x => x.Name))
+                {
+                    var blobRelativePath = "/" + localizedBlob.Path.TrimStart('/');
+                    var contentItem = _contentItemFactory.GetItemFromPath(blobRelativePath);
+
+                    if (contentItem == null)
                     {
-                        var blobRelativePath = "/" + localizedBlob.Path.TrimStart('/');
-                        var contentItem = _contentItemFactory.GetItemFromPath(blobRelativePath);
-                        if (contentItem != null)
-                        {
-                            if (contentItem.Name == null)
-                            {
-                                contentItem.Name = localizedBlob.Name;
-                            }
-
-                            contentItem.Language = localizedBlob.Language;
-                            contentItem.FileName = Path.GetFileName(blobRelativePath);
-                            contentItem.StoragePath = "/" + blobRelativePath.Replace(baseStoreContentPath + "/", string.Empty).TrimStart('/');
-                            LoadAndRenderContentItem(blobRelativePath, contentItem);
-                            retVal.Add(contentItem);
-                        }
+                        continue;
                     }
+
+                    contentItem.Name ??= localizedBlob.Name;
+
+                    contentItem.Language = localizedBlob.Language;
+                    contentItem.FileName = Path.GetFileName(blobRelativePath);
+                    contentItem.StoragePath = "/" + blobRelativePath.Replace(baseStoreContentPath + "/", string.Empty).TrimStart('/');
+                    LoadAndRenderContentItem(blobRelativePath, contentItem);
+                    retVal.Add(contentItem);
                 }
 
                 return retVal.ToArray();

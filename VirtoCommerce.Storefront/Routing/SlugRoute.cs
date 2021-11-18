@@ -37,6 +37,7 @@ namespace VirtoCommerce.Storefront.Routing
             if (!string.IsNullOrEmpty(path))
             {
                 var seoRouteResponse = await seoRouteService.HandleSlugRequestAsync(path, workContext);
+
                 if (seoRouteResponse != null)
                 {
                     if (seoRouteResponse.Redirect)
@@ -55,6 +56,7 @@ namespace VirtoCommerce.Storefront.Routing
                     }
 
                     var actionDescriptor = FindMatchingActionDescriptor(context.RouteData.Values, serviceProvider);
+
                     if (actionDescriptor != null)
                     {
                         context.Handler = httpContext =>

@@ -60,7 +60,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [AllowAnonymous]
         public async Task<ActionResult<UserActionIdentityResult>> Login([FromBody] Login login, [FromQuery] string returnUrl)
         {
-            var result = UserActionIdentityResult.Success;
             TryValidateModel(login);
 
             if (!ModelState.IsValid)
@@ -73,45 +72,58 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             login.UserName = login.UserName?.Trim();
 
             var user = await _signInManager.UserManager.FindByNameAsync(login.UserName);
+            var result = CheckLoginUser(user);
+            
+            if (result != UserActionIdentityResult.Success)
+            {
+                return result;
+            }
 
-            if (user == null)
+            var loginResult = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, login.RememberMe, lockoutOnFailure: true);
+
+            if (!loginResult.Succeeded)
             {
                 result = UserActionIdentityResult.Failed(SecurityErrorDescriber.LoginFailed());
             }
-            else if (!new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore))
-            {
-                result = UserActionIdentityResult.Failed(SecurityErrorDescriber.UserCannotLoginInStore());
-            }
-            else if (new IsUserLockedOutSpecification().IsSatisfiedBy(user))
-            {
-                result = UserActionIdentityResult.Failed(SecurityErrorDescriber.UserIsLockedOut());
-            }
-            else if (new IsUserSuspendedSpecification().IsSatisfiedBy(user))
-            {
-                result = UserActionIdentityResult.Failed(SecurityErrorDescriber.AccountIsBlocked());
-            }
             else
             {
-                var loginResult = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, login.RememberMe, lockoutOnFailure: true);
-
-                if (!loginResult.Succeeded)
+                await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                if (string.IsNullOrEmpty(returnUrl))
                 {
-                    result = UserActionIdentityResult.Failed(SecurityErrorDescriber.LoginFailed());
+                    return result;
                 }
-                else
-                {
-                    await _publisher.Publish(new UserLoginEvent(WorkContext, user));
-                    if (string.IsNullOrEmpty(returnUrl))
-                    {
-                        return result;
-                    }
 
-                    var newUrl = Url.IsLocalUrl(returnUrl) ? returnUrl : "~/";
-                    result.ReturnUrl = UrlBuilder.ToAppRelative(newUrl, WorkContext.CurrentStore, WorkContext.CurrentLanguage);
-                }
+                var newUrl = Url.IsLocalUrl(returnUrl) ? returnUrl : "~/";
+                result.ReturnUrl = UrlBuilder.ToAppRelative(newUrl, WorkContext.CurrentStore, WorkContext.CurrentLanguage);
             }
             return result;
         }
+
+        private UserActionIdentityResult CheckLoginUser(User user)
+        {
+            if (user == null)
+            {
+                return UserActionIdentityResult.Failed(SecurityErrorDescriber.LoginFailed());
+            }
+
+            if (!new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore))
+            {
+                return UserActionIdentityResult.Failed(SecurityErrorDescriber.UserCannotLoginInStore());
+            }
+
+            if (new IsUserLockedOutSpecification().IsSatisfiedBy(user))
+            {
+                return  UserActionIdentityResult.Failed(SecurityErrorDescriber.UserIsLockedOut());
+            }
+
+            if (new IsUserSuspendedSpecification().IsSatisfiedBy(user))
+            {
+                return UserActionIdentityResult.Failed(SecurityErrorDescriber.AccountIsBlocked());
+            }
+
+            return UserActionIdentityResult.Success;
+        }
+        
 
         // POST: storefrontapi/account/user
         [HttpPost("user")]

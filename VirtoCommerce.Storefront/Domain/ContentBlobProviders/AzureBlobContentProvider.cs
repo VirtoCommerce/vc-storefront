@@ -178,6 +178,7 @@ namespace VirtoCommerce.Storefront.Domain
             //Try to check that passed search pattern doesn't contain mask wildcard characters
             //this means that a direct link to the resource is passed, and we do not need to perform any search
             var directPath = Path.Combine(path, searchPattern);
+
             if (!searchPattern.FilePathHasMaskChars() && await PathExistsAsync(directPath))
             {
                 retVal.Add(directPath);
@@ -188,6 +189,7 @@ namespace VirtoCommerce.Storefront.Domain
                 BlobContinuationToken token = null;
                 var operationContext = new OperationContext();
                 var directory = GetCloudBlobDirectory(path);
+
                 do
                 {
                     var resultSegment = await directory.ListBlobsSegmentedAsync(recursive, BlobListingDetails.Metadata, null, token, _options.BlobRequestOptions, operationContext);
@@ -198,14 +200,17 @@ namespace VirtoCommerce.Storefront.Domain
                 // Loop over items within the container and output the length and URI.
                 foreach (var item in blobItems)
                 {
-                    if (item is CloudBlockBlob block)
+                    if (!(item is CloudBlockBlob block))
                     {
-                        var blobRelativePath = GetRelativeUrl(block.Uri.ToString());
-                        var fileName = Path.GetFileName(Uri.UnescapeDataString(block.Uri.ToString()));
-                        if (fileName.FitsMask(searchPattern))
-                        {
-                            retVal.Add(blobRelativePath);
-                        }
+                        continue;
+                    }
+
+                    var blobRelativePath = GetRelativeUrl(block.Uri.ToString());
+                    var fileName = Path.GetFileName(Uri.UnescapeDataString(block.Uri.ToString()));
+
+                    if (fileName.FitsMask(searchPattern))
+                    {
+                        retVal.Add(blobRelativePath);
                     }
                 }
             }
