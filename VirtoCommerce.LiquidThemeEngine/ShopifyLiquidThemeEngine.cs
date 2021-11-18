@@ -246,15 +246,13 @@ namespace VirtoCommerce.LiquidThemeEngine
             {
                 cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(filePath), _themeBlobProvider.Watch(CurrentThemeSettingPath) }));
 
-                using (var stream = GetAssetStreamAsync(filePath).GetAwaiter().GetResult())
+                using var stream = GetAssetStreamAsync(filePath).GetAwaiter().GetResult();
+                if (stream == null)
                 {
-                    if (stream == null)
-                    {
-                        throw new StorefrontException($"Theme resource for path '{filePath}' not found");
-                    }
-                    var hashAlgorithm = CryptoConfig.AllowOnlyFipsAlgorithms ? (SHA256)new SHA256CryptoServiceProvider() : new SHA256Managed();
-                    return WebEncoders.Base64UrlEncode(hashAlgorithm.ComputeHash(stream));
+                    throw new StorefrontException($"Theme resource for path '{filePath}' not found");
                 }
+                var hashAlgorithm = CryptoConfig.AllowOnlyFipsAlgorithms ? (SHA256)new SHA256CryptoServiceProvider() : new SHA256Managed();
+                return WebEncoders.Base64UrlEncode(hashAlgorithm.ComputeHash(stream));
             });
         }
 
@@ -493,10 +491,8 @@ namespace VirtoCommerce.LiquidThemeEngine
 
             if (themeBlobProvider.PathExists(settingsPath))
             {
-                using (var stream = themeBlobProvider.OpenRead(settingsPath))
-                {
-                    result = JsonConvert.DeserializeObject<JObject>(stream.ReadToString());
-                }
+                using var stream = themeBlobProvider.OpenRead(settingsPath);
+                result = JsonConvert.DeserializeObject<JObject>(stream.ReadToString());
             }
             return result;
         }
@@ -514,10 +510,8 @@ namespace VirtoCommerce.LiquidThemeEngine
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheItem) =>
             {
                 cacheItem.AddExpirationToken(new CompositeChangeToken(new[] { ThemeEngineCacheRegion.CreateChangeToken(), _themeBlobProvider.Watch(templatePath) }));
-                using (var stream = _themeBlobProvider.OpenRead(templatePath))
-                {
-                    return stream.ReadToString();
-                }
+                using var stream = _themeBlobProvider.OpenRead(templatePath);
+                return stream.ReadToString();
             });
         }
 

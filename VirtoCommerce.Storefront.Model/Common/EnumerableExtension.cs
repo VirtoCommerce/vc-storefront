@@ -16,11 +16,11 @@ namespace VirtoCommerce.Storefront.Model.Common
 
         public static int GetOrderIndependentHashCode<T>(this IEnumerable<T> source)
         {
-            int hash = 0;
+            var hash = 0;
             //Need to force order to get  order independent hash code
-            foreach (T element in source.OrderBy(x => x, Comparer<T>.Default))
+            foreach (var element in source.OrderBy(x => x, Comparer<T>.Default))
             {
-                hash = hash ^ EqualityComparer<T>.Default.GetHashCode(element);
+                hash ^= EqualityComparer<T>.Default.GetHashCode(element);
             }
             return hash;
         }

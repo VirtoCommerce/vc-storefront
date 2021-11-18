@@ -12,7 +12,10 @@ namespace VirtoCommerce.Storefront.Model.Common
             return (s, e) =>
             {
                 if (throttling)
+                {
                     return;
+                }
+
                 handler(s, e);
                 throttling = true;
                 Task.Delay(throttle).ContinueWith(x => throttling = false);

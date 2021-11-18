@@ -10,7 +10,7 @@ namespace VirtoCommerce.Storefront.Model.Common
         {
             string retVal = null;
 
-            language = language ?? Language.InvariantLanguage;
+            language ??= Language.InvariantLanguage;
 
             if (properties != null)
             {

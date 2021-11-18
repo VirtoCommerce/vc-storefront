@@ -15,8 +15,6 @@ namespace VirtoCommerce.Storefront.Domain
 
     public static partial class MemberConverter
     {
-        private static readonly char[] _nameSeparator = { ' ' };
-
         public static DynamicProperty ToDynamicProperty(this customerDto.DynamicObjectProperty propertyDto)
         {
             return propertyDto.JsonConvert<platformDto.DynamicObjectProperty>().ToDynamicProperty();

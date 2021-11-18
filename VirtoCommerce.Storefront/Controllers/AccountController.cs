@@ -585,7 +585,7 @@ namespace VirtoCommerce.Storefront.Controllers
             }
 
             var successViewName = "customers/forgot_password";
-            NotificationBase resetPasswordNotification = null;
+            NotificationBase resetPasswordNotification;
 
             if (_options.ResetPasswordNotificationGateway.EqualsInvariant("Phone"))
             {

@@ -25,7 +25,7 @@ namespace VirtoCommerce.Storefront.Model.Common
         public static string EnsureTrailingSlash(string path)
         {
             if (!string.IsNullOrEmpty(path) &&
-                path[path.Length - 1] != Path.DirectorySeparatorChar)
+                path[^1] != Path.DirectorySeparatorChar)
             {
                 return path + Path.DirectorySeparatorChar;
             }

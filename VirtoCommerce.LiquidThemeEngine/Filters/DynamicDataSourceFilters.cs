@@ -73,8 +73,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             public static string Rename(string name)
             {
                 var builder = new StringBuilder();
-                bool previousUpper = false;
-                for (int i = 0; i < name.Length; i++)
+                var previousUpper = false;
+
+                for (var i = 0; i < name.Length; i++)
                 {
                     var c = name[i];
                     if (char.IsUpper(c))

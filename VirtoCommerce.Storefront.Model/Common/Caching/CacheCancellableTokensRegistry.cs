@@ -10,7 +10,7 @@ namespace VirtoCommerce.Storefront.Model.Common.Caching
     /// </summary>
     public static class CacheCancellableTokensRegistry
     {
-        private static ConcurrentDictionary<string, CancellationTokenSource> _tokensDict = new ConcurrentDictionary<string, CancellationTokenSource>();
+        private static readonly ConcurrentDictionary<string, CancellationTokenSource> _tokensDict = new ConcurrentDictionary<string, CancellationTokenSource>();
         // Events are not used intentionally to restrict usage by multiple subscribers
         public static Action<TokenCancelledEventArgs> OnTokenCancelled { get; set; }
 

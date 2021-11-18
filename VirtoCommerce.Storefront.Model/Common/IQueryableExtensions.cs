@@ -31,16 +31,11 @@ namespace VirtoCommerce.Storefront.Model.Common
             {
                 throw new ArgumentNullException("sortInfos");
             }
-            IOrderedQueryable<T> retVal = null;
+
             var firstSortInfo = sortInfos.First();
-            if (firstSortInfo.SortDirection == SortDirection.Descending)
-            {
-                retVal = source.OrderByDescending(firstSortInfo.SortColumn);
-            }
-            else
-            {
-                retVal = source.OrderBy(firstSortInfo.SortColumn);
-            }
+
+            var retVal = firstSortInfo.SortDirection == SortDirection.Descending ? source.OrderByDescending(firstSortInfo.SortColumn) : source.OrderBy(firstSortInfo.SortColumn);
+
             return retVal.ThenBySortInfos(sortInfos.Skip(1).ToArray());
         }
 
@@ -67,16 +62,18 @@ namespace VirtoCommerce.Storefront.Model.Common
         public static IOrderedQueryable<T> ApplyOrder<T>(IQueryable<T> source, string property, string methodName)
         {
             if (property == null)
+            {
                 throw new ArgumentNullException("property");
+            }
 
-            string[] props = property.Split('.');
-            Type type = source.ElementType;
-            ParameterExpression arg = Expression.Parameter(type, "x");
+            var props = property.Split('.');
+            var type = source.ElementType;
+            var arg = Expression.Parameter(type, "x");
             Expression expr = arg;
-            foreach (string prop in props)
+            foreach (var prop in props)
             {
                 // use reflection (not ComponentModel) to mirror LINQ
-                PropertyInfo pi = type.GetProperty(prop, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+                var pi = type.GetProperty(prop, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                 if (pi != null)
                 {
                     expr = Expression.Property(expr, pi);
@@ -87,10 +84,11 @@ namespace VirtoCommerce.Storefront.Model.Common
                     return source.OrderBy(x => 1);
                 }
             }
-            Type delegateType = typeof(Func<,>).MakeGenericType(typeof(T), type);
-            LambdaExpression lambda = Expression.Lambda(delegateType, expr, arg);
 
-            object result = typeof(Queryable).GetMethods().Single(
+            var delegateType = typeof(Func<,>).MakeGenericType(typeof(T), type);
+            var lambda = Expression.Lambda(delegateType, expr, arg);
+
+            var result = typeof(Queryable).GetMethods().Single(
                     method => method.Name == methodName
                             && method.IsGenericMethodDefinition
                             && method.GetGenericArguments().Length == 2

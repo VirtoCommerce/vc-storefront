@@ -58,9 +58,14 @@ namespace VirtoCommerce.Storefront.Model.Common
         public void Slice(int pageNumber, int pageSize, IEnumerable<SortInfo> sortInfos, NameValueCollection @params = null)
         {
             if (pageNumber < 1)
+            {
                 throw new ArgumentOutOfRangeException("pageNumber", pageNumber, "PageNumber cannot be below 1.");
+            }
+
             if (pageSize < 1)
+            {
                 throw new ArgumentOutOfRangeException("pageSize", pageSize, "PageSize cannot be less than 1.");
+            }
 
             if (pageNumber != PageNumber)
             {
@@ -189,7 +194,7 @@ namespace VirtoCommerce.Storefront.Model.Common
 
         public bool Contains(object value)
         {
-            return TryGetValue(value, out var dummy);
+            return TryGetValue(value, out _);
         }
 
 

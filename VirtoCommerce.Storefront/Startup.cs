@@ -386,10 +386,8 @@ namespace VirtoCommerce.Storefront
             // Load IIS url rewrite rules from external file
             if (File.Exists("IISUrlRewrite.xml"))
             {
-                using (var iisUrlRewriteStreamReader = File.OpenText("IISUrlRewrite.xml"))
-                {
-                    rewriteOptions.AddIISUrlRewrite(iisUrlRewriteStreamReader);
-                }
+                using var iisUrlRewriteStreamReader = File.OpenText("IISUrlRewrite.xml");
+                rewriteOptions.AddIISUrlRewrite(iisUrlRewriteStreamReader);
             }
 
             rewriteOptions.Add(new StorefrontUrlNormalizeRule());

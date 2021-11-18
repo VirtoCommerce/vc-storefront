@@ -39,15 +39,13 @@ namespace VirtoCommerce.Storefront.Tests.Features
             var services = new CustomServiceCollection();
             var settingsJObject = ReadSettingsFile("full_data.json");
 
-            using (var serviceProvider = services.BuildServiceProvider())
-            {
-                // act
-                var featuresAgent = serviceProvider.GetService<IFeaturesAgent>();
-                var result = featuresAgent.IsActive(featureName, settingsJObject);
+            using var serviceProvider = services.BuildServiceProvider();
+            // act
+            var featuresAgent = serviceProvider.GetService<IFeaturesAgent>();
+            var result = featuresAgent.IsActive(featureName, settingsJObject);
 
-                // assert
-                Assert.Equal(expectedResult, result);
-            }
+            // assert
+            Assert.Equal(expectedResult, result);
         }
 
         [Theory]
@@ -61,15 +59,13 @@ namespace VirtoCommerce.Storefront.Tests.Features
             // in this sample were removed services from 'replaces' sections
             var settingsJObject = ReadSettingsFile("full_data_without_replaces.json");
 
-            using (var serviceProvider = services.BuildServiceProvider())
-            {
-                // act
-                var featuresAgent = serviceProvider.GetService<IFeaturesAgent>();
-                var result = featuresAgent.IsActive(featureName, settingsJObject);
+            using var serviceProvider = services.BuildServiceProvider();
+            // act
+            var featuresAgent = serviceProvider.GetService<IFeaturesAgent>();
+            var result = featuresAgent.IsActive(featureName, settingsJObject);
 
-                // assert
-                Assert.Equal(expectedResult, result);
-            }
+            // assert
+            Assert.Equal(expectedResult, result);
         }
 
         [Theory]
@@ -83,15 +79,13 @@ namespace VirtoCommerce.Storefront.Tests.Features
             // in this sample were removed services from 'replaces' sections
             var settingsJObject = ReadSettingsFile("full_data_with_conflicts.json");
 
-            using (var serviceProvider = services.BuildServiceProvider())
-            {
-                // act
-                var featuresAgent = serviceProvider.GetService<IFeaturesAgent>();
-                var result = featuresAgent.IsActive(featureName, settingsJObject);
+            using var serviceProvider = services.BuildServiceProvider();
+            // act
+            var featuresAgent = serviceProvider.GetService<IFeaturesAgent>();
+            var result = featuresAgent.IsActive(featureName, settingsJObject);
 
-                // assert
-                Assert.Equal(expectedResult, result);
-            }
+            // assert
+            Assert.Equal(expectedResult, result);
         }
 
         [Fact]
@@ -103,15 +97,13 @@ namespace VirtoCommerce.Storefront.Tests.Features
             // in this sample were removed services from 'replaces' sections
             var settingsJObject = ReadSettingsFile("full_data_with_disabled_feature.json");
 
-            using (var serviceProvider = services.BuildServiceProvider())
-            {
-                // act
-                var featuresAgent = serviceProvider.GetService<IFeaturesAgent>();
-                var result = featuresAgent.IsActive("OrdersBrowsing", settingsJObject);
+            using var serviceProvider = services.BuildServiceProvider();
+            // act
+            var featuresAgent = serviceProvider.GetService<IFeaturesAgent>();
+            var result = featuresAgent.IsActive("OrdersBrowsing", settingsJObject);
 
-                // assert
-                Assert.False(result);
-            }
+            // assert
+            Assert.False(result);
         }
 
         private static JObject ReadSettingsFile(string defaultFileName = "test_data.json")

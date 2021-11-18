@@ -222,7 +222,8 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static IEnumerable Sort(object input, string property = null)
         {
-            var ary = input is IEnumerable ? ((IEnumerable)input).Flatten().Cast<object>().ToList() : new List<object>(new[] { input });
+            var ary = input is IEnumerable enumerable ? enumerable.Flatten().Cast<object>().ToList() : new List<object>(new[] { input });
+
             if (!ary.Any())
             {
                 return ary;
@@ -447,7 +448,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static object First(IEnumerable array)
         {
-            return array == null ? null : array.Cast<object>().FirstOrDefault();
+            return array?.Cast<object>().FirstOrDefault();
         }
 
         /// <summary>
@@ -460,7 +461,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static object Last(IEnumerable array)
         {
-            return array == null ? null : array.Cast<object>().LastOrDefault();
+            return array?.Cast<object>().LastOrDefault();
         }
 
         /// <summary>
@@ -664,7 +665,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }
 
             var propertyInfo = type.GetProperty(member);
-            return propertyInfo != null ? propertyInfo.GetValue(value, null) : null;
+            return propertyInfo?.GetValue(value, null);
         }
     }
 
@@ -710,9 +711,11 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                     // For cultures with "," as the decimal separator, allow
                     // both "," and "." to be used as the separator.
                     // First try to parse using current culture.
-                    float result;
-                    if (float.TryParse(match.Groups[1].Value, out result))
+
+                    if (float.TryParse(match.Groups[1].Value, out var result))
+                    {
                         return result;
+                    }
 
                     // If that fails, try to parse using invariant culture.
                     return float.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture);

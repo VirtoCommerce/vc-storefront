@@ -10,7 +10,7 @@ namespace VirtoCommerce.Storefront.Model.Common
     /// </summary>
     public class Currency : ValueObject
     {
-        private static IDictionary<string, string> _isoCurrencySymbolDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase).WithDefaultValue(null);
+        private static readonly IDictionary<string, string> _isoCurrencySymbolDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase).WithDefaultValue(null);
         static Currency()
         {
             foreach (var ci in CultureInfo.GetCultures(CultureTypes.SpecificCultures))
@@ -75,7 +75,7 @@ namespace VirtoCommerce.Storefront.Model.Common
         {
             get
             {
-                return _language != null ? _language.CultureName : null;
+                return _language?.CultureName;
             }
             set
             {

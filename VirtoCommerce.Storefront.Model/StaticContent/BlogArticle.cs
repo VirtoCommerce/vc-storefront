@@ -6,7 +6,7 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
 {
     public partial class BlogArticle : ContentItem
     {
-        private static string _excerpToken = "<!--excerpt-->";
+        private static readonly string _excerpToken = "<!--excerpt-->";
 
         public override string Type { get { return "post"; } }
 
@@ -42,18 +42,15 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
 
             if (metaInfoMap.ContainsKey("is-sticked"))
             {
-                var isSticked = false;
 
-                bool.TryParse(metaInfoMap["is-sticked"].FirstOrDefault(), out isSticked);
+                bool.TryParse(metaInfoMap["is-sticked"].FirstOrDefault(), out var isSticked);
 
                 IsSticked = isSticked;
             }
 
             if (metaInfoMap.ContainsKey("is-trending"))
             {
-                var isTrending = false;
-
-                bool.TryParse(metaInfoMap["is-trending"].FirstOrDefault(), out isTrending);
+                bool.TryParse(metaInfoMap["is-trending"].FirstOrDefault(), out var isTrending);
 
                 IsTrending = isTrending;
             }
