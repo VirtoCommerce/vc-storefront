@@ -31,6 +31,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       NUGET_KEY: ${{ secrets.NUGET_KEY }}
       BLOB_SAS: ${{ secrets.BLOB_TOKEN }}
+      IMAGE_NAME: "storefront"
       PUBLISH_TO_DOCKER: "true"
       UPDATE_LATEST_TAG: "true"
       VERSION_SUFFIX: ""
@@ -106,7 +107,7 @@ jobs:
       uses: VirtoCommerce/vc-github-actions/build-docker-image@master
       with:
         tag: ${{ steps.image.outputs.taggedVersion }}
-        imageName: "storefront"
+        imageName: ${{ env.IMAGE_NAME }}
         dockerFiles: "https://raw.githubusercontent.com/VirtoCommerce/vc-docker/master/linux/storefront/Dockerfile"
 
     - name: Publish Github Release
