@@ -46,7 +46,7 @@ jobs:
       if: ${{ github.event_name == 'workflow_dispatch' }}
       run: |
         echo "PUBLISH_TO_DOCKER=false" >> $GITHUB_ENV
-        echo "UPDATE_LATEST_TAG=false" >> $GITHUB_ENV 
+        echo "UPDATE_LATEST_TAG=false" >> $GITHUB_ENV
 
     - uses: actions/checkout@v2
       with:
@@ -109,13 +109,6 @@ jobs:
         imageName: "storefront"
         dockerFiles: "https://raw.githubusercontent.com/VirtoCommerce/vc-docker/master/linux/storefront/Dockerfile"
 
-    # - name: Publish to Blob
-    #   if: ${{ github.ref == 'refs/heads/dev' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master')}}
-    #   id: blobRelease
-    #   uses: VirtoCommerce/vc-github-actions/publish-blob-release@master
-    #   with:
-    #     blobSAS: ${{ secrets.BLOB_TOKEN }}
-
     - name: Publish Github Release
       if: ${{ github.ref == 'refs/heads/master' }}
       with:
@@ -154,4 +147,3 @@ jobs:
         workflow: VC deployment
         token: ${{ secrets.REPO_TOKEN }}
         inputs: '{ "artifactUrl": "ghcr.io/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}" }'
-        
