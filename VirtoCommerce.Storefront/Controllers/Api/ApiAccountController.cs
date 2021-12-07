@@ -73,7 +73,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             var user = await _signInManager.UserManager.FindByNameAsync(login.UserName);
             var result = CheckLoginUser(user);
-            
+
             if (result != UserActionIdentityResult.Success)
             {
                 return result;
@@ -113,7 +113,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             if (new IsUserLockedOutSpecification().IsSatisfiedBy(user))
             {
-                return  UserActionIdentityResult.Failed(SecurityErrorDescriber.UserIsLockedOut());
+                return UserActionIdentityResult.Failed(SecurityErrorDescriber.UserIsLockedOut());
             }
 
             if (new IsUserSuspendedSpecification().IsSatisfiedBy(user))
@@ -123,7 +123,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             return UserActionIdentityResult.Success;
         }
-        
+
 
         // POST: storefrontapi/account/user
         [HttpPost("user")]
@@ -264,6 +264,15 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             return new UpdatePhoneNumberResult { Succeeded = result.Succeeded };
 
+        }
+
+        [HttpGet("logout")]
+        [AllowAnonymous]
+        public async Task<ActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return NoContent();
         }
 
         private static string GetUserEmail(User user)
