@@ -36,7 +36,14 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         {
             if (input != null)
             {
-                input = Math.Abs(Convert.ToDouble(input, CultureInfo.InvariantCulture));
+                if (int.TryParse(input.ToString(), out var integer))
+                {
+                    input = Math.Abs(integer);
+                }
+                else
+                {
+                    input = Math.Abs(Convert.ToDouble(input, CultureInfo.InvariantCulture));
+                }
             }
             return input;
         }
