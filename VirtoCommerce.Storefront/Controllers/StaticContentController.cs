@@ -99,11 +99,13 @@ namespace VirtoCommerce.Storefront.Controllers
         // GET: /blogs/{blog}, /blog, /blog/category/category, /blogs/{blog}/category/{category}, /blogs/{blog}/tag/{tag}, /blog/tag/{tag}
         [HttpGet("blogs/{blog}/category/{category}")]
         [Route("blog")]
+        [Route("blog/page/{pageNumber}")]
         [Route("blog/category/{category}")]
+        [Route("blog/category/{category}/page/{pageNumber}")]
         [Route("blog/tag/{tag}")]
         [Route("blogs/{blog}")]
         [Route("blogs/{blog}/tag/{tag}")]
-        public async Task<ActionResult> GetBlog(string blog = null, string category = null, string tag = null)
+        public async Task<ActionResult> GetBlog(string blog = null, string category = null, string tag = null, int pageNumber = 1)
         {
             var context = WorkContext;
             context.CurrentBlog = WorkContext.Blogs.FirstOrDefault();
@@ -113,6 +115,7 @@ namespace VirtoCommerce.Storefront.Controllers
             }
             WorkContext.CurrentBlogSearchCritera.Category = category;
             WorkContext.CurrentBlogSearchCritera.Tag = tag;
+            WorkContext.PageNumber = pageNumber;
 
             if (context.CurrentBlog != null)
             {
