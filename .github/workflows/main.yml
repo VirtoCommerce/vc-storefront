@@ -1,4 +1,4 @@
-# v1.1.5
+# v1.2.0
 name: Storefront CI
 
 on:
@@ -27,21 +27,27 @@ jobs:
     if: ${{ github.actor != 'dependabot[bot]' && (github.event.pull_request.head.repo.full_name == github.repository || github.event.pull_request.head.repo.full_name == '') }}  # Check that PR not from forked repo and not from Dependabot
     runs-on: ubuntu-latest
     env:
+      CLOUD_INSTANCE_BASE_URL: ${{secrets.CLOUD_INSTANCE_BASE_URL}}
+      CLIENT_ID: ${{secrets.CLIENT_ID}}
+      CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
       SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
       GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       NUGET_KEY: ${{ secrets.NUGET_KEY }}
       BLOB_SAS: ${{ secrets.BLOB_TOKEN }}
-      IMAGE_NAME: "storefront"
-      PUBLISH_TO_DOCKER: "true"
-      UPDATE_LATEST_TAG: "true"
-      VERSION_SUFFIX: ""
+      IMAGE_NAME: 'storefront'
+      PACKAGE_SERVER: 'ghcr.io'
+      PUBLISH_TO_DOCKER: 'false'
+      UPDATE_LATEST_TAG: 'true'
+      VERSION_SUFFIX: ''
+      BUILD_STATE: 'failed'
+      RELEASE_STATUS: 'false'
+    outputs:
+      artifactUrl:  ${{ steps.artifactUrl.outputs.DOCKER_URL }}
+      jira-keys: ${{ steps.jira_keys.outputs.jira-keys }}
+      deployConfigPath: '.deployment/storefront-app/argoDeploy.json'
+
 
     steps:
-
-    - name: Set up JDK 11 for dotnet-sonarscanner #Sonar stop accepting Java versions less than 11
-      uses: actions/setup-java@v1
-      with:
-        java-version: 1.11
 
     - name: Set variables
       if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -101,6 +107,11 @@ jobs:
     - name: Packaging
       run: vc-build Compress -skip Clean+Restore+Compile+Test
 
+    - name: Set artifactUrl value
+      id: artifactUrl
+      run: |
+        echo ::set-output name=DOCKER_URL::${{ env.PACKAGE_SERVER }}/${{github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}
+
     - name: Build Docker Image
       if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
       id: dockerBuild
@@ -139,12 +150,56 @@ jobs:
       if: ${{ github.event_name == 'pull_request' }}
       uses: VirtoCommerce/vc-github-actions/publish-artifact-link@master
       with:
-        artifactUrl: "ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}"
+        artifactUrl: ${{ steps.artifactUrl.outputs.DOCKER_URL }}
 
-    - name: Invoke VC image deployment workflow
-      if: ${{ github.ref == 'refs/heads/master' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master')}}
-      uses: benc-uk/workflow-dispatch@v1
+    - name: Parse Jira Keys from All Commits
+      uses: VirtoCommerce/vc-github-actions/get-jira-keys@master
+      if: always()
+      id: jira_keys
       with:
-        workflow: VC deployment
-        token: ${{ secrets.REPO_TOKEN }}
-        inputs: '{ "artifactUrl": "ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}" }'
+        release: ${{ env.RELEASE_STATUS }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: BUILD_STATE::successful
+      if: success()
+      run: echo "BUILD_STATE=successful" >> $GITHUB_ENV
+
+    - name: Push Build Info to Jira
+      if: ${{ env.CLOUD_INSTANCE_BASE_URL != 0 && env.CLIENT_ID != 0 && env.CLIENT_SECRET != 0 && steps.jira_keys.outputs.jira-keys != '' && always() }}
+      id: push_build_info_to_jira
+      uses: HighwayThree/jira-upload-build-info@master
+      with:
+        cloud-instance-base-url: '${{ secrets.CLOUD_INSTANCE_BASE_URL }}'
+        client-id: '${{ secrets.CLIENT_ID }}'
+        client-secret: '${{ secrets.CLIENT_SECRET }}'
+        pipeline-id: '${{ github.repository }} ${{ github.workflow }}'
+        build-number: ${{ github.run_number }}
+        build-display-name: 'Workflow: ${{ github.workflow }} (#${{ github.run_number }})'
+        build-state: '${{ env.BUILD_STATE }}'
+        build-url: '${{github.event.repository.url}}/actions/runs/${{github.run_id}}'
+        update-sequence-number: '${{ github.run_id }}'
+        last-updated: '${{github.event.head_commit.timestamp}}'
+        issue-keys: '${{ steps.jira_keys.outputs.jira-keys }}'
+        commit-id: '${{ github.sha }}'
+        repo-url: '${{ github.event.repository.url }}'
+        build-ref-url: '${{ github.event.repository.url }}/actions/runs/${{ github.run_id }}'
+
+    - name: Confirm Jira Build Output
+      if: success()
+      run: |
+        echo "Jira Upload Build Info response: ${{ steps.push_build_info_to_jira.outputs.response }}"
+
+  dev_cd:
+    if: github.ref == 'refs/heads/dev' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master')
+    needs: ci
+    runs-on: ubuntu-latest
+    env:
+      DEPLOYMENT_ENV: 'dev'
+    steps:
+      - name: Invoke Module deployment workflow
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: VC deployment
+          token: ${{ secrets.REPO_TOKEN }}
+          inputs: '{ "artifactUrl": "${{ needs.ci.outputs.artifactUrl }}", "deployEnvironment": "${{ env.DEPLOYMENT_ENV }}", "deployConfigPath": "${{ needs.ci.outputs.deployConfigPath}}", "jiraKeys":"${{ needs.ci.outputs.jira-keys }}" }'
