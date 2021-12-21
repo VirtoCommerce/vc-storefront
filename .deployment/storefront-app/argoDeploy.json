@@ -1,0 +1,29 @@
+{
+    "artifactKey": "docker.pkg.github.com/virtocommerce/vc-storefront/storefront",
+    "deployRepo": "vc-deploy-dev",
+    "cmPath": "storefront-app/resources/kustomization.yaml",
+    "dev": {
+        "deployAppName": "storefront-app-dev",
+        "deployBranch": "dev",
+        "environmentId" : "dev",
+        "environmentName" : "Development",
+        "environmentType" : "development",
+        "environmentUrl" : "https://st-platform.dev.govirto.com/"
+    },
+    "qa": {
+        "deployAppName": "storefront-app-qa",
+        "deployBranch": "qa",
+        "environmentId" : "qa",
+        "environmentName" : "QA",
+        "environmentType" : "testing",
+        "environmentUrl" : "https://st-platform.qa.govirto.com/"
+    },
+     "prod": {
+        "deployAppName": "storefront-app-demo",
+        "deployBranch": "demo",
+        "environmentId" : "demo",
+        "environmentName" : "Demo",
+        "environmentType" : "production",
+        "environmentUrl" : "https://st-platform.demo.govirto.com/"
+    }
+}
