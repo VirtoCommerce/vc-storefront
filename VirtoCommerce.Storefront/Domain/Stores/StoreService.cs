@@ -66,7 +66,7 @@ namespace VirtoCommerce.Storefront.Domain
             result.Url = _storefrontOptions.StoreUrls[result.Id] ?? result.Url;
 
             //theme name defined in storefront app options has a higher prioirty over one defined in admin
-            result.ThemeName = !_storefrontOptions.DefaultTheme.IsNullOrEmpty()
+            result.ThemeName = !string.IsNullOrEmpty(_storefrontOptions.DefaultTheme)
                 ? _storefrontOptions.DefaultTheme
                 : result.ThemeName;
 
