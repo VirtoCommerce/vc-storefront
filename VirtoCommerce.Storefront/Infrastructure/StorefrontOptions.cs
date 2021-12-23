@@ -8,6 +8,9 @@ namespace VirtoCommerce.Storefront.Infrastructure
     public class StorefrontOptions
     {
         public string DefaultStore { get; set; }
+
+        public string DefaultTheme { get; set; }
+
         public TimeSpan ChangesPollingInterval { get; set; } = TimeSpan.FromMinutes(1);
         public PlatformEndpointOptions Endpoint { get; set; }
         public LiquidThemeEngineOptions LiquidThemeEngine { get; set; }
