@@ -28,6 +28,7 @@ jobs:
       CLOUD_INSTANCE_BASE_URL: ${{secrets.CLOUD_INSTANCE_BASE_URL}}
       CLIENT_ID: ${{secrets.CLIENT_ID}}
       CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+      ARGO_SERVER: 'argo.govirto.com'
 
     steps: 
 
