@@ -5,7 +5,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models;
-using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models;
@@ -91,6 +90,11 @@ namespace VirtoCommerce.Storefront.Domain
 
             //use url for stores from configuration file with hight priority than store url defined in manager
             result.Url = _storefrontOptions.StoreUrls[result.Id] ?? result.Url;
+
+            //theme name defined in storefront app options has a higher prioirty over one defined in admin
+            result.ThemeName = !string.IsNullOrEmpty(_storefrontOptions.DefaultTheme)
+                ? _storefrontOptions.DefaultTheme
+                : result.ThemeName;
 
             return result;
         }
