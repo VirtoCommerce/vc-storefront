@@ -1,0 +1,20 @@
+User-agent: *
+Allow:*.woff
+Allow:*.ttf
+Allow:*.css
+Allow:*.js
+Allow:*.jpg
+Allow:*.png
+Allow:*.tiff
+Allow:*.webp
+Allow:*.svg
+Disallow: /search?q=
+Disallow: /assets/files/virtocommerce-product-release-notes-2019.pdf
+Disallow: /assets/files/whitepaper-5-reasons-to-switch-your-ecommerce-to-the-cloud.pdf
+Disallow: /assets/files/whitepaper-top-5-b2b-challenges.pdf
+Disallow: /en-us
+Disallow: /implementation/multi-touch
+Disallow: /solutions/b2x
+Disallow: /solutions/b2b
+
+Sitemap: https://virtocommerce.com/sitemap.xml
