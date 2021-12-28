@@ -65,6 +65,11 @@ namespace VirtoCommerce.Storefront.Domain
             //use url for stores from configuration file with hight priority than store url defined in manager
             result.Url = _storefrontOptions.StoreUrls[result.Id] ?? result.Url;
 
+            //theme name defined in storefront app options has a higher prioirty over one defined in admin
+            result.ThemeName = !string.IsNullOrEmpty(_storefrontOptions.DefaultTheme)
+                ? _storefrontOptions.DefaultTheme
+                : result.ThemeName;
+
             return Task.FromResult(result);
         }
 
