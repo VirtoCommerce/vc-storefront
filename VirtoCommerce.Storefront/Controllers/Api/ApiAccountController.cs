@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -328,6 +329,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             else // "Email"
             {
                 var token = await _signInManager.UserManager.GeneratePasswordResetTokenAsync(user);
+                token = WebUtility.UrlEncode(token);
                 var resetPasswordUri = new UriBuilder(forgotPassword.ResetPasswordUrl) { Query = $"userId={user.Id}&token={token}" };
 
                 resetPasswordNotification = new ResetPasswordEmailNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
@@ -351,7 +353,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/account/validateToken
         [HttpPost("validateToken")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserActionIdentityResult>> ValidateResetPasswordToken([FromBody] ResetPasswordModel model)
+        public async Task<ActionResult<UserActionIdentityResult>> ValidateResetPasswordToken([FromBody] ValidateTokenModel model)
         {
             var result = UserActionIdentityResult.Success;
 
