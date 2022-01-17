@@ -266,6 +266,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         }
 
+        // POST: storefrontapi/account/logout
         [HttpGet("logout")]
         [AllowAnonymous]
         public async Task<ActionResult> Logout()
@@ -274,6 +275,154 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             return NoContent();
         }
+
+        // POST: storefrontapi/account/forgotpassword
+        [HttpPost("forgotPassword")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserActionIdentityResult>> ForgotPassword([FromBody] ForgotPassword forgotPassword)
+        {
+            var result = UserActionIdentityResult.Success;
+
+            TryValidateModel(forgotPassword);
+
+            if (!ModelState.IsValid)
+            {
+                return UserActionIdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors)
+                    .Select(x => new IdentityError { Description = x.ErrorMessage })
+                    .ToArray());
+            }
+
+            var user = await _signInManager.UserManager.FindByEmailAsync(forgotPassword.Email);
+
+            if (user == null)
+            {
+                user = await _signInManager.UserManager.FindByNameAsync(forgotPassword.Email);
+            }
+
+            if (user == null)
+            {
+                // Don't reveal that the user does not exist
+                return result;
+            }
+
+            NotificationBase resetPasswordNotification;
+
+            if (_options.ResetPasswordNotificationGateway.EqualsInvariant("Phone"))
+            {
+                var phoneNumber = await _signInManager.UserManager.GetPhoneNumberAsync(user);
+
+                if (string.IsNullOrEmpty(phoneNumber))
+                {
+                    return UserActionIdentityResult.Failed(SecurityErrorDescriber.PhoneNumberNotFound());
+                }
+
+                var token = await _signInManager.UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultPhoneProvider, "ResetPassword");
+
+                resetPasswordNotification = new ResetPasswordSmsNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                {
+                    Token = token,
+                    Recipient = phoneNumber,
+                };
+            }
+            else // "Email"
+            {
+                var token = await _signInManager.UserManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { UserId = user.Id, Token = token }, protocol: Request.Scheme, host: WorkContext.CurrentStore.Host);
+
+                resetPasswordNotification = new ResetPasswordEmailNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
+                {
+                    Url = callbackUrl,
+                    Sender = WorkContext.CurrentStore.Email,
+                    Recipient = GetUserEmail(user)
+                };
+            }
+
+            var sendingResult = await SendNotificationAsync(resetPasswordNotification);
+
+            if (sendingResult.IsSuccess == false)
+            {
+                return UserActionIdentityResult.Failed(SecurityErrorDescriber.ErrorSendNotification(sendingResult.ErrorMessage));
+            }
+
+            return result;
+        }
+
+        // POST: storefrontapi/account/validateToken
+        [HttpPost("validateToken")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserActionIdentityResult>> ValidateResetPasswordToken([FromBody] ResetPasswordModel model)
+        {
+            var result = UserActionIdentityResult.Success;
+
+            TryValidateModel(model);
+
+            if (!ModelState.IsValid)
+            {
+                return UserActionIdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors)
+                    .Select(x => new IdentityError { Description = x.ErrorMessage })
+                    .ToArray());
+            }
+
+            var user = await _signInManager.UserManager.FindByIdAsync(model.UserId);
+
+            if (user == null)
+            {
+                // Don't reveal that the user does not exist
+                return result;
+            }
+
+            var isValidToken = await _signInManager.UserManager.VerifyUserTokenAsync(user, _signInManager.UserManager.Options.Tokens.PasswordResetTokenProvider, UserManager<User>.ResetPasswordTokenPurpose, token);
+
+            if (!isValidToken)
+            {
+                return UserActionIdentityResult.Failed(SecurityErrorDescriber.InvalidToken());
+            }
+
+            return result;
+        }
+
+        // POST: storefrontapi/account/resetPassword
+        [HttpPost("resetPassword")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserActionIdentityResult>> ResetPassword([FromBody] ResetPasswordModel model)
+        {
+            var result = UserActionIdentityResult.Success;
+
+            TryValidateModel(model);
+            // Need reassign the passed form to the current context to allow for user post it again with initial data such as Token and Email
+            WorkContext.Form = Form.FromObject(model);
+
+            if (string.IsNullOrEmpty(model.UserId))
+            {
+                return UserActionIdentityResult.Failed(SecurityErrorDescriber.ResetPasswordInvalidData());
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return UserActionIdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors)
+                    .Select(x => new IdentityError { Description = x.ErrorMessage })
+                    .ToArray());
+            }
+
+            var user = await _signInManager.UserManager.FindByIdAsync(model.UserId);
+
+            if (user == null)
+            {
+                // Don't reveal that the user does not exist
+                return result;
+            }
+
+            var resetPasswordResult = await _signInManager.UserManager.ResetPasswordAsync(user, model.Token, model.Password);
+
+
+            if (!resetPasswordResult.Succeeded)
+            {
+                result = UserActionIdentityResult.Failed(resetPasswordResult.Errors.ToArray());
+            }
+
+            return result;
+        }
+
 
         private static string GetUserEmail(User user)
         {
