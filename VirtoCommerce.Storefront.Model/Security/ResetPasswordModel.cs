@@ -2,9 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace VirtoCommerce.Storefront.Model.Security
 {
-    public partial class ResetPasswordModel
+    public class ResetPasswordModel
     {
-
         [Required(ErrorMessage = "A Token is required")]
         public string UserId { get; set; }
 

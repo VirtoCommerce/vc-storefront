@@ -171,6 +171,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 {
                     var token = await _signInManager.UserManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { UserId = user.Id, Token = token }, protocol: Request.Scheme, host: WorkContext.CurrentStore.Host);
+
                     var emailConfirmationNotification = new EmailConfirmationNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
                     {
                         Url = callbackUrl,
@@ -279,7 +280,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/account/forgotpassword
         [HttpPost("forgotPassword")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserActionIdentityResult>> ForgotPassword([FromBody] ForgotPassword forgotPassword)
+        public async Task<ActionResult<UserActionIdentityResult>> ForgotPassword([FromBody] ForgotPasswordModel forgotPassword)
         {
             var result = UserActionIdentityResult.Success;
 
@@ -327,11 +328,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             else // "Email"
             {
                 var token = await _signInManager.UserManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { UserId = user.Id, Token = token }, protocol: Request.Scheme, host: WorkContext.CurrentStore.Host);
+                var resetPasswordUri = new UriBuilder(forgotPassword.ResetPasswordUrl) { Query = $"userId={user.Id}&token={token}" };
 
                 resetPasswordNotification = new ResetPasswordEmailNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
                 {
-                    Url = callbackUrl,
+                    Url = resetPasswordUri.ToString(),
                     Sender = WorkContext.CurrentStore.Email,
                     Recipient = GetUserEmail(user)
                 };
@@ -371,7 +372,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 return result;
             }
 
-            var isValidToken = await _signInManager.UserManager.VerifyUserTokenAsync(user, _signInManager.UserManager.Options.Tokens.PasswordResetTokenProvider, UserManager<User>.ResetPasswordTokenPurpose, token);
+            var isValidToken = await _signInManager.UserManager.VerifyUserTokenAsync(user, _signInManager.UserManager.Options.Tokens.PasswordResetTokenProvider, UserManager<User>.ResetPasswordTokenPurpose, model.Token);
 
             if (!isValidToken)
             {
@@ -389,8 +390,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             var result = UserActionIdentityResult.Success;
 
             TryValidateModel(model);
-            // Need reassign the passed form to the current context to allow for user post it again with initial data such as Token and Email
-            WorkContext.Form = Form.FromObject(model);
 
             if (string.IsNullOrEmpty(model.UserId))
             {
