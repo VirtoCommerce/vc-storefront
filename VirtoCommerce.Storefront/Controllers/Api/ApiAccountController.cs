@@ -371,7 +371,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             if (user == null)
             {
                 // Don't reveal that the user does not exist
-                return result;
+                return UserActionIdentityResult.Failed(SecurityErrorDescriber.InvalidToken());
             }
 
             var isValidToken = await _signInManager.UserManager.VerifyUserTokenAsync(user, _signInManager.UserManager.Options.Tokens.PasswordResetTokenProvider, UserManager<User>.ResetPasswordTokenPurpose, model.Token);
