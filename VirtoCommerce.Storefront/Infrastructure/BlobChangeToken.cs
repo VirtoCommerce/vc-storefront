@@ -26,7 +26,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
         private DateTime _lastModifiedUtc;
         private DateTime _prevModifiedUtc;
         private static DateTime _lastCheckedTimeUtcStatic;
-        private static readonly object _lock = new object();
+        private static object _lock = new object();
 
         public BlobChangeToken(string blobName, CloudBlobContainer container, AzureBlobContentOptions options)
         {
@@ -36,11 +36,6 @@ namespace VirtoCommerce.Storefront.Infrastructure
             _options = options;
 
             _lastModifiedUtc = _prevModifiedUtc = DateTime.UtcNow;
-        }
-
-        public static void UpdateLastCheckedTimeUtcStatic(DateTime currentTime)
-        {
-            _lastCheckedTimeUtcStatic = currentTime;
         }
 
         public bool HasChanged
@@ -64,21 +59,22 @@ namespace VirtoCommerce.Storefront.Infrastructure
                     return _hasChanged;
                 }
 
-                var lockTaken = Monitor.TryEnter(_lock);
-
-                try
+                Task.Run(() =>
                 {
+                    bool lockTaken = Monitor.TryEnter(_lock);
                     if (lockTaken)
                     {
-                        Task.Run(() => EvaluateBlobsModifiedDate());
-                        UpdateLastCheckedTimeUtcStatic(currentTime);
+                        try
+                        {
+                            EvaluateBlobsModifiedDate();
+                        }
+                        finally
+                        {
+                            Monitor.Exit(_lock);
+                        }
                     }
-                }
-                finally
-                {
-                    if (lockTaken)
-                        Monitor.Exit(_lock);
-                }
+                    _lastCheckedTimeUtcStatic = currentTime;
+                });
 
                 return _hasChanged;
             }
@@ -101,8 +97,13 @@ namespace VirtoCommerce.Storefront.Infrastructure
         private static bool WildcardMatch(string wildcard, string filename)
         {
             // it's a simplest realization for case when wildcard ends with **/*
-            var path = wildcard.Split('*')[0];
+            var path = PrefixFromWildcard(wildcard);
             return filename.StartsWith(path, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private static string PrefixFromWildcard(string wildcard)
+        {
+            return wildcard.Split('*')[0];
         }
 
         private bool IsRegularFileName(string pattern)
@@ -116,13 +117,11 @@ namespace VirtoCommerce.Storefront.Infrastructure
             foreach (var file in files)
             {
                 if (cancellationToken.IsCancellationRequested)
-                {
                     break;
-                }
 
                 var lastModifiedUtc = file.Properties.LastModified?.UtcDateTime ?? DateTime.UtcNow;
 
-                if (!_previousChangeTimeUtcTokenLookup.TryGetValue(file.Name, out var dt))
+                if (!_previousChangeTimeUtcTokenLookup.TryGetValue(file.Name, out DateTime dt))
                 {
                     _previousChangeTimeUtcTokenLookup.GetOrAdd(file.Name, lastModifiedUtc);
                 }
@@ -140,7 +139,9 @@ namespace VirtoCommerce.Storefront.Infrastructure
             var operationContext = new OperationContext();
             do
             {
-                var resultSegment = await _container.ListBlobsSegmentedAsync(null, true, BlobListingDetails.Metadata, null, token, _options.BlobRequestOptions, operationContext);
+                var prefix = PrefixFromWildcard(BlobName);
+                var resultSegment = await _container.ListBlobsSegmentedAsync(
+                    prefix, true, BlobListingDetails.Metadata, null, token, _options.BlobRequestOptions, operationContext);
                 token = resultSegment.ContinuationToken;
                 blobItems.AddRange(resultSegment.Results);
             } while (token != null);
