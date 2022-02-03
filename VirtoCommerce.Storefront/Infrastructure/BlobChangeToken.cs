@@ -38,6 +38,11 @@ namespace VirtoCommerce.Storefront.Infrastructure
             _lastModifiedUtc = _prevModifiedUtc = DateTime.UtcNow;
         }
 
+        private static void UpdateLastCheckedTimeUtcStatic(DateTime currentTime)
+        {
+            _lastCheckedTimeUtcStatic = currentTime;
+        }
+
         public bool HasChanged
         {
             get
@@ -66,8 +71,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
                     {
                         return _hasChanged;
                     }
-
-                    _lastCheckedTimeUtcStatic = currentTime;
+                    UpdateLastCheckedTimeUtcStatic(currentTime);
                     Task.Run(() =>
                     {
                         EvaluateBlobsModifiedDate();
