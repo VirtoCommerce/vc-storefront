@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -59,22 +60,20 @@ namespace VirtoCommerce.Storefront.Infrastructure
                     return _hasChanged;
                 }
 
-                Task.Run(() =>
+                lock (_lock)
                 {
-                    bool lockTaken = Monitor.TryEnter(_lock);
-                    if (lockTaken)
+                    currentTime = DateTime.UtcNow;
+                    if (currentTime - _lastCheckedTimeUtcStatic < _options.ChangesPollingInterval)
                     {
-                        try
-                        {
-                            EvaluateBlobsModifiedDate();
-                        }
-                        finally
-                        {
-                            Monitor.Exit(_lock);
-                        }
+                        return _hasChanged;
                     }
+
                     _lastCheckedTimeUtcStatic = currentTime;
-                });
+                    Task.Run(() =>
+                    {
+                        EvaluateBlobsModifiedDate();
+                    });
+                }
 
                 return _hasChanged;
             }
@@ -97,13 +96,8 @@ namespace VirtoCommerce.Storefront.Infrastructure
         private static bool WildcardMatch(string wildcard, string filename)
         {
             // it's a simplest realization for case when wildcard ends with **/*
-            var path = PrefixFromWildcard(wildcard);
+            var path = wildcard.Split('*')[0];
             return filename.StartsWith(path, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        private static string PrefixFromWildcard(string wildcard)
-        {
-            return wildcard.Split('*')[0];
         }
 
         private bool IsRegularFileName(string pattern)
@@ -139,9 +133,8 @@ namespace VirtoCommerce.Storefront.Infrastructure
             var operationContext = new OperationContext();
             do
             {
-                var prefix = PrefixFromWildcard(BlobName);
                 var resultSegment = await _container.ListBlobsSegmentedAsync(
-                    prefix, true, BlobListingDetails.Metadata, null, token, _options.BlobRequestOptions, operationContext);
+                    null, true, BlobListingDetails.Metadata, null, token, _options.BlobRequestOptions, operationContext);
                 token = resultSegment.ContinuationToken;
                 blobItems.AddRange(resultSegment.Results);
             } while (token != null);
