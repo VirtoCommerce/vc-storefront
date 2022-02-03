@@ -38,11 +38,6 @@ namespace VirtoCommerce.Storefront.Infrastructure
             _lastModifiedUtc = _prevModifiedUtc = DateTime.UtcNow;
         }
 
-        public static void UpdateLastCheckedTimeUtcStatic(DateTime currentTime)
-        {
-            _lastCheckedTimeUtcStatic = currentTime;
-        }
-
         public bool HasChanged
         {
             get
@@ -64,23 +59,20 @@ namespace VirtoCommerce.Storefront.Infrastructure
                     return _hasChanged;
                 }
 
-                Task.Run(() =>
+                lock (_lock)
                 {
-                    var lockTaken = Monitor.TryEnter(_lock);
-
-                    if (lockTaken)
+                    currentTime = DateTime.UtcNow;
+                    if (currentTime - _lastCheckedTimeUtcStatic < _options.ChangesPollingInterval)
                     {
-                        try
-                        {
-                            EvaluateBlobsModifiedDate();
-                            UpdateLastCheckedTimeUtcStatic(currentTime);
-                        }
-                        finally
-                        {
-                            Monitor.Exit(_lock);
-                        }
+                        return _hasChanged;
                     }
-                });
+
+                    _lastCheckedTimeUtcStatic = currentTime;
+                    Task.Run(() =>
+                    {
+                        EvaluateBlobsModifiedDate();
+                    });
+                }
 
                 return _hasChanged;
             }
@@ -100,15 +92,10 @@ namespace VirtoCommerce.Storefront.Infrastructure
             }
         }
 
-        private static string GetPrefixFromWildcard(string wildcard)
-        {
-            return wildcard.Split('*')[0];
-        }
-
         private static bool WildcardMatch(string wildcard, string filename)
         {
             // it's a simplest realization for case when wildcard ends with **/*
-            var path = GetPrefixFromWildcard(wildcard);
+            var path = wildcard.Split('*')[0];
             return filename.StartsWith(path, StringComparison.InvariantCultureIgnoreCase);
         }
 
@@ -147,8 +134,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
             var operationContext = new OperationContext();
             do
             {
-                var prefix = GetPrefixFromWildcard(BlobName);
-                var resultSegment = await _container.ListBlobsSegmentedAsync(prefix, true, BlobListingDetails.Metadata, null, token, _options.BlobRequestOptions, operationContext);
+                var resultSegment = await _container.ListBlobsSegmentedAsync(null, true, BlobListingDetails.Metadata, null, token, _options.BlobRequestOptions, operationContext);
                 token = resultSegment.ContinuationToken;
                 blobItems.AddRange(resultSegment.Results);
             } while (token != null);
