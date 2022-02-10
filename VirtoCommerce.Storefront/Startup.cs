@@ -24,6 +24,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using VirtoCommerce.LiquidThemeEngine;
+using VirtoCommerce.LiquidThemeEngine.PostRenderTemplateChange;
 using VirtoCommerce.Storefront.Binders;
 using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.DependencyInjection;
@@ -131,6 +132,9 @@ namespace VirtoCommerce.Storefront
 
             // register features toggling agent
             services.AddSingleton<IFeaturesAgent, FeaturesAgent>();
+
+            // register Liquid post render template handler
+            services.AddSingleton<IPostRenderTemplateChange, PostRenderTemplateChanger>();
 
             //Cache
             var redisConnectionString = Configuration.GetConnectionString("RedisConnectionString");
