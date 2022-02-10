@@ -55,7 +55,14 @@ namespace VirtoCommerce.Storefront.Domain
                         {
                             if (entry.Key is YamlScalarNode node)
                             {
-                                metadata.Add(node.Value, GetYamlNodeValues(entry.Value));
+                                if (entry.Value is YamlSequenceNode list)
+                                {
+                                    metadata.Add(node.Value, GetYamlNodeValues(list));
+                                }
+                                else
+                                {
+                                    metadata.Add(node.Value, entry.Value);
+                                }
                             }
                         }
                     }

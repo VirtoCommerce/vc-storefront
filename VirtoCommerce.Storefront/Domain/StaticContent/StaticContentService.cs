@@ -118,7 +118,7 @@ namespace VirtoCommerce.Storefront.Domain
             // Transform permalink template to url
             contentItem.Url = GetContentItemUrl(contentItem, contentItem.Permalink);
             // Transform aliases permalink templates to urls
-            contentItem.AliasesUrls = contentItem.Aliases.Select(x => GetContentItemUrl(contentItem, x)).ToList();
+            contentItem.AliasesUrls = contentItem.Aliases?.Select(x => GetContentItemUrl(contentItem, x)).ToList();
         }
 
         private static string GetContentItemUrl(ContentItem item, string permalink)
