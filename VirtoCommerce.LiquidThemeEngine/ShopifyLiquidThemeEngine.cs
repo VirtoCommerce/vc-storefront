@@ -348,9 +348,9 @@ namespace VirtoCommerce.LiquidThemeEngine
 
             var result = parsedTemplate.Render(templateContext);
 
-            _postRenderTemplateChange.Change(ref result);
+            var changedResult = _postRenderTemplateChange.Change(result);
 
-            return new ValueTask<string>(result);
+            return new ValueTask<string>(changedResult);
         }
 
         /// <summary>

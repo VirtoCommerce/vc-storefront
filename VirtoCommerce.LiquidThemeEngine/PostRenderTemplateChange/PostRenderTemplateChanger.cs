@@ -12,12 +12,13 @@ namespace VirtoCommerce.LiquidThemeEngine.PostRenderTemplateChange
 
         public IList<IPostRenderTemplateChangeOperation> Operations => _operations;
 
-        public void Change(ref string renderResult)
+        public string Change(string renderResult)
         {
             foreach (var operation in Operations)
             {
-                operation.Run(ref renderResult);
+                renderResult = operation.Run(renderResult);
             }
+            return renderResult;
         }
     }
 }

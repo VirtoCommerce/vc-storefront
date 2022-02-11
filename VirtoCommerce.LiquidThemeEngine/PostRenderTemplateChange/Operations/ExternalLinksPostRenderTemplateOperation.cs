@@ -5,20 +5,22 @@ namespace VirtoCommerce.LiquidThemeEngine.PostRenderTemplateChange.Operations
 {
     public class ExternalLinksPostRenderTemplateOperation : IPostRenderTemplateChangeOperation
     {
-        public void Run(ref string renderResult)
+        private readonly Regex _linksTagsRegex = new Regex(@"<\s*a[^>]*>(.*?)<\s*/\s*a>", RegexOptions.Compiled);
+        private readonly Regex _hrefAttrRegex = new Regex(@"(?<=\bhref\s*=\s*[""'])[^""']*", RegexOptions.Compiled);
+
+        public string Run(string renderResult)
         {
-            var linksTagsRegex = new Regex(@"<\s*a[^>]*>(.*?)<\s*/\s*a>");
-            var hrefAttrRegex = new Regex(@"(?<=\bhref="")[^""]*");
-            var matches = linksTagsRegex.Matches(renderResult).Where(m => m.Success).Select(m => m.Value);
+            var matches = _linksTagsRegex.Matches(renderResult).Where(m => m.Success).Select(m => m.Value);
             foreach (var match in matches)
             {
-                var hrefAttrValue = hrefAttrRegex.Match(match).Value;
-                if (hrefAttrValue.Trim().StartsWith("http"))
+                var hrefAttrValue = _hrefAttrRegex.Match(match).Value.Trim().ToUpper();
+                if (hrefAttrValue.StartsWith("HTTP:") || hrefAttrValue.StartsWith("HTTPS:"))
                 {
                     var matchWithRel = match.Replace("<a", "<a rel=\"nofollow\" target=\"_blank\"");
                     renderResult = renderResult.Replace(match, matchWithRel);
                 }
             }
+            return renderResult;
         }
     }
 }
