@@ -9,6 +9,7 @@ using Microsoft.Extensions.Primitives;
 using Moq;
 using Newtonsoft.Json.Linq;
 using VirtoCommerce.LiquidThemeEngine;
+using VirtoCommerce.LiquidThemeEngine.PostRenderTemplateChange;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Features;
@@ -295,7 +296,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
         private ShopifyLiquidThemeEngine GetThemeEngine(bool useThemesInheritance, LiquidThemeEngineOptions options)
         {
             return new ShopifyLiquidThemeEngine(MemoryCache, GetWorkContextAccessor(useThemesInheritance), HttpContextAccessor,
-                null, ContentBlobProvider, null, new OptionsWrapper<LiquidThemeEngineOptions>(options), new FeaturesAgent());
+                null, ContentBlobProvider, null, new OptionsWrapper<LiquidThemeEngineOptions>(options), new FeaturesAgent(), new PostRenderTemplateChanger());
         }
 
         public void Dispose()
