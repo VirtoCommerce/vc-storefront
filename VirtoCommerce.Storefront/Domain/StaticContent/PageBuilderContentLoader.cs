@@ -21,37 +21,23 @@ namespace VirtoCommerce.Storefront.Domain
 
             foreach (JProperty item in items)
             {
-                if (item.Value.HasValues)
+                if (item.Value.Type == JTokenType.Array)
                 {
-                    if (item.Value.Type == JTokenType.Array)
+                    metadata.Add(item.Name, item.Values());
+                }
+                else if (item.Value.Type == JTokenType.Object)
+                {
+                    var objectProperties = item.Value.Select(i => i.ToObject<JProperty>()).ToList();
+                    var propertiesNames = objectProperties.Select(i => i.Name).ToList();
+                    if (propertiesNames.Contains("url") && propertiesNames.Contains("altText"))
                     {
-                        metadata.Add(item.Name, item.Value.ToArray());
-                        continue;
+                        metadata.Add(item.Name, item.Value);
                     }
-
-                    if (item.Value.Type == JTokenType.Object)
+                    else
                     {
-                        var objectProperties = item.Value.Select(i => i.ToObject<JProperty>()).ToList();
-                        var propertiesNames = objectProperties.Select(i => i.Name).ToList();
-                        if (propertiesNames.Contains("url") && propertiesNames.Contains("altText"))
+                        foreach (var property in objectProperties)
                         {
-                            metadata.Add(item.Name, item.Value);
-                        }
-                        else
-                        {
-                            foreach (var property in objectProperties)
-                            {
-                                metadata.Add($"{item.Name}.{property.Name}", property.Value.Value<string>());
-                            }
-                        }
-                    }
-
-                    if (item.Value.Type == JTokenType.Property)
-                    {
-                        var value = item.Value.Value<string>();
-                        if (value != null)
-                        {
-                            metadata.Add(item.Name, value);
+                            metadata.Add($"{item.Name}.{property.Name}", property.Value.Value<string>());
                         }
                     }
                 }
