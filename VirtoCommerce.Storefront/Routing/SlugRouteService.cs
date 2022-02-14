@@ -166,7 +166,7 @@ namespace VirtoCommerce.Storefront.Routing
                 if (result == null)
                 {
                     // Check alternate page URLs
-                    result = workContext.Pages.FirstOrDefault(x => x.AliasesUrls.Contains(seoPath, StringComparer.OrdinalIgnoreCase));
+                    result = workContext.Pages.FirstOrDefault(x => x.AliasesUrls != null && x.AliasesUrls.Contains(seoPath, StringComparer.OrdinalIgnoreCase));
                 }
             }
 

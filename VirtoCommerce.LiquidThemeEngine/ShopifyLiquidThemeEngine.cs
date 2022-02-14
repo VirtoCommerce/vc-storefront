@@ -18,6 +18,7 @@ using Newtonsoft.Json.Linq;
 using Scriban;
 using Scriban.Parsing;
 using Scriban.Runtime;
+using VirtoCommerce.LiquidThemeEngine.PostRenderTemplateChange;
 using VirtoCommerce.LiquidThemeEngine.Scriban;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
@@ -49,9 +50,10 @@ namespace VirtoCommerce.LiquidThemeEngine
         private readonly IContentBlobProvider _themeBlobProvider;
         private readonly ISassFileManager _sassFileManager;
         private readonly IFeaturesAgent _featuresAgent;
+        private readonly IPostRenderTemplateChange _postRenderTemplateChange;
 
         public ShopifyLiquidThemeEngine(IStorefrontMemoryCache memoryCache, IWorkContextAccessor workContextAccessor, IHttpContextAccessor httpContextAccessor,
-                                        IStorefrontUrlBuilder storeFrontUrlBuilder, IContentBlobProvider contentBlobProvider, ISassFileManager sassFileManager, IOptions<LiquidThemeEngineOptions> options, IFeaturesAgent featuresAgent)
+                                        IStorefrontUrlBuilder storeFrontUrlBuilder, IContentBlobProvider contentBlobProvider, ISassFileManager sassFileManager, IOptions<LiquidThemeEngineOptions> options, IFeaturesAgent featuresAgent, IPostRenderTemplateChange postRenderTemplateChange)
         {
             _workContextAccessor = workContextAccessor;
             _httpContextAccessor = httpContextAccessor;
@@ -61,6 +63,7 @@ namespace VirtoCommerce.LiquidThemeEngine
             _themeBlobProvider = contentBlobProvider;
             _sassFileManager = sassFileManager;
             _featuresAgent = featuresAgent;
+            _postRenderTemplateChange = postRenderTemplateChange;
             SassCompiler.FileManager = sassFileManager;
         }
 
@@ -344,7 +347,10 @@ namespace VirtoCommerce.LiquidThemeEngine
             templateContext.PushGlobal(scriptObject);
 
             var result = parsedTemplate.Render(templateContext);
-            return new ValueTask<string>(result);
+
+            var changedResult = _postRenderTemplateChange.Change(result);
+
+            return new ValueTask<string>(changedResult);
         }
 
         /// <summary>
