@@ -14,7 +14,5 @@ Disallow: /assets/files/whitepaper-5-reasons-to-switch-your-ecommerce-to-the-clo
 Disallow: /assets/files/whitepaper-top-5-b2b-challenges.pdf
 Disallow: /en-us
 Disallow: /implementation/multi-touch
-Disallow: /solutions/b2x
-Disallow: /solutions/b2b
 
 Sitemap: https://virtocommerce.com/sitemap.xml
