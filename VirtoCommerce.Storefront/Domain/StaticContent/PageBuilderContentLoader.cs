@@ -23,7 +23,10 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 if (item.Value.Type == JTokenType.Array)
                 {
-                    metadata.Add(item.Name, item.Values());
+                    if (item.Value.HasValues)
+                    {
+                        metadata.Add(item.Name, item.Value.ToArray());
+                    }
                 }
                 else if (item.Value.Type == JTokenType.Object)
                 {
