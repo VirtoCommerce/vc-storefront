@@ -34,7 +34,8 @@ namespace VirtoCommerce.Storefront.Routing
 
             var path = context.HttpContext.Request.Path.TrimStoreAndLangSegment(workContext.CurrentStore, workContext.CurrentLanguage).ToString().TrimStart('/');
 
-            if (!string.IsNullOrEmpty(path))
+            //Do not use slug routing for SPA themes
+            if (!workContext.CurrentStore.IsSpa && !string.IsNullOrEmpty(path))
             {
                 var seoRouteResponse = await seoRouteService.HandleSlugRequestAsync(path, workContext);
 
