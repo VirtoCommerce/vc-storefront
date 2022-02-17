@@ -42,7 +42,13 @@ namespace VirtoCommerce.Storefront.Routing
 
         public virtual async Task<SlugRouteResponse> HandleSlugRequestAsync(string slugPath, WorkContext workContext)
         {
-            var entity = await FindEntityBySlugPath(slugPath, workContext) ?? new SlugRoutingData { ObjectType = "Asset", SeoPath = slugPath };
+            var entity = new SlugRoutingData { ObjectType = "Asset", SeoPath = slugPath };
+            //Do not use slug routing for SPA themes
+            if (!workContext.CurrentStore.IsSpa)
+            {
+                entity = await FindEntityBySlugPath(slugPath, workContext) ?? entity;
+            }
+
             var response = entity.SeoPath.EqualsInvariant(slugPath) ? View(entity) : Redirect(entity);
             return response;
         }
