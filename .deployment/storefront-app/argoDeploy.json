@@ -7,7 +7,7 @@
         "deployBranch": "dev",
         "environmentId" : "dev",
         "environmentName" : "Development",
-        "environmentType" : "development",
+        "environmentType" : "staging",
         "environmentUrl" : "https://st-platform.dev.govirto.com/"
     },
     "qa": {
