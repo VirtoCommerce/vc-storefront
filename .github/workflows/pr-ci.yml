@@ -1,4 +1,4 @@
-# v3.200.2
+# v3.200.3
 name: PR build
 
 on:
@@ -15,15 +15,16 @@ on:
 
 jobs:
   test:
-    uses: VirtoCommerce/.github/.github/workflows/test-and-sonar.yml@v3.200.2
+    uses: VirtoCommerce/.github/.github/workflows/test-and-sonar.yml@v3.200.3
     secrets:
       sonarToken: ${{ secrets.SONAR_TOKEN }}
 
   build:
-    uses: VirtoCommerce/.github/.github/workflows/build.yml@v3.200.2
+    uses: VirtoCommerce/.github/.github/workflows/build.yml@v3.200.3
     with:
       uploadDocker: 'true'
       eventName: ${{ github.event_name }}
-      imageName: ${{ github.event.repository.name }}
+      imageName: 'storefront'
+      dockerFiles: 'https://raw.githubusercontent.com/VirtoCommerce/vc-docker/master/linux/storefront/Dockerfile'
     secrets:
       envPAT: ${{ secrets.REPO_TOKEN }}
