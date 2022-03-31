@@ -1,18 +1,15 @@
-# v1.2.0
+# v1.2.1
 name: Storefront CI
 
 on:
   workflow_dispatch:
+    inputs:
+      forceLatest:
+        description: "Flag to set dev-linux-latest flag on workflow_dispatch event. Allowed values true or false."
+        required: false
+        default: "false"
+
   push:
-    paths-ignore:
-      - '.github/**'
-      - 'docs/**'
-      - 'build/**'
-      - 'README.md'
-      - 'LICENSE'
-      - '**/argoDeploy.json'
-    branches: [ master, dev ]
-  pull_request:
     paths-ignore:
       - '.github/**'
       - 'docs/**'
@@ -36,16 +33,15 @@ jobs:
       BLOB_SAS: ${{ secrets.BLOB_TOKEN }}
       IMAGE_NAME: 'storefront'
       PACKAGE_SERVER: 'ghcr.io'
-      PUBLISH_TO_DOCKER: 'false'
+      PUBLISH_TO_DOCKER: 'true'
       UPDATE_LATEST_TAG: 'true'
       VERSION_SUFFIX: ''
       BUILD_STATE: 'failed'
       RELEASE_STATUS: 'false'
+      BUILD_DOCKER: 'false'
     outputs:
       artifactUrl:  ${{ steps.artifactUrl.outputs.DOCKER_URL }}
       jira-keys: ${{ steps.jira_keys.outputs.jira-keys }}
-      deployConfigPath: '.deployment/storefront-app/argoDeploy.json'
-
 
     steps:
 
@@ -53,7 +49,17 @@ jobs:
       if: ${{ github.event_name == 'workflow_dispatch' }}
       run: |
         echo "PUBLISH_TO_DOCKER=false" >> $GITHUB_ENV
-        echo "UPDATE_LATEST_TAG=false" >> $GITHUB_ENV
+        echo "UPDATE_LATEST_TAG=${{ github.event.inputs.forceLatest }}" >> $GITHUB_ENV 
+    
+    - name: Set RELEASE_STATUS
+      if: ${{ github.ref == 'refs/heads/master' && github.event_name == 'push' }}
+      run: |
+        echo "RELEASE_STATUS=true" >> $GITHUB_ENV
+
+    - name: Set BUILD_DOCKER
+      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/dev-dockerenv' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
+      run: |
+        echo "BUILD_DOCKER=true" >> $GITHUB_ENV
 
     - uses: actions/checkout@v2
       with:
@@ -96,6 +102,10 @@ jobs:
     - name: Unit Tests
       run: vc-build Test -TestsFilter "Category=Unit|Category=CI" -skip
 
+    - name: BUILD_STATE::successful
+      if: success()
+      run: echo "BUILD_STATE=successful" >> $GITHUB_ENV
+
     - name: SonarCloud End
       uses: VirtoCommerce/vc-github-actions/sonar-scanner-end@master
 
@@ -113,7 +123,7 @@ jobs:
         echo ::set-output name=DOCKER_URL::${{ env.PACKAGE_SERVER }}/${{github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}
 
     - name: Build Docker Image
-      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
+      if: ${{ env.BUILD_DOCKER == 'true' }}
       id: dockerBuild
       uses: VirtoCommerce/vc-github-actions/build-docker-image@master
       with:
@@ -128,15 +138,15 @@ jobs:
       uses: VirtoCommerce/vc-github-actions/publish-github-release@master
 
     - name: Docker Login
-      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
+      if: ${{ env.BUILD_DOCKER == 'true' }}
       uses: azure/docker-login@v1
       with:
-        login-server: ghcr.io
+        login-server: ${{ env.PACKAGE_SERVER }}
         username: $GITHUB_ACTOR
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Publish Docker Image
-      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
+      if: ${{ env.BUILD_DOCKER == 'true' }}
       uses: VirtoCommerce/vc-github-actions/publish-docker-image@master
       with:
           image: ${{ steps.dockerBuild.outputs.imageName }}
@@ -160,10 +170,6 @@ jobs:
         release: ${{ env.RELEASE_STATUS }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: BUILD_STATE::successful
-      if: success()
-      run: echo "BUILD_STATE=successful" >> $GITHUB_ENV
 
     - name: Push Build Info to Jira
       if: ${{ env.CLOUD_INSTANCE_BASE_URL != 0 && env.CLIENT_ID != 0 && env.CLIENT_SECRET != 0 && steps.jira_keys.outputs.jira-keys != '' && always() }}
@@ -190,16 +196,26 @@ jobs:
       run: |
         echo "Jira Upload Build Info response: ${{ steps.push_build_info_to_jira.outputs.response }}"
 
-  dev_cd:
-    if: github.ref == 'refs/heads/dev' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master')
+  deploy:
+    if: ${{ (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master') && github.event_name == 'push' }}
     needs: ci
     runs-on: ubuntu-latest
     env:
-      DEPLOYMENT_ENV: 'dev'
+      CONFIG_PATH: '.deployment/storefront-app/argoDeploy.json'
     steps:
-      - name: Invoke Module deployment workflow
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          workflow: VC deployment
-          token: ${{ secrets.REPO_TOKEN }}
-          inputs: '{ "artifactUrl": "${{ needs.ci.outputs.artifactUrl }}", "deployEnvironment": "${{ env.DEPLOYMENT_ENV }}", "deployConfigPath": "${{ needs.ci.outputs.deployConfigPath}}", "jiraKeys":"${{ needs.ci.outputs.jira-keys }}" }'
+
+    - name: Set deployment environment
+      id: deployEnv
+      run: |
+        if [ '${{ github.ref }}' = 'refs/heads/master' ]; then
+          echo ::set-output name=NAME::prod
+        else
+          echo ::set-output name=NAME::dev
+        fi;
+
+    - name: Invoke Module deployment workflow
+      uses: benc-uk/workflow-dispatch@v1
+      with:
+        workflow: VC deployment
+        token: ${{ secrets.REPO_TOKEN }}
+        inputs: '{ "artifactUrl": "${{ needs.ci.outputs.artifactUrl }}", "deployEnvironment": "${{ steps.deployEnv.outputs.NAME }}", "deployConfigPath": "${{ env.CONFIG_PATH }}", "jiraKeys":"${{ needs.ci.outputs.jira-keys }}" }'

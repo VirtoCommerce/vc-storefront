@@ -3,15 +3,15 @@
     "deployRepo": "vc-deploy-dev",
     "cmPath": "storefront-app/resources/kustomization.yaml",
     "dev": {
-        "deployAppName": "storefront-app-dev",
+        "deployAppName": "storefront-dev",
         "deployBranch": "dev",
         "environmentId" : "dev",
         "environmentName" : "Development",
-        "environmentType" : "development",
+        "environmentType" : "staging",
         "environmentUrl" : "https://st-platform.dev.govirto.com/"
     },
     "qa": {
-        "deployAppName": "storefront-app-qa",
+        "deployAppName": "storefront-qa",
         "deployBranch": "qa",
         "environmentId" : "qa",
         "environmentName" : "QA",
@@ -19,7 +19,7 @@
         "environmentUrl" : "https://st-platform.qa.govirto.com/"
     },
      "prod": {
-        "deployAppName": "storefront-app-demo",
+        "deployAppName": "storefront-demo",
         "deployBranch": "demo",
         "environmentId" : "demo",
         "environmentName" : "Demo",
