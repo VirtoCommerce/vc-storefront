@@ -9,11 +9,11 @@ namespace VirtoCommerce.Storefront.Model
         public string BaseUrl { get; set; }
         public string StoreId { get; set; }
         public string StoreName { get; set; }
-        public string Language { get; set; }
-        public string[] AvailLanguages { get; set; }
+        public Language Language { get; set; }
+        public Language[] AvailLanguages { get; set; }
         public string CatalogId { get; set; }
-        public string Currency { get; set; }
-        public string[] AvailCurrencies { get; set; }
+        public Currency Currency { get; set; }
+        public Currency[] AvailCurrencies { get; set; }
         public string UserId { get; set; }
         public string UserName { get; set; }
         public IDictionary<string, object> Settings { get; set; }
@@ -25,11 +25,11 @@ namespace VirtoCommerce.Storefront.Model
                 BaseUrl = urlBuilder.ToAppAbsolute("/"),
                 StoreId = workContext.CurrentStore?.Id,
                 StoreName = workContext.CurrentStore?.Name,
-                Language = workContext.CurrentLanguage?.CultureName,
-                AvailLanguages = workContext.CurrentStore?.Languages?.Select(x => x.CultureName).ToArray(),
+                Language = workContext.CurrentLanguage,
+                AvailLanguages = workContext.CurrentStore?.Languages.ToArray(),
                 CatalogId = workContext.CurrentStore?.Catalog,
-                Currency = workContext.CurrentCurrency?.Code,
-                AvailCurrencies = workContext.CurrentStore?.CurrenciesCodes.ToArray(),
+                Currency = workContext.CurrentCurrency,
+                AvailCurrencies = workContext.AllCurrencies.ToArray(),
                 UserId = workContext.CurrentUser?.Id,
                 UserName = workContext.CurrentUser?.Name,
                 Settings = workContext.Settings
