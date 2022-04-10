@@ -117,7 +117,8 @@ namespace VirtoCommerce.Storefront.Infrastructure
         {
             var workContext = _workContextAccessor.WorkContext;
             var urlBuilderContext = workContext.ToToolsContext();
-            return _urlBuilder.BuildStoreUrl(urlBuilderContext, virtualPath, store.ToToolsStore(), language?.CultureName);
+
+            return _urlBuilder.BuildStoreUrl(urlBuilderContext, virtualPath, store.ToToolsStore(), null);
         }
 
         public string ToLocalPath(string virtualPath)

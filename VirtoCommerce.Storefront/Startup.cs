@@ -390,8 +390,6 @@ namespace VirtoCommerce.Storefront
                 rewriteOptions.AddIISUrlRewrite(iisUrlRewriteStreamReader);
             }
 
-            rewriteOptions.Add(new StorefrontUrlNormalizeRule());
-
             var requireHttpsOptions = new RequireHttpsOptions();
             Configuration.GetSection("VirtoCommerce:RequireHttps").Bind(requireHttpsOptions);
             if (requireHttpsOptions.Enabled)
