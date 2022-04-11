@@ -9,10 +9,10 @@ namespace VirtoCommerce.Storefront.Model
         public string BaseUrl { get; set; }
         public string StoreId { get; set; }
         public string StoreName { get; set; }
-        public Language Language { get; set; }
+        public Language DefaultLanguage { get; set; }
         public Language[] AvailLanguages { get; set; }
         public string CatalogId { get; set; }
-        public Currency Currency { get; set; }
+        public Currency DefaultCurrency { get; set; }
         public Currency[] AvailCurrencies { get; set; }
         public string UserId { get; set; }
         public string UserName { get; set; }
@@ -25,10 +25,10 @@ namespace VirtoCommerce.Storefront.Model
                 BaseUrl = urlBuilder.ToAppAbsolute("/"),
                 StoreId = workContext.CurrentStore?.Id,
                 StoreName = workContext.CurrentStore?.Name,
-                Language = workContext.CurrentLanguage,
+                DefaultLanguage = workContext.CurrentStore?.DefaultLanguage,
                 AvailLanguages = workContext.CurrentStore?.Languages.ToArray(),
                 CatalogId = workContext.CurrentStore?.Catalog,
-                Currency = workContext.CurrentCurrency,
+                DefaultCurrency = workContext.AllCurrencies.FirstOrDefault(x => x.Code == workContext.CurrentStore.DefaultCurrencyCode),
                 AvailCurrencies = workContext.AllCurrencies.ToArray(),
                 UserId = workContext.CurrentUser?.Id,
                 UserName = workContext.CurrentUser?.Name,
