@@ -5,7 +5,7 @@ namespace VirtoCommerce.Storefront.Routing
 {
     public class StorefrontRoute : Route
     {
-        private const string _regexp = "{store}/{language:regex([a-zA-Z]{{2}}-[a-zA-Z]{{2}})}/";
+        private const string _regexp = "";
         public StorefrontRoute(IRouter target, string routeTemplate, IInlineConstraintResolver inlineConstraintResolver)
             : this(target, routeTemplate, null, null, null, inlineConstraintResolver)
         {

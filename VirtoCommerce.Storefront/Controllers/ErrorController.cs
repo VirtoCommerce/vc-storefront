@@ -7,7 +7,6 @@ using VirtoCommerce.Storefront.Model.Common.Exceptions;
 
 namespace VirtoCommerce.Storefront.Controllers
 {
-    [Route("error")]
     [StorefrontRoute("error")]
     public class ErrorController : Controller
     {
