@@ -8,7 +8,7 @@
         "environmentId" : "dev",
         "environmentName" : "Development",
         "environmentType" : "staging",
-        "environmentUrl" : "https://st-platform.dev.govirto.com/"
+        "environmentUrl" : "https://st-storefront.dev.govirto.com/"
     },
     "qa": {
         "deployAppName": "storefront-qa",
@@ -16,7 +16,7 @@
         "environmentId" : "qa",
         "environmentName" : "QA",
         "environmentType" : "testing",
-        "environmentUrl" : "https://st-platform.qa.govirto.com/"
+        "environmentUrl" : "https://st-storefront.qa.govirto.com/"
     },
      "prod": {
         "deployAppName": "storefront-demo",
@@ -24,6 +24,6 @@
         "environmentId" : "demo",
         "environmentName" : "Demo",
         "environmentType" : "production",
-        "environmentUrl" : "https://st-platform.demo.govirto.com/"
+        "environmentUrl" : "https://st-storefront.demo.govirto.com/"
     }
 }
