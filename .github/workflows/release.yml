@@ -1,5 +1,5 @@
 # v1.0.0
-name: Release
+name: Release - Quick release
 
 on:
   workflow_dispatch:
