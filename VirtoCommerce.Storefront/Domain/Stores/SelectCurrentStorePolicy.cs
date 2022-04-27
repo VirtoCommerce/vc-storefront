@@ -20,13 +20,13 @@ namespace VirtoCommerce.Storefront.Domain
             //Try first find by store url (if it defined)
             var result = stores.FirstOrDefault(x => context.Request.Path.StartsWithSegments(new PathString("/" + x.Id)));
 
-            if (result == null)
-            {
-                result = stores.FirstOrDefault(x => x.IsStoreUrl(context.Request.GetUri()));
-            }
             if (result == null && defaultStoreId != null)
             {
                 result = stores.FirstOrDefault(x => x.Id.EqualsInvariant(defaultStoreId));
+            }
+            if (result == null)
+            {
+                result = stores.FirstOrDefault(x => x.IsStoreUrl(context.Request.GetUri()));
             }
             if (result == null)
             {
