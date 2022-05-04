@@ -251,7 +251,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 {
                     throw new StorefrontException($"Theme resource for path '{filePath}' not found");
                 }
-                var hashAlgorithm = CryptoConfig.AllowOnlyFipsAlgorithms ? (SHA256)new SHA256CryptoServiceProvider() : new SHA256Managed();
+                var hashAlgorithm = CryptoConfig.AllowOnlyFipsAlgorithms ? SHA256CryptoServiceProvider.Create() : SHA256Managed.Create();
                 return WebEncoders.Base64UrlEncode(hashAlgorithm.ComputeHash(stream));
             });
         }

@@ -207,7 +207,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
             CurrentThemeStream = currentThemeStream;
         }
 
-        private void InitializeStream<T>(StreamWriter writer, out Stream stream, T content)
+        private static void InitializeStream<T>(StreamWriter writer, out Stream stream, T content)
         {
             // Clear
             writer.BaseStream.Position = 0;
@@ -241,7 +241,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
             }
         }
 
-        public IStorefrontMemoryCache MemoryCache
+        public static IStorefrontMemoryCache MemoryCache
         {
             get
             {
@@ -258,7 +258,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
             }
         }
 
-        private IWorkContextAccessor GetWorkContextAccessor(bool useThemesInheritance)
+        private static IWorkContextAccessor GetWorkContextAccessor(bool useThemesInheritance)
         {
             var mock = new Mock<IWorkContextAccessor>();
             mock.Setup(service => service.WorkContext)
@@ -273,7 +273,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
             return mock.Object;
         }
 
-        private IHttpContextAccessor HttpContextAccessor
+        private static IHttpContextAccessor HttpContextAccessor
         {
             get
             {
