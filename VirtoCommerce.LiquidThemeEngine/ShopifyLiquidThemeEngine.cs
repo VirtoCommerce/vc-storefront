@@ -251,7 +251,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 {
                     throw new StorefrontException($"Theme resource for path '{filePath}' not found");
                 }
-                var hashAlgorithm = CryptoConfig.AllowOnlyFipsAlgorithms ? (SHA256)new SHA256CryptoServiceProvider() : new SHA256Managed();
+                var hashAlgorithm = SHA256.Create();
                 return WebEncoders.Base64UrlEncode(hashAlgorithm.ComputeHash(stream));
             });
         }
@@ -364,7 +364,7 @@ namespace VirtoCommerce.LiquidThemeEngine
                 NewLine = Environment.NewLine,
                 TemplateLoaderLexerOptions = new LexerOptions
                 {
-                    Mode = ScriptMode.Liquid
+                    Mode = ScriptMode.Default
                 }
             };
             templateContext.PushGlobal(scriptObject);

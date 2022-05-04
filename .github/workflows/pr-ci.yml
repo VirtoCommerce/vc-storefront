@@ -25,6 +25,6 @@ jobs:
       uploadDocker: 'true'
       eventName: ${{ github.event_name }}
       imageName: 'storefront'
-      dockerFiles: 'https://raw.githubusercontent.com/VirtoCommerce/vc-docker/master/linux/storefront/Dockerfile'
+      dockerFiles: 'https://raw.githubusercontent.com/VirtoCommerce/vc-docker/feat/net6/linux/storefront/Dockerfile'
     secrets:
       envPAT: ${{ secrets.REPO_TOKEN }}

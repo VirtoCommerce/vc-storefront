@@ -281,8 +281,7 @@ namespace VirtoCommerce.Storefront
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
             })
-             .AddFluentValidation()
-            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+             .AddFluentValidation();
 
 
             // Register event handlers via reflection

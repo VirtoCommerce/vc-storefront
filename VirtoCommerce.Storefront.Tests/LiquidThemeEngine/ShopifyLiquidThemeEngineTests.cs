@@ -28,9 +28,9 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
         }
 
         private static readonly string ThemesPath = "Themes";
-        private static readonly string BaseThemePath = "odt\\default";
-        private static readonly string CurrentThemePath = "odt\\current";
-        private static readonly string SettingsPath = "config\\settings_data.json";
+        private static readonly string BaseThemePath = $"odt{Path.DirectorySeparatorChar}default";
+        private static readonly string CurrentThemePath = $"odt{Path.DirectorySeparatorChar}current";
+        private static readonly string SettingsPath = $"config{Path.DirectorySeparatorChar}settings_data.json";
 
         private static JObject DefaultSettingsWithoutPresets => JObject.Parse(@"
         {
@@ -141,7 +141,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
         {
             var options = new LiquidThemeEngineOptions()
             {
-                BaseThemePath = "odt\\default"
+                BaseThemePath = $"odt{Path.DirectorySeparatorChar}default"
             };
 
             Check_Inheritance_Backward_Compatibility(options);
@@ -181,7 +181,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
         {
             var options = new LiquidThemeEngineOptions()
             {
-                BaseThemePath = "odt\\default",
+                BaseThemePath = $"odt{Path.DirectorySeparatorChar}default",
                 MergeBaseSettings = true
             };
             var shopifyLiquidThemeEngine = GetThemeEngine(true, options);
@@ -207,7 +207,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
             CurrentThemeStream = currentThemeStream;
         }
 
-        private void InitializeStream<T>(StreamWriter writer, out Stream stream, T content)
+        private static void InitializeStream<T>(StreamWriter writer, out Stream stream, T content)
         {
             // Clear
             writer.BaseStream.Position = 0;
@@ -241,7 +241,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
             }
         }
 
-        public IStorefrontMemoryCache MemoryCache
+        public static IStorefrontMemoryCache MemoryCache
         {
             get
             {
@@ -258,7 +258,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
             }
         }
 
-        private IWorkContextAccessor GetWorkContextAccessor(bool useThemesInheritance)
+        private static IWorkContextAccessor GetWorkContextAccessor(bool useThemesInheritance)
         {
             var mock = new Mock<IWorkContextAccessor>();
             mock.Setup(service => service.WorkContext)
@@ -273,7 +273,7 @@ namespace VirtoCommerce.Storefront.Tests.LiquidThemeEngine
             return mock.Object;
         }
 
-        private IHttpContextAccessor HttpContextAccessor
+        private static IHttpContextAccessor HttpContextAccessor
         {
             get
             {
