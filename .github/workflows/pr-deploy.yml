@@ -38,8 +38,11 @@ jobs:
         artifactName: ${{ env.ARTIFACT_NAME }}
 
     - name: Gets Jira key from PR body
-      uses: VirtoCommerce/vc-github-actions/get-artifact-link@master
       id: jiraKey
+      uses: VirtoCommerce/vc-github-actions/pr-body-get-link@master
+      with:
+        skipArtifactUrl: 'true'
+        githubToken: ${{ secrets.REPO_TOKEN }}
 
   publish:
     needs:
