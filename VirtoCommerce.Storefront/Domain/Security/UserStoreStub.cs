@@ -91,7 +91,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         {
             var userDto = await _platformSecurityApi.GetUserByIdAsync(userId);
 
-            var result = PrepareUserResultAsync(userDto);
+            var result = PrepareUserResult(userDto);
 
             //Load user associated contact
             if (result != null && result.ContactId != null)
@@ -106,7 +106,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         {
             var userDto = await _platformSecurityApi.GetUserByNameAsync(normalizedUserName);
 
-            var result = PrepareUserResultAsync(userDto);
+            var result = PrepareUserResult(userDto);
 
             //Load user associated contact
             if (result != null && result.ContactId != null)
@@ -217,7 +217,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         {
             var userDto = await _platformSecurityApi.GetUserByEmailAsync(normalizedEmail);
 
-            var result = PrepareUserResultAsync(userDto);
+            var result = PrepareUserResult(userDto);
 
             //Load user associated contact
             if (result != null && result.ContactId != null)
@@ -280,7 +280,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         {
             var userDto = await _platformSecurityApi.GetUserByLoginAsync(loginProvider, providerKey);
 
-            var result = PrepareUserResultAsync(userDto);
+            var result = PrepareUserResult(userDto);
 
             //Load user associated contact
             if (result != null && result.ContactId != null)
@@ -512,7 +512,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             // Cleanup
         }
 
-        private User PrepareUserResultAsync(AutoRestClients.PlatformModuleApi.Models.ApplicationUser userDto)
+        private User PrepareUserResult(AutoRestClients.PlatformModuleApi.Models.ApplicationUser userDto)
         {
             User result = null;
             if (userDto != null)
