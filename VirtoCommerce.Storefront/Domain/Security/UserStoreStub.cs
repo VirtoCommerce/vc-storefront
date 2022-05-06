@@ -5,13 +5,11 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Customer.Services;
 using VirtoCommerce.Storefront.Model.Security;
 
@@ -31,9 +29,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
         IUserAuthenticatorKeyStore<User>
     {
         private readonly ISecurity _platformSecurityApi;
-        private readonly IStorefrontMemoryCache _memoryCache;
+
         private readonly IMemberService _memberService;
-        private readonly StorefrontOptions _options;
+
 
         public UserStoreStub(ISecurity platformSecurityApi,
             IMemberService memberService,
@@ -41,9 +39,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             IOptions<StorefrontOptions> options)
         {
             _platformSecurityApi = platformSecurityApi;
-            _memoryCache = memoryCache;
             _memberService = memberService;
-            _options = options.Value;
         }
 
         #region IUserStore<User> members
@@ -93,13 +89,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public async Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            var cacheKey = CacheKey.With(GetType(), "FindByIdAsync", userId);
-            var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-            {
-                var userDto = await _platformSecurityApi.GetUserByIdAsync(userId);
+            var userDto = await _platformSecurityApi.GetUserByIdAsync(userId);
 
-                return await PrepareUserResultAsync(cacheEntry, userDto);
-            }, cacheNullValue: false);
+            var result = PrepareUserResultAsync(userDto);
 
             //Load user associated contact
             if (result != null && result.ContactId != null)
@@ -112,13 +104,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            var cacheKey = CacheKey.With(GetType(), "FindByNameAsync", normalizedUserName);
-            var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-            {
-                var userDto = await _platformSecurityApi.GetUserByNameAsync(normalizedUserName);
+            var userDto = await _platformSecurityApi.GetUserByNameAsync(normalizedUserName);
 
-                return await PrepareUserResultAsync(cacheEntry, userDto);
-            }, cacheNullValue: false);
+            var result = PrepareUserResultAsync(userDto);
 
             //Load user associated contact
             if (result != null && result.ContactId != null)
@@ -178,7 +166,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return resultDto.ToIdentityResult();
         }
 
-        #endregion
+        #endregion IUserStore<User> members
 
         #region IUserLockoutStore<User> members
 
@@ -221,19 +209,15 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return Task.CompletedTask;
         }
 
-        #endregion
+        #endregion IUserLockoutStore<User> members
 
         #region IUserEmailStore<User> members
 
         public async Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
-            var cacheKey = CacheKey.With(GetType(), "FindByEmailAsync", normalizedEmail);
-            var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-            {
-                var userDto = await _platformSecurityApi.GetUserByEmailAsync(normalizedEmail);
+            var userDto = await _platformSecurityApi.GetUserByEmailAsync(normalizedEmail);
 
-                return await PrepareUserResultAsync(cacheEntry, userDto);
-            }, cacheNullValue: false);
+            var result = PrepareUserResultAsync(userDto);
 
             //Load user associated contact
             if (result != null && result.ContactId != null)
@@ -277,7 +261,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return Task.CompletedTask;
         }
 
-        #endregion
+        #endregion IUserEmailStore<User> members
 
         #region IUserLoginStore<User> members
 
@@ -294,14 +278,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
 
         public async Task<User> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
-            var cacheKey = CacheKey.With(GetType(), "FindByLoginAsync", loginProvider, providerKey);
-            var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
-            {
-                var userDto = await _platformSecurityApi.GetUserByLoginAsync(loginProvider, providerKey);
+            var userDto = await _platformSecurityApi.GetUserByLoginAsync(loginProvider, providerKey);
 
-                return await PrepareUserResultAsync(cacheEntry, userDto);
-            }, cacheNullValue: false);
-
+            var result = PrepareUserResultAsync(userDto);
 
             //Load user associated contact
             if (result != null && result.ContactId != null)
@@ -329,7 +308,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return Task.CompletedTask;
         }
 
-        #endregion
+        #endregion IUserLoginStore<User> members
 
         #region IUserPasswordStore<User> members
 
@@ -349,7 +328,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return Task.CompletedTask;
         }
 
-        #endregion
+        #endregion IUserPasswordStore<User> members
 
         #region IUserSecurityStampStore<User> members
 
@@ -364,7 +343,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return Task.FromResult(user.SecurityStamp);
         }
 
-        #endregion
+        #endregion IUserSecurityStampStore<User> members
 
         #region IUserPhoneNumberStore<User> members
 
@@ -390,7 +369,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return Task.CompletedTask;
         }
 
-        #endregion
+        #endregion IUserPhoneNumberStore<User> members
 
         public Task SetTwoFactorEnabledAsync(User user, bool enabled, CancellationToken cancellationToken)
         {
@@ -469,7 +448,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return Task.FromResult(result);
         }
 
-        #endregion
+        #endregion IUserClaimStore<User> members
 
         #region IRoleStore<Role> members
 
@@ -511,7 +490,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             throw new NotImplementedException();
         }
 
-        #endregion
+        #endregion IRoleStore<Role> members
 
         #region IUserAuthenticatorKeyStore<User>
 
@@ -533,25 +512,21 @@ namespace VirtoCommerce.Storefront.Domain.Security
             // Cleanup
         }
 
-
-        private Task<User> PrepareUserResultAsync(MemoryCacheEntryOptions options, AutoRestClients.PlatformModuleApi.Models.ApplicationUser userDto)
+        private User PrepareUserResultAsync(AutoRestClients.PlatformModuleApi.Models.ApplicationUser userDto)
         {
             User result = null;
             if (userDto != null)
             {
                 result = userDto.ToUser();
-                options.AddExpirationToken(new PollingApiUserChangeToken(_platformSecurityApi, _options.ChangesPollingInterval));
-                options.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
-
             }
-            return Task.FromResult(result);
+            return result;
         }
+
         private async Task<IdentityResult> SaveAsync(Role role, CancellationToken cancellationToken)
         {
             var result = IdentityResult.Success;
             await _platformSecurityApi.UpdateRoleAsync(role.ToRoleDto(), cancellationToken);
             return result;
         }
-
     }
 }
