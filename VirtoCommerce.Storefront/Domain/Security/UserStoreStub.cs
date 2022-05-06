@@ -512,7 +512,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             // Cleanup
         }
 
-        private User PrepareUserResult(AutoRestClients.PlatformModuleApi.Models.ApplicationUser userDto)
+        private static User PrepareUserResult(AutoRestClients.PlatformModuleApi.Models.ApplicationUser userDto)
         {
             User result = null;
             if (userDto != null)
