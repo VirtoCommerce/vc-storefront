@@ -34,16 +34,20 @@ namespace VirtoCommerce.Storefront.Domain.Security
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IMemberService _memberService;
         private readonly StorefrontOptions _options;
+        private readonly IApiChangesWatcher _apiChangesWatcher;
 
         public UserStoreStub(ISecurity platformSecurityApi,
             IMemberService memberService,
             IStorefrontMemoryCache memoryCache,
-            IOptions<StorefrontOptions> options)
+            IOptions<StorefrontOptions> options,
+            IApiChangesWatcher apiChangesWatcher)
         {
             _platformSecurityApi = platformSecurityApi;
             _memoryCache = memoryCache;
             _memberService = memberService;
             _options = options.Value;
+            _apiChangesWatcher = apiChangesWatcher;
+
         }
 
         #region IUserStore<User> members
@@ -540,6 +544,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             if (userDto != null)
             {
                 result = userDto.ToUser();
+                options.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
                 options.AddExpirationToken(new PollingApiUserChangeToken(_platformSecurityApi, _options.ChangesPollingInterval));
                 options.AddExpirationToken(SecurityCacheRegion.CreateChangeToken(userDto.Id));
 
