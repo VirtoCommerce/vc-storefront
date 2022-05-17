@@ -15,12 +15,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
     public class ApiCommonController : StorefrontControllerBase
     {
         private readonly IStoreModule _storeApi;
+        private readonly ISeoInfoService _seoInfoService;
         private readonly Country[] _countriesWithoutRegions;
 
-        public ApiCommonController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IStoreModule storeApi)
+        public ApiCommonController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IStoreModule storeApi, ISeoInfoService seoInfoService)
             : base(workContextAccessor, urlBuilder)
         {
             _storeApi = storeApi;
+            _seoInfoService = seoInfoService;
             _countriesWithoutRegions = WorkContext.AllCountries
              .Select(c => new Country { Name = c.Name, Code2 = c.Code2, Code3 = c.Code3, RegionType = c.RegionType })
              .ToArray();
@@ -53,6 +55,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             await _storeApi.SendDynamicNotificationAnStoreEmailAsync(model.ToServiceModel(WorkContext));
 
             return Ok();
+        }
+
+        [HttpGet("seoInfos/{slug}")]
+        public async Task<SeoInfo[]> GetSeoInfosAsync(string slug)
+        {
+            return await _seoInfoService.GetSeoInfosBySlug(slug);
         }
     }
 }
