@@ -7,6 +7,10 @@ namespace VirtoCommerce.Storefront.Model
     /// </summary>
     public partial class SeoInfo : ValueObject, IHasLanguage
     {
+        public string Id { get; set; }
+        public string ObjectType { get; set; }
+        public string ObjectId { get; set; }
+        public bool? IsActive { get; set; }
         public string MetaDescription { get; set; }
 
         public string Slug { get; set; }
