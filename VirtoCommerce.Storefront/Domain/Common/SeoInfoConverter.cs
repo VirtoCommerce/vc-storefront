@@ -9,6 +9,11 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var retVal = new SeoInfo
             {
+                Id = seoDto.Id,
+                ObjectId = seoDto.ObjectId,
+                ObjectType = seoDto.ObjectType,
+                IsActive = seoDto.IsActive,
+
                 MetaDescription = seoDto.MetaDescription,
                 MetaKeywords = seoDto.MetaKeywords,
 
