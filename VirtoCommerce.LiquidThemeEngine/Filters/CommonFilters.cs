@@ -160,5 +160,15 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
             return result;
         }
+
+        public static string Setting(TemplateContext context, string key)
+        {
+            var themeEngine = (ShopifyLiquidThemeEngine)context.TemplateLoader;
+            var settings = themeEngine.GetSettings();
+
+            settings.TryGetValue(key, out var result);
+
+            return result?.ToString();
+        }
     }
 }
