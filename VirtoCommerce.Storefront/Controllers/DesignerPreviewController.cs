@@ -20,7 +20,7 @@ namespace VirtoCommerce.Storefront.Controllers
         public IActionResult Index()
         {
             WorkContext.Layout = Request.Query["layout"].ToString();
-            return View("json-preview", WorkContext);
+            return View("preview", WorkContext);
         }
 
         [HttpPost("designer-preview/block")]
