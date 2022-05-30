@@ -8,7 +8,7 @@
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FVirtoCommerce%2Fvc-storefront%2Fmaster%2Fazuredeploy.json)
 
-Official online shopping website based on [Virto Commerce Platform written on ASP.NET Core](https://virtocommerce.com/b2b-ecommerce-platform). The website is a client application for VC Platform and uses only public APIs while communicating.
+Official online shopping website based on [Virto Commerce Platform written on ASP.NET Core](https://virtocommerce.com/microsoft-ecommerce-platform). The website is a client application for VC Platform and uses only public APIs while communicating.
 
 It is possible to run multiple different stores (web sites) on top of Virto Commerce. Each store (website) might have its own theme with a specific layout still being based on the same catalog and customer data.
 
