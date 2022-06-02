@@ -86,6 +86,8 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IMemberService, MemberService>();
             services.AddSingleton<ISeoInfoService, SeoInfoServise>();
 
+            services.AddSingleton<IStaticContentInThemeService, StaticContentInThemeService>();
+
             services.AddSingleton<IStaticContentService, StaticContentService>();
             services.AddSingleton<IMenuLinkListService, MenuLinkListServiceImpl>();
             services.AddSingleton<IStaticContentItemFactory, StaticContentItemFactory>();

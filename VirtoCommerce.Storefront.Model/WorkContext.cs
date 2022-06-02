@@ -155,6 +155,16 @@ namespace VirtoCommerce.Storefront.Model
         public IMutablePagedList<ContentItem> Pages { get; set; }
 
         /// <summary>
+        /// All static content items (Pages, blog articles etc) for current store and theme
+        /// </summary>
+        public IMutablePagedList<ContentItem> PagesInTheme { get; set; }
+
+        /// <summary>
+        /// All static templates items (catalog, cart etc) for current store and theme
+        /// </summary>
+        public IMutablePagedList<ContentItem> Templates { get; set; }
+
+        /// <summary>
         ///  All blogs with articles for current store and theme
         /// </summary>
         public IMutablePagedList<Blog> Blogs { get; set; }
