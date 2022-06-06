@@ -23,7 +23,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         public ActionResult FindPage([FromBody]ContentInThemeSearchCriteria value)
         {
             var permalink = value.Permalink;
-            var result = WorkContext.PagesInTheme.FirstOrDefault(x => x.Permalink != null && x.Permalink.EqualsInvariant(permalink));
+            var result = WorkContext.Pages.FirstOrDefault(x => x.Permalink != null && x.Permalink.EqualsInvariant(permalink));
             if (result == null)
             {
                 return NotFound();
