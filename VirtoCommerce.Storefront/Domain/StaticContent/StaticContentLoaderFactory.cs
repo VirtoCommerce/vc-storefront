@@ -11,7 +11,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             switch (Path.GetExtension(contentItem.StoragePath))
             {
-                case string value when value.EqualsInvariant(".PAGE"):
+                case string value when value.EqualsInvariant(".PAGE") || value.EqualsInvariant(".JSON"):
                     return new PageBuilderContentLoader();
                 case string value when value.EqualsInvariant(".MD"):
                     return new MarkdownContentLoader(new MarkdownPipelineBuilder().UseAdvancedExtensions().Build());

@@ -8,6 +8,6 @@ namespace VirtoCommerce.Storefront.Model.StaticContent
     /// </summary>
     public interface IStaticContentService
     {
-        IEnumerable<ContentItem> LoadStoreStaticContent(Store store);
+        IEnumerable<ContentItem> LoadStoreStaticContent(Store store, string type);
     }
 }
