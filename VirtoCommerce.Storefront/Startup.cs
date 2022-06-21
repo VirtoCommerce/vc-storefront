@@ -84,6 +84,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<ICurrencyService, CurrencyService>();
             services.AddSingleton<ISlugRouteService, SlugRouteService>();
             services.AddSingleton<IMemberService, MemberService>();
+            services.AddSingleton<ISeoInfoService, SeoInfoServise>();
 
             services.AddSingleton<IStaticContentService, StaticContentService>();
             services.AddSingleton<IMenuLinkListService, MenuLinkListServiceImpl>();
@@ -281,8 +282,7 @@ namespace VirtoCommerce.Storefront
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
             })
-             .AddFluentValidation()
-            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+             .AddFluentValidation();
 
 
             // Register event handlers via reflection
@@ -389,8 +389,6 @@ namespace VirtoCommerce.Storefront
                 using var iisUrlRewriteStreamReader = File.OpenText("IISUrlRewrite.xml");
                 rewriteOptions.AddIISUrlRewrite(iisUrlRewriteStreamReader);
             }
-
-            rewriteOptions.Add(new StorefrontUrlNormalizeRule());
 
             var requireHttpsOptions = new RequireHttpsOptions();
             Configuration.GetSection("VirtoCommerce:RequireHttps").Bind(requireHttpsOptions);

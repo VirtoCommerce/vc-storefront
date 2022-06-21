@@ -56,6 +56,7 @@ namespace VirtoCommerce.Storefront.Middleware
             await builder.WithMenuLinksAsync(workContext.CurrentStore, workContext.CurrentLanguage);
             await builder.WithPagesAsync(workContext.CurrentStore, workContext.CurrentLanguage);
             await builder.WithBlogsAsync(workContext.CurrentStore, workContext.CurrentLanguage);
+            await builder.WithTemplatesAsync(workContext.CurrentStore);
 
 
             //EU General Data Protection Regulation (GDPR) support 

@@ -64,19 +64,19 @@ namespace VirtoCommerce.Storefront.Tests.OutputCache
         public HttpClient Client { get; }
 
 
-        [Theory]
-        [InlineData("/Electronics/en-US/themes/localization.json")]
-        [InlineData("/Electronics/en-US/themes/assets/shop.js")]
-        public async Task ServesThemesAssets(string url)
-        {
+        //[Theory]
+        //[InlineData("/Electronics/en-US/themes/localization.json")]
+        //[InlineData("/Electronics/en-US/themes/assets/shop.js")]
+        //public async Task ServesThemesAssets(string url)
+        //{
 
-            // Act & Assert
-            var initialResponse = await Client.GetAsync(url);
-            var subsequentResponse = await Client.GetAsync(url);
+        //    // Act & Assert
+        //    var initialResponse = await Client.GetAsync(url);
+        //    var subsequentResponse = await Client.GetAsync(url);
 
-            await AssertCachedResponseAsync(initialResponse, subsequentResponse);
+        //    await AssertCachedResponseAsync(initialResponse, subsequentResponse);
 
-        }
+        //}
 
         private static async Task AssertCachedResponseAsync(HttpResponseMessage initialResponse, HttpResponseMessage subsequentResponse)
         {

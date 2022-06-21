@@ -66,7 +66,7 @@ namespace VirtoCommerce.Storefront.Domain
             // all static content items
             IPagedList<ContentItem> Factory(int pageNumber, int pageSize, IEnumerable<SortInfo> sorInfos)
             {
-                var contentItems = staticContentService.LoadStoreStaticContent(store).Where(x => x.Language.IsInvariant || x.Language == language);
+                var contentItems = staticContentService.LoadStoreStaticContent(store, "pages").Where(x => x.Language.IsInvariant || x.Language == language);
                 return new StaticPagedList<ContentItem>(contentItems, pageNumber, pageSize, contentItems.Count());
             }
 
@@ -95,7 +95,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             IPagedList<Blog> Factory(int pageNumber, int pageSize, IEnumerable<SortInfo> sorInfos)
             {
-                var contentItems = staticContentService.LoadStoreStaticContent(store).Where(x => x.Language.IsInvariant || x.Language == language);
+                var contentItems = staticContentService.LoadStoreStaticContent(store, "blogs").Where(x => x.Language.IsInvariant || x.Language == language);
                 var blogs = contentItems.OfType<Blog>().ToArray();
                 var blogArticlesGroup = contentItems.OfType<BlogArticle>().GroupBy(x => x.BlogName, x => x).ToList();
                 foreach (var blog in blogs)
@@ -114,6 +114,32 @@ namespace VirtoCommerce.Storefront.Domain
             builder.WorkContext.CurrentBlogSearchCritera = new BlogSearchCriteria(builder.WorkContext.QueryString);
 
             return builder.WithBlogsAsync(new MutablePagedList<Blog>((Func<int, int, IEnumerable<SortInfo>, IPagedList<Blog>>) Factory, 1, 20));
+        }
+
+        public static Task WithTemplatesAsync(this IWorkContextBuilder builder, IMutablePagedList<ContentItem> templates)
+        {
+            builder.WorkContext.Templates = templates;
+            return Task.CompletedTask;
+        }
+
+        public static Task WithTemplatesAsync(this IWorkContextBuilder builder, Store store)
+        {
+            if (store == null)
+            {
+                throw new ArgumentNullException(nameof(store));
+            }
+
+            var serviceProvider = builder.HttpContext.RequestServices;
+            var staticContentService = serviceProvider.GetRequiredService<IStaticContentService>();
+
+            // all static content items
+            IPagedList<ContentItem> Factory(int pageNumber, int pageSize, IEnumerable<SortInfo> sorInfos)
+            {
+                var contentItems = staticContentService.LoadStoreStaticContent(store, "templates");
+                return new StaticPagedList<ContentItem>(contentItems, pageNumber, pageSize, contentItems.Count());
+            }
+
+            return builder.WithTemplatesAsync(new MutablePagedList<ContentItem>(Factory, 1, 20));
         }
     }
 }

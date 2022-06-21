@@ -23,7 +23,7 @@ namespace VirtoCommerce.Storefront.Model
             }
 
             CultureName = culture.Name;
-            ThreeLeterLanguageName = culture.ThreeLetterISOLanguageName;
+            ThreeLetterLanguageName = culture.ThreeLetterISOLanguageName;
             TwoLetterLanguageName = culture.TwoLetterISOLanguageName;
             NativeName = culture.NativeName;
             if (!culture.IsNeutralCulture && culture != CultureInfo.InvariantCulture)
@@ -57,7 +57,7 @@ namespace VirtoCommerce.Storefront.Model
         /// <summary>
         ///  Gets the ISO 639-2 three-letter code for the language 
         /// </summary>
-        public string ThreeLeterLanguageName { get; private set; }
+        public string ThreeLetterLanguageName { get; private set; }
         /// <summary>
         ///   Gets the ISO 639-1 two-letter code for the language
         /// </summary>

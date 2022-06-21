@@ -19,12 +19,11 @@ namespace VirtoCommerce.Storefront.Domain
     /// </summary>
     public class StaticContentService : IStaticContentService
     {
-        private static readonly string[] _extensions = { ".md", ".liquid", ".html", ".page" };
+        private static readonly string[] _extensions = { ".md", ".html", ".page", ".template", ".json" };
         private readonly IStaticContentItemFactory _contentItemFactory;
         private readonly IContentBlobProvider _contentBlobProvider;
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IStaticContentLoaderFactory _metadataFactory;
-        private readonly string _basePath = "Pages";
 
         public StaticContentService(IStorefrontMemoryCache memoryCache, IStaticContentItemFactory contentItemFactory,
                                         IContentBlobProvider contentBlobProvider, IStaticContentLoaderFactory metadataFactory)
@@ -37,19 +36,14 @@ namespace VirtoCommerce.Storefront.Domain
 
         #region IStaticContentService Members
 
-        public IEnumerable<ContentItem> LoadStoreStaticContent(Store store)
+        public IEnumerable<ContentItem> LoadStoreStaticContent(Store store, string type)
         {
-            var baseStoreContentPath = string.Concat(_basePath, "/", store.Id);
-            var cacheKey = CacheKey.With(GetType(), "LoadStoreStaticContent", store.Id);
+            var baseStoreContentPath = Path.Combine("Themes", store.Id, "default", "content", type);
+            var cacheKey = CacheKey.With(GetType(), "LoadStoreStaticContent", store.Id, type);
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
             {
                 var retVal = new List<ContentItem>();
                 const string searchPattern = "*.*";
-
-                if (!_contentBlobProvider.PathExists(baseStoreContentPath))
-                {
-                    baseStoreContentPath = Path.Combine("Themes", store.Id, "default", "Pages");
-                }
 
                 cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { StaticContentCacheRegion.CreateChangeToken(), _contentBlobProvider.Watch(baseStoreContentPath + "/**/*") }));
 
