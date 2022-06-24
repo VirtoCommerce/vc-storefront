@@ -38,7 +38,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
             _lastModifiedUtc = _prevModifiedUtc = DateTime.UtcNow;
         }
 
-        public static void UpdateLastCheckedTimeUtcStatic(DateTime currentTime)
+        private static void UpdateLastCheckedTimeUtcStatic(DateTime currentTime)
         {
             _lastCheckedTimeUtcStatic = currentTime;
         }
@@ -64,20 +64,18 @@ namespace VirtoCommerce.Storefront.Infrastructure
                     return _hasChanged;
                 }
 
-                var lockTaken = Monitor.TryEnter(_lock);
-
-                try
+                lock (_lock)
                 {
-                    if (lockTaken)
+                    currentTime = DateTime.UtcNow;
+                    if (currentTime - _lastCheckedTimeUtcStatic < _options.ChangesPollingInterval)
                     {
-                        Task.Run(() => EvaluateBlobsModifiedDate());
-                        UpdateLastCheckedTimeUtcStatic(currentTime);
+                        return _hasChanged;
                     }
-                }
-                finally
-                {
-                    if (lockTaken)
-                        Monitor.Exit(_lock);
+                    UpdateLastCheckedTimeUtcStatic(currentTime);
+                    Task.Run(() =>
+                    {
+                        EvaluateBlobsModifiedDate();
+                    });
                 }
 
                 return _hasChanged;
