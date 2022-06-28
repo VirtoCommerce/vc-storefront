@@ -70,9 +70,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                       .ToArray());
             }
 
-            login.UserName = login.UserName?.Trim();
+            login.UserName = login.Email?.Trim();
 
-            var user = await _signInManager.UserManager.FindByNameAsync(login.UserName);
+            var user = await _signInManager.UserManager.FindByEmailAsync(login.Email);
             var result = CheckLoginUser(user);
 
             if (result != UserActionIdentityResult.Success)
@@ -80,7 +80,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 return result;
             }
 
-            var loginResult = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, login.RememberMe, lockoutOnFailure: true);
+            var loginResult = await _signInManager.PasswordSignInAsync(user.UserName, login.Password, login.RememberMe, lockoutOnFailure: true);
 
             if (!loginResult.Succeeded)
             {
