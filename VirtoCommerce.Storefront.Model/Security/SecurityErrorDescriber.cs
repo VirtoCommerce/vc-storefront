@@ -4,6 +4,14 @@ namespace VirtoCommerce.Storefront.Model.Security
 {
     public static partial class SecurityErrorDescriber
     {
+        public static FormError UsernameOrEmailIsRequired()
+        {
+            return new FormError
+            {
+                Code = nameof(UsernameOrEmailIsRequired).PascalToKebabCase(),
+                Description = "Username or email is required"
+            };
+        }
         public static FormError LoginFailed()
         {
             return new FormError

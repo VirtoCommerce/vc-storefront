@@ -6,8 +6,8 @@ namespace VirtoCommerce.Storefront.Model.Security
     public partial class Login
     {
         [EmailAddress]
-        [Required]
         public string Email { get; set; }
+
 
         public string UserName { get; set; }
 

@@ -70,9 +70,24 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                       .ToArray());
             }
 
-            login.UserName = login.Email?.Trim();
+            login.Email = login.Email?.Trim();
+            login.UserName = login.UserName?.Trim();
 
-            var user = await _signInManager.UserManager.FindByEmailAsync(login.Email);
+            User user = null;
+
+            if (!string.IsNullOrEmpty(login.UserName))
+            {
+                user = await _signInManager.UserManager.FindByNameAsync(login.UserName);
+            }
+            else if (!string.IsNullOrEmpty(login.Email))
+            {
+                user = await _signInManager.UserManager.FindByEmailAsync(login.Email);
+            }
+            else
+            {
+                return UserActionIdentityResult.Failed(SecurityErrorDescriber.UsernameOrEmailIsRequired());
+            }
+
             var result = CheckLoginUser(user);
 
             if (result != UserActionIdentityResult.Success)
