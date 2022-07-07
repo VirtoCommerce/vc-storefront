@@ -57,10 +57,33 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Ok();
         }
 
-        [HttpGet("seoInfos/{slug}")]
-        public async Task<SeoInfo[]> GetSeoInfosAsync(string slug)
+        [HttpGet("slug/{slug}")]
+        public async Task<SlugInfoResult> GetInfoBySlugAsync(string slug, [FromQuery] string culture)
         {
-            return await _seoInfoService.GetSeoInfosBySlug(slug);
+            var result = new SlugInfoResult();
+
+            try
+            {
+                result.ContentItem = WorkContext.Pages.FirstOrDefault(x => x.Permalink != null
+                                                                        && x.Permalink.EqualsInvariant($"/{slug}")
+                                                                        && x.Language.CultureName.EqualsInvariant(culture))
+                    ?? WorkContext.Pages.FirstOrDefault(x => x.Permalink != null
+                                                                        && x.Permalink.EqualsInvariant($"/{slug}")
+                                                                        && x.Language.IsInvariant);
+            }
+            catch
+            {
+                //do nothing
+            }
+
+            if (result.ContentItem == null)
+            {
+                var seoInfos = await _seoInfoService.GetSeoInfosBySlug(slug);
+
+                result.EntityInfo = seoInfos.FirstOrDefault(x => x.Language.CultureName.EqualsInvariant(culture));
+            }
+
+            return result;
         }
     }
 }
