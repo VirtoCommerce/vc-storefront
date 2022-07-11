@@ -20,7 +20,7 @@ namespace VirtoCommerce.Storefront.Domain
             var items = settings.AsJEnumerable();
             foreach (var item in items.OfType<JProperty>())
             {
-                metadata.Add(item.Name, new List<string> { item.Value.Value<string>() });
+                metadata.Add(item.Name, new List<string> { item.Value.ToString() });
             }
         }
     }
