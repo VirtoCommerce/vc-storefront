@@ -71,14 +71,15 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             if (result.EntityInfo == null)
             {
+                var pageUrl = $"/{slug}";
                 try
                 {
-                    result.ContentItem = WorkContext.Pages.FirstOrDefault(x => x.Permalink != null
-                                                                            && x.Permalink.EqualsInvariant($"/{slug}")
-                                                                            && x.Language.CultureName.EqualsInvariant(culture))
-                        ?? WorkContext.Pages.FirstOrDefault(x => x.Permalink != null
-                                                                            && x.Permalink.EqualsInvariant($"/{slug}")
-                                                                            && x.Language.IsInvariant);
+                    var pages = WorkContext.Pages.Where(p => string.Equals(p.Url, pageUrl, StringComparison.OrdinalIgnoreCase));
+
+                    result.ContentItem = pages.FirstOrDefault(x => x.Language.CultureName.EqualsInvariant(culture))
+                                            ?? pages.FirstOrDefault(x => x.Language.IsInvariant)
+                                            ?? pages.FirstOrDefault(x => x.AliasesUrls.Contains(pageUrl, StringComparer.OrdinalIgnoreCase));
+
                 }
                 catch
                 {
