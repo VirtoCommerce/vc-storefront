@@ -62,25 +62,28 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         {
             var result = new SlugInfoResult();
 
-            try
-            {
-                result.ContentItem = WorkContext.Pages.FirstOrDefault(x => x.Permalink != null
-                                                                        && x.Permalink.EqualsInvariant($"/{slug}")
-                                                                        && x.Language.CultureName.EqualsInvariant(culture))
-                    ?? WorkContext.Pages.FirstOrDefault(x => x.Permalink != null
-                                                                        && x.Permalink.EqualsInvariant($"/{slug}")
-                                                                        && x.Language.IsInvariant);
-            }
-            catch
-            {
-                //do nothing
-            }
+            var seoInfos = await _seoInfoService.GetBestMatchingSeoInfos(slug, WorkContext.CurrentStore, culture);
 
-            if (result.ContentItem == null)
-            {
-                var seoInfos = await _seoInfoService.GetSeoInfosBySlug(slug);
+            var bestSeoInfo = seoInfos.FirstOrDefault();
 
-                result.EntityInfo = seoInfos.FirstOrDefault(x => x.Language.CultureName.EqualsInvariant(culture));
+            result.EntityInfo = bestSeoInfo;
+
+
+            if (result.EntityInfo == null)
+            {
+                try
+                {
+                    result.ContentItem = WorkContext.Pages.FirstOrDefault(x => x.Permalink != null
+                                                                            && x.Permalink.EqualsInvariant($"/{slug}")
+                                                                            && x.Language.CultureName.EqualsInvariant(culture))
+                        ?? WorkContext.Pages.FirstOrDefault(x => x.Permalink != null
+                                                                            && x.Permalink.EqualsInvariant($"/{slug}")
+                                                                            && x.Language.IsInvariant);
+                }
+                catch
+                {
+                    //do nothing
+                }
             }
 
             return result;
