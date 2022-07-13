@@ -57,10 +57,37 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Ok();
         }
 
-        [HttpGet("seoInfos/{slug}")]
-        public async Task<SeoInfo[]> GetSeoInfosAsync(string slug)
+        [HttpGet("slug/{slug}")]
+        public async Task<SlugInfoResult> GetInfoBySlugAsync(string slug, [FromQuery] string culture)
         {
-            return await _seoInfoService.GetSeoInfosBySlug(slug);
+            var result = new SlugInfoResult();
+
+            var seoInfos = await _seoInfoService.GetBestMatchingSeoInfos(slug, WorkContext.CurrentStore, culture);
+
+            var bestSeoInfo = seoInfos.FirstOrDefault();
+
+            result.EntityInfo = bestSeoInfo;
+
+
+            if (result.EntityInfo == null)
+            {
+                var pageUrl = $"/{slug}";
+                try
+                {
+                    var pages = WorkContext.Pages.Where(p => string.Equals(p.Url, pageUrl, StringComparison.OrdinalIgnoreCase));
+
+                    result.ContentItem = pages.FirstOrDefault(x => x.Language.CultureName.EqualsInvariant(culture))
+                                            ?? pages.FirstOrDefault(x => x.Language.IsInvariant)
+                                            ?? pages.FirstOrDefault(x => x.AliasesUrls.Contains(pageUrl, StringComparer.OrdinalIgnoreCase));
+
+                }
+                catch
+                {
+                    //do nothing
+                }
+            }
+
+            return result;
         }
     }
 }

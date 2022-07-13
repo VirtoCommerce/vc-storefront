@@ -45,5 +45,23 @@ namespace VirtoCommerce.Storefront.Common
                 .Select(s => s.JsonConvert<coreDto.SeoInfo>())
                 .ToList();
         }
+
+        /// <summary>
+        /// Returns SEO records with highest score
+        /// http://docs.virtocommerce.com/display/vc2devguide/SEO
+        /// </summary>
+        /// <param name="seoRecords"></param>
+        /// <param name="store"></param>
+        /// <param name="currentCulture"></param>
+        /// <param name="slug"></param>
+        /// <returns></returns>
+        public static IList<coreDto.SeoInfo> GetBestMatchingSeoInfos(this IEnumerable<coreDto.SeoInfo> seoRecords, Store store, string currentCulture, string slug = null)
+        {
+            return seoRecords
+                ?.Select(s => s.JsonConvert<toolsDto.SeoInfo>())
+                .GetBestMatchingSeoInfos(store.Id, store.DefaultLanguage.CultureName, currentCulture, slug)
+                .Select(s => s.JsonConvert<coreDto.SeoInfo>())
+                .ToList();
+        }
     }
 }
