@@ -136,7 +136,7 @@ yarn compress
 # change the current directory
 cd C:\vc-storefront
 # build and run storefront application
-dotnet run
+dotnet run --project .\VirtoCommerce.Storefront\VirtoCommerce.Storefront.csproj
 ```
 
 ### FAQ
