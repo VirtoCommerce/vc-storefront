@@ -18,21 +18,18 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private readonly IStoreModule _storeApi;
         private readonly ISeoInfoService _seoInfoService;
         private readonly Country[] _countriesWithoutRegions;
-        private readonly IStaticContentService _staticContent;
 
         public ApiCommonController(
             IWorkContextAccessor workContextAccessor,
             IStorefrontUrlBuilder urlBuilder,
             IStoreModule storeApi,
-            ISeoInfoService seoInfoService,
-            IStaticContentService staticContent) : base(workContextAccessor, urlBuilder)
+            ISeoInfoService seoInfoService) : base(workContextAccessor, urlBuilder)
         {
             _storeApi = storeApi;
             _seoInfoService = seoInfoService;
             _countriesWithoutRegions = WorkContext.AllCountries
                  .Select(c => new Country { Name = c.Name, Code2 = c.Code2, Code3 = c.Code3, RegionType = c.RegionType })
                  .ToArray();
-            _staticContent = staticContent;
         }
 
         // GET: storefrontapi/countries
