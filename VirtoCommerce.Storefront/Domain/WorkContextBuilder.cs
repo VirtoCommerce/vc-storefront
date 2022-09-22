@@ -29,7 +29,9 @@ namespace VirtoCommerce.Storefront.Domain
             }
             WorkContext.PageSize = pageSize ?? 20;
             //To interpret as true the value of preview_mode from the query string according to its actual presence, since another value of this parameter can be passed.
-            WorkContext.IsPreviewMode = !string.IsNullOrEmpty(WorkContext.QueryString["preview_mode"]);
+            WorkContext.IsPreviewMode =
+                !string.IsNullOrEmpty(WorkContext.QueryString["preview_mode"])
+                || httpContext.Request.Headers["x-template-builder"] == "preview-mode";
 
         }
 

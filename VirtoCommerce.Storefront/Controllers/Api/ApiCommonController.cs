@@ -7,6 +7,7 @@ using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
@@ -17,15 +18,21 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private readonly IStoreModule _storeApi;
         private readonly ISeoInfoService _seoInfoService;
         private readonly Country[] _countriesWithoutRegions;
+        private readonly IStaticContentService _staticContent;
 
-        public ApiCommonController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IStoreModule storeApi, ISeoInfoService seoInfoService)
-            : base(workContextAccessor, urlBuilder)
+        public ApiCommonController(
+            IWorkContextAccessor workContextAccessor,
+            IStorefrontUrlBuilder urlBuilder,
+            IStoreModule storeApi,
+            ISeoInfoService seoInfoService,
+            IStaticContentService staticContent) : base(workContextAccessor, urlBuilder)
         {
             _storeApi = storeApi;
             _seoInfoService = seoInfoService;
             _countriesWithoutRegions = WorkContext.AllCountries
-             .Select(c => new Country { Name = c.Name, Code2 = c.Code2, Code3 = c.Code3, RegionType = c.RegionType })
-             .ToArray();
+                 .Select(c => new Country { Name = c.Name, Code2 = c.Code2, Code3 = c.Code3, RegionType = c.RegionType })
+                 .ToArray();
+            _staticContent = staticContent;
         }
 
         // GET: storefrontapi/countries
@@ -57,7 +64,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return Ok();
         }
 
-        [HttpGet("slug/{slug}")]
+        [HttpGet("slug/{*slug}")]
         public async Task<SlugInfoResult> GetInfoBySlugAsync(string slug, [FromQuery] string culture)
         {
             var result = new SlugInfoResult();
@@ -74,11 +81,15 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var pageUrl = $"/{slug}";
                 try
                 {
-                    var pages = WorkContext.Pages.Where(p => string.Equals(p.Url, pageUrl, StringComparison.OrdinalIgnoreCase));
+                    var pages = WorkContext.Pages.Where(p =>
+                        string.Equals(p.Url, pageUrl, StringComparison.OrdinalIgnoreCase)
+                        || string.Equals(p.Url, slug, StringComparison.OrdinalIgnoreCase)
+                    );
 
-                    result.ContentItem = pages.FirstOrDefault(x => x.Language.CultureName.EqualsInvariant(culture))
+                    var page = pages.FirstOrDefault(x => x.Language.CultureName.EqualsInvariant(culture))
                                             ?? pages.FirstOrDefault(x => x.Language.IsInvariant)
                                             ?? pages.FirstOrDefault(x => x.AliasesUrls.Contains(pageUrl, StringComparer.OrdinalIgnoreCase));
+                    result.ContentItem = page;
 
                 }
                 catch

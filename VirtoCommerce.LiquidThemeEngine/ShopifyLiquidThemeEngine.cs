@@ -323,7 +323,7 @@ namespace VirtoCommerce.LiquidThemeEngine
 
             if (!(context is IScriptObject scriptObject))
             {
-                throw new StorefrontException($"{ nameof(context) } must implement IScriptObject");
+                throw new StorefrontException($"{nameof(context)} must implement IScriptObject");
             }
 
             if (string.IsNullOrEmpty(templateContent))

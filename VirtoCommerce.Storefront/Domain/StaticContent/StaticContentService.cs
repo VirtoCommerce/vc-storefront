@@ -36,51 +36,68 @@ namespace VirtoCommerce.Storefront.Domain
 
         #region IStaticContentService Members
 
-        public IEnumerable<ContentItem> LoadStoreStaticContent(Store store, string type)
+        public IEnumerable<ContentItem> LoadStoreStaticContent(Store store, string type, bool force = false)
         {
-            var baseStoreContentPath = Path.Combine("Themes", store.Id, "default", "content", type);
-            var cacheKey = CacheKey.With(GetType(), "LoadStoreStaticContent", store.Id, type);
+            var theme = store.ThemeName ?? "default";
+            var baseStoreContentPath = Path.Combine("Themes", store.Id, theme, "content", type);
+
+            if (force)
+            {
+                var retVal = ReadContentInternal(baseStoreContentPath);
+                return retVal.ToArray();
+            }
+
+            var cacheKey = CacheKey.With(GetType(), "LoadStoreStaticContent", store.Id, type, theme);
             return _memoryCache.GetOrCreateExclusive(cacheKey, (cacheEntry) =>
             {
-                var retVal = new List<ContentItem>();
-                const string searchPattern = "*.*";
-
-                cacheEntry.AddExpirationToken(new CompositeChangeToken(new[] { StaticContentCacheRegion.CreateChangeToken(), _contentBlobProvider.Watch(baseStoreContentPath + "/**/*") }));
-
-                if (!_contentBlobProvider.PathExists(baseStoreContentPath))
+                cacheEntry.AddExpirationToken(new CompositeChangeToken(new[]
                 {
-                    return retVal.ToArray();
-                }
-
-                // Search files by requested search pattern
-                var contentBlobs = _contentBlobProvider.Search(baseStoreContentPath, searchPattern, true)
-                    .Where(x => _extensions.Any(x.EndsWith))
-                    .Select(x => x.Replace("\\\\", "\\"));
-
-                // each content file  has a name pattern {name}.{language?}.{ext}
-                var localizedBlobs = contentBlobs.Select(x => new LocalizedBlobInfo(x));
-
-                foreach (var localizedBlob in localizedBlobs.OrderBy(x => x.Name))
-                {
-                    var blobRelativePath = "/" + localizedBlob.Path.TrimStart('/');
-                    var contentItem = _contentItemFactory.GetItemFromPath(blobRelativePath);
-
-                    if (contentItem == null)
-                    {
-                        continue;
-                    }
-
-                    contentItem.Name ??= localizedBlob.Name;
-
-                    contentItem.Language = localizedBlob.Language;
-                    contentItem.FileName = Path.GetFileName(blobRelativePath);
-                    contentItem.StoragePath = "/" + blobRelativePath.Replace(baseStoreContentPath + "/", string.Empty).TrimStart('/');
-                    LoadAndRenderContentItem(blobRelativePath, contentItem);
-                    retVal.Add(contentItem);
-                }
-
+                    StaticContentCacheRegion.CreateChangeToken(),
+                    _contentBlobProvider.Watch(baseStoreContentPath + "/**/*")
+                }));
+                var retVal = ReadContentInternal(baseStoreContentPath);
                 return retVal.ToArray();
             });
+        }
+
+        private ContentItem[] ReadContentInternal(string baseStoreContentPath)
+        {
+            var retVal = new List<ContentItem>();
+            const string searchPattern = "*.*";
+
+            if (!_contentBlobProvider.PathExists(baseStoreContentPath))
+            {
+                return retVal.ToArray();
+            }
+
+            // Search files by requested search pattern
+            var contentBlobs = _contentBlobProvider.Search(baseStoreContentPath, searchPattern, true)
+                .Where(x => _extensions.Any(x.EndsWith))
+                .Select(x => x.Replace("\\\\", "\\"));
+
+            // each content file  has a name pattern {name}.{language?}.{ext}
+            var localizedBlobs = contentBlobs.Select(x => new LocalizedBlobInfo(x));
+
+            foreach (var localizedBlob in localizedBlobs.OrderBy(x => x.Name))
+            {
+                var blobRelativePath = "/" + localizedBlob.Path.TrimStart('/');
+                var contentItem = _contentItemFactory.GetItemFromPath(blobRelativePath);
+
+                if (contentItem == null)
+                {
+                    continue;
+                }
+
+                contentItem.Name ??= localizedBlob.Name;
+
+                contentItem.Language = localizedBlob.Language;
+                contentItem.FileName = Path.GetFileName(blobRelativePath);
+                contentItem.StoragePath = "/" + blobRelativePath.Replace(baseStoreContentPath + "/", string.Empty).TrimStart('/');
+                LoadAndRenderContentItem(blobRelativePath, contentItem);
+                retVal.Add(contentItem);
+            }
+
+            return retVal.ToArray();
         }
 
         #endregion
