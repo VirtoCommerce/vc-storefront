@@ -66,7 +66,7 @@ namespace VirtoCommerce.Storefront.Domain
             // all static content items
             IPagedList<ContentItem> Factory(int pageNumber, int pageSize, IEnumerable<SortInfo> sorInfos)
             {
-                var contentItems = staticContentService.LoadStoreStaticContent(store, "pages").Where(x => x.Language.IsInvariant || x.Language == language);
+                var contentItems = staticContentService.LoadStoreStaticContent(store, "pages", builder.WorkContext.IsPreviewMode).Where(x => x.Language.IsInvariant || x.Language == language);
                 return new StaticPagedList<ContentItem>(contentItems, pageNumber, pageSize, contentItems.Count());
             }
 
@@ -95,7 +95,7 @@ namespace VirtoCommerce.Storefront.Domain
 
             IPagedList<Blog> Factory(int pageNumber, int pageSize, IEnumerable<SortInfo> sorInfos)
             {
-                var contentItems = staticContentService.LoadStoreStaticContent(store, "blogs").Where(x => x.Language.IsInvariant || x.Language == language);
+                var contentItems = staticContentService.LoadStoreStaticContent(store, "blogs", builder.WorkContext.IsPreviewMode).Where(x => x.Language.IsInvariant || x.Language == language);
                 var blogs = contentItems.OfType<Blog>().ToArray();
                 var blogArticlesGroup = contentItems.OfType<BlogArticle>().GroupBy(x => x.BlogName, x => x).ToList();
                 foreach (var blog in blogs)
@@ -113,7 +113,7 @@ namespace VirtoCommerce.Storefront.Domain
             // Initialize blogs search criteria 
             builder.WorkContext.CurrentBlogSearchCritera = new BlogSearchCriteria(builder.WorkContext.QueryString);
 
-            return builder.WithBlogsAsync(new MutablePagedList<Blog>((Func<int, int, IEnumerable<SortInfo>, IPagedList<Blog>>) Factory, 1, 20));
+            return builder.WithBlogsAsync(new MutablePagedList<Blog>(Factory, 1, 20));
         }
 
         public static Task WithTemplatesAsync(this IWorkContextBuilder builder, IMutablePagedList<ContentItem> templates)
@@ -135,7 +135,7 @@ namespace VirtoCommerce.Storefront.Domain
             // all static content items
             IPagedList<ContentItem> Factory(int pageNumber, int pageSize, IEnumerable<SortInfo> sorInfos)
             {
-                var contentItems = staticContentService.LoadStoreStaticContent(store, "templates");
+                var contentItems = staticContentService.LoadStoreStaticContent(store, "templates", builder.WorkContext.IsPreviewMode);
                 return new StaticPagedList<ContentItem>(contentItems, pageNumber, pageSize, contentItems.Count());
             }
 
