@@ -70,6 +70,11 @@ namespace VirtoCommerce.Storefront.Middleware
             workContext.BusinessToBusinessRoles = SecurityConstants.Roles.B2BRoles;
             _workContextAccessor.WorkContext = workContext;
 
+            if (workContext.IsPreviewMode)
+            {
+                context.Response.Headers.Add("non-cached-result", "true");
+            }
+            
             await _next(context);
         }
     }

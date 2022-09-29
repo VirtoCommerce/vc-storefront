@@ -59,23 +59,6 @@ namespace VirtoCommerce.Storefront.Routing
 
             switch (routingData.ObjectType)
             {
-                case "Category":
-                    response.RouteData["action"] = "ThemeView";
-                    response.RouteData["controller"] = "ThemeView";
-                    response.RouteData["routing"] = routingData;
-                    response.RouteData["viewName"] = "collection";
-                    break;
-                case "CatalogProduct":
-                    response.RouteData["action"] = "ThemeView";
-                    response.RouteData["controller"] = "ThemeView";
-                    response.RouteData["routing"] = routingData;
-                    response.RouteData["viewName"] = "product";
-                    break;
-                case "Page":
-                    response.RouteData["action"] = "GetContentPage";
-                    response.RouteData["controller"] = "StaticContent";
-                    response.RouteData["page"] = routingData.ObjectInstance;
-                    break;
                 case "Asset":
                     response.RouteData["action"] = "GetThemeAssets";
                     response.RouteData["controller"] = "Asset";
