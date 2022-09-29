@@ -11,14 +11,5 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             return View("index");
         }
-
-        [HttpGet("about")]
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
     }
 }
