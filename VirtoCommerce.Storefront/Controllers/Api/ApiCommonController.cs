@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi;
@@ -96,6 +97,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
 
             return result;
+        }
+
+        [HttpGet("version")]
+        public ActionResult Version()
+        {
+            return Ok(System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location).FileVersion);
         }
     }
 }
