@@ -19,8 +19,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         {
         }
 
-        [HttpPost]
-        public ActionResult ResetCache([FromBody]dynamic body)
+        [HttpPost("reset-cache")]
+        public ActionResult ResetCache(/*[FromBody]dynamic body*/)
         {
             // don't use body, it's just example
             StaticContentCacheRegion.ExpireRegion();
