@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
@@ -16,6 +17,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         public ApiStaticContentController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder)
             : base(workContextAccessor, urlBuilder)
         {
+        }
+
+        [HttpPost]
+        public ActionResult ResetCache([FromBody]dynamic body)
+        {
+            // don't use body, it's just example
+            StaticContentCacheRegion.ExpireRegion();
+            return Ok();
         }
 
         // POST: storefrontapi/content/pages
