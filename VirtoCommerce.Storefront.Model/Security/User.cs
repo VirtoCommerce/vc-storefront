@@ -86,6 +86,10 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// The user name of an operator who has loggen in on behalf of a customer
         /// </summary>
         public string OperatorUserName { get; set; }
+        /// <summary>
+        /// The user full name of an operator who has loggen in on behalf of a customer
+        /// </summary>
+        public string OperatorFullName { get; set; }
 
         public IList<ExternalUserLoginInfo> ExternalLogins { get; set; }
 

@@ -50,6 +50,7 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 impersonateUser.OperatorUserId = WorkContext.CurrentUser.Id;
                 impersonateUser.OperatorUserName = WorkContext.CurrentUser.UserName;
+                impersonateUser.OperatorFullName = WorkContext.CurrentUser.Name;
 
                 // sign out the current user
                 await _signInManager.SignOutAsync();
