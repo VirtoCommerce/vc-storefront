@@ -48,16 +48,18 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
                 //Add special header with user name to each API request for future audit and logging
                 if (currentUser != null && currentUser.IsRegisteredUser)
                 {
-                    var userName = currentUser.OperatorUserName;
-
-                    if (string.IsNullOrEmpty(userName))
-                    {
-                        userName = currentUser.UserName;
-                    }
+                    var userName = currentUser.UserName;
 
                     if (!string.IsNullOrEmpty(userName))
                     {
                         request.Headers.Add("VirtoCommerce-User-Name", userName);
+                    }
+
+                    var operatorUserName = currentUser.OperatorUserName;
+
+                    if (!string.IsNullOrEmpty(operatorUserName))
+                    {
+                        request.Headers.Add("VirtoCommerce-Operator-User-Name", operatorUserName);
                     }
                 }
                 else
