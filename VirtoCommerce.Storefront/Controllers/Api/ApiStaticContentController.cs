@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
@@ -19,11 +20,18 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         {
         }
 
-        [HttpPost("reset-cache")]
-        public ActionResult ResetCache(/*[FromBody]dynamic body*/)
+        [HttpPost("reset-cache/{region}")]
+        public ActionResult ResetCache([FromRoute] string region)
         {
-            // don't use body, it's just example
-            StaticContentCacheRegion.ExpireRegion();
+            switch (region)
+            {
+                case "theme": ThemeEngineCacheRegion.ExpireRegion();
+                    break;
+                case "pages":
+                case "blogs":
+                    StaticContentCacheRegion.ExpireRegion();
+                    break;
+            }
             return Ok();
         }
 
