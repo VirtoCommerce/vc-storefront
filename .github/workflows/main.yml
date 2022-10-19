@@ -40,7 +40,7 @@ jobs:
       RELEASE_STATUS: 'false'
       BUILD_DOCKER: 'false'
     outputs:
-      artifactUrl:  ${{ steps.artifactUrl.outputs.DOCKER_URL }}
+      artifactUrl:  ${{ steps.image.outputs.taggedVersion }}
       jira-keys: ${{ steps.jira_keys.outputs.jira-keys }}
 
     steps:
@@ -155,6 +155,12 @@ jobs:
           docker_token: ${{ secrets.DOCKER_TOKEN }}
           docker_hub: ${{ env.PUBLISH_TO_DOCKER }}
           update_latest: ${{ env.UPDATE_LATEST_TAG }}
+    
+    - name: Publish to ACR 
+      run: |
+        docker login virtopaasregistrymain.azurecr.io -u vcst-token -p ${{ secrets.VCST_ACR_DOCKER_PASSWORD }}
+        docker tag ghcr.io/virtocommerce/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }} virtopaasregistrymain.azurecr.io/vcst/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}
+        docker push virtopaasregistrymain.azurecr.io/vcst/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}
 
     - name: Add link to PR
       if: ${{ github.event_name == 'pull_request' }}
@@ -197,7 +203,7 @@ jobs:
         echo "Jira Upload Build Info response: ${{ steps.push_build_info_to_jira.outputs.response }}"
 
   deploy:
-    if: ${{ (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master') && github.event_name == 'push' }}
+    if: ${{ (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master') && (github.event_name == 'push' ||  github.event_name == 'workflow_dispatch')}}
     needs: ci
     runs-on: ubuntu-latest
     env:
