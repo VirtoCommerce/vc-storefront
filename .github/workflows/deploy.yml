@@ -40,18 +40,34 @@ jobs:
     - name: Set Output
       id: app-name
       run: |
-          if [ ${{ github.ref }} != 'refs/heads/master' ]; then
+          if [ ${{ github.ref }} == 'refs/heads/master' ]; then
             echo "IS master branch"
             echo "::set-output name=APP::vcst-demo"
-          elif [ ${{ github.ref }} != 'refs/heads/dev' ]; then
+          elif [ ${{ github.ref }} == 'refs/heads/dev' ]; then
             echo "IS dev branch"
             echo "::set-output name=APP::vcst-dev"
           fi
+    
+    - name: Read deployment config
+      uses: VirtoCommerce/vc-github-actions/get-deploy-param@master
+      id: deployConfig
+      with:
+        envName: ${{ github.event.inputs.deployEnvironment }}
+        deployConfigPath: ${{ github.event.inputs.deployConfigPath }}
+
+    - name: Start deployment
+      uses: bobheadxi/deployments@master
+      id: deployment
+      with:
+        step: start
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: ${{ steps.deployConfig.outputs.environmentName }}
+        no_override: false
 
     - name: Update environment
       run: |
-        vc-build SetHelmParameter -ArgoServer https://argo.virtocommerce.cloud -ArgoAppName ${{ steps.app-name.outputs.APP }} -ArgoToken ${{ env.VCST_TOKEN }} -HelmParameters storefront.image.tag=${{ github.event.inputs.deployEnvironment }}
-
+        vc-build SetHelmParameter -ArgoServer https://argo.virtocommerce.cloud -ArgoAppName ${{ steps.app-name.outputs.APP }} -ArgoToken ${{ secrets.VCST_TOKEN }} -HelmParameters storefront.image.tag=${{ github.event.inputs.artifactUrl }}
+  
     - name: DEPLOY_STATE::successful
       if: success()
       run: echo "DEPLOY_STATE=successful" >> $GITHUB_ENV
