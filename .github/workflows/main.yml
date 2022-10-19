@@ -159,7 +159,7 @@ jobs:
     - name: Publish to ACR 
       run: |
         docker login virtopaasregistrymain.azurecr.io -u vcst-token -p ${{ secrets.VCST_ACR_DOCKER_PASSWORD }}
-        docker tag ${{ steps.artifactUrl.outputs.DOCKER_URL }} virtopaasregistrymain.azurecr.io/vcst/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}
+        docker tag ghcr.io/virtocommerce/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }} virtopaasregistrymain.azurecr.io/vcst/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}
         docker push virtopaasregistrymain.azurecr.io/vcst/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}
 
     - name: Add link to PR
