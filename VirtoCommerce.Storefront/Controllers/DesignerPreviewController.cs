@@ -30,7 +30,7 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             var page = new ContentPage
             {
-                Content = $"[{data}]"
+                Content = $@"{{ ""settings"": {{}}, ""content"": [ {data} ] }}"
             };
 
             WorkContext.CurrentPage = page;
