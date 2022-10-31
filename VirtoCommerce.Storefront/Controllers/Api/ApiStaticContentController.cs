@@ -8,6 +8,7 @@ using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.StaticContent;
+using VirtoCommerce.Storefront.Models;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
@@ -20,10 +21,10 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         {
         }
 
-        [HttpPost("reset-cache/{region}")]
-        public ActionResult ResetCache([FromRoute] string region)
+        [HttpPost("reset-cache")]
+        public ActionResult ResetCache([FromBody] ResetCacheModel region)
         {
-            switch (region)
+            switch (region.ContentType)
             {
                 case "theme": ThemeEngineCacheRegion.ExpireRegion();
                     break;
