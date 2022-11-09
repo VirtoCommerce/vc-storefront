@@ -439,6 +439,37 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return result;
         }
 
+        // POST: storefrontapi/account/confirmemail
+        [HttpPost("confirmemail")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserActionIdentityResult>> ConfirmEmail([FromBody] ConfirmEmailModel model)
+        {
+            TryValidateModel(model);
+
+            if (!ModelState.IsValid)
+            {
+                return UserActionIdentityResult.Failed(ModelState.Values.SelectMany(x => x.Errors)
+                    .Select(x => new IdentityError { Description = x.ErrorMessage })
+                    .ToArray());
+            }
+
+            var user = await _signInManager.UserManager.FindByIdAsync(model.UserId);
+
+            if (user == null)
+            {
+                // Don't reveal that the user does not exist
+                return UserActionIdentityResult.Failed(SecurityErrorDescriber.InvalidToken());
+            }
+
+            var confirmEmailResult = await _signInManager.UserManager.ConfirmEmailAsync(user, model.Token);
+
+            if (!confirmEmailResult.Succeeded)
+            {
+                return UserActionIdentityResult.Failed(confirmEmailResult.Errors.ToArray());
+            }
+
+            return UserActionIdentityResult.Success;
+        }
 
         private static string GetUserEmail(User user)
         {
