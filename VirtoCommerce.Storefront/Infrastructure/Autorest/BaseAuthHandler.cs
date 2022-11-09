@@ -75,7 +75,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
         /// <param name="request"></param>
         protected void AddUserIp(HttpRequestMessage request)
         {
-            var userIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
+            var userIp = _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress.ToString();
 
             if (!string.IsNullOrEmpty(userIp))
             {
