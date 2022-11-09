@@ -26,7 +26,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         public ActionResult ResetCache([FromBody] ResetCacheEventModel webHookEvent)
         {
             if (TryResetCacheInternal(webHookEvent?.EventBody?.FirstOrDefault()?.Type))
+            {
                 return Ok("OK");
+            }
 
             return Ok("Failed");
         }
@@ -36,12 +38,14 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         public ActionResult ResetCache([FromRoute] string region)
         {
             if (TryResetCacheInternal(region))
+            {
                 return Ok("OK");
+            }
 
             return Ok("Failed");
         }
 
-        private bool TryResetCacheInternal(string region)
+        private static bool TryResetCacheInternal(string region)
         {
             switch (region)
             {
