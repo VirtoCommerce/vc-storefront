@@ -8,6 +8,7 @@ using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.StaticContent;
+using VirtoCommerce.Storefront.Models;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
@@ -20,19 +21,44 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         {
         }
 
+        // POST: storefrontapi/content/reset-cache
+        [HttpPost("reset-cache")]
+        public ActionResult ResetCache([FromBody] ResetCacheEventModel webHookEvent)
+        {
+            if (TryResetCacheInternal(webHookEvent?.EventBody?.FirstOrDefault()?.Type))
+            {
+                return Ok("OK");
+            }
+            // we can't return 400, because webhook module use it to repeat request
+            return Ok("Failed");
+        }
+
+        // POST: storefrontapi/content/reset-cache/theme
         [HttpPost("reset-cache/{region}")]
         public ActionResult ResetCache([FromRoute] string region)
         {
+            if (TryResetCacheInternal(region))
+            {
+                return Ok("OK");
+            }
+            // we can't return 400, because webhook module use it to repeat request
+            return Ok("Failed");
+        }
+
+        private static bool TryResetCacheInternal(string region)
+        {
             switch (region)
             {
-                case "theme": ThemeEngineCacheRegion.ExpireRegion();
-                    break;
+                case "theme":
+                case "themes":
+                    ThemeEngineCacheRegion.ExpireRegion();
+                    return true;
                 case "pages":
                 case "blogs":
                     StaticContentCacheRegion.ExpireRegion();
-                    break;
+                    return true;
             }
-            return Ok();
+            return false;
         }
 
         // POST: storefrontapi/content/pages
