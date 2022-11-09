@@ -29,7 +29,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 return Ok("OK");
             }
-
+            // we can't return 400, because webhook module use it to repeat request
             return Ok("Failed");
         }
 
@@ -41,7 +41,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 return Ok("OK");
             }
-
+            // we can't return 400, because webhook module use it to repeat request
             return Ok("Failed");
         }
 
