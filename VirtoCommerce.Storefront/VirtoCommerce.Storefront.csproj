@@ -6,8 +6,8 @@
     <UserSecretsId>0cd403c4-2cd0-42b3-987a-02900f4a683e</UserSecretsId>
     <Description>The storefront implementation of the Virto Commerce platform.</Description>
     <PackageLicenseUrl>https://virtocommerce.com/open-source-license</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/VirtoCommerce/vc-storefront-core</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/VirtoCommerce/vc-storefront-core</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/VirtoCommerce/vc-storefront</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/VirtoCommerce/vc-storefront</RepositoryUrl>
     
     <PackageIconUrl>https://virtocommerce.com/themes/assets/logo.jpg</PackageIconUrl>
     <PackageReleaseNotes></PackageReleaseNotes>
@@ -47,10 +47,10 @@
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.4.0" />
     
     <PackageReference Include="Markdig" Version="0.30.2" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.20.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.20.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.21.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.SnapshotCollector" Version="1.4.3" />
-    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.20.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.21.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />

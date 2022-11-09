@@ -21,19 +21,40 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         {
         }
 
+        // POST: storefrontapi/content/reset-cache
         [HttpPost("reset-cache")]
-        public ActionResult ResetCache([FromBody] ResetCacheModel region)
+        public ActionResult ResetCache([FromBody] ResetCacheEventModel webHookEvent)
         {
-            switch (region.ContentType)
+            if (TryResetCacheInternal(webHookEvent?.EventBody?.FirstOrDefault()?.Type))
+                return Ok("OK");
+
+            return Ok("Failed");
+        }
+
+        // POST: storefrontapi/content/reset-cache/theme
+        [HttpPost("reset-cache/{region}")]
+        public ActionResult ResetCache([FromRoute] string region)
+        {
+            if (TryResetCacheInternal(region))
+                return Ok("OK");
+
+            return Ok("Failed");
+        }
+
+        private bool TryResetCacheInternal(string region)
+        {
+            switch (region)
             {
-                case "theme": ThemeEngineCacheRegion.ExpireRegion();
-                    break;
+                case "theme":
+                case "themes":
+                    ThemeEngineCacheRegion.ExpireRegion();
+                    return true;
                 case "pages":
                 case "blogs":
                     StaticContentCacheRegion.ExpireRegion();
-                    break;
+                    return true;
             }
-            return Ok();
+            return false;
         }
 
         // POST: storefrontapi/content/pages
