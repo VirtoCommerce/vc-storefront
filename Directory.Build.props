@@ -3,11 +3,11 @@
 
   <PropertyGroup>
     <Product>VirtoCommerce</Product>
-    <Copyright>Copyright © VirtoCommerce 2011-2020</Copyright>
+    <Copyright>Copyright © VirtoCommerce 2011-2022</Copyright>
     <Authors>VirtoCommerce</Authors>
   </PropertyGroup>
    <PropertyGroup>
-    <VersionPrefix>6.6.0</VersionPrefix>
+    <VersionPrefix>6.7.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <VersionSuffix Condition=" '$(VersionSuffix)' != '' AND '$(BuildNumber)' != '' ">$(VersionSuffix)-$(BuildNumber)</VersionSuffix>
   </PropertyGroup>
