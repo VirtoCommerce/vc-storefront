@@ -364,7 +364,8 @@ namespace VirtoCommerce.LiquidThemeEngine
                 NewLine = Environment.NewLine,
                 TemplateLoaderLexerOptions = new LexerOptions
                 {
-                    Mode = ScriptMode.Default
+                    Mode = ScriptMode.Default,
+                    Lang = ScriptLang.Liquid
                 }
             };
             templateContext.PushGlobal(scriptObject);
