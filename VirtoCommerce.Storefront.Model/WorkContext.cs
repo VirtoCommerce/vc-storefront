@@ -23,10 +23,16 @@ namespace VirtoCommerce.Storefront.Model
         public SlugRoutingData SlugRoutingData { get; set; }
 
         public string Template { get; set; }
+
         /// <summary>
         /// Merchants can specify a page_description.
         /// </summary>
         public string PageDescription => CurrentPageSeo?.MetaDescription ?? string.Empty;
+
+        /// <summary>
+        /// Merchants can specify a page_keywords.
+        /// </summary>
+        public string PageKeywords => CurrentPageSeo?.MetaKeywords ?? string.Empty;
 
         /// <summary>
         /// The liquid object page_title returns the title of the current page.
