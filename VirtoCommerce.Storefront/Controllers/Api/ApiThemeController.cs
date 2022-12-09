@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Infrastructure;
@@ -19,6 +20,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // GET: storefrontapi/theme/context
         [HttpGet("context")]
+        [AllowAnonymous]
         public ActionResult<SpaThemeContext> GetSpaThemeContext()
         {
             var result = SpaThemeContext.Create(WorkContext, UrlBuilder);
