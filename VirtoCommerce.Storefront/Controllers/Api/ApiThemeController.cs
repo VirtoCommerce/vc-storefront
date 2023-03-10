@@ -12,7 +12,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
     public class ApiThemeController : StorefrontControllerBase
     {
         private readonly ILiquidThemeEngine _liquidThemeEngine;
-        public ApiThemeController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder,  ILiquidThemeEngine liquidThemeEngine)
+        public ApiThemeController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, ILiquidThemeEngine liquidThemeEngine)
             : base(workContextAccessor, urlBuilder)
         {
             _liquidThemeEngine = liquidThemeEngine;
