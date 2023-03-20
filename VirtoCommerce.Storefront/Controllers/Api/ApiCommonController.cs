@@ -9,7 +9,6 @@ using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.Controllers.Api
 {
@@ -77,7 +76,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             if (result.EntityInfo == null)
             {
-                var pageUrl = $"/{slug}";
+                var pageUrl = slug == "home" ? "/" : $"/{slug}";
                 try
                 {
                     var pages = WorkContext.Pages.Where(p =>
