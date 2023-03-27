@@ -211,7 +211,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return result;
         }
 
-
         // POST: storefrontapi/account/password
         [HttpPost("password")]
         public async Task<ActionResult<PasswordChangeResult>> ChangePassword([FromBody] ChangePassword formModel)
@@ -219,7 +218,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             var result = await _signInManager.UserManager.ChangePasswordAsync(WorkContext.CurrentUser, formModel.OldPassword, formModel.NewPassword);
             return new PasswordChangeResult { Succeeded = result.Succeeded, Errors = result.Errors.Select(x => new FormError { Code = x.Code.PascalToKebabCase(), Description = x.Description }).ToList() };
         }
-
 
         // DELETE: storefrontapi/account/phonenumber
         [HttpDelete("phonenumber")]
