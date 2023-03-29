@@ -67,16 +67,20 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         {
             var result = new SlugInfoResult();
 
-            var seoInfos = await _seoInfoService.GetBestMatchingSeoInfos(slug, WorkContext.CurrentStore, culture);
+            if (string.IsNullOrEmpty(slug))
+            {
+                return result;
+            }
 
+            var segments = slug.Split("/", StringSplitOptions.RemoveEmptyEntries);
+            var lastSegment = segments.Last();
+            var seoInfos = await _seoInfoService.GetBestMatchingSeoInfos(lastSegment, WorkContext.CurrentStore, culture);
             var bestSeoInfo = seoInfos.FirstOrDefault();
-
             result.EntityInfo = bestSeoInfo;
-
 
             if (result.EntityInfo == null)
             {
-                var pageUrl = slug == "home" ? "/" : $"/{slug}";
+                var pageUrl = slug == "__index__home__page__" ? "/" : $"/{slug}";
                 try
                 {
                     var pages = WorkContext.Pages.Where(p =>
