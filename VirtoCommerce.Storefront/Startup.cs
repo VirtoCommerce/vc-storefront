@@ -363,7 +363,7 @@ namespace VirtoCommerce.Storefront
             // Do not write telemetry to debug output 
             TelemetryDebugWriter.IsTracingDisabled = true;
 
-            app.UseHealthChecks("/health", new HealthCheckOptions
+            app.UseHealthChecks("/storefrontapi/health", new HealthCheckOptions
             {
                 ResponseWriter = async (context, report) =>
                 {
