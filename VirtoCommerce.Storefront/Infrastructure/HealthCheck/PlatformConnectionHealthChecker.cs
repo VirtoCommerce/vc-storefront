@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -19,14 +18,10 @@ namespace VirtoCommerce.Storefront.Infrastructure.HealthCheck
         {
             try
             {
-                var stores = await _storeService.GetAllStoresAsync();
-                //if (stores.IsNullOrEmpty())
-                //{
-                //    return HealthCheckResult.
-                //}
+                await _storeService.GetAllStoresAsync();
                 return HealthCheckResult.Healthy("Connection to the Platform is OK");
             }
-            catch (Exception e)
+            catch
             {
                 return HealthCheckResult.Unhealthy("Connection to the Platform fails");
             }
