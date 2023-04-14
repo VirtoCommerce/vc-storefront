@@ -10,6 +10,7 @@ using GraphQL.Client.Serializer.Newtonsoft;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -18,11 +19,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using ProxyKit;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -36,6 +39,7 @@ using VirtoCommerce.Storefront.Filters;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Infrastructure.ApplicationInsights;
 using VirtoCommerce.Storefront.Infrastructure.Autorest;
+using VirtoCommerce.Storefront.Infrastructure.HealthCheck;
 using VirtoCommerce.Storefront.Infrastructure.Swagger;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
@@ -70,6 +74,11 @@ namespace VirtoCommerce.Storefront
         {
             services.AddMemoryCache();
             services.AddResponseCaching();
+
+            services.AddHealthChecks()
+                .AddCheck<PlatformConnectionHealthChecker>("Platform connection health",
+                    failureStatus: HealthStatus.Unhealthy,
+                    tags: new[] { "PlatformConnection" });
 
             services.Configure<StorefrontOptions>(Configuration.GetSection("VirtoCommerce"));
 
@@ -353,6 +362,18 @@ namespace VirtoCommerce.Storefront
             }
             // Do not write telemetry to debug output 
             TelemetryDebugWriter.IsTracingDisabled = true;
+
+            app.UseHealthChecks("/storefrontapi/health", new HealthCheckOptions
+            {
+                ResponseWriter = async (context, report) =>
+                {
+                    context.Response.ContentType = "application/json; charset=utf-8";
+
+                    var reportJson =
+                        JsonConvert.SerializeObject(report.Entries, Formatting.Indented, new StringEnumConverter());
+                    await context.Response.WriteAsync(reportJson);
+                }
+            });
 
             app.UseResponseCaching();
 
