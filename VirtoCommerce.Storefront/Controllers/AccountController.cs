@@ -32,9 +32,10 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpGet("impersonate/{userId}")]
         public async Task<IActionResult> ImpersonateUser(string userId)
         {
-            if (User.Identity.Name == SecurityConstants.AnonymousUsername || User.Claims.Any(x => x.Type == SecurityConstants.Claims.OperatorUserNameClaimType))
+            if (User.Identity.Name == SecurityConstants.AnonymousUsername ||
+                User.Claims.Any(x => x.Type == SecurityConstants.Claims.OperatorUserNameClaimType))
             {
-                return StoreFrontRedirect($"~/sign-in?redirect={System.Uri.EscapeDataString(Request.Path)}");
+                return StoreFrontRedirect($"~/sign-in?returnUrl={System.Uri.EscapeDataString(Request.Path)}");
             }
 
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, null, CanImpersonateAuthorizationRequirement.PolicyName);
