@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -32,34 +31,61 @@ namespace VirtoCommerce.Storefront.Controllers
         [HttpGet("impersonate/{userId}")]
         public async Task<IActionResult> ImpersonateUser(string userId)
         {
-            if (User.Identity.Name == SecurityConstants.AnonymousUsername ||
-                User.Claims.Any(x => x.Type == SecurityConstants.Claims.OperatorUserNameClaimType))
+            // If the user is not authenticated, redirect to the sign-in page
+            if (User.Identity.Name == SecurityConstants.AnonymousUsername)
             {
                 return StoreFrontRedirect($"~/sign-in?returnUrl={System.Uri.EscapeDataString(Request.Path)}");
             }
 
-            var authorizationResult = await _authorizationService.AuthorizeAsync(User, null, CanImpersonateAuthorizationRequirement.PolicyName);
-
-            if (!authorizationResult.Succeeded)
+            // If the user is not impersonating any user, check permission
+            if (string.IsNullOrEmpty(WorkContext.CurrentUser.OperatorUserId))
             {
-                return Forbid();
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, null, CanImpersonateAuthorizationRequirement.PolicyName);
+
+                if (!authorizationResult.Succeeded)
+                {
+                    return Forbid();
+                }
             }
 
+            // find the user to impersonate
             var impersonateUser = await _signInManager.UserManager.FindByIdAsync(userId);
 
+            // if the user is found, update the impersonated user and sign in
             if (impersonateUser != null)
             {
-                impersonateUser.OperatorUserId = WorkContext.CurrentUser.Id;
-                impersonateUser.OperatorUserName = WorkContext.CurrentUser.UserName;
-                impersonateUser.OperatorFullName = WorkContext.CurrentUser.Name;
-
-                // sign out the current user
-                await _signInManager.SignOutAsync();
-
-                await _signInManager.SignInAsync(impersonateUser, isPersistent: false);
+                UpdateImpersonatedUser(impersonateUser);
+                await SignOutAndSignInAsync(impersonateUser);
+            }
+            else
+            {
+                return NotFound();
             }
 
+            // redirect to the home page
             return StoreFrontRedirect("~/");
+        }
+
+        /// <summary>
+        /// Update operator to the impersonated user or keep current the operator if already impersonating
+        /// </summary>
+        /// <param name="impersonateUser"></param>
+        private void UpdateImpersonatedUser(User impersonateUser)
+        {
+            impersonateUser.OperatorUserId = WorkContext.CurrentUser.OperatorUserId ?? WorkContext.CurrentUser.Id;
+            impersonateUser.OperatorUserName = WorkContext.CurrentUser.OperatorUserName ?? WorkContext.CurrentUser.UserName;
+            impersonateUser.OperatorFullName = WorkContext.CurrentUser.OperatorFullName ?? WorkContext.CurrentUser.Name;
+        }
+
+        /// <summary>
+        /// Sign out the current user and sign in the impersonated user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        private async Task SignOutAndSignInAsync(User user)
+        {
+            await _signInManager.SignOutAsync();
+            await _signInManager.SignInAsync(user, isPersistent: false);
         }
     }
 }
