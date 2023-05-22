@@ -58,15 +58,13 @@ namespace VirtoCommerce.Storefront.Controllers
             var impersonateUser = await _signInManager.UserManager.FindByIdAsync(userId);
 
             // if the user is found, update the impersonated user and sign in
-            if (impersonateUser != null)
-            {
-                UpdateImpersonatedUser(impersonateUser);
-                await SignOutAndSignInAsync(impersonateUser);
-            }
-            else
+            if (impersonateUser == null)
             {
                 return NotFound();
             }
+
+            UpdateImpersonatedUser(impersonateUser);
+            await SignOutAndSignInAsync(impersonateUser);
 
             // redirect to the home page
             return StoreFrontRedirect("~/");
@@ -91,14 +89,11 @@ namespace VirtoCommerce.Storefront.Controllers
 
             if (operatorUser != null)
             {
-                await SignOutAndSignInAsync(operatorUser);
-            }
-            else
-            {
                 return NotFound();
             }
 
-            // redirect to the home page
+            await SignOutAndSignInAsync(operatorUser);
+
             return StoreFrontRedirect("~/");
         }
 
