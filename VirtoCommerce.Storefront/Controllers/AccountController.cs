@@ -27,7 +27,13 @@ namespace VirtoCommerce.Storefront.Controllers
             _authorizationService = authorizationService;
         }
 
+
         // GET: /account/impersonate/{userId}
+        /// <summary>
+        /// Handles the impersonation functionality. It allows an authenticated user to impersonate another user by specifying the userId. 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpGet("impersonate/{userId}")]
         public async Task<IActionResult> ImpersonateUser(string userId)
         {
@@ -56,6 +62,36 @@ namespace VirtoCommerce.Storefront.Controllers
             {
                 UpdateImpersonatedUser(impersonateUser);
                 await SignOutAndSignInAsync(impersonateUser);
+            }
+            else
+            {
+                return NotFound();
+            }
+
+            // redirect to the home page
+            return StoreFrontRedirect("~/");
+        }
+
+        // GET: /account/impersonate/reset
+        /// <summary>
+        /// Resets the impersonation state and restore the original user's identity after being impersonated.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("impersonate/reset")]
+        public async Task<IActionResult> ResetImpersonatation()
+        {
+            var operatorUserId = WorkContext.CurrentUser.OperatorUserId;
+
+            if (string.IsNullOrEmpty(operatorUserId))
+            {
+                return StoreFrontRedirect("~/");
+            }
+
+            var operatorUser = await _signInManager.UserManager.FindByIdAsync(operatorUserId);
+
+            if (operatorUser != null)
+            {
+                await SignOutAndSignInAsync(operatorUser);
             }
             else
             {
