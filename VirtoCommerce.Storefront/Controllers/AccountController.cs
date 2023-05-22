@@ -87,7 +87,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
             var operatorUser = await _signInManager.UserManager.FindByIdAsync(operatorUserId);
 
-            if (operatorUser != null)
+            if (operatorUser == null)
             {
                 return NotFound();
             }
