@@ -40,6 +40,7 @@ namespace VirtoCommerce.Storefront.Controllers
         [Route("AccessDenied")]
         public IActionResult AccessDenied()
         {
+            Response.StatusCode = StatusCodes.Status403Forbidden;
             return View("AccessDenied");
         }
     }
