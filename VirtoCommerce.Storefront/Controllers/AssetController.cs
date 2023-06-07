@@ -68,7 +68,7 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             var stream = await _themeEngine.GetAssetStreamAsync(path);
             return stream != null
-                ? File(stream, MimeTypes.GetMimeType(path))
+                ? File(stream, MimeTypes.GetMimeType(path), true)
                 : HandleStaticFiles(path);
         }
 

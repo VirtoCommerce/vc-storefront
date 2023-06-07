@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.FileProviders.Physical;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using VirtoCommerce.Storefront.Model.Caching;
@@ -18,8 +17,7 @@ namespace VirtoCommerce.Storefront.Domain
     {
         private readonly FileSystemBlobContentOptions _options;
         private readonly IStorefrontMemoryCache _memoryCache;
-        // Keep links to file watchers to prevent GC to collect it
-        private readonly PhysicalFilesWatcher _fileSystemWatcher;
+        private readonly PhysicalFileProvider _physicalFileProvider;
 
         public FileSystemContentBlobProvider(IOptions<FileSystemBlobContentOptions> options, IStorefrontMemoryCache memoryCache)
         {
@@ -30,7 +28,7 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 //It is very important to have rootPath with leading slash '\' without this any changes won't reflected
                 var rootPath = _options.Path.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
-                _fileSystemWatcher = new PhysicalFilesWatcher(rootPath, new FileSystemWatcher(rootPath), false);
+                _physicalFileProvider = new PhysicalFileProvider(rootPath);
             }
         }
         #region IContentBlobProvider Members
@@ -118,19 +116,12 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual IChangeToken Watch(string path)
         {
-            if (_fileSystemWatcher != null)
+            if (_physicalFileProvider == null)
             {
-                // Absolute paths not permitted for watcher, need to convert it to relative
-                if (Path.IsPathRooted(path))
-                {
-                    path = GetRelativePath(path).TrimStart('/');
-                }
-                return _fileSystemWatcher.CreateFileChangeToken(path);
+                return NullChangeToken.Singleton;
             }
-            else
-            {
-                return new CancellationChangeToken(new CancellationToken());
-            }
+
+            return _physicalFileProvider.Watch(path);
         }
         #endregion
 
