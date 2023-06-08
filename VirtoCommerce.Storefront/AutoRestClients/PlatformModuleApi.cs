@@ -18,8 +18,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.Threading.Tasks;
 
     /// <summary>
-    /// For this sample, you can use the key to satisfy the authorization
-    /// filters.
+    /// Virto Commerce provides API documentation in two formats, JSON and
+    /// YAML, with schema files generated as swagger.json and swagger.yaml. To
+    /// ensure secure access, authorization filters can be applied using a
+    /// specific key to grant access. This allows authorized users to securely
+    /// interact with the API and access the necessary resources while
+    /// maintaining confidentiality and data integrity.
     /// </summary>
     public partial class PlatformModuleClient : ServiceClient<PlatformModuleClient>, IPlatformModuleClient
     {
@@ -406,8 +410,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     using System.Threading.Tasks;
 
     /// <summary>
-    /// For this sample, you can use the key to satisfy the authorization
-    /// filters.
+    /// Virto Commerce provides API documentation in two formats, JSON and
+    /// YAML, with schema files generated as swagger.json and swagger.yaml. To
+    /// ensure secure access, authorization filters can be applied using a
+    /// specific key to grant access. This allows authorized users to securely
+    /// interact with the API and access the necessary resources while
+    /// maintaining confidentiality and data integrity.
     /// </summary>
     public partial interface IPlatformModuleClient : System.IDisposable
     {
@@ -857,6 +865,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
 
         /// <param name='authenticationType'>
         /// </param>
+        /// <param name='returnUrl'>
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -869,7 +879,126 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> SignInWithHttpMessagesAsync(string authenticationType = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> SignInWithHttpMessagesAsync(string authenticationType = default(string), string returnUrl = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("authenticationType", authenticationType);
+                tracingParameters.Add("returnUrl", returnUrl);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "SignIn", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "externalsignin").ToString();
+            List<string> _queryParameters = new List<string>();
+            if (authenticationType != null)
+            {
+                _queryParameters.Add(string.Format("authenticationType={0}", System.Uri.EscapeDataString(authenticationType)));
+            }
+            if (returnUrl != null)
+            {
+                _queryParameters.Add(string.Format("returnUrl={0}", System.Uri.EscapeDataString(returnUrl)));
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("GET");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <param name='authenticationType'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> SignOutWithHttpMessagesAsync(string authenticationType = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -880,11 +1009,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("authenticationType", authenticationType);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "SignIn", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "SignOut", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "externalsignin").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "externalsignin/signout").ToString();
             List<string> _queryParameters = new List<string>();
             if (authenticationType != null)
             {
@@ -1092,10 +1221,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> GetExternalLoginProvidersWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<ExternalSignInProviderInfo>>> GetExternalLoginProvidersWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1175,9 +1307,27 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse();
+            var _result = new HttpOperationResponse<IList<ExternalSignInProviderInfo>>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<ExternalSignInProviderInfo>>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
             if (_shouldTrace)
             {
                 ServiceClientTracing.Exit(_invocationId, _result);
@@ -1213,6 +1363,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     {
         /// <param name='authenticationType'>
         /// </param>
+        /// <param name='returnUrl'>
+        /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
         /// </param>
@@ -1222,7 +1374,19 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        Task<HttpOperationResponse> SignInWithHttpMessagesAsync(string authenticationType = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> SignInWithHttpMessagesAsync(string authenticationType = default(string), string returnUrl = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <param name='authenticationType'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        Task<HttpOperationResponse> SignOutWithHttpMessagesAsync(string authenticationType = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='returnUrl'>
         /// </param>
         /// <param name='customHeaders'>
@@ -1244,7 +1408,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        Task<HttpOperationResponse> GetExternalLoginProvidersWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        Task<HttpOperationResponse<IList<ExternalSignInProviderInfo>>> GetExternalLoginProvidersWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -1276,9 +1443,36 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// </param>
             /// <param name='authenticationType'>
             /// </param>
-            public static void SignIn(this IExternalSignIn operations, string authenticationType = default(string))
+            /// <param name='returnUrl'>
+            /// </param>
+            public static void SignIn(this IExternalSignIn operations, string authenticationType = default(string), string returnUrl = default(string))
             {
-                operations.SignInAsync(authenticationType).GetAwaiter().GetResult();
+                operations.SignInAsync(authenticationType, returnUrl).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='authenticationType'>
+            /// </param>
+            /// <param name='returnUrl'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task SignInAsync(this IExternalSignIn operations, string authenticationType = default(string), string returnUrl = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.SignInWithHttpMessagesAsync(authenticationType, returnUrl, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='authenticationType'>
+            /// </param>
+            public static void SignOut(this IExternalSignIn operations, string authenticationType = default(string))
+            {
+                operations.SignOutAsync(authenticationType).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
@@ -1289,9 +1483,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task SignInAsync(this IExternalSignIn operations, string authenticationType = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task SignOutAsync(this IExternalSignIn operations, string authenticationType = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.SignInWithHttpMessagesAsync(authenticationType, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.SignOutWithHttpMessagesAsync(authenticationType, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <param name='operations'>
@@ -1320,9 +1514,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            public static void GetExternalLoginProviders(this IExternalSignIn operations)
+            public static IList<ExternalSignInProviderInfo> GetExternalLoginProviders(this IExternalSignIn operations)
             {
-                operations.GetExternalLoginProvidersAsync().GetAwaiter().GetResult();
+                return operations.GetExternalLoginProvidersAsync().GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
@@ -1331,9 +1525,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task GetExternalLoginProvidersAsync(this IExternalSignIn operations, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<ExternalSignInProviderInfo>> GetExternalLoginProvidersAsync(this IExternalSignIn operations, CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.GetExternalLoginProvidersWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false)).Dispose();
+                using (var _result = await operations.GetExternalLoginProvidersWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
 
     }
@@ -1387,6 +1584,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// </summary>
         public PlatformModuleClient Client { get; private set; }
 
+        /// <summary>
+        /// Gets the list of available apps, filtered by user permissions.
+        /// </summary>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -1536,6 +1736,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     /// </summary>
     public partial interface IApps
     {
+        /// <summary>
+        /// Gets the list of available apps, filtered by user permissions.
+        /// </summary>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
         /// </param>
@@ -1575,6 +1778,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
     /// </summary>
     public static partial class AppsExtensions
     {
+            /// <summary>
+            /// Gets the list of available apps, filtered by user permissions.
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -1583,6 +1789,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 return operations.GetAppsAsync().GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Gets the list of available apps, filtered by user permissions.
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -12666,10 +12875,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> GetLoginTypesWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<LoginType>>> GetLoginTypesWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -12749,9 +12961,27 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse();
+            var _result = new HttpOperationResponse<IList<LoginType>>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<LoginType>>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
             if (_shouldTrace)
             {
                 ServiceClientTracing.Exit(_invocationId, _result);
@@ -13648,7 +13878,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/security/users/{userId}/generateToken").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/platform/security/users/{userId}/verifyToken").ToString();
             _url = _url.Replace("{userId}", System.Uri.EscapeDataString(userId));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
@@ -14411,7 +14641,10 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
         /// <exception cref="Microsoft.Rest.HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
-        Task<HttpOperationResponse> GetLoginTypesWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        Task<HttpOperationResponse<IList<LoginType>>> GetLoginTypesWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Verify user email
         /// </summary>
@@ -15624,9 +15857,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            public static void GetLoginTypes(this ISecurity operations)
+            public static IList<LoginType> GetLoginTypes(this ISecurity operations)
             {
-                operations.GetLoginTypesAsync().GetAwaiter().GetResult();
+                return operations.GetLoginTypesAsync().GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -15638,9 +15871,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task GetLoginTypesAsync(this ISecurity operations, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<LoginType>> GetLoginTypesAsync(this ISecurity operations, CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.GetLoginTypesWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false)).Dispose();
+                using (var _result = await operations.GetLoginTypesWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
 
             /// <summary>
@@ -16949,6 +17185,62 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
+    public partial class ExternalSignInProviderInfo
+    {
+        /// <summary>
+        /// Initializes a new instance of the ExternalSignInProviderInfo class.
+        /// </summary>
+        public ExternalSignInProviderInfo()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ExternalSignInProviderInfo class.
+        /// </summary>
+        public ExternalSignInProviderInfo(string authenticationType = default(string), string displayName = default(string))
+        {
+            AuthenticationType = authenticationType;
+            DisplayName = displayName;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "authenticationType")]
+        public string AuthenticationType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "displayName")]
+        public string DisplayName { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public partial class AppDescriptor
     {
         /// <summary>
@@ -18023,6 +18315,74 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
+    public partial class LoginType
+    {
+        /// <summary>
+        /// Initializes a new instance of the LoginType class.
+        /// </summary>
+        public LoginType()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the LoginType class.
+        /// </summary>
+        public LoginType(bool? enabled = default(bool?), bool? hasLoginForm = default(bool?), string authenticationType = default(string), int? priority = default(int?))
+        {
+            Enabled = enabled;
+            HasLoginForm = hasLoginForm;
+            AuthenticationType = authenticationType;
+            Priority = priority;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "enabled")]
+        public bool? Enabled { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "hasLoginForm")]
+        public bool? HasLoginForm { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "authenticationType")]
+        public string AuthenticationType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "priority")]
+        public int? Priority { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public partial class ObjectSettingEntry
     {
         /// <summary>
@@ -18203,35 +18563,27 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class OpenIddictResponse
+    public partial class Role
     {
         /// <summary>
-        /// Initializes a new instance of the OpenIddictResponse class.
+        /// Initializes a new instance of the Role class.
         /// </summary>
-        public OpenIddictResponse()
+        public Role()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the OpenIddictResponse class.
+        /// Initializes a new instance of the Role class.
         /// </summary>
-        public OpenIddictResponse(string accessToken = default(string), string code = default(string), string deviceCode = default(string), string error = default(string), string errorDescription = default(string), string errorUri = default(string), long? expiresIn = default(long?), string idToken = default(string), string refreshToken = default(string), string scope = default(string), string state = default(string), string tokenType = default(string), string userCode = default(string), int? count = default(int?))
+        public Role(string description = default(string), IList<Permission> permissions = default(IList<Permission>), string id = default(string), string name = default(string), string normalizedName = default(string), string concurrencyStamp = default(string))
         {
-            AccessToken = accessToken;
-            Code = code;
-            DeviceCode = deviceCode;
-            Error = error;
-            ErrorDescription = errorDescription;
-            ErrorUri = errorUri;
-            ExpiresIn = expiresIn;
-            IdToken = idToken;
-            RefreshToken = refreshToken;
-            Scope = scope;
-            State = state;
-            TokenType = tokenType;
-            UserCode = userCode;
-            Count = count;
+            Description = description;
+            Permissions = permissions;
+            Id = id;
+            Name = name;
+            NormalizedName = normalizedName;
+            ConcurrencyStamp = concurrencyStamp;
             CustomInit();
         }
 
@@ -18242,73 +18594,33 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "accessToken")]
-        public string AccessToken { get; set; }
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "code")]
-        public string Code { get; set; }
+        [JsonProperty(PropertyName = "permissions")]
+        public IList<Permission> Permissions { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "deviceCode")]
-        public string DeviceCode { get; set; }
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "error")]
-        public string Error { get; set; }
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "errorDescription")]
-        public string ErrorDescription { get; set; }
+        [JsonProperty(PropertyName = "normalizedName")]
+        public string NormalizedName { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "errorUri")]
-        public string ErrorUri { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "expiresIn")]
-        public long? ExpiresIn { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "idToken")]
-        public string IdToken { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "refreshToken")]
-        public string RefreshToken { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "scope")]
-        public string Scope { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "state")]
-        public string State { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "tokenType")]
-        public string TokenType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "userCode")]
-        public string UserCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "count")]
-        public int? Count { get; private set; }
+        [JsonProperty(PropertyName = "concurrencyStamp")]
+        public string ConcurrencyStamp { get; set; }
 
     }
 }
@@ -18331,23 +18643,23 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class LastModifiedResponse
+    public partial class ApplicationUserLogin
     {
         /// <summary>
-        /// Initializes a new instance of the LastModifiedResponse class.
+        /// Initializes a new instance of the ApplicationUserLogin class.
         /// </summary>
-        public LastModifiedResponse()
+        public ApplicationUserLogin()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the LastModifiedResponse class.
+        /// Initializes a new instance of the ApplicationUserLogin class.
         /// </summary>
-        public LastModifiedResponse(string scope = default(string), System.DateTime? lastModifiedDate = default(System.DateTime?))
+        public ApplicationUserLogin(string loginProvider = default(string), string providerKey = default(string))
         {
-            Scope = scope;
-            LastModifiedDate = lastModifiedDate;
+            LoginProvider = loginProvider;
+            ProviderKey = providerKey;
             CustomInit();
         }
 
@@ -18358,13 +18670,295 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "scope")]
-        public string Scope { get; set; }
+        [JsonProperty(PropertyName = "loginProvider")]
+        public string LoginProvider { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "lastModifiedDate")]
-        public System.DateTime? LastModifiedDate { get; set; }
+        [JsonProperty(PropertyName = "providerKey")]
+        public string ProviderKey { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class ApplicationUser
+    {
+        /// <summary>
+        /// Initializes a new instance of the ApplicationUser class.
+        /// </summary>
+        public ApplicationUser()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ApplicationUser class.
+        /// </summary>
+        /// <param name="storeId">Tenant id</param>
+        /// <param name="lockoutEndDateUtc">Obsolete. Use LockoutEnd. DateTime
+        /// in UTC when lockout ends, any time in the past is considered not
+        /// locked out.</param>
+        /// <param name="userState">Possible values include: 'PendingApproval',
+        /// 'Approved', 'Rejected'</param>
+        /// <param name="permissions">Obsolete. All permissions from assigned
+        /// roles.</param>
+        /// <param name="logins">External provider logins.</param>
+        /// <param name="passwordExpired">Indicates that the password for this
+        /// user is expired and must be changed.</param>
+        /// <param name="lastPasswordChangedDate">The last date when the
+        /// password was changed</param>
+        /// <param name="lastPasswordChangeRequestDate">The last date when the
+        /// requested password change.</param>
+        /// <param name="lastLoginDate">The last login date</param>
+        public ApplicationUser(string storeId = default(string), string memberId = default(string), bool? isAdministrator = default(bool?), string photoUrl = default(string), string userType = default(string), string status = default(string), string password = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), IList<Role> roles = default(IList<Role>), System.DateTime? lockoutEndDateUtc = default(System.DateTime?), string userState = default(string), IList<string> permissions = default(IList<string>), IList<ApplicationUserLogin> logins = default(IList<ApplicationUserLogin>), bool? passwordExpired = default(bool?), System.DateTime? lastPasswordChangedDate = default(System.DateTime?), System.DateTime? lastPasswordChangeRequestDate = default(System.DateTime?), System.DateTime? lastLoginDate = default(System.DateTime?), string id = default(string), string userName = default(string), string normalizedUserName = default(string), string email = default(string), string normalizedEmail = default(string), bool? emailConfirmed = default(bool?), string passwordHash = default(string), string securityStamp = default(string), string concurrencyStamp = default(string), string phoneNumber = default(string), bool? phoneNumberConfirmed = default(bool?), bool? twoFactorEnabled = default(bool?), System.DateTime? lockoutEnd = default(System.DateTime?), bool? lockoutEnabled = default(bool?), int? accessFailedCount = default(int?))
+        {
+            StoreId = storeId;
+            MemberId = memberId;
+            IsAdministrator = isAdministrator;
+            PhotoUrl = photoUrl;
+            UserType = userType;
+            Status = status;
+            Password = password;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Roles = roles;
+            LockoutEndDateUtc = lockoutEndDateUtc;
+            UserState = userState;
+            Permissions = permissions;
+            Logins = logins;
+            PasswordExpired = passwordExpired;
+            LastPasswordChangedDate = lastPasswordChangedDate;
+            LastPasswordChangeRequestDate = lastPasswordChangeRequestDate;
+            LastLoginDate = lastLoginDate;
+            Id = id;
+            UserName = userName;
+            NormalizedUserName = normalizedUserName;
+            Email = email;
+            NormalizedEmail = normalizedEmail;
+            EmailConfirmed = emailConfirmed;
+            PasswordHash = passwordHash;
+            SecurityStamp = securityStamp;
+            ConcurrencyStamp = concurrencyStamp;
+            PhoneNumber = phoneNumber;
+            PhoneNumberConfirmed = phoneNumberConfirmed;
+            TwoFactorEnabled = twoFactorEnabled;
+            LockoutEnd = lockoutEnd;
+            LockoutEnabled = lockoutEnabled;
+            AccessFailedCount = accessFailedCount;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// Gets or sets tenant id
+        /// </summary>
+        [JsonProperty(PropertyName = "storeId")]
+        public string StoreId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "memberId")]
+        public string MemberId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isAdministrator")]
+        public bool? IsAdministrator { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "photoUrl")]
+        public string PhotoUrl { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "userType")]
+        public string UserType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "status")]
+        public string Status { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "password")]
+        public string Password { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "roles")]
+        public IList<Role> Roles { get; set; }
+
+        /// <summary>
+        /// Gets or sets obsolete. Use LockoutEnd. DateTime in UTC when lockout
+        /// ends, any time in the past is considered not locked out.
+        /// </summary>
+        [JsonProperty(PropertyName = "lockoutEndDateUtc")]
+        public System.DateTime? LockoutEndDateUtc { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'PendingApproval',
+        /// 'Approved', 'Rejected'
+        /// </summary>
+        [JsonProperty(PropertyName = "userState")]
+        public string UserState { get; set; }
+
+        /// <summary>
+        /// Gets or sets obsolete. All permissions from assigned roles.
+        /// </summary>
+        [JsonProperty(PropertyName = "permissions")]
+        public IList<string> Permissions { get; set; }
+
+        /// <summary>
+        /// Gets or sets external provider logins.
+        /// </summary>
+        [JsonProperty(PropertyName = "logins")]
+        public IList<ApplicationUserLogin> Logins { get; set; }
+
+        /// <summary>
+        /// Gets or sets indicates that the password for this user is expired
+        /// and must be changed.
+        /// </summary>
+        [JsonProperty(PropertyName = "passwordExpired")]
+        public bool? PasswordExpired { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last date when the password was changed
+        /// </summary>
+        [JsonProperty(PropertyName = "lastPasswordChangedDate")]
+        public System.DateTime? LastPasswordChangedDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last date when the requested password change.
+        /// </summary>
+        [JsonProperty(PropertyName = "lastPasswordChangeRequestDate")]
+        public System.DateTime? LastPasswordChangeRequestDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last login date
+        /// </summary>
+        [JsonProperty(PropertyName = "lastLoginDate")]
+        public System.DateTime? LastLoginDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "userName")]
+        public string UserName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "normalizedUserName")]
+        public string NormalizedUserName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "email")]
+        public string Email { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "normalizedEmail")]
+        public string NormalizedEmail { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "emailConfirmed")]
+        public bool? EmailConfirmed { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "passwordHash")]
+        public string PasswordHash { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "securityStamp")]
+        public string SecurityStamp { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "concurrencyStamp")]
+        public string ConcurrencyStamp { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "phoneNumber")]
+        public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "phoneNumberConfirmed")]
+        public bool? PhoneNumberConfirmed { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "twoFactorEnabled")]
+        public bool? TwoFactorEnabled { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "lockoutEnd")]
+        public System.DateTime? LockoutEnd { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "lockoutEnabled")]
+        public bool? LockoutEnabled { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "accessFailedCount")]
+        public int? AccessFailedCount { get; set; }
 
     }
 }
@@ -18801,26 +19395,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class License
+    public partial class ChangePasswordRequest
     {
         /// <summary>
-        /// Initializes a new instance of the License class.
+        /// Initializes a new instance of the ChangePasswordRequest class.
         /// </summary>
-        public License()
+        public ChangePasswordRequest()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the License class.
+        /// Initializes a new instance of the ChangePasswordRequest class.
         /// </summary>
-        public License(string type = default(string), string customerName = default(string), string customerEmail = default(string), System.DateTime? expirationDate = default(System.DateTime?), string rawLicense = default(string))
+        public ChangePasswordRequest(string userName = default(string), string oldPassword = default(string), string newPassword = default(string))
         {
-            Type = type;
-            CustomerName = customerName;
-            CustomerEmail = customerEmail;
-            ExpirationDate = expirationDate;
-            RawLicense = rawLicense;
+            UserName = userName;
+            OldPassword = oldPassword;
+            NewPassword = newPassword;
             CustomInit();
         }
 
@@ -18831,28 +19423,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "type")]
-        public string Type { get; set; }
+        [JsonProperty(PropertyName = "userName")]
+        public string UserName { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "customerName")]
-        public string CustomerName { get; set; }
+        [JsonProperty(PropertyName = "oldPassword")]
+        public string OldPassword { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "customerEmail")]
-        public string CustomerEmail { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "expirationDate")]
-        public System.DateTime? ExpirationDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "rawLicense")]
-        public string RawLicense { get; set; }
+        [JsonProperty(PropertyName = "newPassword")]
+        public string NewPassword { get; set; }
 
     }
 }
@@ -18875,28 +19457,22 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class SystemInfo
+    public partial class ConfirmEmailRequest
     {
         /// <summary>
-        /// Initializes a new instance of the SystemInfo class.
+        /// Initializes a new instance of the ConfirmEmailRequest class.
         /// </summary>
-        public SystemInfo()
+        public ConfirmEmailRequest()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the SystemInfo class.
+        /// Initializes a new instance of the ConfirmEmailRequest class.
         /// </summary>
-        public SystemInfo(string platformVersion = default(string), License license = default(License), IList<ModuleDescriptor> installedModules = default(IList<ModuleDescriptor>), string version = default(string), bool? is64BitOperatingSystem = default(bool?), bool? is64BitProcess = default(bool?), string databaseProvider = default(string))
+        public ConfirmEmailRequest(string token = default(string))
         {
-            PlatformVersion = platformVersion;
-            License = license;
-            InstalledModules = installedModules;
-            Version = version;
-            Is64BitOperatingSystem = is64BitOperatingSystem;
-            Is64BitProcess = is64BitProcess;
-            DatabaseProvider = databaseProvider;
+            Token = token;
             CustomInit();
         }
 
@@ -18907,438 +19483,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "platformVersion")]
-        public string PlatformVersion { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "license")]
-        public License License { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "installedModules")]
-        public IList<ModuleDescriptor> InstalledModules { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "version")]
-        public string Version { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "is64BitOperatingSystem")]
-        public bool? Is64BitOperatingSystem { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "is64BitProcess")]
-        public bool? Is64BitProcess { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "databaseProvider")]
-        public string DatabaseProvider { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class DynamicPropertySearchCriteria
-    {
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertySearchCriteria
-        /// class.
-        /// </summary>
-        public DynamicPropertySearchCriteria()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertySearchCriteria
-        /// class.
-        /// </summary>
-        /// <param name="objectType">Search object type</param>
-        /// <param name="keyword">Search phrase</param>
-        /// <param name="searchPhrase">Property is left for backward
-        /// compatibility</param>
-        /// <param name="languageCode">Search phrase language</param>
-        public DynamicPropertySearchCriteria(string typeName = default(string), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
-        {
-            TypeName = typeName;
-            ResponseGroup = responseGroup;
-            ObjectType = objectType;
-            ObjectTypes = objectTypes;
-            ObjectIds = objectIds;
-            Keyword = keyword;
-            SearchPhrase = searchPhrase;
-            LanguageCode = languageCode;
-            Sort = sort;
-            SortInfos = sortInfos;
-            Skip = skip;
-            Take = take;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "typeName")]
-        public string TypeName { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "responseGroup")]
-        public string ResponseGroup { get; set; }
-
-        /// <summary>
-        /// Gets or sets search object type
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectTypes")]
-        public IList<string> ObjectTypes { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectIds")]
-        public IList<string> ObjectIds { get; set; }
-
-        /// <summary>
-        /// Gets or sets search phrase
-        /// </summary>
-        [JsonProperty(PropertyName = "keyword")]
-        public string Keyword { get; set; }
-
-        /// <summary>
-        /// Gets or sets property is left for backward compatibility
-        /// </summary>
-        [JsonProperty(PropertyName = "searchPhrase")]
-        public string SearchPhrase { get; set; }
-
-        /// <summary>
-        /// Gets or sets search phrase language
-        /// </summary>
-        [JsonProperty(PropertyName = "languageCode")]
-        public string LanguageCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "sort")]
-        public string Sort { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "sortInfos")]
-        public IList<SortInfo> SortInfos { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "skip")]
-        public int? Skip { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "take")]
-        public int? Take { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class DynamicPropertyName
-    {
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertyName class.
-        /// </summary>
-        public DynamicPropertyName()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertyName class.
-        /// </summary>
-        /// <param name="locale">Language ID, e.g. en-US.</param>
-        public DynamicPropertyName(string locale = default(string), string name = default(string))
-        {
-            Locale = locale;
-            Name = name;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// Gets or sets language ID, e.g. en-US.
-        /// </summary>
-        [JsonProperty(PropertyName = "locale")]
-        public string Locale { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class DynamicProperty
-    {
-        /// <summary>
-        /// Initializes a new instance of the DynamicProperty class.
-        /// </summary>
-        public DynamicProperty()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DynamicProperty class.
-        /// </summary>
-        /// <param name="description">dynamic property description</param>
-        /// <param name="isArray">Defines whether a property supports multiple
-        /// values.</param>
-        /// <param name="isDictionary">Dictionary has a predefined set of
-        /// values. User can select one or more of them and cannot enter
-        /// arbitrary values.</param>
-        /// <param name="isMultilingual">For multilingual properties user can
-        /// enter different values for each of registered languages.</param>
-        /// <param name="valueType">Possible values include: 'Undefined',
-        /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
-        /// 'Boolean', 'Html', 'Image'</param>
-        /// <param name="displayNames">Property names for different
-        /// languages.</param>
-        public DynamicProperty(string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            Name = name;
-            Description = description;
-            ObjectType = objectType;
-            IsArray = isArray;
-            IsDictionary = isDictionary;
-            IsMultilingual = isMultilingual;
-            IsRequired = isRequired;
-            DisplayOrder = displayOrder;
-            ValueType = valueType;
-            DisplayNames = displayNames;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets dynamic property description
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// Gets or sets defines whether a property supports multiple values.
-        /// </summary>
-        [JsonProperty(PropertyName = "isArray")]
-        public bool? IsArray { get; set; }
-
-        /// <summary>
-        /// Gets or sets dictionary has a predefined set of values. User can
-        /// select one or more of them and cannot enter arbitrary values.
-        /// </summary>
-        [JsonProperty(PropertyName = "isDictionary")]
-        public bool? IsDictionary { get; set; }
-
-        /// <summary>
-        /// Gets or sets for multilingual properties user can enter different
-        /// values for each of registered languages.
-        /// </summary>
-        [JsonProperty(PropertyName = "isMultilingual")]
-        public bool? IsMultilingual { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isRequired")]
-        public bool? IsRequired { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "displayOrder")]
-        public int? DisplayOrder { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Undefined', 'ShortText',
-        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html',
-        /// 'Image'
-        /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; set; }
-
-        /// <summary>
-        /// Gets or sets property names for different languages.
-        /// </summary>
-        [JsonProperty(PropertyName = "displayNames")]
-        public IList<DynamicPropertyName> DisplayNames { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class DynamicPropertySearchResult
-    {
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertySearchResult
-        /// class.
-        /// </summary>
-        public DynamicPropertySearchResult()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DynamicPropertySearchResult
-        /// class.
-        /// </summary>
-        public DynamicPropertySearchResult(int? totalCount = default(int?), IList<DynamicProperty> results = default(IList<DynamicProperty>))
-        {
-            TotalCount = totalCount;
-            Results = results;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "totalCount")]
-        public int? TotalCount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "results")]
-        public IList<DynamicProperty> Results { get; set; }
+        [JsonProperty(PropertyName = "token")]
+        public string Token { get; set; }
 
     }
 }
@@ -19459,6 +19605,64 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
+    public partial class DynamicPropertyName
+    {
+        /// <summary>
+        /// Initializes a new instance of the DynamicPropertyName class.
+        /// </summary>
+        public DynamicPropertyName()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DynamicPropertyName class.
+        /// </summary>
+        /// <param name="locale">Language ID, e.g. en-US.</param>
+        public DynamicPropertyName(string locale = default(string), string name = default(string))
+        {
+            Locale = locale;
+            Name = name;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// Gets or sets language ID, e.g. en-US.
+        /// </summary>
+        [JsonProperty(PropertyName = "locale")]
+        public string Locale { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public partial class DynamicObjectProperty
     {
         /// <summary>
@@ -19521,6 +19725,163 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "values")]
         public IList<DynamicPropertyObjectValue> Values { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets dynamic property description
+        /// </summary>
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// Gets or sets defines whether a property supports multiple values.
+        /// </summary>
+        [JsonProperty(PropertyName = "isArray")]
+        public bool? IsArray { get; set; }
+
+        /// <summary>
+        /// Gets or sets dictionary has a predefined set of values. User can
+        /// select one or more of them and cannot enter arbitrary values.
+        /// </summary>
+        [JsonProperty(PropertyName = "isDictionary")]
+        public bool? IsDictionary { get; set; }
+
+        /// <summary>
+        /// Gets or sets for multilingual properties user can enter different
+        /// values for each of registered languages.
+        /// </summary>
+        [JsonProperty(PropertyName = "isMultilingual")]
+        public bool? IsMultilingual { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isRequired")]
+        public bool? IsRequired { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "displayOrder")]
+        public int? DisplayOrder { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Undefined', 'ShortText',
+        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean', 'Html',
+        /// 'Image'
+        /// </summary>
+        [JsonProperty(PropertyName = "valueType")]
+        public string ValueType { get; set; }
+
+        /// <summary>
+        /// Gets or sets property names for different languages.
+        /// </summary>
+        [JsonProperty(PropertyName = "displayNames")]
+        public IList<DynamicPropertyName> DisplayNames { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class DynamicProperty
+    {
+        /// <summary>
+        /// Initializes a new instance of the DynamicProperty class.
+        /// </summary>
+        public DynamicProperty()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DynamicProperty class.
+        /// </summary>
+        /// <param name="description">dynamic property description</param>
+        /// <param name="isArray">Defines whether a property supports multiple
+        /// values.</param>
+        /// <param name="isDictionary">Dictionary has a predefined set of
+        /// values. User can select one or more of them and cannot enter
+        /// arbitrary values.</param>
+        /// <param name="isMultilingual">For multilingual properties user can
+        /// enter different values for each of registered languages.</param>
+        /// <param name="valueType">Possible values include: 'Undefined',
+        /// 'ShortText', 'LongText', 'Integer', 'Decimal', 'DateTime',
+        /// 'Boolean', 'Html', 'Image'</param>
+        /// <param name="displayNames">Property names for different
+        /// languages.</param>
+        public DynamicProperty(string name = default(string), string description = default(string), string objectType = default(string), bool? isArray = default(bool?), bool? isDictionary = default(bool?), bool? isMultilingual = default(bool?), bool? isRequired = default(bool?), int? displayOrder = default(int?), string valueType = default(string), IList<DynamicPropertyName> displayNames = default(IList<DynamicPropertyName>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        {
+            Name = name;
+            Description = description;
+            ObjectType = objectType;
+            IsArray = isArray;
+            IsDictionary = isDictionary;
+            IsMultilingual = isMultilingual;
+            IsRequired = isRequired;
+            DisplayOrder = displayOrder;
+            ValueType = valueType;
+            DisplayNames = displayNames;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
 
         /// <summary>
         /// </summary>
@@ -19813,6 +20174,303 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
+    public partial class DynamicPropertySearchCriteria
+    {
+        /// <summary>
+        /// Initializes a new instance of the DynamicPropertySearchCriteria
+        /// class.
+        /// </summary>
+        public DynamicPropertySearchCriteria()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DynamicPropertySearchCriteria
+        /// class.
+        /// </summary>
+        /// <param name="objectType">Search object type</param>
+        /// <param name="keyword">Search phrase</param>
+        /// <param name="searchPhrase">Property is left for backward
+        /// compatibility</param>
+        /// <param name="languageCode">Search phrase language</param>
+        public DynamicPropertySearchCriteria(string typeName = default(string), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        {
+            TypeName = typeName;
+            ResponseGroup = responseGroup;
+            ObjectType = objectType;
+            ObjectTypes = objectTypes;
+            ObjectIds = objectIds;
+            Keyword = keyword;
+            SearchPhrase = searchPhrase;
+            LanguageCode = languageCode;
+            Sort = sort;
+            SortInfos = sortInfos;
+            Skip = skip;
+            Take = take;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "typeName")]
+        public string TypeName { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "responseGroup")]
+        public string ResponseGroup { get; set; }
+
+        /// <summary>
+        /// Gets or sets search object type
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectTypes")]
+        public IList<string> ObjectTypes { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectIds")]
+        public IList<string> ObjectIds { get; set; }
+
+        /// <summary>
+        /// Gets or sets search phrase
+        /// </summary>
+        [JsonProperty(PropertyName = "keyword")]
+        public string Keyword { get; set; }
+
+        /// <summary>
+        /// Gets or sets property is left for backward compatibility
+        /// </summary>
+        [JsonProperty(PropertyName = "searchPhrase")]
+        public string SearchPhrase { get; set; }
+
+        /// <summary>
+        /// Gets or sets search phrase language
+        /// </summary>
+        [JsonProperty(PropertyName = "languageCode")]
+        public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sort")]
+        public string Sort { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sortInfos")]
+        public IList<SortInfo> SortInfos { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "skip")]
+        public int? Skip { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "take")]
+        public int? Take { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class DynamicPropertySearchResult
+    {
+        /// <summary>
+        /// Initializes a new instance of the DynamicPropertySearchResult
+        /// class.
+        /// </summary>
+        public DynamicPropertySearchResult()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DynamicPropertySearchResult
+        /// class.
+        /// </summary>
+        public DynamicPropertySearchResult(int? totalCount = default(int?), IList<DynamicProperty> results = default(IList<DynamicProperty>))
+        {
+            TotalCount = totalCount;
+            Results = results;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "totalCount")]
+        public int? TotalCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "results")]
+        public IList<DynamicProperty> Results { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class IdentityError
+    {
+        /// <summary>
+        /// Initializes a new instance of the IdentityError class.
+        /// </summary>
+        public IdentityError()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the IdentityError class.
+        /// </summary>
+        public IdentityError(string code = default(string), string description = default(string))
+        {
+            Code = code;
+            Description = description;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "code")]
+        public string Code { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class IdentityResult
+    {
+        /// <summary>
+        /// Initializes a new instance of the IdentityResult class.
+        /// </summary>
+        public IdentityResult()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the IdentityResult class.
+        /// </summary>
+        public IdentityResult(bool? succeeded = default(bool?), IList<IdentityError> errors = default(IList<IdentityError>))
+        {
+            Succeeded = succeeded;
+            Errors = errors;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "succeeded")]
+        public bool? Succeeded { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "errors")]
+        public IList<IdentityError> Errors { get; private set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public partial class Job
     {
         /// <summary>
@@ -19875,6 +20533,253 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
+    public partial class JsonElement
+    {
+        /// <summary>
+        /// Initializes a new instance of the JsonElement class.
+        /// </summary>
+        public JsonElement()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the JsonElement class.
+        /// </summary>
+        /// <param name="valueKind">Possible values include: 'Undefined',
+        /// 'Object', 'Array', 'String', 'Number', 'True', 'False',
+        /// 'Null'</param>
+        public JsonElement(string valueKind = default(string))
+        {
+            ValueKind = valueKind;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Undefined', 'Object',
+        /// 'Array', 'String', 'Number', 'True', 'False', 'Null'
+        /// </summary>
+        [JsonProperty(PropertyName = "valueKind")]
+        public string ValueKind { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class LastModifiedResponse
+    {
+        /// <summary>
+        /// Initializes a new instance of the LastModifiedResponse class.
+        /// </summary>
+        public LastModifiedResponse()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the LastModifiedResponse class.
+        /// </summary>
+        public LastModifiedResponse(string scope = default(string), System.DateTime? lastModifiedDate = default(System.DateTime?))
+        {
+            Scope = scope;
+            LastModifiedDate = lastModifiedDate;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "scope")]
+        public string Scope { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "lastModifiedDate")]
+        public System.DateTime? LastModifiedDate { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class License
+    {
+        /// <summary>
+        /// Initializes a new instance of the License class.
+        /// </summary>
+        public License()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the License class.
+        /// </summary>
+        public License(string type = default(string), string customerName = default(string), string customerEmail = default(string), System.DateTime? expirationDate = default(System.DateTime?), string rawLicense = default(string))
+        {
+            Type = type;
+            CustomerName = customerName;
+            CustomerEmail = customerEmail;
+            ExpirationDate = expirationDate;
+            RawLicense = rawLicense;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "customerName")]
+        public string CustomerName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "customerEmail")]
+        public string CustomerEmail { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "expirationDate")]
+        public System.DateTime? ExpirationDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "rawLicense")]
+        public string RawLicense { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class LoginRequest
+    {
+        /// <summary>
+        /// Initializes a new instance of the LoginRequest class.
+        /// </summary>
+        public LoginRequest()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the LoginRequest class.
+        /// </summary>
+        public LoginRequest(string userName = default(string), string password = default(string), bool? rememberMe = default(bool?))
+        {
+            UserName = userName;
+            Password = password;
+            RememberMe = rememberMe;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "userName")]
+        public string UserName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "password")]
+        public string Password { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "rememberMe")]
+        public bool? RememberMe { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public partial class ProgressMessage
     {
         /// <summary>
@@ -19913,131 +20818,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "level")]
         public string Level { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class ModulePushNotification
-    {
-        /// <summary>
-        /// Initializes a new instance of the ModulePushNotification class.
-        /// </summary>
-        public ModulePushNotification()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ModulePushNotification class.
-        /// </summary>
-        /// <param name="errorCount">Gets the count of errors during
-        /// processing.</param>
-        public ModulePushNotification(System.DateTime? started = default(System.DateTime?), System.DateTime? finished = default(System.DateTime?), IList<ProgressMessage> progressLog = default(IList<ProgressMessage>), int? errorCount = default(int?), string serverId = default(string), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?), string id = default(string))
-        {
-            Started = started;
-            Finished = finished;
-            ProgressLog = progressLog;
-            ErrorCount = errorCount;
-            ServerId = serverId;
-            Creator = creator;
-            Created = created;
-            IsNew = isNew;
-            NotifyType = notifyType;
-            Description = description;
-            Title = title;
-            RepeatCount = repeatCount;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "started")]
-        public System.DateTime? Started { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "finished")]
-        public System.DateTime? Finished { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "progressLog")]
-        public IList<ProgressMessage> ProgressLog { get; set; }
-
-        /// <summary>
-        /// Gets the count of errors during processing.
-        /// </summary>
-        [JsonProperty(PropertyName = "errorCount")]
-        public int? ErrorCount { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "serverId")]
-        public string ServerId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "creator")]
-        public string Creator { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "created")]
-        public System.DateTime? Created { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isNew")]
-        public bool? IsNew { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "notifyType")]
-        public string NotifyType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "title")]
-        public string Title { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "repeatCount")]
-        public int? RepeatCount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
 
     }
 }
@@ -20187,89 +20967,36 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class JsonElement
+    public partial class ModulePushNotification
     {
         /// <summary>
-        /// Initializes a new instance of the JsonElement class.
+        /// Initializes a new instance of the ModulePushNotification class.
         /// </summary>
-        public JsonElement()
+        public ModulePushNotification()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the JsonElement class.
+        /// Initializes a new instance of the ModulePushNotification class.
         /// </summary>
-        /// <param name="valueKind">Possible values include: 'Undefined',
-        /// 'Object', 'Array', 'String', 'Number', 'True', 'False',
-        /// 'Null'</param>
-        public JsonElement(string valueKind = default(string))
+        /// <param name="errorCount">Gets the count of errors during
+        /// processing.</param>
+        public ModulePushNotification(System.DateTime? started = default(System.DateTime?), System.DateTime? finished = default(System.DateTime?), IList<ProgressMessage> progressLog = default(IList<ProgressMessage>), int? errorCount = default(int?), string serverId = default(string), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?), string id = default(string))
         {
-            ValueKind = valueKind;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Undefined', 'Object',
-        /// 'Array', 'String', 'Number', 'True', 'False', 'Null'
-        /// </summary>
-        [JsonProperty(PropertyName = "valueKind")]
-        public string ValueKind { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class OpenIddictApplicationDescriptor
-    {
-        /// <summary>
-        /// Initializes a new instance of the OpenIddictApplicationDescriptor
-        /// class.
-        /// </summary>
-        public OpenIddictApplicationDescriptor()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the OpenIddictApplicationDescriptor
-        /// class.
-        /// </summary>
-        public OpenIddictApplicationDescriptor(string clientId = default(string), string clientSecret = default(string), string consentType = default(string), string displayName = default(string), IDictionary<string, string> displayNames = default(IDictionary<string, string>), IList<string> permissions = default(IList<string>), IList<string> postLogoutRedirectUris = default(IList<string>), IDictionary<string, JsonElement> properties = default(IDictionary<string, JsonElement>), IList<string> redirectUris = default(IList<string>), IList<string> requirements = default(IList<string>), string type = default(string))
-        {
-            ClientId = clientId;
-            ClientSecret = clientSecret;
-            ConsentType = consentType;
-            DisplayName = displayName;
-            DisplayNames = displayNames;
-            Permissions = permissions;
-            PostLogoutRedirectUris = postLogoutRedirectUris;
-            Properties = properties;
-            RedirectUris = redirectUris;
-            Requirements = requirements;
-            Type = type;
+            Started = started;
+            Finished = finished;
+            ProgressLog = progressLog;
+            ErrorCount = errorCount;
+            ServerId = serverId;
+            Creator = creator;
+            Created = created;
+            IsNew = isNew;
+            NotifyType = notifyType;
+            Description = description;
+            Title = title;
+            RepeatCount = repeatCount;
+            Id = id;
             CustomInit();
         }
 
@@ -20280,58 +21007,69 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "clientId")]
-        public string ClientId { get; set; }
+        [JsonProperty(PropertyName = "started")]
+        public System.DateTime? Started { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "clientSecret")]
-        public string ClientSecret { get; set; }
+        [JsonProperty(PropertyName = "finished")]
+        public System.DateTime? Finished { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "consentType")]
-        public string ConsentType { get; set; }
+        [JsonProperty(PropertyName = "progressLog")]
+        public IList<ProgressMessage> ProgressLog { get; set; }
+
+        /// <summary>
+        /// Gets the count of errors during processing.
+        /// </summary>
+        [JsonProperty(PropertyName = "errorCount")]
+        public int? ErrorCount { get; private set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "displayName")]
-        public string DisplayName { get; set; }
+        [JsonProperty(PropertyName = "serverId")]
+        public string ServerId { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "displayNames")]
-        public IDictionary<string, string> DisplayNames { get; private set; }
+        [JsonProperty(PropertyName = "creator")]
+        public string Creator { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "permissions")]
-        public IList<string> Permissions { get; private set; }
+        [JsonProperty(PropertyName = "created")]
+        public System.DateTime? Created { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "postLogoutRedirectUris")]
-        public IList<string> PostLogoutRedirectUris { get; private set; }
+        [JsonProperty(PropertyName = "isNew")]
+        public bool? IsNew { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "properties")]
-        public IDictionary<string, JsonElement> Properties { get; private set; }
+        [JsonProperty(PropertyName = "notifyType")]
+        public string NotifyType { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "redirectUris")]
-        public IList<string> RedirectUris { get; private set; }
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "requirements")]
-        public IList<string> Requirements { get; private set; }
+        [JsonProperty(PropertyName = "title")]
+        public string Title { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "type")]
-        public string Type { get; set; }
+        [JsonProperty(PropertyName = "repeatCount")]
+        public int? RepeatCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
     }
 }
@@ -20473,6 +21211,118 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
+    public partial class OpenIddictApplicationDescriptor
+    {
+        /// <summary>
+        /// Initializes a new instance of the OpenIddictApplicationDescriptor
+        /// class.
+        /// </summary>
+        public OpenIddictApplicationDescriptor()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the OpenIddictApplicationDescriptor
+        /// class.
+        /// </summary>
+        public OpenIddictApplicationDescriptor(string clientId = default(string), string clientSecret = default(string), string consentType = default(string), string displayName = default(string), IDictionary<string, string> displayNames = default(IDictionary<string, string>), IList<string> permissions = default(IList<string>), IList<string> postLogoutRedirectUris = default(IList<string>), IDictionary<string, JsonElement> properties = default(IDictionary<string, JsonElement>), IList<string> redirectUris = default(IList<string>), IList<string> requirements = default(IList<string>), string type = default(string))
+        {
+            ClientId = clientId;
+            ClientSecret = clientSecret;
+            ConsentType = consentType;
+            DisplayName = displayName;
+            DisplayNames = displayNames;
+            Permissions = permissions;
+            PostLogoutRedirectUris = postLogoutRedirectUris;
+            Properties = properties;
+            RedirectUris = redirectUris;
+            Requirements = requirements;
+            Type = type;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "clientId")]
+        public string ClientId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "clientSecret")]
+        public string ClientSecret { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "consentType")]
+        public string ConsentType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "displayName")]
+        public string DisplayName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "displayNames")]
+        public IDictionary<string, string> DisplayNames { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "permissions")]
+        public IList<string> Permissions { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "postLogoutRedirectUris")]
+        public IList<string> PostLogoutRedirectUris { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "properties")]
+        public IDictionary<string, JsonElement> Properties { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "redirectUris")]
+        public IList<string> RedirectUris { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "requirements")]
+        public IList<string> Requirements { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public partial class OAuthAppSearchResult
     {
         /// <summary>
@@ -20507,6 +21357,232 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "results")]
         public IList<OpenIddictApplicationDescriptor> Results { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class OpenIddictResponse
+    {
+        /// <summary>
+        /// Initializes a new instance of the OpenIddictResponse class.
+        /// </summary>
+        public OpenIddictResponse()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the OpenIddictResponse class.
+        /// </summary>
+        public OpenIddictResponse(string accessToken = default(string), string code = default(string), string deviceCode = default(string), string error = default(string), string errorDescription = default(string), string errorUri = default(string), long? expiresIn = default(long?), string idToken = default(string), string refreshToken = default(string), string scope = default(string), string state = default(string), string tokenType = default(string), string userCode = default(string), int? count = default(int?))
+        {
+            AccessToken = accessToken;
+            Code = code;
+            DeviceCode = deviceCode;
+            Error = error;
+            ErrorDescription = errorDescription;
+            ErrorUri = errorUri;
+            ExpiresIn = expiresIn;
+            IdToken = idToken;
+            RefreshToken = refreshToken;
+            Scope = scope;
+            State = state;
+            TokenType = tokenType;
+            UserCode = userCode;
+            Count = count;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "accessToken")]
+        public string AccessToken { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "code")]
+        public string Code { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "deviceCode")]
+        public string DeviceCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "error")]
+        public string Error { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "errorDescription")]
+        public string ErrorDescription { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "errorUri")]
+        public string ErrorUri { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "expiresIn")]
+        public long? ExpiresIn { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "idToken")]
+        public string IdToken { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "refreshToken")]
+        public string RefreshToken { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "scope")]
+        public string Scope { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "state")]
+        public string State { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "tokenType")]
+        public string TokenType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "userCode")]
+        public string UserCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "count")]
+        public int? Count { get; private set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class PushNotification
+    {
+        /// <summary>
+        /// Initializes a new instance of the PushNotification class.
+        /// </summary>
+        public PushNotification()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the PushNotification class.
+        /// </summary>
+        public PushNotification(string serverId = default(string), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?), string id = default(string))
+        {
+            ServerId = serverId;
+            Creator = creator;
+            Created = created;
+            IsNew = isNew;
+            NotifyType = notifyType;
+            Description = description;
+            Title = title;
+            RepeatCount = repeatCount;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "serverId")]
+        public string ServerId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "creator")]
+        public string Creator { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "created")]
+        public System.DateTime? Created { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isNew")]
+        public bool? IsNew { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "notifyType")]
+        public string NotifyType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "title")]
+        public string Title { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "repeatCount")]
+        public int? RepeatCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
     }
 }
@@ -20674,104 +21750,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class PushNotification
-    {
-        /// <summary>
-        /// Initializes a new instance of the PushNotification class.
-        /// </summary>
-        public PushNotification()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PushNotification class.
-        /// </summary>
-        public PushNotification(string serverId = default(string), string creator = default(string), System.DateTime? created = default(System.DateTime?), bool? isNew = default(bool?), string notifyType = default(string), string description = default(string), string title = default(string), int? repeatCount = default(int?), string id = default(string))
-        {
-            ServerId = serverId;
-            Creator = creator;
-            Created = created;
-            IsNew = isNew;
-            NotifyType = notifyType;
-            Description = description;
-            Title = title;
-            RepeatCount = repeatCount;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "serverId")]
-        public string ServerId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "creator")]
-        public string Creator { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "created")]
-        public System.DateTime? Created { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isNew")]
-        public bool? IsNew { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "notifyType")]
-        public string NotifyType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "title")]
-        public string Title { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "repeatCount")]
-        public int? RepeatCount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public partial class PushNotificationSearchResult
     {
         /// <summary>
@@ -20836,24 +21814,26 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class LoginRequest
+    public partial class ResetPasswordConfirmRequest
     {
         /// <summary>
-        /// Initializes a new instance of the LoginRequest class.
+        /// Initializes a new instance of the ResetPasswordConfirmRequest
+        /// class.
         /// </summary>
-        public LoginRequest()
+        public ResetPasswordConfirmRequest()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the LoginRequest class.
+        /// Initializes a new instance of the ResetPasswordConfirmRequest
+        /// class.
         /// </summary>
-        public LoginRequest(string userName = default(string), string password = default(string), bool? rememberMe = default(bool?))
+        public ResetPasswordConfirmRequest(string token = default(string), string newPassword = default(string), bool? forcePasswordChangeOnNextSignIn = default(bool?))
         {
-            UserName = userName;
-            Password = password;
-            RememberMe = rememberMe;
+            Token = token;
+            NewPassword = newPassword;
+            ForcePasswordChangeOnNextSignIn = forcePasswordChangeOnNextSignIn;
             CustomInit();
         }
 
@@ -20864,166 +21844,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "userName")]
-        public string UserName { get; set; }
+        [JsonProperty(PropertyName = "token")]
+        public string Token { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "password")]
-        public string Password { get; set; }
+        [JsonProperty(PropertyName = "newPassword")]
+        public string NewPassword { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "rememberMe")]
-        public bool? RememberMe { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class SignInResult
-    {
-        /// <summary>
-        /// Initializes a new instance of the SignInResult class.
-        /// </summary>
-        public SignInResult()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the SignInResult class.
-        /// </summary>
-        public SignInResult(bool? succeeded = default(bool?), bool? isLockedOut = default(bool?), bool? isNotAllowed = default(bool?), bool? requiresTwoFactor = default(bool?))
-        {
-            Succeeded = succeeded;
-            IsLockedOut = isLockedOut;
-            IsNotAllowed = isNotAllowed;
-            RequiresTwoFactor = requiresTwoFactor;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "succeeded")]
-        public bool? Succeeded { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isLockedOut")]
-        public bool? IsLockedOut { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isNotAllowed")]
-        public bool? IsNotAllowed { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "requiresTwoFactor")]
-        public bool? RequiresTwoFactor { get; private set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class UserDetail
-    {
-        /// <summary>
-        /// Initializes a new instance of the UserDetail class.
-        /// </summary>
-        public UserDetail()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the UserDetail class.
-        /// </summary>
-        public UserDetail(IList<string> permissions = default(IList<string>), string userName = default(string), bool? isAdministrator = default(bool?), bool? passwordExpired = default(bool?), int? daysTillPasswordExpiry = default(int?), string id = default(string))
-        {
-            Permissions = permissions;
-            UserName = userName;
-            IsAdministrator = isAdministrator;
-            PasswordExpired = passwordExpired;
-            DaysTillPasswordExpiry = daysTillPasswordExpiry;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "permissions")]
-        public IList<string> Permissions { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "userName")]
-        public string UserName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isAdministrator")]
-        public bool? IsAdministrator { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "passwordExpired")]
-        public bool? PasswordExpired { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "daysTillPasswordExpiry")]
-        public int? DaysTillPasswordExpiry { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
+        [JsonProperty(PropertyName = "forcePasswordChangeOnNextSignIn")]
+        public bool? ForcePasswordChangeOnNextSignIn { get; set; }
 
     }
 }
@@ -21165,142 +21997,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class StringIdentityUserRole
-    {
-        /// <summary>
-        /// Initializes a new instance of the StringIdentityUserRole class.
-        /// </summary>
-        public StringIdentityUserRole()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the StringIdentityUserRole class.
-        /// </summary>
-        public StringIdentityUserRole(string userId = default(string), string roleId = default(string))
-        {
-            UserId = userId;
-            RoleId = roleId;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "userId")]
-        public string UserId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "roleId")]
-        public string RoleId { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Role
-    {
-        /// <summary>
-        /// Initializes a new instance of the Role class.
-        /// </summary>
-        public Role()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Role class.
-        /// </summary>
-        public Role(string description = default(string), IList<Permission> permissions = default(IList<Permission>), string id = default(string), string name = default(string), string normalizedName = default(string), string concurrencyStamp = default(string))
-        {
-            Description = description;
-            Permissions = permissions;
-            Id = id;
-            Name = name;
-            NormalizedName = normalizedName;
-            ConcurrencyStamp = concurrencyStamp;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "permissions")]
-        public IList<Permission> Permissions { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "normalizedName")]
-        public string NormalizedName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "concurrencyStamp")]
-        public string ConcurrencyStamp { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public partial class RoleSearchResult
     {
         /// <summary>
@@ -21397,6 +22093,346 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "errors")]
         public IList<string> Errors { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class SignInResult
+    {
+        /// <summary>
+        /// Initializes a new instance of the SignInResult class.
+        /// </summary>
+        public SignInResult()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the SignInResult class.
+        /// </summary>
+        public SignInResult(bool? succeeded = default(bool?), bool? isLockedOut = default(bool?), bool? isNotAllowed = default(bool?), bool? requiresTwoFactor = default(bool?))
+        {
+            Succeeded = succeeded;
+            IsLockedOut = isLockedOut;
+            IsNotAllowed = isNotAllowed;
+            RequiresTwoFactor = requiresTwoFactor;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "succeeded")]
+        public bool? Succeeded { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isLockedOut")]
+        public bool? IsLockedOut { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isNotAllowed")]
+        public bool? IsNotAllowed { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "requiresTwoFactor")]
+        public bool? RequiresTwoFactor { get; private set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class StringIdentityUserRole
+    {
+        /// <summary>
+        /// Initializes a new instance of the StringIdentityUserRole class.
+        /// </summary>
+        public StringIdentityUserRole()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the StringIdentityUserRole class.
+        /// </summary>
+        public StringIdentityUserRole(string userId = default(string), string roleId = default(string))
+        {
+            UserId = userId;
+            RoleId = roleId;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "userId")]
+        public string UserId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "roleId")]
+        public string RoleId { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class SystemInfo
+    {
+        /// <summary>
+        /// Initializes a new instance of the SystemInfo class.
+        /// </summary>
+        public SystemInfo()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the SystemInfo class.
+        /// </summary>
+        public SystemInfo(string platformVersion = default(string), License license = default(License), IList<ModuleDescriptor> installedModules = default(IList<ModuleDescriptor>), string version = default(string), bool? is64BitOperatingSystem = default(bool?), bool? is64BitProcess = default(bool?), string databaseProvider = default(string))
+        {
+            PlatformVersion = platformVersion;
+            License = license;
+            InstalledModules = installedModules;
+            Version = version;
+            Is64BitOperatingSystem = is64BitOperatingSystem;
+            Is64BitProcess = is64BitProcess;
+            DatabaseProvider = databaseProvider;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "platformVersion")]
+        public string PlatformVersion { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "license")]
+        public License License { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "installedModules")]
+        public IList<ModuleDescriptor> InstalledModules { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "version")]
+        public string Version { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "is64BitOperatingSystem")]
+        public bool? Is64BitOperatingSystem { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "is64BitProcess")]
+        public bool? Is64BitProcess { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "databaseProvider")]
+        public string DatabaseProvider { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class UserDetail
+    {
+        /// <summary>
+        /// Initializes a new instance of the UserDetail class.
+        /// </summary>
+        public UserDetail()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the UserDetail class.
+        /// </summary>
+        public UserDetail(IList<string> permissions = default(IList<string>), string userName = default(string), bool? isAdministrator = default(bool?), bool? passwordExpired = default(bool?), int? daysTillPasswordExpiry = default(int?), string id = default(string))
+        {
+            Permissions = permissions;
+            UserName = userName;
+            IsAdministrator = isAdministrator;
+            PasswordExpired = passwordExpired;
+            DaysTillPasswordExpiry = daysTillPasswordExpiry;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "permissions")]
+        public IList<string> Permissions { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "userName")]
+        public string UserName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isAdministrator")]
+        public bool? IsAdministrator { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "passwordExpired")]
+        public bool? PasswordExpired { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "daysTillPasswordExpiry")]
+        public int? DaysTillPasswordExpiry { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class UserLockedResult
+    {
+        /// <summary>
+        /// Initializes a new instance of the UserLockedResult class.
+        /// </summary>
+        public UserLockedResult()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the UserLockedResult class.
+        /// </summary>
+        public UserLockedResult(bool? locked = default(bool?))
+        {
+            Locked = locked;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "locked")]
+        public bool? Locked { get; set; }
 
     }
 }
@@ -21562,336 +22598,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class ApplicationUserLogin
-    {
-        /// <summary>
-        /// Initializes a new instance of the ApplicationUserLogin class.
-        /// </summary>
-        public ApplicationUserLogin()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ApplicationUserLogin class.
-        /// </summary>
-        public ApplicationUserLogin(string loginProvider = default(string), string providerKey = default(string))
-        {
-            LoginProvider = loginProvider;
-            ProviderKey = providerKey;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "loginProvider")]
-        public string LoginProvider { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "providerKey")]
-        public string ProviderKey { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class ApplicationUser
-    {
-        /// <summary>
-        /// Initializes a new instance of the ApplicationUser class.
-        /// </summary>
-        public ApplicationUser()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ApplicationUser class.
-        /// </summary>
-        /// <param name="storeId">Tenant id</param>
-        /// <param name="lockoutEndDateUtc">Obsolete. Use LockoutEnd. DateTime
-        /// in UTC when lockout ends, any time in the past is considered not
-        /// locked out.</param>
-        /// <param name="userState">Possible values include: 'PendingApproval',
-        /// 'Approved', 'Rejected'</param>
-        /// <param name="permissions">Obsolete. All permissions from assigned
-        /// roles.</param>
-        /// <param name="logins">External provider logins.</param>
-        /// <param name="passwordExpired">Indicates that the password for this
-        /// user is expired and must be changed.</param>
-        /// <param name="lastPasswordChangedDate">The last date when the
-        /// password was changed</param>
-        /// <param name="lastPasswordChangeRequestDate">The last date when the
-        /// requested password change.</param>
-        public ApplicationUser(string storeId = default(string), string memberId = default(string), bool? isAdministrator = default(bool?), string photoUrl = default(string), string userType = default(string), string status = default(string), string password = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), IList<Role> roles = default(IList<Role>), System.DateTime? lockoutEndDateUtc = default(System.DateTime?), string userState = default(string), IList<string> permissions = default(IList<string>), IList<ApplicationUserLogin> logins = default(IList<ApplicationUserLogin>), bool? passwordExpired = default(bool?), System.DateTime? lastPasswordChangedDate = default(System.DateTime?), System.DateTime? lastPasswordChangeRequestDate = default(System.DateTime?), string id = default(string), string userName = default(string), string normalizedUserName = default(string), string email = default(string), string normalizedEmail = default(string), bool? emailConfirmed = default(bool?), string passwordHash = default(string), string securityStamp = default(string), string concurrencyStamp = default(string), string phoneNumber = default(string), bool? phoneNumberConfirmed = default(bool?), bool? twoFactorEnabled = default(bool?), System.DateTime? lockoutEnd = default(System.DateTime?), bool? lockoutEnabled = default(bool?), int? accessFailedCount = default(int?))
-        {
-            StoreId = storeId;
-            MemberId = memberId;
-            IsAdministrator = isAdministrator;
-            PhotoUrl = photoUrl;
-            UserType = userType;
-            Status = status;
-            Password = password;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Roles = roles;
-            LockoutEndDateUtc = lockoutEndDateUtc;
-            UserState = userState;
-            Permissions = permissions;
-            Logins = logins;
-            PasswordExpired = passwordExpired;
-            LastPasswordChangedDate = lastPasswordChangedDate;
-            LastPasswordChangeRequestDate = lastPasswordChangeRequestDate;
-            Id = id;
-            UserName = userName;
-            NormalizedUserName = normalizedUserName;
-            Email = email;
-            NormalizedEmail = normalizedEmail;
-            EmailConfirmed = emailConfirmed;
-            PasswordHash = passwordHash;
-            SecurityStamp = securityStamp;
-            ConcurrencyStamp = concurrencyStamp;
-            PhoneNumber = phoneNumber;
-            PhoneNumberConfirmed = phoneNumberConfirmed;
-            TwoFactorEnabled = twoFactorEnabled;
-            LockoutEnd = lockoutEnd;
-            LockoutEnabled = lockoutEnabled;
-            AccessFailedCount = accessFailedCount;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// Gets or sets tenant id
-        /// </summary>
-        [JsonProperty(PropertyName = "storeId")]
-        public string StoreId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "memberId")]
-        public string MemberId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isAdministrator")]
-        public bool? IsAdministrator { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "photoUrl")]
-        public string PhotoUrl { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "userType")]
-        public string UserType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "status")]
-        public string Status { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "password")]
-        public string Password { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "roles")]
-        public IList<Role> Roles { get; set; }
-
-        /// <summary>
-        /// Gets or sets obsolete. Use LockoutEnd. DateTime in UTC when lockout
-        /// ends, any time in the past is considered not locked out.
-        /// </summary>
-        [JsonProperty(PropertyName = "lockoutEndDateUtc")]
-        public System.DateTime? LockoutEndDateUtc { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'PendingApproval',
-        /// 'Approved', 'Rejected'
-        /// </summary>
-        [JsonProperty(PropertyName = "userState")]
-        public string UserState { get; set; }
-
-        /// <summary>
-        /// Gets or sets obsolete. All permissions from assigned roles.
-        /// </summary>
-        [JsonProperty(PropertyName = "permissions")]
-        public IList<string> Permissions { get; set; }
-
-        /// <summary>
-        /// Gets or sets external provider logins.
-        /// </summary>
-        [JsonProperty(PropertyName = "logins")]
-        public IList<ApplicationUserLogin> Logins { get; set; }
-
-        /// <summary>
-        /// Gets or sets indicates that the password for this user is expired
-        /// and must be changed.
-        /// </summary>
-        [JsonProperty(PropertyName = "passwordExpired")]
-        public bool? PasswordExpired { get; set; }
-
-        /// <summary>
-        /// Gets or sets the last date when the password was changed
-        /// </summary>
-        [JsonProperty(PropertyName = "lastPasswordChangedDate")]
-        public System.DateTime? LastPasswordChangedDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets the last date when the requested password change.
-        /// </summary>
-        [JsonProperty(PropertyName = "lastPasswordChangeRequestDate")]
-        public System.DateTime? LastPasswordChangeRequestDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "userName")]
-        public string UserName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "normalizedUserName")]
-        public string NormalizedUserName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "email")]
-        public string Email { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "normalizedEmail")]
-        public string NormalizedEmail { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "emailConfirmed")]
-        public bool? EmailConfirmed { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "passwordHash")]
-        public string PasswordHash { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "securityStamp")]
-        public string SecurityStamp { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "concurrencyStamp")]
-        public string ConcurrencyStamp { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "phoneNumber")]
-        public string PhoneNumber { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "phoneNumberConfirmed")]
-        public bool? PhoneNumberConfirmed { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "twoFactorEnabled")]
-        public bool? TwoFactorEnabled { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "lockoutEnd")]
-        public System.DateTime? LockoutEnd { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "lockoutEnabled")]
-        public bool? LockoutEnabled { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "accessFailedCount")]
-        public int? AccessFailedCount { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public partial class UserSearchResult
     {
         /// <summary>
@@ -21954,132 +22660,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class ChangePasswordRequest
-    {
-        /// <summary>
-        /// Initializes a new instance of the ChangePasswordRequest class.
-        /// </summary>
-        public ChangePasswordRequest()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ChangePasswordRequest class.
-        /// </summary>
-        public ChangePasswordRequest(string userName = default(string), string oldPassword = default(string), string newPassword = default(string))
-        {
-            UserName = userName;
-            OldPassword = oldPassword;
-            NewPassword = newPassword;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "userName")]
-        public string UserName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "oldPassword")]
-        public string OldPassword { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "newPassword")]
-        public string NewPassword { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class ResetPasswordConfirmRequest
-    {
-        /// <summary>
-        /// Initializes a new instance of the ResetPasswordConfirmRequest
-        /// class.
-        /// </summary>
-        public ResetPasswordConfirmRequest()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ResetPasswordConfirmRequest
-        /// class.
-        /// </summary>
-        public ResetPasswordConfirmRequest(string token = default(string), string newPassword = default(string), bool? forcePasswordChangeOnNextSignIn = default(bool?))
-        {
-            Token = token;
-            NewPassword = newPassword;
-            ForcePasswordChangeOnNextSignIn = forcePasswordChangeOnNextSignIn;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "token")]
-        public string Token { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "newPassword")]
-        public string NewPassword { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "forcePasswordChangeOnNextSignIn")]
-        public bool? ForcePasswordChangeOnNextSignIn { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public partial class ValidatePasswordResetTokenRequest
     {
         /// <summary>
@@ -22096,218 +22676,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
         /// class.
         /// </summary>
         public ValidatePasswordResetTokenRequest(string token = default(string))
-        {
-            Token = token;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "token")]
-        public string Token { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class IdentityError
-    {
-        /// <summary>
-        /// Initializes a new instance of the IdentityError class.
-        /// </summary>
-        public IdentityError()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the IdentityError class.
-        /// </summary>
-        public IdentityError(string code = default(string), string description = default(string))
-        {
-            Code = code;
-            Description = description;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "code")]
-        public string Code { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class IdentityResult
-    {
-        /// <summary>
-        /// Initializes a new instance of the IdentityResult class.
-        /// </summary>
-        public IdentityResult()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the IdentityResult class.
-        /// </summary>
-        public IdentityResult(bool? succeeded = default(bool?), IList<IdentityError> errors = default(IList<IdentityError>))
-        {
-            Succeeded = succeeded;
-            Errors = errors;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "succeeded")]
-        public bool? Succeeded { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "errors")]
-        public IList<IdentityError> Errors { get; private set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class UserLockedResult
-    {
-        /// <summary>
-        /// Initializes a new instance of the UserLockedResult class.
-        /// </summary>
-        public UserLockedResult()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the UserLockedResult class.
-        /// </summary>
-        public UserLockedResult(bool? locked = default(bool?))
-        {
-            Locked = locked;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "locked")]
-        public bool? Locked { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class ConfirmEmailRequest
-    {
-        /// <summary>
-        /// Initializes a new instance of the ConfirmEmailRequest class.
-        /// </summary>
-        public ConfirmEmailRequest()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ConfirmEmailRequest class.
-        /// </summary>
-        public ConfirmEmailRequest(string token = default(string))
         {
             Token = token;
             CustomInit();
