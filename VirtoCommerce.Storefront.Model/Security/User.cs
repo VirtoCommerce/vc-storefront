@@ -69,6 +69,10 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// </summary>
         public virtual DateTime? LockoutEndDateUtc { get; set; }
         /// <summary>
+        /// DateTime in UTC when last login happened
+        /// </summary>
+        public virtual DateTime? LastLoginDate { get; set; }
+        /// <summary>
         /// Returns true if user authenticated  returns false if it anonymous. 
         /// </summary>
         public bool IsRegisteredUser { get; set; }
