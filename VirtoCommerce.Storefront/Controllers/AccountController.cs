@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -117,6 +118,13 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             await _signInManager.SignOutAsync();
             await _signInManager.SignInAsync(user, isPersistent: false);
+            await SetLastLoginDate(user);
+        }
+
+        private async Task SetLastLoginDate(User user)
+        {
+            user.LastLoginDate = DateTime.UtcNow;
+            await _signInManager.UserManager.UpdateAsync(user);
         }
     }
 }

@@ -103,6 +103,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
             else
             {
+                await SetLastLoginDate(user);
                 await _publisher.Publish(new UserLoginEvent(WorkContext, user));
                 if (string.IsNullOrEmpty(returnUrl))
                 {
@@ -169,6 +170,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 if (!_identityOptions.SignIn.RequireConfirmedEmail)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: true);
+                    await SetLastLoginDate(user);
                     await _publisher.Publish(new UserLoginEvent(WorkContext, user));
                 }
 
@@ -504,6 +506,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
 
             return result;
+        }
+
+        private async Task SetLastLoginDate(User user)
+        {
+            user.LastLoginDate = DateTime.UtcNow;
+            await _signInManager.UserManager.UpdateAsync(user);
         }
     }
 }
