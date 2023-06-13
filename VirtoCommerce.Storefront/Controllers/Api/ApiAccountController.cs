@@ -513,5 +513,13 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             user.LastLoginDate = DateTime.UtcNow;
             await _signInManager.UserManager.UpdateAsync(user);
         }
+
+        // GET: storefrontapi/account/passwordrequirements
+        [HttpGet("passwordrequirements")]
+        [AllowAnonymous]
+        public ActionResult<PasswordOptions> GetPasswordRequirements()
+        {
+            return _identityOptions.Password;
+        }
     }
 }
