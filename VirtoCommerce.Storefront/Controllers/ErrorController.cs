@@ -82,17 +82,11 @@ namespace VirtoCommerce.Storefront.Controllers
 
         private string TrimTwoLetterLangSegment(string path)
         {
-            var languages = WorkContext.CurrentStore.Languages;
+            var language = WorkContext.CurrentStore.Languages.FirstOrDefault(x => Regex.IsMatch(path, @"^/\b" + x.TwoLetterLanguageName + @"\b/", RegexOptions.IgnoreCase));
 
-            foreach (var language in languages)
+            if (language != null)
             {
-                if (!Regex.IsMatch(path, @"^/\b" + language.TwoLetterLanguageName + @"\b/", RegexOptions.IgnoreCase))
-                {
-                    continue;
-                }
-
                 path = Regex.Replace(path, @"/\b" + language.TwoLetterLanguageName + @"\b/", "/", RegexOptions.IgnoreCase);
-                break;
             }
 
             return path;
