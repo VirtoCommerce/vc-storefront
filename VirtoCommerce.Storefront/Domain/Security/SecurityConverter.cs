@@ -143,6 +143,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 IsAdministrator = user.IsAdministrator,
                 PhoneNumber = user.PhoneNumber,
                 PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+                PasswordExpired = user.PasswordExpired,
             };
 
             if (!user.Roles.IsNullOrEmpty())
