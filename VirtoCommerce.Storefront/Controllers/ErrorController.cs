@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -32,8 +33,14 @@ namespace VirtoCommerce.Storefront.Controllers
             //Returns index page on 404 error when the store.IsSpa flag is activated 
             if (errCode == StatusCodes.Status404NotFound && WorkContext.CurrentStore.IsSpa)
             {
-                var path = Request.HttpContext.Features.Get<IStatusCodeReExecuteFeature>()?.OriginalPath;
+                var path = TrimTwoLetterLangSegment(Request.HttpContext.Features.Get<IStatusCodeReExecuteFeature>()?.OriginalPath);
                 Response.StatusCode = StatusCodes.Status404NotFound;
+
+                if (path == "/")
+                {
+                    Response.StatusCode = StatusCodes.Status200OK;
+                    return View("index");
+                }
 
                 if (string.IsNullOrEmpty(path))
                 {
@@ -41,8 +48,11 @@ namespace VirtoCommerce.Storefront.Controllers
                 }
 
                 var slug = path.Split('/').Last();
-                var seoInfos = await _seoInfoService.GetBestMatchingSeoInfos(slug, WorkContext.CurrentStore, WorkContext.CurrentLanguage.CultureName);
-                Response.StatusCode = seoInfos.Any() ? StatusCodes.Status200OK : StatusCodes.Status404NotFound;
+                if (!string.IsNullOrEmpty(slug))
+                {
+                    var seoInfos = await _seoInfoService.GetBestMatchingSeoInfos(slug, WorkContext.CurrentStore, WorkContext.CurrentLanguage.CultureName);
+                    Response.StatusCode = seoInfos.Any() ? StatusCodes.Status200OK : StatusCodes.Status404NotFound;
+                }
 
                 if (Response.StatusCode == StatusCodes.Status404NotFound)
                 {
@@ -68,6 +78,24 @@ namespace VirtoCommerce.Storefront.Controllers
         {
             Response.StatusCode = StatusCodes.Status403Forbidden;
             return View("AccessDenied");
+        }
+
+        private string TrimTwoLetterLangSegment(string path)
+        {
+            var languages = WorkContext.CurrentStore.Languages;
+
+            foreach (var language in languages)
+            {
+                if (!Regex.IsMatch(path, @"^/\b" + language.TwoLetterLanguageName + @"\b/", RegexOptions.IgnoreCase))
+                {
+                    continue;
+                }
+
+                path = Regex.Replace(path, @"/\b" + language.TwoLetterLanguageName + @"\b/", "/", RegexOptions.IgnoreCase);
+                break;
+            }
+
+            return path;
         }
     }
 }
