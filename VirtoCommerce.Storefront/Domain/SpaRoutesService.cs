@@ -34,7 +34,18 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 var routes = await GetSpaRoutes();
 
-                return routes.Any(x => Regex.IsMatch(route, x));
+                var isSpaRoute = routes.Any(jsPattern =>
+                {
+                    // Input sample: jsPattern = "/^\\/account\\/profile\\/?$/i"
+                    // Only the char "i" can be an ending. The others chars are not used
+                    // when generating RegExp patterns in the `routes.json` file.
+                    var options = jsPattern.EndsWith("i") ? RegexOptions.IgnoreCase : RegexOptions.None;
+                    var pattern = Regex.Replace(jsPattern, @"^\/|\/i?$", string.Empty);
+
+                    return Regex.IsMatch(route, pattern, options);
+                });
+
+                return isSpaRoute;
             });
 
             return result;
