@@ -56,6 +56,11 @@ namespace VirtoCommerce.Storefront.Controllers
 
                 if (Response.StatusCode == StatusCodes.Status404NotFound)
                 {
+                    Response.StatusCode = _seoInfoService.GetContentItem($"/{slug}", WorkContext.CurrentLanguage.CultureName) != null ? StatusCodes.Status200OK : StatusCodes.Status404NotFound;
+                }
+
+                if (Response.StatusCode == StatusCodes.Status404NotFound)
+                {
                     Response.StatusCode = await _spaRoutesService.IsSpaRoute(path) ? StatusCodes.Status200OK : StatusCodes.Status404NotFound;
                 }
 
