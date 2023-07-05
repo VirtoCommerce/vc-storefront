@@ -13,11 +13,10 @@ namespace VirtoCommerce.Storefront.Domain
     public class SeoInfoService : ISeoInfoService
     {
         private readonly ICommerce _coreModuleApi;
-        private readonly WorkContext _workContext;
-        public SeoInfoService(ICommerce coreModuleApi, IWorkContextAccessor workContextAccessor)
+
+        public SeoInfoService(ICommerce coreModuleApi)
         {
             _coreModuleApi = coreModuleApi;
-            _workContext = workContextAccessor.WorkContext;
         }
 
         public async Task<SeoInfo[]> GetSeoInfosBySlug(string slug)
@@ -34,18 +33,18 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public ContentItem GetContentItem(string slug, string culture)
+        public ContentItem GetContentItem(string slug, WorkContext context)
         {
             ContentItem result = null;
             var pageUrl = slug == "__index__home__page__" ? "/" : $"/{slug}";
             try
             {
-                var pages = _workContext.Pages.Where(p =>
+                var pages = context.Pages.Where(p =>
                     string.Equals(p.Url, pageUrl, StringComparison.OrdinalIgnoreCase)
                     || string.Equals(p.Url, slug, StringComparison.OrdinalIgnoreCase)
                 );
 
-                var page = pages.FirstOrDefault(x => x.Language.CultureName.EqualsInvariant(culture))
+                var page = pages.FirstOrDefault(x => x.Language.CultureName.EqualsInvariant(context.CurrentLanguage.CultureName))
                            ?? pages.FirstOrDefault(x => x.Language.IsInvariant)
                            ?? pages.FirstOrDefault(x => x.AliasesUrls.Contains(pageUrl, StringComparer.OrdinalIgnoreCase));
                 result = page;

@@ -10,6 +10,6 @@ namespace VirtoCommerce.Storefront.Model
 
         Task<SeoInfo[]> GetBestMatchingSeoInfos(string slug, Store store, string currentCulture);
 
-        ContentItem GetContentItem(string slug, string culture);
+        ContentItem GetContentItem(string slug, WorkContext context);
     }
 }
