@@ -80,7 +80,24 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             if (result.EntityInfo == null)
             {
-                result.ContentItem = _seoInfoService.GetContentItem(slug, culture);
+                var pageUrl = slug == "__index__home__page__" ? "/" : $"/{slug}";
+                try
+                {
+                    var pages = WorkContext.Pages.Where(p =>
+                        string.Equals(p.Url, pageUrl, StringComparison.OrdinalIgnoreCase)
+                        || string.Equals(p.Url, slug, StringComparison.OrdinalIgnoreCase)
+                    );
+
+                    var page = pages.FirstOrDefault(x => x.Language.CultureName.EqualsInvariant(culture))
+                               ?? pages.FirstOrDefault(x => x.Language.IsInvariant)
+                               ?? pages.FirstOrDefault(x => x.AliasesUrls.Contains(pageUrl, StringComparer.OrdinalIgnoreCase));
+                    result.ContentItem = page;
+
+                }
+                catch
+                {
+                    //do nothing
+                }
             }
 
             return result;
