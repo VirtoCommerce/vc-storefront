@@ -89,8 +89,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     );
 
                     var page = pages.FirstOrDefault(x => x.Language.CultureName.EqualsInvariant(culture))
-                                            ?? pages.FirstOrDefault(x => x.Language.IsInvariant)
-                                            ?? pages.FirstOrDefault(x => x.AliasesUrls.Contains(pageUrl, StringComparer.OrdinalIgnoreCase));
+                               ?? pages.FirstOrDefault(x => x.Language.IsInvariant)
+                               ?? pages.FirstOrDefault(x => x.AliasesUrls.Contains(pageUrl, StringComparer.OrdinalIgnoreCase));
                     result.ContentItem = page;
 
                 }
