@@ -16,7 +16,7 @@ namespace VirtoCommerce.Storefront.Domain
     {
         private readonly IContentBlobProvider _contentBlobProvider;
         private readonly IStorefrontMemoryCache _memoryCache;
-        private readonly WorkContext _workContext;
+        private readonly IWorkContextAccessor _workContextAccessor;
 
         public SpaRouteService(
             IContentBlobProvider contentBlobProvider,
@@ -25,12 +25,13 @@ namespace VirtoCommerce.Storefront.Domain
         {
             _contentBlobProvider = contentBlobProvider;
             _memoryCache = memoryCache;
-            _workContext = workContextAccessor.WorkContext;
+            _workContextAccessor = workContextAccessor;
         }
 
         public virtual async Task<bool> IsSpaRoute(string route)
         {
-            var cacheKey = CacheKey.With(GetType(), "IsSpaRoute", _workContext.CurrentStore.Id, route);
+            var workContext = _workContextAccessor.WorkContext;
+            var cacheKey = CacheKey.With(GetType(), nameof(IsSpaRoute), workContext.CurrentStore.Id, route);
             var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (_) =>
             {
                 var routes = await GetSpaRoutes();
@@ -54,12 +55,13 @@ namespace VirtoCommerce.Storefront.Domain
 
         protected virtual async Task<List<string>> GetSpaRoutes()
         {
-            var cacheKey = CacheKey.With(GetType(), "GetSpaRoutes", _workContext.CurrentStore.Id);
+            var workContext = _workContextAccessor.WorkContext;
+            var cacheKey = CacheKey.With(GetType(), nameof(GetSpaRoutes), workContext.CurrentStore.Id);
             var routes = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (_) =>
             {
                 var result = new List<string>();
-                var currentThemeName = !string.IsNullOrEmpty(_workContext.CurrentStore.ThemeName) ? _workContext.CurrentStore.ThemeName : "default";
-                var currentThemePath = Path.Combine("Themes", _workContext.CurrentStore.Id, currentThemeName);
+                var currentThemeName = !string.IsNullOrEmpty(workContext.CurrentStore.ThemeName) ? workContext.CurrentStore.ThemeName : "default";
+                var currentThemePath = Path.Combine("Themes", workContext.CurrentStore.Id, currentThemeName);
                 var currentThemeSettingPath = Path.Combine(currentThemePath, "config", "routes.json");
 
                 if (_contentBlobProvider.PathExists(currentThemeSettingPath))
