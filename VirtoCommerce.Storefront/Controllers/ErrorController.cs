@@ -15,16 +15,17 @@ namespace VirtoCommerce.Storefront.Controllers
     public class ErrorController : StorefrontControllerBase
     {
         private readonly ISeoInfoService _seoInfoService;
-        private readonly ISpaRoutesService _spaRoutesService;
+        private readonly ISpaRouteService _spaRouteService;
 
         public ErrorController(
             IWorkContextAccessor workContextAccessor,
             IStorefrontUrlBuilder urlBuilder,
             ISeoInfoService seoInfoService,
-            ISpaRoutesService spaRoutesService) : base(workContextAccessor, urlBuilder)
+            ISpaRouteService spaRouteService)
+            : base(workContextAccessor, urlBuilder)
         {
             _seoInfoService = seoInfoService;
-            _spaRoutesService = spaRoutesService;
+            _spaRouteService = spaRouteService;
         }
 
         [Route("{errCode}")]
@@ -61,7 +62,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
                 if (Response.StatusCode == StatusCodes.Status404NotFound)
                 {
-                    Response.StatusCode = await _spaRoutesService.IsSpaRoute(path) ? StatusCodes.Status200OK : StatusCodes.Status404NotFound;
+                    Response.StatusCode = await _spaRouteService.IsSpaRoute(path) ? StatusCodes.Status200OK : StatusCodes.Status404NotFound;
                 }
 
                 return View("index");

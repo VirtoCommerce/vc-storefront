@@ -12,13 +12,14 @@ using VirtoCommerce.Storefront.Model.StaticContent;
 
 namespace VirtoCommerce.Storefront.Domain
 {
-    public class SpaRoutesService : ISpaRoutesService
+    public class SpaRouteService : ISpaRouteService
     {
         private readonly IContentBlobProvider _contentBlobProvider;
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly WorkContext _workContext;
 
-        public SpaRoutesService(IContentBlobProvider contentBlobProvider,
+        public SpaRouteService(
+            IContentBlobProvider contentBlobProvider,
             IStorefrontMemoryCache memoryCache,
             IWorkContextAccessor workContextAccessor)
         {

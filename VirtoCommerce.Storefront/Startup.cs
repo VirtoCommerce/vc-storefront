@@ -94,7 +94,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<ISlugRouteService, SlugRouteService>();
             services.AddSingleton<IMemberService, MemberService>();
             services.AddSingleton<ISeoInfoService, SeoInfoService>();
-            services.AddSingleton<ISpaRoutesService, SpaRoutesService>();
+            services.AddSingleton<ISpaRouteService, SpaRouteService>();
 
             services.AddSingleton<IStaticContentService, StaticContentService>();
             services.AddSingleton<IMenuLinkListService, MenuLinkListServiceImpl>();
