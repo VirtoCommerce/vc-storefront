@@ -1763,6 +1763,117 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
             return _result;
         }
 
+        /// <param name='body'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> ResizeIconWithHttpMessagesAsync(IconResizeRequest body = default(IconResizeRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("body", body);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "ResizeIcon", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = Client.BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/member/icon/resize").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(body != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Client.Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 204 && (int)_statusCode != 401 && (int)_statusCode != 403)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
         /// <summary>
         /// Create contact
         /// </summary>
@@ -4815,8 +4926,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
         /// <summary>
         /// Get all member organizations
         /// </summary>
-        /// <param name='id1'>
-        /// </param>
         /// <param name='id'>
         /// member Id
         /// </param>
@@ -4841,11 +4950,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<Organization>>> GetMemberOrganizationsWithHttpMessagesAsync(string id1, string id = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<Organization>>> GetMemberOrganizationsWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (id1 == null)
+            if (id == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "id1");
+                throw new ValidationException(ValidationRules.CannotBeNull, "id");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -4855,23 +4964,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("id", id);
-                tracingParameters.Add("id1", id1);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetMemberOrganizations", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
             var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/members/{id}/organizations").ToString();
-            _url = _url.Replace("{id}", System.Uri.EscapeDataString(id1));
-            List<string> _queryParameters = new List<string>();
-            if (id != null)
-            {
-                _queryParameters.Add(string.Format("id={0}", System.Uri.EscapeDataString(id)));
-            }
-            if (_queryParameters.Count > 0)
-            {
-                _url += "?" + string.Join("&", _queryParameters);
-            }
+            _url = _url.Replace("{id}", System.Uri.EscapeDataString(id));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -5194,6 +5293,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
         /// Thrown when the operation returned an invalid status code
         /// </exception>
         Task<HttpOperationResponse> BulkDeleteMembersBySearchCriteriaWithHttpMessagesAsync(MembersSearchCriteria body = default(MembersSearchCriteria), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <param name='body'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        Task<HttpOperationResponse> ResizeIconWithHttpMessagesAsync(IconResizeRequest body = default(IconResizeRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Create contact
         /// </summary>
@@ -5625,8 +5736,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
         /// <summary>
         /// Get all member organizations
         /// </summary>
-        /// <param name='id1'>
-        /// </param>
         /// <param name='id'>
         /// member Id
         /// </param>
@@ -5645,7 +5754,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<IList<Organization>>> GetMemberOrganizationsWithHttpMessagesAsync(string id1, string id = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<Organization>>> GetMemberOrganizationsWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
 // <auto-generated>
@@ -6040,6 +6149,29 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
             public static async Task BulkDeleteMembersBySearchCriteriaAsync(this ICustomerModule operations, MembersSearchCriteria body = default(MembersSearchCriteria), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.BulkDeleteMembersBySearchCriteriaWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// </param>
+            public static void ResizeIcon(this ICustomerModule operations, IconResizeRequest body = default(IconResizeRequest))
+            {
+                operations.ResizeIconAsync(body).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='body'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task ResizeIconAsync(this ICustomerModule operations, IconResizeRequest body = default(IconResizeRequest), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.ResizeIconWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -6818,14 +6950,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='id1'>
-            /// </param>
             /// <param name='id'>
             /// member Id
             /// </param>
-            public static IList<Organization> GetMemberOrganizations(this ICustomerModule operations, string id1, string id = default(string))
+            public static IList<Organization> GetMemberOrganizations(this ICustomerModule operations, string id)
             {
-                return operations.GetMemberOrganizationsAsync(id1, id).GetAwaiter().GetResult();
+                return operations.GetMemberOrganizationsAsync(id).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -6834,17 +6964,15 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='id1'>
-            /// </param>
             /// <param name='id'>
             /// member Id
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<Organization>> GetMemberOrganizationsAsync(this ICustomerModule operations, string id1, string id = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<Organization>> GetMemberOrganizationsAsync(this ICustomerModule operations, string id, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetMemberOrganizationsWithHttpMessagesAsync(id1, id, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetMemberOrganizationsWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -6884,9 +7012,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the CustomerAddress class.
         /// </summary>
-        /// <param name="addressType">Possible values include: 'Billing',
-        /// 'Shipping', 'BillingAndShipping', 'Pickup'</param>
-        public CustomerAddress(string addressType = default(string), string key = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
+        /// <param name="addressType">Possible values include: 'Undefined',
+        /// 'Billing', 'Shipping', 'BillingAndShipping', 'Pickup'</param>
+        public CustomerAddress(string addressType = default(string), string key = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string), string outerId = default(string), bool? isDefault = default(bool?), string description = default(string))
         {
             AddressType = addressType;
             Key = key;
@@ -6906,6 +7034,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
             LastName = lastName;
             Phone = phone;
             Email = email;
+            OuterId = outerId;
+            IsDefault = isDefault;
+            Description = description;
             CustomInit();
         }
 
@@ -6915,8 +7046,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets possible values include: 'Billing', 'Shipping',
-        /// 'BillingAndShipping', 'Pickup'
+        /// Gets or sets possible values include: 'Undefined', 'Billing',
+        /// 'Shipping', 'BillingAndShipping', 'Pickup'
         /// </summary>
         [JsonProperty(PropertyName = "addressType")]
         public string AddressType { get; set; }
@@ -7005,6 +7136,21 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "email")]
         public string Email { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isDefault")]
+        public bool? IsDefault { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
 
     }
 }
@@ -7595,7 +7741,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the Organization class.
         /// </summary>
-        public Organization(string description = default(string), string businessCategory = default(string), string ownerId = default(string), string parentId = default(string), string objectType = default(string), string name = default(string), string memberType = default(string), string outerId = default(string), IList<CustomerAddress> addresses = default(IList<CustomerAddress>), IList<string> phones = default(IList<string>), IList<string> emails = default(IList<string>), IList<Note> notes = default(IList<Note>), IList<string> groups = default(IList<string>), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Organization(string description = default(string), string businessCategory = default(string), string ownerId = default(string), string parentId = default(string), string objectType = default(string), string name = default(string), string memberType = default(string), string outerId = default(string), string status = default(string), IList<CustomerAddress> addresses = default(IList<CustomerAddress>), IList<string> phones = default(IList<string>), IList<string> emails = default(IList<string>), IList<Note> notes = default(IList<Note>), IList<string> groups = default(IList<string>), string iconUrl = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Description = description;
             BusinessCategory = businessCategory;
@@ -7605,11 +7751,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
             Name = name;
             MemberType = memberType;
             OuterId = outerId;
+            Status = status;
             Addresses = addresses;
             Phones = phones;
             Emails = emails;
             Notes = notes;
             Groups = groups;
+            IconUrl = iconUrl;
             DynamicProperties = dynamicProperties;
             SeoObjectType = seoObjectType;
             SeoInfos = seoInfos;
@@ -7668,6 +7816,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "status")]
+        public string Status { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "addresses")]
         public IList<CustomerAddress> Addresses { get; set; }
 
@@ -7690,6 +7843,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "groups")]
         public IList<string> Groups { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "iconUrl")]
+        public string IconUrl { get; set; }
 
         /// <summary>
         /// </summary>
@@ -7765,16 +7923,18 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the Member class.
         /// </summary>
-        public Member(string name = default(string), string memberType = default(string), string outerId = default(string), IList<CustomerAddress> addresses = default(IList<CustomerAddress>), IList<string> phones = default(IList<string>), IList<string> emails = default(IList<string>), IList<Note> notes = default(IList<Note>), IList<string> groups = default(IList<string>), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Member(string name = default(string), string memberType = default(string), string outerId = default(string), string status = default(string), IList<CustomerAddress> addresses = default(IList<CustomerAddress>), IList<string> phones = default(IList<string>), IList<string> emails = default(IList<string>), IList<Note> notes = default(IList<Note>), IList<string> groups = default(IList<string>), string iconUrl = default(string), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Name = name;
             MemberType = memberType;
             OuterId = outerId;
+            Status = status;
             Addresses = addresses;
             Phones = phones;
             Emails = emails;
             Notes = notes;
             Groups = groups;
+            IconUrl = iconUrl;
             ObjectType = objectType;
             DynamicProperties = dynamicProperties;
             SeoObjectType = seoObjectType;
@@ -7809,6 +7969,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "status")]
+        public string Status { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "addresses")]
         public IList<CustomerAddress> Addresses { get; set; }
 
@@ -7831,6 +7996,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "groups")]
         public IList<string> Groups { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "iconUrl")]
+        public string IconUrl { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8191,13 +8361,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         /// <param name="userState">Possible values include: 'PendingApproval',
         /// 'Approved', 'Rejected'</param>
-        public ApplicationUser(string storeId = default(string), string memberId = default(string), bool? isAdministrator = default(bool?), string photoUrl = default(string), string userType = default(string), string password = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), IList<Role> roles = default(IList<Role>), System.DateTime? lockoutEndDateUtc = default(System.DateTime?), string userState = default(string), IList<string> permissions = default(IList<string>), IList<ApplicationUserLogin> logins = default(IList<ApplicationUserLogin>), bool? passwordExpired = default(bool?), string id = default(string), string userName = default(string), string normalizedUserName = default(string), string email = default(string), string normalizedEmail = default(string), bool? emailConfirmed = default(bool?), string passwordHash = default(string), string securityStamp = default(string), string concurrencyStamp = default(string), string phoneNumber = default(string), bool? phoneNumberConfirmed = default(bool?), bool? twoFactorEnabled = default(bool?), System.DateTime? lockoutEnd = default(System.DateTime?), bool? lockoutEnabled = default(bool?), int? accessFailedCount = default(int?))
+        public ApplicationUser(string storeId = default(string), string memberId = default(string), bool? isAdministrator = default(bool?), string photoUrl = default(string), string userType = default(string), string status = default(string), string password = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), IList<Role> roles = default(IList<Role>), System.DateTime? lockoutEndDateUtc = default(System.DateTime?), string userState = default(string), IList<string> permissions = default(IList<string>), IList<ApplicationUserLogin> logins = default(IList<ApplicationUserLogin>), bool? passwordExpired = default(bool?), System.DateTime? lastPasswordChangedDate = default(System.DateTime?), System.DateTime? lastPasswordChangeRequestDate = default(System.DateTime?), string id = default(string), string userName = default(string), string normalizedUserName = default(string), string email = default(string), string normalizedEmail = default(string), bool? emailConfirmed = default(bool?), string passwordHash = default(string), string securityStamp = default(string), string concurrencyStamp = default(string), string phoneNumber = default(string), bool? phoneNumberConfirmed = default(bool?), bool? twoFactorEnabled = default(bool?), System.DateTime? lockoutEnd = default(System.DateTime?), bool? lockoutEnabled = default(bool?), int? accessFailedCount = default(int?))
         {
             StoreId = storeId;
             MemberId = memberId;
             IsAdministrator = isAdministrator;
             PhotoUrl = photoUrl;
             UserType = userType;
+            Status = status;
             Password = password;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
@@ -8209,6 +8380,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
             Permissions = permissions;
             Logins = logins;
             PasswordExpired = passwordExpired;
+            LastPasswordChangedDate = lastPasswordChangedDate;
+            LastPasswordChangeRequestDate = lastPasswordChangeRequestDate;
             Id = id;
             UserName = userName;
             NormalizedUserName = normalizedUserName;
@@ -8256,6 +8429,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "userType")]
         public string UserType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "status")]
+        public string Status { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8313,6 +8491,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "passwordExpired")]
         public bool? PasswordExpired { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "lastPasswordChangedDate")]
+        public System.DateTime? LastPasswordChangedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "lastPasswordChangeRequestDate")]
+        public System.DateTime? LastPasswordChangeRequestDate { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8423,7 +8611,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the Contact class.
         /// </summary>
-        public Contact(string salutation = default(string), string fullName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), System.DateTime? birthDate = default(System.DateTime?), string defaultLanguage = default(string), string timeZone = default(string), IList<string> organizations = default(IList<string>), IList<string> associatedOrganizations = default(IList<string>), string taxPayerId = default(string), string preferredDelivery = default(string), string preferredCommunication = default(string), string defaultShippingAddressId = default(string), string defaultBillingAddressId = default(string), string photoUrl = default(string), string objectType = default(string), IList<ApplicationUser> securityAccounts = default(IList<ApplicationUser>), string name = default(string), string memberType = default(string), string outerId = default(string), IList<CustomerAddress> addresses = default(IList<CustomerAddress>), IList<string> phones = default(IList<string>), IList<string> emails = default(IList<string>), IList<Note> notes = default(IList<Note>), IList<string> groups = default(IList<string>), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Contact(string salutation = default(string), string fullName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), System.DateTime? birthDate = default(System.DateTime?), string defaultLanguage = default(string), string timeZone = default(string), IList<string> organizations = default(IList<string>), IList<string> associatedOrganizations = default(IList<string>), string taxPayerId = default(string), string preferredDelivery = default(string), string preferredCommunication = default(string), string defaultShippingAddressId = default(string), string defaultBillingAddressId = default(string), string photoUrl = default(string), bool? isAnonymized = default(bool?), string about = default(string), string objectType = default(string), IList<ApplicationUser> securityAccounts = default(IList<ApplicationUser>), string name = default(string), string memberType = default(string), string outerId = default(string), string status = default(string), IList<CustomerAddress> addresses = default(IList<CustomerAddress>), IList<string> phones = default(IList<string>), IList<string> emails = default(IList<string>), IList<Note> notes = default(IList<Note>), IList<string> groups = default(IList<string>), string iconUrl = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Salutation = salutation;
             FullName = fullName;
@@ -8441,16 +8629,20 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
             DefaultShippingAddressId = defaultShippingAddressId;
             DefaultBillingAddressId = defaultBillingAddressId;
             PhotoUrl = photoUrl;
+            IsAnonymized = isAnonymized;
+            About = about;
             ObjectType = objectType;
             SecurityAccounts = securityAccounts;
             Name = name;
             MemberType = memberType;
             OuterId = outerId;
+            Status = status;
             Addresses = addresses;
             Phones = phones;
             Emails = emails;
             Notes = notes;
             Groups = groups;
+            IconUrl = iconUrl;
             DynamicProperties = dynamicProperties;
             SeoObjectType = seoObjectType;
             SeoInfos = seoInfos;
@@ -8549,6 +8741,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "isAnonymized")]
+        public bool? IsAnonymized { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "about")]
+        public string About { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "objectType")]
         public string ObjectType { get; private set; }
 
@@ -8574,6 +8776,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "status")]
+        public string Status { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "addresses")]
         public IList<CustomerAddress> Addresses { get; set; }
 
@@ -8596,6 +8803,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "groups")]
         public IList<string> Groups { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "iconUrl")]
+        public string IconUrl { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8671,21 +8883,24 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the Vendor class.
         /// </summary>
-        public Vendor(string description = default(string), string siteUrl = default(string), string logoUrl = default(string), string groupName = default(string), string objectType = default(string), string name = default(string), string memberType = default(string), string outerId = default(string), IList<CustomerAddress> addresses = default(IList<CustomerAddress>), IList<string> phones = default(IList<string>), IList<string> emails = default(IList<string>), IList<Note> notes = default(IList<Note>), IList<string> groups = default(IList<string>), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Vendor(string description = default(string), string siteUrl = default(string), string logoUrl = default(string), string groupName = default(string), IList<ApplicationUser> securityAccounts = default(IList<ApplicationUser>), string objectType = default(string), string name = default(string), string memberType = default(string), string outerId = default(string), string status = default(string), IList<CustomerAddress> addresses = default(IList<CustomerAddress>), IList<string> phones = default(IList<string>), IList<string> emails = default(IList<string>), IList<Note> notes = default(IList<Note>), IList<string> groups = default(IList<string>), string iconUrl = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Description = description;
             SiteUrl = siteUrl;
             LogoUrl = logoUrl;
             GroupName = groupName;
+            SecurityAccounts = securityAccounts;
             ObjectType = objectType;
             Name = name;
             MemberType = memberType;
             OuterId = outerId;
+            Status = status;
             Addresses = addresses;
             Phones = phones;
             Emails = emails;
             Notes = notes;
             Groups = groups;
+            IconUrl = iconUrl;
             DynamicProperties = dynamicProperties;
             SeoObjectType = seoObjectType;
             SeoInfos = seoInfos;
@@ -8724,6 +8939,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "securityAccounts")]
+        public IList<ApplicationUser> SecurityAccounts { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "objectType")]
         public string ObjectType { get; private set; }
 
@@ -8741,6 +8961,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "outerId")]
         public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "status")]
+        public string Status { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8766,6 +8991,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "groups")]
         public IList<string> Groups { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "iconUrl")]
+        public string IconUrl { get; set; }
 
         /// <summary>
         /// </summary>
@@ -8841,7 +9071,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the Employee class.
         /// </summary>
-        public Employee(string salutation = default(string), string fullName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), System.DateTime? birthDate = default(System.DateTime?), string defaultLanguage = default(string), string timeZone = default(string), IList<string> organizations = default(IList<string>), string employeeType = default(string), bool? isActive = default(bool?), string photoUrl = default(string), string objectType = default(string), IList<ApplicationUser> securityAccounts = default(IList<ApplicationUser>), string name = default(string), string memberType = default(string), string outerId = default(string), IList<CustomerAddress> addresses = default(IList<CustomerAddress>), IList<string> phones = default(IList<string>), IList<string> emails = default(IList<string>), IList<Note> notes = default(IList<Note>), IList<string> groups = default(IList<string>), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Employee(string salutation = default(string), string fullName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), System.DateTime? birthDate = default(System.DateTime?), string defaultLanguage = default(string), string timeZone = default(string), IList<string> organizations = default(IList<string>), string employeeType = default(string), bool? isActive = default(bool?), string photoUrl = default(string), string objectType = default(string), IList<ApplicationUser> securityAccounts = default(IList<ApplicationUser>), string name = default(string), string memberType = default(string), string outerId = default(string), string status = default(string), IList<CustomerAddress> addresses = default(IList<CustomerAddress>), IList<string> phones = default(IList<string>), IList<string> emails = default(IList<string>), IList<Note> notes = default(IList<Note>), IList<string> groups = default(IList<string>), string iconUrl = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), string seoObjectType = default(string), IList<SeoInfo> seoInfos = default(IList<SeoInfo>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             Salutation = salutation;
             FullName = fullName;
@@ -8860,11 +9090,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
             Name = name;
             MemberType = memberType;
             OuterId = outerId;
+            Status = status;
             Addresses = addresses;
             Phones = phones;
             Emails = emails;
             Notes = notes;
             Groups = groups;
+            IconUrl = iconUrl;
             DynamicProperties = dynamicProperties;
             SeoObjectType = seoObjectType;
             SeoInfos = seoInfos;
@@ -8968,6 +9200,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "status")]
+        public string Status { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "addresses")]
         public IList<CustomerAddress> Addresses { get; set; }
 
@@ -8990,6 +9227,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "groups")]
         public IList<string> Groups { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "iconUrl")]
+        public string IconUrl { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9030,6 +9272,180 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class ContactSearchResult
+    {
+        /// <summary>
+        /// Initializes a new instance of the ContactSearchResult class.
+        /// </summary>
+        public ContactSearchResult()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ContactSearchResult class.
+        /// </summary>
+        public ContactSearchResult(int? totalCount = default(int?), IList<Contact> results = default(IList<Contact>))
+        {
+            TotalCount = totalCount;
+            Results = results;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "totalCount")]
+        public int? TotalCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "results")]
+        public IList<Contact> Results { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class IconResizeRequest
+    {
+        /// <summary>
+        /// Initializes a new instance of the IconResizeRequest class.
+        /// </summary>
+        public IconResizeRequest()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the IconResizeRequest class.
+        /// </summary>
+        public IconResizeRequest(string url = default(string), int? width = default(int?), int? height = default(int?))
+        {
+            Url = url;
+            Width = width;
+            Height = height;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "url")]
+        public string Url { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "width")]
+        public int? Width { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "height")]
+        public int? Height { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class MemberSearchResult
+    {
+        /// <summary>
+        /// Initializes a new instance of the MemberSearchResult class.
+        /// </summary>
+        public MemberSearchResult()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the MemberSearchResult class.
+        /// </summary>
+        public MemberSearchResult(int? totalCount = default(int?), IList<Member> results = default(IList<Member>))
+        {
+            TotalCount = totalCount;
+            Results = results;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "totalCount")]
+        public int? TotalCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "results")]
+        public IList<Member> Results { get; set; }
 
     }
 }
@@ -9124,7 +9540,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the MembersSearchCriteria class.
         /// </summary>
-        public MembersSearchCriteria(string memberType = default(string), IList<string> memberTypes = default(IList<string>), string group = default(string), IList<string> groups = default(IList<string>), string memberId = default(string), bool? deepSearch = default(bool?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public MembersSearchCriteria(string memberType = default(string), IList<string> memberTypes = default(IList<string>), string group = default(string), IList<string> groups = default(IList<string>), string memberId = default(string), bool? deepSearch = default(bool?), IList<string> outerIds = default(IList<string>), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
             MemberType = memberType;
             MemberTypes = memberTypes;
@@ -9132,6 +9548,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
             Groups = groups;
             MemberId = memberId;
             DeepSearch = deepSearch;
+            OuterIds = outerIds;
             ResponseGroup = responseGroup;
             ObjectType = objectType;
             ObjectTypes = objectTypes;
@@ -9180,6 +9597,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "deepSearch")]
         public bool? DeepSearch { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerIds")]
+        public IList<string> OuterIds { get; set; }
 
         /// <summary>
         /// </summary>
@@ -9235,62 +9657,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "take")]
         public int? Take { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class MemberSearchResult
-    {
-        /// <summary>
-        /// Initializes a new instance of the MemberSearchResult class.
-        /// </summary>
-        public MemberSearchResult()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the MemberSearchResult class.
-        /// </summary>
-        public MemberSearchResult(int? totalCount = default(int?), IList<Member> results = default(IList<Member>))
-        {
-            TotalCount = totalCount;
-            Results = results;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "totalCount")]
-        public int? TotalCount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "results")]
-        public IList<Member> Results { get; set; }
 
     }
 }
@@ -9369,23 +9735,23 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class ContactSearchResult
+    public partial class StringIdentityUserRole
     {
         /// <summary>
-        /// Initializes a new instance of the ContactSearchResult class.
+        /// Initializes a new instance of the StringIdentityUserRole class.
         /// </summary>
-        public ContactSearchResult()
+        public StringIdentityUserRole()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the ContactSearchResult class.
+        /// Initializes a new instance of the StringIdentityUserRole class.
         /// </summary>
-        public ContactSearchResult(int? totalCount = default(int?), IList<Contact> results = default(IList<Contact>))
+        public StringIdentityUserRole(string userId = default(string), string roleId = default(string))
         {
-            TotalCount = totalCount;
-            Results = results;
+            UserId = userId;
+            RoleId = roleId;
             CustomInit();
         }
 
@@ -9396,13 +9762,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "totalCount")]
-        public int? TotalCount { get; set; }
+        [JsonProperty(PropertyName = "userId")]
+        public string UserId { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "results")]
-        public IList<Contact> Results { get; set; }
+        [JsonProperty(PropertyName = "roleId")]
+        public string RoleId { get; set; }
 
     }
 }

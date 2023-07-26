@@ -21,6 +21,8 @@ namespace VirtoCommerce.Storefront.Model.Customer
 
         public string Salutation { get; set; }
 
+        public string Status { get; set; }
+
         public string PhotoUrl { get; set; }
 
         public string TimeZone { get; set; }
