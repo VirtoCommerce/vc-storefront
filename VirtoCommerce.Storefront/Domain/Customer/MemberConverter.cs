@@ -79,6 +79,7 @@ namespace VirtoCommerce.Storefront.Domain
                 OrganizationId = contactDto.Organizations?.FirstOrDefault(),
                 OrganizationsIds = contactDto.Organizations,
                 Salutation = contactDto.Salutation,
+                Status = contactDto.Status,
                 PhotoUrl = contactDto.PhotoUrl
             };
 
@@ -177,6 +178,7 @@ namespace VirtoCommerce.Storefront.Domain
                 LastName = customer.LastName,
                 MiddleName = customer.MiddleName,
                 Salutation = customer.Salutation,
+                Status = customer.Status,
                 PhotoUrl = customer.PhotoUrl,
                 MemberType = "Contact",
             };
