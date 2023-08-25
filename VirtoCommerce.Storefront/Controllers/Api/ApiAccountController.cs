@@ -115,9 +115,16 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
             else
             {
+                if (new IsUserPasswordExpiredSpecification().IsSatisfiedBy(user))
+                {
+                    ResetIdentityCookies();
+
+                    return UserActionIdentityResult.Failed(SecurityErrorDescriber.PasswordExpired());
+                }
+
                 if (!new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore))
                 {
-                    Response.Cookies.Delete(".AspNetCore.Identity.Application");
+                    ResetIdentityCookies();
 
                     return UserActionIdentityResult.Failed(SecurityErrorDescriber.UserCannotLoginInStore());
                 }
@@ -136,6 +143,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
 
             return result;
+        }
+
+        private void ResetIdentityCookies()
+        {
+            Response.Cookies.Delete(".AspNetCore.Identity.Application");
         }
 
         // POST: storefrontapi/account/user

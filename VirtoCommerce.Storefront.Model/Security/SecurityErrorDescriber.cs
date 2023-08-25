@@ -155,6 +155,14 @@ namespace VirtoCommerce.Storefront.Model.Security
                 Description = "Your account has been temporarily locked. Please try again after some time."
             };
         }
+        public static FormError PasswordExpired()
+        {
+            return new FormError
+            {
+                Code = nameof(PasswordExpired).PascalToKebabCase(),
+                Description = "Your password has been expired and must be changed."
+            };
+        }
 
     }
 }
