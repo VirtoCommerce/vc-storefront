@@ -88,59 +88,55 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 return UserActionIdentityResult.Failed(SecurityErrorDescriber.UsernameOrEmailIsRequired());
             }
 
-            var result = CheckLoginUser(user);
-
-            if (result != UserActionIdentityResult.Success)
+            if (user == null)
             {
-                return result;
+                return UserActionIdentityResult.Failed(SecurityErrorDescriber.LoginFailed());
             }
 
             var loginResult = await _signInManager.PasswordSignInAsync(user.UserName, login.Password, login.RememberMe, lockoutOnFailure: true);
 
             if (!loginResult.Succeeded)
             {
-                result = UserActionIdentityResult.Failed(SecurityErrorDescriber.LoginFailed());
+                if (loginResult.IsLockedOut)
+                {
+                    if (new IsUserLockedByRequiredEmailVerificationSpecification().IsSatisfiedBy(user))
+                    {
+                        return UserActionIdentityResult.Failed(SecurityErrorDescriber.EmailVerificationIsRequired());
+                    }
+                    if (new IsUserTemporaryLockedOutSpecification().IsSatisfiedBy(user))
+                    {
+                        return UserActionIdentityResult.Failed(SecurityErrorDescriber.UserIsTemporaryLockedOut());
+                    }
+
+                    return UserActionIdentityResult.Failed(SecurityErrorDescriber.UserIsLockedOut());
+                }
+
+                return UserActionIdentityResult.Failed(SecurityErrorDescriber.LoginFailed());
             }
             else
             {
-                await SetLastLoginDate(user);
-                await _publisher.Publish(new UserLoginEvent(WorkContext, user));
-                if (string.IsNullOrEmpty(returnUrl))
+                if (!new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore))
                 {
-                    return result;
+                    Response.Cookies.Delete(".AspNetCore.Identity.Application");
+
+                    return UserActionIdentityResult.Failed(SecurityErrorDescriber.UserCannotLoginInStore());
                 }
 
+            }
+
+            await SetLastLoginDate(user);
+            await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+
+            var result = new UserActionIdentityResult();
+
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
                 var newUrl = Url.IsLocalUrl(returnUrl) ? returnUrl : "~/";
                 result.ReturnUrl = UrlBuilder.ToAppRelative(newUrl, WorkContext.CurrentStore, WorkContext.CurrentLanguage);
             }
+
             return result;
         }
-
-        private UserActionIdentityResult CheckLoginUser(User user)
-        {
-            if (user == null)
-            {
-                return UserActionIdentityResult.Failed(SecurityErrorDescriber.LoginFailed());
-            }
-
-            if (!new CanUserLoginToStoreSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore))
-            {
-                return UserActionIdentityResult.Failed(SecurityErrorDescriber.UserCannotLoginInStore());
-            }
-
-            if (new IsUserLockedOutSpecification().IsSatisfiedBy(user))
-            {
-                return UserActionIdentityResult.Failed(SecurityErrorDescriber.UserIsLockedOut());
-            }
-
-            if (new IsUserSuspendedSpecification().IsSatisfiedBy(user))
-            {
-                return UserActionIdentityResult.Failed(SecurityErrorDescriber.AccountIsBlocked());
-            }
-
-            return UserActionIdentityResult.Success;
-        }
-
 
         // POST: storefrontapi/account/user
         [HttpPost("user")]

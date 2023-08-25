@@ -97,6 +97,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 UserType = userDto.UserType,
                 TwoFactorEnabled = userDto.TwoFactorEnabled ?? false,
                 PhoneNumberConfirmed = userDto.PhoneNumberConfirmed ?? false,
+                Status = userDto.Status,
             };
 
             if (!userDto.Roles.IsNullOrEmpty())
@@ -144,6 +145,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 PhoneNumber = user.PhoneNumber,
                 PhoneNumberConfirmed = user.PhoneNumberConfirmed,
                 PasswordExpired = user.PasswordExpired,
+                Status = user.Status
             };
 
             if (!user.Roles.IsNullOrEmpty())

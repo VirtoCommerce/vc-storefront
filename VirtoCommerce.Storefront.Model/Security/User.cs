@@ -80,7 +80,14 @@ namespace VirtoCommerce.Storefront.Model.Security
         /// The flag indicates that the user is an administrator 
         /// </summary>
         public bool IsAdministrator { get; set; }
+
         public string UserType { get; set; }
+
+        /// <summary>
+        /// Represents user status.
+        /// </summary>
+        public string Status { get; set; }
+
         public AccountState UserState { get; set; }
         /// <summary>
         /// The user ID of an operator who has loggen in on behalf of a customer
