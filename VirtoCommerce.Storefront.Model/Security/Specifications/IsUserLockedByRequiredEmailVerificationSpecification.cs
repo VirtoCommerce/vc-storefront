@@ -6,7 +6,7 @@ namespace VirtoCommerce.Storefront.Model.Security.Specifications
     {
         public virtual bool IsSatisfiedBy(User user)
         {
-            return user.Status == "Locked" && !user.EmailConfirmed;
+            return user.Contact.Status == "Locked" && !user.EmailConfirmed;
         }
     }
 }
