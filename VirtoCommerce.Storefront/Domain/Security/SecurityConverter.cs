@@ -24,7 +24,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             {
                 Id = role.Id,
                 Name = role.Name,
-                Permissions = role?.Permissions.Select(x => new dto.Permission { Id = x, Name = x }).ToList()
+                Permissions = role.Permissions.Select(x => new dto.Permission { Id = x, Name = x }).ToList()
             };
         }
         public static Role ToRole(this dto.Role roleDto)
@@ -33,7 +33,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             {
                 Id = roleDto.Id,
                 Name = roleDto.Name,
-                Permissions = roleDto?.Permissions.Select(x => x.Id).ToList()
+                Permissions = roleDto.Permissions.Select(x => x.Id).ToList()
             };
         }
 
@@ -97,6 +97,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 UserType = userDto.UserType,
                 TwoFactorEnabled = userDto.TwoFactorEnabled ?? false,
                 PhoneNumberConfirmed = userDto.PhoneNumberConfirmed ?? false,
+                Status = userDto.Status,
             };
 
             if (!userDto.Roles.IsNullOrEmpty())
@@ -144,6 +145,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 PhoneNumber = user.PhoneNumber,
                 PhoneNumberConfirmed = user.PhoneNumberConfirmed,
                 PasswordExpired = user.PasswordExpired,
+                Status = user.Status
             };
 
             if (!user.Roles.IsNullOrEmpty())
