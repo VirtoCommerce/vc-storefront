@@ -134,7 +134,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             await SetLastLoginDate(user);
             await _publisher.Publish(new UserLoginEvent(WorkContext, user));
 
-            var result = new UserActionIdentityResult();
+            var result = UserActionIdentityResult.Success;
 
             if (!string.IsNullOrEmpty(returnUrl))
             {
