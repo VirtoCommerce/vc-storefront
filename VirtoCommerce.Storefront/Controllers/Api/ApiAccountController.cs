@@ -115,6 +115,13 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
             else
             {
+                if (user.Contact == null)
+                {
+                    ResetIdentityCookies();
+
+                    return UserActionIdentityResult.Failed(SecurityErrorDescriber.UserNotFound());
+                }
+
                 if (new IsUserPasswordExpiredSpecification().IsSatisfiedBy(user))
                 {
                     ResetIdentityCookies();
