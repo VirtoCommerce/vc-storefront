@@ -9,7 +9,7 @@ namespace VirtoCommerce.Storefront.Model.Security
             return new FormError
             {
                 Code = nameof(UsernameOrEmailIsRequired).PascalToKebabCase(),
-                Description = "Username or email is required"
+                Description = "Please provide a username or email"
             };
         }
         public static FormError LoginFailed()
@@ -17,7 +17,7 @@ namespace VirtoCommerce.Storefront.Model.Security
             return new FormError
             {
                 Code = nameof(LoginFailed).PascalToKebabCase(),
-                Description = "Login attempt failed"
+                Description = "Login attempt failed. Please check your credentials."
             };
         }
 
@@ -26,7 +26,7 @@ namespace VirtoCommerce.Storefront.Model.Security
             return new FormError
             {
                 Code = nameof(UserNotFound).PascalToKebabCase(),
-                Description = "User not found"
+                Description = "User not found. Please ensure you've entered the correct information."
             };
         }
         public static FormError UserCannotLoginInStore()
@@ -34,7 +34,7 @@ namespace VirtoCommerce.Storefront.Model.Security
             return new FormError
             {
                 Code = nameof(UserCannotLoginInStore).PascalToKebabCase(),
-                Description = "User cannot login to current store"
+                Description = "Access denied. You cannot sign in to the current store"
             };
         }
 
@@ -43,7 +43,7 @@ namespace VirtoCommerce.Storefront.Model.Security
             return new FormError
             {
                 Code = nameof(PhoneNumberNotFound).PascalToKebabCase(),
-                Description = "Reset password by code is Failed. Phone Number not found"
+                Description = "Password reset failed. Phone number not found for verification."
             };
         }
 
@@ -52,7 +52,16 @@ namespace VirtoCommerce.Storefront.Model.Security
             return new FormError
             {
                 Code = nameof(AccountIsBlocked).PascalToKebabCase(),
-                Description = "Account is blocked"
+                Description = "Your account has been blocked. Please contact support for assistance."
+            };
+        }
+
+        public static FormError EmailVerificationIsRequired()
+        {
+            return new FormError
+            {
+                Code = nameof(EmailVerificationIsRequired).PascalToKebabCase(),
+                Description = "Email verification required. Please verify your email address."
             };
         }
 
@@ -61,7 +70,7 @@ namespace VirtoCommerce.Storefront.Model.Security
             return new FormError
             {
                 Code = nameof(OperationFailed).PascalToKebabCase(),
-                Description = "Operation failed"
+                Description = "Oops, something went wrong. The operation could not be completed."
             };
         }
 
@@ -70,7 +79,7 @@ namespace VirtoCommerce.Storefront.Model.Security
             return new FormError
             {
                 Code = nameof(ResetPasswordIsTurnedOff).PascalToKebabCase(),
-                Description = "Reset password by code is turned off"
+                Description = "Password reset by code is currently unavailable."
             };
         }
 
@@ -79,7 +88,7 @@ namespace VirtoCommerce.Storefront.Model.Security
             return new FormError
             {
                 Code = nameof(InvalidToken).PascalToKebabCase(),
-                Description = "Token is invalid or expired"
+                Description = "Sorry, the token is invalid or has expired. Please request a new one."
             };
         }
         public static FormError InvalidUrl()
@@ -87,7 +96,7 @@ namespace VirtoCommerce.Storefront.Model.Security
             return new FormError
             {
                 Code = nameof(InvalidUrl).PascalToKebabCase(),
-                Description = "Url is invalid"
+                Description = "The URL you provided is not valid."
             };
         }
         public static FormError ResetPasswordInvalidData()
@@ -95,7 +104,7 @@ namespace VirtoCommerce.Storefront.Model.Security
             return new FormError
             {
                 Code = nameof(ResetPasswordInvalidData).PascalToKebabCase(),
-                Description = "Reset password data is invalid"
+                Description = "Password reset data is invalid. Please try again."
             };
         }
         public static FormError PasswordAndConfirmPasswordDoesNotMatch()
@@ -103,7 +112,7 @@ namespace VirtoCommerce.Storefront.Model.Security
             return new FormError
             {
                 Code = nameof(PasswordAndConfirmPasswordDoesNotMatch).PascalToKebabCase(),
-                Description = "Password and Confirm password doesn't match"
+                Description = "Passwords don't match. Please ensure both passwords are the same."
             };
         }
         public static FormError InvitationHasAreadyBeenUsed()
@@ -111,7 +120,7 @@ namespace VirtoCommerce.Storefront.Model.Security
             return new FormError
             {
                 Code = nameof(InvitationHasAreadyBeenUsed).PascalToKebabCase(),
-                Description = "Invitation has already been used"
+                Description = "This invitation has already been used. Please contact the sender if you need assistance."
             };
         }
         public static FormError PhoneNumberVerificationFailed()
@@ -119,7 +128,7 @@ namespace VirtoCommerce.Storefront.Model.Security
             return new FormError
             {
                 Code = nameof(PhoneNumberVerificationFailed).PascalToKebabCase(),
-                Description = "Phone number verification failed"
+                Description = "Phone number verification failed. Please try again or contact support."
             };
         }
         public static FormError ErrorSendNotification(string error)
@@ -135,7 +144,23 @@ namespace VirtoCommerce.Storefront.Model.Security
             return new FormError
             {
                 Code = nameof(UserIsLockedOut).PascalToKebabCase(),
-                Description = "User is locked out"
+                Description = "Your account has been locked. Please contact support for assistance."
+            };
+        }
+        public static FormError UserIsTemporaryLockedOut()
+        {
+            return new FormError
+            {
+                Code = nameof(UserIsLockedOut).PascalToKebabCase(),
+                Description = "Your account has been temporarily locked. Please try again after some time."
+            };
+        }
+        public static FormError PasswordExpired()
+        {
+            return new FormError
+            {
+                Code = nameof(PasswordExpired).PascalToKebabCase(),
+                Description = "Your password has been expired and must be changed."
             };
         }
 
