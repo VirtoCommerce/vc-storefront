@@ -327,7 +327,6 @@ namespace VirtoCommerce.Storefront
                 c.OperationFilter<ArrayInQueryParametersFilter>();
                 c.OperationFilter<FileUploadOperationFilter>();
                 c.SchemaFilter<EnumSchemaFilter>();
-                c.SchemaFilter<NewtonsoftJsonIgnoreFilter>();
 
                 // Use method name as operation ID, i.e. ApiAccount.GetOrganization instead of /storefrontapi/account/organization (will be treated as just organization method)
                 c.CustomOperationIds(apiDesc => apiDesc.TryGetMethodInfo(out var methodInfo) ? methodInfo.Name : null);
@@ -335,6 +334,7 @@ namespace VirtoCommerce.Storefront
                 // To avoid errors with repeating type names
                 c.CustomSchemaIds(type => (Attribute.GetCustomAttribute(type, typeof(SwaggerSchemaIdAttribute)) as SwaggerSchemaIdAttribute)?.Id ?? type.FriendlyId());
             });
+            services.AddSwaggerGenNewtonsoftSupport();
 
             services.AddResponseCompression();
 

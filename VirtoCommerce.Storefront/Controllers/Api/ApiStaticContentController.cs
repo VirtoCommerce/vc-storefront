@@ -1,6 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.LiquidThemeEngine;
 using VirtoCommerce.Storefront.Domain;
@@ -35,7 +35,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/content/reset-cache/theme
         [HttpPost("reset-cache/{region}")]
-        public ActionResult ResetCache([FromRoute] string region)
+        public ActionResult ResetCacheRegion([FromRoute] string region)
         {
             if (TryResetCacheInternal(region))
             {
@@ -63,7 +63,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // POST: storefrontapi/content/pages
         [HttpPost("pages")]
-        public ActionResult FindPage([FromBody]ContentInThemeSearchCriteria value)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult FindPage([FromBody] ContentInThemeSearchCriteria value)
         {
             var permalink = value.Permalink;
             var result = WorkContext.Pages.FirstOrDefault(x => x.Permalink != null && x.Permalink.EqualsInvariant(permalink));
@@ -75,7 +77,9 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         [HttpPost("templates")]
-        public ActionResult LoadTemplate([FromBody]ContentInThemeSearchCriteria value)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult LoadTemplate([FromBody] ContentInThemeSearchCriteria value)
         {
             var template = value.Template;
             var result = WorkContext.Templates.FirstOrDefault(x => x.Name == template);
@@ -88,7 +92,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         private ActionResult JsonResult(string content)
         {
-            return Content(content, "application/json");
+            return Content(content, MediaTypeNames.Application.Json);
         }
     }
 }
