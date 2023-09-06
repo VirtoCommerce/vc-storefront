@@ -81,8 +81,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult LoadTemplate([FromBody] ContentInThemeSearchCriteria value)
         {
-            var template = value.Template;
-            var result = WorkContext.Templates.FirstOrDefault(x => x.Name == template);
+            var result = WorkContext.Templates.FirstOrDefault(x => x.Name == value.TemplateName);
             if (result == null)
             {
                 return NotFound();
