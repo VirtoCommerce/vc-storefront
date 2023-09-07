@@ -100,7 +100,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 if (loginResult.IsLockedOut)
                 {
-                    if (new IsUserLockedByRequiredEmailVerificationSpecification().IsSatisfiedBy(user))
+                    if (new IsUserLockedByRequiredEmailVerificationSpecification(user).IsSatisfiedBy(WorkContext.CurrentStore))
                     {
                         return UserActionIdentityResult.Failed(SecurityErrorDescriber.EmailVerificationIsRequired());
                     }
