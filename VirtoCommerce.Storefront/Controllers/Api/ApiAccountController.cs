@@ -124,8 +124,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
                 if (new IsUserPasswordExpiredSpecification().IsSatisfiedBy(user))
                 {
-                    ResetIdentityCookies();
-
                     return UserActionIdentityResult.Failed(SecurityErrorDescriber.PasswordExpired(user.Id));
                 }
 
