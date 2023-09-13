@@ -7,6 +7,7 @@ namespace VirtoCommerce.Storefront.Model
         public string Code { get; set; }
         public string Message => Description;
         public string Description { get; set; }
+        public string UserId { get; set; }
 
         public override string ToString()
         {
