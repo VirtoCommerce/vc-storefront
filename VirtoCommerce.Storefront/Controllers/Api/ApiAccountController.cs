@@ -50,6 +50,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // GET: storefrontapi/account
+        [Obsolete("Use me query from GraphQL")]
         [HttpGet]
         [AllowAnonymous]
         public ActionResult<User> GetCurrentUser()
@@ -156,6 +157,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/account/user
+        [Obsolete("Use requestRegistration mutations from GraphQL")]
         [HttpPost("user")]
         public async Task<ActionResult<UserActionIdentityResult>> RegisterUser([FromBody] UserRegistration registration)
         {
@@ -228,6 +230,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
 
         // POST: storefrontapi/account/password
+        [Obsolete("Use changePassword mutation from GraphQL")]
         [HttpPost("password")]
         public async Task<ActionResult<PasswordChangeResult>> ChangePassword([FromBody] ChangePassword formModel)
         {
@@ -309,6 +312,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/account/forgotpassword
+        [Obsolete("Use requestPasswordReset mutation from GraphQL")]
         [HttpPost("forgotPassword")]
         [AllowAnonymous]
         public async Task<ActionResult<UserActionIdentityResult>> ForgotPassword([FromBody] ForgotPasswordModel forgotPassword)
@@ -381,6 +385,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/account/validateToken
+        [Obsolete("This API no longer used. See XAPI documentation")]
         [HttpPost("validateToken")]
         [AllowAnonymous]
         public async Task<ActionResult<UserActionIdentityResult>> ValidateResetPasswordToken([FromBody] ValidateTokenModel model)
@@ -415,6 +420,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/account/resetPassword
+        [Obsolete("Use resetPasswordByToken mutation from GraphQL")]
         [HttpPost("resetPassword")]
         [AllowAnonymous]
         public async Task<ActionResult<UserActionIdentityResult>> ResetPassword([FromBody] ResetPasswordModel model)
@@ -455,6 +461,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // POST: storefrontapi/account/confirmemail
+        [Obsolete("Use confirmEmail mutation from GraphQL")]
         [HttpPost("confirmemail")]
         [AllowAnonymous]
         public async Task<ActionResult<UserActionIdentityResult>> ConfirmEmail([FromBody] ConfirmEmailModel model)

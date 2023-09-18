@@ -34,6 +34,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // GET: storefrontapi/countries
+        [Obsolete("Use countries query from GraphQL")]
         [HttpGet("countries")]
         public ActionResult<Country[]> GetCountries()
         {
@@ -41,6 +42,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         }
 
         // GET: storefrontapi/countries/{countryCode}/regions
+        [Obsolete("Use countries or regions query from GraphQL")]
         [HttpGet("countries/{countryCode}/regions")]
         public ActionResult<CountryRegion[]> GetCountryRegions(string countryCode)
         {
@@ -61,9 +63,31 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             return Ok();
         }
+        
+        [HttpPost("slug")]
+        public async Task<SlugInfoResult> GetSlugInfoBySlugAsync([FromBody] SlugInfoRequest slugInfoRequest)
+        {
+            return await GetSlugInfoAsync(slugInfoRequest.Slug, slugInfoRequest.CultureName);
+        }
 
+        // Wildcard parameters are not supported by OpenAPI (including latest 3.1)
+        // https://stackoverflow.com/a/42880107/507434
+        [Obsolete("Use GetSlugInfoBySlug (POST /slug) instead")]
         [HttpGet("slug/{*slug}")]
         public async Task<SlugInfoResult> GetInfoBySlugAsync(string slug, [FromQuery] string culture)
+        {
+            return await GetSlugInfoAsync(slug, culture);
+        }
+
+        // GET: storefrontapi/version
+        [HttpGet("version")]
+        [AllowAnonymous]
+        public ActionResult Version()
+        {
+            return Ok(System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location).FileVersion);
+        }
+
+        private async Task<SlugInfoResult> GetSlugInfoAsync(string slug, string culture)
         {
             var result = new SlugInfoResult();
 
@@ -101,14 +125,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
 
             return result;
-        }
-
-        // GET: storefrontapi/version
-        [HttpGet("version")]
-        [AllowAnonymous]
-        public ActionResult Version()
-        {
-            return Ok(System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location).FileVersion);
         }
     }
 }

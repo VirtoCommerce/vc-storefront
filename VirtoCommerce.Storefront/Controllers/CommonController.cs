@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -82,6 +83,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // GET: common/getcountries/json
+        [Obsolete("Use countries query from GraphQL")]
         [HttpGet("common/getcountries/json")]
         public ActionResult GetCountries()
         {
@@ -90,6 +92,7 @@ namespace VirtoCommerce.Storefront.Controllers
         }
 
         // GET: common/getregions/{countryCode}/json
+        [Obsolete("Use countries or regions query from GraphQL")]
         [HttpGet("common/getregions/{countryCode}/json")]
         public ActionResult GetRegions(string countryCode)
         {
