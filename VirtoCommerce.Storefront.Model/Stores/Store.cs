@@ -136,6 +136,8 @@ namespace VirtoCommerce.Storefront.Model.Stores
 
         public bool EmailVerificationEnabled { get; set; }
 
+        public bool CreateAnonymousOrderEnabled { get; set; }
+
         public decimal FixedTaxRate { get; set; }
 
         public string CartValidationRuleSet { get; set; }
