@@ -88,6 +88,7 @@ namespace VirtoCommerce.Storefront.Domain
             result.AnonymousUsersAllowed = result.Settings.GetSettingValue("Stores.AllowAnonymousUsers", true);
             result.IsSpa = result.Settings.GetSettingValue("Stores.IsSpa", false);
             result.EmailVerificationEnabled = result.Settings.GetSettingValue("Stores.EmailVerificationEnabled", false);
+            result.CreateAnonymousOrderEnabled = result.Settings.GetSettingValue("XOrder.CreateAnonymousOrderEnabled", true);
 
             result.CartValidationRuleSet = result.Settings.GetSettingValue<string>("Stores.CartValidationRuleSet", null);
             if (string.IsNullOrEmpty(result.CartValidationRuleSet))
