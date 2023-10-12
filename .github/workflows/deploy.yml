@@ -66,8 +66,8 @@ jobs:
 
     - name: Update environment
       run: |
-        vc-build SetHelmParameter -ArgoServer https://argo.virtocommerce.cloud -ArgoAppName ${{ steps.app-name.outputs.APP }} -ArgoToken ${{ secrets.VCST_TOKEN }} -HelmParameters storefront.image.tag=${{ github.event.inputs.artifactUrl }}
-  
+        vc-build SetEnvParameter -EnvironmentName ${{ steps.app-name.outputs.APP }} -CloudToken ${{ secrets.VCST_TOKEN }} -HelmParameters storefront.image.tag=${{ github.event.inputs.artifactUrl }}
+
     - name: DEPLOY_STATE::successful
       if: success()
       run: echo "DEPLOY_STATE=successful" >> $GITHUB_ENV
