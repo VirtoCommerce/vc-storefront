@@ -131,7 +131,7 @@ namespace VirtoCommerce.Storefront.Controllers
         /// </summary>
         /// <param name="url">URL to redirect</param>
         /// <returns>Redirect to URL</returns>
-        [HttpGet]
+        [HttpOptions]
         public ActionResult InternalRedirect([FromRoute] string url)
         {
             return StoreFrontRedirectPermanent(url);
