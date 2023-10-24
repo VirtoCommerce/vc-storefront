@@ -2,7 +2,7 @@
     <rewriteMaps>
         <!--  Write maps here -->
     </rewriteMaps>
-    <rules useOriginalURLEncoding="false">
+    <rules>
         <!--  Write rules here -->
     </rules>
 </rewrite>
