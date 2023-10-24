@@ -40,6 +40,7 @@ using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Infrastructure.ApplicationInsights;
 using VirtoCommerce.Storefront.Infrastructure.Autorest;
 using VirtoCommerce.Storefront.Infrastructure.HealthCheck;
+using VirtoCommerce.Storefront.Infrastructure.Prerender;
 using VirtoCommerce.Storefront.Infrastructure.Swagger;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
@@ -405,6 +406,7 @@ namespace VirtoCommerce.Storefront
             app.UseSwagger(c => c.RouteTemplate = "docs/{documentName}/docs.json");
 
             var rewriteOptions = new RewriteOptions();
+
             // Load IIS url rewrite rules from external file
             if (File.Exists("IISUrlRewrite.xml"))
             {
@@ -412,13 +414,26 @@ namespace VirtoCommerce.Storefront
                 rewriteOptions.AddIISUrlRewrite(iisUrlRewriteStreamReader);
             }
 
+            // Add prerender.io rules
+            var prerenderOptions = new PrerenderOptions();
+            Configuration.GetSection("Prerender").Bind(prerenderOptions);
+            if (File.Exists("IISUrlRewrite.Prerender.xml") && prerenderOptions.Enabled)
+            {
+                using var iisUrlRewriteStreamReader = File.OpenText("IISUrlRewrite.Prerender.xml");
+                rewriteOptions.AddIISUrlRewrite(iisUrlRewriteStreamReader);
+                rewriteOptions.Add(new PrerenderHeaderRule(prerenderOptions.Token));
+            }
+
+            // Load http enforcement rules from appsettings.json
             var requireHttpsOptions = new RequireHttpsOptions();
             Configuration.GetSection("VirtoCommerce:RequireHttps").Bind(requireHttpsOptions);
             if (requireHttpsOptions.Enabled)
             {
                 rewriteOptions.AddRedirectToHttps(requireHttpsOptions.StatusCode, requireHttpsOptions.Port);
             }
+
             app.UseRewriter(rewriteOptions);
+
             // Enable browser XSS protection
             app.Use(async (context, next) =>
             {
