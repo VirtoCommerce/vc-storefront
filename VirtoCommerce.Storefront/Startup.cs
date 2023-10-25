@@ -392,7 +392,6 @@ namespace VirtoCommerce.Storefront
             app.UseMiddleware<WorkContextBuildMiddleware>();
             app.UseMiddleware<StoreMaintenanceMiddleware>();
             app.UseMiddleware<NoLiquidThemeMiddleware>();
-            app.UseMiddleware<PrerenderMiddleware>();
 
             var mvcViewOptions = app.ApplicationServices.GetService<IOptions<MvcViewOptions>>().Value;
             mvcViewOptions.ViewEngines.Add(app.ApplicationServices.GetService<ILiquidViewEngine>());
@@ -422,6 +421,7 @@ namespace VirtoCommerce.Storefront
             {
                 using var iisUrlRewriteStreamReader = File.OpenText("IISUrlRewrite.Prerender.xml");
                 rewriteOptions.AddIISUrlRewrite(iisUrlRewriteStreamReader);
+                rewriteOptions.Add(new PrerenderHeaderRule(prerenderOptions.Token));
 
                 Console.WriteLine("Added prerender.io rewrite rules");
             }
