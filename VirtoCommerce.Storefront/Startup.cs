@@ -422,8 +422,6 @@ namespace VirtoCommerce.Storefront
                 using var iisUrlRewriteStreamReader = File.OpenText("IISUrlRewrite.Prerender.xml");
                 rewriteOptions.AddIISUrlRewrite(iisUrlRewriteStreamReader);
                 rewriteOptions.Add(new PrerenderHeaderRule(prerenderOptions.Token));
-
-                Console.WriteLine("Added prerender.io rewrite rules");
             }
 
             // Load http enforcement rules from appsettings.json
