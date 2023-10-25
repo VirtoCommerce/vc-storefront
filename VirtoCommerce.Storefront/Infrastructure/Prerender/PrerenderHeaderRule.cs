@@ -19,7 +19,7 @@ public class PrerenderHeaderRule: IRule
 
         if (request.Host.HasValue && request.Host.Host.Contains("prerender.io"))
         {
-            request.Headers.TryAdd("HTTP_X_PRERENDER_TOKEN", _token);
+            request.Headers.TryAdd("X-Prerender-Token", _token);
         }
     }
 }
