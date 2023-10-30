@@ -63,7 +63,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             return Ok();
         }
-        
+
         [HttpPost("slug")]
         public async Task<SlugInfoResult> GetSlugInfoBySlugAsync([FromBody] SlugInfoRequest slugInfoRequest)
         {
@@ -102,7 +102,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             var bestSeoInfo = seoInfos.FirstOrDefault();
             result.EntityInfo = bestSeoInfo;
 
-            if (result.EntityInfo == null)
+            if (result.EntityInfo == null || result.EntityInfo.ObjectType == "ContentFile")
             {
                 var pageUrl = slug == "__index__home__page__" ? "/" : $"/{slug}";
                 try
@@ -110,7 +110,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     var pages = WorkContext.Pages.Where(p =>
                         string.Equals(p.Url, pageUrl, StringComparison.OrdinalIgnoreCase)
                         || string.Equals(p.Url, slug, StringComparison.OrdinalIgnoreCase)
-                    );
+                    ).ToList();
 
                     var page = pages.FirstOrDefault(x => x.Language.CultureName.EqualsInvariant(culture))
                                ?? pages.FirstOrDefault(x => x.Language.IsInvariant)
