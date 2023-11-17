@@ -528,10 +528,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return result;
         }
 
-        private async Task SetLastLoginDate(User user)
+        private Task SetLastLoginDate(User user)
         {
             user.LastLoginDate = DateTime.UtcNow;
-            await _signInManager.UserManager.UpdateAsync(user);
+            user.AccessFailedCount = 0;
+            return _signInManager.UserManager.UpdateAsync(user);
         }
 
         // GET: storefrontapi/account/passwordrequirements
