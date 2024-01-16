@@ -2,18 +2,23 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using AsyncKeyedLock;
 using VirtoCommerce.Storefront.Model.Caching;
 
 namespace VirtoCommerce.Storefront.Model.Common.Caching
 {
     public static class MemoryCacheExtensions
     {
-        private static readonly ConcurrentDictionary<string, object> _lockLookup = new ConcurrentDictionary<string, object>();
+        private static readonly AsyncKeyedLocker<string> _locker = new(o =>
+        {
+            o.PoolSize = 20;
+            o.PoolInitialFill = 1;
+        });
         public static async Task<TItem> GetOrCreateExclusiveAsync<TItem>(this IMemoryCache cache, string key, Func<MemoryCacheEntryOptions, Task<TItem>> factory, bool cacheNullValue = true)
         {
             if (!cache.TryGetValue(key, out var result))
             {
-                using (await AsyncLock.GetLockByKey(key).LockAsync())
+                using (await _locker.LockAsync(key).ConfigureAwait(false))
                 {
                     if (!cache.TryGetValue(key, out result))
                     {
@@ -33,7 +38,7 @@ namespace VirtoCommerce.Storefront.Model.Common.Caching
         {
             if (!cache.TryGetValue(key, out var result))
             {
-                lock (_lockLookup.GetOrAdd(key, new object()))
+                using (_locker.Lock(key))
                 {
                     if (!cache.TryGetValue(key, out result))
                     {

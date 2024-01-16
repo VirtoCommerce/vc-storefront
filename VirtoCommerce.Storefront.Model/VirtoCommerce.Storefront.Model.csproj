@@ -17,8 +17,8 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="AsyncKeyedLock" Version="6.3.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
-    <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
     <PackageReference Include="FluentValidation" Version="10.4.0" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
   </ItemGroup>

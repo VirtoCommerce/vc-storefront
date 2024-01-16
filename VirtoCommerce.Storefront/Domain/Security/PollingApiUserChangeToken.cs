@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using System.Threading;
+using AsyncKeyedLock;
 using Microsoft.Extensions.Primitives;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
@@ -15,7 +15,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
         private static DateTime _lastCheckedTimeUtcStatic;
         private readonly TimeSpan _pollingInterval;
 
-        private readonly object _lock = new object();
+        private readonly AsyncNonKeyedLocker _lock = new();
 
         public PollingApiUserChangeToken(ISecurity platformSecurityApi, TimeSpan pollingInterval)
         {
@@ -49,8 +49,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                     return false;
                 }
 
-                var lockTaken = Monitor.TryEnter(_lock);
-                try
+                using (_lock.Lock(millisecondsTimeout: 0, out var lockTaken))
                 {
                     //Do not wait if is locked by another thread 
                     if (lockTaken)
@@ -73,13 +72,6 @@ namespace VirtoCommerce.Storefront.Domain.Security
                         }
 
                         UpdateLastCheckedTimeUtcStatic(currentTime);
-                    }
-                }
-                finally
-                {
-                    if (lockTaken)
-                    {
-                        Monitor.Exit(_lock);
                     }
                 }
                 return false;
