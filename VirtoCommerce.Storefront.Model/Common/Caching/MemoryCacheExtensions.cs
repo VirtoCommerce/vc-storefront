@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Concurrent;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
 using AsyncKeyedLock;
+using Microsoft.Extensions.Caching.Memory;
 using VirtoCommerce.Storefront.Model.Caching;
 
 namespace VirtoCommerce.Storefront.Model.Common.Caching
