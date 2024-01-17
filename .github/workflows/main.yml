@@ -43,7 +43,8 @@ jobs:
       artifactUrl:  ${{ steps.image.outputs.taggedVersion }}
       jira-keys: ${{ steps.jira_keys.outputs.jira-keys }}
 
-    steps:        
+    steps:
+    
     - name: Set variables
       if: ${{ github.event_name == 'workflow_dispatch' }}
       run: |
