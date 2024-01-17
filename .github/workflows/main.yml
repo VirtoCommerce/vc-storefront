@@ -44,7 +44,7 @@ jobs:
       jira-keys: ${{ steps.jira_keys.outputs.jira-keys }}
 
     steps:
-    
+
     - name: Set variables
       if: ${{ github.event_name == 'workflow_dispatch' }}
       run: |
