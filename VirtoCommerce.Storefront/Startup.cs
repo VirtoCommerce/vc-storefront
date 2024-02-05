@@ -439,11 +439,20 @@ namespace VirtoCommerce.Storefront
                 }));
 
             app.UseWhen(
+                context => context.Request.Path.Value.EndsWith("connect/token"),
+                appInner => appInner
+                    .RunProxy(context => context
+                        .ForwardTo(platformEndpointOptions.Url)
+                        .AddXForwardedHeaders()
+                        .Send()));
+
+            app.UseWhen(
                 context => context.Request.Path.StartsWithSegments("/api/files"),
                 appInner => appInner
-                    .RunProxy(context => context.ForwardTo(platformEndpointOptions.Url)
-                    .AddXForwardedHeaders()
-                    .Send()));
+                    .RunProxy(context => context
+                        .ForwardTo(platformEndpointOptions.Url)
+                        .AddXForwardedHeaders()
+                        .Send()));
 
             // It will be good to rewrite endpoint routing as described here, but it's not easy to do:
             // https://docs.microsoft.com/en-us/aspnet/core/migration/22-to-30?view=aspnetcore-3.1&tabs=visual-studio#routing-startup-code
