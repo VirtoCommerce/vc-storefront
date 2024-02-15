@@ -65,7 +65,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
                 else
                 {
                     request.Headers.Add("VirtoCommerce-User-Name", "Anonymous");
-                    request.Headers.Add("VirtoCommerce-AnonymousUser-Id", currentUser?.Id);
+                    request.Headers.Add("VirtoCommerce-Anonymous-User-Id", currentUser?.Id);
                 }
             }
         }
