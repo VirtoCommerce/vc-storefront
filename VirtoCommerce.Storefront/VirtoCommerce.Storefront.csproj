@@ -8,7 +8,7 @@
     <PackageLicenseUrl>https://virtocommerce.com/open-source-license</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/VirtoCommerce/vc-storefront</PackageProjectUrl>
     <RepositoryUrl>https://github.com/VirtoCommerce/vc-storefront</RepositoryUrl>
-    
+
     <PackageIconUrl>https://virtocommerce.com/themes/assets/logo.jpg</PackageIconUrl>
     <PackageReleaseNotes></PackageReleaseNotes>
     <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
@@ -20,7 +20,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>1701;1702;1591;1573;1570</NoWarn>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <Compile Remove="JsonConverters\**" />
     <Compile Remove="wwwroot\cms-content\**" />
@@ -45,12 +45,11 @@
     <PackageReference Include="IdentityModel" Version="6.0.0" />
     <PackageReference Include="FluentValidation" Version="10.4.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.4.0" />
-    
     <PackageReference Include="Markdig" Version="0.30.2" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.21.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.SnapshotCollector" Version="1.4.3" />
-    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.21.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.22.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.SnapshotCollector" Version="1.4.6" />
+    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.22.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
@@ -72,9 +71,14 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="VirtoCommerce.Tools" Version="3.400.0" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
+  </ItemGroup>
+
+  <!--Workaround for vulnerable transitive packages-->
+  <ItemGroup>
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
   </ItemGroup>
 
   <ItemGroup>
