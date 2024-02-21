@@ -45,13 +45,13 @@ jobs:
 
     steps:
 
-    - name: Set up Node 18
-      uses: actions/setup-node@v3
+    - name: Set up Node 20
+      uses: actions/setup-node@v4
       with:
-          node-version: '18'
+          node-version: '20'
             
     - name: Set up Java 17
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: '17'
@@ -72,7 +72,7 @@ jobs:
       run: |
         echo "BUILD_DOCKER=true" >> $GITHUB_ENV
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
@@ -131,7 +131,7 @@ jobs:
     - name: Set artifactUrl value
       id: artifactUrl
       run: |
-        echo ::set-output name=DOCKER_URL::${{ env.PACKAGE_SERVER }}/${{github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}
+        echo "DOCKER_URL=${{ env.PACKAGE_SERVER }}/${{github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}" >> $GITHUB_ENV
 
     - name: Build Docker Image
       if: ${{ env.BUILD_DOCKER == 'true' }}
@@ -191,7 +191,7 @@ jobs:
     - name: Push Build Info to Jira
       if: ${{ env.CLOUD_INSTANCE_BASE_URL != 0 && env.CLIENT_ID != 0 && env.CLIENT_SECRET != 0 && steps.jira_keys.outputs.jira-keys != '' && always() }}
       id: push_build_info_to_jira
-      uses: HighwayThree/jira-upload-build-info@master
+      uses: VirtoCommerce/jira-upload-build-info@master
       with:
         cloud-instance-base-url: '${{ secrets.CLOUD_INSTANCE_BASE_URL }}'
         client-id: '${{ secrets.CLIENT_ID }}'
@@ -225,9 +225,9 @@ jobs:
       id: deployEnv
       run: |
         if [ '${{ github.ref }}' = 'refs/heads/master' ]; then
-          echo ::set-output name=NAME::prod
+          echo "NAME=prod" >> $GITHUB_ENV
         else
-          echo ::set-output name=NAME::dev
+          echo "NAME=dev" >> $GITHUB_ENV
         fi;
 
     - name: Invoke Module deployment workflow
