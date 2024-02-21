@@ -439,7 +439,7 @@ namespace VirtoCommerce.Storefront
                 }));
 
             app.UseWhen(
-                context => context.Request.Path.Value.EndsWith("connect/token"),
+                context => context.Request.Path.Value.EndsWith("/token"),
                 appInner => appInner
                     .RunProxy(context => context
                         .ForwardTo(platformEndpointOptions.Url)

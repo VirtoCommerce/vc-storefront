@@ -67,7 +67,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.Autorest
 
         protected override async Task AddAuthenticationAsync(HttpRequestMessage request)
         {
-            if (!request.Headers.Contains("Authorization") && !request.RequestUri.AbsoluteUri.Contains("/connect/token"))
+            if (!request.Headers.Contains("Authorization") && !request.RequestUri.AbsoluteUri.EndsWith("/token"))
             {
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await GetOrRenewTokenAsync());
             }
