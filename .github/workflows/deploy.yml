@@ -42,10 +42,7 @@ jobs:
       run: |
           if [ ${{ github.ref }} == 'refs/heads/master' ]; then
             echo "IS master branch"
-            echo "APP=vcst-demo" >> $GITHUB_ENV
-          elif [ ${{ github.ref }} == 'refs/heads/dev' ]; then
-            echo "IS dev branch"
-            echo "APP=vcst-dev" >> $GITHUB_ENV
+            echo "APP=vcptcore-qa" >> $GITHUB_OUTPUT
           fi
     
     - name: Read deployment config
@@ -66,7 +63,7 @@ jobs:
 
     - name: Update environment
       run: |
-        vc-build SetEnvParameter -EnvironmentName ${{ steps.app-name.outputs.APP }} -CloudToken ${{ secrets.VCST_PLATFORM_TOKEN }} -HelmParameters storefront.image.tag=${{ github.event.inputs.artifactUrl }}
+        vc-build SetEnvParameter -EnvironmentName ${{ steps.app-name.outputs.APP }} -CloudToken ${{ secrets.VCPTCORE_PLATFORM_TOKEN }} -HelmParameters storefront.image.tag=${{ github.event.inputs.artifactUrl }}
 
     - name: DEPLOY_STATE::successful
       if: success()
