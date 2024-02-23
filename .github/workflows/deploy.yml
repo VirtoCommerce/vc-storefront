@@ -42,10 +42,7 @@ jobs:
       run: |
           if [ ${{ github.ref }} == 'refs/heads/master' ]; then
             echo "IS master branch"
-            echo "::set-output name=APP::vcst-demo"
-          elif [ ${{ github.ref }} == 'refs/heads/dev' ]; then
-            echo "IS dev branch"
-            echo "::set-output name=APP::vcst-dev"
+            echo "APP=vcptcore-qa" >> $GITHUB_OUTPUT
           fi
     
     - name: Read deployment config
@@ -66,7 +63,7 @@ jobs:
 
     - name: Update environment
       run: |
-        vc-build SetEnvParameter -EnvironmentName ${{ steps.app-name.outputs.APP }} -CloudToken ${{ secrets.VCST_PLATFORM_TOKEN }} -HelmParameters storefront.image.tag=${{ github.event.inputs.artifactUrl }}
+        vc-build SetEnvParameter -EnvironmentName ${{ steps.app-name.outputs.APP }} -CloudToken ${{ secrets.VCPTCORE_PLATFORM_TOKEN }} -HelmParameters storefront.image.tag=${{ github.event.inputs.artifactUrl }}
 
     - name: DEPLOY_STATE::successful
       if: success()
@@ -88,7 +85,7 @@ jobs:
     - name: Push Deployment Info to Jira
       if: ${{ env.CLOUD_INSTANCE_BASE_URL != 0 && env.CLIENT_ID != 0 && env.CLIENT_SECRET != 0 && github.event.inputs.jiraKeys != '' && always() }}
       id: push_deployment_info_to_jira
-      uses: HighwayThree/jira-upload-deployment-info@master
+      uses: VirtoCommerce/jira-upload-deployment-info@master
       env:
         CLOUD_INSTANCE_BASE_URL: ${{secrets.CLOUD_INSTANCE_BASE_URL}}
         CLIENT_ID: ${{secrets.CLIENT_ID}}
