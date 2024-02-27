@@ -24,7 +24,7 @@ jobs:
       jiraKey: ${{ steps.jiraKey.outputs.qaTaskNumber }}
     steps:
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Get Artifact Version
       uses: VirtoCommerce/vc-github-actions/get-image-version@master
@@ -47,7 +47,7 @@ jobs:
   publish:
     needs:
       get-deployment-data
-    uses: VirtoCommerce/.github/.github/workflows/publish-docker.yml@v3.200.7
+    uses: VirtoCommerce/.github/.github/workflows/publish-docker.yml@v3.800.2
     with:
       fullKey: ${{ needs.get-deployment-data.outputs.dockerFullKey }}
       shortKey: '${{ needs.get-deployment-data.outputs.dockerShortKey }}-'
@@ -60,7 +60,7 @@ jobs:
   deploy:
     needs:
       [publish, get-deployment-data]
-    uses: VirtoCommerce/.github/.github/workflows/deploy.yml@v3.200.7
+    uses: VirtoCommerce/.github/.github/workflows/deploy.yml@v3.800.2
     with:
       argoServer: 'argo.govirto.com'
       artifactUrl: ${{ needs.publish.outputs.imagePath }}
@@ -94,10 +94,10 @@ jobs:
       with:
         artifactUrl: ${{ needs.publish.outputs.imagePath }}
 
-    - uses: actions/github-script@v5
+    - uses: actions/github-script@v7
       if: ${{ !(contains('skipped, cancelled', needs.publish.result ))  }}
       with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
+        #github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
           github.rest.issues.createComment({
             issue_number: context.issue.number,
@@ -121,10 +121,10 @@ jobs:
       run: |
         echo "MESSAGE_BODY=:heavy_check_mark: Docker image ${{ needs.publish.outputs.imagePath }} deployed to QA" >> $GITHUB_ENV
 
-    - uses: actions/github-script@v5
+    - uses: actions/github-script@v7
       if: ${{ !(contains('skipped, cancelled', needs.deploy.result )) }}
       with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
+        #github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
           github.rest.issues.createComment({
             issue_number: context.issue.number,
