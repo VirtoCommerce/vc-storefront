@@ -53,7 +53,7 @@ jobs:
         deployConfigPath: ${{ github.event.inputs.deployConfigPath }}
 
     - name: Start deployment
-      uses: bobheadxi/deployments@master
+      uses: VirtoCommerce/vc-github-actions/gh-deployments@master
       id: deployment
       with:
         step: start
@@ -74,7 +74,7 @@ jobs:
       run: echo "DEPLOY_STATE=failed"  >> $GITHUB_ENV
 
     - name: Update GitHub deployment status
-      uses: bobheadxi/deployments@master
+      uses: VirtoCommerce/vc-github-actions/gh-deployments@master
       if: always()
       with:
         step: finish
