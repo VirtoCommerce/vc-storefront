@@ -53,7 +53,8 @@ jobs:
         deployConfigPath: ${{ github.event.inputs.deployConfigPath }}
 
     - name: Start deployment
-      uses: VirtoCommerce/vc-github-actions/gh-deployments@master
+      #if: ${{ github.ref == 'refs/heads/master' }}
+      uses: VirtoCommerce/vc-github-actions/gh-deployments@VCST-488
       id: deployment
       with:
         step: start
@@ -62,6 +63,7 @@ jobs:
         no_override: false
 
     - name: Update environment
+      if: ${{ github.ref == 'refs/heads/master' }}
       run: |
         vc-build CloudEnvSetParameter -EnvironmentName ${{ steps.app-name.outputs.APP }} -CloudToken ${{ secrets.VCPTCORE_PLATFORM_TOKEN }} -HelmParameters storefront.image.tag=${{ github.event.inputs.artifactUrl }}
 
@@ -74,7 +76,7 @@ jobs:
       run: echo "DEPLOY_STATE=failed"  >> $GITHUB_ENV
 
     - name: Update GitHub deployment status
-      uses: VirtoCommerce/vc-github-actions/gh-deployments@master
+      uses: VirtoCommerce/vc-github-actions/gh-deployments@VCST-488
       if: always()
       with:
         step: finish
