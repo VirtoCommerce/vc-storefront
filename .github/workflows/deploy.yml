@@ -42,10 +42,10 @@ jobs:
       run: |
           if [ ${{ github.ref }} == 'refs/heads/master' ]; then
             echo "IS master branch"
-            echo "::set-output name=APP::vcst-demo"
+            echo "APP=vcptcore-qa" >> $GITHUB_OUTPUT
           elif [ ${{ github.ref }} == 'refs/heads/dev' ]; then
             echo "IS dev branch"
-            echo "::set-output name=APP::vcst-dev"
+            echo "APP=vcst-dev" >> $GITHUB_OUTPUT
           fi
     
     - name: Read deployment config
@@ -56,7 +56,7 @@ jobs:
         deployConfigPath: ${{ github.event.inputs.deployConfigPath }}
 
     - name: Start deployment
-      uses: bobheadxi/deployments@master
+      uses: VirtoCommerce/vc-github-actions/gh-deployments@master
       id: deployment
       with:
         step: start
@@ -64,9 +64,15 @@ jobs:
         env: ${{ steps.deployConfig.outputs.environmentName }}
         no_override: false
 
-    - name: Update environment
+    - name: Update vcptcore-qa environment
+      if: ${{ github.ref == 'refs/heads/master' }}
       run: |
-        vc-build SetEnvParameter -EnvironmentName ${{ steps.app-name.outputs.APP }} -CloudToken ${{ secrets.VCST_PLATFORM_TOKEN }} -HelmParameters storefront.image.tag=${{ github.event.inputs.artifactUrl }}
+        vc-build CloudEnvSetParameter -EnvironmentName ${{ steps.app-name.outputs.APP }} -CloudToken ${{ secrets.VCPTCORE_PLATFORM_TOKEN }} -HelmParameters storefront.image.tag=${{ github.event.inputs.artifactUrl }}
+    
+    - name: Update vcst-dev environment
+      if: ${{ github.ref == 'refs/heads/dev' }}
+      run: |
+        vc-build CloudEnvSetParameter -EnvironmentName ${{ steps.app-name.outputs.APP }} -CloudToken ${{ secrets.VCST_PLATFORM_TOKEN }} -HelmParameters storefront.image.tag=${{ github.event.inputs.artifactUrl }}
 
     - name: DEPLOY_STATE::successful
       if: success()
@@ -77,7 +83,7 @@ jobs:
       run: echo "DEPLOY_STATE=failed"  >> $GITHUB_ENV
 
     - name: Update GitHub deployment status
-      uses: bobheadxi/deployments@master
+      uses: VirtoCommerce/vc-github-actions/gh-deployments@master
       if: always()
       with:
         step: finish
@@ -88,7 +94,7 @@ jobs:
     - name: Push Deployment Info to Jira
       if: ${{ env.CLOUD_INSTANCE_BASE_URL != 0 && env.CLIENT_ID != 0 && env.CLIENT_SECRET != 0 && github.event.inputs.jiraKeys != '' && always() }}
       id: push_deployment_info_to_jira
-      uses: HighwayThree/jira-upload-deployment-info@master
+      uses: VirtoCommerce/jira-upload-deployment-info@master
       env:
         CLOUD_INSTANCE_BASE_URL: ${{secrets.CLOUD_INSTANCE_BASE_URL}}
         CLIENT_ID: ${{secrets.CLIENT_ID}}
