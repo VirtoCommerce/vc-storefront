@@ -1,8 +1,10 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using System.Threading.Tasks;
 using FluentValidation.AspNetCore;
 using GraphQL.Client.Abstractions;
 using GraphQL.Client.Http;
@@ -427,16 +429,19 @@ namespace VirtoCommerce.Storefront
             });
 
             var platformEndpointOptions = app.ApplicationServices.GetRequiredService<IOptions<PlatformEndpointOptions>>().Value;
-            // Forwards the request only when the host is set to the specified value
-            app.UseWhen(
-                context => context.Request.Path.Value.EndsWith("xapi/graphql"),
-                appInner => appInner.RunProxy(context =>
+
+            var httpsPlatformGraphqlEndpoint = new Uri(platformEndpointOptions.Url, "graphql");
+            var wssPlatformGraphqlEndpoint = new UriBuilder(httpsPlatformGraphqlEndpoint) { Scheme = Uri.UriSchemeWss }.Uri;
+
+            app.UseWebSockets();
+            app.Map("/xapi/graphql",
+                appInner =>
                 {
-                    context.Request.Path = PathString.Empty;
-                    return context.ForwardTo(new Uri(platformEndpointOptions.Url, "graphql"))
+                    appInner.UseWebSocketProxy(_ => wssPlatformGraphqlEndpoint, options => options.AddXForwardedHeaders());
+                    appInner.RunProxy(context => context.ForwardTo(httpsPlatformGraphqlEndpoint)
                         .AddXForwardedHeaders()
-                        .Send();
-                }));
+                        .Send());
+                });
 
             app.UseWhen(
                 context => context.Request.Path.Value.EndsWith("/token"),
