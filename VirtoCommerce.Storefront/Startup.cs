@@ -431,7 +431,10 @@ namespace VirtoCommerce.Storefront
             var platformEndpointOptions = app.ApplicationServices.GetRequiredService<IOptions<PlatformEndpointOptions>>().Value;
 
             var httpsPlatformGraphqlEndpoint = new Uri(platformEndpointOptions.Url, "graphql");
-            var wssPlatformGraphqlEndpoint = new UriBuilder(httpsPlatformGraphqlEndpoint) { Scheme = Uri.UriSchemeWss }.Uri;
+            var wssPlatformGraphqlEndpoint = new UriBuilder(httpsPlatformGraphqlEndpoint)
+            {
+                Scheme = httpsPlatformGraphqlEndpoint.Scheme == Uri.UriSchemeHttps ? Uri.UriSchemeWss : Uri.UriSchemeWs
+            }.Uri;
 
             app.UseWebSockets();
             app.Map("/xapi/graphql",
