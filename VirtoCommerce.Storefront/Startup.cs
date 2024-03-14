@@ -342,6 +342,8 @@ namespace VirtoCommerce.Storefront
 
             services.AddProxy(builder => builder.AddHttpMessageHandler(sp => sp.GetService<AuthenticationHandlerFactory>().CreateAuthHandler()));
 
+            services.Configure<ProxyOptions>(options => options.WebSocketKeepAliveInterval = TimeSpan.FromSeconds(50));
+
             services.AddSingleton<IGraphQLClient>(s =>
             {
                 var platformEndpointOptions = s.GetRequiredService<IOptions<PlatformEndpointOptions>>().Value;
