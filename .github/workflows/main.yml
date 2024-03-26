@@ -167,6 +167,13 @@ jobs:
           docker_hub: ${{ env.PUBLISH_TO_DOCKER }}
           update_latest: ${{ env.UPDATE_LATEST_TAG }}
     
+    - name: Publish to SaaS ACR
+      if: ${{ github.ref == 'refs/heads/master' }}
+      run: |
+        docker login virtopaasregistrymain.azurecr.io -u VirtoPaaSRegistryMain -p ${{secrets.ACR_PASSWORD}}
+        docker tag ghcr.io/virtocommerce/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }} virtopaasregistrymain.azurecr.io/saas/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}
+        docker push virtopaasregistrymain.azurecr.io/saas/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}
+    
     - name: Publish to ACR 
       run: |
         docker login virtopaasregistrymain.azurecr.io -u vcst-token -p ${{ secrets.VCST_ACR_DOCKER_PASSWORD }}
