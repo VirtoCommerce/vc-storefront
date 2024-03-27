@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?><Project>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
   <!-- These properties will be shared for all projects -->
-
   <PropertyGroup>
     <Product>VirtoCommerce</Product>
-    <Copyright>Copyright © VirtoCommerce 2011-2022</Copyright>
+    <Copyright>Copyright © 2011-2024 Virto Commerce. All rights reserved</Copyright>
     <Authors>VirtoCommerce</Authors>
   </PropertyGroup>
-   <PropertyGroup>
-    <VersionPrefix>6.43.0</VersionPrefix>
-    <VersionSuffix></VersionSuffix>
+  <PropertyGroup>
+    <VersionPrefix>3.800.0</VersionPrefix>
+    <VersionSuffix>
+    </VersionSuffix>
     <VersionSuffix Condition=" '$(VersionSuffix)' != '' AND '$(BuildNumber)' != '' ">$(VersionSuffix)-$(BuildNumber)</VersionSuffix>
   </PropertyGroup>
-
 </Project>

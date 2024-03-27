@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <!--Need to include TargetLatestRuntimePatch, otherwise get following error about ASP NET Core restored version-->
     <!--https://stackoverflow.com/questions/51642172/the-project-was-restored-using-microsoft-netcore-app-version-2-1-0-but-with-cur-->
     <!--https://docs.microsoft.com/en-us/dotnet/core/deploying/runtime-patch-selection-->
@@ -14,14 +13,11 @@
     <IsPackable>False</IsPackable>
     <OutputType>Library</OutputType>
   </PropertyGroup>
-
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.0" />
     <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
-    <PackageReference Include="FluentValidation" Version="10.4.0" />
+    <PackageReference Include="FluentValidation" Version="11.8.1" />
     <PackageReference Include="PagedList.Core" Version="1.17.4" />
   </ItemGroup>
-
-
 </Project>
