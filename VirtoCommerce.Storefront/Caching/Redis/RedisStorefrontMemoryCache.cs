@@ -19,7 +19,7 @@ namespace VirtoCommerce.Storefront.Caching.Redis
         private readonly ISubscriber _bus;
         private readonly RedisCachingOptions _redisCachingOptions;
         private readonly StorefrontOptions _storefrontOptions;
-        private readonly IConnectionMultiplexer _connection;
+        private readonly ConnectionMultiplexer _connection;
         private readonly ILogger<RedisStorefrontMemoryCache> _log;
 
         private bool _isSubscribed;

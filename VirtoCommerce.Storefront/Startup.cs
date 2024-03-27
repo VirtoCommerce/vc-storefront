@@ -425,7 +425,7 @@ namespace VirtoCommerce.Storefront
             // Enable browser XSS protection
             app.Use(async (context, next) =>
             {
-                context.Response.Headers["X-Xss-Protection"] = "1";
+                context.Response.Headers.XXSSProtection = "1";
                 await next();
             });
 
