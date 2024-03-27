@@ -7,8 +7,8 @@ namespace DotLiquid.ViewEngine.Exceptions
     [Serializable]
     public class SaasCompileException : Exception
     {
-        protected SaasCompileException(SerializationInfo info,
-            StreamingContext context) : base(info, context)
+        [Obsolete(DiagnosticId = "SYSLIB0051")]
+        protected SaasCompileException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             SassLine = info.GetString("SassLine");
         }
@@ -62,6 +62,7 @@ namespace DotLiquid.ViewEngine.Exceptions
             return (currentLineNumber == lineNumber) ? line : string.Empty;
         }
 
+        [Obsolete(DiagnosticId = "SYSLIB0051")]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);

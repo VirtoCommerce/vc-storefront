@@ -72,9 +72,9 @@ namespace VirtoCommerce.Storefront.Middleware
 
             if (workContext.IsPreviewMode)
             {
-                context.Response.Headers.Add("non-cached-result", "true");
+                context.Response.Headers.Append("non-cached-result", "true");
             }
-            
+
             await _next(context);
         }
     }

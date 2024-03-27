@@ -1,10 +1,8 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using System.Threading.Tasks;
 using FluentValidation.AspNetCore;
 using GraphQL.Client.Abstractions;
 using GraphQL.Client.Http;
@@ -293,9 +291,10 @@ namespace VirtoCommerce.Storefront
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
-            })
-             .AddFluentValidation();
+            });
 
+            services.AddFluentValidationAutoValidation();
+            services.AddFluentValidationClientsideAdapters();
 
             // Register event handlers via reflection
             services.RegisterAssembliesEventHandlers(typeof(Startup));
@@ -426,7 +425,7 @@ namespace VirtoCommerce.Storefront
             // Enable browser XSS protection
             app.Use(async (context, next) =>
             {
-                context.Response.Headers["X-Xss-Protection"] = "1";
+                context.Response.Headers.XXSSProtection = "1";
                 await next();
             });
 

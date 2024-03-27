@@ -7,8 +7,8 @@ namespace VirtoCommerce.Storefront.Infrastructure
     [Serializable]
     public class NoThemeException : StorefrontException
     {
-        protected NoThemeException(SerializationInfo info,
-            StreamingContext context) : base(info, context)
+        [Obsolete(DiagnosticId = "SYSLIB0051")]
+        protected NoThemeException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
 
         }
