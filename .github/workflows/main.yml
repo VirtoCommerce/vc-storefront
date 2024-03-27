@@ -140,7 +140,7 @@ jobs:
       with:
         tag: ${{ steps.image.outputs.taggedVersion }}
         imageName: ${{ env.IMAGE_NAME }}
-        dockerFiles: 'https://raw.githubusercontent.com/VirtoCommerce/vc-docker/feat/net6/linux/storefront/Dockerfile'
+        dockerFiles: 'https://raw.githubusercontent.com/VirtoCommerce/vc-docker/feat/net8/linux/storefront/Dockerfile'
 
     - name: Publish Github Release
       if: ${{ github.ref == 'refs/heads/master' }}

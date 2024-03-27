@@ -1,4 +1,4 @@
-# v3.200.5
+# v3.800.5
 name: Release - branch
 
 on:
@@ -25,7 +25,7 @@ jobs:
       uploadDocker: 'true'
       eventName: ${{ github.event_name }}
       imageName: 'storefront'
-      dockerFiles: 'https://raw.githubusercontent.com/VirtoCommerce/vc-docker/feat/net6/linux/storefront/Dockerfile'
+      dockerFiles: 'https://raw.githubusercontent.com/VirtoCommerce/vc-docker/feat/net8/linux/storefront/Dockerfile'
       forceVersionSuffix: 'false'
     secrets:
       envPAT: ${{ secrets.REPO_TOKEN }}

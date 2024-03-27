@@ -1,4 +1,4 @@
-# v3.200.7
+# v3.800.4
 name: PR deploy
 
 on:
@@ -47,7 +47,7 @@ jobs:
   publish:
     needs:
       get-deployment-data
-    uses: VirtoCommerce/.github/.github/workflows/publish-docker.yml@v3.800.2
+    uses: VirtoCommerce/.github/.github/workflows/publish-docker.yml@v3.800.4
     with:
       fullKey: ${{ needs.get-deployment-data.outputs.dockerFullKey }}
       shortKey: '${{ needs.get-deployment-data.outputs.dockerShortKey }}-'
@@ -60,7 +60,7 @@ jobs:
   deploy:
     needs:
       [publish, get-deployment-data]
-    uses: VirtoCommerce/.github/.github/workflows/deploy.yml@v3.800.2
+    uses: VirtoCommerce/.github/.github/workflows/deploy.yml@v3.800.4
     with:
       argoServer: 'argo.govirto.com'
       artifactUrl: ${{ needs.publish.outputs.imagePath }}
