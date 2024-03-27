@@ -6,8 +6,8 @@ namespace VirtoCommerce.Storefront.Model.Features.Exceptions
     [Serializable]
     public class FeaturesException : Exception
     {
-        protected FeaturesException(SerializationInfo info,
-            StreamingContext context) : base(info, context)
+        [Obsolete(DiagnosticId = "SYSLIB0051")]
+        protected FeaturesException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
 

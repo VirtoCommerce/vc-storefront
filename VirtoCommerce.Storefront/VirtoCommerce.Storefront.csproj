@@ -44,7 +44,6 @@
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.22.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.SnapshotCollector" Version="1.4.6" />
-    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.22.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="8.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.0" />

@@ -52,7 +52,7 @@ namespace VirtoCommerce.Storefront.Caching.Redis
 
         protected virtual void OnConnectionFailed(object sender, ConnectionFailedEventArgs e)
         {
-            _log.LogError($"Redis disconnected from instance { _instanceId }. Endpoint is {e.EndPoint}, failure type is {e.FailureType}");
+            _log.LogError($"Redis disconnected from instance {_instanceId}. Endpoint is {e.EndPoint}, failure type is {e.FailureType}");
 
             // If we have no connection to Redis, we can't invalidate cache on another platform instances,
             // so the better idea is to disable cache at all for data consistence
@@ -64,7 +64,7 @@ namespace VirtoCommerce.Storefront.Caching.Redis
 
         protected virtual void OnConnectionRestored(object sender, ConnectionFailedEventArgs e)
         {
-            _log.LogTrace($"Redis backplane connection restored for instance { _instanceId }");
+            _log.LogTrace($"Redis backplane connection restored for instance {_instanceId}");
 
             // Return cache to the same state as it was initially.
             // Don't set directly true because it may be disabled in app settings
@@ -116,10 +116,15 @@ namespace VirtoCommerce.Storefront.Caching.Redis
             base.EvictionCallback(key, value, reason, state);
         }
 
+        protected virtual RedisChannel GetRedisChannel()
+        {
+            return RedisChannel.Literal(_redisCachingOptions.ChannelName);
+        }
+
         private void Publish(RedisCachingMessage message)
         {
             EnsureRedisServerConnection();
-            _bus.Publish(_redisCachingOptions.ChannelName, JsonConvert.SerializeObject(message), CommandFlags.FireAndForget);
+            _bus.Publish(GetRedisChannel(), JsonConvert.SerializeObject(message), CommandFlags.FireAndForget);
         }
 
         private void EnsureRedisServerConnection()
@@ -133,9 +138,9 @@ namespace VirtoCommerce.Storefront.Caching.Redis
                         _connection.ConnectionFailed += OnConnectionFailed;
                         _connection.ConnectionRestored += OnConnectionRestored;
 
-                        _bus.Subscribe(_redisCachingOptions.ChannelName, OnMessage, CommandFlags.FireAndForget);
+                        _bus.Subscribe(GetRedisChannel(), OnMessage, CommandFlags.FireAndForget);
 
-                        _log.LogTrace($"Successfully subscribed to Redis backplane channel {_redisCachingOptions.ChannelName } with instance id:{ _instanceId }");
+                        _log.LogTrace($"Successfully subscribed to Redis backplane channel {_redisCachingOptions.ChannelName} with instance id:{_instanceId}");
                         _isSubscribed = true;
                     }
                 }
@@ -149,7 +154,7 @@ namespace VirtoCommerce.Storefront.Caching.Redis
             {
                 if (disposing)
                 {
-                    _bus.Unsubscribe(_redisCachingOptions.ChannelName, null, CommandFlags.FireAndForget);
+                    _bus.Unsubscribe(GetRedisChannel(), null, CommandFlags.FireAndForget);
                     _connection.ConnectionFailed -= OnConnectionFailed;
                     _connection.ConnectionRestored -= OnConnectionRestored;
                 }

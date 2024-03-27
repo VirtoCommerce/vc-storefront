@@ -7,8 +7,8 @@ namespace VirtoCommerce.Storefront.Infrastructure.Exceptions
     [Serializable]
     public class NoStoresException : StorefrontException
     {
-        protected NoStoresException(SerializationInfo info,
-            StreamingContext context) : base(info, context)
+        [Obsolete(DiagnosticId = "SYSLIB0051")]
+        protected NoStoresException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
 
