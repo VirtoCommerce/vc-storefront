@@ -8,8 +8,8 @@ namespace VirtoCommerce.Storefront.Model.Common.Exceptions
     {
         public string View { get; set; }
 
-        protected StorefrontException(SerializationInfo info,
-            StreamingContext context) : base(info, context)
+        [Obsolete(DiagnosticId = "SYSLIB0051")]
+        protected StorefrontException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             View = info.GetString("View");
         }
@@ -34,6 +34,7 @@ namespace VirtoCommerce.Storefront.Model.Common.Exceptions
             View = view;
         }
 
+        [Obsolete(DiagnosticId = "SYSLIB0051")]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);

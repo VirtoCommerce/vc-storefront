@@ -2,14 +2,14 @@ using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Security;
-using dto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
+using Dto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain.Security
 {
 
     public static class SecurityConverter
     {
-        public static IdentityResult ToIdentityResult(this dto.SecurityResult resultDto)
+        public static IdentityResult ToIdentityResult(this Dto.SecurityResult resultDto)
         {
             if (resultDto.Succeeded == true)
             {
@@ -18,16 +18,16 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return IdentityResult.Failed(resultDto.Errors.Select(x => new IdentityError { Description = x }).ToArray());
         }
 
-        public static dto.Role ToRoleDto(this Role role)
+        public static Dto.Role ToRoleDto(this Role role)
         {
-            return new dto.Role
+            return new Dto.Role
             {
                 Id = role.Id,
                 Name = role.Name,
-                Permissions = role.Permissions.Select(x => new dto.Permission { Id = x, Name = x }).ToList()
+                Permissions = role.Permissions.Select(x => new Dto.Permission { Id = x, Name = x }).ToList()
             };
         }
-        public static Role ToRole(this dto.Role roleDto)
+        public static Role ToRole(this Dto.Role roleDto)
         {
             return new Role
             {
@@ -72,7 +72,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return result;
         }
 
-        public static User ToUser(this dto.ApplicationUser userDto)
+        public static User ToUser(this Dto.ApplicationUser userDto)
         {
             var result = new User()
             {
@@ -121,9 +121,9 @@ namespace VirtoCommerce.Storefront.Domain.Security
             return result;
         }
 
-        public static dto.ApplicationUser ToUserDto(this User user)
+        public static Dto.ApplicationUser ToUserDto(this User user)
         {
-            var result = new dto.ApplicationUser
+            var result = new Dto.ApplicationUser
             {
                 Id = user.Id,
                 Email = user.Email,
@@ -155,7 +155,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
             }
             if (!user.ExternalLogins.IsNullOrEmpty())
             {
-                result.Logins = user.ExternalLogins.Select(x => new dto.ApplicationUserLogin
+                result.Logins = user.ExternalLogins.Select(x => new Dto.ApplicationUserLogin
                 {
                     LoginProvider = x.LoginProvider,
                     ProviderKey = x.ProviderKey
