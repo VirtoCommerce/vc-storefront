@@ -37,8 +37,8 @@ jobs:
       UPDATE_LATEST_TAG: 'true'
       VERSION_SUFFIX: ''
       BUILD_STATE: 'failed'
-      RELEASE_STATUS: 'false'
-      BUILD_DOCKER: 'false'
+      RELEASE_STATUS: 'true'
+      BUILD_DOCKER: 'true'
     outputs:
       artifactUrl:  ${{ steps.image.outputs.taggedVersion }}
       jira-keys: ${{ steps.jira_keys.outputs.jira-keys }}
@@ -98,11 +98,11 @@ jobs:
           echo "VERSION_SUFFIX=${{ steps.image.outputs.suffix }}" >> $GITHUB_ENV
         fi;
 
-    - name: Add version suffix
-      if: ${{ github.ref != 'refs/heads/master' }}
-      uses: VirtoCommerce/vc-github-actions/add-version-suffix@master
-      with:
-        versionSuffix: ${{ env.VERSION_SUFFIX }}
+    # - name: Add version suffix
+    #   if: ${{ github.ref != 'refs/heads/master' }}
+    #   uses: VirtoCommerce/vc-github-actions/add-version-suffix@master
+    #   with:
+    #     versionSuffix: ${{ env.VERSION_SUFFIX }}
 
     - name: SonarCloud Begin
       uses: VirtoCommerce/vc-github-actions/sonar-scanner-begin@master
@@ -143,9 +143,9 @@ jobs:
         dockerFiles: 'https://raw.githubusercontent.com/VirtoCommerce/vc-docker/feat/net6/linux/storefront/Dockerfile'
 
     - name: Publish Github Release
-      if: ${{ github.ref == 'refs/heads/master' }}
-      with:
-        changelog: ${{ steps.changelog.outputs.changelog }}
+      # if: ${{ github.ref == 'refs/heads/master' }}
+      # with:
+      #   changelog: ${{ steps.changelog.outputs.changelog }}
       uses: VirtoCommerce/vc-github-actions/publish-github-release@master
 
     - name: Docker Login
@@ -220,26 +220,26 @@ jobs:
       run: |
         echo "Jira Upload Build Info response: ${{ steps.push_build_info_to_jira.outputs.response }}"
 
-  deploy:
-    if: ${{ (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master') && (github.event_name == 'push' ||  github.event_name == 'workflow_dispatch')}}
-    needs: ci
-    runs-on: ubuntu-latest
-    env:
-      CONFIG_PATH: '.deployment/storefront-app/argoDeploy.json'
-    steps:
+  # deploy:
+  #   if: ${{ (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master') && (github.event_name == 'push' ||  github.event_name == 'workflow_dispatch')}}
+  #   needs: ci
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     CONFIG_PATH: '.deployment/storefront-app/argoDeploy.json'
+  #   steps:
 
-    - name: Set deployment environment
-      id: deployEnv
-      run: |
-        if [ '${{ github.ref }}' = 'refs/heads/master' ]; then
-          echo "NAME=prod" >> $GITHUB_OUTPUT
-        else
-          echo "NAME=dev" >> $GITHUB_OUTPUT
-        fi;
+  #   - name: Set deployment environment
+  #     id: deployEnv
+  #     run: |
+  #       if [ '${{ github.ref }}' = 'refs/heads/master' ]; then
+  #         echo "NAME=prod" >> $GITHUB_OUTPUT
+  #       else
+  #         echo "NAME=dev" >> $GITHUB_OUTPUT
+  #       fi;
 
-    - name: Invoke Module deployment workflow
-      uses: benc-uk/workflow-dispatch@v1
-      with:
-        workflow: VC deployment
-        token: ${{ secrets.REPO_TOKEN }}
-        inputs: '{ "artifactUrl": "${{ needs.ci.outputs.artifactUrl }}", "deployEnvironment": "${{ steps.deployEnv.outputs.NAME }}", "deployConfigPath": "${{ env.CONFIG_PATH }}", "jiraKeys":"${{ needs.ci.outputs.jira-keys }}" }'
+  #   - name: Invoke Module deployment workflow
+  #     uses: benc-uk/workflow-dispatch@v1
+  #     with:
+  #       workflow: VC deployment
+  #       token: ${{ secrets.REPO_TOKEN }}
+  #       inputs: '{ "artifactUrl": "${{ needs.ci.outputs.artifactUrl }}", "deployEnvironment": "${{ steps.deployEnv.outputs.NAME }}", "deployConfigPath": "${{ env.CONFIG_PATH }}", "jiraKeys":"${{ needs.ci.outputs.jira-keys }}" }'
