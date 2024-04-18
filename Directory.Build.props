@@ -7,7 +7,7 @@
     <Authors>VirtoCommerce</Authors>
   </PropertyGroup>
   <PropertyGroup>
-    <VersionPrefix>8.2.0</VersionPrefix>
+    <VersionPrefix>8.3.0</VersionPrefix>
     <VersionSuffix>
     </VersionSuffix>
     <VersionSuffix Condition=" '$(VersionSuffix)' != '' AND '$(BuildNumber)' != '' ">$(VersionSuffix)-$(BuildNumber)</VersionSuffix>
